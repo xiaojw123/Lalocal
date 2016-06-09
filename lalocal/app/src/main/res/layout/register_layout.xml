@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.activity.LoginActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_title_height"
+        android:background="@color/white">
+
+        <include layout="@layout/common_back_layout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/register"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_17_sp" />
+    </FrameLayout>
+
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_fa"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/register_edit_left"
+        android:paddingRight="@dimen/register_edit_left">
+
+        <com.lalocal.lalocal.view.CustomEditText
+            android:id="@+id/reigster_emial_custom_edit"
+            style="@style/CustomEditTextTheme"
+            android:layout_marginTop="@dimen/register_email_edit_top"
+            app:text_hint="@string/write_email" />
+
+        <com.lalocal.lalocal.view.CustomEditText
+            android:id="@+id/reigster_psw_custom_edit"
+            style="@style/CustomEditTextTheme"
+            android:layout_marginTop="@dimen/register_password_edit_top"
+            app:text_hint="@string/write_psw" />
+
+        <com.lalocal.lalocal.view.CustomEditText
+            android:id="@+id/reigster_nickname_custom_edit"
+            style="@style/CustomEditTextTheme"
+            android:layout_marginTop="@dimen/register_password_edit_top"
+            app:text_hint="@string/write_nickname" />
+
+        <Button
+            android:id="@+id/register_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_btn_height"
+            android:layout_marginTop="@dimen/register_btn_top"
+            android:background="@drawable/register_button_bg"
+            android:text="@string/register"
+            android:textColor="@drawable/register_button_textcolor"
+            android:textSize="@dimen/text_size_18_sp" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="@dimen/register_user_protocal_top">
+
+            <TextView
+                android:id="@+id/register_agree_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:text="@string/register_describe"
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_14_sp" />
+
+            <TextView
+                android:id="@+id/register_user_protocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/register_agree_tv"
+                android:paddingRight="@dimen/dimen_size_1_dp"
+                android:text="@string/user_protocol"
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_14_sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/register_title_divde_line_height"
+                android:layout_alignLeft="@+id/register_user_protocal"
+                android:layout_alignRight="@+id/register_user_protocal"
+                android:layout_below="@+id/register_user_protocal"
+                android:background="@color/color_b3" />
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

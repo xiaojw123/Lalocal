@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_tab_container_height">49dp</dimen>
+    <dimen name="home_tab_recommend_img_wdith">23dp</dimen>
+    <dimen name="home_tab_recommend_img_height">23dp</dimen>
+    <dimen name="home_tab_recommend_img_top">3dp</dimen>
+    <dimen name="home_tab_destination_img_wdith">21dp</dimen>
+    <dimen name="home_tab_destination_img_height">22dp</dimen>
+    <dimen name="home_tab_news_img_width">21dp</dimen>
+    <dimen name="home_tab_news_img_height">21dp</dimen>
+    <dimen name="home_tab_me_img_width">21dp</dimen>
+    <dimen name="home_tab_me_img_height">20dp</dimen>
+    <dimen name="home_tab_img_width">22dp</dimen>
+    <dimen name="home_tab_img_height">21dp</dimen>
+    <dimen name="home_tab_text_top">6dp</dimen>
+</resources>
