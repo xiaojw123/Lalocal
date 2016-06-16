@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.view.PhotoSelectDialog;
@@ -166,6 +167,7 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == PHOTO_REQUEST_GALLERY) {
             if (data != null) {
                 Uri uri = data.getData();
@@ -204,12 +206,6 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                             }
                         }
                     }).start();
-//                    out.flush();
-//                    outputStream = openFileOutput("_head_icon.jpg",
-//                            Context.MODE_PRIVATE);
-//                    out.writeTo(outputStream);
-//                    out.close();
-//                    outputStream.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -219,6 +215,18 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                     tempFile.delete();
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+
+        } else if (requestCode == MODIFY_USER_PROFILE) {
+            if (resultCode == EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL) {
+                String email = data.getStringExtra(Params.EMAIL);
+                email_tv.setText(email);
+            } else if (resultCode == AccountEidt2Activity.RESULT_CODE_PHONE) {
+                String phone = data.getStringExtra(Params.PHONE);
+                phone_tv.setText(phone);
+            } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
+                String nickname = data.getStringExtra(Params.NICKNAME);
+                nickaname_tv.setText(nickname);
             }
 
         }

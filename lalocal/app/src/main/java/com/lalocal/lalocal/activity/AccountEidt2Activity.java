@@ -16,6 +16,7 @@ import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.view.CustomDialog;
 import com.lalocal.lalocal.view.WheelDialog;
 
@@ -104,7 +105,7 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
                         return;
                     }
                     Intent intent = new Intent();
-                    intent.putExtra("nickname", nickname);
+                    intent.putExtra(Params.NICKNAME, nickname);
                     setResult(RESULT_CODE_NICKNAME, intent);
                     contentService.modifyUserProfile(nickname, -1, null);
                 } else if (actionType == ACTION_PHONE_MODIFY) {
@@ -114,7 +115,7 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
                         return;
                     }
                     Intent intent = new Intent();
-                    intent.putExtra("phone", phone);
+                    intent.putExtra(Params.PHONE, phone);
                     setResult(RESULT_CODE_PHONE, intent);
                     contentService.modifyUserProfile(null, -1, phone);
                 }
@@ -124,18 +125,27 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
                 contentService.sendVerificationCode(getUserEmail());
                 break;
             case R.id.account_eidt2_changeemail_btn:
-                Intent intent=new Intent(this,EmailBoundActivity.class);
-                intent.putExtra("email",getUserEmail());
-                startActivity(intent);
+                Intent intent = new Intent(this, EmailBoundActivity.class);
+                intent.putExtra(Params.EMAIL, getUserEmail());
+                startActivityForResult(intent, 100);
                 break;
         }
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL) {
+            setResult(EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL, data);
+            finish();
+        }
+
+    }
 
     @Override
     public void onDialogClickListener(Dialog dialog, View view) {
         dialog.dismiss();
+        finish();
     }
 
     @Override

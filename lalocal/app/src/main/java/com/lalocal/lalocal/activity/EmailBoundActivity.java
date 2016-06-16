@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,9 +12,11 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.view.CustomDialog;
 
 public class EmailBoundActivity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
+    public static final int RESULIT_CODE_BOUND_EMAIL = 103;
     EditText email_edit;
     Button change_email_btn;
     ContentService contentService;
@@ -37,7 +40,7 @@ public class EmailBoundActivity extends AppCompatActivity implements View.OnClic
     }
 
     public String getUserEmail() {
-        return getIntent().getStringExtra("email");
+        return getIntent().getStringExtra(Params.EMAIL);
     }
 
     @Override
@@ -47,6 +50,9 @@ public class EmailBoundActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onDialogClickListener(Dialog dialog, View view) {
+        Intent intent = new Intent();
+        intent.putExtra(Params.EMAIL, email_edit.getText().toString());
+        setResult(RESULIT_CODE_BOUND_EMAIL, intent);
         dialog.dismiss();
         finish();
     }
