@@ -58,6 +58,8 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.setting_about_us:
+                Intent aboutUsIntent=new Intent(this,AboutUsActivity.class);
+                startActivity(aboutUsIntent);
                 break;
             case R.id.setting_clear_cache:
                 final String chacheSize = DataCleanManager.getTotalCacheSize(this);
@@ -96,6 +98,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     }
+
 
     public boolean isLogin() {
         return getIntent().getBooleanExtra(MeFragment.LOGIN_STATUS, false);

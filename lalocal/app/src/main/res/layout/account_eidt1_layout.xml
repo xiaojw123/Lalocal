@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_fa"
+    tools:context=".activity.AccountEidt1Activity">
+    <FrameLayout
+        android:id="@+id/edit_accout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_title_height"
+        android:background="@color/white">
+
+        <include layout="@layout/common_back_layout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/edit_account"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_17_sp" />
+    </FrameLayout>
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        android:layout_below="@+id/edit_accout_title"
+        />
+    
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/account_edit_personalheader"
+        android:layout_width="@dimen/account_edit_personalheader_width"
+        android:layout_height="@dimen/account_edit_personalheader_width"
+        android:layout_marginTop="@dimen/account_edit_personalheader_top"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/home_me_personheadnormal"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_below="@+id/account_edit_personalheader"
+        android:layout_marginTop="@dimen/account_eidt_userinfo_contianer_top"
+        >
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_below="@+id/setting_clear_cache"
+            />
+        <RelativeLayout
+            android:id="@+id/account_edit_nickname"
+            style="@style/AccoutEditItemTheme"
+            >
+            <TextView
+                style="@style/AcountEditItemTitle"
+                 android:text="昵称"
+                 />
+
+            <TextView
+                android:id="@+id/account_edit_nickname_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right1"
+
+           />
+            <ImageView
+                android:id="@+id/arrow_right1"
+                style="@style/AcountEditItemArrowRight"
+                />
+
+        </RelativeLayout>
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_below="@+id/setting_clear_cache"
+            />
+        <RelativeLayout
+            android:id="@+id/account_edit_sex"
+            style="@style/AccoutEditItemTheme"
+            >
+            <TextView
+                android:id="@+id/sex_text"
+                style="@style/AcountEditItemTitle"
+                android:text="@string/sex"
+                />
+
+            <CheckBox
+                android:id="@+id/accout_edit_boy_sex_cb"
+                android:layout_width="@dimen/accout_edit_boy_sex_cb_width"
+                android:layout_height="@dimen/accout_edit_boy_sex_cb_height"
+                android:background="@drawable/accout_edit_boy_sex_cb_bg"
+                android:layout_toRightOf="@+id/sex_text"
+                android:layout_marginLeft="@dimen/accout_edit_boy_sex_cb_left"
+                android:button="@null"
+                />
+            
+            <TextView
+                android:id="@+id/sex_line"
+                android:layout_width="@dimen/dimen_size_1_dp"
+                android:layout_height="@dimen/accout_edit_sex_line_heigt"
+                android:layout_marginLeft="@dimen/accout_edit_sex_line_left"
+                android:layout_toRightOf="@+id/accout_edit_boy_sex_cb"
+                android:background="@color/color_de"
+                />
+
+            <CheckBox
+                android:id="@+id/accout_edit_girl_sex_cb"
+                android:layout_width="@dimen/accout_edit_boy_sex_cb_width"
+                android:layout_height="@dimen/accout_edit_boy_sex_cb_height"
+                android:background="@drawable/accout_edit_girl_sex_cb_bg"
+                android:layout_toRightOf="@+id/sex_line"
+                android:layout_marginLeft="@dimen/accout_edit_girl_sex_cb_left"
+                android:button="@null"
+                />
+        </RelativeLayout>
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_below="@+id/setting_clear_cache"
+            />
+        <RelativeLayout
+            android:id="@+id/account_edit_phone"
+            style="@style/AccoutEditItemTheme"
+            >
+            <TextView
+                style="@style/AcountEditItemTitle"
+                android:text="@string/phone"
+                />
+
+            <TextView
+                android:id="@+id/acount_edit_phone_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right2"
+
+                />
+            <ImageView
+                android:id="@+id/arrow_right2"
+                style="@style/AcountEditItemArrowRight"
+                />
+
+        </RelativeLayout>
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_below="@+id/setting_clear_cache"
+            />
+
+        <RelativeLayout
+            android:id="@+id/account_edit_email"
+            style="@style/AccoutEditItemTheme"
+            >
+            <TextView
+                style="@style/AcountEditItemTitle"
+                android:text="@string/email"
+                />
+
+            <TextView
+                android:id="@+id/acount_edit_email_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right3"
+                android:paddingRight="@dimen/dimen_size_5_dp"
+                />
+            <ImageView
+                android:id="@+id/arrow_right3"
+                style="@style/AcountEditItemArrowRight"
+                />
+        </RelativeLayout>
+    </LinearLayout>>
+
+    
+
+    
+
+
+
+
+
+</RelativeLayout>

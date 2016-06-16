@@ -24,8 +24,8 @@
     </FrameLayout>
 
     <TextView
-        style="@style/CommonTitleLineTheme"
-        />
+    style="@style/CommonTitleLineTheme"
+    />
 
 
     <LinearLayout

@@ -1,0 +1,1094 @@
+[
+    {
+        "country_pinyin": "yindunixiya", 
+        "country": "印度尼西亚", 
+        "code": "0062", 
+        "code_plus": "+62"
+    }, 
+    {
+        "country_pinyin": "feilvbin", 
+        "country": "菲律宾", 
+        "code": "0063", 
+        "code_plus": "+63"
+    }, 
+    {
+        "country_pinyin": "xinjiapo", 
+        "country": "新加坡", 
+        "code": "0065", 
+        "code_plus": "+65"
+    }, 
+    {
+        "country_pinyin": "taiguo", 
+        "country": "泰国", 
+        "code": "0066", 
+        "code_plus": "+66"
+    }, 
+    {
+        "country_pinyin": "wenlai", 
+        "country": "文莱", 
+        "code": "00673", 
+        "code_plus": "+673"
+    }, 
+    {
+        "country_pinyin": "riben", 
+        "country": "日本", 
+        "code": "0081", 
+        "code_plus": "+81"
+    }, 
+    {
+        "country_pinyin": "hanguo", 
+        "country": "韩国", 
+        "code": "0082", 
+        "code_plus": "+82"
+    }, 
+    {
+        "country_pinyin": "yuenan", 
+        "country": "越南", 
+        "code": "0084", 
+        "code_plus": "+84"
+    }, 
+    {
+        "country_pinyin": "zhaoxian", 
+        "country": "朝鲜", 
+        "code": "00850", 
+        "code_plus": "+850"
+    }, 
+    {
+        "country_pinyin": "xianggang", 
+        "country": "香港", 
+        "code": "00852", 
+        "code_plus": "+852"
+    }, 
+    {
+        "country_pinyin": "aomen", 
+        "country": "澳门", 
+        "code": "00853", 
+        "code_plus": "+853"
+    }, 
+    {
+        "country_pinyin": "jianpuzhai", 
+        "country": "柬埔寨", 
+        "code": "00855", 
+        "code_plus": "+855"
+    }, 
+    {
+        "country_pinyin": "laozhua", 
+        "country": "老挝", 
+        "code": "00856", 
+        "code_plus": "+856"
+    }, 
+    {
+        "country_pinyin": "zhongguo", 
+        "country": "中国", 
+        "code": "0086", 
+        "code_plus": "+86"
+    }, 
+    {
+        "country_pinyin": "taiwan", 
+        "country": "台湾", 
+        "code": "00886", 
+        "code_plus": "+886"
+    }, 
+    {
+        "country_pinyin": "mengjialaguo", 
+        "country": "孟加拉国", 
+        "code": "00880", 
+        "code_plus": "+880"
+    }, 
+    {
+        "country_pinyin": "tuerqi", 
+        "country": "土耳其", 
+        "code": "0090", 
+        "code_plus": "+90"
+    }, 
+    {
+        "country_pinyin": "yindu", 
+        "country": "印度", 
+        "code": "0091", 
+        "code_plus": "+91"
+    }, 
+    {
+        "country_pinyin": "bajisitan", 
+        "country": "巴基斯坦", 
+        "code": "0092", 
+        "code_plus": "+92"
+    }, 
+    {
+        "country_pinyin": "afuhan", 
+        "country": "阿富汗", 
+        "code": "0093", 
+        "code_plus": "+93"
+    }, 
+    {
+        "country_pinyin": "sililanqia", 
+        "country": "斯里兰卡", 
+        "code": "0094", 
+        "code_plus": "+94"
+    }, 
+    {
+        "country_pinyin": "miandian", 
+        "country": "缅甸", 
+        "code": "0095", 
+        "code_plus": "+95"
+    }, 
+    {
+        "country_pinyin": "maerdaifu", 
+        "country": "马尔代夫", 
+        "code": "00960", 
+        "code_plus": "+960"
+    }, 
+    {
+        "country_pinyin": "libanen", 
+        "country": "黎巴嫩", 
+        "code": "00961", 
+        "code_plus": "+961"
+    }, 
+    {
+        "country_pinyin": "yuedan", 
+        "country": "约旦", 
+        "code": "00962", 
+        "code_plus": "+962"
+    }, 
+    {
+        "country_pinyin": "xuliya", 
+        "country": "叙利亚", 
+        "code": "00963", 
+        "code_plus": "+963"
+    }, 
+    {
+        "country_pinyin": "yilake", 
+        "country": "伊拉克", 
+        "code": "00964", 
+        "code_plus": "+964"
+    }, 
+    {
+        "country_pinyin": "keweite", 
+        "country": "科威特", 
+        "code": "00965", 
+        "code_plus": "+965"
+    }, 
+    {
+        "country_pinyin": "shatealabo", 
+        "country": "沙特阿拉伯", 
+        "code": "00966", 
+        "code_plus": "+966"
+    }, 
+    {
+        "country_pinyin": "aman", 
+        "country": "阿曼", 
+        "code": "00968", 
+        "code_plus": "+968"
+    }, 
+    {
+        "country_pinyin": "yiselie", 
+        "country": "以色列", 
+        "code": "00972", 
+        "code_plus": "+972"
+    }, 
+    {
+        "country_pinyin": "balin", 
+        "country": "巴林", 
+        "code": "00973", 
+        "code_plus": "+973"
+    }, 
+    {
+        "country_pinyin": "qiataer", 
+        "country": "卡塔尔", 
+        "code": "00974", 
+        "code_plus": "+974"
+    }, 
+    {
+        "country_pinyin": "budan", 
+        "country": "不丹", 
+        "code": "00975", 
+        "code_plus": "+975"
+    }, 
+    {
+        "country_pinyin": "menggu", 
+        "country": "蒙古", 
+        "code": "00976", 
+        "code_plus": "+976"
+    }, 
+    {
+        "country_pinyin": "niboer", 
+        "country": "尼泊尔", 
+        "code": "00977", 
+        "code_plus": "+977"
+    }, 
+    {
+        "country_pinyin": "yilang", 
+        "country": "伊朗", 
+        "code": "0098", 
+        "code_plus": "+98"
+    }, 
+    {
+        "country_pinyin": "eluosi", 
+        "country": "俄罗斯", 
+        "code": "007", 
+        "code_plus": "+7"
+    }, 
+    {
+        "country_pinyin": "xila", 
+        "country": "希腊", 
+        "code": "0030", 
+        "code_plus": "+30"
+    }, 
+    {
+        "country_pinyin": "helan", 
+        "country": "荷兰", 
+        "code": "0031", 
+        "code_plus": "+31"
+    }, 
+    {
+        "country_pinyin": "bilishi", 
+        "country": "比利时", 
+        "code": "0032", 
+        "code_plus": "+32"
+    }, 
+    {
+        "country_pinyin": "faguo", 
+        "country": "法国", 
+        "code": "0033", 
+        "code_plus": "+33"
+    }, 
+    {
+        "country_pinyin": "xibanya", 
+        "country": "西班牙", 
+        "code": "0034", 
+        "code_plus": "+34"
+    }, 
+    {
+        "country_pinyin": "zhibuluotuo", 
+        "country": "直布罗陀", 
+        "code": "00350", 
+        "code_plus": "+350"
+    }, 
+    {
+        "country_pinyin": "putaoya", 
+        "country": "葡萄牙", 
+        "code": "00351", 
+        "code_plus": "+351"
+    }, 
+    {
+        "country_pinyin": "lusenbao", 
+        "country": "卢森堡", 
+        "code": "00352", 
+        "code_plus": "+352"
+    }, 
+    {
+        "country_pinyin": "aierlan", 
+        "country": "爱尔兰", 
+        "code": "00353", 
+        "code_plus": "+353"
+    }, 
+    {
+        "country_pinyin": "bingdao", 
+        "country": "冰岛", 
+        "code": "00354", 
+        "code_plus": "+354"
+    }, 
+    {
+        "country_pinyin": "aerbaniya", 
+        "country": "阿尔巴尼亚", 
+        "code": "00355", 
+        "code_plus": "+355"
+    }, 
+    {
+        "country_pinyin": "maerta", 
+        "country": "马耳他", 
+        "code": "00356", 
+        "code_plus": "+356"
+    }, 
+    {
+        "country_pinyin": "saipulusi", 
+        "country": "塞浦路斯", 
+        "code": "00357", 
+        "code_plus": "+357"
+    }, 
+    {
+        "country_pinyin": "fenlan", 
+        "country": "芬兰", 
+        "code": "00358", 
+        "code_plus": "+358"
+    }, 
+    {
+        "country_pinyin": "baojialiya", 
+        "country": "保加利亚", 
+        "code": "00359", 
+        "code_plus": "+359"
+    }, 
+    {
+        "country_pinyin": "xiongyali", 
+        "country": "匈牙利", 
+        "code": "00336", 
+        "code_plus": "+336"
+    }, 
+    {
+        "country_pinyin": "deguo", 
+        "country": "德国", 
+        "code": "0049", 
+        "code_plus": "+49"
+    }, 
+    {
+        "country_pinyin": "nansilafu", 
+        "country": "南斯拉夫", 
+        "code": "00338", 
+        "code_plus": "+338"
+    }, 
+    {
+        "country_pinyin": "yidali", 
+        "country": "意大利", 
+        "code": "0039", 
+        "code_plus": "+39"
+    }, 
+    {
+        "country_pinyin": "shengmalinuo", 
+        "country": "圣马力诺", 
+        "code": "00223", 
+        "code_plus": "+223"
+    }, 
+    {
+        "country_pinyin": "fandigang", 
+        "country": "梵蒂冈", 
+        "code": "00396", 
+        "code_plus": "+396"
+    }, 
+    {
+        "country_pinyin": "luomaniya", 
+        "country": "罗马尼亚", 
+        "code": "0040", 
+        "code_plus": "+40"
+    }, 
+    {
+        "country_pinyin": "ruishi", 
+        "country": "瑞士", 
+        "code": "0041", 
+        "code_plus": "+41"
+    }, 
+    {
+        "country_pinyin": "liezhidunshideng", 
+        "country": "列支敦士登", 
+        "code": "004175", 
+        "code_plus": "+4175"
+    }, 
+    {
+        "country_pinyin": "aodili", 
+        "country": "奥地利", 
+        "code": "0043", 
+        "code_plus": "+43"
+    }, 
+    {
+        "country_pinyin": "yingguo", 
+        "country": "英国", 
+        "code": "0044", 
+        "code_plus": "+44"
+    }, 
+    {
+        "country_pinyin": "danmai", 
+        "country": "丹麦", 
+        "code": "0045", 
+        "code_plus": "+45"
+    }, 
+    {
+        "country_pinyin": "ruidian", 
+        "country": "瑞典", 
+        "code": "0046", 
+        "code_plus": "+46"
+    }, 
+    {
+        "country_pinyin": "nuowei", 
+        "country": "挪威", 
+        "code": "0047", 
+        "code_plus": "+47"
+    }, 
+    {
+        "country_pinyin": "bolan", 
+        "country": "波兰", 
+        "code": "0048", 
+        "code_plus": "+48"
+    }, 
+    {
+        "country_pinyin": "aiji", 
+        "country": "埃及", 
+        "code": "0020", 
+        "code_plus": "+20"
+    }, 
+    {
+        "country_pinyin": "moluoge", 
+        "country": "摩洛哥", 
+        "code": "00210", 
+        "code_plus": "+210"
+    }, 
+    {
+        "country_pinyin": "aerjiliya", 
+        "country": "阿尔及利亚", 
+        "code": "00213", 
+        "code_plus": "+213"
+    }, 
+    {
+        "country_pinyin": "tunisi", 
+        "country": "突尼斯", 
+        "code": "00216", 
+        "code_plus": "+216"
+    }, 
+    {
+        "country_pinyin": "libiya", 
+        "country": "利比亚", 
+        "code": "00218", 
+        "code_plus": "+218"
+    }, 
+    {
+        "country_pinyin": "gangbiya", 
+        "country": "冈比亚", 
+        "code": "00220", 
+        "code_plus": "+220"
+    }, 
+    {
+        "country_pinyin": "saineijiaer", 
+        "country": "塞内加尔", 
+        "code": "00221", 
+        "code_plus": "+221"
+    }, 
+    {
+        "country_pinyin": "maolitaniya", 
+        "country": "毛里塔尼亚", 
+        "code": "00222", 
+        "code_plus": "+222"
+    }, 
+    {
+        "country_pinyin": "mali", 
+        "country": "马里", 
+        "code": "00223", 
+        "code_plus": "+223"
+    }, 
+    {
+        "country_pinyin": "jineiya", 
+        "country": "几内亚", 
+        "code": "00224", 
+        "code_plus": "+224"
+    }, 
+    {
+        "country_pinyin": "ketediwa", 
+        "country": "科特迪瓦", 
+        "code": "00225", 
+        "code_plus": "+225"
+    }, 
+    {
+        "country_pinyin": "bujilafasuo", 
+        "country": "布基拉法索", 
+        "code": "00226", 
+        "code_plus": "+226"
+    }, 
+    {
+        "country_pinyin": "nirier", 
+        "country": "尼日尔", 
+        "code": "00227", 
+        "code_plus": "+227"
+    }, 
+    {
+        "country_pinyin": "duoge", 
+        "country": "多哥", 
+        "code": "00228", 
+        "code_plus": "+228"
+    }, 
+    {
+        "country_pinyin": "beining", 
+        "country": "贝宁", 
+        "code": "00229", 
+        "code_plus": "+229"
+    }, 
+    {
+        "country_pinyin": "maoliqiusi", 
+        "country": "毛里求斯", 
+        "code": "00230", 
+        "code_plus": "+230"
+    }, 
+    {
+        "country_pinyin": "libiliya", 
+        "country": "利比里亚", 
+        "code": "00231", 
+        "code_plus": "+231"
+    }, 
+    {
+        "country_pinyin": "sailaliang", 
+        "country": "塞拉利昂", 
+        "code": "00232", 
+        "code_plus": "+232"
+    }, 
+    {
+        "country_pinyin": "jiana", 
+        "country": "加纳", 
+        "code": "00233", 
+        "code_plus": "+233"
+    }, 
+    {
+        "country_pinyin": "niriliya", 
+        "country": "尼日利亚", 
+        "code": "00234", 
+        "code_plus": "+234"
+    }, 
+    {
+        "country_pinyin": "zhade", 
+        "country": "乍得", 
+        "code": "00235", 
+        "code_plus": "+235"
+    }, 
+    {
+        "country_pinyin": "zhongfei", 
+        "country": "中非", 
+        "code": "00236", 
+        "code_plus": "+236"
+    }, 
+    {
+        "country_pinyin": "kamailong", 
+        "country": "喀麦隆", 
+        "code": "00237", 
+        "code_plus": "+237"
+    }, 
+    {
+        "country_pinyin": "fodejiao", 
+        "country": "佛得角", 
+        "code": "00238", 
+        "code_plus": "+238"
+    }, 
+    {
+        "country_pinyin": "shengduomei", 
+        "country": "圣多美", 
+        "code": "00239", 
+        "code_plus": "+239"
+    }, 
+    {
+        "country_pinyin": "pulinxibi", 
+        "country": "普林西比", 
+        "code": "00239", 
+        "code_plus": "+239"
+    }, 
+    {
+        "country_pinyin": "chidaojineiya", 
+        "country": "赤道几内亚", 
+        "code": "00240", 
+        "code_plus": "+240"
+    }, 
+    {
+        "country_pinyin": "jiapeng", 
+        "country": "加蓬", 
+        "code": "00241", 
+        "code_plus": "+241"
+    }, 
+    {
+        "country_pinyin": "gangguo", 
+        "country": "刚果", 
+        "code": "00242", 
+        "code_plus": "+242"
+    }, 
+    {
+        "country_pinyin": "zayier", 
+        "country": "扎伊尔", 
+        "code": "00243", 
+        "code_plus": "+243"
+    }, 
+    {
+        "country_pinyin": "angela", 
+        "country": "安哥拉", 
+        "code": "00244", 
+        "code_plus": "+244"
+    }, 
+    {
+        "country_pinyin": "jineiyabishao", 
+        "country": "几内亚比绍", 
+        "code": "00245", 
+        "code_plus": "+245"
+    }, 
+    {
+        "country_pinyin": "asensong", 
+        "country": "阿森松", 
+        "code": "00247", 
+        "code_plus": "+247"
+    }, 
+    {
+        "country_pinyin": "saisheer", 
+        "country": "塞舌尔", 
+        "code": "00248", 
+        "code_plus": "+248"
+    }, 
+    {
+        "country_pinyin": "sudan", 
+        "country": "苏丹", 
+        "code": "00249", 
+        "code_plus": "+249"
+    }, 
+    {
+        "country_pinyin": "luwangda", 
+        "country": "卢旺达", 
+        "code": "00250", 
+        "code_plus": "+250"
+    }, 
+    {
+        "country_pinyin": "aisaiebiya", 
+        "country": "埃塞俄比亚", 
+        "code": "00251", 
+        "code_plus": "+251"
+    }, 
+    {
+        "country_pinyin": "suomali", 
+        "country": "索马里", 
+        "code": "00252", 
+        "code_plus": "+252"
+    }, 
+    {
+        "country_pinyin": "jibuti", 
+        "country": "吉布提", 
+        "code": "00253", 
+        "code_plus": "+253"
+    }, 
+    {
+        "country_pinyin": "kenniya", 
+        "country": "肯尼亚", 
+        "code": "00254", 
+        "code_plus": "+254"
+    }, 
+    {
+        "country_pinyin": "tansangniya", 
+        "country": "坦桑尼亚", 
+        "code": "00255", 
+        "code_plus": "+255"
+    }, 
+    {
+        "country_pinyin": "wuganda", 
+        "country": "乌干达", 
+        "code": "00256", 
+        "code_plus": "+256"
+    }, 
+    {
+        "country_pinyin": "bulongdi", 
+        "country": "布隆迪", 
+        "code": "00257", 
+        "code_plus": "+257"
+    }, 
+    {
+        "country_pinyin": "mosangbike", 
+        "country": "莫桑比克", 
+        "code": "00258", 
+        "code_plus": "+258"
+    }, 
+    {
+        "country_pinyin": "zanbiya", 
+        "country": "赞比亚", 
+        "code": "00260", 
+        "code_plus": "+260"
+    }, 
+    {
+        "country_pinyin": "madajiasijia", 
+        "country": "马达加斯加", 
+        "code": "00261", 
+        "code_plus": "+261"
+    }, 
+    {
+        "country_pinyin": "liuniwangdao", 
+        "country": "留尼旺岛", 
+        "code": "00262", 
+        "code_plus": "+262"
+    }, 
+    {
+        "country_pinyin": "jinbabuwei", 
+        "country": "津巴布韦", 
+        "code": "00263", 
+        "code_plus": "+263"
+    }, 
+    {
+        "country_pinyin": "namibiya", 
+        "country": "纳米比亚", 
+        "code": "00264", 
+        "code_plus": "+264"
+    }, 
+    {
+        "country_pinyin": "malawei", 
+        "country": "马拉维", 
+        "code": "00265", 
+        "code_plus": "+265"
+    }, 
+    {
+        "country_pinyin": "laisuotuo", 
+        "country": "莱索托", 
+        "code": "00266", 
+        "code_plus": "+266"
+    }, 
+    {
+        "country_pinyin": "bociwana", 
+        "country": "博茨瓦纳", 
+        "code": "00267", 
+        "code_plus": "+267"
+    }, 
+    {
+        "country_pinyin": "siweishilan", 
+        "country": "斯威士兰", 
+        "code": "00268", 
+        "code_plus": "+268"
+    }, 
+    {
+        "country_pinyin": "kemoluo", 
+        "country": "科摩罗", 
+        "code": "00269", 
+        "code_plus": "+269"
+    }, 
+    {
+        "country_pinyin": "nanfei", 
+        "country": "南非", 
+        "code": "0027", 
+        "code_plus": "+27"
+    }, 
+    {
+        "country_pinyin": "shenghelena", 
+        "country": "圣赫勒拿", 
+        "code": "00290", 
+        "code_plus": "+290"
+    }, 
+    {
+        "country_pinyin": "alubadao", 
+        "country": "阿鲁巴岛", 
+        "code": "00297", 
+        "code_plus": "+297"
+    }, 
+    {
+        "country_pinyin": "faluoqundao", 
+        "country": "法罗群岛", 
+        "code": "00298", 
+        "code_plus": "+298"
+    }, 
+    {
+        "country_pinyin": "meiguo", 
+        "country": "美国", 
+        "code": "001", 
+        "code_plus": "+1"
+    }, 
+    {
+        "country_pinyin": "jianada", 
+        "country": "加拿大", 
+        "code": "001", 
+        "code_plus": "+1"
+    }, 
+    {
+        "country_pinyin": "zhongtudao", 
+        "country": "中途岛", 
+        "code": "001808", 
+        "code_plus": "+1808"
+    }, 
+    {
+        "country_pinyin": "xiaweiyi", 
+        "country": "夏威夷", 
+        "code": "001808", 
+        "code_plus": "+1808"
+    }, 
+    {
+        "country_pinyin": "weikedao", 
+        "country": "威克岛", 
+        "code": "001808", 
+        "code_plus": "+1808"
+    }, 
+    {
+        "country_pinyin": "anguiladao", 
+        "country": "安圭拉岛", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "weierjingqundao", 
+        "country": "维尔京群岛", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "shengluxiya", 
+        "country": "圣卢西亚", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "boduolige", 
+        "country": "波多黎各", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "yamaijia", 
+        "country": "牙买加", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "bahama", 
+        "country": "巴哈马", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "babaduosi", 
+        "country": "巴巴多斯", 
+        "code": "001809", 
+        "code_plus": "+1809"
+    }, 
+    {
+        "country_pinyin": "alasijia", 
+        "country": "阿拉斯加", 
+        "code": "001907", 
+        "code_plus": "+1907"
+    }, 
+    {
+        "country_pinyin": "gelinglandao", 
+        "country": "格陵兰岛", 
+        "code": "00299", 
+        "code_plus": "+299"
+    }, 
+    {
+        "country_pinyin": "fukelanqundao", 
+        "country": "福克兰群岛", 
+        "code": "00500", 
+        "code_plus": "+5+"
+    }, 
+    {
+        "country_pinyin": "bolizi", 
+        "country": "伯利兹", 
+        "code": "00501", 
+        "code_plus": "+501"
+    }, 
+    {
+        "country_pinyin": "weidimala", 
+        "country": "危地马拉", 
+        "code": "00502", 
+        "code_plus": "+502"
+    }, 
+    {
+        "country_pinyin": "saerwaduo", 
+        "country": "萨尔瓦多", 
+        "code": "00503", 
+        "code_plus": "+503"
+    }, 
+    {
+        "country_pinyin": "hongdoulasi", 
+        "country": "洪都拉斯", 
+        "code": "00504", 
+        "code_plus": "+504"
+    }, 
+    {
+        "country_pinyin": "nijialagua", 
+        "country": "尼加拉瓜", 
+        "code": "00505", 
+        "code_plus": "+505"
+    }, 
+    {
+        "country_pinyin": "gesidalijia", 
+        "country": "哥斯达黎加", 
+        "code": "00506", 
+        "code_plus": "+506"
+    }, 
+    {
+        "country_pinyin": "banama", 
+        "country": "巴拿马", 
+        "code": "00507", 
+        "code_plus": "+507"
+    }, 
+    {
+        "country_pinyin": "haidi", 
+        "country": "海地", 
+        "code": "00509", 
+        "code_plus": "+509"
+    }, 
+    {
+        "country_pinyin": "bilu", 
+        "country": "秘鲁", 
+        "code": "0051", 
+        "code_plus": "+51"
+    }, 
+    {
+        "country_pinyin": "moxige", 
+        "country": "墨西哥", 
+        "code": "0052", 
+        "code_plus": "+52"
+    }, 
+    {
+        "country_pinyin": "guba", 
+        "country": "古巴", 
+        "code": "0053", 
+        "code_plus": "+53"
+    }, 
+    {
+        "country_pinyin": "agenting", 
+        "country": "阿根廷", 
+        "code": "0054", 
+        "code_plus": "+54"
+    }, 
+    {
+        "country_pinyin": "baxi", 
+        "country": "巴西", 
+        "code": "0055", 
+        "code_plus": "+55"
+    }, 
+    {
+        "country_pinyin": "zhili", 
+        "country": "智利", 
+        "code": "0056", 
+        "code_plus": "+56"
+    }, 
+    {
+        "country_pinyin": "gelunbiya", 
+        "country": "哥伦比亚", 
+        "code": "0057", 
+        "code_plus": "+57"
+    }, 
+    {
+        "country_pinyin": "weineiruila", 
+        "country": "委内瑞拉", 
+        "code": "0058", 
+        "code_plus": "+58"
+    }, 
+    {
+        "country_pinyin": "boliweiya", 
+        "country": "玻利维亚", 
+        "code": "00591", 
+        "code_plus": "+591"
+    }, 
+    {
+        "country_pinyin": "guiyana", 
+        "country": "圭亚那", 
+        "code": "00592", 
+        "code_plus": "+592"
+    }, 
+    {
+        "country_pinyin": "eguaduoer", 
+        "country": "厄瓜多尔", 
+        "code": "00593", 
+        "code_plus": "+593"
+    }, 
+    {
+        "country_pinyin": "fashuguiyana", 
+        "country": "法属圭亚那", 
+        "code": "00594", 
+        "code_plus": "+594"
+    }, 
+    {
+        "country_pinyin": "balagui", 
+        "country": "巴拉圭", 
+        "code": "00595", 
+        "code_plus": "+595"
+    }, 
+    {
+        "country_pinyin": "matinike", 
+        "country": "马提尼克", 
+        "code": "00596", 
+        "code_plus": "+596"
+    }, 
+    {
+        "country_pinyin": "sulinan", 
+        "country": "苏里南", 
+        "code": "00597", 
+        "code_plus": "+597"
+    }, 
+    {
+        "country_pinyin": "wulagui", 
+        "country": "乌拉圭", 
+        "code": "00598", 
+        "code_plus": "+598"
+    }, 
+    {
+        "country_pinyin": "aodaliya", 
+        "country": "澳大利亚", 
+        "code": "0061", 
+        "code_plus": "+61"
+    }, 
+    {
+        "country_pinyin": "xinxilan", 
+        "country": "新西兰", 
+        "code": "0064", 
+        "code_plus": "+64"
+    }, 
+    {
+        "country_pinyin": "guandao", 
+        "country": "关岛", 
+        "code": "00671", 
+        "code_plus": "+671"
+    }, 
+    {
+        "country_pinyin": "kekesidao", 
+        "country": "科科斯岛", 
+        "code": "006722", 
+        "code_plus": "+6722"
+    }, 
+    {
+        "country_pinyin": "nuofukedao", 
+        "country": "诺福克岛", 
+        "code": "006723", 
+        "code_plus": "+6723"
+    }, 
+    {
+        "country_pinyin": "shengdandao", 
+        "country": "圣诞岛", 
+        "code": "006724", 
+        "code_plus": "+6724"
+    }, 
+    {
+        "country_pinyin": "naolu", 
+        "country": "瑙鲁", 
+        "code": "00674", 
+        "code_plus": "+674"
+    }, 
+    {
+        "country_pinyin": "tangjia", 
+        "country": "汤加", 
+        "code": "00676", 
+        "code_plus": "+676"
+    }, 
+    {
+        "country_pinyin": "suoluomenqundao", 
+        "country": "所罗门群岛", 
+        "code": "00677", 
+        "code_plus": "+677"
+    }, 
+    {
+        "country_pinyin": "wanuatu", 
+        "country": "瓦努阿图", 
+        "code": "00678", 
+        "code_plus": "+678"
+    }, 
+    {
+        "country_pinyin": "feiji", 
+        "country": "斐济", 
+        "code": "00679", 
+        "code_plus": "+679"
+    }, 
+    {
+        "country_pinyin": "kekequndao", 
+        "country": "科克群岛", 
+        "code": "00682", 
+        "code_plus": "+682"
+    }, 
+    {
+        "country_pinyin": "niuaidao", 
+        "country": "纽埃岛", 
+        "code": "00683", 
+        "code_plus": "+683"
+    }, 
+    {
+        "country_pinyin": "dongsamoya", 
+        "country": "东萨摩亚", 
+        "code": "00684", 
+        "code_plus": "+684"
+    }, 
+    {
+        "country_pinyin": "xisamoya", 
+        "country": "西萨摩亚", 
+        "code": "00685", 
+        "code_plus": "+685"
+    }, 
+    {
+        "country_pinyin": "jilibasi", 
+        "country": "基里巴斯", 
+        "code": "00686", 
+        "code_plus": "+686"
+    }, 
+    {
+        "country_pinyin": "tuwalu", 
+        "country": "图瓦卢", 
+        "code": "00688", 
+        "code_plus": "+688"
+    }
+]

@@ -7,10 +7,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.view.adapter.MyFavoriteAdpater;
 
 /**
  * Created by xiaojw on 2016/6/3.
@@ -31,10 +34,13 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     ImageView headImg;
     SwipeRefreshLayout refreshLayout;
     LinearLayout favorite_tab, order_tab, coupon_tab;
+    FrameLayout tab_content_container;
     ViewGroup lastSelectedView;
     Button settingBtn;
+    RecyclerView myfavorite_rlv, myorder_rlv, coupon_rlv;
     ContentService contentService;
     boolean isLogined;
+
 
     Handler handler = new Handler() {
         @Override
@@ -66,6 +72,8 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         favorite_tab = (LinearLayout) view.findViewById(R.id.home_me_favorite_tab);
         order_tab = (LinearLayout) view.findViewById(R.id.home_me_order_tab);
         coupon_tab = (LinearLayout) view.findViewById(R.id.home_me_coupon_tab);
+        tab_content_container = (FrameLayout) view.findViewById(R.id.home_tab_content_container);
+        initTabView(tab_content_container);
         refreshLayout.setColorSchemeResources(R.color.color_8fe6ff, R.color.thin_blue, R.color.color_de);
         refreshLayout.setOnRefreshListener(this);
         verified_tv.setOnClickListener(meFragmentClickListener);
@@ -75,6 +83,14 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         favorite_tab.setOnClickListener(meFragmentClickListener);
         order_tab.setOnClickListener(meFragmentClickListener);
         coupon_tab.setOnClickListener(meFragmentClickListener);
+    }
+
+    private void initTabView(FrameLayout tab_content_container) {
+        myfavorite_rlv = new RecyclerView(getActivity());
+        MyFavoriteAdpater adpater = new MyFavoriteAdpater(getActivity());
+        myfavorite_rlv.setAdapter(adpater);
+
+
     }
 
     @Override

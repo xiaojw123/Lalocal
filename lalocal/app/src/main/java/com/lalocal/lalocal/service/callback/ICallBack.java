@@ -7,6 +7,11 @@ import com.lalocal.lalocal.model.User;
  */
 public abstract class ICallBack {
 
+
+    public void onUpHeaderComplete(){
+
+    }
+
     public void onResetPasswordComplete(int code,String msg){
 
     }

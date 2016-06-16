@@ -27,7 +27,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        home_tab_container = (LinearLayout) findViewById(R.id.home_tab_container);
+        home_tab_container = (LinearLayout) findViewById(R.id.home_tab_containner);
         home_recommend_tab = (RelativeLayout) findViewById(R.id.home_tab_recommend);
         home_destination_tab = (RelativeLayout) findViewById(R.id.home_tab_destination);
         home_news_tab = (RelativeLayout) findViewById(R.id.home_tab_news);

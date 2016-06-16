@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/transparent</item>
-        <item name="colorPrimaryDark">@android:color/transparent</item>
+        <item name="colorPrimary">@android:color/white</item>
+        <item name="colorPrimaryDark">@android:color/white</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -18,6 +18,8 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
+
+
 
     <style name="RegisterEditTheme">
         <item name="android:layout_width">match_parent</item>
@@ -87,7 +89,13 @@
         <item name="android:layout_height">@dimen/register_title_divde_line_height</item>
         <item name="android:background">@color/color_de</item>
     </style>
-    
+
+    <style name="CommonTitleLineThem2">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/register_title_divde_line_height</item>
+        <item name="android:background">@color/color_d9</item>
+    </style>
+
     <style name="SettingItemTextTheme">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -95,12 +103,59 @@
         <item name="android:textColor">@color/color_66</item>
         <item name="android:layout_gravity">center_vertical</item>
     </style>
+
     <style name="SettingItemArrowTheme">
         <item name="android:layout_width">@dimen/setting_item_arrow_right_width</item>
         <item name="android:layout_height">@dimen/setting_item_arrow_right_height</item>
         <item name="android:background">@drawable/arrow_right</item>
         <item name="android:layout_gravity">center_vertical|right</item>
     </style>
+    <style name="AboutUsItemArrowTheme" parent="AcountEditItemArrowRight">
+        <item name="android:layout_marginRight">@dimen/dimen_size_11_dp</item>
+    </style>
 
+    <style name="CommonTitleNameTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_1a</item>
+        <item name="android:textSize">@dimen/text_size_17_sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="AboutUsItemTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/about_us_contact_item_height</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:gravity">center_vertical</item>
+
+    </style>
+
+    
+    <style name="AcountEditItemTitle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_14_sp</item>
+        <item name="android:textColor">@color/color_8c</item>
+    </style>
+
+    <style name="AcountEditItemContent">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_14_sp</item>
+        <item name="android:textColor">@color/color_66</item>
+    </style>
+    <style name="AcountEditItemArrowRight">
+        <item name="android:layout_width">@dimen/setting_item_arrow_right_width</item>
+        <item name="android:layout_height">@dimen/setting_item_arrow_right_height</item>
+        <item name="android:layout_marginLeft">@dimen/dimen_size_7_dp</item>
+        <item name="android:background">@drawable/arrow_right</item>
+        <item name="android:layout_alignParentRight">true</item>
+    </style>
+    <style name="AccoutEditItemTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/setting_about_us_height</item>
+        <item name="android:paddingLeft">@dimen/account_edit_nickname_left</item>
+        <item name="android:paddingRight">@dimen/account_edit_nickname_right</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
 
 </resources>

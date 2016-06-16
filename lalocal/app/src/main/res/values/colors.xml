@@ -16,4 +16,12 @@
     <color name="color_f8">#f8f8f8</color>
     <color name="color_ffaa2a">#ffaa2a</color>
     <color name="color_ff6f6f">#ff6f6f</color>
+    <color name="color_4a90e2">#4a90e2</color>
+    <color name="color_f07e3c">#f07e3c</color>
+    <color name="color_7ed321">#7ed321</color>
+    <color name="color_bd10e0">#bd10e0</color>
+    <color name="color_c5">#c5c5c5</color>
+    <color name="color_8c">#8c8c8c</color>
+    <color name="thin_dark">#70000000</color>
+
 </resources>

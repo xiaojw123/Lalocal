@@ -48,6 +48,10 @@
 
 
     </FrameLayout>
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        android:layout_below="@+id/setting_about_us"
+     />
     <FrameLayout
         android:id="@+id/setting_clear_cache"
         android:layout_width="match_parent"
@@ -74,8 +78,17 @@
 
 
     </FrameLayout>
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        android:layout_below="@+id/setting_clear_cache"
+        />
 
 
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        android:layout_below="@+id/setting_clear_cache"
+        android:layout_marginTop="@dimen/setting_modify_password_top"
+        />
     <FrameLayout
         android:id="@+id/setting_modify_password"
         android:layout_width="match_parent"
@@ -96,7 +109,10 @@
 
 
     </FrameLayout>
-
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        android:layout_below="@+id/setting_modify_password"
+        />
 
 
     <Button

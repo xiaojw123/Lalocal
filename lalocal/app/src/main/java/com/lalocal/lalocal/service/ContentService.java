@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.service;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -28,6 +29,9 @@ import java.util.Map;
  */
 public class ContentService {
     public static final String CONTENT_TYPE = "application/json";
+    //    public static final String MITLIPART_IMAGE_TYPE = "multipart/form-data; boundary=fD4fH3gL0hK7aI6";
+    public static final String MITLIPART_IMAGE_TYPE = "application/multi";
+
     private ICallBack callBack;
     RequestQueue requestQueue;
     ContentResponse response;
@@ -42,6 +46,37 @@ public class ContentService {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+
+    //修改的用户资料
+    public void modifyUserProfile(String nickanme, int sex, String phone) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.PUT, APPcofig.MODIFY_USER_PROFILE_URL, response, response);
+        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, phone));
+        requestQueue.add(request);
+    }
+
+    //上传头像
+    public void uploadHeader(byte[] bodyBytes) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.UPLOAD_HEADER);
+
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.UPLOAD_HEDARE_URL, response, response);
+        request.setBodyType(MITLIPART_IMAGE_TYPE);
+        request.setBodyParams(bodyBytes);
+        requestQueue.add(request);
+    }
+
+    public void getFavoriteItems(String userid, String token) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, APPcofig.GET_MY_FARORITE_ITEMS, response, response);
+//        request.setHeaderParams();
+        requestQueue.add(request);
     }
 
     public void resetPasword(String email, String vercode, String newpsw) {
@@ -102,6 +137,9 @@ public class ContentService {
 
     class ContentRequest extends StringRequest {
         private String body;
+        private Map<String, String> headerParams;
+        private byte[] bodyParams;
+        private String bodyType;
 
         public ContentRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             this(Method.GET, url, listener, errorListener);
@@ -111,24 +149,37 @@ public class ContentService {
             super(method, url, listener, errorListener);
         }
 
+        public void setHeaderParams(Map<String, String> headerParams) {
+            this.headerParams = headerParams;
+        }
+
         @Override
         public Map<String, String> getHeaders() throws AuthFailureError {
-            return getHeaderParams();
+            return headerParams == null ? getHeaderParams() : headerParams;
         }
 
         public void setBodyParams(String body) {
             this.body = body;
         }
 
+
+        public void setBodyParams(byte[] bodyParams) {
+            this.bodyParams = bodyParams;
+        }
+
         @Override
         public byte[] getBody() throws AuthFailureError {
-            return body.getBytes();
+            return bodyParams != null ? bodyParams : body.getBytes();
+        }
+
+        public void setBodyType(String bodyType) {
+            this.bodyType = bodyType;
         }
 
         //request body type:json
         @Override
         public String getBodyContentType() {
-            return CONTENT_TYPE;
+            return bodyType != null ? bodyType : CONTENT_TYPE;
         }
 
     }
@@ -179,9 +230,27 @@ public class ContentService {
                 case RequestCode.RESET_PASSWORD:
                     responseResetPassword(json);
                     break;
+                case RequestCode.UPLOAD_HEADER:
+                    responseUploadHeader(json);
+                    break;
+                case RequestCode.MODIFY_USER_PROFILE:
+                    responseModifyUserProfile(json);
+                    break;
             }
 
         }
+
+        private void responseModifyUserProfile(String json) {
+            AppLog.print("modifyuserprofile____" + json);
+
+
+        }
+
+        private void responseUploadHeader(String json) {
+            AppLog.print("responseUploadHeader json___" + json);
+
+        }
+
 
         private void responseResetPassword(String json) {
             AppLog.print("reset psw__" + json);
@@ -189,7 +258,7 @@ public class ContentService {
                 JSONObject jsonObject = new JSONObject(json);
                 int code = jsonObject.optInt(ResultParams.RESULT_CODE, 1);
                 String message = jsonObject.optString(ResultParams.MESSAGE);
-                AppLog.print("responseResetPassword code____"+code);
+                AppLog.print("responseResetPassword code____" + code);
                 callBack.onResetPasswordComplete(code, message);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -255,6 +324,27 @@ public class ContentService {
                 e.printStackTrace();
             }
         }
+    }
+
+    public String getModifyUserProfileParams(String nickname, int sex, String phone) {
+        JSONObject jsonObj = new JSONObject();
+        try {
+            if (!TextUtils.isEmpty(nickname)) {
+                jsonObj.put("nickName", nickname);
+            }
+            if (sex == 1 || sex == 0) {
+                boolean flag = sex == 1 ? true : false;
+                jsonObj.put("sex", flag);
+            }
+            if (!TextUtils.isEmpty(phone)) {
+                jsonObj.put("phone", phone);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObj.toString();
+
+
     }
 
     public String getResetPswParams(String email, String vercode, String newpsw) {
@@ -330,6 +420,9 @@ public class ContentService {
         public static final int CHECK_EMAIL = 102;
         public static final int SEND_VERIFICATION_CODE = 103;
         public static final int RESET_PASSWORD = 104;
+        public static final int GET_FAVORITE_ITEMS = 105;
+        public static final int UPLOAD_HEADER = 106;
+        public static final int MODIFY_USER_PROFILE = 107;
     }
 
 

@@ -25,7 +25,6 @@ public class UserProtocolActivity extends AppCompatActivity {
         ws.setLoadWithOverviewMode(true);
         ws.setDisplayZoomControls(false);
         webView.setHorizontalScrollBarEnabled(false);
-//        webView.setVerticalScrollBarEnabled(false);
         setContentView(webView);
     }
 

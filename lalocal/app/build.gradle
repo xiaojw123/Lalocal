@@ -25,4 +25,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile files('libs/universal-image-loader-1.9.5.jar')
     compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile files('libs/google-http-client-1.20.0.jar')
+    compile 'com.belerweb:pinyin4j:2.5.1'
 }
