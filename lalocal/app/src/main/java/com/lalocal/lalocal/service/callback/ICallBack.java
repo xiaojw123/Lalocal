@@ -31,7 +31,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onResigterComplete(String resultCode, String message, String email, String psw) {
+    public void onResigterComplete(String resultCode, String message, String email, String psw,int userid,String token) {
 
     }
 
