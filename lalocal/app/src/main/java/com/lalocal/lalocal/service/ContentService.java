@@ -11,7 +11,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+
 import com.lalocal.lalocal.model.LoginUser;
+
+import com.lalocal.lalocal.model.RecommendAdResp;
+import com.lalocal.lalocal.model.RecommendDataResp;
+
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.APPcofig;
@@ -172,6 +177,26 @@ public class ContentService {
         requestQueue.add(request);
     }
 
+    //推荐
+    public void recommentList(final int pageSize, final int pageNumber){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.RECOMMEND);
+            response.setRecommend(pageSize, pageNumber);
+        }
+        String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
+        ContentRequest request = new ContentRequest(APPcofig.RECOMMEND_URL + getParameter, response, response);
+        requestQueue.add(request);
+
+    }
+    //推荐页广告位
+    public void recommendAd(){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.RECOMMEND_AD);
+        }
+
+        ContentRequest request = new ContentRequest(APPcofig.RECOMMEND_AD, response, response);
+        requestQueue.add(request);
+    }
 
     class ContentRequest extends StringRequest {
         private String body;
@@ -227,7 +252,7 @@ public class ContentService {
 
         private String email, psw;
         private int resultCode;
-
+        private int pageSize,pageNumber;
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
@@ -240,7 +265,11 @@ public class ContentService {
         public void setEmail(String email) {
             this.email = email;
         }
+        public void setRecommend(int pageSize, int pageNumber){
+            this.pageSize=pageSize;
+            this.pageNumber=pageNumber;
 
+        }
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
@@ -274,11 +303,19 @@ public class ContentService {
                 case RequestCode.MODIFY_USER_PROFILE:
                     responseModifyUserProfile(json);
                     break;
+
                 case RequestCode.GET_USER_PROFILE:
                     responseGetUserProfile(json);
                     break;
                 case RequestCode.BOUDN_EMAIL:
                     responseBoundEmail(json);
+                    break;
+
+                case RequestCode.RECOMMEND:
+                    responseRecommend(json);
+                    break;
+                case RequestCode.RECOMMEND_AD:
+                    responseRecommendAd(json);
                     break;
             }
 
@@ -293,6 +330,9 @@ public class ContentService {
                 callBack.onSendActivateEmmailComplete(code, message);
             } catch (JSONException e) {
                 e.printStackTrace();
+
+
+
             }
 
         }
@@ -315,6 +355,7 @@ public class ContentService {
 
         private void responseModifyUserProfile(String json) {
             AppLog.print("modifyuserprofile____" + json);
+
             try {
                 JSONObject jsonObj = new JSONObject(json);
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
@@ -412,6 +453,18 @@ public class ContentService {
             }
         }
     }
+    //推荐
+    public void responseRecommend(String json){
+
+        RecommendDataResp recommendDataResp = new Gson().fromJson(json, RecommendDataResp.class);
+        callBack.onRecommend(recommendDataResp);
+    }
+    //推荐广告
+    public void responseRecommendAd(String json){
+        RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
+        callBack.onRecommendAd(recommendAdResp);
+
+    }
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String phone) {
         JSONObject jsonObj = new JSONObject();
@@ -496,6 +549,7 @@ public class ContentService {
 
     }
 
+
     public Map<String, String> getHeaderParams() {
         Map<String, String> headers = new HashMap<>();
         headers.put("APP_VERSION", APPcofig.getVersionName(context));
@@ -542,9 +596,14 @@ public class ContentService {
         public static final int GET_FAVORITE_ITEMS = 105;
         public static final int UPLOAD_HEADER = 106;
         public static final int MODIFY_USER_PROFILE = 107;
+
         public static final int GET_USER_PROFILE = 108;
         public static final int BOUDN_EMAIL = 109;
         public static final int ACTIVATE_EMAIL = 110;
+
+        public static final int RECOMMEND=200;
+        public static final int RECOMMEND_AD=201;
+
     }
 
 

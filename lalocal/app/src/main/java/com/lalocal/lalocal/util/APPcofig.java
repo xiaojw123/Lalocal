@@ -23,9 +23,13 @@ public class APPcofig {
     public static  final  String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
     public static final String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
 
+    //推荐接口
+    public static final String RECOMMEND_URL=BASE_URL+"themes?";
+    //推荐广告位接口
+    public static final String RECOMMEND_AD=BASE_URL+"advertising?type=0";
 
-
-
+    //专题详情接口
+    public static final String SPECIAL_DETAILS_URL="http://dev.lalocal.cn:8080/api/themes/";
     public static  final String IN_LAND_PHONE="400-017-8056";
     public static  final String FOREIGEN_PHONE="(+86)0571-86808267";
 

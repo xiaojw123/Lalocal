@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recommend_title_ll_height">
+        <include layout="@layout/common_back_layout" />
+        <ImageView
+            android:layout_width="@dimen/recommend_title_img_wdith"
+            android:layout_height="@dimen/recommend_title_img_height"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lalocallogo"
+            />
+
+        <ImageView
+            android:id="@+id/special_details_share_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/special_details_margin"
+            android:src="@drawable/index_article_btn_share"/>
+
+        <ImageView
+            android:id="@+id/special_details_like_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/special_details_share_iv"
+            android:layout_marginRight="@dimen/special_details_margin"
+            android:src="@drawable/index_article_btn_like"/>
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/recommend_listview_item2_height">
+                <RelativeLayout
+                    android:id="@+id/special_details_rl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/special_details_pictorial_iv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="fitXY"
+                        />
+                    <TextView
+                        android:id="@+id/spcial_details_tv_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:paddingLeft="120dp"
+                        android:textColor="@android:color/white"
+                        android:text="人这一生啊无论身体还是心灵都需要多泡泡温泉洗尽尘埃"
+                        android:lines="4"
+                        android:maxEms="10"/>
+                    <TextView
+                        android:id="@+id/spcial_details_tv_authorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toRightOf="@id/spcial_details_tv_content"
+                        android:layout_alignBottom="@+id/spcial_details_tv_content"
+                        android:textColor="@android:color/white"
+                        android:text="- - 布吉道左者"/>
+                </RelativeLayout>
+
+                <VideoView
+                    android:id="@+id/special_details_pictorial_video"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"
+                     />
+            </FrameLayout>
+            <WebView
+                android:id="@+id/special_details_webview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                ></WebView>
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+</LinearLayout>

@@ -1,6 +1,11 @@
 package com.lalocal.lalocal.service.callback;
 
+
 import com.lalocal.lalocal.model.LoginUser;
+
+import com.lalocal.lalocal.model.RecommendAdResp;
+import com.lalocal.lalocal.model.RecommendDataResp;
+
 import com.lalocal.lalocal.model.User;
 
 /**
@@ -54,6 +59,9 @@ public abstract class ICallBack {
 
 
     }
-
+    //推荐
+    public void onRecommend(RecommendDataResp recommendDataResp){}
+    //推荐广告
+    public void onRecommendAd( RecommendAdResp recommendAdResp){}
 
 }
