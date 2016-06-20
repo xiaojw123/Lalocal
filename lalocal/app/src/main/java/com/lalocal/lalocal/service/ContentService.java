@@ -85,21 +85,20 @@ public class ContentService {
         AppLog.print("uploadHeader :photo__" + photo + ", userid__" + userid + ", token__" + token);
         ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.UPLOAD_HEDARE_URL, response, response);
         String contentType = "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__";
-        request.setBodyType(contentType);
-        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+//        request.setBodyType(contentType);
+        request.setHeaderParams(getUploadHeder(userid, token));
         request.setBodyParams(getUploadBodyParmas(photo));
         requestQueue.add(request);
     }
 
     private String getUploadBodyParmas(String photo) {
-        return "avatar" + photo;
-//        JSONObject jsonObj = new JSONObject();
-//        try {
-//            jsonObj.put("avatar", bytes);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//        return jsonObj.toString();
+        JSONObject jsonObj = new JSONObject();
+        try {
+            jsonObj.put("avatar", photo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObj.toString();
     }
 
     public void getFavoriteItems(String userid, String token) {
@@ -441,10 +440,14 @@ public class ContentService {
 
         private void responseRegister(String json) {
             try {
+                AppLog.print("responseRegister___" + json);
                 JSONObject jsonObject = new JSONObject(json);
                 String resCode = jsonObject.optString(ResultParams.RESULT_CODE, "1");
                 String message = jsonObject.optString(ResultParams.MESSAGE, "注册失败");
-                callBack.onResigterComplete(resCode, message, email, psw);
+                JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
+                int userid = jsonObj.optInt("id");
+                String token = jsonObj.optString("token");
+                callBack.onResigterComplete(resCode, message, email, psw,userid,token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -555,21 +558,22 @@ public class ContentService {
         return headers;
     }
 
-    public Map<String, String> getUploadHeder(int userid, String token, String contetype) {
+    public Map<String, String> getUploadHeder(int userid, String token) {
         Map<String, String> map = getLoginedHeaderParams(userid, token);
-        map.put("Content-Type", contetype);
+        map.put("Content-Type", "multipart/form-data;charset=utf-8; boundary=__X_PAW_BOUNDARY__; image/png");
+        //multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__
+        map.put("Content-Disposition", "name=avatar; filename=alipay_m@2x.png");
         return map;
     }
+
 
     public Map<String, String> getLoginedHeaderParams(int userid, String token) {
         AppLog.print("userid___" + userid + ", token___" + token);
         Map<String, String> map = getHeaderParams();
         if (userid != -1) {
-            AppLog.print("bind1__");
             map.put("USER_ID", String.valueOf(userid));
         }
         if (!TextUtils.isEmpty(token)) {
-            AppLog.print("bind2__");
             map.put("TOKEN", token);
         }
         return map;

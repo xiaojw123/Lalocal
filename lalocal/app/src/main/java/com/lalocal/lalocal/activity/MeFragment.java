@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.MyFavoriteAdpater;
 
@@ -114,9 +116,9 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             } else if (v == headImg || v == username_tv) {
                 if (isLogined) {
                     Intent intent = new Intent(getActivity(), AccountEidt1Activity.class);
-                    intent.putExtra(Params.USERID,user.getId());
-                    intent.putExtra(Params.TOKEN,user.getToken());
-                    startActivityForResult(intent,100);
+                    intent.putExtra(Params.USERID, user.getId());
+                    intent.putExtra(Params.TOKEN, user.getToken());
+                    startActivityForResult(intent, 100);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivityForResult(intent, 100);
@@ -139,6 +141,7 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        AppLog.print("onActivityResult resCode__"+resultCode);
         if (resultCode == LoginActivity.REGISTER_OK) {
             String email = data.getStringExtra(LoginActivity.EMAIL);
             String psw = data.getStringExtra(LoginActivity.PSW);
@@ -148,7 +151,17 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             updateFragmentView(true, user);
         } else if (resultCode == SettingActivity.UN_LOGIN_OK) {
             updateFragmentView(false, null);
+        } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
+            int status = data.getIntExtra(Params.STATUS, -1);
+            String nickname = data.getStringExtra(Params.NICKNAME);
+            String avatar = data.getStringExtra(Params.AVATAR);
+            AppLog.print("status__"+status+", nickanem__"+nickname+", avatar__"+avatar);
+            user.setStatus(status);
+            user.setNickName(nickname);
+            user.setAvatar(avatar);
+            updateFragmentView(isLogined, user);
         }
+        ;
 
 
     }
@@ -156,9 +169,12 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     //isLogined=false时注意擦除登陆数据
     private void updateFragmentView(boolean isLogined, User user) {
         this.isLogined = isLogined;
-        this.user=user;
-        if (isLogined) {
-            username_tv.setText(user.getNickName());
+        this.user = user;
+        if (isLogined && user != null) {
+            String nickname = user.getNickName();
+            if (!TextUtils.isEmpty(nickname)) {
+                username_tv.setText(nickname);
+            }
             if (verified_tv.getVisibility() != View.VISIBLE) {
                 verified_tv.setVisibility(View.VISIBLE);
             }
@@ -169,7 +185,10 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 verified_tv.setActivated(false);
                 verified_tv.setText(getResources().getString(R.string.no_verified));
             }
-            DrawableUtils.displayImg(getActivity(), headImg, user.getAvatar());
+            String avatar = user.getAvatar();
+            if (!TextUtils.isEmpty(avatar)) {
+                DrawableUtils.displayImg(getActivity(), headImg, avatar);
+            }
         } else {
             username_tv.setText(getResources().getString(R.string.please_login));
             verified_tv.setVisibility(View.GONE);

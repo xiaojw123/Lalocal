@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -22,7 +21,9 @@ import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.PhotoSelectDialog;
 
 import java.io.ByteArrayOutputStream;
@@ -32,6 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEidt1Activity extends AppCompatActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener {
     public static final int RESULT_CODE_MODFY_PROFILE = 123;
+    public static final int UPDATE_ME_DATA = 301;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
@@ -53,6 +55,7 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     ImageView backImg;
     int sex = -1;
     boolean isEmailUpdate;
+    Intent backIntent = new Intent();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +116,7 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
         int id = v.getId();
         switch (id) {
             case R.id.common_back_btn:
+                setResult(UPDATE_ME_DATA, backIntent);
                 finish();
                 break;
             case R.id.account_edit_personalheader:
@@ -236,18 +240,16 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 try {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-//                    bitmap.recycle();
+                    bitmap.recycle();
                     bos.flush();
                     bos.close();
                     byte[] bytes = bos.toByteArray();
-                    byte[] encode= Base64.encode(bytes,Base64.DEFAULT);
-                    String photo=new String(encode);
                     if (user != null) {
-                        contentService.uploadHeader(photo, user.getId(), getToken());
+                        FileUploadUtil.uploadFile(this, backIntent, bytes, user.getId(), getToken());
                     }
-//                    bitmap.recycle();
-//                    bos.flush();
-//                    bos.close();
+                    bitmap.recycle();
+                    bos.flush();
+                    bos.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -274,6 +276,8 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 }
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
                 String nickname = data.getStringExtra(Params.NICKNAME);
+                AppLog.print("modify nickanme__"+nickname);
+                backIntent.putExtra(Params.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
             }
 
@@ -343,6 +347,7 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
             isEmailUpdate = false;
         }
         int status = user.getStatus();
+        backIntent.putExtra(Params.STATUS, status);
         if (status == -1) {
             email_tv.setText(user.getEmail() + "(未验证)");
         } else {
@@ -350,4 +355,11 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
         }
 
     }
+
+    @Override
+    public void onBackPressed() {
+        setResult(UPDATE_ME_DATA, backIntent);
+        super.onBackPressed();
+    }
+
 }

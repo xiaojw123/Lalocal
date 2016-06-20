@@ -100,11 +100,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     class CallBack extends ICallBack {
         @Override
-        public void onResigterComplete(String resultCode, String message, String email, String psw) {
+        public void onResigterComplete(String resultCode, String message, String email, String psw, int userid, String token) {
             if ("0".equals(resultCode)) {
                 loginEmail = email;
                 loginPsw = psw;
-                CommonUtil.showPromptDialog(RegisterActivity.this, getResources().getString(R.string.register_success_prompt), successDialogClicklistener);
+                contentService.boundEmail(email, userid, token);
+
             } else {
                 CommonUtil.showPromptDialog(RegisterActivity.this, message, promptDialogClicklistener);
             }
@@ -112,8 +113,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
+        public void onSendActivateEmmailComplete(int code, String message) {
+            CommonUtil.showPromptDialog(RegisterActivity.this, getResources().getString(R.string.register_success_prompt), successDialogClicklistener);
+        }
+
+        @Override
         public void onRequestFailed(String msg) {
-            CommonUtil.showPromptDialog(RegisterActivity.this,"注册失败", promptDialogClicklistener);
+            CommonUtil.showPromptDialog(RegisterActivity.this, "注册失败", promptDialogClicklistener);
         }
     }
 

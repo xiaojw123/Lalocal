@@ -38,10 +38,14 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="true" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+<<<<<<< HEAD
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
     <option name="id" value="Android" />
+=======
+    <output url="file://$PROJECT_DIR$/classes" />
+>>>>>>> c8bdb647b0902687adfa6855338114f356e79de4
   </component>
   <component name="masterDetails">
     <states>
