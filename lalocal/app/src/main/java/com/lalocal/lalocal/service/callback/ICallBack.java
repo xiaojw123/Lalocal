@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.service.callback;
 
+import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.User;
 
 /**
@@ -7,12 +8,26 @@ import com.lalocal.lalocal.model.User;
  */
 public abstract class ICallBack {
 
-
-    public void onUpHeaderComplete(){
+    public void onModifyUserProfile(int code,LoginUser user){
 
     }
 
-    public void onResetPasswordComplete(int code,String msg){
+
+    public void onSendActivateEmmailComplete(int code,String message) {
+
+    }
+
+    public void onGetUserProfile(int code, LoginUser user) {
+
+
+    }
+
+    public void onUpHeaderComplete() {
+
+    }
+
+
+    public void onResetPasswordComplete(int code, String msg) {
 
     }
 
@@ -20,11 +35,12 @@ public abstract class ICallBack {
 
     }
 
-    public void onCheckEmail(boolean isChecked,String email) {
+    public void onCheckEmail(boolean isChecked, String email) {
 
 
     }
-    public void onSendVerCode(int code,String email){
+
+    public void onSendVerCode(int code, String email) {
 
     }
 
@@ -34,7 +50,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onRequestFailed(String  error) {
+    public void onRequestFailed(String error) {
 
 
     }

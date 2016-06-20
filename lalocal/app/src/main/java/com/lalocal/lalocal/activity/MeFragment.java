@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
@@ -40,6 +41,7 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     RecyclerView myfavorite_rlv, myorder_rlv, coupon_rlv;
     ContentService contentService;
     boolean isLogined;
+    User user;
 
 
     Handler handler = new Handler() {
@@ -110,8 +112,15 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
                 setContentTabSelected(viewGroup, true);
                 lastSelectedView = viewGroup;
             } else if (v == headImg || v == username_tv) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent, 100);
+                if (isLogined) {
+                    Intent intent = new Intent(getActivity(), AccountEidt1Activity.class);
+                    intent.putExtra(Params.USERID,user.getId());
+                    intent.putExtra(Params.TOKEN,user.getToken());
+                    startActivityForResult(intent,100);
+                } else {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(intent, 100);
+                }
             } else if (v == settingBtn) {
                 Intent intent = new Intent(getActivity(), SettingActivity.class);
                 intent.putExtra(LOGIN_STATUS, isLogined);
@@ -147,6 +156,7 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     //isLogined=false时注意擦除登陆数据
     private void updateFragmentView(boolean isLogined, User user) {
         this.isLogined = isLogined;
+        this.user=user;
         if (isLogined) {
             username_tv.setText(user.getNickName());
             if (verified_tv.getVisibility() != View.VISIBLE) {

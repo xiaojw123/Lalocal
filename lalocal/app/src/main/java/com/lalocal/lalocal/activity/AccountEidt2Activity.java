@@ -8,15 +8,17 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.model.Country;
+import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.help.Params;
 import com.lalocal.lalocal.view.CustomDialog;
 import com.lalocal.lalocal.view.WheelDialog;
 
@@ -31,16 +33,37 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
     TextView countrycode_tv;
     int actionType;
     ContentService contentService;
+    ImageView backImg;
+    int userid;
+    String token;
+    String email, emailText;
+    boolean isModifyEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_eidt2_layout);
-        actionType = getActionType();
+        initParams();
         initService();
         initView();
 
 
+    }
+
+    private void initParams() {
+        actionType = getActionType();
+        userid = getIntent().getIntExtra(Params.USERID, -1);
+        token = getIntent().getStringExtra(Params.TOKEN);
+        emailText = getEmailText();
+        if (TextUtils.isEmpty(emailText)) {
+            email = "";
+        } else {
+            if (emailText.contains("(")) {
+                email = emailText.substring(0, emailText.indexOf("("));
+            } else {
+                email = emailText;
+            }
+        }
     }
 
     private void initService() {
@@ -49,6 +72,7 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
     }
 
     private void initView() {
+        backImg = (ImageView) findViewById(R.id.common_back_btn);
         nickname_modfiy_edit = (EditText) findViewById(R.id.nickname_modify_edit);
         countrycode_tv = (TextView) findViewById(R.id.account_edit2_countrycode);
         phone_modify_edit = (EditText) findViewById(R.id.account_edit2_phone);
@@ -59,7 +83,8 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
         Button sendagain_btn = (Button) findViewById(R.id.account_eidt2_sendagain_btn);
         Button changeemail_btn = (Button) findViewById(R.id.account_eidt2_changeemail_btn);
         nickname_modfiy_edit.setText(getNickname());
-        email_tv.setText(getUserEmail());
+        email_tv.setText(getEmailText());
+        backImg.setOnClickListener(this);
         save_tv.setOnClickListener(this);
         sendagain_btn.setOnClickListener(this);
         changeemail_btn.setOnClickListener(this);
@@ -67,6 +92,8 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
         if (actionType == ACTION_NICKNAME_MODIFY) {
             nickname_modfiy_edit.setVisibility(View.VISIBLE);
         } else if (actionType == ACTION_PHONE_MODIFY) {
+            countrycode_tv.setText(getAreaCode());
+            phone_modify_edit.setText(getPhone());
             phone_modify_view.setVisibility(View.VISIBLE);
         } else if (actionType == ACTION_EMAIL_MODIFY) {
             save_tv.setVisibility(View.GONE);
@@ -85,52 +112,110 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
         return getIntent().getStringExtra("nickname");
     }
 
-    public String getUserEmail() {
-        return getIntent().getStringExtra("email");
+    public String getEmailText() {
+        return getIntent().getStringExtra("emailtext");
+    }
+
+
+    public String getAreaCode() {
+        String areaCode = getIntent().getStringExtra(Params.AREA_Code);
+        if (TextUtils.isEmpty(areaCode)) {
+            areaCode = "+86";
+        }
+        return areaCode;
+    }
+
+    public String getPhone() {
+        return getIntent().getStringExtra(Params.PHONE);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.common_back_btn:
+                finish();
+                break;
             case R.id.account_edit2_countrycode:
-                WheelDialog dialog = new WheelDialog(this);
-                dialog.setOnWheelDialogSelectedListener(this);
-                dialog.show();
+                showAreaCodeSeletor();
                 break;
             case R.id.account_edit_save:
                 if (actionType == ACTION_NICKNAME_MODIFY) {
-                    String nickname = nickname_modfiy_edit.getText().toString();
-                    if (!CommonUtil.checkNickname(nickname)) {
-                        CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_no_right), this);
-                        return;
-                    }
-                    Intent intent = new Intent();
-                    intent.putExtra(Params.NICKNAME, nickname);
-                    setResult(RESULT_CODE_NICKNAME, intent);
-                    contentService.modifyUserProfile(nickname, -1, null);
+                    if (modifyNickName()) return;
                 } else if (actionType == ACTION_PHONE_MODIFY) {
-                    String phone = countrycode_tv.getText().toString() + "  " + phone_modify_edit.getText().toString();
-                    if (TextUtils.isEmpty(phone)) {
-                        CommonUtil.showPromptDialog(this, "手机号不能为空", this);
-                        return;
-                    }
-                    Intent intent = new Intent();
-                    intent.putExtra(Params.PHONE, phone);
-                    setResult(RESULT_CODE_PHONE, intent);
-                    contentService.modifyUserProfile(null, -1, phone);
+                    if (modifyPhone()) return;
                 }
-                finish();
                 break;
             case R.id.account_eidt2_sendagain_btn:
-                contentService.sendVerificationCode(getUserEmail());
+                if (TextUtils.isEmpty(email)) {
+                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), this);
+                    return;
+                }
+                contentService.boundEmail(email, userid, token);
                 break;
             case R.id.account_eidt2_changeemail_btn:
-                Intent intent = new Intent(this, EmailBoundActivity.class);
-                intent.putExtra(Params.EMAIL, getUserEmail());
-                startActivityForResult(intent, 100);
+                changeEmail();
                 break;
         }
 
+    }
+
+    private void changeEmail() {
+        Intent intent = new Intent(this, EmailBoundActivity.class);
+        intent.putExtra(Params.USERID,userid);
+        intent.putExtra(Params.TOKEN,token);
+        intent.putExtra(Params.EMAIL, email);
+        startActivityForResult(intent, 100);
+    }
+
+    private void showAreaCodeSeletor() {
+        WheelDialog dialog = new WheelDialog(this);
+        dialog.setOnWheelDialogSelectedListener(this);
+        dialog.show();
+    }
+
+    private boolean modifyNickName() {
+        String nickname = nickname_modfiy_edit.getText().toString();
+        if (!CommonUtil.checkNickname(nickname)) {
+            if (TextUtils.isEmpty(nickname)) {
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), this);
+            } else {
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_input_error), this);
+            }
+            return true;
+        }
+        if (nickname.equals(getNickname())) {
+            finish();
+            return true;
+        }
+        contentService.modifyUserProfile(nickname, -1, null, null, userid, token);
+        return false;
+    }
+
+    private boolean modifyPhone() {
+        String phoneNumber = phone_modify_edit.getText().toString();
+        String areaCode = countrycode_tv.getText().toString();
+        if ("国家号".equals(areaCode)) {
+            areaCode = getAreaCode();
+        }
+        String phoneStr = areaCode + "  " + phoneNumber;
+        if (TextUtils.isEmpty(phoneNumber)) {
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), this);
+            return true;
+        }
+        if (areaCode.equals(getAreaCode())) {
+            areaCode = null;
+        } else if (phoneNumber.equals(getPhone())) {
+            phoneNumber = null;
+        } else if (areaCode.equals(getAreaCode()) && phoneNumber.equals(getPhone())) {
+            finish();
+            return true;
+        }
+        Intent intent = new Intent();
+        intent.putExtra(Params.AREA_Code, areaCode);
+        intent.putExtra(Params.PHONE, phoneNumber);
+        setResult(RESULT_CODE_PHONE, intent);
+        contentService.modifyUserProfile(null, -1, areaCode, phoneNumber, userid, token);
+        return false;
     }
 
     @Override
@@ -145,21 +230,43 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
     @Override
     public void onDialogClickListener(Dialog dialog, View view) {
         dialog.dismiss();
-        finish();
+        if (isModifyEmail) {
+            isModifyEmail = false;
+            setResult(EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL, null);
+            finish();
+        }
     }
 
     @Override
     public void onSelected(Country item) {
         countrycode_tv.setText(item.getCodePlus());
-        phone_modify_edit.setText(item.getName());
     }
 
     class CallBack extends ICallBack {
         @Override
-        public void onSendVerCode(int code, String email) {
+        public void onSendActivateEmmailComplete(int code, String message) {
             if (code == 0) {
+                isModifyEmail = true;
                 CommonUtil.showPromptDialog(AccountEidt2Activity.this, getResources().getString(R.string.register_success_prompt), AccountEidt2Activity.this);
+            } else {
+                CommonUtil.showPromptDialog(AccountEidt2Activity.this, message, AccountEidt2Activity.this);
             }
+        }
+
+        @Override
+        public void onModifyUserProfile(int code, LoginUser user) {
+            if (code == 0) {
+                Intent intent = new Intent();
+                if (actionType == ACTION_NICKNAME_MODIFY) {
+                    intent.putExtra(Params.NICKNAME, user.getNickName());
+                    setResult(RESULT_CODE_NICKNAME, intent);
+                } else if (actionType == ACTION_PHONE_MODIFY) {
+                    intent.putExtra(Params.AREA_Code, user.getAreaCode());
+                    intent.putExtra(Params.PHONE, user.getPhone());
+                    setResult(RESULT_CODE_PHONE, intent);
+                }
+            }
+            finish();
 
         }
     }

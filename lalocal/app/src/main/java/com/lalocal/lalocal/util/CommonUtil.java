@@ -56,6 +56,7 @@ public class CommonUtil{
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener) {
         CustomDialog dialog = new CustomDialog(context);
+        dialog.setCancelable(false);
         dialog.setTitle(context.getResources().getString(R.string.prompt));
         dialog.setMessage(message);
         dialog.setNeturalBtn(context.getResources().getString(R.string.sure), listener);

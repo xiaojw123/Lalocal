@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by xiaojw on 2016/6/7.
  */
 public class User implements Parcelable{
-    int userid;
+    int id;
     String nickName;
     String email;
     String avatar;
@@ -26,9 +26,6 @@ public class User implements Parcelable{
         }
     };
 
-    public void setUserid(int userid) {
-        this.userid = userid;
-    }
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
@@ -50,10 +47,6 @@ public class User implements Parcelable{
         this.status = status;
     }
 
-    public int getUserid() {
-
-        return userid;
-    }
 
     public String getNickName() {
         return nickName;
@@ -80,10 +73,19 @@ public class User implements Parcelable{
         return 0;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(userid);
+        dest.writeInt(id);
         dest.writeString(nickName);
+
         dest.writeString(email);
         dest.writeString(avatar);
         dest.writeString(token);
@@ -91,7 +93,7 @@ public class User implements Parcelable{
     }
 
     public User(Parcel in){
-        userid = in.readInt();
+        id = in.readInt();
         nickName = in.readString();
         email = in.readString();
         avatar = in.readString();

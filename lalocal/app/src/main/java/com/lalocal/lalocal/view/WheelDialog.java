@@ -48,7 +48,13 @@ public class WheelDialog extends Dialog implements View.OnClickListener {
         for (String key : keylist) {
             for (Country c : countryList) {
                 if (key.equals(c.getName())) {
-                    items.add(c);
+                    if (key.equals("中国")) {
+                        selectedItem=c;
+                        items.add(0, c);
+                    } else {
+                        items.add(c);
+
+                    }
                 }
             }
 

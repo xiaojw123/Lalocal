@@ -8,25 +8,30 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.Params;
+import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.PhotoSelectDialog;
 
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEidt1Activity extends AppCompatActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener {
+    public static final int RESULT_CODE_MODFY_PROFILE = 123;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
@@ -37,12 +42,17 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     RelativeLayout nickname_rlt;
     TextView nickaname_tv;
     CheckBox boysex_cb, girlsex_cb;
+    RelativeLayout email_rlt;
     RelativeLayout phone_rlt;
     TextView phone_tv;
-    RelativeLayout email_rlt;
+    TextView areacode_tv;
     TextView email_tv;
     int outputX, outputY;
     ContentService contentService;
+    LoginUser user;
+    ImageView backImg;
+    int sex = -1;
+    boolean isEmailUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +61,18 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
         initService();
         intParams();
         initView();
-
+        contentService.getUserProfile(getUserId(), getToken());
     }
+
+    public int getUserId() {
+        return getIntent().getIntExtra(Params.USERID, -1);
+    }
+
+    public String getToken() {
+
+        return getIntent().getStringExtra(Params.TOKEN);
+    }
+
 
     private void initService() {
         contentService = new ContentService(this);
@@ -68,15 +88,18 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     }
 
     private void initView() {
+        backImg = (ImageView) findViewById(R.id.common_back_btn);
         personalheader_civ = (CircleImageView) findViewById(R.id.account_edit_personalheader);
         nickname_rlt = (RelativeLayout) findViewById(R.id.account_edit_nickname);
         nickaname_tv = (TextView) findViewById(R.id.account_edit_nickname_text);
         boysex_cb = (CheckBox) findViewById(R.id.accout_edit_boy_sex_cb);
         girlsex_cb = (CheckBox) findViewById(R.id.accout_edit_girl_sex_cb);
         phone_rlt = (RelativeLayout) findViewById(R.id.account_edit_phone);
+        areacode_tv = (TextView) findViewById(R.id.account_edit_areacode_text);
         phone_tv = (TextView) findViewById(R.id.acount_edit_phone_text);
         email_rlt = (RelativeLayout) findViewById(R.id.account_edit_email);
         email_tv = (TextView) findViewById(R.id.acount_edit_email_text);
+        backImg.setOnClickListener(this);
         personalheader_civ.setOnClickListener(this);
         nickname_rlt.setOnClickListener(this);
         boysex_cb.setOnClickListener(this);
@@ -89,6 +112,9 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.common_back_btn:
+                finish();
+                break;
             case R.id.account_edit_personalheader:
                 PhotoSelectDialog dialog = new PhotoSelectDialog(this);
                 dialog.setButtonClickListener(this);
@@ -98,22 +124,36 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 startEditIntent(AccountEidt2Activity.ACTION_NICKNAME_MODIFY);
                 break;
             case R.id.accout_edit_boy_sex_cb:
-            case R.id.accout_edit_girl_sex_cb:
-                int sex = -1;
+                sex = 1;
                 if (girlsex_cb.isChecked()) {
-                    sex = 0;
-                    boysex_cb.setChecked(false);
-                } else if (boysex_cb.isChecked()) {
-                    sex = 1;
                     girlsex_cb.setChecked(false);
                 }
-                contentService.modifyUserProfile(null, sex, null);
+                boysex_cb.setChecked(true);
+                contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
+
+                break;
+            case R.id.accout_edit_girl_sex_cb:
+                sex = 0;
+                if (boysex_cb.isChecked()) {
+                    boysex_cb.setChecked(false);
+                }
+                girlsex_cb.setChecked(true);
+                contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
                 break;
             case R.id.account_edit_phone:
                 startEditIntent(AccountEidt2Activity.ACTION_PHONE_MODIFY);
                 break;
             case R.id.account_edit_email:
-                startEditIntent(AccountEidt2Activity.ACTION_EMAIL_MODIFY);
+                if (user != null && user.getStatus() == 0) {
+                    Intent intent = new Intent(this, EmailBoundActivity.class);
+                    intent.putExtra(Params.EMAIL, user.getEmail());
+                    intent.putExtra(Params.USERID, user.getId());
+                    intent.putExtra(Params.TOKEN, getToken());
+                    startActivityForResult(intent, MODIFY_USER_PROFILE);
+                } else {
+                    startEditIntent(AccountEidt2Activity.ACTION_EMAIL_MODIFY);
+
+                }
                 break;
 
 
@@ -130,9 +170,15 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 intent.putExtra("nickname", nickaname_tv.getText().toString());
                 break;
             case AccountEidt2Activity.ACTION_EMAIL_MODIFY:
-                intent.putExtra("email", email_tv.getText().toString());
+                intent.putExtra("emailtext", email_tv.getText().toString());
+                break;
+            case AccountEidt2Activity.ACTION_PHONE_MODIFY:
+                intent.putExtra(Params.AREA_Code, areacode_tv.getText().toString());
+                intent.putExtra(Params.PHONE, phone_tv.getText().toString());
                 break;
         }
+        intent.putExtra(Params.USERID, user.getId());
+        intent.putExtra(Params.TOKEN, getToken());
         startActivityForResult(intent, MODIFY_USER_PROFILE);
     }
 
@@ -187,25 +233,21 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
             if (data != null) {
                 final Bitmap bitmap = data.getParcelableExtra("data");
                 personalheader_civ.setImageBitmap(bitmap);
-                // 保存图片到internal storage
-//                FileOutputStream outputStream;
                 try {
-                    File tmpFile = new File(Environment.getExternalStorageDirectory().getPath() + "head.jpg");
-                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(tmpFile));
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
-                    bitmap.recycle();
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-//                                FileUploadUtil.uploadFile(AccountEidtActivity.this,bmpBytes);
-//                               String result= post.send(APPcofig.UPLOAD_HEDARE_URL);
-//                                AppLog.print("resutl____"+result);
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }).start();
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+//                    bitmap.recycle();
+                    bos.flush();
+                    bos.close();
+                    byte[] bytes = bos.toByteArray();
+                    byte[] encode= Base64.encode(bytes,Base64.DEFAULT);
+                    String photo=new String(encode);
+                    if (user != null) {
+                        contentService.uploadHeader(photo, user.getId(), getToken());
+                    }
+//                    bitmap.recycle();
+//                    bos.flush();
+//                    bos.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -219,11 +261,17 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
 
         } else if (requestCode == MODIFY_USER_PROFILE) {
             if (resultCode == EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL) {
-                String email = data.getStringExtra(Params.EMAIL);
-                email_tv.setText(email);
+                isEmailUpdate = true;
+                contentService.getUserProfile(getUserId(), getToken());
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_PHONE) {
                 String phone = data.getStringExtra(Params.PHONE);
-                phone_tv.setText(phone);
+                String areaCode = data.getStringExtra(Params.AREA_Code);
+                if (phone != null) {
+                    if (areaCode != null) {
+                        areacode_tv.setText(areaCode);
+                    }
+                    phone_tv.setText(phone);
+                }
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
                 String nickname = data.getStringExtra(Params.NICKNAME);
                 nickaname_tv.setText(nickname);
@@ -268,5 +316,38 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
         @Override
         public void onUpHeaderComplete() {
         }
+
+        @Override
+        public void onGetUserProfile(int code, LoginUser user) {
+            updateUserProfileView(user);
+        }
+    }
+
+    private void updateUserProfileView(LoginUser user) {
+        this.user = user;
+        if (!isEmailUpdate) {
+            DrawableUtils.displayImg(this, personalheader_civ, user.getAvatar());
+            nickaname_tv.setText(user.getNickName());
+            if (user.isSex()) {
+                boysex_cb.setChecked(true);
+                girlsex_cb.setChecked(false);
+            } else {
+                girlsex_cb.setChecked(true);
+                boysex_cb.setChecked(false);
+            }
+            if (!TextUtils.isEmpty(user.getPhone())) {
+                areacode_tv.setText(user.getAreaCode());
+                phone_tv.setText(user.getPhone());
+            }
+        } else {
+            isEmailUpdate = false;
+        }
+        int status = user.getStatus();
+        if (status == -1) {
+            email_tv.setText(user.getEmail() + "(未验证)");
+        } else {
+            email_tv.setText(user.getEmail());
+        }
+
     }
 }

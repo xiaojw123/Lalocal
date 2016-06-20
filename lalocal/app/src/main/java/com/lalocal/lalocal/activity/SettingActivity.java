@@ -38,8 +38,10 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
         signOUtBtn = (Button) findViewById(R.id.setting_sign_out);
         chacheSizeTv.setText(DataCleanManager.getTotalCacheSize(this));
         if (isLogin()) {
+            modifyPswContianer.setVisibility(View.VISIBLE);
             signOUtBtn.setText(getResources().getString(R.string.sign_out));
         } else {
+            modifyPswContianer.setVisibility(View.GONE);
             signOUtBtn.setText(getResources().getString(R.string.immediately_login));
         }
         backImg.setOnClickListener(this);
@@ -58,7 +60,7 @@ public class SettingActivity extends AppCompatActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.setting_about_us:
-                Intent aboutUsIntent=new Intent(this,AboutUsActivity.class);
+                Intent aboutUsIntent = new Intent(this, AboutUsActivity.class);
                 startActivity(aboutUsIntent);
                 break;
             case R.id.setting_clear_cache:

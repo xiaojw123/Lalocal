@@ -19,6 +19,8 @@ public class APPcofig {
     public static final  String GET_MY_FARORITE_ITEMS=BASE_URL+"praises?pageNumber=1&pageSize=10";
     public static final  String UPLOAD_HEDARE_URL=BASE_URL+"users/avatar";
     public static  final  String MODIFY_USER_PROFILE_URL=BASE_URL+"users/profile";
+    public static final  String GET_USER_PROFILE_URL=BASE_URL+"users/profile";
+    public static  final  String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
     public static final String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
 
 

@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.APPcofig;
@@ -48,26 +49,52 @@ public class ContentService {
         this.callBack = callBack;
     }
 
+    public void getUserProfile(int userid, String token) {
+        AppLog.print("userid___" + userid + ", token___" + token);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_PROFILE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, APPcofig.GET_USER_PROFILE_URL, response, response);
+        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        requestQueue.add(request);
+    }
+
     //修改的用户资料
-    public void modifyUserProfile(String nickanme, int sex, String phone) {
+    public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, int userid, String token) {
+        AppLog.print("modifyUserProfile____token_" + token);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, APPcofig.MODIFY_USER_PROFILE_URL, response, response);
-        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, phone));
+        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
         requestQueue.add(request);
     }
 
     //上传头像
-    public void uploadHeader(byte[] bodyBytes) {
+    public void uploadHeader(String photo, int userid, String token) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.UPLOAD_HEADER);
 
         }
+        AppLog.print("uploadHeader :photo__" + photo + ", userid__" + userid + ", token__" + token);
         ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.UPLOAD_HEDARE_URL, response, response);
-        request.setBodyType(MITLIPART_IMAGE_TYPE);
-        request.setBodyParams(bodyBytes);
+        String contentType = "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__";
+        request.setBodyType(contentType);
+        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setBodyParams(getUploadBodyParmas(photo));
         requestQueue.add(request);
+    }
+
+    private String getUploadBodyParmas(String photo) {
+        return "avatar" + photo;
+//        JSONObject jsonObj = new JSONObject();
+//        try {
+//            jsonObj.put("avatar", bytes);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return jsonObj.toString();
     }
 
     public void getFavoriteItems(String userid, String token) {
@@ -88,6 +115,18 @@ public class ContentService {
         requestQueue.add(request);
 
     }
+
+    public void boundEmail(String email, int userid, String token) {
+        AppLog.print("bound____email__" + email);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.BOUDN_EMAIL);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.PUT, APPcofig.BOUND_EMAIL_URL, response, response);
+        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setBodyParams(getBoudEmailParams(email));
+        requestQueue.add(request);
+    }
+
 
     //发送验证码
     public void sendVerificationCode(String email) {
@@ -236,12 +275,57 @@ public class ContentService {
                 case RequestCode.MODIFY_USER_PROFILE:
                     responseModifyUserProfile(json);
                     break;
+                case RequestCode.GET_USER_PROFILE:
+                    responseGetUserProfile(json);
+                    break;
+                case RequestCode.BOUDN_EMAIL:
+                    responseBoundEmail(json);
+                    break;
             }
+
+        }
+
+        private void responseBoundEmail(String json) {
+            AppLog.print("boundEmail____" + json);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                String message = jsonObj.optString(ResultParams.MESSAGE);
+                callBack.onSendActivateEmmailComplete(code, message);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        private void responseGetUserProfile(String json) {
+            AppLog.print("getUserprofile___" + json);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+                Gson gson = new Gson();
+                LoginUser user = gson.fromJson(resultJson.toString(), LoginUser.class);
+                callBack.onGetUserProfile(code, user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
 
         private void responseModifyUserProfile(String json) {
             AppLog.print("modifyuserprofile____" + json);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+                Gson gson = new Gson();
+                LoginUser user = gson.fromJson(resultJson.toString(), LoginUser.class);
+                callBack.onModifyUserProfile(code, user);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
 
         }
@@ -326,25 +410,31 @@ public class ContentService {
         }
     }
 
-    public String getModifyUserProfileParams(String nickname, int sex, String phone) {
+    public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String phone) {
         JSONObject jsonObj = new JSONObject();
         try {
             if (!TextUtils.isEmpty(nickname)) {
+                AppLog.print("nickname___");
                 jsonObj.put("nickName", nickname);
             }
             if (sex == 1 || sex == 0) {
                 boolean flag = sex == 1 ? true : false;
+                AppLog.print("sex___" + flag);
                 jsonObj.put("sex", flag);
             }
+            if (!TextUtils.isEmpty(areaCode)) {
+                jsonObj.put("areaCode", areaCode);
+            }
             if (!TextUtils.isEmpty(phone)) {
+                AppLog.print("phone___");
                 jsonObj.put("phone", phone);
             }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObj.toString();
-
-
     }
 
     public String getResetPswParams(String email, String vercode, String newpsw) {
@@ -357,6 +447,10 @@ public class ContentService {
             e.printStackTrace();
         }
         return jsonObj.toString();
+    }
+
+    public String getBoudEmailParams(String email) {
+        return getCheckParams(email);
     }
 
     public String getVerParams(String email) {
@@ -407,6 +501,27 @@ public class ContentService {
         return headers;
     }
 
+    public Map<String, String> getUploadHeder(int userid, String token, String contetype) {
+        Map<String, String> map = getLoginedHeaderParams(userid, token);
+        map.put("Content-Type", contetype);
+        return map;
+    }
+
+    public Map<String, String> getLoginedHeaderParams(int userid, String token) {
+        AppLog.print("userid___" + userid + ", token___" + token);
+        Map<String, String> map = getHeaderParams();
+        if (userid != -1) {
+            AppLog.print("bind1__");
+            map.put("USER_ID", String.valueOf(userid));
+        }
+        if (!TextUtils.isEmpty(token)) {
+            AppLog.print("bind2__");
+            map.put("TOKEN", token);
+        }
+        return map;
+
+    }
+
 
     interface ResultParams {
         public static final String RESULT_CODE = "returnCode";
@@ -423,6 +538,9 @@ public class ContentService {
         public static final int GET_FAVORITE_ITEMS = 105;
         public static final int UPLOAD_HEADER = 106;
         public static final int MODIFY_USER_PROFILE = 107;
+        public static final int GET_USER_PROFILE = 108;
+        public static final int BOUDN_EMAIL = 109;
+        public static final int ACTIVATE_EMAIL = 110;
     }
 
 

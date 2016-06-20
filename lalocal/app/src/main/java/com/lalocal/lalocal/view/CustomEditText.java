@@ -15,16 +15,19 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.util.AppLog;
 
 /**
  * Created by xiaojw on 2016/6/2.
  */
 public class CustomEditText extends FrameLayout implements View.OnClickListener, TextWatcher, View.OnFocusChangeListener {
-
+    public static final int TYPE_1 = 101;
+    public static final int TYPE_2 = 102;
     EditText editText;
     Button clearBtn;
     Button selecedBtn;
     boolean isClearBtnVisible = true;
+
 
     public CustomEditText(Context context) {
         this(context, null);
@@ -50,6 +53,12 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         editText.setOnFocusChangeListener(this);
     }
 
+    public void setEidtType(int type) {
+        if (type == TYPE_1) {
+            editText.setBackgroundResource(R.drawable.email_bound_edit_bg);
+        }
+    }
+
     public void setTextVisible(boolean flag) {
         if (!flag) {
             editText.setTransformationMethod(PasswordTransformationMethod.getInstance());
@@ -67,6 +76,10 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
 
     }
 
+    public void setText(String text) {
+        editText.setText(text);
+    }
+
     public String getText() {
         return editText.getText().toString();
     }
@@ -74,7 +87,6 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
 
     @Override
     public void onClick(View v) {
-
         if (!isEidtTextEmpty()) {
             editText.setText("");
             clearBtn.setVisibility(GONE);
@@ -114,6 +126,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
                 selecedBtn.setSelected(true);
             }
             if (!isClearBtnVisible && !isEidtTextEmpty()) {
+                AppLog.print("onFocusChange___1");
                 if (clearBtn.getVisibility() != VISIBLE) {
                     clearBtn.setVisibility(VISIBLE);
                 }
@@ -122,6 +135,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
             if (selecedBtn != null) {
                 selecedBtn.setSelected(false);
             }
+            AppLog.print("onFocusChange___2");
             if (clearBtn.getVisibility() == VISIBLE) {
                 clearBtn.setVisibility(GONE);
             }
