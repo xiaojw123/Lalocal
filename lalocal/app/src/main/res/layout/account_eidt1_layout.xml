@@ -90,6 +90,7 @@
                 android:layout_toRightOf="@+id/sex_text"
                 android:layout_marginLeft="@dimen/accout_edit_boy_sex_cb_left"
                 android:button="@null"
+                android:layout_centerVertical="true"
                 />
             
             <TextView
@@ -99,16 +100,18 @@
                 android:layout_marginLeft="@dimen/accout_edit_sex_line_left"
                 android:layout_toRightOf="@+id/accout_edit_boy_sex_cb"
                 android:background="@color/color_de"
+                android:layout_centerVertical="true"
                 />
 
             <CheckBox
                 android:id="@+id/accout_edit_girl_sex_cb"
-                android:layout_width="@dimen/accout_edit_boy_sex_cb_width"
-                android:layout_height="@dimen/accout_edit_boy_sex_cb_height"
+                android:layout_width="@dimen/accout_edit_girl_sex_cb_width"
+                android:layout_height="@dimen/accout_edit_girl_sex_cb_height"
                 android:background="@drawable/accout_edit_girl_sex_cb_bg"
                 android:layout_toRightOf="@+id/sex_line"
                 android:layout_marginLeft="@dimen/accout_edit_girl_sex_cb_left"
                 android:button="@null"
+                android:layout_centerVertical="true"
                 />
         </RelativeLayout>
         <TextView
@@ -122,6 +125,13 @@
             <TextView
                 style="@style/AcountEditItemTitle"
                 android:text="@string/phone"
+                />
+
+            <TextView
+                android:id="@+id/account_edit_areacode_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/acount_edit_phone_text"
+                android:layout_marginRight="@dimen/dimen_size_4_dp"
                 />
 
             <TextView
@@ -161,6 +171,10 @@
                 style="@style/AcountEditItemArrowRight"
                 />
         </RelativeLayout>
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_below="@+id/setting_clear_cache"
+            />
     </LinearLayout>>
 
     

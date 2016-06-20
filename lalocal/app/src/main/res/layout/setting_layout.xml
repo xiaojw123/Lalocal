@@ -3,9 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lalocal.lalocal.activity.SettingActivity"
     android:background="@color/color_fa"
-    >
+    tools:context="com.lalocal.lalocal.activity.SettingActivity">
 
     <FrameLayout
         android:id="@+id/setting_title_container"
@@ -23,111 +22,104 @@
             android:textColor="@color/color_1a"
             android:textSize="@dimen/text_size_17_sp" />
     </FrameLayout>
+
     <TextView
         android:id="@+id/setting_line"
         style="@style/CommonTitleLineTheme"
-        android:layout_below="@+id/setting_title_container"
-        />
-    
+        android:layout_below="@+id/setting_title_container" />
+
     <FrameLayout
         android:id="@+id/setting_about_us"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_height"
         android:layout_below="@+id/setting_line"
-        android:paddingLeft="@dimen/setting_item_left"
-        android:paddingRight="@dimen/setting_item_right"
-        android:background="@color/white"
-        >
+        android:background="@color/white">
+
         <TextView
             style="@style/SettingItemTextTheme"
-            android:text="@string/about_us"
-            />
+            android:layout_marginLeft="@dimen/setting_item_left"
+            android:text="@string/about_us" />
+
         <ImageView
             style="@style/SettingItemArrowTheme"
-            />
+            android:layout_marginRight="@dimen/setting_item_right" />
 
 
     </FrameLayout>
-    <TextView
-        style="@style/CommonTitleLineTheme"
-        android:layout_below="@+id/setting_about_us"
-     />
+
+
     <FrameLayout
         android:id="@+id/setting_clear_cache"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_height"
-        android:background="@drawable/setting_item_bg"
         android:layout_below="@+id/setting_about_us"
-        android:paddingLeft="@dimen/setting_item_left"
-        android:paddingRight="@dimen/setting_item_right"
-        >
+        android:background="@drawable/setting_item_bg">
+
+        <TextView style="@style/CommonTitleLineTheme" />
+
         <TextView
             style="@style/SettingItemTextTheme"
-            android:text="@string/clear_cache"
-            />
+            android:layout_marginLeft="@dimen/setting_item_left"
+            android:text="@string/clear_cache" />
+
         <TextView
             android:id="@+id/setting_cache_size"
             style="@style/SettingItemTextTheme"
-            android:layout_marginRight="@dimen/setting_item_cahe_size_left"
             android:layout_gravity="center_vertical|right"
-             />
+            android:layout_marginRight="@dimen/setting_item_cahe_size_left" />
+
         <ImageView
             style="@style/SettingItemArrowTheme"
-            />
+            android:layout_marginRight="@dimen/setting_item_right" />
 
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_gravity="bottom" />
 
 
     </FrameLayout>
-    <TextView
-        style="@style/CommonTitleLineTheme"
-        android:layout_below="@+id/setting_clear_cache"
-        />
 
 
-    <TextView
-        style="@style/CommonTitleLineTheme"
-        android:layout_below="@+id/setting_clear_cache"
-        android:layout_marginTop="@dimen/setting_modify_password_top"
-        />
     <FrameLayout
         android:id="@+id/setting_modify_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_height"
+        android:layout_below="@+id/setting_clear_cache"
         android:layout_marginTop="@dimen/setting_modify_password_top"
         android:background="@drawable/setting_item_bg"
-        android:layout_below="@+id/setting_clear_cache"
-        android:paddingLeft="@dimen/setting_item_left"
-        android:paddingRight="@dimen/setting_item_right"
+        android:visibility="gone"
         >
+
+        <TextView style="@style/CommonTitleLineTheme" />
+
+
         <TextView
             style="@style/SettingItemTextTheme"
-            android:text="@string/modify_psw"
-            />
+            android:layout_marginLeft="@dimen/setting_item_left"
+            android:text="@string/modify_psw" />
+
         <ImageView
             style="@style/SettingItemArrowTheme"
-            />
+            android:layout_marginRight="@dimen/setting_item_right" />
 
+        <TextView
+            style="@style/CommonTitleLineTheme"
+            android:layout_gravity="bottom" />
 
     </FrameLayout>
-    <TextView
-        style="@style/CommonTitleLineTheme"
-        android:layout_below="@+id/setting_modify_password"
-        />
 
 
     <Button
         android:id="@+id/setting_sign_out"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_sign_out_height"
-        android:layout_marginLeft="@dimen/setting_sign_out_left"
-        android:layout_marginRight="@dimen/setting_sign_out_left"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/setting_sign_out_bottom"
+        android:layout_marginLeft="@dimen/setting_sign_out_left"
+        android:layout_marginRight="@dimen/setting_sign_out_left"
         android:background="@drawable/setting_sign_out_bg"
-        android:textSize="@dimen/text_size_16_sp"
         android:textColor="@color/white"
-        />
-
+        android:textSize="@dimen/text_size_16_sp" />
 
 
 </RelativeLayout>

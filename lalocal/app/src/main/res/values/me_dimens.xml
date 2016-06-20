@@ -87,7 +87,7 @@
     <dimen name="setting_sign_out_height">46dp</dimen>
     <dimen name="setting_item_arrow_right_width">7dp</dimen>
     <dimen name="setting_item_arrow_right_height">12dp</dimen>
-    <dimen name="setting_item_cahe_size_left">15dp</dimen>
+    <dimen name="setting_item_cahe_size_left">22dp</dimen>
 
 
     <!--注册  -->

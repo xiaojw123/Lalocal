@@ -31,6 +31,8 @@
     <string name="email_no_right">邮箱输入有误</string>
     <string name="psw_no_right">密码输入有误</string>
     <string name="nickname_no_right">昵称不正确</string>
+    <string name="nickname_input_error">昵称输入有误</string>
+    <string name="message_not_empty">信息不能为空</string>
     <string name="register_success_prompt">我们已发送一份邮件到邮箱，请前往验证，我们致力于更好地为你服务</string>
     <string name="veritied_code_no_empty">验证码不能为空</string>
     <string name="psw_no_empty">密码不能为空</string>
@@ -69,4 +71,5 @@
     <string name="send_again">重新发送</string>
     <string name="change_email">更换邮箱</string>
     <string name="bound_email">绑定邮箱</string>
+    <string name="send_email_vercode">发送验证</string>
 </resources>

@@ -135,6 +135,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_14_sp</item>
         <item name="android:textColor">@color/color_8c</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
 
     <style name="AcountEditItemContent">
@@ -142,6 +143,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_14_sp</item>
         <item name="android:textColor">@color/color_66</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
     <style name="AcountEditItemArrowRight">
         <item name="android:layout_width">@dimen/setting_item_arrow_right_width</item>
@@ -149,13 +151,14 @@
         <item name="android:layout_marginLeft">@dimen/dimen_size_7_dp</item>
         <item name="android:background">@drawable/arrow_right</item>
         <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
     <style name="AccoutEditItemTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/setting_about_us_height</item>
         <item name="android:paddingLeft">@dimen/account_edit_nickname_left</item>
         <item name="android:paddingRight">@dimen/account_edit_nickname_right</item>
-        <item name="android:gravity">center_vertical</item>
     </style>
+        <!--<item name="android:gravity">center_vertical</item>-->
 
 </resources>
