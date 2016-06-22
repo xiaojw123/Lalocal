@@ -1,14 +1,17 @@
 package com.lalocal.lalocal.model;
 
 public class CycleVpEntity {
-	/** 广告ID */
+
+	// 广告ID
 	private String id;
-	/** 详情url */
+	//详情url
 	private String curl;
-	/** 图片url */
+	// 图片url
 	private String iurl;
-	/** 标题 */
+	// 标题
 	private String title;
+
+
 
 	public String getId() {
 		return id;

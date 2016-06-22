@@ -17,6 +17,7 @@ import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 
+import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.APPcofig;
@@ -197,6 +198,14 @@ public class ContentService {
         ContentRequest request = new ContentRequest(APPcofig.RECOMMEND_AD, response, response);
         requestQueue.add(request);
     }
+    //specialdetail
+    public void specialDetail(String rowId){
+        if(callBack!=null){
+            response=new ContentResponse(RequestCode.SPECIAL_DETAIL);
+        }
+        ContentRequest request = new ContentRequest(APPcofig.SPECIAL_DETAILS_URL+rowId,response,response);
+        requestQueue.add(request);
+    }
 
     class ContentRequest extends StringRequest {
         private String body;
@@ -316,6 +325,9 @@ public class ContentService {
                     break;
                 case RequestCode.RECOMMEND_AD:
                     responseRecommendAd(json);
+                    break;
+                case RequestCode.SPECIAL_DETAIL:
+                    responseSpecialDetail(json);
                     break;
             }
 
@@ -466,6 +478,12 @@ public class ContentService {
 
     }
 
+    //specialdetail
+    public void responseSpecialDetail(String json){
+        SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
+        callBack.onRecommendSpecial(spectialDetailsResp);
+    }
+
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String phone) {
         JSONObject jsonObj = new JSONObject();
         try {
@@ -603,6 +621,7 @@ public class ContentService {
 
         public static final int RECOMMEND=200;
         public static final int RECOMMEND_AD=201;
+        public static final int SPECIAL_DETAIL=202;
 
     }
 

@@ -7,5 +7,5 @@
     android:id="@+id/recommend_listview_item2_iv"
     android:layout_width="match_parent"
     android:layout_height="@dimen/recommend_listview_item2_height"
-    android:src="@drawable/loading"/>
+    android:src="@drawable/androidloading"/>
 </LinearLayout>

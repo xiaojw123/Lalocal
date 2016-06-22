@@ -29,4 +29,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile files('libs/google-http-client-1.20.0.jar')
     compile 'com.belerweb:pinyin4j:2.5.1'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

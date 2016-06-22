@@ -65,9 +65,8 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
         xlistview.setXListViewListener(this);
-        if (vhdf == null) {
-            vhdf = LayoutInflater.from(getActivity()).inflate(R.layout.viewpager, null);
-        }
+
+        vhdf = LayoutInflater.from(getActivity()).inflate(R.layout.viewpager, null);
         cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content);
 
         xlistview.addHeaderView(vhdf);
@@ -80,7 +79,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     Intent intent=new Intent(getActivity(),SpecialDetailsActivity.class);
                     intent.putExtra("rowId",rowId+"");
                     startActivity(intent);
-                    Toast.makeText(getActivity(),rowId+"",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -122,7 +120,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
             super.onRecommendAd(recommendAdResp);
             if(recommendAdResp.getReturnCode()==0){
                 List<RecommendAdResultBean> result = recommendAdResp.getResult();
-
                 ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, result);
 
 
