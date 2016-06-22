@@ -112,6 +112,40 @@
     <dimen name="register_clear_btn_right">12dp</dimen>
 
     <dimen name="wheel_dialog_item_height">40dp</dimen>
+    <dimen name="my_coupon_item_width">345dp</dimen>
+    <dimen name="my_coupon_item_height">172dp</dimen>
+    <dimen name="my_coupon_item_bottom_bg">49dp</dimen>
+    <dimen name="my_conpon_denomination_left">82dp</dimen>
+    <dimen name="my_conpon_denomination_top">27dp</dimen>
+    <dimen name="my_conpon_denomination_units_left">14dp</dimen>
+    <dimen name="my_conpon_denomination_units_top">60dp</dimen>
+    <dimen name="my_conpon_denomination_units_width">29dp</dimen>
+    <dimen name="my_conpon_denomination_units_height">28dp</dimen>
+    <dimen name="my_favorite_item_authoravatar_width">22dp</dimen>
+    <dimen name="my_favorite_item_authoravatar_height">22dp</dimen>
+
+
 
 
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

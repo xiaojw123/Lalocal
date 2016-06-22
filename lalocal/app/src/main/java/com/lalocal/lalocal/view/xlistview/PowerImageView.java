@@ -76,11 +76,14 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
 
     /**
      * PowerImageView构造函数，在这里完成所有必要的初始化操作。
+     *
      * @param context
      */
     public PowerImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PowerImageView);
+        //TODO add by xiaojw
+        isAutoPlay = a.getBoolean(R.styleable.PowerImageView_auto_play, false);
         int resourceId = getResourceId(a, context, attrs);
         if (resourceId != 0) {
             // 当资源id不等于0时，就去获取该资源的流
@@ -89,7 +92,6 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
             mMovie = Movie.decodeStream(is);
             if (mMovie != null) {
                 // 如果返回值不等于null，就说明这是一个GIF图片，下面获取是否自动播放的属性
-                isAutoPlay = a.getBoolean(R.styleable.PowerImageView_auto_play, false);
                 Bitmap bitmap = BitmapFactory.decodeStream(is);
                 mImageWidth = bitmap.getWidth();
                 mImageHeight = bitmap.getHeight();
@@ -102,6 +104,7 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
                 }
             }
         }
+
     }
 
     @Override
@@ -112,19 +115,23 @@ public class PowerImageView extends ImageView implements View.OnClickListener {
             invalidate();
         }
     }
-    public void setAutoPlay(boolean isAutoPlay){
-        this.isAutoPlay=isAutoPlay;
-    }
-    public boolean getAutoPlay(){
-        return  isAutoPlay;
+
+    public void setAutoPlay(boolean isAutoPlay) {
+        this.isAutoPlay = isAutoPlay;
     }
 
-    public void setPlaying(boolean isPlaying){
-        this.isPlaying=isPlaying;
+    public boolean getAutoPlay() {
+        return isAutoPlay;
     }
-    public boolean getPlaying(){
-        return  isPlaying;
+
+    public void setPlaying(boolean isPlaying) {
+        this.isPlaying = isPlaying;
     }
+
+    public boolean getPlaying() {
+        return isPlaying;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         if (mMovie == null) {

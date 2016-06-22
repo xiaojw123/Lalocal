@@ -6,69 +6,88 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.Params;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.adapter.MyFavoriteAdpater;
+import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
+import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
+import com.lalocal.lalocal.view.adapter.MyOrderAdapter;
+import com.lalocal.lalocal.view.xlistview.XListView;
+
+import java.util.List;
 
 /**
  * Created by xiaojw on 2016/6/3.
  */
-public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class MeFragment extends Fragment implements XListView.IXListViewListener, AdapterView.OnItemClickListener {
     public static final String USER = "user";
     public static final String LOGIN_STATUS = "loginstatus";
     TextView username_tv, verified_tv;
+    TextView favoriteNum_tv, orderNum_tv, couponNum_tv;
     ImageView headImg;
-    SwipeRefreshLayout refreshLayout;
     LinearLayout favorite_tab, order_tab, coupon_tab;
-    FrameLayout tab_content_container;
     ViewGroup lastSelectedView;
     Button settingBtn;
     RecyclerView myfavorite_rlv, myorder_rlv, coupon_rlv;
     ContentService contentService;
-    boolean isLogined;
+    boolean isLogined, isRefresh;
+    int favoriteTotalPages, favoritePage;
     User user;
-
+    XListView xListView;
+    MyFavoriteAdapter favoriteAdapter;
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            refreshLayout.setRefreshing(false);
+            super.handleMessage(msg);
+            xListView.stopRefresh();
         }
     };
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.home_me_layout, container, false);
+        View view = inflater.inflate(R.layout.me_fragment_layout, container, false);
+        xListView = (XListView) view.findViewById(R.id.home_me_xlistview);
+        xListView.setPullRefreshEnable(true);
+        xListView.setPullLoadEnable(true);
+        xListView.setXListViewListener(this);
+        xListView.setOnItemClickListener(this);
+        View headerView = inflater.inflate(R.layout.home_me_layout, null);
+        xListView.addHeaderView(headerView);
+        favoriteAdapter = new MyFavoriteAdapter(getActivity(), null);
+        xListView.setAdapter(favoriteAdapter);
+        initView(headerView);
         initContentService();
-        initView(view);
         return view;
     }
 
     private void initContentService() {
+        favoritePage = 1;
         contentService = new ContentService(getActivity());
         contentService.setCallBack(new MeCallBack());
+        contentService.getMyFavorite(-1, null, 1, 10);
     }
 
     private void initView(View view) {
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.home_me_refresh_container);
         settingBtn = (Button) view.findViewById(R.id.home_me_set_btn);
         headImg = (ImageView) view.findViewById(R.id.home_me_headportrait_img);
         verified_tv = (TextView) view.findViewById(R.id.home_me_verified);
@@ -76,10 +95,9 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         favorite_tab = (LinearLayout) view.findViewById(R.id.home_me_favorite_tab);
         order_tab = (LinearLayout) view.findViewById(R.id.home_me_order_tab);
         coupon_tab = (LinearLayout) view.findViewById(R.id.home_me_coupon_tab);
-        tab_content_container = (FrameLayout) view.findViewById(R.id.home_tab_content_container);
-        initTabView(tab_content_container);
-        refreshLayout.setColorSchemeResources(R.color.color_8fe6ff, R.color.thin_blue, R.color.color_de);
-        refreshLayout.setOnRefreshListener(this);
+        favoriteNum_tv = (TextView) view.findViewById(R.id.home_me_favorite_num);
+        orderNum_tv = (TextView) view.findViewById(R.id.home_me_order_num);
+        couponNum_tv = (TextView) view.findViewById(R.id.home_me_coupons_num);
         verified_tv.setOnClickListener(meFragmentClickListener);
         settingBtn.setOnClickListener(meFragmentClickListener);
         headImg.setOnClickListener(meFragmentClickListener);
@@ -87,19 +105,7 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         favorite_tab.setOnClickListener(meFragmentClickListener);
         order_tab.setOnClickListener(meFragmentClickListener);
         coupon_tab.setOnClickListener(meFragmentClickListener);
-    }
-
-    private void initTabView(FrameLayout tab_content_container) {
-        myfavorite_rlv = new RecyclerView(getActivity());
-        MyFavoriteAdpater adpater = new MyFavoriteAdpater(getActivity());
-        myfavorite_rlv.setAdapter(adpater);
-
-
-    }
-
-    @Override
-    public void onRefresh() {
-        handler.sendEmptyMessageDelayed(0, 2000);
+        setSelectedTab(favorite_tab);
     }
 
 
@@ -107,17 +113,19 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         @Override
         public void onClick(View v) {
             if (v == favorite_tab || v == order_tab || v == coupon_tab) {
-                if (lastSelectedView != null) {
-                    setContentTabSelected(lastSelectedView, false);
+                setSelectedTab((ViewGroup) v);
+                if (v == favorite_tab) {
+                    xListView.setAdapter(favoriteAdapter);
+                } else if (v == coupon_tab) {
+                    xListView.setAdapter(new MyCouponAdapter(getActivity()));
+                } else if (v == order_tab) {
+                    xListView.setAdapter(new MyOrderAdapter(getActivity()));
                 }
-                ViewGroup viewGroup = (ViewGroup) v;
-                setContentTabSelected(viewGroup, true);
-                lastSelectedView = viewGroup;
             } else if (v == headImg || v == username_tv) {
                 if (isLogined) {
                     Intent intent = new Intent(getActivity(), AccountEidt1Activity.class);
-                    intent.putExtra(Params.USERID, user.getId());
-                    intent.putExtra(Params.TOKEN, user.getToken());
+                    intent.putExtra(KeyParams.USERID, user.getId());
+                    intent.putExtra(KeyParams.TOKEN, user.getToken());
                     startActivityForResult(intent, 100);
                 } else {
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
@@ -131,6 +139,15 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         }
     };
 
+    private void setSelectedTab(ViewGroup v) {
+        if (lastSelectedView != null) {
+            setContentTabSelected(lastSelectedView, false);
+        }
+        ViewGroup viewGroup = v;
+        setContentTabSelected(viewGroup, true);
+        lastSelectedView = viewGroup;
+    }
+
     public void setContentTabSelected(ViewGroup container, boolean isSelected) {
         container.setSelected(isSelected);
         for (int i = 0; i < container.getChildCount(); i++) {
@@ -141,7 +158,7 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AppLog.print("onActivityResult resCode__"+resultCode);
+        AppLog.print("onActivityResult resCode__" + resultCode);
         if (resultCode == LoginActivity.REGISTER_OK) {
             String email = data.getStringExtra(LoginActivity.EMAIL);
             String psw = data.getStringExtra(LoginActivity.PSW);
@@ -152,10 +169,10 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
         } else if (resultCode == SettingActivity.UN_LOGIN_OK) {
             updateFragmentView(false, null);
         } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
-            int status = data.getIntExtra(Params.STATUS, -1);
-            String nickname = data.getStringExtra(Params.NICKNAME);
-            String avatar = data.getStringExtra(Params.AVATAR);
-            AppLog.print("status__"+status+", nickanem__"+nickname+", avatar__"+avatar);
+            int status = data.getIntExtra(KeyParams.STATUS, -1);
+            String nickname = data.getStringExtra(KeyParams.NICKNAME);
+            String avatar = data.getStringExtra(KeyParams.AVATAR);
+            AppLog.print("status__" + status + ", nickanem__" + nickname + ", avatar__" + avatar);
             user.setStatus(status);
             user.setNickName(nickname);
             user.setAvatar(avatar);
@@ -170,7 +187,11 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
     private void updateFragmentView(boolean isLogined, User user) {
         this.isLogined = isLogined;
         this.user = user;
+        int userid = -1;
+        String token = null;
         if (isLogined && user != null) {
+            userid = user.getId();
+            token = user.getToken();
             String nickname = user.getNickName();
             if (!TextUtils.isEmpty(nickname)) {
                 username_tv.setText(nickname);
@@ -189,11 +210,50 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
             }
+
         } else {
             username_tv.setText(getResources().getString(R.string.please_login));
             verified_tv.setVisibility(View.GONE);
             headImg.setImageResource(R.drawable.home_me_personheadnormal);
         }
+        if (favorite_tab.isSelected()) {
+            contentService.getMyFavorite(userid, token, 1, 10);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                isRefresh = false;
+                handler.sendEmptyMessage(0);
+            }
+        }, 1000);
+
+    }
+
+    @Override
+    public void onLoadMore() {
+        isRefresh = true;
+        favoritePage = favoritePage + 1;
+        if (favoritePage <= favoriteTotalPages) {
+            if (user != null) {
+
+            }
+            contentService.getMyFavorite(user.getId(), user.getToken(), 10, favoritePage);
+
+        } else {
+            Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
+        }
+        xListView.stopLoadMore();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+
     }
 
     class MeCallBack extends ICallBack {
@@ -204,6 +264,12 @@ public class MeFragment extends Fragment implements SwipeRefreshLayout.OnRefresh
             }
         }
 
+        @Override
+        public void onGetFavoriteItem(List<FavoriteItem> items, int totalPages, int totalRows) {
+            favoriteNum_tv.setText(String.valueOf(totalRows));
+            MeFragment.this.favoriteTotalPages = totalPages;
+            favoriteAdapter.updateListView(items);
+        }
     }
 
 

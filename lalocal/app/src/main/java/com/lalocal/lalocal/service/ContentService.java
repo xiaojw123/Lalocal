@@ -11,23 +11,24 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-
+import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
-
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
-
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.APPcofig;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.MD5Util;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,9 +36,6 @@ import java.util.Map;
  */
 public class ContentService {
     public static final String CONTENT_TYPE = "application/json";
-    //    public static final String MITLIPART_IMAGE_TYPE = "multipart/form-data; boundary=fD4fH3gL0hK7aI6";
-    public static final String MITLIPART_IMAGE_TYPE = "application/multi";
-
     private ICallBack callBack;
     RequestQueue requestQueue;
     ContentResponse response;
@@ -54,12 +52,23 @@ public class ContentService {
         this.callBack = callBack;
     }
 
+    public void getMyFavorite(int userid, String token, int pageNumber, int pageSize) {
+        //pageNumber=1&pageSize=10
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_FARORITE_ITEMS + "pageNumber=" + pageNumber + "&pageSize=" + pageSize, response, response);
+        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        requestQueue.add(request);
+    }
+
+
     public void getUserProfile(int userid, String token) {
         AppLog.print("userid___" + userid + ", token___" + token);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_PROFILE);
         }
-        ContentRequest request = new ContentRequest(Request.Method.GET, APPcofig.GET_USER_PROFILE_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_USER_PROFILE_URL, response, response);
         request.setHeaderParams(getLoginedHeaderParams(userid, token));
         requestQueue.add(request);
     }
@@ -70,26 +79,12 @@ public class ContentService {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, APPcofig.MODIFY_USER_PROFILE_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.MODIFY_USER_PROFILE_URL, response, response);
         request.setHeaderParams(getLoginedHeaderParams(userid, token));
         request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
         requestQueue.add(request);
     }
 
-    //上传头像
-    public void uploadHeader(String photo, int userid, String token) {
-        if (callBack != null) {
-            response = new ContentResponse(RequestCode.UPLOAD_HEADER);
-
-        }
-        AppLog.print("uploadHeader :photo__" + photo + ", userid__" + userid + ", token__" + token);
-        ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.UPLOAD_HEDARE_URL, response, response);
-        String contentType = "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__";
-//        request.setBodyType(contentType);
-        request.setHeaderParams(getUploadHeder(userid, token));
-        request.setBodyParams(getUploadBodyParmas(photo));
-        requestQueue.add(request);
-    }
 
     private String getUploadBodyParmas(String photo) {
         JSONObject jsonObj = new JSONObject();
@@ -101,20 +96,12 @@ public class ContentService {
         return jsonObj.toString();
     }
 
-    public void getFavoriteItems(String userid, String token) {
-        if (callBack != null) {
-            response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
-        }
-        ContentRequest request = new ContentRequest(Request.Method.GET, APPcofig.GET_MY_FARORITE_ITEMS, response, response);
-//        request.setHeaderParams();
-        requestQueue.add(request);
-    }
 
     public void resetPasword(String email, String vercode, String newpsw) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RESET_PASSWORD);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, APPcofig.RESET_PASSWORD_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.RESET_PASSWORD_URL, response, response);
         request.setBodyParams(getResetPswParams(email, vercode, newpsw));
         requestQueue.add(request);
 
@@ -125,7 +112,7 @@ public class ContentService {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, APPcofig.BOUND_EMAIL_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.BOUND_EMAIL_URL, response, response);
         request.setHeaderParams(getLoginedHeaderParams(userid, token));
         request.setBodyParams(getBoudEmailParams(email));
         requestQueue.add(request);
@@ -138,7 +125,7 @@ public class ContentService {
             response = new ContentResponse(RequestCode.SEND_VERIFICATION_CODE);
             response.setEmail(email);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.SEND_VERIFICATION_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.SEND_VERIFICATION_URL, response, response);
         request.setBodyParams(getVerParams(email));
         requestQueue.add(request);
 
@@ -150,7 +137,7 @@ public class ContentService {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
             response.setEmail(email);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.CHECK_EMAIL_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
         request.setBodyParams(getCheckParams(email));
         requestQueue.add(request);
     }
@@ -161,7 +148,7 @@ public class ContentService {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.LOGIN_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.LOGIN_URL, response, response);
         request.setBodyParams(getLoginParams(email, password));
         requestQueue.add(request);
     }
@@ -172,29 +159,30 @@ public class ContentService {
             response = new ContentResponse(RequestCode.REGISTER);
             response.setUserInfo(email, password);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, APPcofig.REGISTER_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.REGISTER_URL, response, response);
         request.setBodyParams(getRegisterParams(email, password, nickname));
         requestQueue.add(request);
     }
 
     //推荐
-    public void recommentList(final int pageSize, final int pageNumber){
+    public void recommentList(final int pageSize, final int pageNumber) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RECOMMEND);
             response.setRecommend(pageSize, pageNumber);
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
-        ContentRequest request = new ContentRequest(APPcofig.RECOMMEND_URL + getParameter, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_URL + getParameter, response, response);
         requestQueue.add(request);
 
     }
+
     //推荐页广告位
-    public void recommendAd(){
+    public void recommendAd() {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RECOMMEND_AD);
         }
 
-        ContentRequest request = new ContentRequest(APPcofig.RECOMMEND_AD, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_AD, response, response);
         requestQueue.add(request);
     }
 
@@ -252,7 +240,8 @@ public class ContentService {
 
         private String email, psw;
         private int resultCode;
-        private int pageSize,pageNumber;
+        private int pageSize, pageNumber;
+
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
@@ -265,11 +254,13 @@ public class ContentService {
         public void setEmail(String email) {
             this.email = email;
         }
-        public void setRecommend(int pageSize, int pageNumber){
-            this.pageSize=pageSize;
-            this.pageNumber=pageNumber;
+
+        public void setRecommend(int pageSize, int pageNumber) {
+            this.pageSize = pageSize;
+            this.pageNumber = pageNumber;
 
         }
+
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
@@ -282,6 +273,9 @@ public class ContentService {
         @Override
         public void onResponse(String json) {
             switch (resultCode) {
+                case RequestCode.GET_FAVORITE_ITEMS:
+                    responseGetFavoriteItems(json);
+                    break;
                 case RequestCode.REGISTER:
                     responseRegister(json);
                     break;
@@ -321,6 +315,32 @@ public class ContentService {
 
         }
 
+        private void responseGetFavoriteItems(String json) {
+            AppLog.print("responseGetFavorite___" + json);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                if (code == 0) {
+                    JSONObject resutJson = jsonObj.optJSONObject(ResultParams.REULST);
+                    int totalPages=jsonObj.optInt("totalPages");
+                    int totalRows=jsonObj.optInt("totalRows");
+                    JSONArray rows = resutJson.optJSONArray("rows");
+                    Gson gson = new Gson();
+                    List<FavoriteItem> items = new ArrayList<>();
+                    for (int i = 0; i < rows.length(); i++) {
+                        JSONObject rowJsonObj = rows.getJSONObject(i);
+                        FavoriteItem item = gson.fromJson(rowJsonObj.toString(), FavoriteItem.class);
+                        items.add(item);
+                    }
+                    callBack.onGetFavoriteItem(items,totalPages,totalRows);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
         private void responseBoundEmail(String json) {
             AppLog.print("boundEmail____" + json);
             try {
@@ -330,7 +350,6 @@ public class ContentService {
                 callBack.onSendActivateEmmailComplete(code, message);
             } catch (JSONException e) {
                 e.printStackTrace();
-
 
 
             }
@@ -447,20 +466,22 @@ public class ContentService {
                 JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
                 int userid = jsonObj.optInt("id");
                 String token = jsonObj.optString("token");
-                callBack.onResigterComplete(resCode, message, email, psw,userid,token);
+                callBack.onResigterComplete(resCode, message, email, psw, userid, token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+
     //推荐
-    public void responseRecommend(String json){
+    public void responseRecommend(String json) {
 
         RecommendDataResp recommendDataResp = new Gson().fromJson(json, RecommendDataResp.class);
         callBack.onRecommend(recommendDataResp);
     }
+
     //推荐广告
-    public void responseRecommendAd(String json){
+    public void responseRecommendAd(String json) {
         RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
         callBack.onRecommendAd(recommendAdResp);
 
@@ -552,23 +573,15 @@ public class ContentService {
 
     public Map<String, String> getHeaderParams() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("APP_VERSION", APPcofig.getVersionName(context));
+        headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
+        AppLog.print("verision__" + AppConfig.getVersionName(context) + ", device_id__" + CommonUtil.getUUID(context));
         return headers;
-    }
-
-    public Map<String, String> getUploadHeder(int userid, String token) {
-        Map<String, String> map = getLoginedHeaderParams(userid, token);
-        map.put("Content-Type", "multipart/form-data;charset=utf-8; boundary=__X_PAW_BOUNDARY__; image/png");
-        //multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__
-        map.put("Content-Disposition", "name=avatar; filename=alipay_m@2x.png");
-        return map;
     }
 
 
     public Map<String, String> getLoginedHeaderParams(int userid, String token) {
-        AppLog.print("userid___" + userid + ", token___" + token);
         Map<String, String> map = getHeaderParams();
         if (userid != -1) {
             map.put("USER_ID", String.valueOf(userid));
@@ -576,6 +589,7 @@ public class ContentService {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
+        AppLog.print("userid__" + userid + ", token___" + token);
         return map;
 
     }
@@ -596,13 +610,11 @@ public class ContentService {
         public static final int GET_FAVORITE_ITEMS = 105;
         public static final int UPLOAD_HEADER = 106;
         public static final int MODIFY_USER_PROFILE = 107;
-
         public static final int GET_USER_PROFILE = 108;
         public static final int BOUDN_EMAIL = 109;
-        public static final int ACTIVATE_EMAIL = 110;
 
-        public static final int RECOMMEND=200;
-        public static final int RECOMMEND_AD=201;
+        public static final int RECOMMEND = 200;
+        public static final int RECOMMEND_AD = 201;
 
     }
 

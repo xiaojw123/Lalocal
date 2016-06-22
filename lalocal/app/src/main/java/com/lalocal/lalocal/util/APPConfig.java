@@ -7,21 +7,27 @@ import android.content.pm.PackageManager;
 /**
  * Created by xiaojw on 2016/6/6.
  */
-public class APPcofig {
+public class AppConfig {
+    //用户协议-h5
+    public static final String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     public static final String BASE_URL = "http://dev.lalocal.cn:8080/api/";
     //注册接口
     public static final String REGISTER_URL = BASE_URL + "users/register";
     //登录接口
     public static final String LOGIN_URL = BASE_URL + "users/login";
+    //检测邮箱是否被注册过
     public static  final String CHECK_EMAIL_URL=BASE_URL+"users/checkEmail";
+    //发送验证码接口
     public static final  String SEND_VERIFICATION_URL=BASE_URL+"system/sendEmail";
+    //忘记密码接口
     public static final String RESET_PASSWORD_URL=BASE_URL+"users/forgetPassword";
-    public static final  String GET_MY_FARORITE_ITEMS=BASE_URL+"praises?pageNumber=1&pageSize=10";
+    public static final  String GET_MY_FARORITE_ITEMS=BASE_URL+"praises?";
     public static final  String UPLOAD_HEDARE_URL=BASE_URL+"users/avatar";
     public static  final  String MODIFY_USER_PROFILE_URL=BASE_URL+"users/profile";
     public static final  String GET_USER_PROFILE_URL=BASE_URL+"users/profile";
     public static  final  String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
-    public static final String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
+    //我的收藏接口
+
 
     //推荐接口
     public static final String RECOMMEND_URL=BASE_URL+"themes?";

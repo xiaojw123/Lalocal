@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.service.callback;
 
 
+import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
 
 import com.lalocal.lalocal.model.RecommendAdResp;
@@ -8,10 +9,15 @@ import com.lalocal.lalocal.model.RecommendDataResp;
 
 import com.lalocal.lalocal.model.User;
 
+import java.util.List;
+
 /**
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+    public void onGetFavoriteItem(List<FavoriteItem> items,int totalPages,int toalRows){
+
+    }
 
     public void onModifyUserProfile(int code,LoginUser user){
 
@@ -24,10 +30,6 @@ public abstract class ICallBack {
 
     public void onGetUserProfile(int code, LoginUser user) {
 
-
-    }
-
-    public void onUpHeaderComplete() {
 
     }
 

@@ -27,7 +27,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialBannerBean;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.util.APPcofig;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -93,7 +93,7 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
     private void initData() {
         Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
-         String url= APPcofig.SPECIAL_DETAILS_URL+rowId;
+         String url= AppConfig.SPECIAL_DETAILS_URL+rowId;
         if(rowId!=null){
            StringRequest mRequest= new StringRequest(url, new Response.Listener<String>() {
                 @Override

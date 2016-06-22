@@ -71,7 +71,7 @@ public class WheelDialog extends Dialog implements View.OnClickListener {
         getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         TextView save_tv = (TextView) findViewById(R.id.wheeldialog_save_tv);
         WheelView wv = (WheelView) view.findViewById(R.id.wheeldialog_wlv);
-        wv.setOffset(0);
+        wv.setOffset(1);
         wv.setItems(items);
         wv.setSeletion(0);
         wv.setOnWheelViewListener(new WheelView.OnWheelViewListener() {

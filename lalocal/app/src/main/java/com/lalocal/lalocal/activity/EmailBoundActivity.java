@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.Params;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -48,7 +48,7 @@ public class EmailBoundActivity extends AppCompatActivity implements View.OnClic
     }
 
     public String getUserEmail() {
-        return getIntent().getStringExtra(Params.EMAIL);
+        return getIntent().getStringExtra(KeyParams.EMAIL);
     }
 
     @Override
@@ -67,11 +67,11 @@ public class EmailBoundActivity extends AppCompatActivity implements View.OnClic
     }
 
     public int getUserId() {
-        return getIntent().getIntExtra(Params.USERID, -1);
+        return getIntent().getIntExtra(KeyParams.USERID, -1);
     }
 
     public String getToken() {
-        return getIntent().getStringExtra(Params.TOKEN);
+        return getIntent().getStringExtra(KeyParams.TOKEN);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class EmailBoundActivity extends AppCompatActivity implements View.OnClic
         if (isBoundEmail) {
             isBoundEmail = false;
             Intent intent = new Intent();
-            intent.putExtra(Params.EMAIL, email_edit.getText().toString());
+            intent.putExtra(KeyParams.EMAIL, email_edit.getText().toString());
             setResult(RESULIT_CODE_BOUND_EMAIL, intent);
             finish();
         }
