@@ -1,10 +1,11 @@
 package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -20,8 +21,10 @@ import com.lalocal.lalocal.model.SpecialBannerBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.service.ContentService;
+
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.APPcofig;
+
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -41,6 +44,7 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
     private TextView detailsTvAuthorName;
     private RelativeLayout detailsRl;
     private  ContentService contentService;
+    private WebSettings settings;
 
 
     @Override
@@ -109,7 +113,9 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
     private void initData() {
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
-        String url= APPcofig.SPECIAL_DETAILS_URL+rowId;
+
+         String url= AppConfig.SPECIAL_DETAILS_URL+rowId;
+
         if(rowId!=null){
             ContentService contentService = new ContentService(this);
             contentService.setCallBack(new MyCallBack());
@@ -134,8 +140,36 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
                 }
                 AppLog.i("h5url", h5Url);
                 specialWebView = (WebView) findViewById(R.id.special_details_webview);
-                specialWebView.getSettings().setJavaScriptEnabled(true);
+
+               settings=specialWebView.getSettings();
                 specialWebView.loadUrl(h5Url);
+                settings.setJavaScriptEnabled(true); //如果访问的页面中有Javascript，则WebView必须设置支持Javascript
+                settings.setJavaScriptCanOpenWindowsAutomatically(true);
+                settings.setSupportZoom(true); //支持缩放
+                settings.setBuiltInZoomControls(true); //支持手势缩放
+                settings.setDisplayZoomControls(false); //是否显示缩放按钮
+
+                // >= 19(SDK4.4)启动硬件加速，否则启动软件加速
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    specialWebView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                    settings.setLoadsImagesAutomatically(true); //支持自动加载图片
+                } else {
+                    specialWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                    settings.setLoadsImagesAutomatically(false);
+                }
+
+                settings.setUseWideViewPort(true); //将图片调整到适合WebView的大小
+                settings.setLoadWithOverviewMode(true); //自适应屏幕
+                settings.setDomStorageEnabled(true);
+                settings.setSaveFormData(true);
+                settings.setSupportMultipleWindows(true);
+                settings.setAppCacheEnabled(true);
+                settings.setCacheMode(WebSettings.LOAD_DEFAULT); //优先使用缓存
+                specialWebView.setHorizontalScrollbarOverlay(true);
+                specialWebView.setHorizontalScrollBarEnabled(false);
+                specialWebView.setOverScrollMode(View.OVER_SCROLL_NEVER); // 取消WebView中滚动或拖动到顶部、底部时的阴影
+                specialWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY); // 取消滚动条白边效果
+                specialWebView.requestFocus();
                 specialWebView.setWebViewClient(new MyWebViewClient());
                     bannerBean=spectialDetailsResp.result.banner;
                     if(bannerBean!=null)
@@ -193,10 +227,30 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
             String[] split = url.split("\\?");
             String json = split[1];
             SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-            Intent intent1 = new Intent(SpecialDetailsActivity.this, ArticleActivity.class);
             if(specialToH5Bean!=null){
-                intent1.putExtra("articl",specialToH5Bean.getTargetId() + "");
-                startActivity(intent1);
+          switch (specialToH5Bean.getTargetType()){
+              case "1":
+                  //文章，调h5接口
+                        Intent intent1 = new Intent(SpecialDetailsActivity.this, ArticleActivity.class);
+                      intent1.putExtra("articl",specialToH5Bean.getTargetId() + "");
+                      startActivity(intent1);
+                  break;
+              case "2":
+                  //产品,去产品详情页
+                  Intent intent2=new Intent(SpecialDetailsActivity.this,ProductDetailsActivity.class);
+                  intent2.putExtra("productdetails",specialToH5Bean.getTargetId()+"");
+                  startActivity(intent2);
+                  break;
+              case "3":
+
+                  break;
+              case "4":
+
+                  break;
+              case "5":
+
+                  break;
+          }
             }
 
             return true;

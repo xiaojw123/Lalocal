@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.util.APPcofig;
+import com.lalocal.lalocal.util.AppConfig;
 
 public class AboutUsActivity extends AppCompatActivity implements View.OnClickListener {
     TextView appversion;
@@ -29,7 +29,7 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
         foreign_phone_rl = (RelativeLayout) findViewById(R.id.about_us_phone_outer);
         grade_rl = (RelativeLayout) findViewById(R.id.about_us_grade);
         useclauses_rl = (RelativeLayout) findViewById(R.id.about_us_use_clauses);
-        appversion.setText("版本" + APPcofig.getVersionName(this));
+        appversion.setText("版本" + AppConfig.getVersionName(this));
         backImg.setOnClickListener(this);
         email_rl.setOnClickListener(this);
         inland_phone_rl.setOnClickListener(this);
@@ -48,10 +48,10 @@ public class AboutUsActivity extends AppCompatActivity implements View.OnClickLi
                 sendEmail();
                 break;
             case R.id.about_us_phone_inner:
-                callPhone(APPcofig.getInlandPhone());
+                callPhone(AppConfig.getInlandPhone());
                 break;
             case R.id.about_us_phone_outer:
-                callPhone(APPcofig.getForeigenPhone());
+                callPhone(AppConfig.getForeigenPhone());
                 break;
             case R.id.about_us_grade:
                 grade();

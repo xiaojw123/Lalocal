@@ -7,6 +7,8 @@ import android.text.TextUtils;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.view.CustomDialog;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,7 +16,14 @@ import java.util.regex.Pattern;
 /**
  * Created by xiaojw on 2016/6/6.
  */
-public class CommonUtil{
+public class CommonUtil {
+
+    //人民币
+    public static String formartPrice(String price) {
+        NumberFormat nf = new DecimalFormat("¥ ###,###,###,###,###,###,###,###");
+        long d = Long.parseLong(price);
+        return nf.format(d);
+    }
 
     //验证邮箱格式
     public static boolean checkEmail(String email) {

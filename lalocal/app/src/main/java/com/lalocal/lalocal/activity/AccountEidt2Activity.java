@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.Params;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
@@ -52,8 +52,8 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
 
     private void initParams() {
         actionType = getActionType();
-        userid = getIntent().getIntExtra(Params.USERID, -1);
-        token = getIntent().getStringExtra(Params.TOKEN);
+        userid = getIntent().getIntExtra(KeyParams.USERID, -1);
+        token = getIntent().getStringExtra(KeyParams.TOKEN);
         emailText = getEmailText();
         if (TextUtils.isEmpty(emailText)) {
             email = "";
@@ -118,7 +118,7 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
 
 
     public String getAreaCode() {
-        String areaCode = getIntent().getStringExtra(Params.AREA_Code);
+        String areaCode = getIntent().getStringExtra(KeyParams.AREA_Code);
         if (TextUtils.isEmpty(areaCode)) {
             areaCode = "+86";
         }
@@ -126,7 +126,7 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
     }
 
     public String getPhone() {
-        return getIntent().getStringExtra(Params.PHONE);
+        return getIntent().getStringExtra(KeyParams.PHONE);
     }
 
     @Override
@@ -161,9 +161,9 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
 
     private void changeEmail() {
         Intent intent = new Intent(this, EmailBoundActivity.class);
-        intent.putExtra(Params.USERID,userid);
-        intent.putExtra(Params.TOKEN,token);
-        intent.putExtra(Params.EMAIL, email);
+        intent.putExtra(KeyParams.USERID,userid);
+        intent.putExtra(KeyParams.TOKEN,token);
+        intent.putExtra(KeyParams.EMAIL, email);
         startActivityForResult(intent, 100);
     }
 
@@ -211,8 +211,8 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
             return true;
         }
         Intent intent = new Intent();
-        intent.putExtra(Params.AREA_Code, areaCode);
-        intent.putExtra(Params.PHONE, phoneNumber);
+        intent.putExtra(KeyParams.AREA_Code, areaCode);
+        intent.putExtra(KeyParams.PHONE, phoneNumber);
         setResult(RESULT_CODE_PHONE, intent);
         contentService.modifyUserProfile(null, -1, areaCode, phoneNumber, userid, token);
         return false;
@@ -258,11 +258,11 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
             if (code == 0) {
                 Intent intent = new Intent();
                 if (actionType == ACTION_NICKNAME_MODIFY) {
-                    intent.putExtra(Params.NICKNAME, user.getNickName());
+                    intent.putExtra(KeyParams.NICKNAME, user.getNickName());
                     setResult(RESULT_CODE_NICKNAME, intent);
                 } else if (actionType == ACTION_PHONE_MODIFY) {
-                    intent.putExtra(Params.AREA_Code, user.getAreaCode());
-                    intent.putExtra(Params.PHONE, user.getPhone());
+                    intent.putExtra(KeyParams.AREA_Code, user.getAreaCode());
+                    intent.putExtra(KeyParams.PHONE, user.getPhone());
                     setResult(RESULT_CODE_PHONE, intent);
                 }
             }

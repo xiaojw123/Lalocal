@@ -3,7 +3,7 @@ package com.lalocal.lalocal.util;
 import android.content.Context;
 import android.content.Intent;
 
-import com.lalocal.lalocal.help.Params;
+import com.lalocal.lalocal.help.KeyParams;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,7 +27,7 @@ public class FileUploadUtil {
                     String end = "\r\n";
                     String twoHyphens = "--";
                     String boundary = "__X_PAW_BOUNDARY__";
-                    URL url = new URL(APPcofig.UPLOAD_HEDARE_URL);
+                    URL url = new URL(AppConfig.UPLOAD_HEDARE_URL);
                     HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
                     urlConnection.setRequestMethod("POST");
                     urlConnection.setConnectTimeout(5000);
@@ -35,7 +35,7 @@ public class FileUploadUtil {
                     urlConnection.setDoInput(true);
                     urlConnection.setDoOutput(true);
                     urlConnection.setRequestProperty("Content-Type", "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__");
-                    urlConnection.setRequestProperty("APP_VERSION", APPcofig.getVersionName(context));
+                    urlConnection.setRequestProperty("APP_VERSION", AppConfig.getVersionName(context));
                     urlConnection.setRequestProperty("DEVICE", "android");
                     urlConnection.setRequestProperty("DEVICE_ID", CommonUtil.getUUID(context));
                     urlConnection.setRequestProperty("USER_ID", String.valueOf(userid));
@@ -60,7 +60,7 @@ public class FileUploadUtil {
                     }
                     br.close();
                     is.close();
-                    backIntent.putExtra(Params.AVATAR, getAvatar(sb.toString()));
+                    backIntent.putExtra(KeyParams.AVATAR, getAvatar(sb.toString()));
                     AppLog.print("res message___" + sb.toString());
                 } catch (Exception e) {
                     e.printStackTrace();

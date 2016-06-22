@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,6 +17,13 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.AdapterView;
+
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.view.xlistview.XListView;
 
@@ -27,10 +35,11 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test_activity_layout);
-      WebView wb= (WebView) findViewById(R.id.wb);
+        WebView wb = (WebView) findViewById(R.id.wb);
         wb.getSettings().setJavaScriptEnabled(true);
         Intent intent = getIntent();
         String h5url = intent.getStringExtra("h5url");
         wb.loadUrl(h5url);
+
     }
 }

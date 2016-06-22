@@ -3,10 +3,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.CycleVpEntity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import android.content.Context;
 

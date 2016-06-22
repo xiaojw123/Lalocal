@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.Params;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
@@ -68,12 +68,12 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     }
 
     public int getUserId() {
-        return getIntent().getIntExtra(Params.USERID, -1);
+        return getIntent().getIntExtra(KeyParams.USERID, -1);
     }
 
     public String getToken() {
 
-        return getIntent().getStringExtra(Params.TOKEN);
+        return getIntent().getStringExtra(KeyParams.TOKEN);
     }
 
 
@@ -150,9 +150,9 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
             case R.id.account_edit_email:
                 if (user != null && user.getStatus() == 0) {
                     Intent intent = new Intent(this, EmailBoundActivity.class);
-                    intent.putExtra(Params.EMAIL, user.getEmail());
-                    intent.putExtra(Params.USERID, user.getId());
-                    intent.putExtra(Params.TOKEN, getToken());
+                    intent.putExtra(KeyParams.EMAIL, user.getEmail());
+                    intent.putExtra(KeyParams.USERID, user.getId());
+                    intent.putExtra(KeyParams.TOKEN, getToken());
                     startActivityForResult(intent, MODIFY_USER_PROFILE);
                 } else {
                     startEditIntent(AccountEidt2Activity.ACTION_EMAIL_MODIFY);
@@ -177,12 +177,12 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 intent.putExtra("emailtext", email_tv.getText().toString());
                 break;
             case AccountEidt2Activity.ACTION_PHONE_MODIFY:
-                intent.putExtra(Params.AREA_Code, areacode_tv.getText().toString());
-                intent.putExtra(Params.PHONE, phone_tv.getText().toString());
+                intent.putExtra(KeyParams.AREA_Code, areacode_tv.getText().toString());
+                intent.putExtra(KeyParams.PHONE, phone_tv.getText().toString());
                 break;
         }
-        intent.putExtra(Params.USERID, user.getId());
-        intent.putExtra(Params.TOKEN, getToken());
+        intent.putExtra(KeyParams.USERID, user.getId());
+        intent.putExtra(KeyParams.TOKEN, getToken());
         startActivityForResult(intent, MODIFY_USER_PROFILE);
     }
 
@@ -266,8 +266,8 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 isEmailUpdate = true;
                 contentService.getUserProfile(getUserId(), getToken());
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_PHONE) {
-                String phone = data.getStringExtra(Params.PHONE);
-                String areaCode = data.getStringExtra(Params.AREA_Code);
+                String phone = data.getStringExtra(KeyParams.PHONE);
+                String areaCode = data.getStringExtra(KeyParams.AREA_Code);
                 if (phone != null) {
                     if (areaCode != null) {
                         areacode_tv.setText(areaCode);
@@ -275,9 +275,9 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                     phone_tv.setText(phone);
                 }
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
-                String nickname = data.getStringExtra(Params.NICKNAME);
+                String nickname = data.getStringExtra(KeyParams.NICKNAME);
                 AppLog.print("modify nickanme__"+nickname);
-                backIntent.putExtra(Params.NICKNAME, nickname);
+                backIntent.putExtra(KeyParams.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
             }
 
@@ -317,9 +317,6 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     }
 
     class CallBack extends ICallBack {
-        @Override
-        public void onUpHeaderComplete() {
-        }
 
         @Override
         public void onGetUserProfile(int code, LoginUser user) {
@@ -347,7 +344,7 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
             isEmailUpdate = false;
         }
         int status = user.getStatus();
-        backIntent.putExtra(Params.STATUS, status);
+        backIntent.putExtra(KeyParams.STATUS, status);
         if (status == -1) {
             email_tv.setText(user.getEmail() + "(未验证)");
         } else {

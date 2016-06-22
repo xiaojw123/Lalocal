@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:layout_gravity="center"
+        android:layout_width="@dimen/my_coupon_item_width"
+        android:layout_height="@dimen/my_coupon_item_height"
+        android:background="@color/color_ffaa2a">
+        <TextView
+            android:id="@+id/my_coupon_denomination_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_fffca6"
+            android:textSize="@dimen/text_size_70_sp"
+            android:text="300"
+            android:layout_marginLeft="@dimen/my_conpon_denomination_left"
+            android:layout_marginTop="@dimen/my_conpon_denomination_top"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_fffca6"
+            android:gravity="fill"
+            android:text="元"
+            android:textSize="@dimen/my_conpon_denomination_units_height"
+            android:layout_toRightOf="@+id/my_coupon_denomination_tv"
+            android:layout_marginLeft="@dimen/my_conpon_denomination_units_left"
+            android:layout_marginTop="@dimen/my_conpon_denomination_units_top"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_coupon_item_bottom_bg"
+            android:background="@color/color_20_dark"
+            android:layout_alignParentBottom="true"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_15_sp"
+                android:layout_marginTop="@dimen/dimen_size_6_dp"
+                android:textColor="@color/color_ffe7a6"
+                android:text="@string/coupon_can_overlay"
+                />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_10_sp"
+                android:layout_marginTop="@dimen/dimen_size_6_dp"
+                android:textColor="@color/color_60ffe7a6"
+                android:text="有效期至：2016.06.21"
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+</FrameLayout>

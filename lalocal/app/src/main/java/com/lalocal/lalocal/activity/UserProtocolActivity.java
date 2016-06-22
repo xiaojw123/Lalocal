@@ -8,7 +8,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.lalocal.lalocal.util.APPcofig;
+import com.lalocal.lalocal.util.AppConfig;
 
 public class UserProtocolActivity extends AppCompatActivity {
     WebView webView;
@@ -18,7 +18,7 @@ public class UserProtocolActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         webView = new WebView(this);
         webView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        webView.loadUrl(APPcofig.USER_PROTOCOL_URL);
+        webView.loadUrl(AppConfig.USER_PROTOCOL_URL);
         webView.setWebViewClient(new MWebviewClient());
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);

@@ -17,7 +17,7 @@ public class ArticleActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.article_layout);
+        setContentView(R.layout.article_main_layout);
         WebView articleWebview= (WebView) findViewById(R.id.article_webview);
         Intent intent = getIntent();
         String articl = intent.getStringExtra("articl");

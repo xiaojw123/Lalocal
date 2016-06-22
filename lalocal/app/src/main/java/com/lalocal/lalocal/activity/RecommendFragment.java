@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
@@ -18,13 +19,11 @@ import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.APPcofig;
-import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.DemoUtil;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +75,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 if(allRows!=null){
                     RecommendRowsBean recommendRowsBean = allRows.get(position - 2);
                     int rowId = recommendRowsBean.getId();
+
                     Intent intent=new Intent(getActivity(),SpecialDetailsActivity.class);
                     intent.putExtra("rowId",rowId+"");
                     startActivity(intent);
