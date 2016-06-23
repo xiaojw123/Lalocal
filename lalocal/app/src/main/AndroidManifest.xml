@@ -7,6 +7,17 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!--分享权限-->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+
+
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -20,6 +31,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
@@ -30,15 +42,18 @@
         <activity android:name=".activity.AccountEidt1Activity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.AccountEidt2Activity" />
-        <activity android:name=".activity.EmailBoundActivity" />
-        <activity android:name=".activity.SpecialDetailsActivity" />
-        <activity android:name=".activity.TestActivity">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
+        <activity android:name=".activity.EmailBoundActivity"></activity>
+        <activity android:name=".activity.SpecialDetailsActivity"></activity>
+
+        <activity android:name=".activity.BigPictureActivity"></activity>
+       <activity android:name=".activity.ArticleActivity"></activity>
+
+    <activity android:name=".activity.ProductDetailsActivity"></activity>
+
+
+
+
     </application>
 
 </manifest>

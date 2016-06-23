@@ -15,6 +15,10 @@ import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
+
+
+import com.lalocal.lalocal.model.SpectialDetailsResp;
+
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
@@ -185,6 +189,23 @@ public class ContentService {
         ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_AD, response, response);
         requestQueue.add(request);
     }
+    //specialdetail
+    public void specialDetail(String rowId){
+        if(callBack!=null){
+            response=new ContentResponse(RequestCode.SPECIAL_DETAIL);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.SPECIAL_DETAILS_URL+rowId,response,response);
+        requestQueue.add(request);
+    }
+
+    //产品详情
+    public  void productDetails(String targetId){
+        if(callBack !=null){
+            response=new ContentResponse(RequestCode.PRODUCT_DETAILS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
+        requestQueue.add(contentRequest);
+    }
 
     class ContentRequest extends StringRequest {
         private String body;
@@ -310,6 +331,12 @@ public class ContentService {
                     break;
                 case RequestCode.RECOMMEND_AD:
                     responseRecommendAd(json);
+                    break;
+                case RequestCode.SPECIAL_DETAIL:
+                    responseSpecialDetail(json);
+                    break;
+                case RequestCode.PRODUCT_DETAILS:
+                    responseProductDetails(json);
                     break;
             }
 
@@ -472,6 +499,10 @@ public class ContentService {
             }
         }
     }
+    //产品详情
+    private void responseProductDetails(String json) {
+        
+    }
 
     //推荐
     public void responseRecommend(String json) {
@@ -484,6 +515,15 @@ public class ContentService {
     public void responseRecommendAd(String json) {
         RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
         callBack.onRecommendAd(recommendAdResp);
+
+    }
+
+    //specialdetail
+    public void responseSpecialDetail(String json){
+        SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
+        if(spectialDetailsResp!=null){
+            callBack.onRecommendSpecial(spectialDetailsResp);
+        }
 
     }
 
@@ -613,8 +653,14 @@ public class ContentService {
         public static final int GET_USER_PROFILE = 108;
         public static final int BOUDN_EMAIL = 109;
 
-        public static final int RECOMMEND = 200;
-        public static final int RECOMMEND_AD = 201;
+
+        public static final int RECOMMEND=200;
+        public static final int RECOMMEND_AD=201;
+        public static final int SPECIAL_DETAIL=202;
+        public static final int PRODUCT_DETAILS=203;
+
+
+
 
     }
 

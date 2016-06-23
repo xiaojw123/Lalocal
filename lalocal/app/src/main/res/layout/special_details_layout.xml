@@ -3,7 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/recommend_title_ll_height">
@@ -14,7 +13,6 @@
             android:layout_centerInParent="true"
             android:src="@drawable/lalocallogo"
             />
-
         <ImageView
             android:id="@+id/special_details_share_iv"
             android:layout_width="wrap_content"
@@ -23,7 +21,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/special_details_margin"
             android:src="@drawable/index_article_btn_share"/>
-
         <ImageView
             android:id="@+id/special_details_like_iv"
             android:layout_width="wrap_content"
@@ -35,12 +32,12 @@
     </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/recommend_listview_item2_height">
@@ -75,25 +72,26 @@
                         android:textColor="@android:color/white"
                         android:text="- - 布吉道左者"/>
                 </RelativeLayout>
-
                 <VideoView
                     android:id="@+id/special_details_pictorial_video"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:visibility="gone"
-                     />
+                    />
             </FrameLayout>
-            <WebView
-                android:id="@+id/special_details_webview"
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                ></WebView>
-
+                android:orientation="vertical">
+                <WebView
+                    android:id="@+id/special_details_webview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    ></WebView>
+            </LinearLayout>
         </LinearLayout>
-
-
-
     </ScrollView>
 
 </LinearLayout>

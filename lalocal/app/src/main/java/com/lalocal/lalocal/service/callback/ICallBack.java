@@ -4,9 +4,11 @@ package com.lalocal.lalocal.service.callback;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
 
+import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 
+import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
 
 import java.util.List;
@@ -65,5 +67,9 @@ public abstract class ICallBack {
     public void onRecommend(RecommendDataResp recommendDataResp){}
     //推荐广告
     public void onRecommendAd( RecommendAdResp recommendAdResp){}
+    //specialdetail
+    public void onRecommendSpecial(SpectialDetailsResp spectialDetailsResp){}
+    //产品详情
+    public void onProductDetails(ProductDetailsDataResp detailsDataResp){}
 
 }

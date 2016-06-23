@@ -10,6 +10,7 @@ import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
@@ -27,10 +28,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.TestActivity;
 import com.lalocal.lalocal.model.CycleVpEntity;
+import com.lalocal.lalocal.model.RecommendAdResultBean;
 
 /**
  * 实现可循环，可轮播的viewpager
@@ -54,7 +58,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 	private int WHEEL = 100; // 转动
 	private int WHEEL_WAIT = 101; // 等待
 	private ImageCycleViewListener mImageCycleViewListener;
-	private List<CycleVpEntity> infos;
+	private List<RecommendAdResultBean> infos;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,7 +101,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 	}
 	
 	
-	public void setData(List<ImageView> views, List<CycleVpEntity> list, ImageCycleViewListener listener) {
+	public void setData(List<ImageView> views, List<RecommendAdResultBean> list, ImageCycleViewListener listener) {
 		setData(views, list, listener, 0);
 	}
 
@@ -109,7 +113,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 	 * @param showPosition
 	 *            默认显示位置
 	 */
-	public void setData(List<ImageView> views, List<CycleVpEntity> list, ImageCycleViewListener listener,
+	public void setData(List<ImageView> views, List<RecommendAdResultBean> list, ImageCycleViewListener listener,
 			int showPosition) {
 		mImageCycleViewListener = listener;
 		infos = list;
@@ -314,7 +318,19 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 
 					@Override
 					public void onClick(View v) {
+
+
+						//轮播图页面点击进入相关页面
 						mImageCycleViewListener.onImageClick(infos.get(currentPosition - 1), currentPosition, v);
+						int targetType = infos.get(currentPosition - 1).targetType;
+						if(targetType==-1){
+							String url = infos.get(currentPosition - 1).url;
+							Intent intent = new Intent(getActivity(), TestActivity.class);
+							intent.putExtra("h5url", url);
+							startActivity(intent);
+						}else {
+							Toast.makeText(getActivity(),"点击了",Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 			}
@@ -401,6 +417,6 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 	public static interface ImageCycleViewListener {
 
 
-		public void onImageClick(CycleVpEntity info, int postion, View imageView);
+		public void onImageClick(RecommendAdResultBean info, int postion, View imageView);
 	}
 }
