@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:background="#1a1a1a"
+
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:background="#1a1a1a"
+        android:orientation="vertical"
+        >
   <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="44dp"
@@ -26,6 +31,7 @@
     android:layout_height="0dp"
     android:layout_weight="1"
     android:orientation="vertical"
+    android:padding="5dp"
     android:background="@drawable/article_details_bg">
     <WebView
         android:id="@+id/article_webview"
@@ -33,7 +39,6 @@
         android:layout_height="match_parent"
         ></WebView>
 </LinearLayout>
-
-
-
-</LinearLayout>
+    </LinearLayout>
+    <include layout="@layout/article_bottom_layout"></include>
+</RelativeLayout>
