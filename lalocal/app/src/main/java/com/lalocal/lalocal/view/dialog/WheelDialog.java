@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.view;
+package com.lalocal.lalocal.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.util.PinyinComparator;
+import com.lalocal.lalocal.view.WheelView;
 
 import java.io.IOException;
 import java.io.InputStream;

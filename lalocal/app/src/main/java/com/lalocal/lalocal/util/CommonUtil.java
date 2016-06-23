@@ -5,7 +5,7 @@ import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.view.CustomDialog;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;

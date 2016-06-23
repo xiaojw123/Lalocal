@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.view;
+package com.lalocal.lalocal.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

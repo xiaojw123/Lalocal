@@ -28,7 +28,7 @@
         <item name="android:textColorHint">@color/color_ee</item>
         <item name="android:textColor">@color/color_66</item>
         <item name="android:textSize">@dimen/text_size_18_sp</item>
-        <item name="android:textCursorDrawable">@drawable/register_edit_cursor_color</item>
+        <item name="android:textCursorDrawable">@drawable/custom_edit_cursor</item>
         <item name="android:paddingLeft">@dimen/register_edit_left_padding</item>
         <item name="android:singleLine">true</item>
     </style>

@@ -24,7 +24,7 @@ import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
-import com.lalocal.lalocal.view.PhotoSelectDialog;
+import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

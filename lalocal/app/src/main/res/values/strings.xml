@@ -88,5 +88,10 @@
     <string name="route">路线</string>
     <string name="special">专题</string>
     <string name="information">资讯</string>
+    <string name="no_oder">暂无订单</string>
+    <string name="convert">我有兑换码</string>
+    <string name="coupon_convert_rule">所有特价商品不可是永久旅行基金</string>
+    <string name="convert_coupon">兑换</string>
+    <string name="input_favorable_code">请输入优惠码</string>
 
 </resources>

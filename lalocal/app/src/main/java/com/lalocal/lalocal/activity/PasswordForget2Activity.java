@@ -14,7 +14,7 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.CustomDialog;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.CustomEditText;
 
 public class PasswordForget2Activity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingLeft="@dimen/home_me_my_favorite_item_left"
+    android:paddingRight="@dimen/home_me_my_favorite_item_left">
+
+    <Button
+        android:id="@+id/my_coupon_convert_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/my_coupon_convert_btn_height"
+        android:text="@string/convert"
+        android:textSize="@dimen/text_size_16_sp"
+        android:textColor="@color/white"
+        android:background="@drawable/account_edit2_changeemail_btn_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/coupon_convert_rule"
+        android:layout_marginTop="@dimen/dimen_size_10_dp"
+        />
+
+
+
+
+</LinearLayout>

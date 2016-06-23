@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.DataCleanManager;
-import com.lalocal.lalocal.view.CustomDialog;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
     public static final int UN_LOGIN_OK = 103;

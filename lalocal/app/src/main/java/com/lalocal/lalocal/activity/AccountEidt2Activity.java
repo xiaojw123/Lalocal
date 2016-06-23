@@ -19,8 +19,8 @@ import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.CustomDialog;
-import com.lalocal.lalocal.view.WheelDialog;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.lalocal.lalocal.view.dialog.WheelDialog;
 
 public class AccountEidt2Activity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener, WheelDialog.OnWheelSelectedListener {
     public static final int RESULT_CODE_NICKNAME = 101;

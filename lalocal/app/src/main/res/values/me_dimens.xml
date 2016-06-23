@@ -123,6 +123,11 @@
     <dimen name="my_conpon_denomination_units_height">28dp</dimen>
     <dimen name="my_favorite_item_authoravatar_width">22dp</dimen>
     <dimen name="my_favorite_item_authoravatar_height">22dp</dimen>
+    <dimen name="my_oder_nothing_img_width">75dp</dimen>
+    <dimen name="my_oder_nothing_img_height">49dp</dimen>
+    <dimen name="my_oder_nothing_img_top">30dp</dimen>
+    <dimen name="my_coupon_convert_btn_height">44dp</dimen>
+    <dimen name="convertdialog_input_code_height">44dp</dimen>
 
 
 

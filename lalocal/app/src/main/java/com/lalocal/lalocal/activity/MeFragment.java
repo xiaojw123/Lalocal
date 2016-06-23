@@ -117,8 +117,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 if (v == favorite_tab) {
                     xListView.setAdapter(favoriteAdapter);
                 } else if (v == coupon_tab) {
+                    xListView.setPullLoadEnable(false);
                     xListView.setAdapter(new MyCouponAdapter(getActivity()));
                 } else if (v == order_tab) {
+                    xListView.setPullLoadEnable(false);
                     xListView.setAdapter(new MyOrderAdapter(getActivity()));
                 }
             } else if (v == headImg || v == username_tv) {
