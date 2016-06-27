@@ -159,7 +159,13 @@
         <item name="android:paddingLeft">@dimen/account_edit_nickname_left</item>
         <item name="android:paddingRight">@dimen/account_edit_nickname_right</item>
     </style>
-        <!--<item name="android:gravity">center_vertical</item>-->
+    <style name="MyOrderTripPeopleTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_13_sp</item>
+        <item name="android:textColor">@color/color_b3</item>
+    </style>
+    
 
 
     <!--bigpicturedialog-->

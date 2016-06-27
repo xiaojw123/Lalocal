@@ -1,9 +1,11 @@
 package com.lalocal.lalocal.service.callback;
 
 
+import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
 
+import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
@@ -17,6 +19,16 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+
+    public void onGetOrderItem(List<OrderItem> items){
+
+    }
+
+
+    public void onGetCounponItem(List<Coupon> items){
+
+    }
+
     public void onGetFavoriteItem(List<FavoriteItem> items,int totalPages,int toalRows){
 
     }

@@ -17,10 +17,29 @@
         android:background="@drawable/account_edit2_changeemail_btn_bg" />
 
     <TextView
+        android:id="@+id/my_coupon_convert_rule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/coupon_convert_rule"
         android:layout_marginTop="@dimen/dimen_size_10_dp"
+        />
+
+    <ImageView
+        android:id="@+id/my_coupon_nothing_img"
+        android:layout_width="@dimen/my_oder_nothing_img_width"
+        android:layout_height="@dimen/my_oder_nothing_img_height"
+        android:background="@drawable/order_image_nothing"
+        android:layout_marginTop="@dimen/my_coupon_nothing_img_top"
+        />
+    <TextView
+        android:id="@+id/my_coupon_nothing_warn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_b3"
+        android:text="你还没有登录，即使是我们的工程师也不能算出你有多少优惠券"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_15_sp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
         />
 
 

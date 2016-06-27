@@ -19,10 +19,14 @@ import java.util.concurrent.Executors;
 
 public class DrawableUtils {
     public static final int MAX_AGE = 24 * 3600 * 1000;
-    private static  final  int DRAWABLE_NULL=R.drawable.company_logo;
+    private static final int DRAWABLE_NULL = R.drawable.company_logo;
     private static ImageLoader loader;
 
     public static void displayImg(Context context, ImageView img, String url) {
+        displayImg(context, img, url, 0);
+    }
+
+    public static void displayImg(Context context, ImageView img, String url, int radius) {
         if (loader == null) {
             loader = ImageLoader.getInstance();
         }
@@ -32,11 +36,12 @@ public class DrawableUtils {
 
         File imgFile = loader.getDiskCache().get(url);
         if (imgFile == null || !imgFile.exists()) {
-            loader.displayImage(url, img, getImageOptions(0,DRAWABLE_NULL));
+            loader.displayImage(url, img, getImageOptions(radius, DRAWABLE_NULL));
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
             loader.displayImage(fileUri, img);
         }
+
     }
 
     private static void init(Context context) {
@@ -51,9 +56,9 @@ public class DrawableUtils {
         loader.init(builder.build());
     }
 
-    private static DisplayImageOptions getImageOptions(int radius,int resID) {
+    private static DisplayImageOptions getImageOptions(int radius, int resID) {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
-        if (resID!=DRAWABLE_NULL){
+        if (resID != DRAWABLE_NULL) {
             builder.showImageForEmptyUri(resID);
             builder.showImageOnLoading(resID);
             builder.showImageOnFail(resID);

@@ -22,7 +22,6 @@ import java.util.List;
  * 我的收藏适配器 目前共五种类型 targeType  1文章 2产品 9线路 10专题 13资讯
  */
 public class MyFavoriteAdapter extends BaseAdapter {
-    int contentType;
     Context context;
     List<FavoriteItem> datas;
 
@@ -60,6 +59,7 @@ public class MyFavoriteAdapter extends BaseAdapter {
         if (datas == null || datas.size() < 1) {
             return null;
         }
+        FavoriteItem item = datas.get(position);
         ViewHolder holder = null;
         if (holder == null) {
             holder = new ViewHolder();
@@ -72,7 +72,6 @@ public class MyFavoriteAdapter extends BaseAdapter {
             holder.author = (TextView) convertView.findViewById(R.id.my_favorite_item_article_author);
             holder.authorAvatar = (ImageView) convertView.findViewById(R.id.my_favorite_item_authoravatar);
             holder.price = (TextView) convertView.findViewById(R.id.my_favorite_item_goods_price);
-            FavoriteItem item = datas.get(position);
             if (item != null) {
                 int targetType = item.getTargetType();
                 Resources res=context.getResources();
@@ -135,6 +134,7 @@ public class MyFavoriteAdapter extends BaseAdapter {
                 DrawableUtils.displayImg(context, holder.photo, item.getPhoto());
                 holder.title.setText(item.getTargetName());
             }
+            convertView.setTag(R.id.targetId,item.getTargetId());
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

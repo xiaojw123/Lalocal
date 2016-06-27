@@ -1,30 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_f8"
+    android:paddingTop="@dimen/dimen_size_15_dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-       >
-
-        <ImageView
-            android:id="@+id/my_oder_nothing_img"
-            android:layout_width="@dimen/my_oder_nothing_img_width"
-            android:layout_height="@dimen/my_oder_nothing_img_height"
-            android:background="@drawable/order_image_nothing"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/my_oder_nothing_img_top"
-            />
+        android:layout_height="@dimen/my_order_item_height"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/my_order_item_left"
+        android:paddingRight="@dimen/my_order_item_right"
+        android:paddingTop="@dimen/my_order_item_top">
 
         <TextView
+            android:id="@+id/my_order_item_ordernumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/no_oder"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dimen_size_15_dp"
-            android:layout_below="@+id/my_oder_nothing_img"
+            android:text="@string/order_number"
+            android:textColor="@color/color_8c"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/my_oder_ordernum_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/my_oder_ordernum_text_left"
+            android:layout_toRightOf="@+id/my_order_item_ordernumber"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/my_order_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@drawable/my_order_status_textcolor"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/my_order_line1"
+            style="@style/CommonTitleLineThem2"
+            android:layout_below="@+id/my_order_item_ordernumber"
+            android:layout_marginTop="@dimen/my_order_line1_top" />
+
+        <ImageView
+            android:id="@+id/my_oder_img"
+            android:layout_width="@dimen/my_oder_img_width"
+            android:layout_height="@dimen/my_oder_img_height"
+            android:layout_below="@+id/my_order_line1"
+            android:layout_marginTop="@dimen/my_oder_img_top"
+            android:scaleType="fitXY"
+            android:src="@drawable/my_oder_img_drawable" />
+
+        <TextView
+            android:id="@+id/my_order_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/my_oder_img"
+            android:layout_marginLeft="@dimen/my_order_name_tv_left"
+            android:layout_marginTop="@dimen/my_order_name_tv_top"
+            android:layout_toRightOf="@+id/my_oder_img"
+            android:ellipsize="end"
+            android:lines="3"
+            android:text="富士山温泉和御殿场奥特莱斯一日游场奥特莱斯"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/text_size_15_sp" />
+        
+        <LinearLayout
+            android:id="@+id/my_order_adult_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_order_adult_container_height"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/my_order_adult_container_top"
+            android:layout_below="@+id/my_oder_img"
             />
+
+
+        <TextView
+            android:id="@+id/my_order_line2"
+            style="@style/CommonTitleLineThem2"
+            android:layout_below="@+id/my_order_line1"
+            android:layout_marginTop="@dimen/my_order_line2_top" />
+
+        <TextView
+            android:id="@+id/my_order_toal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/my_order_line2"
+            android:layout_marginTop="@dimen/dimen_size_13_dp"
+            android:paddingRight="@dimen/dimen_size_5_dp"
+            android:text="@string/toal"
+            android:textColor="@color/color_8c"
+            android:textSize="@dimen/text_size_14_sp" />
+
+        <TextView
+            android:id="@+id/my_order_toal_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/my_order_toal"
+            android:layout_toRightOf="@+id/my_order_toal"
+            android:textColor="@color/color_ff6f6f"
+            android:textSize="@dimen/text_size_15_sp"
+            android:textStyle="bold" />
+        <!--支付，取消-->
+        <Button
+            android:id="@+id/my_order_pay_btn"
+            android:layout_width="@dimen/my_order_pay_btn_width"
+            android:layout_height="@dimen/my_order_pay_btn_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/my_order_line2"
+            android:layout_marginRight="@dimen/my_order_pay_btn_right"
+            android:layout_marginTop="@dimen/my_order_pay_btn_top"
+            android:background="@drawable/my_order_btn_bg"
+            android:text="@string/payment"
+            android:textColor="@drawable/my_order_btn_textcolor"
+            android:textSize="@dimen/text_size_13_sp" />
+
+        <Button
+            android:id="@+id/my_order_cancel_btn"
+            android:layout_width="@dimen/my_order_pay_btn_width"
+            android:layout_height="@dimen/my_order_pay_btn_height"
+            android:layout_alignTop="@+id/my_order_pay_btn"
+            android:layout_marginRight="@dimen/dimen_size_12_dp"
+            android:layout_toLeftOf="@+id/my_order_pay_btn"
+            android:background="@drawable/my_order_btn_bg"
+            android:text="@string/cancel"
+            android:textColor="@drawable/my_order_btn_textcolor"
+            android:textSize="@dimen/text_size_13_sp" />
+
+
     </RelativeLayout>
 
 

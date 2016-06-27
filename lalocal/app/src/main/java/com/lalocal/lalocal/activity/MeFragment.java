@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
@@ -31,6 +33,7 @@ import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
 import com.lalocal.lalocal.view.adapter.MyOrderAdapter;
 import com.lalocal.lalocal.view.xlistview.XListView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,7 +55,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     User user;
     XListView xListView;
     MyFavoriteAdapter favoriteAdapter;
-
+    MyCouponAdapter couponAdapter;
+    MyOrderAdapter orderAdapter;
+    List<FavoriteItem> allItems = new ArrayList<>();
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -73,11 +78,17 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         xListView.setOnItemClickListener(this);
         View headerView = inflater.inflate(R.layout.home_me_layout, null);
         xListView.addHeaderView(headerView);
-        favoriteAdapter = new MyFavoriteAdapter(getActivity(), null);
-        xListView.setAdapter(favoriteAdapter);
         initView(headerView);
+        initAdapter();
         initContentService();
         return view;
+    }
+
+    private void initAdapter() {
+        favoriteAdapter = new MyFavoriteAdapter(getActivity(), null);
+        couponAdapter = new MyCouponAdapter(getActivity(), null);
+        orderAdapter = new MyOrderAdapter(getActivity(),null);
+        xListView.setAdapter(favoriteAdapter);
     }
 
     private void initContentService() {
@@ -115,13 +126,20 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (v == favorite_tab || v == order_tab || v == coupon_tab) {
                 setSelectedTab((ViewGroup) v);
                 if (v == favorite_tab) {
-                    xListView.setAdapter(favoriteAdapter);
+                    xListView.setPullLoadEnable(true);
+                    if (favoriteAdapter != null) {
+                        xListView.setAdapter(favoriteAdapter);
+                    }
                 } else if (v == coupon_tab) {
                     xListView.setPullLoadEnable(false);
-                    xListView.setAdapter(new MyCouponAdapter(getActivity()));
+                    if (couponAdapter != null) {
+                        xListView.setAdapter(couponAdapter);
+                    }
                 } else if (v == order_tab) {
                     xListView.setPullLoadEnable(false);
-                    xListView.setAdapter(new MyOrderAdapter(getActivity()));
+                    if (orderAdapter != null) {
+                        xListView.setAdapter(orderAdapter);
+                    }
                 }
             } else if (v == headImg || v == username_tv) {
                 if (isLogined) {
@@ -212,16 +230,36 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
             }
-
+            contentService.getMyFavorite(userid, token, 1, 10);
+            contentService.getMyCoupon(userid, token);
+            contentService.getMyOrder(userid, token);
         } else {
             username_tv.setText(getResources().getString(R.string.please_login));
             verified_tv.setVisibility(View.GONE);
             headImg.setImageResource(R.drawable.home_me_personheadnormal);
+            favoriteAdapter = new MyFavoriteAdapter(getActivity(), null);
+            couponAdapter = new MyCouponAdapter(getActivity(), null);
+            orderAdapter = new MyOrderAdapter(getActivity(), null);
+            favoriteNum_tv.setText("0");
+            orderNum_tv.setText("0");
+            couponNum_tv.setText("0");
+            if (favorite_tab.isSelected()) {
+                xListView.setAdapter(favoriteAdapter);
+            }
+            if (coupon_tab.isSelected()) {
+                xListView.setAdapter(couponAdapter);
+            }
+            if (order_tab.isSelected()) {
+                xListView.setAdapter(orderAdapter);
+            }
+            contentService.getMyFavorite(-1, null, 1, 10);
+
+
         }
-        if (favorite_tab.isSelected()) {
-            contentService.getMyFavorite(userid, token, 1, 10);
-        }
+
+
     }
+
 
     @Override
     public void onRefresh() {
@@ -241,9 +279,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         favoritePage = favoritePage + 1;
         if (favoritePage <= favoriteTotalPages) {
             if (user != null) {
-
+                contentService.getMyFavorite(user.getId(), user.getToken(), 10, favoritePage);
             }
-            contentService.getMyFavorite(user.getId(), user.getToken(), 10, favoritePage);
 
         } else {
             Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
@@ -253,9 +290,32 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+       Object objValue= view.getTag(R.id.orderDetailId);
+        if (objValue!=null){
+            //订单详情
+
+        }
 
 
 
+//        int targetId = (int) view.getTag(R.id.targetId);
+//        Intent intent = new Intent();
+//        switch (targetId) {
+//            case 1:
+//                intent.setClass(getActivity(), ArticleActivity.class);
+//                break;
+//            case 2:
+//                break;
+//            case 9:
+//                break;
+//            case 10:
+//                intent.setClass(getActivity(), SpecialDetailsActivity.class);
+//                break;
+//            case 13:
+//                break;
+//        }
+//        intent.putExtra("productdetails", String.valueOf(targetId));
+//        startActivity(intent);
     }
 
     class MeCallBack extends ICallBack {
@@ -268,9 +328,46 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
         @Override
         public void onGetFavoriteItem(List<FavoriteItem> items, int totalPages, int totalRows) {
-            favoriteNum_tv.setText(String.valueOf(totalRows));
-            MeFragment.this.favoriteTotalPages = totalPages;
-            favoriteAdapter.updateListView(items);
+            favoriteTotalPages = totalPages;
+            if (!isRefresh) {
+                allItems.clear();
+            }
+            if (allItems.size() == 0) {
+                allItems.addAll(items);
+                favoriteAdapter = new MyFavoriteAdapter(getActivity(), allItems);
+                if (favorite_tab.isSelected()) {
+                    xListView.setAdapter(favoriteAdapter);
+                }
+            } else {
+                if (allItems.contains(items)) {
+                    return;
+                }
+                int len = allItems.size();
+                allItems.addAll(len, items);
+                favoriteAdapter.updateListView(allItems);
+            }
+            favoriteNum_tv.setText(String.valueOf(allItems.size()));
+        }
+
+        @Override
+        public void onGetCounponItem(List<Coupon> items) {
+            couponNum_tv.setText(String.valueOf(items.size()));
+            couponAdapter = new MyCouponAdapter(getActivity(), items);
+            if (coupon_tab.isSelected()) {
+                xListView.setAdapter(couponAdapter);
+            }
+        }
+
+        @Override
+        public void onGetOrderItem(List<OrderItem> items) {
+            if (items != null) {
+                orderNum_tv.setText(String.valueOf(items.size()));
+                orderAdapter = new MyOrderAdapter(getActivity(), items);
+            }
+            if (order_tab.isSelected()){
+                xListView.setAdapter(orderAdapter);
+            }
+
         }
     }
 
