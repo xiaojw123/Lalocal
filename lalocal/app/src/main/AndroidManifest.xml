@@ -16,11 +16,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-<<<<<<< HEAD
 
 
-=======
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="false"
@@ -44,22 +41,14 @@
         <activity android:name=".activity.AccountEidt1Activity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.AccountEidt2Activity" />
-<<<<<<< HEAD
+
         <activity android:name=".activity.EmailBoundActivity" />
         <activity android:name=".activity.SpecialDetailsActivity" />
         <activity android:name=".activity.BigPictureActivity" />
         <activity android:name=".activity.ArticleActivity" />
         <activity android:name=".activity.ProductDetailsActivity" />
         <activity android:name=".activity.OrderActivity"></activity>
-=======
-        <activity android:name=".activity.EmailBoundActivity"></activity>
-        <activity android:name=".activity.SpecialDetailsActivity"></activity>
 
-        <activity android:name=".activity.BigPictureActivity"></activity>
-        <activity android:name=".activity.ArticleActivity"></activity>
-
-        <activity android:name=".activity.ProductDetailsActivity"></activity>
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
         <activity android:name=".activity.ProductCheckDetailActivity"></activity>
         <activity android:name=".activity.TestActivity"></activity>
         <activity android:name=".activity.VideoActivity"></activity>
@@ -84,12 +73,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-<<<<<<< HEAD
 
-
-=======
-        <activity android:name=".activity.OrderActivity" />
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
     </application>
 
 </manifest>

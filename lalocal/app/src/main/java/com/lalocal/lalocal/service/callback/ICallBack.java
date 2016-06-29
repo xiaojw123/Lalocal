@@ -4,11 +4,9 @@ package com.lalocal.lalocal.service.callback;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
-<<<<<<< HEAD
 
-=======
 import com.lalocal.lalocal.model.OrderDetail;
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
+
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;

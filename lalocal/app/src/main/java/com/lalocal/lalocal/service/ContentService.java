@@ -15,10 +15,9 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
-<<<<<<< HEAD
-=======
+
 import com.lalocal.lalocal.model.OrderDetail;
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
+
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.OrderItem;
@@ -40,6 +39,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -389,17 +389,11 @@ public class ContentService {
                 case RequestCode.BOUDN_EMAIL:
                     responseBoundEmail(json);
                     break;
-<<<<<<< HEAD
 
                 case RequestCode.GET_MY_COUPON:
                     responseGetMyCoupon(json);
                     break;
 
-=======
-                case RequestCode.GET_MY_COUPON:
-                    responseGetMyCoupon(json);
-                    break;
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
                 case RequestCode.RECOMMEND:
                     responseRecommend(json);
                     break;
@@ -683,10 +677,7 @@ public class ContentService {
             }
         }
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
     //点赞
     private void responseParises(String json) {
         AppLog.print("responseParises______" + json);
@@ -708,10 +699,7 @@ public class ContentService {
         if (productDetailsDataResp != null) {
             callBack.onProductDetails(productDetailsDataResp);
         }
-<<<<<<< HEAD
 
-=======
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
     }
 
 
@@ -882,11 +870,9 @@ public class ContentService {
         public static final int BOUDN_EMAIL = 109;
         public static final int GET_MY_COUPON = 110;
         public static final int GET_MY_ORDER = 111;
-<<<<<<< HEAD
-=======
+
         public  static final int GET_ORDER_DETAIL=112;
 
->>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
         public static final int RECOMMEND=200;
         public static final int RECOMMEND_AD=201;
         public static final int SPECIAL_DETAIL=202;
