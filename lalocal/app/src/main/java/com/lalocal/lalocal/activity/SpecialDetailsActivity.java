@@ -121,13 +121,7 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
 
                     contentService1.specialPraise(targetId, 1);//点赞
 
-                   /* ParisesNetwork parisesNetwork=new ParisesNetwork(mContext,targetId,targetType);
-                    parisesNetwork.networkResult(new ParisesNetwork.OnNetworkResponse() {
-                        @Override
-                        public void networkResult(Object o) {
-                            AppLog.i("SpecialDetailsActivity666666666666",o.toString());
-                        }
-                    });*/
+
                 }
                 break;
             case R.id.special_details_share_iv:
@@ -144,7 +138,7 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
         OnekeyShare oks = new OnekeyShare();
         oks.disableSSOWhenAuthorize();
         oks.setTitle(shareVO.title);
-        oks.setText(shareVO.title);
+        oks.setText(shareVO.url);
         if(shareVO.img!=null){
            oks.setImageUrl(shareVO.img);
         }

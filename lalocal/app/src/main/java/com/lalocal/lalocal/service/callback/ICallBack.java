@@ -5,11 +5,8 @@ import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
 
-<<<<<<< HEAD
 import com.lalocal.lalocal.model.PariseResult;
-=======
 import com.lalocal.lalocal.model.OrderItem;
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;

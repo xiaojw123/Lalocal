@@ -16,10 +16,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-<<<<<<< HEAD
 
-=======
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 
     <application
         android:allowBackup="true"
@@ -44,28 +41,26 @@
         <activity android:name=".activity.AccountEidt1Activity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.AccountEidt2Activity" />
-<<<<<<< HEAD
-
-        <activity android:name=".activity.EmailBoundActivity"></activity>
-        <activity android:name=".activity.SpecialDetailsActivity"></activity>
-
-        <activity android:name=".activity.BigPictureActivity"></activity>
-        <activity android:name=".activity.ArticleActivity"></activity>
-
-        <activity android:name=".activity.ProductDetailsActivity"></activity>
+        <activity android:name=".activity.EmailBoundActivity" />
+        <activity android:name=".activity.SpecialDetailsActivity" />
+        <activity android:name=".activity.BigPictureActivity" />
+        <activity android:name=".activity.ArticleActivity" />
+        <activity android:name=".activity.ProductDetailsActivity" />
+        <activity android:name=".activity.OrderActivity"></activity>
         <activity android:name=".activity.ProductCheckDetailActivity"></activity>
         <activity android:name=".activity.TestActivity"></activity>
         <activity android:name=".activity.VideoActivity"></activity>
         <!--分享-->
         <activity
             android:name="com.mob.tools.MobUIShell"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" >
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <data android:scheme="tencent1104646053" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
@@ -76,15 +71,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-=======
-        <activity android:name=".activity.EmailBoundActivity" />
-        <activity android:name=".activity.SpecialDetailsActivity" />
-        <activity android:name=".activity.BigPictureActivity" />
-        <activity android:name=".activity.ArticleActivity" />
-        <activity android:name=".activity.ProductDetailsActivity" />
-        <activity android:name=".activity.OrderActivity"></activity>
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
     </application>
 
 </manifest>

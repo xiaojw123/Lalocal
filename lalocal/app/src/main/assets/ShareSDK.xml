@@ -61,9 +61,9 @@
     <SinaWeibo
         Id="1"
         SortId="1"
-        AppKey="wx6117251010e95624"
-        AppSecret="9154c280dd8a7a9a6b5f57d08dae2930"
-        RedirectUrl="http://www.sharesdk.cn"
+        AppKey="2849578775"
+        AppSecret="3b3bce66ae4671ae755fa11c2ba0ad5d"
+        RedirectUrl="http://sns.whalecloud.com/sina2/callback"
         ShareByAppClient="true"
         Enable="true" />
 

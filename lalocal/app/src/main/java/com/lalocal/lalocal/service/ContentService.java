@@ -16,12 +16,9 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
-<<<<<<< HEAD
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
-=======
 import com.lalocal.lalocal.model.OrderItem;
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
@@ -187,7 +184,7 @@ public class ContentService {
             response=new ContentResponse(RequestCode.PARISES);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.PRAISES,response,response);
-        request.setHeaderParams(getLoginedHeaderParams(-1,null));
+        request.setHeaderParams(getHeaderParamsWithUserId(-1,null));
         request.setBodyParams(getParisesParams(id,type));
         requestQueue.add(request);
 
@@ -208,7 +205,7 @@ public class ContentService {
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
         ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_URL + getParameter, response, response);
-        request.setHeaderParams(getLoginedHeaderParams(-1, null));
+        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
         requestQueue.add(request);
 
     }
@@ -373,13 +370,11 @@ public class ContentService {
                 case RequestCode.BOUDN_EMAIL:
                     responseBoundEmail(json);
                     break;
-<<<<<<< HEAD
-=======
+
                 case RequestCode.GET_MY_COUPON:
                     responseGetMyCoupon(json);
                     break;
 
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
                 case RequestCode.RECOMMEND:
                     responseRecommend(json);
                     break;
@@ -637,7 +632,7 @@ public class ContentService {
             }
         }
     }
-<<<<<<< HEAD
+
     //点赞
     private void responseParises(String json) {
         AppLog.print("responseParises______" + json);
@@ -656,14 +651,9 @@ public class ContentService {
     //产品详情
     private void responseProductDetails(String json) {
         ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
-        if(productDetailsDataResp!=null){
+        if (productDetailsDataResp != null) {
             callBack.onProductDetails(productDetailsDataResp);
         }
-=======
-
-    //产品详情
-    private void responseProductDetails(String json) {
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 
     }
 
@@ -834,24 +824,12 @@ public class ContentService {
         public static final int BOUDN_EMAIL = 109;
         public static final int GET_MY_COUPON = 110;
         public static final int GET_MY_ORDER = 111;
-
-<<<<<<< HEAD
         public static final int RECOMMEND=200;
         public static final int RECOMMEND_AD=201;
         public static final int SPECIAL_DETAIL=202;
         public static final int PRODUCT_DETAILS=203;
         public static final int CANCEL_PARISES=204;
         public static final int PARISES=205;
-
-
-=======
-
-        public static final int RECOMMEND = 200;
-        public static final int RECOMMEND_AD = 201;
-        public static final int SPECIAL_DETAIL = 202;
-        public static final int PRODUCT_DETAILS = 203;
->>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
-
 
     }
 
