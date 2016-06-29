@@ -8,5 +8,5 @@
         android:toYScale="0.001"   
         android:pivotX="15%"  
         android:pivotY="25%"  
-        android:duration="200" />  
+        android:duration="500" />
    

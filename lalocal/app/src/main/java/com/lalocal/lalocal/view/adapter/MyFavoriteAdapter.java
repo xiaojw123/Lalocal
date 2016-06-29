@@ -134,7 +134,7 @@ public class MyFavoriteAdapter extends BaseAdapter {
                 DrawableUtils.displayImg(context, holder.photo, item.getPhoto());
                 holder.title.setText(item.getTargetName());
             }
-            convertView.setTag(R.id.targetId,item.getTargetId());
+            convertView.setTag(R.id.targetId,item);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

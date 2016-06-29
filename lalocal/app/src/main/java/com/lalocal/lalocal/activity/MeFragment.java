@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.OrderItem;
@@ -291,12 +292,16 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        int targetId = (int) view.getTag(R.id.targetId);
-//        Intent intent = new Intent();
-//        switch (targetId) {
-//            case 1:
-//                intent.setClass(getActivity(), ArticleActivity.class);
-//                break;
+        FavoriteItem item = (FavoriteItem) view.getTag(R.id.targetId);
+        switch (item.getTargetType()) {
+            case 1://文章
+                Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                ArticleDetailsBean bean = new ArticleDetailsBean();
+                bean.setCollected(true);
+                bean.setTargetId(item.getTargetId());
+                intent.putExtra("articleDetailsBean", bean);
+                startActivity(intent);
+                break;
 //            case 2:
 //                break;
 //            case 9:
@@ -306,9 +311,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 //                break;
 //            case 13:
 //                break;
-//        }
-//        intent.putExtra("productdetails", String.valueOf(targetId));
-//        startActivity(intent);
+        }
+
     }
 
     class MeCallBack extends ICallBack {

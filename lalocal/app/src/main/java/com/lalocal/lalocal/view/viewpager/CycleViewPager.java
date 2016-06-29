@@ -319,7 +319,6 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 					@Override
 					public void onClick(View v) {
 
-
 						//轮播图页面点击进入相关页面
 						mImageCycleViewListener.onImageClick(infos.get(currentPosition - 1), currentPosition, v);
 						int targetType = infos.get(currentPosition - 1).targetType;

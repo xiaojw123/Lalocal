@@ -30,9 +30,6 @@ public class AppConfig {
         public static  final  String MODIFY_USER_PROFILE_URL=BASE_URL+"users/profile";
         public static final  String GET_USER_PROFILE_URL=BASE_URL+"users/profile";
         public static  final  String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
-
-
-
         //推荐接口
         public static final String RECOMMEND_URL=BASE_URL+"themes?";
         //推荐广告位接口
@@ -40,8 +37,12 @@ public class AppConfig {
 
         //专题详情接口
         public static final String SPECIAL_DETAILS_URL="http://dev.lalocal.cn:8080/api/themes/";
-        //产品详情接口 http://dev.lalocal.cn:8080/api/productions/1
-        public static final  String PRODUCTIONS_DETILS=BASE_URL+"productions/";
+        //产品详情接口
+        public static final  String PRODUCTIONS_DETILS="http://dev.lalocal.cn:8080/api/productions/";
+        //点赞接口
+        public static final  String PRAISES="http://dev.lalocal.cn:8080/api/praises";
+        //取消赞
+        public static final String CANCEL_PRAISES="http://dev.lalocal.cn:8080/api/praises/";
         public static  final String IN_LAND_PHONE="400-017-8056";
         public static  final String FOREIGEN_PHONE="(+86)0571-86808267";
 

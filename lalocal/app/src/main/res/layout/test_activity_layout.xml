@@ -4,8 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
+
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    >
     <WebView
         android:id="@+id/wb"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></WebView>
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+
+
+        ></WebView>
+
+</ScrollView>
+
+
+
+
+    
+
+
 </LinearLayout>

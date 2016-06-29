@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.lalocal.lalocal"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0.0"
@@ -17,6 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/2'] } }
 }
 
 dependencies {
@@ -30,4 +31,5 @@ dependencies {
     compile files('libs/google-http-client-1.20.0.jar')
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile project(':vitamio')
 }

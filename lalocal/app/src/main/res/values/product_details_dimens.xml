@@ -7,4 +7,5 @@
     <dimen name="product_details_padding_left">15dp</dimen>
     <dimen name="product_details_padding_bottom">10dp</dimen>
     <dimen name="product_details_price_size">21sp</dimen>
+    <dimen name="product_details_padding">25dp</dimen>
 </resources>

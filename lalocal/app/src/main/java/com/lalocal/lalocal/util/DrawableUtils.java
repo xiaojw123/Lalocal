@@ -35,6 +35,7 @@ public class DrawableUtils {
         }
 
         File imgFile = loader.getDiskCache().get(url);
+
         if (imgFile == null || !imgFile.exists()) {
             loader.displayImage(url, img, getImageOptions(radius, DRAWABLE_NULL));
         } else {

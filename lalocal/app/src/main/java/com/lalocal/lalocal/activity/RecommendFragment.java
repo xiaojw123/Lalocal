@@ -12,6 +12,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
@@ -19,13 +25,17 @@ import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.AppConfig;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -50,7 +60,10 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
+
+
 
     @Nullable
     @Override
@@ -75,10 +88,12 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 if(allRows!=null){
                     RecommendRowsBean recommendRowsBean = allRows.get(position - 2);
                     int rowId = recommendRowsBean.getId();
-
+                    Toast.makeText(getActivity(),""+rowId,Toast.LENGTH_SHORT).show();
                     Intent intent=new Intent(getActivity(),SpecialDetailsActivity.class);
+                   // Intent intent=new Intent(getActivity(),TestActivity.class);
                     intent.putExtra("rowId",rowId+"");
                     startActivity(intent);
+
                 }
             }
         });
@@ -91,6 +106,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
             super.onRecommend(recommendDataResp);
             List<RecommendRowsBean> rows = recommendDataResp.getResult().getRows();
             if (recommendDataResp != null && rows != null) {
+
                 totalPages = recommendDataResp.getResult().getTotalPages();
                 totalRows = recommendDataResp.getResult().getTotalRows();
                 if(!isRefresh){
@@ -121,8 +137,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
             if(recommendAdResp.getReturnCode()==0){
                 List<RecommendAdResultBean> result = recommendAdResp.getResult();
                 ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, result);
-
-
             }
         }
     }
@@ -164,5 +178,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         }
         xlistview.stopLoadMore();
     }
+
 
 }
