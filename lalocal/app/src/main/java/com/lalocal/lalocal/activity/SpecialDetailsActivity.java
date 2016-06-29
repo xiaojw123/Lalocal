@@ -115,13 +115,9 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.special_details_like_iv:
                 if (praiseFlag) {
-
                     contentService1.cancelParises(praiseId);//取消赞
                 } else {
-
                     contentService1.specialPraise(targetId, 1);//点赞
-
-
                 }
                 break;
             case R.id.special_details_share_iv:
@@ -180,7 +176,7 @@ private String photourl;
             h5Url = spectialDetailsResp.result.url;
             shareVO = spectialDetailsResp.result.shareVO;
             praiseId1 = spectialDetailsResp.result.praiseId;
-            targetId = spectialDetailsResp.result.id;
+          //  int i = targetId = spectialDetailsResp.result.groups;
             targetType = spectialDetailsResp.result.type;
             Toast.makeText(SpecialDetailsActivity.this, "praiseId:"+spectialDetailsResp.result.praiseId, Toast.LENGTH_SHORT).show();
             if (praiseId1 !=null) {
