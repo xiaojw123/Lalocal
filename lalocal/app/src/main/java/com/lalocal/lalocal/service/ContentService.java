@@ -1,7 +1,9 @@
 package com.lalocal.lalocal.service;
 
 import android.content.Context;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -13,6 +15,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
+import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 
@@ -167,7 +171,25 @@ public class ContentService {
         request.setBodyParams(getRegisterParams(email, password, nickname));
         requestQueue.add(request);
     }
+    //点赞
+    public void specialPraise(int id,int type){
+        if(callBack!=null){
+            response=new ContentResponse(RequestCode.PARISES);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.PRAISES,response,response);
+        request.setHeaderParams(getLoginedHeaderParams(-1,null));
+        request.setBodyParams(getParisesParams(id,type));
+        requestQueue.add(request);
 
+    }
+    //取消收藏
+    public void cancelParises(int praiseId) {
+        if(callBack !=null){
+            response=new ContentResponse(RequestCode.CANCEL_PARISES);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE,AppConfig.CANCEL_PRAISES+praiseId, response, response);
+        requestQueue.add(contentRequest);
+    }
     //推荐
     public void recommentList(final int pageSize, final int pageNumber) {
         if (callBack != null) {
@@ -176,16 +198,15 @@ public class ContentService {
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
         ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_URL + getParameter, response, response);
+        request.setHeaderParams(getLoginedHeaderParams(-1, null));
         requestQueue.add(request);
 
     }
-
     //推荐页广告位
     public void recommendAd() {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RECOMMEND_AD);
         }
-
         ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_AD, response, response);
         requestQueue.add(request);
     }
@@ -198,14 +219,17 @@ public class ContentService {
         requestQueue.add(request);
     }
 
+
+
     //产品详情
     public  void productDetails(String targetId){
         if(callBack !=null){
             response=new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS+targetId, response, response);
         requestQueue.add(contentRequest);
     }
+
 
     class ContentRequest extends StringRequest {
         private String body;
@@ -234,7 +258,6 @@ public class ContentService {
             this.body = body;
         }
 
-
         public void setBodyParams(byte[] bodyParams) {
             this.bodyParams = bodyParams;
         }
@@ -254,11 +277,24 @@ public class ContentService {
             return bodyType != null ? bodyType : CONTENT_TYPE;
         }
 
+        @Override
+        protected HashMap<String, String> getParams()
+
+                throws AuthFailureError {
+
+            HashMap<String, String> hashMap = new HashMap<String, String>();
+
+            hashMap.put("un", "852041173");
+
+            hashMap.put("pw", "852041173abc");
+
+            return hashMap;
+
+        }
     }
 
 
     class ContentResponse implements Response.Listener<String>, Response.ErrorListener {
-
         private String email, psw;
         private int resultCode;
         private int pageSize, pageNumber;
@@ -271,11 +307,9 @@ public class ContentService {
             this.email = email;
             this.psw = psw;
         }
-
         public void setEmail(String email) {
             this.email = email;
         }
-
         public void setRecommend(int pageSize, int pageNumber) {
             this.pageSize = pageSize;
             this.pageNumber = pageNumber;
@@ -325,7 +359,6 @@ public class ContentService {
                 case RequestCode.BOUDN_EMAIL:
                     responseBoundEmail(json);
                     break;
-
                 case RequestCode.RECOMMEND:
                     responseRecommend(json);
                     break;
@@ -337,6 +370,12 @@ public class ContentService {
                     break;
                 case RequestCode.PRODUCT_DETAILS:
                     responseProductDetails(json);
+                    break;
+               case RequestCode.CANCEL_PARISES:
+                   responseCancelParises(json);
+                   break;
+                case RequestCode.PARISES:
+                    responseParises(json);
                     break;
             }
 
@@ -462,8 +501,6 @@ public class ContentService {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
         }
 
         private void responseLogin(String json) {
@@ -499,14 +536,32 @@ public class ContentService {
             }
         }
     }
+    //点赞
+    private void responseParises(String json) {
+        AppLog.print("responseParises______" + json);
+
+        PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+        callBack.onInputPariseResult(pariseResult);
+    }
+
+    //取消赞
+    private void responseCancelParises(String json) {
+        AppLog.print("responseCancelParises______" + json);
+        PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+        callBack.onPariseResult(pariseResult);
+    }
+
     //产品详情
     private void responseProductDetails(String json) {
-        
+        ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
+        if(productDetailsDataResp!=null){
+            callBack.onProductDetails(productDetailsDataResp);
+        }
+
     }
 
     //推荐
     public void responseRecommend(String json) {
-
         RecommendDataResp recommendDataResp = new Gson().fromJson(json, RecommendDataResp.class);
         callBack.onRecommend(recommendDataResp);
     }
@@ -546,7 +601,6 @@ public class ContentService {
                 AppLog.print("phone___");
                 jsonObj.put("phone", phone);
             }
-
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -610,12 +664,31 @@ public class ContentService {
 
     }
 
+    //点赞
+    public String getParisesParams(int id,int type){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("targetId",id);
+            jsonObject.put("targetType",type);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+
+
 
     public Map<String, String> getHeaderParams() {
         Map<String, String> headers = new HashMap<>();
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
-        headers.put("DEVICE_ID", CommonUtil.getUUID(context));
+      //  headers.put("DEVICE_ID", CommonUtil.getUUID(context));
+        TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        String DEVICE_ID = tm.getDeviceId();
+        headers.put("DEVICE_ID",DEVICE_ID);
+        AppLog.i("getHeaderParams1111111111111", CommonUtil.getUUID(context));
         AppLog.print("verision__" + AppConfig.getVersionName(context) + ", device_id__" + CommonUtil.getUUID(context));
         return headers;
     }
@@ -653,11 +726,12 @@ public class ContentService {
         public static final int GET_USER_PROFILE = 108;
         public static final int BOUDN_EMAIL = 109;
 
-
         public static final int RECOMMEND=200;
         public static final int RECOMMEND_AD=201;
         public static final int SPECIAL_DETAIL=202;
         public static final int PRODUCT_DETAILS=203;
+        public static final int CANCEL_PARISES=204;
+        public static final int PARISES=205;
 
 
 

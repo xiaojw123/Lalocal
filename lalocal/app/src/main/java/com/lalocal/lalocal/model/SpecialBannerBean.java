@@ -1,9 +1,11 @@
 package com.lalocal.lalocal.model;
 
+
+
 /**
  * Created by lenovo on 2016/6/17.
  */
-public class SpecialBannerBean {
+public class SpecialBannerBean  {
     public int id;
     public String title;
     public int type;
@@ -17,4 +19,5 @@ public class SpecialBannerBean {
     public int readNum;
     public int praiseNum;
     public SpecialShareVOBean shareVO;
+
 }

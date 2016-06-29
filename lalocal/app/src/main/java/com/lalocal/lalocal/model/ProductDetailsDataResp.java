@@ -12,9 +12,4 @@ public class ProductDetailsDataResp {
     public ProductDetailsResultBean result;
     public Object errorCode;
 
-
-
-
-
-
 }

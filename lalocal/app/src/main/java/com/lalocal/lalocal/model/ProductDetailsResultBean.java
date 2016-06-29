@@ -25,5 +25,5 @@ public class ProductDetailsResultBean {
     public SpecialShareVOBean shareVO;
     public Object appraiseVO;
     public List<ProductDetailsBean> details;
-    public List<?> photoVOs;
+    public List<PhotosVosBean> photoVOs;
 }
