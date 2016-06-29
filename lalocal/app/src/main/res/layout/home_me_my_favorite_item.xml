@@ -114,7 +114,7 @@
 
     </RelativeLayout>
     <TextView
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         android:layout_gravity="bottom"
       />
 </FrameLayout>

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.OrderItem;
@@ -27,6 +28,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
 import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
@@ -87,7 +89,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     private void initAdapter() {
         favoriteAdapter = new MyFavoriteAdapter(getActivity(), null);
         couponAdapter = new MyCouponAdapter(getActivity(), null);
-        orderAdapter = new MyOrderAdapter(getActivity(),null);
+        orderAdapter = new MyOrderAdapter(getActivity(), null);
         xListView.setAdapter(favoriteAdapter);
     }
 
@@ -210,8 +212,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         int userid = -1;
         String token = null;
         if (isLogined && user != null) {
-            userid = user.getId();
             token = user.getToken();
+            userid = user.getId();
+            CommonUtil.setUserParams(userid, token);
             String nickname = user.getNickName();
             if (!TextUtils.isEmpty(nickname)) {
                 username_tv.setText(nickname);
@@ -234,6 +237,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             contentService.getMyCoupon(userid, token);
             contentService.getMyOrder(userid, token);
         } else {
+            CommonUtil.setUserParams(-1, null);
             username_tv.setText(getResources().getString(R.string.please_login));
             verified_tv.setVisibility(View.GONE);
             headImg.setImageResource(R.drawable.home_me_personheadnormal);
@@ -253,8 +257,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 xListView.setAdapter(orderAdapter);
             }
             contentService.getMyFavorite(-1, null, 1, 10);
-
-
         }
 
 
@@ -290,20 +292,16 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       Object objValue= view.getTag(R.id.orderDetailId);
-        if (objValue!=null){
-            //订单详情
-
-        }
-
-
-
-//        int targetId = (int) view.getTag(R.id.targetId);
-//        Intent intent = new Intent();
-//        switch (targetId) {
-//            case 1:
-//                intent.setClass(getActivity(), ArticleActivity.class);
-//                break;
+        FavoriteItem item = (FavoriteItem) view.getTag(R.id.targetId);
+        switch (item.getTargetType()) {
+            case 1://文章
+                Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                ArticleDetailsBean bean = new ArticleDetailsBean();
+                bean.setCollected(true);
+                bean.setTargetId(item.getTargetId());
+                intent.putExtra("articleDetailsBean", bean);
+                startActivity(intent);
+                break;
 //            case 2:
 //                break;
 //            case 9:
@@ -313,9 +311,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 //                break;
 //            case 13:
 //                break;
-//        }
-//        intent.putExtra("productdetails", String.valueOf(targetId));
-//        startActivity(intent);
+        }
+
     }
 
     class MeCallBack extends ICallBack {
@@ -364,7 +361,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 orderNum_tv.setText(String.valueOf(items.size()));
                 orderAdapter = new MyOrderAdapter(getActivity(), items);
             }
-            if (order_tab.isSelected()){
+            if (order_tab.isSelected()) {
                 xListView.setAdapter(orderAdapter);
             }
 

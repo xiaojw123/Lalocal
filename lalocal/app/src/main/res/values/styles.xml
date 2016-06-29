@@ -84,13 +84,13 @@
         <item name="android:textColor">@drawable/home_me_content_tab_textcolor</item>
     </style>
 
-    <style name="CommonTitleLineTheme">
+    <style name="CommonDeLineTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/register_title_divde_line_height</item>
         <item name="android:background">@color/color_de</item>
     </style>
 
-    <style name="CommonTitleLineThem2">
+    <style name="CommonD9LineTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/register_title_divde_line_height</item>
         <item name="android:background">@color/color_d9</item>
@@ -163,6 +163,29 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_13_sp</item>
+        <item name="android:textColor">@color/color_b3</item>
+    </style>
+    <style name="OrderCarditemContainerStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/order_travel_information_container_top</item>
+        <item name="android:layout_marginLeft">@dimen/order_travel_information_container_top</item>
+        <item name="android:layout_marginRight">@dimen/order_travel_information_container_top</item>
+        <item name="android:background">@drawable/order_card_item_bg</item>
+    </style>
+    <style name="OrderCardItemIitleStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_16_sp</item>
+        <item name="android:textColor">@color/color_1a</item>
+        <item name="android:layout_marginLeft">@dimen/order_card_item_left</item>
+        <item name="android:layout_marginTop">@dimen/order_card_item_top</item>
+        <item name="android:layout_marginBottom">@dimen/order_card_item_top</item>
+    </style>
+    <style name="OrderCardItemTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/order_travel_time_height</item>
+        <item name="android:textSize">@dimen/text_size_15_sp</item>
         <item name="android:textColor">@color/color_b3</item>
     </style>
     

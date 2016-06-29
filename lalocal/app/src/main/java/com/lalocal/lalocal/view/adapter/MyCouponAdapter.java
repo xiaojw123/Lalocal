@@ -82,15 +82,17 @@ public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener
                 holder = new ViewHolder();
                 convertView = inflater.inflate(R.layout.home_me_my_coupon_item, null);
                 Resources res = context.getResources();
-                convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) res.getDimension(R.dimen.my_coupon_item_height)));
                 int left = (int) res.getDimension(R.dimen.home_me_my_favorite_item_left);
                 int top = 0;
                 int bottom = (int) res.getDimension(R.dimen.dimen_size_5_dp);
+                int height=(int) res.getDimension(R.dimen.my_coupon_item_height);
                 if (position == 1) {
                     top = (int) res.getDimension(R.dimen.dimen_size_25_dp);
+                    height+=(int)res.getDimension(R.dimen.dimen_size_20_dp);
                 } else {
                     top = (int) res.getDimension(R.dimen.dimen_size_5_dp);
                 }
+                convertView.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
                 convertView.setPadding(left, top, left, bottom);
                 holder.myCouponContainer = (RelativeLayout) convertView.findViewById(R.id.my_coupon_card);
                 holder.cornerImg = (ImageView) convertView.findViewById(R.id.my_coupon_corner_img);

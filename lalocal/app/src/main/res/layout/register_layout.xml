@@ -24,7 +24,7 @@
     </FrameLayout>
 
     <TextView
-    style="@style/CommonTitleLineTheme"
+    style="@style/CommonDeLineTheme"
     />
 
 

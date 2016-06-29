@@ -101,5 +101,16 @@
     <string name="child">儿童</string>
     <string name="orderdetail">订单详情</string>
     <string name="service">客服</string>
+    <string name="travel_information">出行信息</string>
+    <string name="packages_choose">套餐选择</string>
+    <string name="travel_time">出行时间</string>
+    <string name="pick_up_location">接送地点</string>
+    <string name="travel_person">出行人</string>
+    <string name="pay_money">支付金额</string>
+    <string name="order_info">订单信息</string>
+    <string name="order_time">下单时间</string>
+    <string name="pay_time">支付时间</string>
+    <string name="pay_channel">支付渠道</string>
+    <string name="immediately_evaluate">立即评价</string>
 
 </resources>

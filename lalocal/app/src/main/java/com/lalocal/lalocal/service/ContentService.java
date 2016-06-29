@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
-import android.widget.Toast;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +15,10 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
+<<<<<<< HEAD
+=======
+import com.lalocal.lalocal.model.OrderDetail;
+>>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.OrderItem;
@@ -62,6 +64,15 @@ public class ContentService {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+
+    public void getOrderDetail(int id){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_ORDER_DETAIL);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.GET_MY_ORDER_ITEMS+"/"+id,response,response);
+        request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(),CommonUtil.getUserToken()));
+        requestQueue.add(request);
     }
 
     public void getMyOrder(int userid, String token) {
@@ -341,6 +352,9 @@ public class ContentService {
         @Override
         public void onResponse(String json) {
             switch (resultCode) {
+                case RequestCode.GET_ORDER_DETAIL:
+                    responseGetOrderDetail(json);
+                    break;
                 case RequestCode.GET_MY_ORDER:
                     responseGetMyOrderItems(json);
                     break;
@@ -375,11 +389,17 @@ public class ContentService {
                 case RequestCode.BOUDN_EMAIL:
                     responseBoundEmail(json);
                     break;
+<<<<<<< HEAD
 
                 case RequestCode.GET_MY_COUPON:
                     responseGetMyCoupon(json);
                     break;
 
+=======
+                case RequestCode.GET_MY_COUPON:
+                    responseGetMyCoupon(json);
+                    break;
+>>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
                 case RequestCode.RECOMMEND:
                     responseRecommend(json);
                     break;
@@ -399,6 +419,32 @@ public class ContentService {
                     responseParises(json);
                     break;
             }
+
+        }
+
+        private void responseGetOrderDetail(String json) {
+            AppLog.print("responseGetOrderDetail____"+json);
+            try {
+                JSONObject jsonObj=new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                if (code==0){
+                    JSONObject resultJsObj=jsonObj.optJSONObject(ResultParams.REULST);
+                    Gson gson=new Gson();
+                    OrderDetail orderItem=gson.fromJson(resultJsObj.toString(), OrderDetail.class);
+                    callBack.onGetOrderDetail(orderItem);
+
+
+
+
+                }
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
 
@@ -637,7 +683,10 @@ public class ContentService {
             }
         }
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
     //点赞
     private void responseParises(String json) {
         AppLog.print("responseParises______" + json);
@@ -659,8 +708,12 @@ public class ContentService {
         if (productDetailsDataResp != null) {
             callBack.onProductDetails(productDetailsDataResp);
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
     }
+
 
     //推荐
     public void responseRecommend(String json) {
@@ -829,6 +882,11 @@ public class ContentService {
         public static final int BOUDN_EMAIL = 109;
         public static final int GET_MY_COUPON = 110;
         public static final int GET_MY_ORDER = 111;
+<<<<<<< HEAD
+=======
+        public  static final int GET_ORDER_DETAIL=112;
+
+>>>>>>> ec8194768739f01a3128ab8a1bc55a56196b8d57
         public static final int RECOMMEND=200;
         public static final int RECOMMEND_AD=201;
         public static final int SPECIAL_DETAIL=202;

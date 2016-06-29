@@ -7,6 +7,7 @@ import android.os.Parcelable;
  * Created by lenovo on 2016/6/27.
  */
 public class ArticleDetailsBean implements Parcelable {
+    private boolean isCollected;
     private int praiseNum;
     private int readNum;
     private int targetId;
@@ -52,6 +53,14 @@ public class ArticleDetailsBean implements Parcelable {
         return targetId;
     }
 
+    public boolean isCollected() {
+        return isCollected;
+    }
+
+    public void setCollected(boolean collected) {
+        isCollected = collected;
+    }
+
     public void setTargetId(int targetId) {
         this.targetId = targetId;
     }
@@ -82,6 +91,7 @@ public class ArticleDetailsBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.isCollected ? (byte) 1 : (byte) 0);
         dest.writeInt(this.praiseNum);
         dest.writeInt(this.readNum);
         dest.writeInt(this.targetId);
@@ -92,6 +102,7 @@ public class ArticleDetailsBean implements Parcelable {
     }
 
     protected ArticleDetailsBean(Parcel in) {
+        this.isCollected = in.readByte() != 0;
         this.praiseNum = in.readInt();
         this.readNum = in.readInt();
         this.targetId = in.readInt();

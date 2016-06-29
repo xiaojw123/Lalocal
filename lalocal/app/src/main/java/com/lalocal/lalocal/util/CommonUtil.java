@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
  * Created by xiaojw on 2016/6/6.
  */
 public class CommonUtil {
+    private static int mUserid = -1;
+    private static String mToken = null;
 
     //人民币
     public static String formartPrice(String price) {
@@ -71,5 +73,19 @@ public class CommonUtil {
         dialog.setNeturalBtn(context.getResources().getString(R.string.sure), listener);
         dialog.show();
     }
+
+    public static void setUserParams(int userid, String token) {
+        mUserid = userid;
+        mToken = token;
+    }
+
+    public static int getUserId() {
+        return mUserid;
+    }
+
+    public static String getUserToken() {
+        return mToken;
+    }
+
 
 }

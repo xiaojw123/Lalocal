@@ -34,7 +34,7 @@
     </RelativeLayout>
 
     <TextView
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         />
 
     <LinearLayout
