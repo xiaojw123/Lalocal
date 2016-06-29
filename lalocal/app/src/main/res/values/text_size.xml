@@ -4,6 +4,7 @@
     <dimen name="text_size_8_sp">8sp</dimen>
     <dimen name="text_size_10_sp">10sp</dimen>
     <dimen name="text_size_12_sp">12sp</dimen>
+    <dimen name="text_size_13_sp">13sp</dimen>
     <dimen name="text_size_14_sp">14sp</dimen>
     <dimen name="text_size_15_sp">15sp</dimen>
     <dimen name="text_size_16_sp">16sp</dimen>
@@ -12,6 +13,7 @@
     <dimen name="text_size_20_sp">20sp</dimen>
     <dimen name="text_size_22_sp">22sp</dimen>
     <dimen name="text_size_24_sp">24sp</dimen>
+    <dimen name="text_size_30_sp">30sp</dimen>
     <dimen name="text_size_70_sp">70sp</dimen>
 
 

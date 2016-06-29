@@ -1,31 +1,47 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.model.OrderItem;
+import com.lalocal.lalocal.util.DrawableUtils;
+
+import java.util.List;
 
 /**
  * Created by xiaojw on 2016/6/21.
  */
 public class MyOrderAdapter extends BaseAdapter {
     Context context;
+    List<OrderItem> items;
 
-    public MyOrderAdapter(Context context) {
+    public MyOrderAdapter(Context context, List<OrderItem> items) {
         this.context = context;
+        this.items = items;
+    }
+
+    public void updateListView(List<OrderItem> items) {
+        this.items = items;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return 1;
+        return items == null || items.size() < 1 ? 1 : items.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return items == null || items.size() < 1 ? null : items.get(position);
     }
 
     @Override
@@ -35,7 +51,100 @@ public class MyOrderAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        convertView = LayoutInflater.from(context).inflate(R.layout.home_me_my_oder_item, null);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        if (position == 0 && (items == null || items.size() < 1)) {
+            convertView = inflater.inflate(R.layout.home_me_my_oder_nothing, null);
+        } else {
+            ViewHolder holder = new ViewHolder();
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.home_me_my_oder_item, null);
+                holder.adultItemCotainer = (LinearLayout) convertView.findViewById(R.id.my_order_adult_container);
+                holder.orderNum = (TextView) convertView.findViewById(R.id.my_oder_ordernum_text);
+                holder.orderStatus = (TextView) convertView.findViewById(R.id.my_order_status_tv);
+                holder.orderName = (TextView) convertView.findViewById(R.id.my_order_name_tv);
+                holder.orderPhoto = (ImageView) convertView.findViewById(R.id.my_oder_img);
+                holder.orderToalPrice = (TextView) convertView.findViewById(R.id.my_order_toal_price);
+                holder.cancleBtn = (Button) convertView.findViewById(R.id.my_order_cancel_btn);
+                holder.payBtn = (Button) convertView.findViewById(R.id.my_order_pay_btn);
+
+                OrderItem item = items.get(position);
+                if (item != null) {
+                    List<OrderItem.OrderPay> orderPays = item.getOrderPayList();
+                    for (OrderItem.OrderPay orderPay : orderPays) {
+                        if (orderPay != null) {
+                            View adultItemView = inflater.inflate(R.layout.my_order_adult_item, holder.adultItemCotainer, false);
+                            TextView name = (TextView) adultItemView.findViewById(R.id.my_order_adult_item_name);
+                            TextView discount = (TextView) adultItemView.findViewById(R.id.my_order_adult_item_discount);
+                            name.setText(orderPay.getName());
+                            discount.setText("￥ " + orderPay.getUnit() + "x" + orderPay.getAmount());
+                            holder.adultItemCotainer.addView(adultItemView);
+                        }
+                    }
+                    holder.orderNum.setText(item.getOrderNumb());
+                    int status = item.getStatus();//: 0已取消/1已预订(未⽀付)/2已⽀付/3已消费/4已评价
+                    Resources res = context.getResources();
+                    int color = res.getColor(R.color.color_d9);
+                    String orderSatus = "";
+                    switch (status) {
+                        case 0:
+                            orderSatus = "已取消";
+                            break;
+                        case 1:
+                            orderSatus = "未支付";
+                            color = res.getColor(R.color.color_ffaa2a);
+                            break;
+                        case 2:
+                            orderSatus = "交易成功";
+                            color = res.getColor(R.color.color_fac1a0);
+                            break;
+                        case 3:
+                            orderSatus = "已出票";
+                            color = res.getColor(R.color.color_79c4d9);
+                            break;
+                        case 4:
+                            orderSatus = "已评价";
+                            break;
+
+                    }
+                    holder.orderStatus.setTextColor(color);
+                    holder.orderStatus.setText(orderSatus);
+                    holder.orderName.setText(item.getName());
+                    holder.orderToalPrice.setText("¥ " + String.valueOf(item.getFee()));
+                    if (status == 1) {
+                        holder.payBtn.setActivated(true);
+                        holder.payBtn.setText("支付");
+                        holder.payBtn.setVisibility(View.VISIBLE);
+                        holder.cancleBtn.setVisibility(View.VISIBLE);
+                    } else {
+                        holder.payBtn.setSelected(true);
+                        holder.payBtn.setText("评价");
+                        holder.payBtn.setVisibility(View.VISIBLE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                    }
+                    DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(), 2);
+                    convertView.setTag(R.id.orderDetailId,item.getId());
+                }
+                convertView.setTag(holder);
+
+
+            } else {
+                holder = (ViewHolder) convertView.getTag();
+            }
+
+
+        }
         return convertView;
     }
+
+    class ViewHolder {
+        LinearLayout adultItemCotainer;
+        TextView orderNum;
+        TextView orderStatus;
+        ImageView orderPhoto;
+        TextView orderName;
+        TextView orderToalPrice;
+        Button cancleBtn;
+        Button payBtn;
+    }
+
 }

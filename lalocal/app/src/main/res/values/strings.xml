@@ -90,8 +90,16 @@
     <string name="information">资讯</string>
     <string name="no_oder">暂无订单</string>
     <string name="convert">我有兑换码</string>
-    <string name="coupon_convert_rule">所有特价商品不可是永久旅行基金</string>
+    <string name="coupon_convert_rule">所有特价商品不可使用优惠券</string>
     <string name="convert_coupon">兑换</string>
     <string name="input_favorable_code">请输入优惠码</string>
+    <string name="order_number">订单编号</string>
+    <string name="adult">成人</string>
+    <string name="toal">合计:</string>
+    <string name="payment">付款</string>
+    <string name="evaluate">评价</string>
+    <string name="child">儿童</string>
+    <string name="orderdetail">订单详情</string>
+    <string name="service">客服</string>
 
 </resources>

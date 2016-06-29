@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.activity.OrderActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_title_height"
+        android:background="@color/white">
+
+        <include layout="@layout/common_back_layout" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/orderdetail"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_17_sp" />
+        <TextView
+            android:id="@+id/order_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/service"
+            android:drawableTop="@drawable/serviceicon"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/order_service_right"
+            />
+        <TextView
+            android:id="@+id/order_more"
+            android:layout_width="@dimen/order_more_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="right|center_vertical"
+            android:textSize="@dimen/text_size_24_sp"
+            android:textStyle="bold"
+            android:paddingRight="@dimen/order_more_right"
+            android:text="..."
+            />
+
+    </FrameLayout>
+
+    <TextView
+        style="@style/CommonTitleLineTheme"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/order_detail_height"
+        android:padding="@dimen/order_detail_padding"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:id="@+id/order_detail_img"
+            android:layout_width="@dimen/order_detail_img_width"
+            android:layout_height="@dimen/order_detail_img_width"
+            />
+        <TextView
+            android:id="@+id/order_detail_title"
+            android:layout_width="@dimen/order_detail_title_wdith"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_15_sp"
+            android:textColor="@color/color_66"
+            android:layout_toRightOf="@+id/order_detail_img"
+            android:layout_marginLeft="@dimen/order_detail_title_left"
+            />
+        <ImageView
+            android:layout_width="@dimen/order_detail_arrow_right_width"
+            android:layout_height="@dimen/order_detail_arrow_right_height"
+            android:background="@drawable/arrow_right"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            />
+    </RelativeLayout>
+
+    
+
+
+</LinearLayout>

@@ -28,6 +28,12 @@
     <color name="color_60ffe7a6">#60ffe7a6</color>
     <color name="color_fffca6">#fffca6</color>
     <color name="color_70_dark">#70000000</color>
+    <color name="color_82dcff">#82dcff</color>
+    <color name="color_c4e3ff">#c4e3ff</color>
+    <color name="color_60_c4e3ff">#60c4e3ff</color>
+    <color name="color_79c4d9">#79c4d9</color>
+    <color name="color_fac1a0">#fac1a0</color>
+    <color name="color_dcf3fa">#dcf3fa</color>
 
 
     <color name="backgroundColorPress">#DBDBD3</color>

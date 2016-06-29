@@ -124,7 +124,6 @@
                 android:id="@+id/home_me_coupons_num"
                 style="@style/HomeMeTabItemNumTheme"
                 android:text="0" />
-
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout

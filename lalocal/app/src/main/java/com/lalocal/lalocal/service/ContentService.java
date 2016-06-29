@@ -13,16 +13,18 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
+<<<<<<< HEAD
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
+=======
+import com.lalocal.lalocal.model.OrderItem;
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
-
-
 import com.lalocal.lalocal.model.SpectialDetailsResp;
-
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
@@ -60,13 +62,32 @@ public class ContentService {
         this.callBack = callBack;
     }
 
+    public void getMyOrder(int userid, String token) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MY_ORDER);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_ORDER_ITEMS, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        requestQueue.add(request);
+
+    }
+
+    public void getMyCoupon(int userid, String token) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MY_COUPON);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_COUPON_ITEMS, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        requestQueue.add(request);
+    }
+
     public void getMyFavorite(int userid, String token, int pageNumber, int pageSize) {
         //pageNumber=1&pageSize=10
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_FARORITE_ITEMS + "pageNumber=" + pageNumber + "&pageSize=" + pageSize, response, response);
-        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
     }
 
@@ -77,7 +98,7 @@ public class ContentService {
             response = new ContentResponse(RequestCode.GET_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_USER_PROFILE_URL, response, response);
-        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
     }
 
@@ -88,20 +109,9 @@ public class ContentService {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.MODIFY_USER_PROFILE_URL, response, response);
-        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
         requestQueue.add(request);
-    }
-
-
-    private String getUploadBodyParmas(String photo) {
-        JSONObject jsonObj = new JSONObject();
-        try {
-            jsonObj.put("avatar", photo);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return jsonObj.toString();
     }
 
 
@@ -121,7 +131,7 @@ public class ContentService {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.BOUND_EMAIL_URL, response, response);
-        request.setHeaderParams(getLoginedHeaderParams(userid, token));
+        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         request.setBodyParams(getBoudEmailParams(email));
         requestQueue.add(request);
     }
@@ -210,21 +220,22 @@ public class ContentService {
         ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_AD, response, response);
         requestQueue.add(request);
     }
+
     //specialdetail
-    public void specialDetail(String rowId){
-        if(callBack!=null){
-            response=new ContentResponse(RequestCode.SPECIAL_DETAIL);
+    public void specialDetail(String rowId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SPECIAL_DETAIL);
         }
-        ContentRequest request = new ContentRequest(AppConfig.SPECIAL_DETAILS_URL+rowId,response,response);
+        ContentRequest request = new ContentRequest(AppConfig.SPECIAL_DETAILS_URL + rowId, response, response);
         requestQueue.add(request);
     }
 
 
 
     //产品详情
-    public  void productDetails(String targetId){
-        if(callBack !=null){
-            response=new ContentResponse(RequestCode.PRODUCT_DETAILS);
+    public void productDetails(String targetId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
         ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS+targetId, response, response);
         requestQueue.add(contentRequest);
@@ -328,6 +339,9 @@ public class ContentService {
         @Override
         public void onResponse(String json) {
             switch (resultCode) {
+                case RequestCode.GET_MY_ORDER:
+                    responseGetMyOrderItems(json);
+                    break;
                 case RequestCode.GET_FAVORITE_ITEMS:
                     responseGetFavoriteItems(json);
                     break;
@@ -359,6 +373,13 @@ public class ContentService {
                 case RequestCode.BOUDN_EMAIL:
                     responseBoundEmail(json);
                     break;
+<<<<<<< HEAD
+=======
+                case RequestCode.GET_MY_COUPON:
+                    responseGetMyCoupon(json);
+                    break;
+
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
                 case RequestCode.RECOMMEND:
                     responseRecommend(json);
                     break;
@@ -381,6 +402,86 @@ public class ContentService {
 
         }
 
+        private void responseGetMyOrderItems(String json) {
+            AppLog.print("responseGetOrderItems__" + json);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                if (code == 0) {
+                    JSONArray resutJsonArray = jsonObj.optJSONArray(ResultParams.REULST);
+                    Gson gson = new Gson();
+                    List<OrderItem> items = new ArrayList<>();
+                    for (int i = 0; i < resutJsonArray.length(); i++) {
+                        JSONObject itemJsonObj = resutJsonArray.optJSONObject(i);
+                        OrderItem orderItem = gson.fromJson(itemJsonObj.toString(), OrderItem.class);
+                        items.add(orderItem);
+                    }
+                    callBack.onGetOrderItem(items);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        private void responseGetMyCoupon(String json) {
+            AppLog.print("responseGetMyCoupon____" + json);
+            try {
+                JSONObject jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                if (code == 0) {
+                    JSONArray resultJsonArray = jsonObj.optJSONArray(ResultParams.REULST);
+                    Gson gson = new Gson();
+                    List<Coupon> coupons = new ArrayList<>();
+                    for (int i = 0; i < resultJsonArray.length(); i++) {
+                        JSONObject couponJsonObj = resultJsonArray.optJSONObject(i);
+                        Coupon coupon = gson.fromJson(couponJsonObj.toString(), Coupon.class);
+                        if (coupon.getStatus() == 1) {
+                            continue;
+                        }
+                        coupons.add(coupon);
+                    }
+                    sortCoupon(coupons);
+                    callBack.onGetCounponItem(coupons);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        private void sortCoupon(List<Coupon> coupons) {
+            for (int i = 0; i < coupons.size() - 1; i++) {
+                Coupon coupon1 = coupons.get(i);
+                Coupon coupon2 = coupons.get(i + 1);
+                int status1 = coupon1.getStatus();
+                int status2 = coupon2.getStatus();//0未使用 2已过期
+                int type1 = coupon1.getType();
+                int type2 = coupon2.getType();//0普通优惠券 1作者优惠券
+                String time1 = coupon1.getExpiredDateStr();
+                String time2 = coupon2.getExpiredDateStr();//过期时间
+                if (status1 == 2 && status2 == 0) {
+                    coupons.set(i, coupon2);
+                    coupons.set(i + 1, coupon1);
+                } else if (status1 == status2) {
+                    if (type1 == type2) {
+                        int result = time1.compareTo(time2);
+                        if (result == 1) {
+                            coupons.set(i, coupon2);
+                            coupons.set(i + 1, coupon1);
+                        }
+                    } else if (type1 == 0 && type2 == 1) {
+                        coupons.set(i, coupon2);
+                        coupons.set(i + 1, coupon1);
+                    }
+                }
+            }
+        }
+
         private void responseGetFavoriteItems(String json) {
             AppLog.print("responseGetFavorite___" + json);
             try {
@@ -388,8 +489,8 @@ public class ContentService {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 if (code == 0) {
                     JSONObject resutJson = jsonObj.optJSONObject(ResultParams.REULST);
-                    int totalPages=jsonObj.optInt("totalPages");
-                    int totalRows=jsonObj.optInt("totalRows");
+                    int totalPages = resutJson.optInt("totalPages");
+                    int totalRows = resutJson.optInt("totalRows");
                     JSONArray rows = resutJson.optJSONArray("rows");
                     Gson gson = new Gson();
                     List<FavoriteItem> items = new ArrayList<>();
@@ -398,7 +499,7 @@ public class ContentService {
                         FavoriteItem item = gson.fromJson(rowJsonObj.toString(), FavoriteItem.class);
                         items.add(item);
                     }
-                    callBack.onGetFavoriteItem(items,totalPages,totalRows);
+                    callBack.onGetFavoriteItem(items, totalPages, totalRows);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -536,6 +637,7 @@ public class ContentService {
             }
         }
     }
+<<<<<<< HEAD
     //点赞
     private void responseParises(String json) {
         AppLog.print("responseParises______" + json);
@@ -557,6 +659,11 @@ public class ContentService {
         if(productDetailsDataResp!=null){
             callBack.onProductDetails(productDetailsDataResp);
         }
+=======
+
+    //产品详情
+    private void responseProductDetails(String json) {
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 
     }
 
@@ -574,9 +681,9 @@ public class ContentService {
     }
 
     //specialdetail
-    public void responseSpecialDetail(String json){
+    public void responseSpecialDetail(String json) {
         SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
-        if(spectialDetailsResp!=null){
+        if (spectialDetailsResp != null) {
             callBack.onRecommendSpecial(spectialDetailsResp);
         }
 
@@ -694,7 +801,7 @@ public class ContentService {
     }
 
 
-    public Map<String, String> getLoginedHeaderParams(int userid, String token) {
+    public Map<String, String> getHeaderParamsWithUserId(int userid, String token) {
         Map<String, String> map = getHeaderParams();
         if (userid != -1) {
             map.put("USER_ID", String.valueOf(userid));
@@ -725,7 +832,10 @@ public class ContentService {
         public static final int MODIFY_USER_PROFILE = 107;
         public static final int GET_USER_PROFILE = 108;
         public static final int BOUDN_EMAIL = 109;
+        public static final int GET_MY_COUPON = 110;
+        public static final int GET_MY_ORDER = 111;
 
+<<<<<<< HEAD
         public static final int RECOMMEND=200;
         public static final int RECOMMEND_AD=201;
         public static final int SPECIAL_DETAIL=202;
@@ -734,6 +844,13 @@ public class ContentService {
         public static final int PARISES=205;
 
 
+=======
+
+        public static final int RECOMMEND = 200;
+        public static final int RECOMMEND_AD = 201;
+        public static final int SPECIAL_DETAIL = 202;
+        public static final int PRODUCT_DETAILS = 203;
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 
 
     }

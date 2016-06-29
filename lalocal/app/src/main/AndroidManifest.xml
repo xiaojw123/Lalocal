@@ -9,15 +9,17 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
-    <!--分享权限-->
+    <!-- 分享权限 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
 
     <application
         android:allowBackup="true"
@@ -32,7 +34,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.RegisterActivity" />
@@ -43,6 +44,7 @@
         <activity android:name=".activity.AccountEidt1Activity" />
         <activity android:name=".activity.AboutUsActivity" />
         <activity android:name=".activity.AccountEidt2Activity" />
+<<<<<<< HEAD
 
         <activity android:name=".activity.EmailBoundActivity"></activity>
         <activity android:name=".activity.SpecialDetailsActivity"></activity>
@@ -75,6 +77,14 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+=======
+        <activity android:name=".activity.EmailBoundActivity" />
+        <activity android:name=".activity.SpecialDetailsActivity" />
+        <activity android:name=".activity.BigPictureActivity" />
+        <activity android:name=".activity.ArticleActivity" />
+        <activity android:name=".activity.ProductDetailsActivity" />
+        <activity android:name=".activity.OrderActivity"></activity>
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
     </application>
 
 </manifest>

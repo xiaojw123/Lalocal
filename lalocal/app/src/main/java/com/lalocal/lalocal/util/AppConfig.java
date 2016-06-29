@@ -20,11 +20,22 @@ public class AppConfig {
         public static final  String SEND_VERIFICATION_URL=BASE_URL+"system/sendEmail";
         //忘记密码接口
         public static final String RESET_PASSWORD_URL=BASE_URL+"users/forgetPassword";
+        //我的收藏接口
         public static final  String GET_MY_FARORITE_ITEMS=BASE_URL+"praises?";
+        //我的优惠券接口
+        public static  final  String GET_MY_COUPON_ITEMS=BASE_URL+"coupons?";
+        //我的订单接口
+        public static  final  String GET_MY_ORDER_ITEMS=BASE_URL+"orders";
         public static final  String UPLOAD_HEDARE_URL=BASE_URL+"users/avatar";
         public static  final  String MODIFY_USER_PROFILE_URL=BASE_URL+"users/profile";
         public static final  String GET_USER_PROFILE_URL=BASE_URL+"users/profile";
         public static  final  String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> 16bd0ee09d64d488d03391b7c64523f25f8c9102
         //推荐接口
         public static final String RECOMMEND_URL=BASE_URL+"themes?";
         //推荐广告位接口

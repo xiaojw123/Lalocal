@@ -112,6 +112,7 @@
     <dimen name="register_clear_btn_right">12dp</dimen>
 
     <dimen name="wheel_dialog_item_height">40dp</dimen>
+    <dimen name="my_coupon_corner_img_width">50dp</dimen>
     <dimen name="my_coupon_item_width">345dp</dimen>
     <dimen name="my_coupon_item_height">172dp</dimen>
     <dimen name="my_coupon_item_bottom_bg">49dp</dimen>
@@ -128,6 +129,41 @@
     <dimen name="my_oder_nothing_img_top">30dp</dimen>
     <dimen name="my_coupon_convert_btn_height">44dp</dimen>
     <dimen name="convertdialog_input_code_height">44dp</dimen>
+    <dimen name="my_coupon_nothing_img_top">118dp</dimen>
+    <!--我的订单-->
+    <dimen name="my_order_item_height">238dp</dimen>
+    <dimen name="my_order_item_left">12dp</dimen>
+    <dimen name="my_order_item_right">11dp</dimen>
+    <dimen name="my_order_item_top">11dp</dimen>
+    <dimen name="my_order_item_ordernumber_left">12dp</dimen>
+    <dimen name="my_oder_ordernum_text_left">20dp</dimen>
+    <dimen name="my_order_line1_top">13dp</dimen>
+    <dimen name="my_oder_img_width">81dp</dimen>
+    <dimen name="my_oder_img_height">61dp</dimen>
+    <dimen name="my_oder_img_top">12dp</dimen>
+    <dimen name="my_order_name_tv_top">7dp</dimen>
+    <dimen name="my_order_name_tv_left">12dp</dimen>
+    <dimen name="my_order_line2_top">151dp</dimen>
+    <dimen name="my_order_pay_btn_width">60dp</dimen>
+    <dimen name="my_order_pay_btn_height">29dp</dimen>
+    <dimen name="my_order_pay_btn_right">12dp</dimen>
+    <dimen name="my_order_pay_btn_top">9dp</dimen>
+    <dimen name="my_order_adult_container_top">3dp</dimen>
+    <dimen name="my_order_adult_item_top">10dp</dimen>
+    <dimen name="my_order_adult_container_height">64dp</dimen>
+    <dimen name="order_service_right">48dp</dimen>
+    <dimen name="order_more_width">39dp</dimen>
+    <dimen name="order_more_height">4dp</dimen>
+    <dimen name="order_more_right">15dp</dimen>
+    <dimen name="order_detail_height">110dp</dimen>
+    <dimen name="order_detail_padding">15dp</dimen>
+    <dimen name="order_detail_img_width">80dp</dimen>
+    <dimen name="order_detail_title_wdith">241dp</dimen>
+    <dimen name="order_detail_title_left">10dp</dimen>
+    <dimen name="order_detail_arrow_right_width">6dp</dimen>
+    <dimen name="order_detail_arrow_right_height">12dp</dimen>
+
+
 
 
 
