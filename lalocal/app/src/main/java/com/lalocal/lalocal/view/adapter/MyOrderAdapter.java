@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.OrderActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -20,7 +23,7 @@ import java.util.List;
 /**
  * Created by xiaojw on 2016/6/21.
  */
-public class MyOrderAdapter extends BaseAdapter {
+public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener {
     Context context;
     List<OrderItem> items;
 
@@ -59,6 +62,8 @@ public class MyOrderAdapter extends BaseAdapter {
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.home_me_my_oder_item, null);
                 holder.adultItemCotainer = (LinearLayout) convertView.findViewById(R.id.my_order_adult_container);
+                holder.itemDetail= (LinearLayout) convertView.findViewById(R.id.my_order_item_detail);
+
                 holder.orderNum = (TextView) convertView.findViewById(R.id.my_oder_ordernum_text);
                 holder.orderStatus = (TextView) convertView.findViewById(R.id.my_order_status_tv);
                 holder.orderName = (TextView) convertView.findViewById(R.id.my_order_name_tv);
@@ -66,6 +71,7 @@ public class MyOrderAdapter extends BaseAdapter {
                 holder.orderToalPrice = (TextView) convertView.findViewById(R.id.my_order_toal_price);
                 holder.cancleBtn = (Button) convertView.findViewById(R.id.my_order_cancel_btn);
                 holder.payBtn = (Button) convertView.findViewById(R.id.my_order_pay_btn);
+                holder.itemDetail.setOnClickListener(this);
 
                 OrderItem item = items.get(position);
                 if (item != null) {
@@ -76,7 +82,7 @@ public class MyOrderAdapter extends BaseAdapter {
                             TextView name = (TextView) adultItemView.findViewById(R.id.my_order_adult_item_name);
                             TextView discount = (TextView) adultItemView.findViewById(R.id.my_order_adult_item_discount);
                             name.setText(orderPay.getName());
-                            discount.setText("￥ " + orderPay.getUnit() + "x" + orderPay.getAmount());
+                            discount.setText("￥ " + (int) orderPay.getUnit() + "x" + orderPay.getAmount());
                             holder.adultItemCotainer.addView(adultItemView);
                         }
                     }
@@ -122,7 +128,7 @@ public class MyOrderAdapter extends BaseAdapter {
                         holder.cancleBtn.setVisibility(View.GONE);
                     }
                     DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(), 2);
-                    convertView.setTag(R.id.orderDetailId,item.getId());
+                    holder.itemDetail.setTag(R.id.orderDetailId, item.getId());
                 }
                 convertView.setTag(holder);
 
@@ -136,8 +142,26 @@ public class MyOrderAdapter extends BaseAdapter {
         return convertView;
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.my_order_item_detail:
+                if (v.getTag(R.id.orderDetailId) != null) {
+                    Intent intent = new Intent(context, OrderActivity.class);
+                    intent.putExtra(KeyParams.ORDER_ID, (int) v.getTag(R.id.orderDetailId));
+                    context.startActivity(intent);
+                }
+                break;
+
+        }
+
+
+    }
+
     class ViewHolder {
         LinearLayout adultItemCotainer;
+        LinearLayout itemDetail;
         TextView orderNum;
         TextView orderStatus;
         ImageView orderPhoto;

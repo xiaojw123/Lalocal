@@ -23,7 +23,7 @@
             android:textSize="@dimen/text_size_17_sp" />
     </FrameLayout>
     <TextView
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         android:layout_below="@+id/edit_accout_title"
         />
     
@@ -44,7 +44,7 @@
         android:layout_marginTop="@dimen/account_eidt_userinfo_contianer_top"
         >
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_below="@+id/setting_clear_cache"
             />
         <RelativeLayout
@@ -69,7 +69,7 @@
 
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_below="@+id/setting_clear_cache"
             />
         <RelativeLayout
@@ -115,7 +115,7 @@
                 />
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_below="@+id/setting_clear_cache"
             />
         <RelativeLayout
@@ -147,7 +147,7 @@
 
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_below="@+id/setting_clear_cache"
             />
 
@@ -172,7 +172,7 @@
                 />
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_below="@+id/setting_clear_cache"
             />
     </LinearLayout>>

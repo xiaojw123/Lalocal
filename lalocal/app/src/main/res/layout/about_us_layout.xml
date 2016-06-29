@@ -30,7 +30,7 @@
     </FrameLayout>
 
     <TextView
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         android:layout_below="@+id/about_us_title" />
 
     <ImageView
@@ -117,7 +117,7 @@
         >
 
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             />
 
         <RelativeLayout
@@ -140,7 +140,7 @@
 
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             android:layout_marginLeft="@dimen/dimen_size_12_dp"
             android:layout_marginRight="@dimen/dimen_size_11_dp"
             />
@@ -165,7 +165,7 @@
 
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             android:layout_marginLeft="@dimen/dimen_size_36_dp"
             android:layout_marginRight="@dimen/dimen_size_11_dp"
             />
@@ -189,7 +189,7 @@
 
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             />
 
 
@@ -205,7 +205,7 @@
         android:background="@color/white"
         >
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             />
         <RelativeLayout
             android:id="@+id/about_us_grade"
@@ -226,7 +226,7 @@
 
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             android:layout_marginLeft="@dimen/dimen_size_12_dp"
             android:layout_marginRight="@dimen/dimen_size_11_dp"
             />
@@ -247,7 +247,7 @@
                 />
         </RelativeLayout>
         <TextView
-            style="@style/CommonTitleLineThem2"
+            style="@style/CommonD9LineTheme"
             />
 
 

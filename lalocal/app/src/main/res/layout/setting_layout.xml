@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/setting_line"
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         android:layout_below="@+id/setting_title_container" />
 
     <FrameLayout
@@ -55,7 +55,7 @@
         android:layout_below="@+id/setting_about_us"
         android:background="@drawable/setting_item_bg">
 
-        <TextView style="@style/CommonTitleLineTheme" />
+        <TextView style="@style/CommonDeLineTheme" />
 
         <TextView
             style="@style/SettingItemTextTheme"
@@ -73,7 +73,7 @@
             android:layout_marginRight="@dimen/setting_item_right" />
 
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_gravity="bottom" />
 
 
@@ -90,7 +90,7 @@
         android:visibility="gone"
         >
 
-        <TextView style="@style/CommonTitleLineTheme" />
+        <TextView style="@style/CommonDeLineTheme" />
 
 
         <TextView
@@ -103,7 +103,7 @@
             android:layout_marginRight="@dimen/setting_item_right" />
 
         <TextView
-            style="@style/CommonTitleLineTheme"
+            style="@style/CommonDeLineTheme"
             android:layout_gravity="bottom" />
 
     </FrameLayout>

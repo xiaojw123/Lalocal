@@ -34,7 +34,7 @@
 
     <TextView
         android:id="@+id/edit_account2_title_line"
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         android:layout_below="@+id/edit_accout_title" />
 
     <EditText

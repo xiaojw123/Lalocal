@@ -17,6 +17,7 @@
     <dimen name="dimen_size_13_dp">13dp</dimen>
     <dimen name="dimen_size_14_dp">14dp</dimen>
     <dimen name="dimen_size_15_dp">15dp</dimen>
+    <dimen name="dimen_size_20_dp">20dp</dimen>
     <dimen name="dimen_size_25_dp">25dp</dimen>
     <dimen name="dimen_size_36_dp">36dp</dimen>
     <dimen name="custom_dialog_container_width">270dp</dimen>

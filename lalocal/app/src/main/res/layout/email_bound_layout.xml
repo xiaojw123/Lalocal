@@ -25,7 +25,7 @@
 
     <TextView
         android:id="@+id/emailbound_title_line"
-        style="@style/CommonTitleLineTheme"
+        style="@style/CommonDeLineTheme"
         android:layout_below="@+id/emailbound_title" />
 
     <!--<EditText-->

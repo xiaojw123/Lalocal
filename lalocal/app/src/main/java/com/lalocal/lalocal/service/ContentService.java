@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
+import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
@@ -53,6 +54,15 @@ public class ContentService {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+
+    public void getOrderDetail(int id){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_ORDER_DETAIL);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.GET_MY_ORDER_ITEMS+"/"+id,response,response);
+        request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(),CommonUtil.getUserToken()));
+        requestQueue.add(request);
     }
 
     public void getMyOrder(int userid, String token) {
@@ -302,6 +312,9 @@ public class ContentService {
         @Override
         public void onResponse(String json) {
             switch (resultCode) {
+                case RequestCode.GET_ORDER_DETAIL:
+                    responseGetOrderDetail(json);
+                    break;
                 case RequestCode.GET_MY_ORDER:
                     responseGetMyOrderItems(json);
                     break;
@@ -353,6 +366,32 @@ public class ContentService {
                     responseProductDetails(json);
                     break;
             }
+
+        }
+
+        private void responseGetOrderDetail(String json) {
+            AppLog.print("responseGetOrderDetail____"+json);
+            try {
+                JSONObject jsonObj=new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                if (code==0){
+                    JSONObject resultJsObj=jsonObj.optJSONObject(ResultParams.REULST);
+                    Gson gson=new Gson();
+                    OrderDetail orderItem=gson.fromJson(resultJsObj.toString(), OrderDetail.class);
+                    callBack.onGetOrderDetail(orderItem);
+
+
+
+
+                }
+
+
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
 
@@ -749,6 +788,7 @@ public class ContentService {
         public static final int BOUDN_EMAIL = 109;
         public static final int GET_MY_COUPON = 110;
         public static final int GET_MY_ORDER = 111;
+        public  static final int GET_ORDER_DETAIL=112;
 
 
         public static final int RECOMMEND = 200;
