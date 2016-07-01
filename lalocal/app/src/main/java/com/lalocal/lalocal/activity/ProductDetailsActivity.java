@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler.Callback;
+import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -13,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
@@ -30,25 +33,27 @@ import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.util.ParisesNetwork;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.MyScrollView;
+import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
+import com.mob.tools.utils.UIHandler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * Created by lenovo on 2016/6/22.
  */
-public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, View.OnClickListener {
+public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener,PlatformActionListener,Callback {
 
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
-
     private int height;
     private ImageView detailsPhoto1;
     private TextView titleTv;
@@ -69,7 +74,13 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
     private Context mContext = ProductDetailsActivity.this;
     private SpecialToH5Bean specialToH5Bean;
     private ContentService contentService;
-
+    private Object praiseId;
+    private SharePopupWindow sharePopupWindow;
+    private ImageView titleBack;
+    private RelativeLayout titleRelayout;
+    private ProductDetailsResultBean result;
+    private boolean praiseFlag;
+    private int parise;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +90,6 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         initData();
 
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShareSDK.stopSDK();
     }
 
     private void initView() {
@@ -102,6 +107,12 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         featureLayout = (LinearLayout) findViewById(R.id.product_content_value);
         serviceLayout = (LinearLayout) findViewById(R.id.product_service_layout);
         purchaseNotes = (LinearLayout) findViewById(R.id.product_purchase_notes);
+        titleBack = (ImageView) findViewById(R.id.product_title_back_btn);
+        titleRelayout = (RelativeLayout) findViewById(R.id.product_service_relayout);
+        mScrollView = (MyScrollView) findViewById(R.id.product_scrollview);
+        reLayout = (RelativeLayout) findViewById(R.id.product_title_relayout);
+        detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
+
         //点击监听
         checkDetails.setOnClickListener(this);
         btnLike.setOnClickListener(this);
@@ -111,9 +122,6 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         productReserve.setOnClickListener(this);
 
 
-        mScrollView = (MyScrollView) findViewById(R.id.product_scrollview);
-        reLayout = (RelativeLayout) findViewById(R.id.product_title_relayout);
-        detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
         mScrollView.setScrollViewListener(ProductDetailsActivity.this);
         reLayout.setBackgroundColor(Color.argb(0, 250, 250, 250));
         ViewTreeObserver vto = detailsPhoto1.getViewTreeObserver();
@@ -129,6 +137,17 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
     }
 
+    private void initData() {
+        Intent intent = getIntent();
+        specialToH5Bean = intent.getParcelableExtra("productdetails");
+        contentService = new ContentService(this);
+        contentService.setCallBack(new MyCallBack());
+        contentService.productDetails(specialToH5Bean.getTargetId() + "");
+        left = DensityUtil.dip2px(ProductDetailsActivity.this, 15);
+        top = DensityUtil.dip2px(ProductDetailsActivity.this, 3);
+
+    }
+
     @Override
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
         AppLog.i("scrollViewHeightToReLayoutHeight", "scrollView:" + y + "//oldy:" + oldy + "/height:" + height);
@@ -139,81 +158,42 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
             reLayout.setAlpha(scale);
             //只是layout背景透明
             reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
-        }
-    }
-
-    private void initData() {
-        Intent intent = getIntent();
-        specialToH5Bean = intent.getParcelableExtra("productdetails");
-        contentService = new ContentService(this);
-        contentService.setCallBack(new MyCallBack());
-        contentService.productDetails(specialToH5Bean.getTargetId() + "");
-
-        left = DensityUtil.dip2px(ProductDetailsActivity.this, 15);
-        top = DensityUtil.dip2px(ProductDetailsActivity.this, 3);
-
-    }
-    private ProductDetailsResultBean result;
-
-    public class MyCallBack extends ICallBack {
-        @Override
-        public void onProductDetails(ProductDetailsDataResp detailsDataResp) {
-            super.onProductDetails(detailsDataResp);
-            result = detailsDataResp.result;
-            Object praiseId = result.praiseId;
-            Toast.makeText(mContext,"onProductDetails+praiseId:"+praiseId,Toast.LENGTH_SHORT).show();
-            String photo = result.photo;
-           // praiseFlag = result.praiseFlag;
-          /*  if (praiseFlag) {
-                btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
-            } else {
-                btnLike.setImageResource(R.drawable.index_article_btn_like);
-
-            }*/
-            List<PhotosVosBean> photoVOs = result.photoVOs;
-            if (photoVOs.size() > 0) {
-                //显示轮播图
-                detailsPhoto1.setVisibility(View.GONE);
-                List<PhotosVosBean> photoVOs1 = result.photoVOs;
-                showphotos(photoVOs1);
-            } else {
-                DrawableUtils.displayImg(ProductDetailsActivity.this, detailsPhoto1, photo);
-            }
-            //产品详情介绍
-            productDetail(result);
-
-        }
-
-        @Override
-        public void onPariseResult(PariseResult pariseResult) {
-            if(pariseResult!=null&&pariseResult.getReturnCode()==0){
-                btnLike.setImageResource(R.drawable.index_article_btn_like);
-
-               Toast.makeText(mContext,"取消成功",Toast.LENGTH_SHORT).show();
+            if(alpha>0.8){
+                titleBack.setVisibility(View.GONE);
+                alpha=1.0f;
+            }else {
+                titleBack.setVisibility(View.VISIBLE);
             }
         }
     }
-    private int parise;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.product_title_back_btn:
+                finish();
+                break;
+            case R.id.product_service_relayout:
+                //去客服页面
+                break;
             case R.id.common_back_btn:
                 finish();
                 break;
             case R.id.product_customer_service:
                 //去客服页面
+                break;
             case R.id.product_btn_like:
                 //TODO 收藏
                 if (result != null) {
-                   //取消收藏
-
-                        if(parise!=0){
-                            Toast.makeText(mContext,"praiseId:"+parise,Toast.LENGTH_SHORT).show();
-                            contentService.cancelParises(parise);
-                        }
-                     else {//添加收藏
-                        addParises();
+                    //取消收藏
+                    if(praiseFlag){
+                        contentService.cancelParises(praiseId);
+                        Toast.makeText(mContext,"点击了，取消收藏",Toast.LENGTH_SHORT).show();
+                    }
+                    else {//添加收藏
+                        int targetId = specialToH5Bean.getTargetId();
+                        contentService.specialPraise(targetId, 2);//点赞
+                        Toast.makeText(mContext, "点击了，添加收藏",Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -239,43 +219,59 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         }
     }
 
-    //添加收藏
-    private void addParises() {
-        btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
-        int targetId = specialToH5Bean.getTargetId();
-        int targetType = specialToH5Bean.getTargetType();
-        final ParisesNetwork parisesNetwork = new ParisesNetwork(mContext, targetId, targetType);
-        parisesNetwork.networkResult(new ParisesNetwork.OnNetworkResponse() {
-            @Override
-            public void networkResult(Object o) {
-                PariseResult pariseResult = new Gson().fromJson(o.toString(), PariseResult.class);
-                if (pariseResult.getReturnCode()==0){
-                    parise=pariseResult.getResult();
-                    Toast.makeText(mContext,"收藏成功："+result,Toast.LENGTH_SHORT).show();
+
+
+    public class MyCallBack extends ICallBack {
+        @Override
+        public void onProductDetails(ProductDetailsDataResp detailsDataResp) {
+            super.onProductDetails(detailsDataResp);
+            if(detailsDataResp.returnCode==0){
+                result = detailsDataResp.result;
+                praiseId = result.praiseId;
+
+                String photo = result.photo;
+                praiseFlag = result.praiseFlag;
+                if (praiseFlag) {
+                    btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                } else {
+                    btnLike.setImageResource(R.drawable.index_article_btn_like);
+
                 }
+                List<PhotosVosBean> photoVOs = result.photoVOs;
+                if (photoVOs.size() > 0) {
+                    //显示轮播图
+                    detailsPhoto1.setVisibility(View.GONE);
+                    List<PhotosVosBean> photoVOs1 = result.photoVOs;
+                    showphotos(photoVOs1);
+                } else {
+                    DrawableUtils.displayImg(ProductDetailsActivity.this, detailsPhoto1, photo);
+                }
+                //产品详情介绍
+                productDetail(result);
             }
-        });
 
 
-    }
-    //显示分享图标页面
-    private void showShare(SpecialShareVOBean shareVO) {
-        ShareSDK.initSDK(this);
-        OnekeyShare oks = new OnekeyShare();
-        oks.disableSSOWhenAuthorize();
-        oks.setTitle(shareVO.title);
-        oks.setText(shareVO.title);
-        if (shareVO.img != null) {
-            oks.setImageUrl(shareVO.img);
         }
-        oks.setUrl(shareVO.url);
-        oks.setSiteUrl(shareVO.url);
-    // 启动分享GUI
-        oks.show(this);
 
+        @Override
+        public void onPariseResult(PariseResult pariseResult) {
+            if(pariseResult!=null&&pariseResult.getReturnCode()==0){
+                btnLike.setImageResource(R.drawable.index_article_btn_like);
+                praiseId=pariseResult.getResult();
+                praiseFlag=false;
+               Toast.makeText(mContext,"取消成功",Toast.LENGTH_SHORT).show();
+            }
+        }
+        @Override
+        public void onInputPariseResult(PariseResult pariseResult) {
+            super.onInputPariseResult(pariseResult);
+            if(pariseResult.getReturnCode()==0){
+                btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                praiseFlag=true;
+            }
+
+        }
     }
-
-
 
     //轮播图
     private void showphotos(List<PhotosVosBean> photoVOs1) {
@@ -355,5 +351,58 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
             featureLayout.addView(tv);
         }
 
+    }
+
+
+    //显示分享图标页面
+    private void showShare(SpecialShareVOBean shareVO) {
+        ShareSDK.initSDK(this);
+        sharePopupWindow = new SharePopupWindow(mContext, shareVO);
+        sharePopupWindow.setPlatformActionListener(this);
+        sharePopupWindow.showShareWindow();
+        sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
+                Gravity.CENTER, 0, 0);
+
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        int what = msg.what;
+        if (what == 1) {
+            Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
+        }
+        if (sharePopupWindow!= null) {
+            sharePopupWindow.dismiss();
+        }
+        return false;
+    }
+
+    @Override
+    public void onComplete(Platform platform, int action, HashMap<String, Object> hashMap) {
+        Message msg = new Message();
+        msg.arg1 = 1;
+        msg.arg2 = action;
+        msg.obj = platform;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    @Override
+    public void onError(Platform platform, int i, Throwable throwable) {
+        Message msg = new Message();
+        msg.what = 1;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    @Override
+    public void onCancel(Platform platform, int i) {
+        Message msg = new Message();
+        msg.what = 0;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK();
     }
 }

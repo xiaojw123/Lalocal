@@ -203,7 +203,7 @@ public class ContentService {
     }
 
     //取消收藏
-    public void cancelParises(int praiseId) {
+    public void cancelParises(Object praiseId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CANCEL_PARISES);
         }
@@ -346,7 +346,7 @@ public class ContentService {
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
             if (responseView != null) {
-                AppLog.print("responseView___"+responseView);
+                AppLog.print("responseView___" + responseView);
                 responseView.setEnabled(true);
             }
             if (callBack != null) {
@@ -359,13 +359,12 @@ public class ContentService {
         public void onResponse(String json) {
             AppLog.print("onResponse___");
             if (responseView != null) {
-                AppLog.print("responseView___"+responseView);
+                AppLog.print("resView___" + responseView);
                 responseView.setEnabled(true);
             }
             JSONObject jsonObj = null;
             try {
                 if (TextUtils.isEmpty(json)) {
-                    AppLog.print("无响应数据————");
                     return;
                 }
                 jsonObj = new JSONObject(json);
@@ -649,6 +648,7 @@ public class ContentService {
         if (productDetailsDataResp != null) {
             callBack.onProductDetails(productDetailsDataResp);
         }
+
     }
 
 
@@ -674,7 +674,8 @@ public class ContentService {
 
     }
 
-    public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String phone) {
+    public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
+            phone) {
         JSONObject jsonObj = new JSONObject();
         try {
             if (!TextUtils.isEmpty(nickname)) {
@@ -775,7 +776,6 @@ public class ContentService {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String DEVICE_ID = tm.getDeviceId();
         headers.put("DEVICE_ID", DEVICE_ID);
-        AppLog.i("getHeaderParams1111111111111", CommonUtil.getUUID(context));
         return headers;
     }
 
@@ -791,7 +791,6 @@ public class ContentService {
         return map;
 
     }
-
 
     interface ResultParams {
         public static final String RESULT_CODE = "returnCode";
@@ -811,8 +810,8 @@ public class ContentService {
         public static final int BOUDN_EMAIL = 109;
         public static final int GET_MY_COUPON = 110;
         public static final int GET_MY_ORDER = 111;
-        public static final int GET_ORDER_DETAIL = 112;
 
+        public static final int GET_ORDER_DETAIL = 112;
         public static final int RECOMMEND = 200;
         public static final int RECOMMEND_AD = 201;
         public static final int SPECIAL_DETAIL = 202;
@@ -821,6 +820,5 @@ public class ContentService {
         public static final int PARISES = 205;
 
     }
-
 
 }

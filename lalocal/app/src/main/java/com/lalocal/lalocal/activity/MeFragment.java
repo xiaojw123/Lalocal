@@ -319,6 +319,12 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             case 10://专题
                 break;
             case 13://资讯
+                Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                ArticleDetailsBean bean = new ArticleDetailsBean();
+             //   bean.setCollected(true);
+                bean.setTargetId(item.getTargetId());
+                intent.putExtra("articleDetailsBean", bean);
+                startActivity(intent);
                 break;
         }
 

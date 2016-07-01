@@ -30,6 +30,7 @@ public class AppConfig {
         public static  final  String MODIFY_USER_PROFILE_URL=BASE_URL+"users/profile";
         public static final  String GET_USER_PROFILE_URL=BASE_URL+"users/profile";
         public static  final  String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
+
         //推荐接口
         public static final String RECOMMEND_URL=BASE_URL+"themes?";
         //推荐广告位接口

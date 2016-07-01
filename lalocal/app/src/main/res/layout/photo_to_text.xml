@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/photo_to_text"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -7,17 +8,20 @@
         android:id="@+id/photo_to_text_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
-    <TextView
-        android:id="@+id/photo_to_text_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="45dp"
-        android:paddingTop="45dp"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:text="哈哈哈哈"
-       />
+        android:scaleType="fitXY"
+        />
+
+
+        <TextView
+            android:id="@+id/photo_to_text_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="45dp"
+            android:paddingTop="45dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+
+            />
 
         <TextView
             android:id="@+id/photo_to_text_name"
@@ -26,13 +30,9 @@
             android:textSize="14sp"
             android:layout_below="@+id/photo_to_text_content"
             android:layout_alignParentRight="true"
-
             android:paddingRight="45dp"
-
             android:textColor="@android:color/white"
-            android:text="fadfasfadf"
+
             />
-
-
 
 </RelativeLayout>

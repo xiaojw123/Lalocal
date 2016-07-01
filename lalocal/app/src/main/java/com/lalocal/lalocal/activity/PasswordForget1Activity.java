@@ -22,7 +22,6 @@ public class PasswordForget1Activity extends BaseActivity implements View.OnClic
     CustomEditText email_edit;
     TextView next_tv;
     ContentService contentService;
-    boolean isForbidenNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

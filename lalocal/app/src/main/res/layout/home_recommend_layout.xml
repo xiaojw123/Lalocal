@@ -1,38 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/recommend_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent">
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/recommend_title_ll_height"
-    android:gravity="center"
-    android:orientation="vertical">
-
-
-    <ImageView
-        android:layout_width="@dimen/recommend_title_img_wdith"
-        android:layout_height="@dimen/recommend_title_img_height"
-        android:layout_gravity="center"
-        android:src="@drawable/lalocallogo"
-        />
-</LinearLayout>
-    <View
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/font_black_2"></View>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-     <com.lalocal.lalocal.view.xlistview.XListView
-         android:id="@+id/recommend_xlv"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"></com.lalocal.lalocal.view.xlistview.XListView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/recommend_title_ll_height"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="@dimen/recommend_title_img_wdith"
+                    android:layout_height="@dimen/recommend_title_img_height"
+                    android:layout_gravity="center"
+                    android:src="@drawable/lalocallogo"
+                    />
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/font_black_2"></View>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+                <com.lalocal.lalocal.view.xlistview.XListView
+                    android:id="@+id/recommend_xlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"></com.lalocal.lalocal.view.xlistview.XListView>
+            </LinearLayout>
 
-    </LinearLayout>
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
 </LinearLayout>

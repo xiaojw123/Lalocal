@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -57,13 +58,12 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private int page = 2;
    private  ContentService contentService;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
-
 
     @Nullable
     @Override
@@ -74,6 +74,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         contentService.recommendAd();
         contentService.recommentList(10, 1);
         xlistview = (XListView) view.findViewById(R.id.recommend_xlv);
+
         xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
         xlistview.setXListViewListener(this);
@@ -105,7 +106,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         public void onRecommend(RecommendDataResp recommendDataResp) {
             super.onRecommend(recommendDataResp);
             List<RecommendRowsBean> rows = recommendDataResp.getResult().getRows();
-            if (recommendDataResp != null && rows != null) {
+            if (recommendDataResp.getReturnCode()==0 && rows != null) {
 
                 totalPages = recommendDataResp.getResult().getTotalPages();
                 totalRows = recommendDataResp.getResult().getTotalRows();
@@ -123,11 +124,9 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     xlistview.setAdapter(xListviewAdapter);
                     firstRefresh = false;
                 }
-
                 if (!firstRefresh) {
                     xListviewAdapter.refresh(allRows);
                 }
-
             }
         }
 
@@ -174,7 +173,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
 
         } else {
             Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
-
         }
         xlistview.stopLoadMore();
     }
