@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -14,7 +13,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.DataCleanManager;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class SettingActivity extends AppCompatActivity implements View.OnClickListener {
+public class SettingActivity extends BaseActivity implements View.OnClickListener {
     public static final int UN_LOGIN_OK = 103;
     ImageView backImg;
     Button signOUtBtn;

@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -10,7 +9,7 @@ import android.webkit.WebViewClient;
 
 import com.lalocal.lalocal.util.AppConfig;
 
-public class UserProtocolActivity extends AppCompatActivity {
+public class UserProtocolActivity extends BaseActivity {
     WebView webView;
 
     @Override

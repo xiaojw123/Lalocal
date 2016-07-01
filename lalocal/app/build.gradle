@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'io.fabric'
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
@@ -12,8 +15,21 @@ android {
         versionName "1.0.0"
     }
     buildTypes {
-        release {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+
+            versionNameSuffix "-debug"
             minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+        }
+        release {
+            minifyEnabled true
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -32,4 +48,34 @@ dependencies {
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile project(':vitamio')
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
+        transitive = true;
+    }
 }
+
+//TODO:bugtags online delete
+apply plugin: 'com.bugtags.library.plugin'
+android {
+    defaultConfig {
+        ndk {
+            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+    }
+}
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
+    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
+    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置(企业版)
+    trackingNetworkEnabled true
+}
+dependencies {
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+}
+
+
+
+

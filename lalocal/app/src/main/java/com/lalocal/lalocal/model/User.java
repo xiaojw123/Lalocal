@@ -7,11 +7,11 @@ import android.os.Parcelable;
  * Created by xiaojw on 2016/6/7.
  */
 public class User implements Parcelable{
-    int id;
+    int id=-1;
     String nickName;
     String email;
     String avatar;
-    String token;
+    String token=null;
     int status=-1;
 
     public static final Creator<User> CREATOR = new Creator<User>() {

@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,16 +11,18 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.CustomEditText;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class PasswordForget1Activity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
+public class PasswordForget1Activity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
     public static final String Email = "email";
     ImageView backImg;
     CustomEditText email_edit;
     TextView next_tv;
     ContentService contentService;
+    boolean isForbidenNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class PasswordForget1Activity extends AppCompatActivity implements View.O
         if (v == backImg) {
             finish();
         } else if (v == next_tv) {
+            AppLog.print("click__enable___");
             String email = email_edit.getText().toString();
             if (TextUtils.isEmpty(email)) {
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), this);
@@ -58,7 +60,9 @@ public class PasswordForget1Activity extends AppCompatActivity implements View.O
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), this);
                 return;
             }
-            contentService.checkEmail(email);
+            next_tv.setEnabled(false);
+            AppLog.print("nextv__"+next_tv);
+            contentService.checkEmail(email, next_tv);
         }
     }
 
@@ -67,18 +71,17 @@ public class PasswordForget1Activity extends AppCompatActivity implements View.O
         dialog.dismiss();
     }
 
+
     class CallBack extends ICallBack {
         @Override
-        public void onCheckEmail(boolean isChecked, String email) {
-            if (!isChecked) {
-                CommonUtil.showPromptDialog(PasswordForget1Activity.this, getResources().getString(R.string.email_no_exisit), PasswordForget1Activity.this);
-            } else {
-                contentService.sendVerificationCode(email);
-            }
+        public void onCheckEmail(String email) {
+            next_tv.setEnabled(false);
+            contentService.sendVerificationCode(email);
         }
 
         @Override
         public void onSendVerCode(int code, String email) {
+            next_tv.setEnabled(true);
             if (code == 0) {
                 Intent intent = new Intent(PasswordForget1Activity.this, PasswordForget2Activity.class);
                 intent.putExtra(Email, email);
@@ -88,14 +91,6 @@ public class PasswordForget1Activity extends AppCompatActivity implements View.O
             }
         }
 
-        @Override
-        public void onRequestFailed(String error) {
-            String msg = "请求超时";
-            if (!TextUtils.isEmpty(error)) {
-                msg = error;
-            }
-            CommonUtil.showPromptDialog(PasswordForget1Activity.this, msg, PasswordForget1Activity.this);
-        }
     }
 
     @Override

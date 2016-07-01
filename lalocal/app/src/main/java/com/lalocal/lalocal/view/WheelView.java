@@ -202,7 +202,6 @@ public class WheelView extends ScrollView {
         View view = LayoutInflater.from(context).inflate(R.layout.country_select_item, this, false);
         int height=(int) getResources().getDimension(R.dimen.wheel_dialog_item_height);
         view.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-        AppLog.print("height___"+height);
         TextView code_tv = (TextView) view.findViewById(R.id.country_code);
         TextView name_tv = (TextView) view.findViewById(R.id.country_name);
         code_tv.setText(item.getCodePlus());
@@ -210,7 +209,6 @@ public class WheelView extends ScrollView {
         if (0 == itemHeight) {
 //            itemHeight = getViewMeasuredHeight(view);
             itemHeight=height;
-            AppLog.print("xjw __itemHeight: " + itemHeight);
             views.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight * displayItemCount));
             LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) this.getLayoutParams();
             this.setLayoutParams(new LinearLayout.LayoutParams(lp.width, itemHeight * displayItemCount));

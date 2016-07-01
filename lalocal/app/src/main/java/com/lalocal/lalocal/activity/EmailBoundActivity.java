@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,10 +12,10 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.CustomEditText;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class EmailBoundActivity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
+public class EmailBoundActivity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
     public static final int RESULIT_CODE_BOUND_EMAIL = 103;
     CustomEditText email_edit;
     Button change_email_btn;

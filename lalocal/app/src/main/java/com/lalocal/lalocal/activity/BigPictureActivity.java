@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -11,11 +10,10 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.BigPictureBean;
-import com.lalocal.lalocal.model.SpecialBannerBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 
-public class BigPictureActivity extends Activity {
+public class BigPictureActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

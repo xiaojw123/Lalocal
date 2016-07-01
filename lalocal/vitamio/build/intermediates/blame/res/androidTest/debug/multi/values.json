@@ -6,18 +6,18 @@
                 "to": {
                     "startLine": 2,
                     "startColumn": 4,
-                    "startOffset": 55,
+                    "startOffset": 100,
                     "endColumn": 54,
-                    "endOffset": 105
+                    "endOffset": 150
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,
-                        "startOffset": 55,
+                        "startOffset": 100,
                         "endColumn": 54,
-                        "endOffset": 105
+                        "endOffset": 150
                     }
                 }
             },
@@ -25,18 +25,18 @@
                 "to": {
                     "startLine": 3,
                     "startColumn": 4,
-                    "startOffset": 110,
+                    "startOffset": 155,
                     "endColumn": 62,
-                    "endOffset": 168
+                    "endOffset": 213
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
-                        "startOffset": 110,
+                        "startOffset": 155,
                         "endColumn": 62,
-                        "endOffset": 168
+                        "endOffset": 213
                     }
                 }
             },
@@ -44,18 +44,18 @@
                 "to": {
                     "startLine": 4,
                     "startColumn": 4,
-                    "startOffset": 173,
+                    "startOffset": 218,
                     "endColumn": 47,
-                    "endOffset": 216
+                    "endOffset": 261
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 4,
                         "startColumn": 4,
-                        "startOffset": 173,
+                        "startOffset": 218,
                         "endColumn": 47,
-                        "endOffset": 216
+                        "endOffset": 261
                     }
                 }
             },
@@ -63,18 +63,18 @@
                 "to": {
                     "startLine": 5,
                     "startColumn": 4,
-                    "startOffset": 221,
+                    "startOffset": 266,
                     "endColumn": 53,
-                    "endOffset": 270
+                    "endOffset": 315
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 5,
                         "startColumn": 4,
-                        "startOffset": 221,
+                        "startOffset": 266,
                         "endColumn": 53,
-                        "endOffset": 270
+                        "endOffset": 315
                     }
                 }
             },
@@ -82,20 +82,20 @@
                 "to": {
                     "startLine": 6,
                     "startColumn": 4,
-                    "startOffset": 275,
+                    "startOffset": 320,
                     "endLine": 8,
                     "endColumn": 13,
-                    "endOffset": 422
+                    "endOffset": 467
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 6,
                         "startColumn": 4,
-                        "startOffset": 275,
+                        "startOffset": 320,
                         "endLine": 8,
                         "endColumn": 13,
-                        "endOffset": 422
+                        "endOffset": 467
                     }
                 }
             },
@@ -103,18 +103,18 @@
                 "to": {
                     "startLine": 9,
                     "startColumn": 4,
-                    "startOffset": 427,
+                    "startOffset": 472,
                     "endColumn": 92,
-                    "endOffset": 515
+                    "endOffset": 560
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 9,
                         "startColumn": 4,
-                        "startOffset": 427,
+                        "startOffset": 472,
                         "endColumn": 92,
-                        "endOffset": 515
+                        "endOffset": 560
                     }
                 }
             },
@@ -122,18 +122,18 @@
                 "to": {
                     "startLine": 10,
                     "startColumn": 4,
-                    "startOffset": 520,
+                    "startOffset": 565,
                     "endColumn": 67,
-                    "endOffset": 583
+                    "endOffset": 628
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 10,
                         "startColumn": 4,
-                        "startOffset": 520,
+                        "startOffset": 565,
                         "endColumn": 67,
-                        "endOffset": 583
+                        "endOffset": 628
                     }
                 }
             },
@@ -141,18 +141,18 @@
                 "to": {
                     "startLine": 11,
                     "startColumn": 4,
-                    "startOffset": 588,
-                    "endColumn": 65,
-                    "endOffset": 649
+                    "startOffset": 633,
+                    "endColumn": 164,
+                    "endOffset": 793
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 11,
                         "startColumn": 4,
-                        "startOffset": 588,
-                        "endColumn": 65,
-                        "endOffset": 649
+                        "startOffset": 633,
+                        "endColumn": 164,
+                        "endOffset": 793
                     }
                 }
             },
@@ -160,18 +160,18 @@
                 "to": {
                     "startLine": 12,
                     "startColumn": 4,
-                    "startOffset": 654,
-                    "endColumn": 100,
-                    "endOffset": 750
+                    "startOffset": 798,
+                    "endColumn": 65,
+                    "endOffset": 859
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 12,
                         "startColumn": 4,
-                        "startOffset": 654,
-                        "endColumn": 100,
-                        "endOffset": 750
+                        "startOffset": 798,
+                        "endColumn": 65,
+                        "endOffset": 859
                     }
                 }
             },
@@ -179,18 +179,18 @@
                 "to": {
                     "startLine": 13,
                     "startColumn": 4,
-                    "startOffset": 755,
-                    "endColumn": 70,
-                    "endOffset": 821
+                    "startOffset": 864,
+                    "endColumn": 100,
+                    "endOffset": 960
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 13,
                         "startColumn": 4,
-                        "startOffset": 755,
-                        "endColumn": 70,
-                        "endOffset": 821
+                        "startOffset": 864,
+                        "endColumn": 100,
+                        "endOffset": 960
                     }
                 }
             },
@@ -198,18 +198,18 @@
                 "to": {
                     "startLine": 14,
                     "startColumn": 4,
-                    "startOffset": 826,
-                    "endColumn": 112,
-                    "endOffset": 934
+                    "startOffset": 965,
+                    "endColumn": 70,
+                    "endOffset": 1031
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 14,
                         "startColumn": 4,
-                        "startOffset": 826,
-                        "endColumn": 112,
-                        "endOffset": 934
+                        "startOffset": 965,
+                        "endColumn": 70,
+                        "endOffset": 1031
                     }
                 }
             },
@@ -217,18 +217,18 @@
                 "to": {
                     "startLine": 15,
                     "startColumn": 4,
-                    "startOffset": 939,
-                    "endColumn": 86,
-                    "endOffset": 1021
+                    "startOffset": 1036,
+                    "endColumn": 112,
+                    "endOffset": 1144
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 15,
                         "startColumn": 4,
-                        "startOffset": 939,
-                        "endColumn": 86,
-                        "endOffset": 1021
+                        "startOffset": 1036,
+                        "endColumn": 112,
+                        "endOffset": 1144
                     }
                 }
             },
@@ -236,39 +236,39 @@
                 "to": {
                     "startLine": 16,
                     "startColumn": 4,
-                    "startOffset": 1026,
-                    "endLine": 17,
-                    "endColumn": 13,
-                    "endOffset": 1150
+                    "startOffset": 1149,
+                    "endColumn": 86,
+                    "endOffset": 1231
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 16,
                         "startColumn": 4,
-                        "startOffset": 1026,
-                        "endLine": 17,
-                        "endColumn": 13,
-                        "endOffset": 1150
+                        "startOffset": 1149,
+                        "endColumn": 86,
+                        "endOffset": 1231
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 18,
+                    "startLine": 17,
                     "startColumn": 4,
-                    "startOffset": 1155,
-                    "endColumn": 84,
-                    "endOffset": 1235
+                    "startOffset": 1236,
+                    "endLine": 18,
+                    "endColumn": 13,
+                    "endOffset": 1360
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
-                        "startLine": 18,
+                        "startLine": 17,
                         "startColumn": 4,
-                        "startOffset": 1155,
-                        "endColumn": 84,
-                        "endOffset": 1235
+                        "startOffset": 1236,
+                        "endLine": 18,
+                        "endColumn": 13,
+                        "endOffset": 1360
                     }
                 }
             },
@@ -276,18 +276,18 @@
                 "to": {
                     "startLine": 19,
                     "startColumn": 4,
-                    "startOffset": 1240,
-                    "endColumn": 72,
-                    "endOffset": 1308
+                    "startOffset": 1365,
+                    "endColumn": 84,
+                    "endOffset": 1445
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 19,
                         "startColumn": 4,
-                        "startOffset": 1240,
-                        "endColumn": 72,
-                        "endOffset": 1308
+                        "startOffset": 1365,
+                        "endColumn": 84,
+                        "endOffset": 1445
                     }
                 }
             },
@@ -295,18 +295,18 @@
                 "to": {
                     "startLine": 20,
                     "startColumn": 4,
-                    "startOffset": 1313,
-                    "endColumn": 67,
-                    "endOffset": 1376
+                    "startOffset": 1450,
+                    "endColumn": 72,
+                    "endOffset": 1518
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 20,
                         "startColumn": 4,
-                        "startOffset": 1313,
-                        "endColumn": 67,
-                        "endOffset": 1376
+                        "startOffset": 1450,
+                        "endColumn": 72,
+                        "endOffset": 1518
                     }
                 }
             },
@@ -314,41 +314,60 @@
                 "to": {
                     "startLine": 21,
                     "startColumn": 4,
-                    "startOffset": 1381,
-                    "endLine": 30,
-                    "endColumn": 12,
-                    "endOffset": 2023
+                    "startOffset": 1523,
+                    "endColumn": 67,
+                    "endOffset": 1586
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
                         "startLine": 21,
                         "startColumn": 4,
-                        "startOffset": 1381,
-                        "endLine": 30,
-                        "endColumn": 12,
-                        "endOffset": 2023
+                        "startOffset": 1523,
+                        "endColumn": 67,
+                        "endOffset": 1586
                     }
                 }
             },
             {
                 "to": {
-                    "startLine": 31,
+                    "startLine": 22,
                     "startColumn": 4,
-                    "startOffset": 2028,
-                    "endLine": 35,
+                    "startOffset": 1591,
+                    "endLine": 31,
                     "endColumn": 12,
                     "endOffset": 2233
                 },
                 "from": {
                     "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
                     "position": {
-                        "startLine": 31,
+                        "startLine": 22,
                         "startColumn": 4,
-                        "startOffset": 2028,
-                        "endLine": 35,
+                        "startOffset": 1591,
+                        "endLine": 31,
                         "endColumn": 12,
                         "endOffset": 2233
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 32,
+                    "startColumn": 4,
+                    "startOffset": 2238,
+                    "endLine": 36,
+                    "endColumn": 12,
+                    "endOffset": 2443
+                },
+                "from": {
+                    "file": "D:\\Git_lalocal\\lalocal\\vitamio\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 32,
+                        "startColumn": 4,
+                        "startOffset": 2238,
+                        "endLine": 36,
+                        "endColumn": 12,
+                        "endOffset": 2443
                     }
                 }
             }

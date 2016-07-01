@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
@@ -31,7 +30,7 @@ import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountEidt1Activity extends AppCompatActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener {
+public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener {
     public static final int RESULT_CODE_MODFY_PROFILE = 123;
     public static final int UPDATE_ME_DATA = 301;
     private static final int PHOTO_REQUEST_CAREMA = 1;
@@ -61,10 +60,9 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_eidt1_layout);
-        initService();
         intParams();
         initView();
-        contentService.getUserProfile(getUserId(), getToken());
+        initService();
     }
 
     public int getUserId() {
@@ -76,10 +74,10 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
         return getIntent().getStringExtra(KeyParams.TOKEN);
     }
 
-
     private void initService() {
         contentService = new ContentService(this);
         contentService.setCallBack(new CallBack());
+        contentService.getUserProfile(getUserId(), getToken());
 
     }
 
@@ -276,7 +274,7 @@ public class AccountEidt1Activity extends AppCompatActivity implements View.OnCl
                 }
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
                 String nickname = data.getStringExtra(KeyParams.NICKNAME);
-                AppLog.print("modify nickanme__"+nickname);
+                AppLog.print("modify nickanme__" + nickname);
                 backIntent.putExtra(KeyParams.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
             }

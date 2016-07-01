@@ -128,7 +128,7 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener 
                         holder.cancleBtn.setVisibility(View.GONE);
                     }
                     DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(), 2);
-                    holder.itemDetail.setTag(R.id.orderDetailId, item.getId());
+                    holder.itemDetail.setTag(R.id.orderDetailId, item);
                 }
                 convertView.setTag(holder);
 
@@ -148,8 +148,10 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener 
         switch (id) {
             case R.id.my_order_item_detail:
                 if (v.getTag(R.id.orderDetailId) != null) {
+                    OrderItem item= (OrderItem) v.getTag(R.id.orderDetailId);
                     Intent intent = new Intent(context, OrderActivity.class);
-                    intent.putExtra(KeyParams.ORDER_ID, (int) v.getTag(R.id.orderDetailId));
+                    intent.putExtra(KeyParams.ORDER_ID, item.getId());
+                    intent.putExtra(KeyParams.STATUS,item.getStatus());
                     context.startActivity(intent);
                 }
                 break;

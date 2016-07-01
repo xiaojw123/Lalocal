@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +21,7 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.dialog.WheelDialog;
 
-public class AccountEidt2Activity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener, WheelDialog.OnWheelSelectedListener {
+public class AccountEidt2Activity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener, WheelDialog.OnWheelSelectedListener {
     public static final int RESULT_CODE_NICKNAME = 101;
     public static final int RESULT_CODE_PHONE = 102;
     public static final int ACTION_NICKNAME_MODIFY = 200;
@@ -197,7 +196,6 @@ public class AccountEidt2Activity extends AppCompatActivity implements View.OnCl
         if ("国家号".equals(areaCode)) {
             areaCode = getAreaCode();
         }
-        String phoneStr = areaCode + "  " + phoneNumber;
         if (TextUtils.isEmpty(phoneNumber)) {
             CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), this);
             return true;

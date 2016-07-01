@@ -1,8 +1,12 @@
 package com.lalocal.lalocal.service;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.TextView;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,9 +19,9 @@ import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
+import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
-import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
@@ -27,6 +31,7 @@ import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.MD5Util;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,12 +63,12 @@ public class ContentService {
         this.callBack = callBack;
     }
 
-    public void getOrderDetail(int id){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.GET_ORDER_DETAIL);
+    public void getOrderDetail(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.GET_MY_ORDER_ITEMS+"/"+id,response,response);
-        request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(),CommonUtil.getUserToken()));
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_ORDER_ITEMS + "/" + id, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(), CommonUtil.getUserToken()));
         requestQueue.add(request);
     }
 
@@ -98,7 +103,6 @@ public class ContentService {
 
 
     public void getUserProfile(int userid, String token) {
-        AppLog.print("userid___" + userid + ", token___" + token);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_PROFILE);
         }
@@ -109,7 +113,6 @@ public class ContentService {
 
     //修改的用户资料
     public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, int userid, String token) {
-        AppLog.print("modifyUserProfile____token_" + token);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
@@ -131,7 +134,6 @@ public class ContentService {
     }
 
     public void boundEmail(String email, int userid, String token) {
-        AppLog.print("bound____email__" + email);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
         }
@@ -155,10 +157,11 @@ public class ContentService {
     }
 
     //判断邮箱是否被注册过
-    public void checkEmail(String email) {
+    public void checkEmail(String email, TextView next_tv) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
             response.setEmail(email);
+            response.setResponseView(next_tv);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
         request.setBodyParams(getCheckParams(email));
@@ -186,25 +189,28 @@ public class ContentService {
         request.setBodyParams(getRegisterParams(email, password, nickname));
         requestQueue.add(request);
     }
+
     //点赞
-    public void specialPraise(int id,int type){
-        if(callBack!=null){
-            response=new ContentResponse(RequestCode.PARISES);
+    public void specialPraise(int id, int type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PARISES);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.PRAISES,response,response);
-        request.setHeaderParams(getHeaderParamsWithUserId(-1,null));
-        request.setBodyParams(getParisesParams(id,type));
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.PRAISES, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
     }
+
     //取消收藏
     public void cancelParises(int praiseId) {
-        if(callBack !=null){
-            response=new ContentResponse(RequestCode.CANCEL_PARISES);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CANCEL_PARISES);
         }
-        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE,AppConfig.CANCEL_PRAISES+praiseId, response, response);
+        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.CANCEL_PRAISES + praiseId, response, response);
         requestQueue.add(contentRequest);
     }
+
     //推荐
     public void recommentList(final int pageSize, final int pageNumber) {
         if (callBack != null) {
@@ -217,6 +223,7 @@ public class ContentService {
         requestQueue.add(request);
 
     }
+
     //推荐页广告位
     public void recommendAd() {
         if (callBack != null) {
@@ -236,13 +243,12 @@ public class ContentService {
     }
 
 
-
     //产品详情
     public void productDetails(String targetId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS+targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -250,7 +256,6 @@ public class ContentService {
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
-        private byte[] bodyParams;
         private String bodyType;
 
         public ContentRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
@@ -274,13 +279,10 @@ public class ContentService {
             this.body = body;
         }
 
-        public void setBodyParams(byte[] bodyParams) {
-            this.bodyParams = bodyParams;
-        }
 
         @Override
         public byte[] getBody() throws AuthFailureError {
-            return bodyParams != null ? bodyParams : body.getBytes();
+            return body != null ? body.getBytes() : super.getBody();
         }
 
         public void setBodyType(String bodyType) {
@@ -292,6 +294,7 @@ public class ContentService {
         public String getBodyContentType() {
             return bodyType != null ? bodyType : CONTENT_TYPE;
         }
+
 
         @Override
         protected HashMap<String, String> getParams()
@@ -305,15 +308,16 @@ public class ContentService {
             hashMap.put("pw", "852041173abc");
 
             return hashMap;
-
         }
     }
 
 
-    class ContentResponse implements Response.Listener<String>, Response.ErrorListener {
+    class ContentResponse implements Response.Listener<String>, Response.ErrorListener, CustomDialog.CustomDialogListener {
         private String email, psw;
         private int resultCode;
         private int pageSize, pageNumber;
+        //responseView发送网络请求时，禁止在响应之前二次请求网络
+        private View responseView;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
@@ -323,9 +327,15 @@ public class ContentService {
             this.email = email;
             this.psw = psw;
         }
+
         public void setEmail(String email) {
             this.email = email;
         }
+
+        public void setResponseView(View responseView) {
+            this.responseView = responseView;
+        }
+
         public void setRecommend(int pageSize, int pageNumber) {
             this.pageSize = pageSize;
             this.pageNumber = pageNumber;
@@ -335,6 +345,10 @@ public class ContentService {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
+            if (responseView != null) {
+                AppLog.print("responseView___"+responseView);
+                responseView.setEnabled(true);
+            }
             if (callBack != null) {
                 callBack.onRequestFailed(volleyError.getMessage());
             }
@@ -343,121 +357,110 @@ public class ContentService {
 
         @Override
         public void onResponse(String json) {
-            switch (resultCode) {
-                case RequestCode.GET_ORDER_DETAIL:
-                    responseGetOrderDetail(json);
-                    break;
-                case RequestCode.GET_MY_ORDER:
-                    responseGetMyOrderItems(json);
-                    break;
-                case RequestCode.GET_FAVORITE_ITEMS:
-                    responseGetFavoriteItems(json);
-                    break;
-                case RequestCode.REGISTER:
-                    responseRegister(json);
-                    break;
-                case RequestCode.LOGIN:
-                    responseLogin(json);
-                    break;
-                case RequestCode.CHECK_EMAIL:
-                    responseCheckMail(json);
-                    break;
-                case RequestCode.SEND_VERIFICATION_CODE:
-                    responseSendVerCode(json);
-                    break;
-                case RequestCode.RESET_PASSWORD:
-                    responseResetPassword(json);
-                    break;
-                case RequestCode.UPLOAD_HEADER:
-                    responseUploadHeader(json);
-                    break;
-                case RequestCode.MODIFY_USER_PROFILE:
-                    responseModifyUserProfile(json);
-                    break;
-
-                case RequestCode.GET_USER_PROFILE:
-                    responseGetUserProfile(json);
-                    break;
-                case RequestCode.BOUDN_EMAIL:
-                    responseBoundEmail(json);
-                    break;
-                case RequestCode.GET_MY_COUPON:
-                    responseGetMyCoupon(json);
-                    break;
-                case RequestCode.RECOMMEND:
-                    responseRecommend(json);
-                    break;
-                case RequestCode.RECOMMEND_AD:
-                    responseRecommendAd(json);
-                    break;
-                case RequestCode.SPECIAL_DETAIL:
-                    responseSpecialDetail(json);
-                    break;
-                case RequestCode.PRODUCT_DETAILS:
-                    responseProductDetails(json);
-                    break;
-               case RequestCode.CANCEL_PARISES:
-                   responseCancelParises(json);
-                   break;
-                case RequestCode.PARISES:
-                    responseParises(json);
-                    break;
+            AppLog.print("onResponse___");
+            if (responseView != null) {
+                AppLog.print("responseView___"+responseView);
+                responseView.setEnabled(true);
             }
-
-        }
-
-        private void responseGetOrderDetail(String json) {
-            AppLog.print("responseGetOrderDetail____"+json);
+            JSONObject jsonObj = null;
             try {
-                JSONObject jsonObj=new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                if (code==0){
-                    JSONObject resultJsObj=jsonObj.optJSONObject(ResultParams.REULST);
-                    Gson gson=new Gson();
-                    OrderDetail orderItem=gson.fromJson(resultJsObj.toString(), OrderDetail.class);
-                    callBack.onGetOrderDetail(orderItem);
-
-
-
-
+                if (TextUtils.isEmpty(json)) {
+                    AppLog.print("无响应数据————");
+                    return;
                 }
+                jsonObj = new JSONObject(json);
+                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+                String message = jsonObj.optString(ResultParams.MESSAGE);
+                if (code != 0) {
+                    //code!=0失败 直接提示用户message
+                    CommonUtil.showPromptDialog(context, message, this);
+                    return;
+                }
+                switch (resultCode) {
+                    case RequestCode.GET_ORDER_DETAIL:
+                        responseGetOrderDetail(jsonObj);
+                        break;
+                    case RequestCode.GET_MY_ORDER:
+                        responseGetMyOrderItems(jsonObj);
+                        break;
+                    case RequestCode.GET_FAVORITE_ITEMS:
+                        responseGetFavoriteItems(jsonObj);
+                        break;
+                    case RequestCode.REGISTER:
+                        responseRegister(jsonObj);
+                        break;
+                    case RequestCode.LOGIN:
+                        responseLogin(jsonObj);
+                        break;
+                    case RequestCode.CHECK_EMAIL:
+                        responseCheckMail();
+                        break;
+                    case RequestCode.SEND_VERIFICATION_CODE:
+                        responseSendVerCode(json);
+                        break;
+                    case RequestCode.RESET_PASSWORD:
+                        responseResetPassword(json);
+                        break;
+                    case RequestCode.MODIFY_USER_PROFILE:
+                        responseModifyUserProfile(json);
+                        break;
 
-
-
-
+                    case RequestCode.GET_USER_PROFILE:
+                        responseGetUserProfile(json);
+                        break;
+                    case RequestCode.BOUDN_EMAIL:
+                        responseBoundEmail(json);
+                        break;
+                    case RequestCode.GET_MY_COUPON:
+                        responseGetMyCoupon(json);
+                        break;
+                    case RequestCode.RECOMMEND:
+                        responseRecommend(json);
+                        break;
+                    case RequestCode.RECOMMEND_AD:
+                        responseRecommendAd(json);
+                        break;
+                    case RequestCode.SPECIAL_DETAIL:
+                        responseSpecialDetail(json);
+                        break;
+                    case RequestCode.PRODUCT_DETAILS:
+                        responseProductDetails(json);
+                        break;
+                    case RequestCode.CANCEL_PARISES:
+                        responseCancelParises(json);
+                        break;
+                    case RequestCode.PARISES:
+                        responseParises(json);
+                        break;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
         }
 
-        private void responseGetMyOrderItems(String json) {
-            AppLog.print("responseGetOrderItems__" + json);
-            try {
-                JSONObject jsonObj = new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                if (code == 0) {
-                    JSONArray resutJsonArray = jsonObj.optJSONArray(ResultParams.REULST);
-                    Gson gson = new Gson();
-                    List<OrderItem> items = new ArrayList<>();
-                    for (int i = 0; i < resutJsonArray.length(); i++) {
-                        JSONObject itemJsonObj = resutJsonArray.optJSONObject(i);
-                        OrderItem orderItem = gson.fromJson(itemJsonObj.toString(), OrderItem.class);
-                        items.add(orderItem);
-                    }
-                    callBack.onGetOrderItem(items);
-                }
+        private void responseGetOrderDetail(JSONObject jsonObj) {
+            JSONObject resultJsObj = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson = new Gson();
+            OrderDetail orderItem = gson.fromJson(resultJsObj.toString(), OrderDetail.class);
+            callBack.onGetOrderDetail(orderItem);
+        }
 
-            } catch (JSONException e) {
-                e.printStackTrace();
+        private void responseGetMyOrderItems(JSONObject jsonObj) {
+            JSONArray resutJsonArray = jsonObj.optJSONArray(ResultParams.REULST);
+            Gson gson = new Gson();
+            List<OrderItem> items = new ArrayList<>();
+            for (int i = 0; i < resutJsonArray.length(); i++) {
+                JSONObject itemJsonObj = resutJsonArray.optJSONObject(i);
+                OrderItem orderItem = gson.fromJson(itemJsonObj.toString(), OrderItem.class);
+                items.add(orderItem);
             }
+            callBack.onGetOrderItem(items);
 
 
         }
 
         private void responseGetMyCoupon(String json) {
-            AppLog.print("responseGetMyCoupon____" + json);
             try {
                 JSONObject jsonObj = new JSONObject(json);
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
@@ -512,34 +515,22 @@ public class ContentService {
             }
         }
 
-        private void responseGetFavoriteItems(String json) {
-            AppLog.print("responseGetFavorite___" + json);
-            try {
-                JSONObject jsonObj = new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                if (code == 0) {
-                    JSONObject resutJson = jsonObj.optJSONObject(ResultParams.REULST);
-                    int totalPages = resutJson.optInt("totalPages");
-                    int totalRows = resutJson.optInt("totalRows");
-                    JSONArray rows = resutJson.optJSONArray("rows");
-                    Gson gson = new Gson();
-                    List<FavoriteItem> items = new ArrayList<>();
-                    for (int i = 0; i < rows.length(); i++) {
-                        JSONObject rowJsonObj = rows.getJSONObject(i);
-                        FavoriteItem item = gson.fromJson(rowJsonObj.toString(), FavoriteItem.class);
-                        items.add(item);
-                    }
-                    callBack.onGetFavoriteItem(items, totalPages, totalRows);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+        private void responseGetFavoriteItems(JSONObject jsonObj) throws JSONException {
+            JSONObject resutJson = jsonObj.optJSONObject(ResultParams.REULST);
+            int totalPages = resutJson.optInt("totalPages");
+            int totalRows = resutJson.optInt("totalRows");
+            JSONArray rows = resutJson.optJSONArray("rows");
+            Gson gson = new Gson();
+            List<FavoriteItem> items = new ArrayList<>();
+            for (int i = 0; i < rows.length(); i++) {
+                JSONObject rowJsonObj = rows.getJSONObject(i);
+                FavoriteItem item = gson.fromJson(rowJsonObj.toString(), FavoriteItem.class);
+                items.add(item);
             }
-
-
+            callBack.onGetFavoriteItem(items, totalPages, totalRows);
         }
 
         private void responseBoundEmail(String json) {
-            AppLog.print("boundEmail____" + json);
             try {
                 JSONObject jsonObj = new JSONObject(json);
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
@@ -554,7 +545,6 @@ public class ContentService {
         }
 
         private void responseGetUserProfile(String json) {
-            AppLog.print("getUserprofile___" + json);
             try {
                 JSONObject jsonObj = new JSONObject(json);
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
@@ -570,7 +560,6 @@ public class ContentService {
         }
 
         private void responseModifyUserProfile(String json) {
-            AppLog.print("modifyuserprofile____" + json);
 
             try {
                 JSONObject jsonObj = new JSONObject(json);
@@ -586,19 +575,12 @@ public class ContentService {
 
         }
 
-        private void responseUploadHeader(String json) {
-            AppLog.print("responseUploadHeader json___" + json);
-
-        }
-
 
         private void responseResetPassword(String json) {
-            AppLog.print("reset psw__" + json);
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 int code = jsonObject.optInt(ResultParams.RESULT_CODE, 1);
                 String message = jsonObject.optString(ResultParams.MESSAGE);
-                AppLog.print("responseResetPassword code____" + code);
                 callBack.onResetPasswordComplete(code, message);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -606,7 +588,6 @@ public class ContentService {
         }
 
         private void responseSendVerCode(String json) {
-            AppLog.print("sendVerCode json___" + json);
             try {
                 JSONObject jsonObject = new JSONObject(json);
                 int code = jsonObject.optInt(ResultParams.RESULT_CODE, -1);
@@ -618,55 +599,35 @@ public class ContentService {
 
         }
 
-        private void responseCheckMail(String json) {
-            AppLog.print("CheckEmail  json__" + json);
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                String reutrnCode = jsonObject.optString(ResultParams.RESULT_CODE);
-                JSONObject resultJson = jsonObject.optJSONObject(ResultParams.REULST);
-                if ("0".equals(reutrnCode) && resultJson != null) {
-                    callBack.onCheckEmail(true, email);
-                } else {
-                    callBack.onCheckEmail(false, email);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        private void responseCheckMail() {
+            callBack.onCheckEmail(email);
         }
 
-        private void responseLogin(String json) {
-            AppLog.print("login Result___s" + json);
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                String returnCode = jsonObject.optString(ResultParams.RESULT_CODE);
-                String message = jsonObject.optString(ResultParams.MESSAGE);
-                JSONObject resutJson = jsonObject.optJSONObject(ResultParams.REULST);
-                User user = null;
-                if (resutJson != null) {
-                    Gson gson = new Gson();
-                    user = gson.fromJson(resutJson.toString(), User.class);
-                }
-                callBack.onLoginSucess(returnCode, message, user);
-            } catch (JSONException e) {
-                e.printStackTrace();
+        private void responseLogin(JSONObject jsonObject) {
+            JSONObject resutJson = jsonObject.optJSONObject(ResultParams.REULST);
+            User user = null;
+            if (resutJson != null) {
+                Gson gson = new Gson();
+                user = gson.fromJson(resutJson.toString(), User.class);
             }
+            callBack.onLoginSucess(user);
         }
 
-        private void responseRegister(String json) {
-            try {
-                AppLog.print("responseRegister___" + json);
-                JSONObject jsonObject = new JSONObject(json);
-                String resCode = jsonObject.optString(ResultParams.RESULT_CODE, "1");
-                String message = jsonObject.optString(ResultParams.MESSAGE, "注册失败");
-                JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
+        private void responseRegister(JSONObject jsonObject) {
+            JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
+            if (jsonObj != null) {
                 int userid = jsonObj.optInt("id");
                 String token = jsonObj.optString("token");
-                callBack.onResigterComplete(resCode, message, email, psw, userid, token);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                callBack.onResigterComplete(email, psw, userid, token);
             }
         }
+
+        @Override
+        public void onDialogClickListener(Dialog dialog, View view) {
+            dialog.dismiss();
+        }
     }
+
     //点赞
     private void responseParises(String json) {
         AppLog.print("responseParises______" + json);
@@ -717,19 +678,16 @@ public class ContentService {
         JSONObject jsonObj = new JSONObject();
         try {
             if (!TextUtils.isEmpty(nickname)) {
-                AppLog.print("nickname___");
                 jsonObj.put("nickName", nickname);
             }
             if (sex == 1 || sex == 0) {
                 boolean flag = sex == 1 ? true : false;
-                AppLog.print("sex___" + flag);
                 jsonObj.put("sex", flag);
             }
             if (!TextUtils.isEmpty(areaCode)) {
                 jsonObj.put("areaCode", areaCode);
             }
             if (!TextUtils.isEmpty(phone)) {
-                AppLog.print("phone___");
                 jsonObj.put("phone", phone);
             }
 
@@ -796,11 +754,11 @@ public class ContentService {
     }
 
     //点赞
-    public String getParisesParams(int id,int type){
+    public String getParisesParams(int id, int type) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("targetId",id);
-            jsonObject.put("targetType",type);
+            jsonObject.put("targetId", id);
+            jsonObject.put("targetType", type);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -809,18 +767,15 @@ public class ContentService {
     }
 
 
-
-
     public Map<String, String> getHeaderParams() {
         Map<String, String> headers = new HashMap<>();
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
-      //  headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        //  headers.put("DEVICE_ID", CommonUtil.getUUID(context));
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         String DEVICE_ID = tm.getDeviceId();
-        headers.put("DEVICE_ID",DEVICE_ID);
+        headers.put("DEVICE_ID", DEVICE_ID);
         AppLog.i("getHeaderParams1111111111111", CommonUtil.getUUID(context));
-        AppLog.print("verision__" + AppConfig.getVersionName(context) + ", device_id__" + CommonUtil.getUUID(context));
         return headers;
     }
 
@@ -833,7 +788,6 @@ public class ContentService {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
-        AppLog.print("userid__" + userid + ", token___" + token);
         return map;
 
     }
@@ -852,20 +806,19 @@ public class ContentService {
         public static final int SEND_VERIFICATION_CODE = 103;
         public static final int RESET_PASSWORD = 104;
         public static final int GET_FAVORITE_ITEMS = 105;
-        public static final int UPLOAD_HEADER = 106;
         public static final int MODIFY_USER_PROFILE = 107;
         public static final int GET_USER_PROFILE = 108;
         public static final int BOUDN_EMAIL = 109;
         public static final int GET_MY_COUPON = 110;
         public static final int GET_MY_ORDER = 111;
-        public  static final int GET_ORDER_DETAIL=112;
+        public static final int GET_ORDER_DETAIL = 112;
 
-        public static final int RECOMMEND=200;
-        public static final int RECOMMEND_AD=201;
-        public static final int SPECIAL_DETAIL=202;
-        public static final int PRODUCT_DETAILS=203;
-        public static final int CANCEL_PARISES=204;
-        public static final int PARISES=205;
+        public static final int RECOMMEND = 200;
+        public static final int RECOMMEND_AD = 201;
+        public static final int SPECIAL_DETAIL = 202;
+        public static final int PRODUCT_DETAILS = 203;
+        public static final int CANCEL_PARISES = 204;
+        public static final int PARISES = 205;
 
     }
 

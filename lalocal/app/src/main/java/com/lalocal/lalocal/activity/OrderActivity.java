@@ -1,12 +1,15 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,11 +23,15 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class OrderActivity extends AppCompatActivity implements View.OnClickListener {
+public class OrderActivity extends BaseActivity implements View.OnClickListener {
     private LinearLayout travel_people_container;
     private LinearLayout pay_money_container;
+    private FrameLayout pay_time_container;
+    private FrameLayout evaluteTimeCotainer;
+    private FrameLayout pay_channel_cotainer;
     private ImageView post_img;
     private TextView title_tv;
     private TextView packages_tv;
@@ -38,6 +45,8 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
     private TextView evalute_time;
     private int height, left;
     private ImageView backImg;
+    private Button evalute_btn;
+    private List<OrderDetail.PeopleItemListBean.ContactInfoListBean> travelpersonsInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +66,10 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
 
     private void initView() {
         backImg = (ImageView) findViewById(R.id.common_back_btn);
+        evalute_btn = (Button) findViewById(R.id.order_immediately_evaluate_btn);
         travel_people_container = (LinearLayout) findViewById(R.id.order_travel_people_container);
+        pay_channel_cotainer=(FrameLayout) findViewById(R.id.order_pay_channel_container);
+        pay_time_container= (FrameLayout) findViewById(R.id.order_pay_time_container);
         pay_money_container = (LinearLayout) findViewById(R.id.order_pay_money_contaienr);
         post_img = (ImageView) findViewById(R.id.order_detail_img);
         title_tv = (TextView) findViewById(R.id.order_detail_title);
@@ -70,18 +82,45 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
         pay_time = (TextView) findViewById(R.id.order_pay_time_text);
         pay_channel = (TextView) findViewById(R.id.order_pay_channel_text);
         evalute_time = (TextView) findViewById(R.id.order_evaluate_time_text);
+        evaluteTimeCotainer= (FrameLayout) findViewById(R.id.order_evaluate_time_cotainer);
+        travel_person_num.setOnClickListener(this);
         backImg.setOnClickListener(this);
+        int status=getStaus();
+        if (status==2){
+            evalute_btn.setVisibility(View.VISIBLE);
+            evalute_btn.setText("立即评价");
+        }else if (status==1){
+            evalute_btn.setVisibility(View.VISIBLE);
+            pay_time_container.setVisibility(View.GONE);
+            pay_channel_cotainer.setVisibility(View.GONE);
+            evaluteTimeCotainer.setVisibility(View.GONE);
+            evalute_btn.setText("立即支付");
+        }else{
+            evalute_btn.setVisibility(View.GONE);
+        }
     }
 
-    public int getOrderId() {
+    private int getOrderId() {
         return getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
     }
+    private int getStaus(){
+        return  getIntent().getIntExtra(KeyParams.STATUS,-1);
+    }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.common_back_btn:
                 finish();
+                break;
+            case R.id.order_person_num_tv:
+                if (travelpersonsInfo==null){
+                    return;
+                }
+                Intent intent=new Intent(this,TravelPersonActivity.class);
+                intent.putParcelableArrayListExtra(KeyParams.TRAVEL_PERSONS_CONCACT, (ArrayList<? extends Parcelable>) travelpersonsInfo);
+                startActivity(intent);
                 break;
 
         }
@@ -119,7 +158,12 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
         pay_time.setText(detail.getPayTime());
         String payType=detail.getPayType();
         if (payType==null){
-            pay_channel.setText("未支付");
+//            pay_channel.setText("");
+        }
+        String praiseTime=detail.getAppraiseTime();
+        if (!TextUtils.isEmpty(praiseTime)){
+            evaluteTimeCotainer.setVisibility(View.GONE);
+            evalute_time.setText(praiseTime);
         }
 
 
@@ -164,8 +208,8 @@ public class OrderActivity extends AppCompatActivity implements View.OnClickList
         if (peopleList != null && peopleList.size() > 0) {
             OrderDetail.PeopleItemListBean peopleItemListBean = peopleList.get(0);
             travel_person_num.setText(String.valueOf(peopleItemListBean.getAmount()));
-            List<OrderDetail.PeopleItemListBean.ContactInfoListBean> contactInfoListBeenList = peopleItemListBean.getContactInfoList();
-            for (OrderDetail.PeopleItemListBean.ContactInfoListBean contactInfoListBean : contactInfoListBeenList) {
+             travelpersonsInfo = peopleItemListBean.getContactInfoList();
+            for (OrderDetail.PeopleItemListBean.ContactInfoListBean contactInfoListBean : travelpersonsInfo) {
                 TextView textView = new TextView(this);
                 textView.setGravity(Gravity.CENTER_VERTICAL);
                 textView.setTextAppearance(this, R.style.OrderCardItemTextStyle);

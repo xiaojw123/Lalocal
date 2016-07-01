@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -15,10 +14,10 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.CustomEditText;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class LoginActivity extends AppCompatActivity implements CustomDialog.CustomDialogListener {
+public class LoginActivity extends BaseActivity implements CustomDialog.CustomDialogListener {
     public static final int REGISTER_OK = 101;
     public static final int LOGIN_OK = 102;
     public static final String EMAIL = "email";
@@ -107,16 +106,11 @@ public class LoginActivity extends AppCompatActivity implements CustomDialog.Cus
 
     class CallBack extends ICallBack {
         @Override
-        public void onLoginSucess(String code, String message, User user) {
-            if ("0".equals(code)) {
+        public void onLoginSucess(User user) {
                 Intent intent = new Intent();
                 intent.putExtra(MeFragment.USER, user);
                 setResult(LOGIN_OK, intent);
                 finish();
-            } else {
-                CommonUtil.showPromptDialog(LoginActivity.this, message, LoginActivity.this);
-            }
-
         }
     }
     @Override

@@ -1,5 +1,9 @@
 package com.lalocal.lalocal.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -237,7 +241,7 @@ public class OrderDetail {
             this.contactInfoList = contactInfoList;
         }
 
-        public static class ContactInfoListBean {
+        public static class ContactInfoListBean implements Parcelable {
             /**
              * description :
              * name : 姓名
@@ -256,7 +260,7 @@ public class OrderDetail {
                 this.itemList = itemList;
             }
 
-            public static class ItemListBean {
+            public static class ItemListBean implements Parcelable {
                 private String description;
                 private String name;
                 private String value;
@@ -302,7 +306,74 @@ public class OrderDetail {
                 public void setNessary(boolean nessary) {
                     this.nessary = nessary;
                 }
+
+                @Override
+                public int describeContents() {
+                    return 0;
+                }
+
+                @Override
+                public void writeToParcel(Parcel dest, int flags) {
+                    dest.writeString(this.description);
+                    dest.writeString(this.name);
+                    dest.writeString(this.value);
+                    dest.writeInt(this.type);
+                    dest.writeByte(this.nessary ? (byte) 1 : (byte) 0);
+                }
+
+                public ItemListBean() {
+                }
+
+                protected ItemListBean(Parcel in) {
+                    this.description = in.readString();
+                    this.name = in.readString();
+                    this.value = in.readString();
+                    this.type = in.readInt();
+                    this.nessary = in.readByte() != 0;
+                }
+
+                public static final Creator<ItemListBean> CREATOR = new Creator<ItemListBean>() {
+                    @Override
+                    public ItemListBean createFromParcel(Parcel source) {
+                        return new ItemListBean(source);
+                    }
+
+                    @Override
+                    public ItemListBean[] newArray(int size) {
+                        return new ItemListBean[size];
+                    }
+                };
             }
+
+            @Override
+            public int describeContents() {
+                return 0;
+            }
+
+            @Override
+            public void writeToParcel(Parcel dest, int flags) {
+                dest.writeList(this.itemList);
+            }
+
+            public ContactInfoListBean() {
+            }
+
+            protected ContactInfoListBean(Parcel in) {
+                this.itemList = new ArrayList<ItemListBean>();
+                in.readList(this.itemList, ItemListBean.class.getClassLoader());
+            }
+
+            public static final Parcelable.Creator<ContactInfoListBean> CREATOR = new Parcelable.Creator<ContactInfoListBean>() {
+                @Override
+                public ContactInfoListBean createFromParcel(Parcel source) {
+                    return new ContactInfoListBean(source);
+                }
+
+                @Override
+                public ContactInfoListBean[] newArray(int size) {
+                    return new ContactInfoListBean[size];
+                }
+            };
         }
     }
 

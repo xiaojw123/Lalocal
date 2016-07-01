@@ -36,7 +36,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_dialog);
-        AppLog.print("dialog oncreate");
         initView();
 
     }
@@ -54,9 +53,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         if (!TextUtils.isEmpty(title)) {
             title_tv.setText(title);
         }
-        AppLog.print("set message__" + message);
         if (!TextUtils.isEmpty(message)) {
-            AppLog.print("set msg__");
             message_tv.setText(message);
         }
         if (!TextUtils.isEmpty(neturalText)) {

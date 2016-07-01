@@ -15,3 +15,20 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keep class org.apache.http.impl.client.**
+-dontwarn org.apache.commons.**
+-keep class com.blueware.** { *; }
+-dontwarn com.blueware.**
+-keep class com.oneapm.** {*;}
+-dontwarn com.oneapm.**
+-keepattributes Exceptions, Signature, InnerClasses
+-keepattributes SourceFile, LineNumberTable
+#online delete
+# ProGuard configurations for Bugtags
+-keepattributes LineNumberTable,SourceFile
+
+-keep class com.bugtags.library.** {*;}
+-dontwarn org.apache.http.**
+-dontwarn android.net.http.AndroidHttpClient
+-dontwarn com.bugtags.library.**
+# End Bugtags

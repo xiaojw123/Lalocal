@@ -47,15 +47,16 @@ public final class R {
         public static int VideoView_error_text_invalid_progressive_playback=0x7f060001;
         public static int VideoView_error_text_unknown=0x7f060002;
         public static int VideoView_error_title=0x7f060003;
-        public static int mediacontroller_play_pause=0x7f060004;
-        public static int permission_group_tools_description=0x7f060005;
-        public static int permission_group_tools_label=0x7f060006;
-        public static int permission_receive_messages_description=0x7f060007;
-        public static int permission_receive_messages_label=0x7f060008;
-        public static int permission_write_providers_description=0x7f060009;
-        public static int permission_write_providers_label=0x7f06000a;
-        public static int vitamio_init_decoders=0x7f06000b;
-        public static int vitamio_library_app_name=0x7f06000c;
+        public static int com_crashlytics_android_build_id=0x7f060004;
+        public static int mediacontroller_play_pause=0x7f060005;
+        public static int permission_group_tools_description=0x7f060006;
+        public static int permission_group_tools_label=0x7f060007;
+        public static int permission_receive_messages_description=0x7f060008;
+        public static int permission_receive_messages_label=0x7f060009;
+        public static int permission_write_providers_description=0x7f06000a;
+        public static int permission_write_providers_label=0x7f06000b;
+        public static int vitamio_init_decoders=0x7f06000c;
+        public static int vitamio_library_app_name=0x7f06000d;
     }
     public static final class style {
         public static int MediaController_SeekBar=0x7f070000;

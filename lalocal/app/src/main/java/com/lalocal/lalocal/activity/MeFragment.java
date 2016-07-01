@@ -6,13 +6,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,10 +23,10 @@ import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.OrderItem;
+import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
@@ -49,8 +48,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     ImageView headImg;
     LinearLayout favorite_tab, order_tab, coupon_tab;
     ViewGroup lastSelectedView;
-    Button settingBtn;
-    RecyclerView myfavorite_rlv, myorder_rlv, coupon_rlv;
+    ImageButton settingBtn;
     ContentService contentService;
     boolean isLogined, isRefresh;
     int favoriteTotalPages, favoritePage;
@@ -101,7 +99,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     }
 
     private void initView(View view) {
-        settingBtn = (Button) view.findViewById(R.id.home_me_set_btn);
+        settingBtn = (ImageButton) view.findViewById(R.id.home_me_set_btn);
         headImg = (ImageView) view.findViewById(R.id.home_me_headportrait_img);
         verified_tv = (TextView) view.findViewById(R.id.home_me_verified);
         username_tv = (TextView) view.findViewById(R.id.home_me_username);
@@ -121,6 +119,20 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         setSelectedTab(favorite_tab);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden) {
+            if (isLogined) {
+                contentService.getMyFavorite(user.getId(), user.getToken(), 1, 10);
+                contentService.getMyCoupon(user.getId(), user.getToken());
+                contentService.getMyOrder(user.getId(), user.getToken());
+            } else {
+                contentService.getMyFavorite(-1, null, 1, 10);
+            }
+        }
+
+    }
 
     private View.OnClickListener meFragmentClickListener = new View.OnClickListener() {
         @Override
@@ -180,7 +192,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AppLog.print("onActivityResult resCode__" + resultCode);
         if (resultCode == LoginActivity.REGISTER_OK) {
             String email = data.getStringExtra(LoginActivity.EMAIL);
             String psw = data.getStringExtra(LoginActivity.PSW);
@@ -194,7 +205,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             int status = data.getIntExtra(KeyParams.STATUS, -1);
             String nickname = data.getStringExtra(KeyParams.NICKNAME);
             String avatar = data.getStringExtra(KeyParams.AVATAR);
-            AppLog.print("status__" + status + ", nickanem__" + nickname + ", avatar__" + avatar);
             user.setStatus(status);
             user.setNickName(nickname);
             user.setAvatar(avatar);
@@ -232,6 +242,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             String avatar = user.getAvatar();
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
+
             }
             contentService.getMyFavorite(userid, token, 1, 10);
             contentService.getMyCoupon(userid, token);
@@ -270,6 +281,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             public void run() {
                 isRefresh = false;
                 handler.sendEmptyMessage(0);
+
+
             }
         }, 1000);
 
@@ -293,34 +306,47 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         FavoriteItem item = (FavoriteItem) view.getTag(R.id.targetId);
-        switch (item.getTargetType()) {
+        switch (item.getTargetType()) {//2产品 9线路 10专题 13资讯
             case 1://文章
-                Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                ArticleDetailsBean bean = new ArticleDetailsBean();
-                bean.setCollected(true);
-                bean.setTargetId(item.getTargetId());
-                intent.putExtra("articleDetailsBean", bean);
-                startActivity(intent);
+                gotoArticleDetail(item);
                 break;
-//            case 2:
-//                break;
-//            case 9:
-//                break;
-//            case 10:
-//                intent.setClass(getActivity(), SpecialDetailsActivity.class);
-//                break;
-//            case 13:
-//                break;
+            case 2://产品
+                gotoProductDetail(item);
+
+                break;
+            case 9://线路
+                break;
+            case 10://专题
+                break;
+            case 13://资讯
+                break;
         }
 
     }
 
+
+    private void gotoProductDetail(FavoriteItem item) {
+        Intent intent = new Intent(getActivity(), ProductDetailsActivity.class);
+        SpecialToH5Bean bean = new SpecialToH5Bean();
+        bean.setTargetId(item.getTargetId());
+        bean.setTargetType(item.getTargetType());
+        intent.putExtra("productdetails", bean);
+        startActivity(intent);
+
+    }
+
+    private void gotoArticleDetail(FavoriteItem item) {
+        Intent intent = new Intent(getActivity(), ArticleActivity.class);
+        ArticleDetailsBean bean = new ArticleDetailsBean();
+        bean.setTargetId(item.getTargetId());
+        intent.putExtra("articleDetailsBean", bean);
+        startActivity(intent);
+    }
+
     class MeCallBack extends ICallBack {
         @Override
-        public void onLoginSucess(String code, String message, User user) {
-            if ("0".equals(code)) {
-                updateFragmentView(true, user);
-            }
+        public void onLoginSucess(User user) {
+            updateFragmentView(true, user);
         }
 
         @Override

@@ -3,26 +3,18 @@ package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -39,8 +31,10 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.DrawableUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 import io.vov.vitamio.LibsChecker;
@@ -51,7 +45,7 @@ import io.vov.vitamio.widget.VideoView;
  * Created by lenovo on 2016/6/17.
  * 专题详情页
  */
-public class SpecialDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+public class SpecialDetailsActivity extends BaseActivity implements View.OnClickListener {
     private ImageView back;
     private ImageView detailsLike;
     private ImageView detailsShare;
@@ -73,8 +67,8 @@ public class SpecialDetailsActivity extends AppCompatActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.special_details_layout);
         ShareSDK.initSDK(this);
+        setContentView(R.layout.special_details_layout);
         initView();
         initData();
 

@@ -2,14 +2,16 @@
 <resources>
 
     <dimen name="home_me_title_height">69dp</dimen>
-    <dimen name="home_me_set_btn_width">24dp</dimen>
-    <dimen name="home_me_set_btn_height">24dp</dimen>
-    <dimen name="home_me_set_btn_top">35dp</dimen>
+    <dimen name="home_me_set_btn_width">44dp</dimen>
+    <dimen name="home_me_set_btn_height">34dp</dimen>
+    <dimen name="home_me_set_btn_top">30dp</dimen>
     <dimen name="home_me_set_btn_right">15dp</dimen>
-    <dimen name="home_me_headportrait_img_width">100dp</dimen>
-    <dimen name="home_me_headportrait_img_height">100dp</dimen>
+    <dimen name="home_me_headportrait_img_width">173dp</dimen>
+    <dimen name="home_me_headportrait_img_height">186dp</dimen>
     <dimen name="home_me_headportrait_img_left">30dp</dimen>
+    <dimen name="home_me_headportrait_img_right">43dp</dimen>
     <dimen name="home_me_headportrait_img_top">25dp</dimen>
+    <dimen name="home_me_headportrait_img_bottom">61dp</dimen>
     <dimen name="home_me_username_left">145dp</dimen>
     <dimen name="home_me_username_top">84dp</dimen>
     <dimen name="home_me_verified_wdith">37dp</dimen>
@@ -150,7 +152,7 @@
     <dimen name="my_order_adult_container_top">3dp</dimen>
     <dimen name="my_order_adult_item_top">10dp</dimen>
     <dimen name="my_order_adult_container_height">64dp</dimen>
-    <dimen name="order_service_right">48dp</dimen>
+    <dimen name="order_service_right">53dp</dimen>
     <dimen name="order_more_width">39dp</dimen>
     <dimen name="order_more_height">4dp</dimen>
     <dimen name="order_more_right">15dp</dimen>
@@ -174,6 +176,7 @@
     <dimen name="order_pay_money_right">15dp</dimen>
     <dimen name="order_immediately_evaluate_btn_height">50dp</dimen>
     <dimen name="order_immediately_evaluate_btn_top">92dp</dimen>
+    <dimen name="order_detail_cotainer_bottom">188dp</dimen>
 
 
 

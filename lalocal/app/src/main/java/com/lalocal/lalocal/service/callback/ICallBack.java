@@ -56,11 +56,11 @@ public abstract class ICallBack {
 
     }
 
-    public void onResigterComplete(String resultCode, String message, String email, String psw,int userid,String token) {
+    public void onResigterComplete(String email, String psw,int userid,String token) {
 
     }
 
-    public void onCheckEmail(boolean isChecked, String email) {
+    public void onCheckEmail(String email) {
 
 
     }
@@ -70,7 +70,7 @@ public abstract class ICallBack {
     }
 
 
-    public void onLoginSucess(String code, String message, User user) {
+    public void onLoginSucess(User user) {
 
 
     }

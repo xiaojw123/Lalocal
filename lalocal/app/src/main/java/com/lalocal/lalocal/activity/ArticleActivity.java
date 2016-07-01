@@ -4,9 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -26,7 +24,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 /**
  * Created by lenovo on 2016/6/21.
  */
-public class ArticleActivity extends AppCompatActivity implements View.OnClickListener{
+public class ArticleActivity extends BaseActivity implements View.OnClickListener{
     private WebView articleWebview;
     private ArticleDetailsBean articleDetailsBean;
     private ImageView btnLike;

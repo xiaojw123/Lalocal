@@ -4,17 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,13 +23,11 @@ import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
 import com.lalocal.lalocal.model.ProductValueBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
-import com.lalocal.lalocal.model.RecommendResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ParisesNetwork;
@@ -51,7 +44,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 /**
  * Created by lenovo on 2016/6/22.
  */
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener {
+public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, View.OnClickListener {
 
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;

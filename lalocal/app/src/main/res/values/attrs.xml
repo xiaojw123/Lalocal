@@ -3,4 +3,23 @@
     <declare-styleable name="PowerImageView">
         <attr name="auto_play" format="boolean"></attr>
     </declare-styleable>
+    <!--RoundImageView style-->
+    <declare-styleable name="RoundImageView">
+        <attr name="type" />
+        <attr name="borderColor" />
+        <attr name="borderWidth" />
+        <attr name="rectRoundRadius" />
+    </declare-styleable>
+    <attr name="type">
+        <enum name="none" value="0" />
+        <enum name="circle" value="1" />
+        <enum name="rounded_rect" value="2" />
+    </attr>
+    <attr name="borderColor" format="color" />
+    <attr name="borderWidth" format="dimension" />
+    <attr name="rectRoundRadius" format="dimension" />
+    <!--CustomEditText style-->
+    <declare-styleable name="CustomEditText">
+        <attr name="text_hint" format="string"/>
+    </declare-styleable>
 </resources>

@@ -2,24 +2,15 @@ package com.lalocal.lalocal.activity;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.util.AppConfig;
-import com.lalocal.lalocal.util.AppLog;
 
 /**
  * Created by lenovo on 2016/6/20.
  */
-public class TestActivity extends AppCompatActivity {
+public class TestActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

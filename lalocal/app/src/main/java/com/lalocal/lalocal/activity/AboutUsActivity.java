@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,7 +11,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppConfig;
 
-public class AboutUsActivity extends AppCompatActivity implements View.OnClickListener {
+public class AboutUsActivity extends BaseActivity implements View.OnClickListener {
     TextView appversion;
     RelativeLayout email_rl, inland_phone_rl, foreign_phone_rl;
     RelativeLayout grade_rl, useclauses_rl;

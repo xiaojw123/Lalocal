@@ -3,22 +3,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/dimen_size_15_dp"
-    >
+    android:paddingBottom="@dimen/dimen_size_15_dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_me_title_height"
         android:background="@color/color_f8">
 
-        <Button
+        <ImageButton
+            android:src="@drawable/home_me_setting"
             android:id="@+id/home_me_set_btn"
             android:layout_width="@dimen/home_me_set_btn_width"
             android:layout_height="@dimen/home_me_set_btn_height"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/home_me_set_btn_right"
+            android:paddingRight="@dimen/home_me_set_btn_right"
             android:layout_marginTop="@dimen/home_me_set_btn_top"
-            android:background="@drawable/home_me_setting" />
+            android:paddingTop="@dimen/dimen_size_5_dp"
+            android:paddingBottom="@dimen/dimen_size_5_dp"
+            android:paddingLeft="@dimen/dimen_size_5_dp"
+            android:background="@null" />
 
         <View
             android:layout_width="match_parent"
@@ -31,10 +34,14 @@
         android:id="@+id/home_me_headportrait_img"
         android:layout_width="@dimen/home_me_headportrait_img_width"
         android:layout_height="@dimen/home_me_headportrait_img_height"
-        android:layout_marginLeft="@dimen/home_me_headportrait_img_left"
-        android:layout_marginTop="@dimen/home_me_headportrait_img_top"
+        android:background="@drawable/home_me_head_bg"
+        android:paddingBottom="@dimen/home_me_headportrait_img_bottom"
+        android:paddingLeft="@dimen/home_me_headportrait_img_left"
+        android:paddingRight="@dimen/home_me_headportrait_img_right"
+        android:paddingTop="@dimen/home_me_headportrait_img_top"
         android:scaleType="fitXY"
         android:src="@drawable/home_me_personheadnormal" />
+
 
     <TextView
         android:id="@+id/home_me_username"
@@ -126,5 +133,4 @@
                 android:text="0" />
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout
-    >
+</RelativeLayout>

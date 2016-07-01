@@ -187,6 +187,7 @@
         <item name="android:layout_height">@dimen/order_travel_time_height</item>
         <item name="android:textSize">@dimen/text_size_15_sp</item>
         <item name="android:textColor">@color/color_b3</item>
+        <item name="android:gravity">center_vertical</item>
     </style>
     
 

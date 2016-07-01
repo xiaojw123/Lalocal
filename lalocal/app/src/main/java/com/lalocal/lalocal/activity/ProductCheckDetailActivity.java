@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -12,7 +11,7 @@ import com.lalocal.lalocal.R;
 /**
  * Created by lenovo on 2016/6/23.
  */
-public class ProductCheckDetailActivity extends AppCompatActivity implements View.OnClickListener{
+public class ProductCheckDetailActivity extends BaseActivity implements View.OnClickListener{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

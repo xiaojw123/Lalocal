@@ -2,7 +2,6 @@ package com.lalocal.lalocal.activity;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -14,10 +13,10 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.CustomEditText;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class PasswordForget2Activity extends AppCompatActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
+public class PasswordForget2Activity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
 
     public static final String VERITIED_CODE = "verited_code";
     public static final String NEW_PASSWORD = "new_password";

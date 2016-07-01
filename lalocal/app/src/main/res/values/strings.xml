@@ -112,5 +112,8 @@
     <string name="pay_time">支付时间</string>
     <string name="pay_channel">支付渠道</string>
     <string name="immediately_evaluate">立即评价</string>
+    <string name="evaluate_time">评价时间</string>
+    <string name="mobile">手机</string>
+    <string name="no_more_content">已没有更多内容</string>
 
 </resources>

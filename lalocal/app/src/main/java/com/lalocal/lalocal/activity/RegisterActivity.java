@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,15 +13,14 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.CustomEditText;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     CustomEditText email_edit, psw_edit, nickname_edit;
     Button register_btn;
     ImageView back_btn;
     ContentService contentService;
-    CustomDialog promptDialog;
     TextView userprotocol_tv;
     String loginEmail, loginPsw;
 
@@ -60,7 +58,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v == back_btn) {
-            AppLog.print("register back btn press_____");
             finish();
         } else if (v == register_btn) {
             register();
@@ -100,16 +97,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     class CallBack extends ICallBack {
         @Override
-        public void onResigterComplete(String resultCode, String message, String email, String psw, int userid, String token) {
-            if ("0".equals(resultCode)) {
+        public void onResigterComplete(String email, String psw, int userid, String token) {
                 loginEmail = email;
                 loginPsw = psw;
                 contentService.boundEmail(email, userid, token);
-
-            } else {
-                CommonUtil.showPromptDialog(RegisterActivity.this, message, promptDialogClicklistener);
-            }
-
         }
 
         @Override
