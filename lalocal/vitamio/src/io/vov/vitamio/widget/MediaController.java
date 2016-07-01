@@ -31,6 +31,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -85,7 +86,7 @@ public class MediaController extends FrameLayout {
   private View mRoot;
   private SeekBar mProgress;
   private TextView mEndTime, mCurrentTime;
-  private TextView mFileName;
+  //private TextView mFileName;
   private OutlineTextView mInfoView;
   private String mTitle;
   private long mDuration;
@@ -164,7 +165,16 @@ public class MediaController extends FrameLayout {
       mHandler.sendEmptyMessageDelayed(SHOW_PROGRESS, 1000);
     }
   };
-
+  public MediaController(Context context,boolean fromXml,View container) {
+    super(context);
+    initController(context);
+    mFromXml = fromXml;
+    mRoot = makeControllerView();//这个地方的FrameLayout.LayoutpParams是因为布局文件中要把MediaController的视图作为childView加到一个FrameLayout中去
+    FrameLayout.LayoutParams p = new FrameLayout.LayoutParams(LayoutParams.FILL_PARENT,125 );//想怎样布局MediaController就尽情的发挥这个LayoutParams吧
+    p.gravity = Gravity.BOTTOM;
+    mRoot.setLayoutParams(p);
+    ((FrameLayout)container).addView(mRoot);
+  }
   public MediaController(Context context, AttributeSet attrs) {
     super(context, attrs);
     mRoot = this;
@@ -257,9 +267,9 @@ public class MediaController extends FrameLayout {
 
     mEndTime = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_time_total", "id", mContext.getPackageName()));
     mCurrentTime = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_time_current", "id", mContext.getPackageName()));
-    mFileName = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_file_name", "id", mContext.getPackageName()));
-    if (mFileName != null)
-      mFileName.setText(mTitle);
+  //  mFileName = (TextView) v.findViewById(getResources().getIdentifier("mediacontroller_file_name", "id", mContext.getPackageName()));
+   /* if (mFileName != null)
+      mFileName.setText(mTitle);*/
   }
 
   public void setMediaPlayer(MediaPlayerControl player) {
@@ -285,11 +295,11 @@ public class MediaController extends FrameLayout {
    *
    * @param name
    */
-  public void setFileName(String name) {
+  /*public void setFileName(String name) {
     mTitle = name;
     if (mFileName != null)
       mFileName.setText(mTitle);
-  }
+  }*/
 
   /**
    * Set the View to hold some information when interact with the

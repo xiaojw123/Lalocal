@@ -10,6 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +42,7 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
     private int praises;
     private int result;
     private Context mContext=ArticleActivity.this;
-
+    private LinearLayout back;
 
 
     @Override
@@ -68,12 +69,14 @@ public class ArticleActivity extends AppCompatActivity implements View.OnClickLi
         readTv = (TextView) findViewById(R.id.article_read_tv);
         collectTv = (TextView) findViewById(R.id.article_collect_tv);
         backBtn = (ImageView) findViewById(R.id.common_back_btn);
+        back = (LinearLayout) findViewById(R.id.article_back_btn);
 
         //点击事件
         btnLike.setOnClickListener(this);
         btnComment.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         backBtn.setOnClickListener(this);
+        back.setOnClickListener(this);
 
     }
 
@@ -103,7 +106,7 @@ boolean isPraises=true;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.common_back_btn:
+            case R.id.article_back_btn:
                 finish();
                 break;
             case R.id.article_btn_comment:

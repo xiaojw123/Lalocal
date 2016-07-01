@@ -31,8 +31,12 @@ public class BigPictureActivity extends Activity {
 		ImageView photoIv= (ImageView) inflate.findViewById(R.id.photo_to_text_iv);
 		TextView textName = (TextView) inflate.findViewById(R.id.photo_to_text_name);
 		DrawableUtils.displayImg(this, photoIv, bean.getImgUrl());
-		textContent.setText(bean.getContent());
-		textName.setText("- -"+bean.getName());
+		if(bean.getContent()!=null){
+			textContent.setText(bean.getContent());
+		}else if(bean.getName()!=null){
+			textName.setText("- -"+bean.getName());
+		}
+
 		bigLayout.addView(inflate);
 	}
 

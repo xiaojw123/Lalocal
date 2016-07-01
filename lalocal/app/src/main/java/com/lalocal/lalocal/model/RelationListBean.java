@@ -10,4 +10,8 @@ public class RelationListBean {
     public int targetId;
     public String targetName;
     public int id;
+    public int styleType;
+    public Object price;
+    public Object status;
+
 }

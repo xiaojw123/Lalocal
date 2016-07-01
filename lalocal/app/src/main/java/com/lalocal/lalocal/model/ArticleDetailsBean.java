@@ -14,23 +14,14 @@ public class ArticleDetailsBean implements Parcelable {
     private String targetName;
     private String phone;
     private int praises;
-
-    public int getPraises() {
-        return praises;
-    }
-
-    public void setPraises(int praises) {
-        this.praises = praises;
-    }
-
     private int targetType;
 
-    public int getTargetType() {
-        return targetType;
+    public boolean isCollected() {
+        return isCollected;
     }
 
-    public void setTargetType(int targetType) {
-        this.targetType = targetType;
+    public void setIsCollected(boolean isCollected) {
+        this.isCollected = isCollected;
     }
 
     public int getPraiseNum() {
@@ -53,14 +44,6 @@ public class ArticleDetailsBean implements Parcelable {
         return targetId;
     }
 
-    public boolean isCollected() {
-        return isCollected;
-    }
-
-    public void setCollected(boolean collected) {
-        isCollected = collected;
-    }
-
     public void setTargetId(int targetId) {
         this.targetId = targetId;
     }
@@ -81,7 +64,20 @@ public class ArticleDetailsBean implements Parcelable {
         this.phone = phone;
     }
 
-    public ArticleDetailsBean() {
+    public int getPraises() {
+        return praises;
+    }
+
+    public void setPraises(int praises) {
+        this.praises = praises;
+    }
+
+    public int getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(int targetType) {
+        this.targetType = targetType;
     }
 
     @Override
@@ -101,6 +97,9 @@ public class ArticleDetailsBean implements Parcelable {
         dest.writeInt(this.targetType);
     }
 
+    public ArticleDetailsBean() {
+    }
+
     protected ArticleDetailsBean(Parcel in) {
         this.isCollected = in.readByte() != 0;
         this.praiseNum = in.readInt();
@@ -112,7 +111,7 @@ public class ArticleDetailsBean implements Parcelable {
         this.targetType = in.readInt();
     }
 
-    public static final Creator<ArticleDetailsBean> CREATOR = new Creator<ArticleDetailsBean>() {
+    public static final Parcelable.Creator<ArticleDetailsBean> CREATOR = new Parcelable.Creator<ArticleDetailsBean>() {
         @Override
         public ArticleDetailsBean createFromParcel(Parcel source) {
             return new ArticleDetailsBean(source);

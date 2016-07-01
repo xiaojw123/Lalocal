@@ -206,7 +206,7 @@ public class ContentService {
 
     }
     //取消收藏
-    public void cancelParises(int praiseId) {
+    public void cancelParises(Object praiseId) {
         if(callBack !=null){
             response=new ContentResponse(RequestCode.CANCEL_PARISES);
         }
@@ -827,11 +827,11 @@ public class ContentService {
         Map<String, String> headers = new HashMap<>();
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
-      //  headers.put("DEVICE_ID", CommonUtil.getUUID(context));
+
         TelephonyManager tm = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         String DEVICE_ID = tm.getDeviceId();
         headers.put("DEVICE_ID",DEVICE_ID);
-        AppLog.i("getHeaderParams1111111111111", CommonUtil.getUUID(context));
+
         AppLog.print("verision__" + AppConfig.getVersionName(context) + ", device_id__" + CommonUtil.getUUID(context));
         return headers;
     }

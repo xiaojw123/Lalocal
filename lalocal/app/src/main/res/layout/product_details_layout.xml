@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/product"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fafafa"
     >
+
     <com.lalocal.lalocal.view.MyScrollView
         android:id="@+id/product_scrollview"
         android:layout_width="match_parent"
@@ -18,6 +20,7 @@
             android:id="@+id/product_details_phones"
             android:layout_width="match_parent"
             android:layout_height="@dimen/product_details_photo_height">
+
             <ImageView
                 android:id="@+id/product_details_photo"
                 android:layout_width="match_parent"
@@ -32,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/black"
-            android:text="蓝山一日游"
             android:textSize="@dimen/product_details_title_tv"
             android:textStyle="bold"
             android:paddingLeft="@dimen/product_details_padding_left"
@@ -48,7 +50,6 @@
                 android:id="@+id/product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1187.00"
                 android:textSize="@dimen/text_size_22_sp"
                 android:textColor="@color/color_ffaa2a"/>
             <TextView
@@ -118,7 +119,7 @@
                 android:background="#fafafa"
                 android:layout_centerInParent="true"
                 android:padding="10dp"
-                android:text="服务介绍"/>
+               />
         </RelativeLayout>
         
         <LinearLayout
@@ -166,6 +167,6 @@
             android:layout_marginRight="12dp"
             />
     </RelativeLayout>
-
+    <include layout="@layout/product_title_layout"></include>
   <include layout="@layout/product_details_bottom_layout"></include>
 </RelativeLayout>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mian"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -46,26 +47,34 @@
                 android:layout_height="1dp"
                 android:background="@color/font_black_2"></View>
 
-            <ScrollView
+            <com.lalocal.lalocal.view.MyScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scrollbars="none"
-                android:fadingEdge="none" >
+                android:id="@+id/special_scrollview">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/special_title_content"
                         android:layout_width="match_parent"
                         android:layout_height="200dp"
-                        android:orientation="vertical">
-                        <ImageView
+                        >
+                        <LinearLayout
+                            android:id="@+id/special_details_img"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/androidloading"
-                            android:visibility="gone"/>
-                    </LinearLayout>
+                            android:layout_height="match_parent">
+                            <ImageView
+                                android:id="@+id/special_details_loading"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:src="@drawable/androidloading"
+                                />
+                        </LinearLayout>
+                        <include layout="@layout/video_layout"></include>
+                        <include layout="@layout/photo_to_text"></include>
+                    </RelativeLayout>
                         <WebView
                             android:id="@+id/special_details_webview"
                             android:layout_width="match_parent"
@@ -73,20 +82,15 @@
                             android:layout_weight="1"
                             ></WebView>
                 </LinearLayout>
-            </ScrollView>
+            </com.lalocal.lalocal.view.MyScrollView>
         </LinearLayout>
-
-        <ProgressBar
+        <!--<ProgressBar
             android:id="@+id/loading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            />
-
+            />-->
+        <include layout="@layout/page_loading"></include>
     </RelativeLayout>
-
-
-
-
 
 </LinearLayout>

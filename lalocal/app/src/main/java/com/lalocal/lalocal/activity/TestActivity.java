@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,11 +27,11 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.test_activity_layout);
         WebView wb = (WebView) findViewById(R.id.wb);
         wb.getSettings().setJavaScriptEnabled(true);
-        wb.loadUrl("https://dev.lalocal.cn/wechat/app_theme?id=34");
+        Intent intent = getIntent();
+        String h5url = intent.getStringExtra("h5url");
+        wb.loadUrl(h5url);
         MyWebviewClient myWebviewClient = new MyWebviewClient();
         wb.setWebViewClient(myWebviewClient);
-
-
     }
 int i=0;
     class MyWebviewClient extends WebViewClient{
@@ -43,10 +44,10 @@ int i=0;
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if(i==0){
+              /*  if(i==0){
                     view.loadUrl("https://dev.lalocal.cn/wechat/app_theme?id=34");
                     i++;
-                }
+                }*/
 
 
             }

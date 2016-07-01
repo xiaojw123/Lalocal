@@ -11,21 +11,21 @@ import android.os.Parcelable;
 public class SpecialToH5Bean implements Parcelable {
     private int targetType;
     private int targetId;
+
+    public int getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(int targetType) {
+        this.targetType = targetType;
+    }
+
     public int getTargetId() {
         return targetId;
     }
 
     public void setTargetId(int targetId) {
         this.targetId = targetId;
-    }
-
-    public int getTargetType() {
-
-        return targetType;
-    }
-
-    public void setTargetType(int targetType) {
-        this.targetType = targetType;
     }
 
     @Override
