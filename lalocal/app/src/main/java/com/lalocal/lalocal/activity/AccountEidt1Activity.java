@@ -20,7 +20,6 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
@@ -31,13 +30,11 @@ import java.io.File;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener {
-    public static final int RESULT_CODE_MODFY_PROFILE = 123;
     public static final int UPDATE_ME_DATA = 301;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
     private static final int MODIFY_USER_PROFILE = 4;
-    private static final String PHOTO_FILE_NAME = "temp_photo.jpg";
     private File tempFile;
     CircleImageView personalheader_civ;
     RelativeLayout nickname_rlt;
@@ -48,19 +45,18 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     TextView phone_tv;
     TextView areacode_tv;
     TextView email_tv;
-    int outputX, outputY;
     ContentService contentService;
     LoginUser user;
     ImageView backImg;
     int sex = -1;
     boolean isEmailUpdate;
     Intent backIntent = new Intent();
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_eidt1_layout);
-        intParams();
         initView();
         initService();
     }
@@ -81,12 +77,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
     }
 
-    private void intParams() {
-        outputX = (int) getResources().getDimension(R.dimen.home_me_headportrait_img_width);
-        outputY = outputX;
-
-
-    }
 
     private void initView() {
         backImg = (ImageView) findViewById(R.id.common_back_btn);
@@ -193,14 +183,15 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     }
 
     private void photoGraph() {
-        Intent intent = new Intent(
-                MediaStore.ACTION_IMAGE_CAPTURE);
+
         if (Environment.getExternalStorageState().equals(
                 Environment.MEDIA_MOUNTED)) {
             tempFile = new File(Environment
                     .getExternalStorageDirectory(),
-                    PHOTO_FILE_NAME);
+                    "header.jpg");
             Uri uri = Uri.fromFile(tempFile);
+            Intent intent = new Intent(
+                    MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(intent,
                     PHOTO_REQUEST_CAREMA);
@@ -215,7 +206,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == PHOTO_REQUEST_GALLERY) {
             if (data != null) {
                 Uri uri = data.getData();
@@ -233,32 +223,25 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
         } else if (requestCode == PHOTO_REQUEST_CUT) {
             if (data != null) {
-                final Bitmap bitmap = data.getParcelableExtra("data");
-                personalheader_civ.setImageBitmap(bitmap);
                 try {
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
-                    bitmap.recycle();
-                    bos.flush();
-                    bos.close();
-                    byte[] bytes = bos.toByteArray();
-                    if (user != null) {
-                        FileUploadUtil.uploadFile(this, backIntent, bytes, user.getId(), getToken());
+                    bitmap = data.getParcelableExtra("data");
+                    if (bitmap != null) {
+                        personalheader_civ.setImageBitmap(bitmap);
+                        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, bos);
+                        bos.flush();
+                        if (user != null) {
+                            FileUploadUtil.uploadFile(this, backIntent, bos.toByteArray(), user.getId(), getToken());
+                        }
+                        if (tempFile != null && tempFile.exists()) {
+                            tempFile.delete();
+                        }
+                        bos.close();
                     }
-                    bitmap.recycle();
-                    bos.flush();
-                    bos.close();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            try {
-                if (tempFile != null && tempFile.exists())
-                    tempFile.delete();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
         } else if (requestCode == MODIFY_USER_PROFILE) {
             if (resultCode == EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL) {
                 isEmailUpdate = true;
@@ -274,7 +257,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 }
             } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
                 String nickname = data.getStringExtra(KeyParams.NICKNAME);
-                AppLog.print("modify nickanme__" + nickname);
                 backIntent.putExtra(KeyParams.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
             }
@@ -289,8 +271,8 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         intent.putExtra("crop", true);
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("outputX", outputX);
-        intent.putExtra("outputY", outputY);
+        intent.putExtra("outputX", 250);
+        intent.putExtra("outputY", 250);
         intent.putExtra("outputFormat", "JPEG");
         intent.putExtra("noFaceDetection", true);
         intent.putExtra("return-data", true);
@@ -347,6 +329,15 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             email_tv.setText(user.getEmail() + "(未验证)");
         } else {
             email_tv.setText(user.getEmail());
+        }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bitmap != null && !bitmap.isRecycled()) {
+            bitmap.recycle();
         }
 
     }
