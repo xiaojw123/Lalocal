@@ -86,6 +86,7 @@
             android:name=".activity.VideoActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity"></activity>
+        <activity android:name=".activity.TestAct"></activity>
 
         <!--分享-->
         <activity

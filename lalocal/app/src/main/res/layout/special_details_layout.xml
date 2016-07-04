@@ -74,6 +74,7 @@
                         </LinearLayout>
                         <include layout="@layout/video_layout"></include>
                         <include layout="@layout/photo_to_text"></include>
+                        android:id="@+id/special_details_webview"
                     </RelativeLayout>
                         <WebView
                             android:id="@+id/special_details_webview"
