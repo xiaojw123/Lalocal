@@ -1,9 +1,11 @@
 package com.lalocal.lalocal.model;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by xiaojw on 2016/6/14.
  */
-public class Country {
+public class Country extends DataSupport{
     private String code_plus;
     private String name;
 

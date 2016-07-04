@@ -7,6 +7,7 @@
     <color name="color_fa">#FAFAFA</color>
     <color name="color_de">#dedede</color>
     <color name="color_b3">#b3b3b3</color>
+    <color name="color_30b3">#30b3b3b3</color>
     <color name="color_ee">#eeeeee</color>
     <color name="color_d9">#d9d9d9</color>
     <color name="color_66">#666666</color>
@@ -34,6 +35,7 @@
     <color name="color_79c4d9">#79c4d9</color>
     <color name="color_fac1a0">#fac1a0</color>
     <color name="color_dcf3fa">#dcf3fa</color>
+    <color name="color_eeee00">#90eaad3a</color>
 
 
     <color name="backgroundColorPress">#DBDBD3</color>

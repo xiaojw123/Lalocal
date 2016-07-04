@@ -45,8 +45,6 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         initParams();
         initService();
         initView();
-
-
     }
 
     private void initParams() {
@@ -135,7 +133,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
                 finish();
                 break;
             case R.id.account_edit2_countrycode:
-                showAreaCodeSeletor();
+                    showAreaCodeSeletor();
                 break;
             case R.id.account_edit_save:
                 if (actionType == ACTION_NICKNAME_MODIFY) {
@@ -160,14 +158,15 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
 
     private void changeEmail() {
         Intent intent = new Intent(this, EmailBoundActivity.class);
-        intent.putExtra(KeyParams.USERID,userid);
-        intent.putExtra(KeyParams.TOKEN,token);
+        intent.putExtra(KeyParams.USERID, userid);
+        intent.putExtra(KeyParams.TOKEN, token);
         intent.putExtra(KeyParams.EMAIL, email);
         startActivityForResult(intent, 100);
     }
 
     private void showAreaCodeSeletor() {
         WheelDialog dialog = new WheelDialog(this);
+        dialog.setCancelable(false);
         dialog.setOnWheelDialogSelectedListener(this);
         dialog.show();
     }
@@ -237,7 +236,9 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onSelected(Country item) {
-        countrycode_tv.setText(item.getCodePlus());
+        if (item != null) {
+            countrycode_tv.setText(item.getCodePlus());
+        }
     }
 
     class CallBack extends ICallBack {
@@ -268,4 +269,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
 
         }
     }
+
+
+
 }

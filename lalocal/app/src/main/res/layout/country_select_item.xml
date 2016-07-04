@@ -8,15 +8,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="200dp"
+        android:layout_marginRight="220dp"
         android:textColor="@drawable/country_item_textcolor"
         />
-
     <TextView
         android:id="@+id/country_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|center_vertical"
-        android:layout_marginLeft="200dp"
+        android:layout_marginLeft="220dp"
         android:textColor="@drawable/country_item_textcolor" />
 </FrameLayout>

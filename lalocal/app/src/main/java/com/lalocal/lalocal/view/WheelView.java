@@ -53,7 +53,6 @@ public class WheelView extends ScrollView {
         init(context);
     }
 
-    //    String[] items;
     List<Country> items;
 
     private List<Country> getItems() {
@@ -78,7 +77,7 @@ public class WheelView extends ScrollView {
     }
 
 
-    public static final int OFF_SET_DEFAULT = 0;
+    public static final int OFF_SET_DEFAULT = 1;
     int offset = OFF_SET_DEFAULT; // 偏移量（需要在最前面和最后面补全）
 
     public int getOffset() {
@@ -96,10 +95,6 @@ public class WheelView extends ScrollView {
 
     private void init(Context context) {
         this.context = context;
-
-//        scrollView = ((ScrollView)this.getParent());
-//        Log.d(TAG, "scrollview: " + scrollView);
-//        this.setOrientation(VERTICAL);
         this.setVerticalScrollBarEnabled(false);
 
         views = new LinearLayout(context);
@@ -111,9 +106,7 @@ public class WheelView extends ScrollView {
             public void run() {
 
                 int newY = getScrollY();
-                if (initialY - newY == 0) { // stopped
-//                    Log.d(TAG, "initialY: " + initialY);
-//                    Log.d(TAG, "remainder: " + remainder + ", divided: " + divided);
+                if (initialY - newY == 0) {
                     final int remainder = initialY % itemHeight;
                     final int divided = initialY / itemHeight;
                     if (remainder == 0) {
@@ -145,8 +138,7 @@ public class WheelView extends ScrollView {
 
                     }
 
-
-                } else {
+                }else {
                     initialY = getScrollY();
                     WheelView.this.postDelayed(scrollerTask, newCheck);
                 }
@@ -164,11 +156,12 @@ public class WheelView extends ScrollView {
     public void startScrollerTask() {
 
         initialY = getScrollY();
+        AppLog.print("startScrollerTask___initialY=_"+initialY);
         this.postDelayed(scrollerTask, newCheck);
     }
 
     private void initData() {
-        displayItemCount = offset * 2 + 7;
+        displayItemCount = offset * 2 + 1;
 
         for (Country item : items) {
             views.addView(createView(item));
@@ -179,25 +172,6 @@ public class WheelView extends ScrollView {
 
     int itemHeight = 0;
 
-    //    private TextView createView(String item) {
-//        TextView tv = new TextView(context);
-//        tv.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//        tv.setSingleLine(true);
-//        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
-//        tv.setText(item);
-//        tv.setGravity(Gravity.CENTER);
-//        int padding = dip2px(15);
-//        tv.setPadding(padding, padding, padding, padding);
-//        if (0 == itemHeight) {
-//            itemHeight = getViewMeasuredHeight(tv);
-//            Log.d(TAG, "itemHeight: " + itemHeight);
-//            views.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight * displayItemCount));
-//            LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) this.getLayoutParams();
-//            this.setLayoutParams(new LinearLayout.LayoutParams(lp.width, itemHeight * displayItemCount));
-//        }
-//        return tv;
-//    }
-//
     private View createView(Country item) {
         View view = LayoutInflater.from(context).inflate(R.layout.country_select_item, this, false);
         int height=(int) getResources().getDimension(R.dimen.wheel_dialog_item_height);
@@ -221,24 +195,7 @@ public class WheelView extends ScrollView {
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         super.onScrollChanged(l, t, oldl, oldt);
 
-//        Log.d(TAG, "l: " + l + ", t: " + t + ", oldl: " + oldl + ", oldt: " + oldt);
-
-//        try {
-//            Field field = ScrollView.class.getDeclaredField("mScroller");
-//            field.setAccessible(true);
-//            OverScroller mScroller = (OverScroller) field.get(this);
-//
-//
-//            if(mScroller.isFinished()){
-//                Log.d(TAG, "isFinished...");
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-
-        refreshItemView(t - 15);
+        refreshItemView(t);
 
         if (t > oldt) {
 //            Log.d(TAG, "向下滚动");
@@ -264,30 +221,6 @@ public class WheelView extends ScrollView {
                 position = divided + offset + 1;
             }
 
-//            if(remainder > itemHeight / 2){
-//                if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//                    position = divided + offset;
-//                    Log.d(TAG, ">down...position: " + position);
-//                }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//                    position = divided + offset + 1;
-//                    Log.d(TAG, ">up...position: " + position);
-//                }
-//            }else{
-////                position = y / itemHeight + offset;
-//                if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//                    position = divided + offset;
-//                    Log.d(TAG, "<down...position: " + position);
-//                }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//                    position = divided + offset + 1;
-//                    Log.d(TAG, "<up...position: " + position);
-//                }
-//            }
-//        }
-
-//        if(scrollDirection == SCROLL_DIRECTION_DOWN){
-//            position = divided + offset;
-//        }else if(scrollDirection == SCROLL_DIRECTION_UP){
-//            position = divided + offset + 1;
         }
 
         int childSize = views.getChildCount();
@@ -298,14 +231,11 @@ public class WheelView extends ScrollView {
                 return;
             }
             ViewGroup container = (ViewGroup) itemView;
-//            AppLog.print("container__"+container+", size__");
             if (position == i) {
                 for (int j = 0; j < container.getChildCount(); j++) {
                     container.getChildAt(j).setSelected(true);
                 }
-//                itemView.setTextColor(Color.parseColor("#0288ce"));
             } else {
-//                itemView.setTextColor(Color.parseColor("#bbbbbb"));
                 for (int j = 0; j < container.getChildCount(); j++) {
                     container.getChildAt(j).setSelected(false);
                 }
@@ -424,7 +354,6 @@ public class WheelView extends ScrollView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_UP) {
-
             startScrollerTask();
         }
         return super.onTouchEvent(ev);

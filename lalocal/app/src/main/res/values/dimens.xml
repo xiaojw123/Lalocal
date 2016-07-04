@@ -20,6 +20,7 @@
     <dimen name="dimen_size_20_dp">20dp</dimen>
     <dimen name="dimen_size_25_dp">25dp</dimen>
     <dimen name="dimen_size_36_dp">36dp</dimen>
+    <dimen name="dimen_size_100_dp">100dp</dimen>
     <dimen name="custom_dialog_container_width">270dp</dimen>
     <dimen name="custom_dialog_container_padding">20dp</dimen>
     <dimen name="custom_dialog_message_top_margin">15dp</dimen>

@@ -2,7 +2,6 @@ package com.lalocal.lalocal.service;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -145,9 +144,10 @@ public class ContentService {
 
 
     //发送验证码
-    public void sendVerificationCode(String email) {
+    public void sendVerificationCode(String email, TextView textView) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SEND_VERIFICATION_CODE);
+            response.setResponseView(textView);
             response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.SEND_VERIFICATION_URL, response, response);
@@ -157,13 +157,12 @@ public class ContentService {
     }
 
     //判断邮箱是否被注册过
-    public void checkEmail(String email, TextView next_tv) {
+    public void checkEmail(String email) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
             response.setEmail(email);
-            response.setResponseView(next_tv);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
+        ContentRequest request = new   ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
         request.setBodyParams(getCheckParams(email));
         requestQueue.add(request);
     }
@@ -346,7 +345,6 @@ public class ContentService {
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
             if (responseView != null) {
-                AppLog.print("responseView___" + responseView);
                 responseView.setEnabled(true);
             }
             if (callBack != null) {
@@ -357,12 +355,11 @@ public class ContentService {
 
         @Override
         public void onResponse(String json) {
-            AppLog.print("onResponse___");
+            AppLog.print("onResponse__");
             if (responseView != null) {
-                AppLog.print("resView___" + responseView);
                 responseView.setEnabled(true);
             }
-            JSONObject jsonObj = null;
+            JSONObject jsonObj;
             try {
                 if (TextUtils.isEmpty(json)) {
                     return;
@@ -395,7 +392,7 @@ public class ContentService {
                         responseCheckMail();
                         break;
                     case RequestCode.SEND_VERIFICATION_CODE:
-                        responseSendVerCode(json);
+                        responseSendVerCode();
                         break;
                     case RequestCode.RESET_PASSWORD:
                         responseResetPassword(json);
@@ -586,19 +583,12 @@ public class ContentService {
             }
         }
 
-        private void responseSendVerCode(String json) {
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                int code = jsonObject.optInt(ResultParams.RESULT_CODE, -1);
-                callBack.onSendVerCode(code, email);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
+        private void responseSendVerCode() {
+            callBack.onSendVerCode(email);
         }
 
         private void responseCheckMail() {
+            AppLog.print("checkMail___");
             callBack.onCheckEmail(email);
         }
 
@@ -682,7 +672,7 @@ public class ContentService {
                 jsonObj.put("nickName", nickname);
             }
             if (sex == 1 || sex == 0) {
-                boolean flag = sex == 1 ? true : false;
+                boolean flag = (sex == 1);
                 jsonObj.put("sex", flag);
             }
             if (!TextUtils.isEmpty(areaCode)) {
@@ -772,10 +762,7 @@ public class ContentService {
         Map<String, String> headers = new HashMap<>();
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
-        //  headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        String DEVICE_ID = tm.getDeviceId();
-        headers.put("DEVICE_ID", DEVICE_ID);
+        headers.put("DEVICE_ID", CommonUtil.getUUID(context));
         return headers;
     }
 
@@ -793,31 +780,31 @@ public class ContentService {
     }
 
     interface ResultParams {
-        public static final String RESULT_CODE = "returnCode";
-        public static final String MESSAGE = "message";
-        public static final String REULST = "result";
+        String RESULT_CODE = "returnCode";
+        String MESSAGE = "message";
+        String REULST = "result";
     }
 
     interface RequestCode {
-        public static final int REGISTER = 100;
-        public static final int LOGIN = 101;
-        public static final int CHECK_EMAIL = 102;
-        public static final int SEND_VERIFICATION_CODE = 103;
-        public static final int RESET_PASSWORD = 104;
-        public static final int GET_FAVORITE_ITEMS = 105;
-        public static final int MODIFY_USER_PROFILE = 107;
-        public static final int GET_USER_PROFILE = 108;
-        public static final int BOUDN_EMAIL = 109;
-        public static final int GET_MY_COUPON = 110;
-        public static final int GET_MY_ORDER = 111;
+        int REGISTER = 100;
+        int LOGIN = 101;
+        int CHECK_EMAIL = 102;
+        int SEND_VERIFICATION_CODE = 103;
+        int RESET_PASSWORD = 104;
+        int GET_FAVORITE_ITEMS = 105;
+        int MODIFY_USER_PROFILE = 107;
+        int GET_USER_PROFILE = 108;
+        int BOUDN_EMAIL = 109;
+        int GET_MY_COUPON = 110;
+        int GET_MY_ORDER = 111;
 
-        public static final int GET_ORDER_DETAIL = 112;
-        public static final int RECOMMEND = 200;
-        public static final int RECOMMEND_AD = 201;
-        public static final int SPECIAL_DETAIL = 202;
-        public static final int PRODUCT_DETAILS = 203;
-        public static final int CANCEL_PARISES = 204;
-        public static final int PARISES = 205;
+        int GET_ORDER_DETAIL = 112;
+        int RECOMMEND = 200;
+        int RECOMMEND_AD = 201;
+        int SPECIAL_DETAIL = 202;
+        int PRODUCT_DETAILS = 203;
+        int CANCEL_PARISES = 204;
+        int PARISES = 205;
 
     }
 

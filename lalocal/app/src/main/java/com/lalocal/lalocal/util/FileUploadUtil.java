@@ -23,55 +23,6 @@ import java.net.URL;
  */
 public class FileUploadUtil {
     public static void uploadFile(Context context, Intent backIntent, byte[] bodyData, int userid, String token) {
-        AppLog.print("uploadFile____");
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    String end = "\r\n";
-//                    String twoHyphens = "--";
-//                    String boundary = "__X_PAW_BOUNDARY__";
-//                    URL url = new URL(AppConfig.UPLOAD_HEDARE_URL);
-//                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-//                    urlConnection.setRequestMethod("POST");
-//                    urlConnection.setConnectTimeout(5000);
-//                    urlConnection.setReadTimeout(5000);
-//                    urlConnection.setDoInput(true);
-//                    urlConnection.setDoOutput(true);
-//                    urlConnection.setRequestProperty("Content-Type", "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__");
-//                    urlConnection.setRequestProperty("APP_VERSION", AppConfig.getVersionName(context));
-//                    urlConnection.setRequestProperty("DEVICE", "android");
-//                    urlConnection.setRequestProperty("DEVICE_ID", CommonUtil.getUUID(context));
-//                    urlConnection.setRequestProperty("USER_ID", String.valueOf(userid));
-//                    urlConnection.setRequestProperty("TOKEN", token);
-//                    urlConnection.connect();
-//                    DataOutputStream dos = new DataOutputStream(urlConnection.getOutputStream());
-//                    dos.writeBytes(twoHyphens + boundary + end);
-//                    dos.writeBytes("Content-Disposition: form-data; " + "name=avatar;filename=alipay_m@3x.png; mimeType:image/*" + end);
-//                    dos.writeBytes(end);
-//                    dos.write(bodyData);
-//                    dos.writeBytes(end);
-//                    dos.writeBytes(twoHyphens + boundary + twoHyphens + end);
-//                    dos.flush();
-//                    dos.close();
-//                    AppLog.print("rescode__" + urlConnection.getResponseCode());
-//                    InputStream is = urlConnection.getInputStream();
-//                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-//                    StringBuffer sb = new StringBuffer();
-//                    String line = null;
-//                    if ((line = br.readLine()) != null) {
-//                        sb.append(line);
-//                    }
-//                    br.close();
-//                    is.close();
-//                    backIntent.putExtra(KeyParams.AVATAR, getAvatar(sb.toString()));
-//                    AppLog.print("res message___" + sb.toString());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//            }
-//        }).start();
         UploadTask task = new UploadTask(context, backIntent);
         task.setHeadParams(String.valueOf(userid), token);
         task.setBodyBytes(bodyData);
@@ -102,7 +53,6 @@ public class FileUploadUtil {
 
         @Override
         protected String doInBackground(String... params) {
-            AppLog.print("doInBackGroud start_____" + params[0]);
             StringBuffer sb = new StringBuffer();
             try {
                 String end = "\r\n";
@@ -121,24 +71,19 @@ public class FileUploadUtil {
                 urlConnection.setRequestProperty("DEVICE_ID", uuid);
                 urlConnection.setRequestProperty("USER_ID", String.valueOf(userid));
                 urlConnection.setRequestProperty("TOKEN", token);
-                AppLog.print("doin connectoin____");
                 DataOutputStream dos = new DataOutputStream(urlConnection.getOutputStream());
                 dos.writeBytes(twoHyphens + boundary + end);
                 dos.writeBytes("Content-Disposition: form-data; " + "name=avatar;filename=alipay_m@3x.png; mimeType:image/*" + end);
                 dos.writeBytes(end);
                 dos.write(bodyBytes);
-                AppLog.print("bodyBytes__"+bodyBytes);
                 dos.writeBytes(end);
                 dos.writeBytes(twoHyphens + boundary + twoHyphens + end);
                 dos.flush();
-                AppLog.print("doin writeBytes____");
                 InputStream is = urlConnection.getInputStream();
-                AppLog.print("is____response__");
                 BufferedReader br = new BufferedReader(new InputStreamReader(is));
                 String line = null;
                 if ((line = br.readLine()) != null) {
                     sb.append(line);
-                    AppLog.print("line__" + line);
                 }
                 br.close();
                 is.close();
@@ -147,7 +92,6 @@ public class FileUploadUtil {
 //                e.printStackTrace();
                 return null;
             }
-            AppLog.print("doInBackGroud end_____" + sb.toString());
             return sb.toString();
         }
 
@@ -169,11 +113,5 @@ public class FileUploadUtil {
     }
 
 
-    public static String getAvatar(String result) throws JSONException {
-        JSONObject jsonObj = new JSONObject(result);
-        JSONObject resultJson = jsonObj.optJSONObject("result");
-        return resultJson.optString("avatar", null);
-
-    }
 
 }

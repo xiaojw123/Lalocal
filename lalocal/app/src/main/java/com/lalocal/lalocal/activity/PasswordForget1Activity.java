@@ -7,11 +7,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -49,7 +49,6 @@ public class PasswordForget1Activity extends BaseActivity implements View.OnClic
         if (v == backImg) {
             finish();
         } else if (v == next_tv) {
-            AppLog.print("click__enable___");
             String email = email_edit.getText().toString();
             if (TextUtils.isEmpty(email)) {
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), this);
@@ -60,8 +59,7 @@ public class PasswordForget1Activity extends BaseActivity implements View.OnClic
                 return;
             }
             next_tv.setEnabled(false);
-            AppLog.print("nextv__"+next_tv);
-            contentService.checkEmail(email, next_tv);
+            contentService.sendVerificationCode(email, next_tv);
         }
     }
 
@@ -73,23 +71,12 @@ public class PasswordForget1Activity extends BaseActivity implements View.OnClic
 
     class CallBack extends ICallBack {
         @Override
-        public void onCheckEmail(String email) {
-            next_tv.setEnabled(false);
-            contentService.sendVerificationCode(email);
+        public void onSendVerCode(String email) {
+            Toast.makeText(PasswordForget1Activity.this,"邮件已发送",Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(PasswordForget1Activity.this, PasswordForget2Activity.class);
+            intent.putExtra(Email, email);
+            startActivityForResult(intent, 100);
         }
-
-        @Override
-        public void onSendVerCode(int code, String email) {
-            next_tv.setEnabled(true);
-            if (code == 0) {
-                Intent intent = new Intent(PasswordForget1Activity.this, PasswordForget2Activity.class);
-                intent.putExtra(Email, email);
-                startActivityForResult(intent, 100);
-            } else {
-                CommonUtil.showPromptDialog(PasswordForget1Activity.this, getResources().getString(R.string.ver_code_send_failed), PasswordForget1Activity.this);
-            }
-        }
-
     }
 
     @Override

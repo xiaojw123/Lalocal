@@ -20,10 +20,13 @@
                 android:id="@+id/wheeldialog_save_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:paddingLeft="@dimen/dimen_size_10_dp"
                 android:text="@string/save"
                 android:gravity="center"
+                android:textSize="@dimen/text_size_17_sp"
                 android:layout_gravity="right|center_vertical"
-                android:textColor="@color/color_ffaa2a"
+                android:textColor="@color/color_eeee00"
+                android:textStyle="bold"
                 android:paddingRight="@dimen/dimen_size_10_dp"
                 />
 
@@ -32,11 +35,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_size_1_dp"
-            android:background="@color/color_b3"
-            />i
+            android:background="@color/color_30b3"
+            />
         <View
             android:layout_width="match_parent"
-            android:layout_height="100dp"/>
+            android:layout_height="80dp"/>
 
 
         <com.lalocal.lalocal.view.WheelView

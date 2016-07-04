@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.util.AppLog;
 
 public class HomeActivity extends BaseActivity {
     RelativeLayout home_recommend_tab, home_destination_tab, home_news_tab, home_me_tab;
@@ -21,6 +22,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
         initView();
     }

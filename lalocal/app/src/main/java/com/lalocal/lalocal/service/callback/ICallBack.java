@@ -67,7 +67,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onSendVerCode(int code, String email) {
+    public void onSendVerCode(String email) {
 
     }
 

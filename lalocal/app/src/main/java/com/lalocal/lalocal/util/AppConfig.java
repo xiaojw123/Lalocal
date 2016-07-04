@@ -9,7 +9,10 @@ import android.content.pm.PackageManager;
 public class AppConfig {
         //用户协议-h5
         public static final String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
+        //
         public static final String BASE_URL = "http://dev.lalocal.cn:8080/api/";
+        //生产环境
+//        public static final String BASE_URL = "http://api.lalocal.cn/api";
         //注册接口
         public static final String REGISTER_URL = BASE_URL + "users/register";
         //登录接口
