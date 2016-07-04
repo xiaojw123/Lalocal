@@ -41,7 +41,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private int result;
     private Context mContext=ArticleActivity.this;
     private LinearLayout back;
-
+    private View placeHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         collectTv = (TextView) findViewById(R.id.article_collect_tv);
         backBtn = (ImageView) findViewById(R.id.common_back_btn);
         back = (LinearLayout) findViewById(R.id.article_back_btn);
+        placeHolder = findViewById(R.id.place_holder);
 
         //点击事件
         btnLike.setOnClickListener(this);
@@ -151,6 +152,7 @@ boolean isPraises=true;
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 AppLog.i("1111111111111111111111111111",url);
+                placeHolder.setVisibility(View.GONE);
                 if(isLoading){
                     isLoading=false;
                     articleWebview.loadUrl("https://dev.lalocal.cn/wechat/app_article?id=" + articleDetailsBean.getTargetId());

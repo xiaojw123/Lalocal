@@ -29,11 +29,20 @@
                 android:orientation="vertical"
                 android:padding="5dp"
                 android:background="@drawable/article_details_bg">
-                <WebView
-                    android:id="@+id/article_webview"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    ></WebView>
+                    android:layout_height="match_parent">
+                    <WebView
+                        android:id="@+id/article_webview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scrollbars="none"
+                        ></WebView>
+                    <View
+                        android:id="@+id/place_holder"
+                        android:layout_width="match_parent"
+                        android:layout_height="1000dp"></View>
+                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
