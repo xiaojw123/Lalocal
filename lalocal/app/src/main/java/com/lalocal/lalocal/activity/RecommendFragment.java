@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.activity;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,6 +59,8 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private int page = 2;
    private  ContentService contentService;
 
+    private View header;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,10 +82,11 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         xlistview.setPullRefreshEnable(true);
         xlistview.setXListViewListener(this);
 
-        vhdf = LayoutInflater.from(getActivity()).inflate(R.layout.viewpager, null);
-        cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content);
-
-        xlistview.addHeaderView(vhdf);
+        cycleViewPager = new CycleViewPager();
+        header = View.inflate(getActivity(), R.layout.viewpager, null);
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.add(R.id.fragment_cycle_viewpager_content, cycleViewPager).commit();
+        xlistview.addHeaderView(header);
         xlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

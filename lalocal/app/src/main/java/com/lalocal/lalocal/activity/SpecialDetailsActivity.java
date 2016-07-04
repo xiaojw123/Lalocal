@@ -3,6 +3,9 @@ package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
@@ -17,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
@@ -265,9 +267,16 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     //显示h5页面
     private void showWebview(String h5Url) {
         specialWebView = (WebView) findViewById(R.id.special_details_webview);
+        if(Build.VERSION.SDK_INT >= 19) {
+            specialWebView.getSettings().setLoadsImagesAutomatically(true);
+        } else {
+            specialWebView.getSettings().setLoadsImagesAutomatically(false);
+        }
         settings = specialWebView.getSettings();
         specialWebView.loadUrl(h5Url);
         settings.setJavaScriptEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         specialWebView.setWebViewClient(new MyWebViewClient());
 
     }
@@ -408,14 +417,25 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if (isLoading) {
+            ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+            String typeName = networkInfo.getTypeName();
+            if(typeName.equalsIgnoreCase("WIFI")&&isLoading){
+                isLoading=false;
                 specialWebView.reload();
-                isLoading = false;
             }
+
+            if(!specialWebView.getSettings().getLoadsImagesAutomatically()) {
+                specialWebView.getSettings().setLoadsImagesAutomatically(true);
+            }
+
             loadingPage.setVisibility(View.GONE);
 
+
         }
-    }
+
+        }
+
 
     //分享
     private void showShare(SpecialShareVOBean shareVO) {
