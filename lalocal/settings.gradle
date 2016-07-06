@@ -1,5 +1,5 @@
-<<<<<<< HEAD
-include ':app', ':wkvideoplayer', ':library', ':shinebuttonlib'
-=======
-include ':app', ':wkvideoplayer'
->>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
+
+include ':app', ':library', ':shinebuttonlib', ':wkvideoplayer'
+
+include ':app'
+

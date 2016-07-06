@@ -36,15 +36,15 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/special_details_margin"
                     android:src="@drawable/index_article_btn_share"/>
-              <!--  <ImageView
-                    android:id="@+id/special_details_like_iv"
-                    android:layout_width="@dimen/special_details_img_like"
-                    android:layout_height="@dimen/special_details_img_like"
-                    android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/special_details_share_iv"
-                    android:layout_marginRight="@dimen/special_details_margin"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/index_article_btn_like"/>-->
+                <!--  <ImageView
+                      android:id="@+id/special_details_like_iv"
+                      android:layout_width="@dimen/special_details_img_like"
+                      android:layout_height="@dimen/special_details_img_like"
+                      android:layout_centerVertical="true"
+                      android:layout_toLeftOf="@+id/special_details_share_iv"
+                      android:layout_marginRight="@dimen/special_details_margin"
+                      android:scaleType="fitXY"
+                      android:src="@drawable/index_article_btn_like"/>-->
 
                 <com.sackcentury.shinebuttonlib.ShineButton
                     android:layout_width="@dimen/special_details_img_like"
@@ -62,14 +62,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/font_black_2"></View>
-             <LinearLayout
-                   android:id="@+id/height_layout"
-                   android:layout_width="match_parent"
-                   android:layout_height="wrap_content"
-                   android:orientation="vertical"
-                 android:visibility="gone"
-                   >
-               </LinearLayout>
+            <LinearLayout
+                android:id="@+id/height_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+            </LinearLayout>
 
             <com.lalocal.lalocal.view.MyScrollView
                 android:layout_width="match_parent"
@@ -99,14 +99,13 @@
                         </LinearLayout>
                         <include layout="@layout/video_layout"></include>
                         <include layout="@layout/photo_to_text"></include>
-                        android:id="@+id/special_details_webview"
                     </RelativeLayout>
-                        <WebView
-                            android:id="@+id/special_details_webview"
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            ></WebView>
+                    <WebView
+                        android:id="@+id/special_details_webview"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        ></WebView>
                 </LinearLayout>
             </com.lalocal.lalocal.view.MyScrollView>
 

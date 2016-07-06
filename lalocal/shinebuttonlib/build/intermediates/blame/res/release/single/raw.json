@@ -4,18 +4,6 @@
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\src\\main\\res\\raw\\heart.png"
     },
     {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\release\\raw\\smile.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\src\\main\\res\\raw\\smile.png"
-    },
-    {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\release\\raw\\star.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\src\\main\\res\\raw\\star.png"
-    },
-    {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\release\\raw\\like.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\src\\main\\res\\raw\\like.png"
-    },
-    {
         "merged": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\release\\raw\\smile.png",
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\src\\main\\res\\raw\\smile.png"
     },
@@ -26,9 +14,5 @@
     {
         "merged": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\release\\raw\\star.png",
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\src\\main\\res\\raw\\star.png"
-    },
-    {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\release\\raw\\heart.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\src\\main\\res\\raw\\heart.png"
     }
 ]

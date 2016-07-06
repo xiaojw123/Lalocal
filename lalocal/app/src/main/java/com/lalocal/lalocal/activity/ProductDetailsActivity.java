@@ -1,11 +1,10 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler.Callback;
+import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
@@ -40,11 +39,9 @@ import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.mob.tools.utils.UIHandler;
 import com.sackcentury.shinebuttonlib.ShineButton;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -52,7 +49,7 @@ import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by lenovo on 2016/6/22.
  */
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener,PlatformActionListener,Callback {
+public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener,PlatformActionListener,Handler.Callback {
 
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
@@ -208,7 +205,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     if(praiseFlag){
                         contentService.cancelParises(praiseId);
 
-                }
+                    }
                     else {//添加收藏
                         int targetId = specialToH5Bean.getTargetId();
                         contentService.specialPraise(targetId, 2);//点赞
@@ -251,10 +248,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 String photo = result.photo;
                 praiseFlag = result.praiseFlag;
                 if (praiseFlag) {
-                   // btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                    // btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
                     btnLike.setChecked(true);
                 } else {
-                   // btnLike.setImageResource(R.drawable.index_article_btn_like);
+                    // btnLike.setImageResource(R.drawable.index_article_btn_like);
                     btnLike.setChecked(false);
 
                 }

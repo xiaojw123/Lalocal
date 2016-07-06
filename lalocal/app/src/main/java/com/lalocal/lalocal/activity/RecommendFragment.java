@@ -57,7 +57,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private int itemCount = 0;
     boolean firstRefresh = true;
     private int page = 2;
-   private  ContentService contentService;
+    private  ContentService contentService;
 
     private View header;
 
@@ -97,7 +97,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     int rowId = recommendRowsBean.getId();
 
                     Intent intent=new Intent(getActivity(),SpecialDetailsActivity.class);
-
                     intent.putExtra("rowId",rowId+"");
                     startActivity(intent);
 

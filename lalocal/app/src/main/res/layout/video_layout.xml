@@ -7,7 +7,6 @@
     android:gravity="center"
     android:layout_centerInParent="true"
     >
-
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -29,7 +28,5 @@
         </com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer>
 
     </FrameLayout>
-
-
 
 </RelativeLayout>

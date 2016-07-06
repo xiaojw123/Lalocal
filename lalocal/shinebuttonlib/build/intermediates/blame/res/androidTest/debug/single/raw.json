@@ -1,9 +1,5 @@
 [
     {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\like.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\like.png"
-    },
-    {
         "merged": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\like.png",
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\like.png"
     },
@@ -12,23 +8,11 @@
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\heart.png"
     },
     {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\heart.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\heart.png"
-    },
-    {
         "merged": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\smile.png",
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\smile.png"
     },
     {
         "merged": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\star.png",
         "source": "D:\\lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\star.png"
-    },
-    {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\star.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\star.png"
-    },
-    {
-        "merged": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\raw\\smile.png",
-        "source": "C:\\Users\\android\\Desktop\\ShineButton-master\\shinebuttonlib\\build\\intermediates\\bundles\\debug\\res\\raw\\smile.png"
     }
 ]

@@ -21,21 +21,15 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-<<<<<<< HEAD
-
-=======
->>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.HomeActivity"
-<<<<<<< HEAD
             android:hardwareAccelerated="false"
-=======
             android:screenOrientation="portrait"
->>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
+
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -96,11 +90,11 @@
             android:name=".activity.VideoActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity"></activity>
-<<<<<<< HEAD
+
         <activity android:name=".activity.ArticleTestAct"></activity>
-=======
+
         <activity android:name=".activity.TestAct"></activity>
->>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
+
 
         <!--分享-->
         <activity

@@ -4,7 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
    >
-   <!-- android:name="com.lalocal.lalocal.view.viewpager.CycleViewPager"-->
     <RelativeLayout
 
         android:layout_width="match_parent"

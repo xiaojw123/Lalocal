@@ -17,9 +17,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-
 import android.view.ViewGroup;
-
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -104,13 +102,12 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private int praiseId;
     private String h5Url;
     private View mPlayBtnView;
-
     private RelativeLayout relativeLayout;
     private View line;
     private boolean isPause;
     private SecretTextView textContent;
     private SecretTextView textName;
-
+    private int bannerType=5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +117,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         initView();
         initData();
     }
-
     private void initView() {
         back = (ImageView) findViewById(R.id.common_back_btn);
         detailsLike = (ShineButton) findViewById(R.id.special_details_like_iv);
@@ -137,7 +133,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         banerContent = (RelativeLayout) findViewById(R.id.special_title_content);
         line = findViewById(R.id.special_line);
         relativeLayout = (RelativeLayout) findViewById(R.id.reLayout);
-
         mPlayBtnView = findViewById(R.id.play_btn);
         mPlayBtnView.setOnClickListener(this);
         back.setOnClickListener(this);
@@ -207,23 +202,24 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 }
 
                 if (praiseFlag) {
-                 //   detailsLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                    //   detailsLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
                     detailsLike.setChecked(true);
                 } else {
-                  //  detailsLike.setImageResource(R.drawable.index_article_btn_like);
+                    //  detailsLike.setImageResource(R.drawable.index_article_btn_like);
                     detailsLike.setChecked(false);
                 }
                 bannerBean = spectialDetailsResp.result.banner;
+
                 if (bannerBean != null) {
-                    int type = bannerBean.type;
+                    bannerType = bannerBean.type;
                     //type : 画报类型 0 为图⽚  1为视频
-                    if (type == 0) {
+                    if (bannerType == 0) {
                         // 显示图片和文字
                         videoLayoout.setVisibility(View.GONE);
                         photoLayout.setVisibility(View.VISIBLE);
                         imgLayout.setVisibility(View.GONE);
                         showArtworkAndText(bannerBean);
-                    } else if (type == 1) {
+                    } else if (bannerType == 1) {
                         // 播放视频
                         String videoUrl = bannerBean.videoUrl;
                         photoLayout.setVisibility(View.GONE);
@@ -255,7 +251,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         @Override
         public void onInputPariseResult(PariseResult pariseResult) {
             super.onInputPariseResult(pariseResult);
-           // detailsLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+            // detailsLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
             detailsLike.setChecked(true);
             praiseId1 = pariseResult.getResult();
             praiseFlag = true;
@@ -268,7 +264,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         public void onPariseResult(PariseResult pariseResult) {
             super.onPariseResult(pariseResult);
 
-          //  detailsLike.setImageResource(R.drawable.index_article_btn_like);
+            //  detailsLike.setImageResource(R.drawable.index_article_btn_like);
             detailsLike.setChecked(false);
             praiseFlag = false;
         }
@@ -349,21 +345,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private void playVideo(final String videoUrl) {
         mPlayBtnView.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
-
         videoView.setAutoHideController(true);
         Uri uri = Uri.parse(videoUrl);
         videoView.loadAndPlay(uri, 0);
-
-        videoView.setAutoHideController(false);
-        Uri uri = Uri.parse(videoUrl);
-        videoView.loadAndPlay(uri, 0);
-    }
-
-
-    /**
-     * 播放器的回调函数
-     */
-    private SuperVideoPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new SuperVideoPlayer.VideoPlayCallbackImpl() {
 
 
     }
@@ -413,18 +397,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
 
 
-
-        @Override
-        public void onCloseVideo() {
-            videoView.close();//关闭VideoView
-            mPlayBtnView.setVisibility(View.VISIBLE);
-            videoView.setVisibility(View.GONE);
-            resetPageToPortrait();
-        }
-
-        @Override
-        public void onSwitchPageType() {
-
         }
 
 
@@ -433,7 +405,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
          */
         @Override
         public void onPlayFinish() {
-
 
         }
     };
@@ -464,30 +435,13 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         specialWebView.setWebViewClient(new MyWebViewClient());
 
-
-        }
-    };
-    /***
-     * 恢复屏幕至竖屏
-     */
-    private void resetPageToPortrait() {
-        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-            videoView.setPageType(MediaController.PageType.SHRINK);
-        }
     }
-
-
-
-
-
 
 
     //滚动监听，超出视屏区域，暂停播放视屏
     @Override
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
         int i = DensityUtil.dip2px(mContext, 200);
-
         if (y > 600) {
             isPause = videoView.pausePlay(false);
             isPause=true;
@@ -495,14 +449,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             isPause=false;
             videoView.goOnPlay();
         }
-
-      /*  if (y > 600) {
-            videoView.pause();
-        } else {
-            videoView.start();
-        }
-*/
-
     }
 
     boolean isLoading = true;
@@ -520,12 +466,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                         if (articleDetailsBeanList != null) {
                             for (int i = 0; i < articleDetailsBeanList.size(); i++) {
                                 if (specialToH5Bean.getTargetId() == articleDetailsBeanList.get(i).getTargetId()) {
-
                                     Intent intent1 = new Intent(mContext, ArticleTestAct.class);
-
-                                 //   Intent intent1 = new Intent(mContext, ArticleActivity.class);
-                                    Intent intent1 = new Intent(mContext, TestActivity.class);
-
                                     intent1.putExtra("articleDetailsBean", articleDetailsBeanList.get(i));
                                     startActivity(intent1);
                                 }
@@ -572,19 +513,22 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             }
             loadingPage.setVisibility(View.GONE);
             //文字动画
-            if(isShowAnim){
-                isShowAnim=false;
-                textContent.toggle();
-                textContent.setIsVisible(true);
-                textContent.setDuration(3000);
-                textName.toggle();
-                textName.setIsVisible(true);
-                textName.setDuration(1500);
+            if(bannerType==0&&isShowAnim){
+
+                    isShowAnim=false;
+                    textContent.toggle();
+                    textContent.setIsVisible(true);
+                    textContent.setDuration(3000);
+                    textName.toggle();
+                    textName.setIsVisible(true);
+                    textName.setDuration(1500);
+
+
             }
 
         }
 
-        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
