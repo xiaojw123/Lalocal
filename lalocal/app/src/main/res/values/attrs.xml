@@ -21,5 +21,11 @@
     <!--CustomEditText style-->
     <declare-styleable name="CustomEditText">
         <attr name="text_hint" format="string"/>
+        <attr name="maxLen" format="integer"/>
+        <attr name="dights" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="CustomTitleView">
+        <attr name="title_name" format="string"/>
+        <attr name="lineVisible" format="boolean"/>
     </declare-styleable>
 </resources>

@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,11 +23,13 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
@@ -65,7 +68,15 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             xListView.stopRefresh();
         }
     };
+    OnMeFragmentListener fragmentListener;
 
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        AppLog.print("onAttach(Activity)___");
+        fragmentListener = (OnMeFragmentListener) activity;
+    }
 
     @Nullable
     @Override
@@ -123,15 +134,19 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (!hidden) {
+
+
             if (isLogined) {
-                contentService.getMyFavorite(user.getId(), user.getToken(), 1, 10);
-                contentService.getMyCoupon(user.getId(), user.getToken());
-                contentService.getMyOrder(user.getId(), user.getToken());
+                if (user != null) {
+                    contentService.getUserProfile(user.getId(), user.getToken());
+                    contentService.getMyFavorite(user.getId(), user.getToken(), 1, 10);
+                    contentService.getMyCoupon(user.getId(), user.getToken());
+                    contentService.getMyOrder(user.getId(), user.getToken());
+                }
             } else {
                 contentService.getMyFavorite(-1, null, 1, 10);
             }
         }
-
     }
 
     private View.OnClickListener meFragmentClickListener = new View.OnClickListener() {
@@ -205,12 +220,29 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             int status = data.getIntExtra(KeyParams.STATUS, -1);
             String nickname = data.getStringExtra(KeyParams.NICKNAME);
             String avatar = data.getStringExtra(KeyParams.AVATAR);
-            user.setStatus(status);
-            user.setNickName(nickname);
-            user.setAvatar(avatar);
-            updateFragmentView(isLogined, user);
+            int userid=data.getIntExtra(KeyParams.USERID,-1);
+            String token=data.getStringExtra(KeyParams.TOKEN);
+            if (user != null) {
+                user.setStatus(status);
+                user.setNickName(nickname);
+                user.setAvatar(avatar);
+                updateFragmentView(isLogined, user);
+            }
+            contentService.getUserProfile(userid,token);
+
+        } else if (resultCode == SettingActivity.IM_LOGIN) {
+            User user = data.getParcelableExtra(USER);
+            if (user != null) {
+                updateFragmentView(true, user);
+            } else {
+                String email = data.getStringExtra(LoginActivity.EMAIL);
+                String psw = data.getStringExtra(LoginActivity.PSW);
+                contentService.login(email, psw);
+            }
+            if (fragmentListener != null) {
+                fragmentListener.onShowRecommendFragment();
+            }
         }
-        ;
 
 
     }
@@ -227,6 +259,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             CommonUtil.setUserParams(userid, token);
             String nickname = user.getNickName();
             if (!TextUtils.isEmpty(nickname)) {
+                username_tv.setActivated(true);
                 username_tv.setText(nickname);
             }
             if (verified_tv.getVisibility() != View.VISIBLE) {
@@ -249,6 +282,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             contentService.getMyOrder(userid, token);
         } else {
             CommonUtil.setUserParams(-1, null);
+            username_tv.setActivated(false);
             username_tv.setText(getResources().getString(R.string.please_login));
             verified_tv.setVisibility(View.GONE);
             headImg.setImageResource(R.drawable.home_me_personheadnormal);
@@ -321,7 +355,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             case 13://资讯
                 Intent intent = new Intent(getActivity(), ArticleActivity.class);
                 ArticleDetailsBean bean = new ArticleDetailsBean();
-             //   bean.setCollected(true);
+                //   bean.setCollected(true);
                 bean.setTargetId(item.getTargetId());
                 intent.putExtra("articleDetailsBean", bean);
                 startActivity(intent);
@@ -360,6 +394,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             favoriteTotalPages = totalPages;
             if (!isRefresh) {
                 allItems.clear();
+            } else {
+                isRefresh = false;
             }
             if (allItems.size() == 0) {
                 allItems.addAll(items);
@@ -398,6 +434,27 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             }
 
         }
+
+        //只刷新验证状态————
+        @Override
+        public void onGetUserProfile(LoginUser user) {
+            if (user != null) {
+                if (user.getStatus() == 0) {
+                    verified_tv.setActivated(true);
+
+                    verified_tv.setText(getResources().getString(R.string.verified));
+                } else {
+                    verified_tv.setActivated(false);
+                    verified_tv.setText(getResources().getString(R.string.no_verified));
+                }
+            }
+
+        }
+    }
+
+    public static interface OnMeFragmentListener {
+        void onShowRecommendFragment();
+
     }
 
 

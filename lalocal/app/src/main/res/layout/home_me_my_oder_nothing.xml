@@ -23,6 +23,8 @@
             android:text="@string/no_oder"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_size_15_dp"
+            android:textSize="@dimen/text_size_18_sp"
+            android:textColor="@color/color_b3"
             android:layout_below="@+id/my_oder_nothing_img"
             />
     </RelativeLayout>

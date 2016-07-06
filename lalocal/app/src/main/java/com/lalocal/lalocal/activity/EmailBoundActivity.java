@@ -1,11 +1,9 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
@@ -15,12 +13,11 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class EmailBoundActivity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
+public class EmailBoundActivity extends BaseActivity implements View.OnClickListener {
     public static final int RESULIT_CODE_BOUND_EMAIL = 103;
     CustomEditText email_edit;
     Button change_email_btn;
     ContentService contentService;
-    ImageView backImg;
     boolean isBoundEmail;
 
     @Override
@@ -28,17 +25,13 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.email_bound_layout);
         initService();
-        backImg = (ImageView) findViewById(R.id.common_back_btn);
         email_edit = (CustomEditText) findViewById(R.id.emailbound_email_edit);
         change_email_btn = (Button) findViewById(R.id.emailbound_change_email_btn);
         email_edit.setEidtType(CustomEditText.TYPE_1);
         email_edit.setText(getUserEmail());
+        email_edit.setDefaultSelectionEnd(true);
         email_edit.setClearButtonVisible(false);
-        backImg.setOnClickListener(this);
         change_email_btn.setOnClickListener(this);
-
-
-
     }
 
     private void initService() {
@@ -52,12 +45,14 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v == backImg) {
-            finish();
-        } else if (v == change_email_btn) {
+        if (v == change_email_btn) {
             String email = email_edit.getText().toString();
             if (!CommonUtil.checkEmail(email)) {
-                CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), this);
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), null);
+                return;
+            }
+            if (email.equals(getUserEmail())) {
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_change), null);
                 return;
             }
             contentService.boundEmail(email, getUserId(), getToken());
@@ -73,28 +68,20 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
         return getIntent().getStringExtra(KeyParams.TOKEN);
     }
 
-    @Override
-    public void onDialogClickListener(Dialog dialog, View view) {
-        dialog.dismiss();
-        if (isBoundEmail) {
-            isBoundEmail = false;
+
+    class CallBack extends ICallBack implements CustomDialog.CustomDialogListener {
+
+        @Override
+        public void onSendActivateEmmailComplete() {
+            CommonUtil.showPromptDialog(EmailBoundActivity.this, getResources().getString(R.string.register_success_prompt), this);
+        }
+
+        @Override
+        public void onDialogClickListener() {
             Intent intent = new Intent();
             intent.putExtra(KeyParams.EMAIL, email_edit.getText().toString());
             setResult(RESULIT_CODE_BOUND_EMAIL, intent);
             finish();
-        }
-    }
-
-    class CallBack extends ICallBack {
-
-        @Override
-        public void onSendActivateEmmailComplete(int code, String message) {
-            if (code == 0) {
-                isBoundEmail = true;
-                CommonUtil.showPromptDialog(EmailBoundActivity.this, getResources().getString(R.string.register_success_prompt), EmailBoundActivity.this);
-            } else {
-                CommonUtil.showPromptDialog(EmailBoundActivity.this, message, EmailBoundActivity.this);
-            }
         }
     }
 

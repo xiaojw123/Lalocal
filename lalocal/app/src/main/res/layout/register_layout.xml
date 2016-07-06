@@ -7,25 +7,11 @@
     android:orientation="vertical"
     tools:context="com.lalocal.lalocal.activity.LoginActivity">
 
-    <FrameLayout
+    <com.lalocal.lalocal.view.CustomTitleView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/register_title_height"
-        android:background="@color/white">
-
-        <include layout="@layout/common_back_layout" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/register"
-            android:textColor="@color/color_1a"
-            android:textSize="@dimen/text_size_17_sp" />
-    </FrameLayout>
-
-    <TextView
-    style="@style/CommonDeLineTheme"
-    />
+        android:layout_height="wrap_content"
+        app:title_name="@string/register"
+        />
 
 
     <LinearLayout
@@ -48,12 +34,15 @@
             android:id="@+id/reigster_psw_custom_edit"
             style="@style/CustomEditTextTheme"
             android:layout_marginTop="@dimen/register_password_edit_top"
-            app:text_hint="@string/write_psw" />
+            app:maxLen="20"
+            app:dights="@string/psw_limit_dights"
+             app:text_hint="@string/write_psw" />
 
         <com.lalocal.lalocal.view.CustomEditText
             android:id="@+id/reigster_nickname_custom_edit"
             style="@style/CustomEditTextTheme"
             android:layout_marginTop="@dimen/register_password_edit_top"
+            app:maxLen="20"
             app:text_hint="@string/write_nickname" />
 
         <Button

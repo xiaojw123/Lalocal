@@ -1,38 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_fa"
     tools:context="com.lalocal.lalocal.activity.SettingActivity">
 
-    <FrameLayout
-        android:id="@+id/setting_title_container"
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/setting_title_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/register_title_height"
-        android:background="@color/white">
-
-        <include layout="@layout/common_back_layout" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/setting"
-            android:textColor="@color/color_1a"
-            android:textSize="@dimen/text_size_17_sp" />
-    </FrameLayout>
-
-    <TextView
-        android:id="@+id/setting_line"
-        style="@style/CommonDeLineTheme"
-        android:layout_below="@+id/setting_title_container" />
+        android:layout_height="wrap_content"
+        app:title_name="@string/setting" />
 
     <FrameLayout
         android:id="@+id/setting_about_us"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_height"
-        android:layout_below="@+id/setting_line"
+        android:layout_below="@+id/setting_title_view"
         android:background="@color/white">
 
         <TextView
@@ -87,8 +73,7 @@
         android:layout_below="@+id/setting_clear_cache"
         android:layout_marginTop="@dimen/setting_modify_password_top"
         android:background="@drawable/setting_item_bg"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <TextView style="@style/CommonDeLineTheme" />
 

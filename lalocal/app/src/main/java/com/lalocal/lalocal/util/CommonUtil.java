@@ -62,6 +62,14 @@ public class CommonUtil {
 //        return deviceUuid.toString();
     }
 
+    public static boolean isEmpty(String str) {
+        if (str == null || str.trim().length() < 1) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener) {
         CustomDialog dialog = new CustomDialog(context);

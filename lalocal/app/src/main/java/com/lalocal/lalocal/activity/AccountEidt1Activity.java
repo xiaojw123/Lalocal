@@ -10,7 +10,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +22,7 @@ import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
 
 import java.io.ByteArrayOutputStream;
@@ -29,7 +30,7 @@ import java.io.File;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener {
+public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener, CustomTitleView.onBackBtnClickListener {
     public static final int UPDATE_ME_DATA = 301;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
@@ -40,6 +41,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     RelativeLayout nickname_rlt;
     TextView nickaname_tv;
     CheckBox boysex_cb, girlsex_cb;
+    FrameLayout boysex_fl, girlsex_fl;
     RelativeLayout email_rlt;
     RelativeLayout phone_rlt;
     TextView phone_tv;
@@ -47,11 +49,11 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     TextView email_tv;
     ContentService contentService;
     LoginUser user;
-    ImageView backImg;
     int sex = -1;
     boolean isEmailUpdate;
     Intent backIntent = new Intent();
     Bitmap bitmap;
+    CustomTitleView customTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,10 +81,12 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
 
     private void initView() {
-        backImg = (ImageView) findViewById(R.id.common_back_btn);
+        customTitleView = (CustomTitleView) findViewById(R.id.account_eidt1_titleview);
         personalheader_civ = (CircleImageView) findViewById(R.id.account_edit_personalheader);
         nickname_rlt = (RelativeLayout) findViewById(R.id.account_edit_nickname);
         nickaname_tv = (TextView) findViewById(R.id.account_edit_nickname_text);
+        boysex_fl = (FrameLayout) findViewById(R.id.accout_edit_boy_sex_fl);
+        girlsex_fl = (FrameLayout) findViewById(R.id.accout_edit_girl_sex_fl);
         boysex_cb = (CheckBox) findViewById(R.id.accout_edit_boy_sex_cb);
         girlsex_cb = (CheckBox) findViewById(R.id.accout_edit_girl_sex_cb);
         phone_rlt = (RelativeLayout) findViewById(R.id.account_edit_phone);
@@ -90,23 +94,22 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         phone_tv = (TextView) findViewById(R.id.acount_edit_phone_text);
         email_rlt = (RelativeLayout) findViewById(R.id.account_edit_email);
         email_tv = (TextView) findViewById(R.id.acount_edit_email_text);
-        backImg.setOnClickListener(this);
         personalheader_civ.setOnClickListener(this);
         nickname_rlt.setOnClickListener(this);
+        boysex_fl.setOnClickListener(this);
+        girlsex_fl.setOnClickListener(this);
         boysex_cb.setOnClickListener(this);
         girlsex_cb.setOnClickListener(this);
         phone_rlt.setOnClickListener(this);
         email_rlt.setOnClickListener(this);
+        customTitleView.setOnBackClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
-            case R.id.common_back_btn:
-                setResult(UPDATE_ME_DATA, backIntent);
-                finish();
-                break;
             case R.id.account_edit_personalheader:
                 PhotoSelectDialog dialog = new PhotoSelectDialog(this);
                 dialog.setButtonClickListener(this);
@@ -115,21 +118,17 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             case R.id.account_edit_nickname:
                 startEditIntent(AccountEidt2Activity.ACTION_NICKNAME_MODIFY);
                 break;
-            case R.id.accout_edit_boy_sex_cb:
+            case R.id.accout_edit_boy_sex_fl:
                 sex = 1;
-                if (girlsex_cb.isChecked()) {
-                    girlsex_cb.setChecked(false);
-                }
+                girlsex_cb.setChecked(false);
                 boysex_cb.setChecked(true);
                 contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
-
                 break;
-            case R.id.accout_edit_girl_sex_cb:
+
+            case R.id.accout_edit_girl_sex_fl:
                 sex = 0;
-                if (boysex_cb.isChecked()) {
-                    boysex_cb.setChecked(false);
-                }
                 girlsex_cb.setChecked(true);
+                boysex_cb.setChecked(false);
                 contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
                 break;
             case R.id.account_edit_phone:
@@ -296,10 +295,11 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
     }
 
+
     class CallBack extends ICallBack {
 
         @Override
-        public void onGetUserProfile(int code, LoginUser user) {
+        public void onGetUserProfile(LoginUser user) {
             updateUserProfileView(user);
         }
     }
@@ -324,13 +324,14 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             isEmailUpdate = false;
         }
         int status = user.getStatus();
-        backIntent.putExtra(KeyParams.STATUS, status);
         if (status == -1) {
             email_tv.setText(user.getEmail() + "(未验证)");
         } else {
             email_tv.setText(user.getEmail());
         }
-
+        backIntent.putExtra(KeyParams.STATUS, status);
+        backIntent.putExtra(KeyParams.USERID, user.getId());
+        backIntent.putExtra(KeyParams.TOKEN, user.getToken());
     }
 
     @Override
@@ -346,6 +347,11 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     public void onBackPressed() {
         setResult(UPDATE_ME_DATA, backIntent);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onBackClick() {
+        setResult(UPDATE_ME_DATA, backIntent);
     }
 
 }

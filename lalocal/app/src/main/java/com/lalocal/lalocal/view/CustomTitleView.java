@@ -1,0 +1,77 @@
+package com.lalocal.lalocal.view;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.util.AttributeSet;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.lalocal.lalocal.R;
+
+/**
+ * Created by xiaojw on 2016/7/4.
+ * APP通用标题栏
+ * lineVisible  type; boolen 设置标题分界线是否显示
+ * title_name   type:string 设置标题名称
+ */
+public class CustomTitleView extends FrameLayout implements View.OnClickListener {
+    onBackBtnClickListener listener;
+    Context context;
+    TextView title_tv;
+
+    public CustomTitleView(Context context) {
+        this(context, null);
+    }
+
+    public CustomTitleView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public CustomTitleView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        this.context = context;
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleView);
+        String name = a.getString(R.styleable.CustomTitleView_title_name);
+        boolean lineVisible = a.getBoolean(R.styleable.CustomTitleView_lineVisible, true);
+        a.recycle();
+        LayoutInflater.from(context).inflate(R.layout.custom_title_layout, this);
+        ImageView backImg = (ImageView) findViewById(R.id.titleview_back_img);
+         title_tv = (TextView) findViewById(R.id.titleview_title_tv);
+        View line = findViewById(R.id.titleview_line);
+        if (!lineVisible) {
+            line.setVisibility(GONE);
+        }
+        title_tv.setText(name);
+        backImg.setOnClickListener(this);
+    }
+
+    public void setOnBackClickListener(onBackBtnClickListener listener) {
+        this.listener = listener;
+
+    }
+    public void setTitle(String titleName){
+        title_tv.setText(titleName);
+    }
+
+    @Override
+    public void onClick(View v) {
+        try {
+            if (listener != null) {
+                listener.onBackClick();
+            }
+            Activity a = (Activity) context;
+            a.finish();
+        } catch (Exception e) {
+
+        }
+    }
+
+    public interface onBackBtnClickListener {
+        void onBackClick();
+    }
+
+}

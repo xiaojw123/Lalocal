@@ -1,26 +1,17 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.Dialog;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 
-public class PasswordForget2Activity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener {
-
-    public static final String VERITIED_CODE = "verited_code";
-    public static final String NEW_PASSWORD = "new_password";
-    ImageView backImg;
+public class PasswordForget2Activity extends BaseActivity implements View.OnClickListener {
     CustomEditText veritiedcode_edit;
     CustomEditText passwrod_edit;
     Button sureBtn;
@@ -32,6 +23,7 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
         setContentView(R.layout.password_forget_layout2);
         initContentService();
         initView();
+        CommonUtil.showPromptDialog(this, "邮件已发送", null);
     }
 
     private void initContentService() {
@@ -40,35 +32,32 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
     }
 
     private void initView() {
-        backImg = (ImageView) findViewById(R.id.common_back_btn);
         veritiedcode_edit = (CustomEditText) findViewById(R.id.forgetpsw_veritifiedcode_custom_edit);
         passwrod_edit = (CustomEditText) findViewById(R.id.forgetpsw_lastest_psw_custom_edit);
         sureBtn = (Button) findViewById(R.id.forgetpsw_sure_btn);
         veritiedcode_edit.setSelectedButton(sureBtn);
+        veritiedcode_edit.setFilterSpace(true);
         passwrod_edit.setSelectedButton(sureBtn);
-        backImg.setOnClickListener(this);
         sureBtn.setOnClickListener(this);
 
     }
 
     @Override
     public void onClick(View v) {
-        if (v == backImg) {
-            finish();
-        } else if (v == sureBtn) {
+        if (v == sureBtn) {
             String veritiedcode = veritiedcode_edit.getText().toString();
-            if (TextUtils.isEmpty(veritiedcode)) {
-                CommonUtil.showPromptDialog(this, getResources().getString(R.string.veritied_code_no_empty), this);
+            if (CommonUtil.isEmpty(veritiedcode)) {
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.veritied_code_no_empty), null);
                 return;
             }
             String psw = passwrod_edit.getText().toString();
-            if (TextUtils.isEmpty(psw)) {
+            if (CommonUtil.isEmpty(psw)) {
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_empty),
-                        this);
+                        null);
                 return;
             }
             if (!CommonUtil.checkPassword(psw)) {
-                CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), this);
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
                 return;
             }
             contentService.resetPasword(getEmail(), veritiedcode, psw);
@@ -80,22 +69,13 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
         return getIntent().getStringExtra(PasswordForget1Activity.Email);
     }
 
-    @Override
-    public void onDialogClickListener(Dialog dialog, View view) {
-        dialog.dismiss();
-    }
 
     class CallBack extends ICallBack {
         @Override
-        public void onResetPasswordComplete(int code, String msg) {
-            AppLog.print("CallBack______"+code);
-            if (code == 0) {
-                Toast.makeText(PasswordForget2Activity.this, "密码重置成功!", Toast.LENGTH_LONG).show();
-                setResult(RESULT_OK, null);
-                finish();
-            } else {
-                Toast.makeText(PasswordForget2Activity.this, msg, Toast.LENGTH_LONG).show();
-            }
+        public void onResetPasswordComplete() {
+            Toast.makeText(PasswordForget2Activity.this, "密码修改成功!", Toast.LENGTH_LONG).show();
+            setResult(RESULT_OK, null);
+            finish();
         }
     }
 }

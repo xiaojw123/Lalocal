@@ -2,11 +2,11 @@ package com.lalocal.lalocal.activity;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppConfig;
 
 public class UserProtocolActivity extends BaseActivity {
@@ -15,8 +15,8 @@ public class UserProtocolActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        webView = new WebView(this);
-        webView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        setContentView(R.layout.use_clauses_layout);
+        webView = (WebView) findViewById(R.id.user_clauses_wv);
         webView.loadUrl(AppConfig.USER_PROTOCOL_URL);
         webView.setWebViewClient(new MWebviewClient());
         WebSettings ws = webView.getSettings();
@@ -24,7 +24,6 @@ public class UserProtocolActivity extends BaseActivity {
         ws.setLoadWithOverviewMode(true);
         ws.setDisplayZoomControls(false);
         webView.setHorizontalScrollBarEnabled(false);
-        setContentView(webView);
     }
 
     class MWebviewClient extends WebViewClient {

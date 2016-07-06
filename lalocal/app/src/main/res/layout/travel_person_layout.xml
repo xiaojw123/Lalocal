@@ -3,29 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_f8"
     android:orientation="vertical"
     tools:context="com.lalocal.lalocal.activity.TravelPersonActivity">
-    <FrameLayout
+    <com.lalocal.lalocal.view.CustomTitleView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/register_title_height"
-        android:background="@color/white">
-
-        <include layout="@layout/common_back_layout" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/travel_person"
-            android:textColor="@color/color_1a"
-            android:textSize="@dimen/text_size_17_sp" />
-
-
-
-    </FrameLayout>
-
-    <TextView style="@style/CommonDeLineTheme" />
+        android:layout_height="wrap_content"
+        app:title_name="@string/travel_person"
+        />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

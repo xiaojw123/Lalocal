@@ -14,4 +14,6 @@ public interface KeyParams {
     public static  final  String AVATAR="avatar";
     public static  final  String ORDER_ID="orderid";
     public static  final  String TRAVEL_PERSONS_CONCACT="concact";
+    public static  final String SETTING="setting";
+    public static  final  String IM_LOGIN="im_login";
 }

@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppLog;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
     RelativeLayout home_recommend_tab, home_destination_tab, home_news_tab, home_me_tab;
     LinearLayout home_tab_container;
     ViewGroup lastSelectedTab;
@@ -126,4 +126,10 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+
+    @Override
+    public void onShowRecommendFragment() {
+        AppLog.print("Activity  onShowRecommendFragment");
+        showFragment(home_recommend_tab);
+    }
 }

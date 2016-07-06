@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,7 +12,7 @@ import com.lalocal.lalocal.model.OrderDetail;
 
 import java.util.List;
 
-public class TravelPersonActivity extends BaseActivity implements View.OnClickListener {
+public class TravelPersonActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +27,6 @@ public class TravelPersonActivity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        ImageView backImg= (ImageView) findViewById(R.id.common_back_btn);
-        backImg.setOnClickListener(this);
         LinearLayout persons_container = (LinearLayout) findViewById(R.id.travel_persons_container);
         List<OrderDetail.PeopleItemListBean.ContactInfoListBean> personsContact = getPersonsContactInfo();
         LayoutInflater inflater = LayoutInflater.from(this);
@@ -69,8 +66,4 @@ public class TravelPersonActivity extends BaseActivity implements View.OnClickLi
 
     }
 
-    @Override
-    public void onClick(View v) {
-        finish();
-    }
 }

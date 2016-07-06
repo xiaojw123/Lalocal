@@ -39,22 +39,22 @@ public abstract class ICallBack {
 
     }
 
-    public void onModifyUserProfile(int code,LoginUser user){
+    public void onModifyUserProfile(LoginUser user){
 
     }
 
 
-    public void onSendActivateEmmailComplete(int code,String message) {
+    public void onSendActivateEmmailComplete() {
 
     }
 
-    public void onGetUserProfile(int code, LoginUser user) {
+    public void onGetUserProfile(LoginUser user) {
 
 
     }
 
 
-    public void onResetPasswordComplete(int code, String msg) {
+    public void onResetPasswordComplete() {
 
     }
 

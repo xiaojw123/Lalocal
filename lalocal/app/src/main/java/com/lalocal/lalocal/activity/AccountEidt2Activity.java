@@ -1,13 +1,11 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,7 +19,7 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.dialog.WheelDialog;
 
-public class AccountEidt2Activity extends BaseActivity implements View.OnClickListener, CustomDialog.CustomDialogListener, WheelDialog.OnWheelSelectedListener {
+public class AccountEidt2Activity extends BaseActivity implements View.OnClickListener, WheelDialog.OnWheelSelectedListener {
     public static final int RESULT_CODE_NICKNAME = 101;
     public static final int RESULT_CODE_PHONE = 102;
     public static final int ACTION_NICKNAME_MODIFY = 200;
@@ -32,11 +30,10 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     TextView countrycode_tv;
     int actionType;
     ContentService contentService;
-    ImageView backImg;
     int userid;
     String token;
     String email, emailText;
-    boolean isModifyEmail;
+    Button sendagain_btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +66,6 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     }
 
     private void initView() {
-        backImg = (ImageView) findViewById(R.id.common_back_btn);
         nickname_modfiy_edit = (EditText) findViewById(R.id.nickname_modify_edit);
         countrycode_tv = (TextView) findViewById(R.id.account_edit2_countrycode);
         phone_modify_edit = (EditText) findViewById(R.id.account_edit2_phone);
@@ -77,11 +73,10 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         TextView save_tv = (TextView) findViewById(R.id.account_edit_save);
         LinearLayout phone_modify_view = (LinearLayout) findViewById(R.id.phone_modify_view);
         LinearLayout email_modify_view = (LinearLayout) findViewById(R.id.email_modify_view);
-        Button sendagain_btn = (Button) findViewById(R.id.account_eidt2_sendagain_btn);
+         sendagain_btn = (Button) findViewById(R.id.account_eidt2_sendagain_btn);
         Button changeemail_btn = (Button) findViewById(R.id.account_eidt2_changeemail_btn);
         nickname_modfiy_edit.setText(getNickname());
         email_tv.setText(getEmailText());
-        backImg.setOnClickListener(this);
         save_tv.setOnClickListener(this);
         sendagain_btn.setOnClickListener(this);
         changeemail_btn.setOnClickListener(this);
@@ -129,11 +124,8 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.common_back_btn:
-                finish();
-                break;
             case R.id.account_edit2_countrycode:
-                    showAreaCodeSeletor();
+                showAreaCodeSeletor();
                 break;
             case R.id.account_edit_save:
                 if (actionType == ACTION_NICKNAME_MODIFY) {
@@ -144,7 +136,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
                 break;
             case R.id.account_eidt2_sendagain_btn:
                 if (TextUtils.isEmpty(email)) {
-                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), this);
+                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), null);
                     return;
                 }
                 contentService.boundEmail(email, userid, token);
@@ -166,19 +158,19 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
 
     private void showAreaCodeSeletor() {
         WheelDialog dialog = new WheelDialog(this);
-        dialog.setCancelable(false);
+        dialog.setEnalbeView(countrycode_tv);
         dialog.setOnWheelDialogSelectedListener(this);
         dialog.show();
     }
 
     private boolean modifyNickName() {
         String nickname = nickname_modfiy_edit.getText().toString();
+        if (CommonUtil.isEmpty(nickname)) {
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_no_empty), null);
+            return true;
+        }
         if (!CommonUtil.checkNickname(nickname)) {
-            if (TextUtils.isEmpty(nickname)) {
-                CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), this);
-            } else {
-                CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_input_error), this);
-            }
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_input_error), null);
             return true;
         }
         if (nickname.equals(getNickname())) {
@@ -196,7 +188,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
             areaCode = getAreaCode();
         }
         if (TextUtils.isEmpty(phoneNumber)) {
-            CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), this);
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), null);
             return true;
         }
         if (areaCode.equals(getAreaCode())) {
@@ -225,51 +217,40 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     }
 
     @Override
-    public void onDialogClickListener(Dialog dialog, View view) {
-        dialog.dismiss();
-        if (isModifyEmail) {
-            isModifyEmail = false;
-            setResult(EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL, null);
-            finish();
-        }
-    }
-
-    @Override
     public void onSelected(Country item) {
         if (item != null) {
             countrycode_tv.setText(item.getCodePlus());
         }
     }
 
-    class CallBack extends ICallBack {
+    class CallBack extends ICallBack implements CustomDialog.CustomDialogListener {
         @Override
-        public void onSendActivateEmmailComplete(int code, String message) {
-            if (code == 0) {
-                isModifyEmail = true;
-                CommonUtil.showPromptDialog(AccountEidt2Activity.this, getResources().getString(R.string.register_success_prompt), AccountEidt2Activity.this);
-            } else {
-                CommonUtil.showPromptDialog(AccountEidt2Activity.this, message, AccountEidt2Activity.this);
-            }
+        public void onSendActivateEmmailComplete() {
+            sendagain_btn.setText("已发送");
+            CommonUtil.showPromptDialog(AccountEidt2Activity.this, getResources().getString(R.string.register_success_prompt), this);
         }
 
         @Override
-        public void onModifyUserProfile(int code, LoginUser user) {
-            if (code == 0) {
-                Intent intent = new Intent();
-                if (actionType == ACTION_NICKNAME_MODIFY) {
-                    intent.putExtra(KeyParams.NICKNAME, user.getNickName());
-                    setResult(RESULT_CODE_NICKNAME, intent);
-                } else if (actionType == ACTION_PHONE_MODIFY) {
-                    intent.putExtra(KeyParams.AREA_Code, user.getAreaCode());
-                    intent.putExtra(KeyParams.PHONE, user.getPhone());
-                    setResult(RESULT_CODE_PHONE, intent);
-                }
+        public void onModifyUserProfile(LoginUser user) {
+            Intent intent = new Intent();
+            if (actionType == ACTION_NICKNAME_MODIFY) {
+                intent.putExtra(KeyParams.NICKNAME, user.getNickName());
+                setResult(RESULT_CODE_NICKNAME, intent);
+            } else if (actionType == ACTION_PHONE_MODIFY) {
+                intent.putExtra(KeyParams.AREA_Code, user.getAreaCode());
+                intent.putExtra(KeyParams.PHONE, user.getPhone());
+                setResult(RESULT_CODE_PHONE, intent);
             }
             finish();
 
         }
-    }
 
+        @Override
+        public void onDialogClickListener() {
+            setResult(EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL, null);
+            finish();
+        }
+    }
 
 
 }
