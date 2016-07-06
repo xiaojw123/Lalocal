@@ -25,9 +25,8 @@
                 android:id="@+id/product_details_photo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/product_details_photo_height"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/androidloading"/>
-
         </RelativeLayout>
 
         <TextView
@@ -62,8 +61,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:paddingLeft="@dimen/product_details_padding_left"
-            android:paddingRight="@dimen/product_details_padding_left"
+            android:layout_marginLeft="@dimen/product_details_padding_left"
+            android:layout_marginRight="@dimen/product_details_padding_left"
             android:background="@android:color/darker_gray"></View>
         <LinearLayout
             android:id="@+id/product_content_value"
@@ -77,8 +76,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:paddingLeft="@dimen/product_details_padding_left"
-            android:paddingRight="@dimen/product_details_padding_left"
+            android:layout_marginLeft="@dimen/product_details_padding_left"
+            android:layout_marginRight="@dimen/product_details_padding_left"
             android:background="@android:color/darker_gray"></View>
 
         <LinearLayout
@@ -90,7 +89,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="查看详情"/>
+                android:text="查看详情"
+                android:textColor="@android:color/black"/>
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -108,8 +108,8 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:paddingLeft="@dimen/product_details_padding_left"
-                android:paddingRight="@dimen/product_details_padding_left"
+                android:layout_marginLeft="@dimen/product_details_padding_left"
+                android:layout_marginRight="@dimen/product_details_padding_left"
                 android:layout_centerInParent="true"
                 android:background="@android:color/darker_gray"></View>
             <TextView
@@ -121,12 +121,13 @@
                 android:padding="10dp"
                />
         </RelativeLayout>
-        
+
         <LinearLayout
             android:id="@+id/product_service_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
         </LinearLayout>
 
@@ -134,7 +135,9 @@
             android:id="@+id/product_purchase_notes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_marginBottom="20dp"
+            >
 
         </LinearLayout>
         <View

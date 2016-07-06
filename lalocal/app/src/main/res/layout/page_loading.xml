@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+
     >
 
     <include layout="@layout/common_back_layout"></include>
@@ -17,8 +18,8 @@
 
         <com.lalocal.lalocal.view.xlistview.PowerImageView
             android:id="@+id/xlistview_header_anim"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="center"
             android:src="@drawable/loading"
             attr:auto_play="true"

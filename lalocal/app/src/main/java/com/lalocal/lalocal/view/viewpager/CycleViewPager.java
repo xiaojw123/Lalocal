@@ -318,7 +318,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 
 					@Override
 					public void onClick(View v) {
-
+/*
 						//轮播图页面点击进入相关页面
 						mImageCycleViewListener.onImageClick(infos.get(currentPosition - 1), currentPosition, v);
 						int targetType = infos.get(currentPosition - 1).targetType;
@@ -328,8 +328,8 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 							intent.putExtra("h5url", url);
 							startActivity(intent);
 						}else {
-							Toast.makeText(getActivity(),"点击了",Toast.LENGTH_SHORT).show();
-						}
+						Toast.makeText(getActivity(),"点击了",Toast.LENGTH_SHORT).show();
+						}*/
 					}
 				});
 			}

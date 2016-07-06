@@ -1,24 +1,24 @@
 package com.lalocal.lalocal.activity;
-
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
-
 import com.lalocal.lalocal.R;
-
 /**
  * Created by lenovo on 2016/6/23.
  */
 public class ProductCheckDetailActivity extends BaseActivity implements View.OnClickListener{
     private boolean isLoading;
     private Context mContext=ProductCheckDetailActivity.this;
+    private WebView checkWebview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,7 +26,7 @@ public class ProductCheckDetailActivity extends BaseActivity implements View.OnC
         String checkdetail = getIntent().getStringExtra("checkdetail");
         ImageView back= (ImageView) findViewById(R.id.common_back_btn);
         back.setOnClickListener(this);
-        final WebView checkWebview= (WebView) findViewById(R.id.product_check_detail_webview);
+        checkWebview = (WebView) findViewById(R.id.product_check_detail_webview);
         if(Build.VERSION.SDK_INT >= 19) {
             checkWebview.getSettings().setLoadsImagesAutomatically(true);
         } else {
@@ -38,6 +38,9 @@ public class ProductCheckDetailActivity extends BaseActivity implements View.OnC
         checkWebview.loadUrl(checkdetail);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        if(Build.VERSION.SDK_INT >= 21){
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         checkWebview.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -65,10 +68,17 @@ public class ProductCheckDetailActivity extends BaseActivity implements View.OnC
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && checkWebview.canGoBack()) {
+            checkWebview.goBack(); // goBack()表示返回WebView的上一页面
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
     public void onClick(View v) {
         if(v.getId()==R.id.common_back_btn){
             finish();
         }
-
     }
 }

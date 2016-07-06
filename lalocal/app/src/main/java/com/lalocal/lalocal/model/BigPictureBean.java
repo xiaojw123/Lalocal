@@ -11,6 +11,7 @@ public class BigPictureBean implements Parcelable {
     private String imgUrl;
     private String content;
     private String name;
+    private boolean isShare;
 
     public String getImgUrl() {
         return imgUrl;
@@ -36,6 +37,14 @@ public class BigPictureBean implements Parcelable {
         this.name = name;
     }
 
+    public boolean isShare() {
+        return isShare;
+    }
+
+    public void setShare(boolean share) {
+        isShare = share;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -46,6 +55,7 @@ public class BigPictureBean implements Parcelable {
         dest.writeString(this.imgUrl);
         dest.writeString(this.content);
         dest.writeString(this.name);
+        dest.writeByte(this.isShare ? (byte) 1 : (byte) 0);
     }
 
     public BigPictureBean() {
@@ -55,9 +65,10 @@ public class BigPictureBean implements Parcelable {
         this.imgUrl = in.readString();
         this.content = in.readString();
         this.name = in.readString();
+        this.isShare = in.readByte() != 0;
     }
 
-    public static final Parcelable.Creator<BigPictureBean> CREATOR = new Parcelable.Creator<BigPictureBean>() {
+    public static final Creator<BigPictureBean> CREATOR = new Creator<BigPictureBean>() {
         @Override
         public BigPictureBean createFromParcel(Parcel source) {
             return new BigPictureBean(source);

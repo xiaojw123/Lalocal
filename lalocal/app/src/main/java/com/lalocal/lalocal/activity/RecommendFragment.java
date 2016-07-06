@@ -84,6 +84,8 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
 
         cycleViewPager = new CycleViewPager();
         header = View.inflate(getActivity(), R.layout.viewpager, null);
+        View viewById = header.findViewById(R.id.lunbotu_content);
+        viewById.setVisibility(View.GONE);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_cycle_viewpager_content, cycleViewPager).commit();
         xlistview.addHeaderView(header);
@@ -93,9 +95,9 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 if(allRows!=null){
                     RecommendRowsBean recommendRowsBean = allRows.get(position - 2);
                     int rowId = recommendRowsBean.getId();
-                    Toast.makeText(getActivity(),""+rowId,Toast.LENGTH_SHORT).show();
+
                     Intent intent=new Intent(getActivity(),SpecialDetailsActivity.class);
-                   // Intent intent=new Intent(getActivity(),TestActivity.class);
+
                     intent.putExtra("rowId",rowId+"");
                     startActivity(intent);
 

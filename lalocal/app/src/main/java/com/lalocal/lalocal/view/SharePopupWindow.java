@@ -30,7 +30,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
         this.shareVO=shareVO;
-        Toast.makeText(cx,"pop",Toast.LENGTH_SHORT).show();
     }
 
     public void showShareWindow() {
@@ -85,6 +84,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sp.setShareType(Platform.SHARE_WEBPAGE);
         sp.setTitle(shareVO.getTitle());
         sp.setText(shareVO.getUrl());
+
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
         }

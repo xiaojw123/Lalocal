@@ -37,6 +37,7 @@ public class ViewFactory {
 		cycleViewPager.setCycle(true);
 		// 在加载数据前设置是否循环
 		cycleViewPager.setData(views,result , new CycleViewPager.ImageCycleViewListener() {
+
 			
 			@Override
 			public void onImageClick(RecommendAdResultBean info, int postion, View imageView) {

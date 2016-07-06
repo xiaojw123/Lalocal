@@ -4,11 +4,25 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
    >
-<FrameLayout
-        android:id="@+id/fragment_cycle_viewpager_content"
-        android:name="com.lalocal.lalocal.view.viewpager.CycleViewPager"
+   <!-- android:name="com.lalocal.lalocal.view.viewpager.CycleViewPager"-->
+    <RelativeLayout
+
         android:layout_width="match_parent"
-        android:layout_height="@dimen/recommend_listview_item1_vp_height" />
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:id="@+id/fragment_cycle_viewpager_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recommend_listview_item1_vp_height" />
+        <fragment
+            android:id="@+id/lunbotu_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/recommend_listview_item1_vp_height"
+            android:name="com.lalocal.lalocal.view.viewpager.CycleViewPager"
+            >
+        </fragment>
+
+    </RelativeLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/recommend_listview_item1_view_height"></View>

@@ -2,28 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/photo_to_text"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#1a1a1a">
 
     <ImageView
         android:id="@+id/photo_to_text_iv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         />
-
-
-        <TextView
+    <View
+        android:id="@+id/masking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#1a1a1a"
+        android:alpha="0.3"
+        ></View>
+        <com.lalocal.lalocal.view.SecretTextView
             android:id="@+id/photo_to_text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="45dp"
-            android:paddingTop="45dp"
+            android:paddingLeft="50dp"
+            android:paddingTop="50dp"
             android:textColor="@android:color/white"
             android:textSize="16sp"
-
             />
 
-        <TextView
+        <com.lalocal.lalocal.view.SecretTextView
             android:id="@+id/photo_to_text_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

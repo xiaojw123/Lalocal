@@ -1,8 +1,5 @@
 
 package com.lalocal.lalocal.view.xlistview;
-
-
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -15,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.view.GifView;
 
 
 public class XListViewHeader extends LinearLayout {
@@ -47,7 +45,6 @@ public class XListViewHeader extends LinearLayout {
 		super(context, attrs);
 		initView(context);
 	}
-
 	private void initView(Context context) {
 		// 初始情况，设置下拉刷新view高度为0
 		LayoutParams lp = new LayoutParams(
@@ -61,7 +58,7 @@ public class XListViewHeader extends LinearLayout {
 		mHintTextView = (TextView)findViewById(R.id.xlistview_header_hint_textview);
 		mProgressBar = (ProgressBar)findViewById(R.id.xlistview_header_progressbar);
 		piv=(PowerImageView) findViewById(R.id.xlistview_header_anim);
-		
+
 		mRotateUpAnim = new RotateAnimation(0.0f, -180.0f,
 				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
 				0.5f);

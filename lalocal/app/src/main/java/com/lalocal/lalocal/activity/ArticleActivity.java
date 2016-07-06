@@ -87,7 +87,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         praises = articleDetailsBean.getPraises();
         contentService = new ContentService(this);
         contentService.setCallBack(new MyCallBack());
-       // Toast.makeText(mContext,"点赞："+praises,Toast.LENGTH_SHORT).show();
+
     }
     private void initWebview() {
 
@@ -134,7 +134,7 @@ boolean isPraises=true;
     class  MyWebViewClient extends  WebViewClient{
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                Toast.makeText(ArticleActivity.this,"Article:"+ url, Toast.LENGTH_SHORT).show();
+
                 //lalocal://codeImageClick?{"name":"Lalocal","wechatNo":"%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB","imageUrl":"http://7xpid3.com1.z0.glb.clouddn.com/20160615142707308988042388"}
               /*  String[] split = url.split("codeImageClick\\?");
                 String json = split[1];*/
@@ -171,7 +171,7 @@ boolean isPraises=true;
             result = pariseResult.getResult();
             praisesNum = articleDetailsBean.getPraiseNum() + 1;
             collectTv.setText("  收藏 " +praisesNum);
-            Toast.makeText(mContext,"点赞哈哈："+result,Toast.LENGTH_SHORT).show();
+
         }
         //取消赞
         @Override
@@ -180,7 +180,7 @@ boolean isPraises=true;
             btnLike.setImageResource(R.drawable.index_icon_like);
             int i =praisesNum-1;
             collectTv.setText("  收藏 " + i);
-            Toast.makeText(mContext,"取消成功",Toast.LENGTH_SHORT).show();
+
         }
     }
 

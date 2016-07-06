@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -38,6 +39,7 @@ import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.mob.tools.utils.UIHandler;
+import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +61,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private TextView titleTv;
     private TextView productPrice;
     private LinearLayout checkDetails;
-    private ImageView btnLike;
+    private ShineButton btnLike;
     private ImageView btnShare;
     private TextView productReserve;
     private ImageView customer;
@@ -81,6 +83,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private ProductDetailsResultBean result;
     private boolean praiseFlag;
     private int parise;
+    private List<String> photoList;
+    private View titleLine;
+    private LinearLayout serviceLL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +103,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         titleTv = (TextView) findViewById(R.id.product_title_tv);
         productPrice = (TextView) findViewById(R.id.product_price);
         checkDetails = (LinearLayout) findViewById(R.id.product_check_detail);
-        btnLike = (ImageView) findViewById(R.id.product_btn_like);
+        btnLike = (ShineButton) findViewById(R.id.product_btn_like);
         btnShare = (ImageView) findViewById(R.id.product_btn_share);
         productReserve = (TextView) findViewById(R.id.product_details_reserve);
         customer = (ImageView) findViewById(R.id.product_customer_service);
@@ -112,6 +118,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         mScrollView = (MyScrollView) findViewById(R.id.product_scrollview);
         reLayout = (RelativeLayout) findViewById(R.id.product_title_relayout);
         detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
+        titleLine = findViewById(R.id.product_title_line);
+        serviceLL = (LinearLayout) findViewById(R.id.product_service_ll);
 
         //点击监听
         checkDetails.setOnClickListener(this);
@@ -145,26 +153,37 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         contentService.productDetails(specialToH5Bean.getTargetId() + "");
         left = DensityUtil.dip2px(ProductDetailsActivity.this, 15);
         top = DensityUtil.dip2px(ProductDetailsActivity.this, 3);
-
     }
-
     @Override
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
-        AppLog.i("scrollViewHeightToReLayoutHeight", "scrollView:" + y + "//oldy:" + oldy + "/height:" + height);
+        boolean isOpactity=true;
         if (y <= height) {
             float scale = (float) y / height;
             float alpha = (255 * scale);
             //layout全部透明    0.16--0.95
-            reLayout.setAlpha(scale);
+
             //只是layout背景透明
-            reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
-            if(alpha>0.8){
+
+            if(alpha>210.0||scale>0.80){
+
                 titleBack.setVisibility(View.GONE);
-                alpha=1.0f;
+                titleLine.setVisibility(View.VISIBLE);
+                serviceLL.setVisibility(View.VISIBLE);
+                alpha=255;
+                scale=1.0f;
+
             }else {
                 titleBack.setVisibility(View.VISIBLE);
+                titleLine.setVisibility(View.GONE);
+                serviceLL.setVisibility(View.GONE);
             }
+
+            reLayout.setAlpha(scale);
+            reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
+
+            AppLog.i("TAG", "scale:" + scale + "//alpha:" + alpha );
         }
+
     }
 
     @Override
@@ -188,12 +207,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     //取消收藏
                     if(praiseFlag){
                         contentService.cancelParises(praiseId);
-                        Toast.makeText(mContext,"点击了，取消收藏",Toast.LENGTH_SHORT).show();
-                    }
+
+                }
                     else {//添加收藏
                         int targetId = specialToH5Bean.getTargetId();
                         contentService.specialPraise(targetId, 2);//点赞
-                        Toast.makeText(mContext, "点击了，添加收藏",Toast.LENGTH_SHORT).show();
+
                     }
 
                 }
@@ -232,22 +251,39 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 String photo = result.photo;
                 praiseFlag = result.praiseFlag;
                 if (praiseFlag) {
-                    btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                   // btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                    btnLike.setChecked(true);
                 } else {
-                    btnLike.setImageResource(R.drawable.index_article_btn_like);
+                   // btnLike.setImageResource(R.drawable.index_article_btn_like);
+                    btnLike.setChecked(false);
 
-                }
-                List<PhotosVosBean> photoVOs = result.photoVOs;
-                if (photoVOs.size() > 0) {
-                    //显示轮播图
-                    detailsPhoto1.setVisibility(View.GONE);
-                    List<PhotosVosBean> photoVOs1 = result.photoVOs;
-                    showphotos(photoVOs1);
-                } else {
-                    DrawableUtils.displayImg(ProductDetailsActivity.this, detailsPhoto1, photo);
                 }
                 //产品详情介绍
                 productDetail(result);
+                List<PhotosVosBean> photoVOs = result.photoVOs;
+                List<RecommendAdResultBean> list = new ArrayList<>();
+                if (photoVOs.size() > 0) {
+                    //显示轮播图
+                    detailsPhoto1.setVisibility(View.GONE);
+                    for (int i = 0; i < photoVOs.size(); i++) {
+                        RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
+                        recommendAdResultBean.photo = photoVOs.get(i).fileName;
+                        list.add(recommendAdResultBean);
+                    }
+                    showphotos(list);
+                } else if(photoList.size()>0){
+                    detailsPhoto1.setVisibility(View.GONE);
+                    for (int i = 0; i < photoList.size(); i++) {
+                        RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
+                        recommendAdResultBean.photo =photoList.get(i);
+                        list.add(recommendAdResultBean);
+                    }
+                    showphotos(list);
+
+                } else {
+                    DrawableUtils.displayImg(ProductDetailsActivity.this, detailsPhoto1, photo);
+                }
+
             }
 
 
@@ -256,17 +292,19 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         @Override
         public void onPariseResult(PariseResult pariseResult) {
             if(pariseResult!=null&&pariseResult.getReturnCode()==0){
-                btnLike.setImageResource(R.drawable.index_article_btn_like);
+                //btnLike.setImageResource(R.drawable.index_article_btn_like);
+                btnLike.setChecked(false);
                 praiseId=pariseResult.getResult();
                 praiseFlag=false;
-               Toast.makeText(mContext,"取消成功",Toast.LENGTH_SHORT).show();
+
             }
         }
         @Override
         public void onInputPariseResult(PariseResult pariseResult) {
             super.onInputPariseResult(pariseResult);
             if(pariseResult.getReturnCode()==0){
-                btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                //btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+                btnLike.setChecked(true);
                 praiseFlag=true;
             }
 
@@ -274,18 +312,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     //轮播图
-    private void showphotos(List<PhotosVosBean> photoVOs1) {
+    private void showphotos(List<RecommendAdResultBean> list) {
 
         View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.viewpager, null);
-        CycleViewPager fragmentById = (CycleViewPager) getFragmentManager().findFragmentById(R.id.fragment_cycle_viewpager_content);
-        List<RecommendAdResultBean> list = new ArrayList<>();
-        for (int i = 0; i < photoVOs1.size(); i++) {
-            RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
-            recommendAdResultBean.photo = photoVOs1.get(i).fileName;
-            list.add(recommendAdResultBean);
+        View viewById = inflate.findViewById(R.id.fragment_cycle_viewpager_content);
+        viewById.setVisibility(View.GONE);
+        CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
+
+        if(list.size()>0){
+
+            ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
         }
 
-        ViewFactory.initialize(ProductDetailsActivity.this, inflate, fragmentById, list);
         phones.addView(inflate);
     }
 
@@ -301,7 +339,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             } else if (i == 1) {
                 //服务介绍
                 serviceIntroduce(details.get(i).content);
-                productService.setText(details.get(i).title);
+                productService.setText("· "+details.get(i).title+" ·");
+                productService.setTextColor(Color.BLACK);
             } else if (i == 2) {
                 //  purchaseNotes(details.get(i).content);
             }
@@ -324,21 +363,42 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private void serviceIntroduce(List<ProductContentBean> content) {
         for (int i = 0; i < content.size(); i++) {
             TextView tv = new TextView(ProductDetailsActivity.this);
-            tv.setText(content.get(i).menu + "");
+            tv.setText("· "+content.get(i).menu + "");
             tv.setTextColor(Color.parseColor("#ffaa2a"));
             tv.setPadding(left, left, 0, left);
             serviceLayout.addView(tv);
             List<ProductValueBean> value = content.get(i).value;
+            List<ProductValueBean> value1 = content.get(i).value;
+            photoList = new ArrayList<>();
+
+            for(int k=0;k<value1.size();k++){
+                String photo = value1.get(k).photo;
+                if(!photo.equals("")){
+                    photoList.add(photo);
+                }
+
+            }
             for (int j = 0; j < value.size(); j++) {
                 TextView tvContent = new TextView(ProductDetailsActivity.this);
                 tvContent.setText(value.get(j).text);
                 tvContent.setPadding(left, 0, 0, 0);
                 serviceLayout.addView(tvContent);
             }
-            View view = new View(ProductDetailsActivity.this);
-            view.setBackgroundColor(Color.parseColor("#666666"));
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2);
-            serviceLayout.addView(view, params);
+            View nullView= new View(ProductDetailsActivity.this);
+
+            LinearLayout.LayoutParams nullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60);
+            serviceLayout.addView(nullView, nullParams);
+            if(i!=content.size()-1){
+                View view = new View(ProductDetailsActivity.this);
+                view.setBackgroundColor(Color.parseColor("#aaaaaa"));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
+                params.leftMargin=DensityUtil.dip2px(mContext,12);
+                params.rightMargin=DensityUtil.dip2px(mContext,12);
+                serviceLayout.addView(view, params);
+            }
+
+
+
         }
     }
 
