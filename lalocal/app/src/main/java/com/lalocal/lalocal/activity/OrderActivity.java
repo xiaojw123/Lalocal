@@ -44,7 +44,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     private TextView pay_channel;
     private TextView evalute_time;
     private int height, left;
-    private ImageView backImg;
     private Button evalute_btn;
     private List<OrderDetail.PeopleItemListBean.ContactInfoListBean> travelpersonsInfo;
 
@@ -65,7 +64,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
-        backImg = (ImageView) findViewById(R.id.common_back_btn);
         evalute_btn = (Button) findViewById(R.id.order_immediately_evaluate_btn);
         travel_people_container = (LinearLayout) findViewById(R.id.order_travel_people_container);
         pay_channel_cotainer=(FrameLayout) findViewById(R.id.order_pay_channel_container);
@@ -84,7 +82,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         evalute_time = (TextView) findViewById(R.id.order_evaluate_time_text);
         evaluteTimeCotainer= (FrameLayout) findViewById(R.id.order_evaluate_time_cotainer);
         travel_person_num.setOnClickListener(this);
-        backImg.setOnClickListener(this);
         int status=getStaus();
         if (status==2){
             evalute_btn.setVisibility(View.VISIBLE);
@@ -111,9 +108,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.common_back_btn:
-                finish();
-                break;
             case R.id.order_person_num_tv:
                 if (travelpersonsInfo==null){
                     return;

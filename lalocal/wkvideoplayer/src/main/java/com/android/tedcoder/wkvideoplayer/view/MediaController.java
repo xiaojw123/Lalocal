@@ -26,6 +26,10 @@ public class MediaController extends FrameLayout implements SeekBar.OnSeekBarCha
     private ImageView mExpandImg;//最大化播放按钮
     private ImageView mShrinkImg;//缩放播放按钮
     private View mMenuViewPlaceHolder;
+<<<<<<< HEAD
+=======
+
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
     private MediaControlImpl mMediaControl;
 
     @Override

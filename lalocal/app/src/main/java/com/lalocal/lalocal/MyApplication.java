@@ -40,4 +40,5 @@ public class MyApplication extends Application {
         Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
 
     }
+
 }

@@ -36,7 +36,11 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
 
+<<<<<<< HEAD
   <!--  <FrameLayout
+=======
+    <FrameLayout
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
         android:id="@+id/progressbar"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -49,8 +53,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>
     </FrameLayout>
+<<<<<<< HEAD
 -->
   <!--  <FrameLayout
+=======
+
+    <FrameLayout
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
         android:id="@+id/video_close_view"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -62,6 +71,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:src="@drawable/biz_news_list_ad_video_close_btn"/>
+<<<<<<< HEAD
     </FrameLayout>-->
+=======
+    </FrameLayout>
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
 
 </RelativeLayout>

@@ -2,10 +2,10 @@
 <resources>
 
     <dimen name="home_me_title_height">69dp</dimen>
-    <dimen name="home_me_set_btn_width">44dp</dimen>
+    <dimen name="home_me_set_btn_width">54dp</dimen>
     <dimen name="home_me_set_btn_height">34dp</dimen>
     <dimen name="home_me_set_btn_top">30dp</dimen>
-    <dimen name="home_me_set_btn_right">15dp</dimen>
+    <dimen name="home_me_set_btn_right">25dp</dimen>
     <dimen name="home_me_headportrait_img_width">173dp</dimen>
     <dimen name="home_me_headportrait_img_height">186dp</dimen>
     <dimen name="home_me_headportrait_img_left">30dp</dimen>
@@ -50,8 +50,8 @@
     <dimen name="about_us_layout_container_bottom">16dp</dimen>
     <!--编辑账号-->
     <dimen name="account_edit_personalheader_width">88dp</dimen>
-    <dimen name="account_edit_personalheader_top">81dp</dimen>
-    <dimen name="account_eidt_userinfo_contianer_top">18dp</dimen>
+    <dimen name="account_edit_personalheader_top">36dp</dimen>
+    <dimen name="account_edit_personalheader_bottom">18dp</dimen>
     <dimen name="account_edit_nickname_left">13dp</dimen>
     <dimen name="account_edit_nickname_right">10dp</dimen>
     <dimen name="accout_edit_boy_sex_cb_width">18dp</dimen>
@@ -59,9 +59,9 @@
     <dimen name="accout_edit_boy_sex_cb_left">60dp</dimen>
     <dimen name="accout_edit_girl_sex_cb_width">12dp</dimen>
     <dimen name="accout_edit_girl_sex_cb_height">16dp</dimen>
-    <dimen name="accout_edit_girl_sex_cb_left">75dp</dimen>
+    <dimen name="accout_edit_girl_sex_cb_left">70dp</dimen>
     <dimen name="accout_edit_sex_line_heigt">25dp</dimen>
-    <dimen name="accout_edit_sex_line_left">78dp</dimen>
+    <dimen name="accout_edit_sex_line_left">73dp</dimen>
     <dimen name="accout_edit_spiner_width">20dp</dimen>
 
 
@@ -98,8 +98,7 @@
     <dimen name="common_back_btn_height">48dp</dimen>
     <dimen name="common_back_btn_top_padding">15dp</dimen>
     <dimen name="common_back_btn_left_padding">12dp</dimen>
-    <dimen name="register_title_height">44dp</dimen>
-    <dimen name="register_title_divde_line_height">1dp</dimen>
+    <dimen name="register_title_divde_line_height">0.5px</dimen>
     <dimen name="register_edit_left">12dp</dimen>
     <dimen name="register_edit_right">12dp</dimen>
     <dimen name="register_edit_height">50dp</dimen>
@@ -126,9 +125,9 @@
     <dimen name="my_conpon_denomination_units_height">28dp</dimen>
     <dimen name="my_favorite_item_authoravatar_width">22dp</dimen>
     <dimen name="my_favorite_item_authoravatar_height">22dp</dimen>
-    <dimen name="my_oder_nothing_img_width">75dp</dimen>
-    <dimen name="my_oder_nothing_img_height">49dp</dimen>
-    <dimen name="my_oder_nothing_img_top">30dp</dimen>
+    <dimen name="my_oder_nothing_img_width">99dp</dimen>
+    <dimen name="my_oder_nothing_img_height">61dp</dimen>
+    <dimen name="my_oder_nothing_img_top">90dp</dimen>
     <dimen name="my_coupon_convert_btn_height">44dp</dimen>
     <dimen name="convertdialog_input_code_height">44dp</dimen>
     <dimen name="my_coupon_nothing_img_top">118dp</dimen>
@@ -152,7 +151,7 @@
     <dimen name="my_order_adult_container_top">3dp</dimen>
     <dimen name="my_order_adult_item_top">10dp</dimen>
     <dimen name="my_order_adult_container_height">64dp</dimen>
-    <dimen name="order_service_right">53dp</dimen>
+    <dimen name="order_service_right">16dp</dimen>
     <dimen name="order_more_width">39dp</dimen>
     <dimen name="order_more_height">4dp</dimen>
     <dimen name="order_more_right">15dp</dimen>

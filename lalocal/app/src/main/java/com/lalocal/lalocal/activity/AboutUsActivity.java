@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,13 +14,11 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
     TextView appversion;
     RelativeLayout email_rl, inland_phone_rl, foreign_phone_rl;
     RelativeLayout grade_rl, useclauses_rl;
-    ImageView backImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.about_us_layout);
-        backImg = (ImageView) findViewById(R.id.common_back_btn);
         appversion = (TextView) findViewById(R.id.about_us_version);
         email_rl = (RelativeLayout) findViewById(R.id.about_us_email);
         inland_phone_rl = (RelativeLayout) findViewById(R.id.about_us_phone_inner);
@@ -29,7 +26,6 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
         grade_rl = (RelativeLayout) findViewById(R.id.about_us_grade);
         useclauses_rl = (RelativeLayout) findViewById(R.id.about_us_use_clauses);
         appversion.setText("版本" + AppConfig.getVersionName(this));
-        backImg.setOnClickListener(this);
         email_rl.setOnClickListener(this);
         inland_phone_rl.setOnClickListener(this);
         foreign_phone_rl.setOnClickListener(this);
@@ -40,9 +36,6 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.common_back_btn:
-                finish();
-                break;
             case R.id.about_us_email:
                 sendEmail();
                 break;

@@ -6,6 +6,7 @@
     <EditText
         android:id="@+id/input_edit"
         style="@style/RegisterEditTheme"
+        android:paddingRight="40dp"
         />
 
     <Button

@@ -1,14 +1,14 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -19,7 +19,6 @@ import com.lalocal.lalocal.view.dialog.CustomDialog;
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     CustomEditText email_edit, psw_edit, nickname_edit;
     Button register_btn;
-    ImageView back_btn;
     ContentService contentService;
     TextView userprotocol_tv;
     String loginEmail, loginPsw;
@@ -39,7 +38,6 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initView() {
-        back_btn = (ImageView) findViewById(R.id.common_back_btn);
         email_edit = (CustomEditText) findViewById(R.id.reigster_emial_custom_edit);
         psw_edit = (CustomEditText) findViewById(R.id.reigster_psw_custom_edit);
         nickname_edit = (CustomEditText) findViewById(R.id.reigster_nickname_custom_edit);
@@ -48,18 +46,24 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         email_edit.setSelectedButton(register_btn);
         psw_edit.setSelectedButton(register_btn);
         nickname_edit.setSelectedButton(register_btn);
+        nickname_edit.setFilterSpace(true);
         email_edit.setClearButtonVisible(false);
         register_btn.setOnClickListener(this);
-        back_btn.setOnClickListener(this);
         userprotocol_tv.setOnClickListener(this);
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            email_edit.setText(email);
+        }
+    }
+
+    private String getEmail() {
+        return getIntent().getStringExtra(KeyParams.EMAIL);
     }
 
 
     @Override
     public void onClick(View v) {
-        if (v == back_btn) {
-            finish();
-        } else if (v == register_btn) {
+        if (v == register_btn) {
             register();
         } else if (v == userprotocol_tv) {
             showUserProtocol();
@@ -76,64 +80,56 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         String psw = psw_edit.getText();
         String nickname = nickname_edit.getText();
         AppLog.print("check email_____" + CommonUtil.checkEmail(email));
-        if (!CommonUtil.checkEmail(email)) {
-            CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), promptDialogClicklistener);
+        if (CommonUtil.isEmpty(email)) {
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), null);
             return;
         }
-        AppLog.print("ceheck psw__" + CommonUtil.checkPassword(psw));
+
+        if (CommonUtil.isEmpty(psw)) {
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_empty), null);
+            return;
+        }
+        if (CommonUtil.isEmpty(nickname)) {
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_no_empty), null);
+            return;
+        }
+
+        if (!CommonUtil.checkEmail(email)) {
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), null);
+            return;
+        }
         if (!CommonUtil.checkPassword(psw)) {
-            CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), promptDialogClicklistener);
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
             return;
         }
         AppLog.print("ceheck nick__" + CommonUtil.checkNickname(nickname));
         if (!CommonUtil.checkNickname(nickname)) {
-            CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_no_right), promptDialogClicklistener);
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.nickname_no_right), null);
             return;
         }
         if (contentService != null) {
-            contentService.register(email, psw, nickname);
+            register_btn.setEnabled(false);
+            contentService.register(email, psw, nickname,register_btn);
         }
     }
 
-    class CallBack extends ICallBack {
+    class CallBack extends ICallBack implements CustomDialog.CustomDialogListener {
         @Override
         public void onResigterComplete(String email, String psw, int userid, String token) {
-                loginEmail = email;
-                loginPsw = psw;
-                contentService.boundEmail(email, userid, token);
+            loginEmail = email;
+            loginPsw = psw;
+            CommonUtil.showPromptDialog(RegisterActivity.this, getResources().getString(R.string.register_success_prompt), this);
         }
 
         @Override
-        public void onSendActivateEmmailComplete(int code, String message) {
-            CommonUtil.showPromptDialog(RegisterActivity.this, getResources().getString(R.string.register_success_prompt), successDialogClicklistener);
-        }
-
-        @Override
-        public void onRequestFailed(String msg) {
-            CommonUtil.showPromptDialog(RegisterActivity.this, "注册失败", promptDialogClicklistener);
-        }
-    }
-
-
-    CustomDialog.CustomDialogListener promptDialogClicklistener = new CustomDialog.CustomDialogListener() {
-        @Override
-        public void onDialogClickListener(Dialog dialog, View view) {
-            dialog.dismiss();
-        }
-
-    };
-
-    CustomDialog.CustomDialogListener successDialogClicklistener = new CustomDialog.CustomDialogListener() {
-        @Override
-        public void onDialogClickListener(Dialog dialog, View view) {
-            dialog.dismiss();
+        public void onDialogClickListener() {
             Intent intent = new Intent();
             intent.putExtra(LoginActivity.EMAIL, loginEmail);
             intent.putExtra(LoginActivity.PSW, loginPsw);
             setResult(RESULT_OK, intent);
             finish();
         }
-    };
+    }
 
 
 }

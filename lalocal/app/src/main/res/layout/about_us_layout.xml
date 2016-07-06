@@ -1,270 +1,258 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:snser="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_fa"
-    android:scrollbars="none"
+    android:orientation="vertical"
     tools:context="com.lalocal.lalocal.activity.AboutUsActivity">
 
-    <RelativeLayout
+    <com.lalocal.lalocal.view.CustomTitleView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingBottom="@dimen/about_us_layout_container_bottom">
+        android:layout_height="wrap_content"
+        snser:title_name="@string/about_us" />
 
-        <FrameLayout
-            android:id="@+id/about_us_title"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dimen_size_15_dp"
+        >
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/register_title_height"
-            android:background="@color/white">
+            android:layout_height="wrap_content">
 
-            <include layout="@layout/common_back_layout" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/about_us"
-                android:textColor="@color/color_1a"
-                android:textSize="@dimen/text_size_17_sp" />
-        </FrameLayout>
-
-        <TextView
-            style="@style/CommonDeLineTheme"
-            android:layout_below="@+id/about_us_title" />
-
-
-        <com.lalocal.lalocal.view.RoundImageView
-            android:id="@+id/about_us_logo"
-            android:layout_width="@dimen/about_us_logo_width"
-            android:layout_height="@dimen/about_us_logo_width"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/about_us_logo_top"
-            android:src="@drawable/company_logo"
-            snser:borderColor="@color/color_d9"
-            snser:borderWidth="@dimen/dimen_size_1_dp"
-            snser:rectRoundRadius="@dimen/dimen_size_10_dp"
-            snser:type="rounded_rect" />
-
-        <TextView
-            android:id="@+id/about_us_company_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_logo"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/about_us_company_name_top"
-            android:text="@string/company_name"
-            android:textColor="@color/color_66"
-            android:textSize="@dimen/text_size_18_sp"
-            android:textStyle="bold" />
-
-        <LinearLayout
-            android:id="@+id/about_us_slogan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_company_name"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/about_us_slogan_top"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="@dimen/dimen_size_7_dp"
-                android:layout_height="@dimen/dimen_size_1_dp"
-                android:background="@color/color_b3" />
-
+            <com.lalocal.lalocal.view.RoundImageView
+                android:id="@+id/about_us_logo"
+                android:layout_width="@dimen/about_us_logo_width"
+                android:layout_height="@dimen/about_us_logo_width"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/about_us_logo_top"
+                android:src="@drawable/company_logo"
+                snser:borderColor="@color/color_d9"
+                snser:borderWidth="@dimen/dimen_size_1_dp"
+                snser:rectRoundRadius="@dimen/dimen_size_10_dp"
+                snser:type="rounded_rect" />
 
             <TextView
+                android:id="@+id/about_us_company_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dimen_size_10_dp"
-                android:layout_marginRight="@dimen/dimen_size_10_dp"
-                android:text="@string/slogan"
+                android:layout_below="@+id/about_us_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/about_us_company_name_top"
+                android:text="@string/company_name"
+                android:textColor="@color/color_66"
+                android:textSize="@dimen/text_size_18_sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/about_us_slogan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_company_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/about_us_slogan_top"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/dimen_size_7_dp"
+                    android:layout_height="@dimen/dimen_size_1_dp"
+                    android:background="@color/color_b3" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_size_10_dp"
+                    android:layout_marginRight="@dimen/dimen_size_10_dp"
+                    android:text="@string/slogan"
+                    android:textColor="@color/color_b3"
+                    android:textSize="@dimen/text_size_12_sp" />
+
+                <View
+                    android:layout_width="@dimen/dimen_size_7_dp"
+                    android:layout_height="@dimen/dimen_size_1_dp"
+                    android:background="@color/color_b3" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/about_us_version"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_slogan"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/about_us_slogan_top"
+                android:text="版本1.0.0"
                 android:textColor="@color/color_b3"
                 android:textSize="@dimen/text_size_12_sp" />
 
-            <View
-                android:layout_width="@dimen/dimen_size_7_dp"
-                android:layout_height="@dimen/dimen_size_1_dp"
-                android:background="@color/color_b3" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/about_us_version"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_slogan"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/about_us_slogan_top"
-            android:text="版本1.0.0"
-            android:textColor="@color/color_b3"
-            android:textSize="@dimen/text_size_12_sp" />
-
-        <TextView
-            android:id="@+id/about_us_contact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_version"
-            android:layout_marginLeft="@dimen/about_us_contact_left"
-            android:layout_marginTop="@dimen/about_us_contact_top"
-            android:text="@string/contact_us"
-            android:textColor="@color/color_b3"
-            android:textSize="@dimen/text_size_12_sp" />
-
-        <LinearLayout
-            android:id="@+id/about_us_contact_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_contact"
-            android:layout_marginTop="@dimen/about_us_contact_item1_top"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <TextView style="@style/CommonD9LineTheme" />
-
-            <RelativeLayout
-                android:id="@+id/about_us_email"
-                style="@style/AboutUsItemTheme">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_12_dp"
-                    android:drawableLeft="@drawable/about_us_icon_email"
-                    android:drawablePadding="@dimen/dimen_size_9_dp"
-                    android:gravity="center"
-                    android:text="@string/company_email" />
-
-                <ImageView style="@style/AboutUsItemArrowTheme" />
-
-            </RelativeLayout>
-
             <TextView
-                style="@style/CommonD9LineTheme"
-                android:layout_marginLeft="@dimen/dimen_size_12_dp"
-                android:layout_marginRight="@dimen/dimen_size_11_dp" />
+                android:id="@+id/about_us_contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_version"
+                android:layout_marginLeft="@dimen/about_us_contact_left"
+                android:layout_marginTop="@dimen/about_us_contact_top"
+                android:text="@string/contact_us"
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_12_sp" />
 
-            <RelativeLayout
-                android:id="@+id/about_us_phone_inner"
-                style="@style/AboutUsItemTheme"
+            <LinearLayout
+                android:id="@+id/about_us_contact_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_contact"
+                android:layout_marginTop="@dimen/about_us_contact_item1_top"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-                >
+                <TextView style="@style/CommonD9LineTheme" />
+
+                <RelativeLayout
+                    android:id="@+id/about_us_email"
+                    style="@style/AboutUsItemTheme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+                        android:drawableLeft="@drawable/about_us_icon_email"
+                        android:drawablePadding="@dimen/dimen_size_9_dp"
+                        android:gravity="center"
+                        android:text="@string/company_email" />
+
+                    <ImageView style="@style/AboutUsItemArrowTheme" />
+
+                </RelativeLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CommonD9LineTheme"
                     android:layout_marginLeft="@dimen/dimen_size_12_dp"
-                    android:drawableLeft="@drawable/about_us_icon_phone"
-                    android:drawablePadding="@dimen/dimen_size_9_dp"
-                    android:gravity="center"
-                    android:text="@string/company_phone" />
+                    android:layout_marginRight="@dimen/dimen_size_11_dp" />
 
-                <ImageView style="@style/AboutUsItemArrowTheme" />
+                <RelativeLayout
+                    android:id="@+id/about_us_phone_inner"
+                    style="@style/AboutUsItemTheme"
 
-            </RelativeLayout>
+                    >
 
-            <TextView
-                style="@style/CommonD9LineTheme"
-                android:layout_marginLeft="@dimen/dimen_size_36_dp"
-                android:layout_marginRight="@dimen/dimen_size_11_dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+                        android:drawableLeft="@drawable/about_us_icon_phone"
+                        android:drawablePadding="@dimen/dimen_size_9_dp"
+                        android:gravity="center"
+                        android:text="@string/company_phone" />
 
-            <RelativeLayout
-                android:id="@+id/about_us_phone_outer"
-                style="@style/AboutUsItemTheme">
+                    <ImageView style="@style/AboutUsItemArrowTheme" />
+
+                </RelativeLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CommonD9LineTheme"
                     android:layout_marginLeft="@dimen/dimen_size_36_dp"
-                    android:drawablePadding="@dimen/dimen_size_9_dp"
-                    android:gravity="center"
-                    android:text="@string/company_phone_outer" />
-                |
+                    android:layout_marginRight="@dimen/dimen_size_11_dp" />
 
-                <ImageView style="@style/AboutUsItemArrowTheme" />
+                <RelativeLayout
+                    android:id="@+id/about_us_phone_outer"
+                    style="@style/AboutUsItemTheme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_36_dp"
+                        android:drawablePadding="@dimen/dimen_size_9_dp"
+                        android:gravity="center"
+                        android:text="@string/company_phone_outer" />
+                    |
+
+                    <ImageView style="@style/AboutUsItemArrowTheme" />
 
 
-            </RelativeLayout>
+                </RelativeLayout>
 
-            <TextView style="@style/CommonD9LineTheme" />
+                <TextView style="@style/CommonD9LineTheme" />
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/about_us_user"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_contact_container"
-            android:layout_marginTop="@dimen/dimen_size_15_dp"
-            android:background="@color/white"
-            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/about_us_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_contact_container"
+                android:layout_marginTop="@dimen/dimen_size_15_dp"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            <TextView style="@style/CommonD9LineTheme" />
+                <TextView style="@style/CommonD9LineTheme" />
 
-            <RelativeLayout
-                android:id="@+id/about_us_grade"
-                style="@style/AboutUsItemTheme">
+                <RelativeLayout
+                    android:id="@+id/about_us_grade"
+                    style="@style/AboutUsItemTheme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+                        android:drawablePadding="@dimen/dimen_size_9_dp"
+                        android:gravity="center"
+                        android:text="@string/grade" />
+
+                    <ImageView style="@style/AboutUsItemArrowTheme" />
+
+
+                </RelativeLayout>
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/CommonD9LineTheme"
                     android:layout_marginLeft="@dimen/dimen_size_12_dp"
-                    android:drawablePadding="@dimen/dimen_size_9_dp"
-                    android:gravity="center"
-                    android:text="@string/grade" />
+                    android:layout_marginRight="@dimen/dimen_size_11_dp" />
 
-                <ImageView style="@style/AboutUsItemArrowTheme" />
+                <RelativeLayout
+                    android:id="@+id/about_us_use_clauses"
+                    style="@style/AboutUsItemTheme">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+                        android:drawablePadding="@dimen/dimen_size_9_dp"
+                        android:gravity="center"
+                        android:text="@string/use_clauses" />
+
+                    <ImageView style="@style/AboutUsItemArrowTheme" />
+                </RelativeLayout>
+
+                <TextView style="@style/CommonD9LineTheme" />
 
 
-            </RelativeLayout>
+            </LinearLayout>
 
             <TextView
-                style="@style/CommonD9LineTheme"
-                android:layout_marginLeft="@dimen/dimen_size_12_dp"
-                android:layout_marginRight="@dimen/dimen_size_11_dp" />
+                android:id="@+id/about_us_publisher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_user"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/about_us_publisher_top"
+                android:text="@string/publisher"
+                android:textColor="@color/color_c5"
+                android:textSize="@dimen/text_size_10_sp" />
 
-            <RelativeLayout
-                android:id="@+id/about_us_use_clauses"
-                style="@style/AboutUsItemTheme">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_12_dp"
-                    android:drawablePadding="@dimen/dimen_size_9_dp"
-                    android:gravity="center"
-                    android:text="@string/use_clauses" />
-
-                <ImageView style="@style/AboutUsItemArrowTheme" />
-            </RelativeLayout>
-
-            <TextView style="@style/CommonD9LineTheme" />
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/about_us_publisher"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_user"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/about_us_publisher_top"
-            android:text="@string/publisher"
-            android:textColor="@color/color_c5"
-            android:textSize="@dimen/text_size_8_sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/about_us_publisher"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/about_us_reserved_top"
-            android:text="@string/reserved"
-            android:textColor="@color/color_c5"
-            android:textSize="@dimen/text_size_8_sp" />
-    </RelativeLayout>
-
-</ScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/about_us_publisher"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/about_us_reserved_top"
+                android:text="@string/reserved"
+                android:textColor="@color/color_c5"
+                android:textSize="@dimen/text_size_10_sp" />
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

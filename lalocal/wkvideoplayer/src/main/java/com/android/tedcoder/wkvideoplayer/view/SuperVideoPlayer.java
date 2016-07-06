@@ -49,8 +49,13 @@ public class SuperVideoPlayer extends RelativeLayout {
     private MediaController mMediaController;//控制器
     private Timer mUpdateTimer;
     private VideoPlayCallbackImpl mVideoPlayCallback;//回调函数
+<<<<<<< HEAD
     //private View mProgressBarView;//加载中按钮
    // private View mCloseBtnView;//关闭按钮
+=======
+    private View mProgressBarView;//加载中按钮
+    private View mCloseBtnView;//关闭按钮
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
     private Uri mUri;//网络视频路径
 
     //是否自动隐藏控制栏
@@ -69,7 +74,18 @@ public class SuperVideoPlayer extends RelativeLayout {
         }
     });
 
+<<<<<<< HEAD
 
+=======
+    private View.OnClickListener mOnClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            if (view.getId() == R.id.video_close_view) {
+                mVideoPlayCallback.onCloseVideo();//回调函数的关闭方法
+            }
+        }
+    };
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
 
     private View.OnTouchListener mOnTouchVideoListener = new OnTouchListener() {
         @Override
@@ -120,7 +136,11 @@ public class SuperVideoPlayer extends RelativeLayout {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
+<<<<<<< HEAD
                    //     mProgressBarView.setVisibility(View.GONE);
+=======
+                        mProgressBarView.setVisibility(View.GONE);
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
                         setCloseButton(true);
                         return true;
                     }
@@ -169,6 +189,7 @@ public class SuperVideoPlayer extends RelativeLayout {
      *
      * @param isShowController 是否显示控制条
      */
+<<<<<<< HEAD
     public boolean pausePlay(boolean isShowController) {
         mVideoView.pause();
         mMediaController.setPlayState(MediaController.PlayState.PAUSE);
@@ -177,6 +198,14 @@ public class SuperVideoPlayer extends RelativeLayout {
     }
 
 
+=======
+    public void pausePlay(boolean isShowController) {
+        mVideoView.pause();
+        mMediaController.setPlayState(MediaController.PlayState.PAUSE);
+        stopHideTimer(isShowController);
+    }
+
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
     /***
      * 继续播放
      */
@@ -235,6 +264,11 @@ public class SuperVideoPlayer extends RelativeLayout {
         View.inflate(context, R.layout.super_vodeo_player_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
         mVideoView = (VideoView) findViewById(R.id.video_view);
         mMediaController = (MediaController) findViewById(R.id.controller);
+<<<<<<< HEAD
+=======
+        mProgressBarView = findViewById(R.id.progressbar);//加载中的那个圆圈
+        mCloseBtnView = findViewById(R.id.video_close_view);
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
 
         mMediaController.setMediaControl(mMediaControl);
         mVideoView.setOnTouchListener(mOnTouchVideoListener);
@@ -242,7 +276,12 @@ public class SuperVideoPlayer extends RelativeLayout {
         setCloseButton(false);
         showProgressView(false);
 
+<<<<<<< HEAD
 
+=======
+        mCloseBtnView.setOnClickListener(mOnClickListener);
+        mProgressBarView.setOnClickListener(mOnClickListener);
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
     }
 
     /**
@@ -251,7 +290,11 @@ public class SuperVideoPlayer extends RelativeLayout {
      * @param isShow isShow
      */
     private void setCloseButton(boolean isShow) {
+<<<<<<< HEAD
       ///  mCloseBtnView.setVisibility(isShow ? VISIBLE : INVISIBLE);
+=======
+        mCloseBtnView.setVisibility(isShow ? VISIBLE : INVISIBLE);
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
     }
 
     /**
@@ -308,11 +351,19 @@ public class SuperVideoPlayer extends RelativeLayout {
      * @param isTransparentBg isTransparentBg
      */
     private void showProgressView(Boolean isTransparentBg) {
+<<<<<<< HEAD
       //  mProgressBarView.setVisibility(VISIBLE);
         if (!isTransparentBg) {
          //   mProgressBarView.setBackgroundResource(android.R.color.black);
         } else {
            // mProgressBarView.setBackgroundResource(android.R.color.transparent);
+=======
+        mProgressBarView.setVisibility(VISIBLE);
+        if (!isTransparentBg) {
+            mProgressBarView.setBackgroundResource(android.R.color.black);
+        } else {
+            mProgressBarView.setBackgroundResource(android.R.color.transparent);
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
         }
     }
 

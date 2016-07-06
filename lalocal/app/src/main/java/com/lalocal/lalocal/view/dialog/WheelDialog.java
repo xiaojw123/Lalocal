@@ -25,12 +25,17 @@ public class WheelDialog extends Dialog implements View.OnClickListener {
     private Context context;
     private OnWheelSelectedListener listener;
     private Country selectedItem;
+    private View view;
 
 
     public WheelDialog(Context context) {
         super(context, R.style.prompt_dialog);
         this.context = context;
 
+    }
+
+    public void setEnalbeView(View view) {
+        this.view = view;
     }
 
 
@@ -73,6 +78,22 @@ public class WheelDialog extends Dialog implements View.OnClickListener {
             listener.onSelected(selectedItem);
         }
 
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (view != null) {
+            view.setEnabled(false);
+        }
+    }
+
+    @Override
+    public void dismiss() {
+        super.dismiss();
+        if (view != null) {
+            view.setEnabled(true);
+        }
     }
 
     public interface OnWheelSelectedListener {

@@ -4,8 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/lalocal.iml" filepath="$PROJECT_DIR$/lalocal.iml" />
+<<<<<<< HEAD
       <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
       <module fileurl="file://$PROJECT_DIR$/shinebuttonlib/shinebuttonlib.iml" filepath="$PROJECT_DIR$/shinebuttonlib/shinebuttonlib.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" filepath="$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" />
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
       <module fileurl="file://$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" filepath="$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" />
     </modules>
   </component>

@@ -5,13 +5,19 @@
       <GradleProjectSettings>
         <option name="distributionType" value="LOCAL" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
         <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.10" />
+=======
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+<<<<<<< HEAD
             <option value="$PROJECT_DIR$/library" />
             <option value="$PROJECT_DIR$/shinebuttonlib" />
+=======
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
             <option value="$PROJECT_DIR$/wkvideoplayer" />
           </set>
         </option>
@@ -19,8 +25,11 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+<<<<<<< HEAD
             <option value="$PROJECT_DIR$/library" />
             <option value="$PROJECT_DIR$/shinebuttonlib" />
+=======
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
             <option value="$PROJECT_DIR$/wkvideoplayer" />
           </set>
         </option>

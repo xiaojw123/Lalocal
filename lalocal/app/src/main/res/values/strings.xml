@@ -28,8 +28,8 @@
     <string name="weibo">微博</string>
     <string name="prompt">提示</string>
     <string name="sure">确认</string>
-    <string name="email_no_right">邮箱输入有误</string>
-    <string name="psw_no_right">密码输入有误</string>
+    <string name="email_no_right">邮箱输入格式有误</string>
+    <string name="psw_no_right">密码必须6-20位</string>
     <string name="nickname_no_right">昵称不正确</string>
     <string name="nickname_input_error">昵称输入有误</string>
     <string name="message_not_empty">信息不能为空</string>
@@ -55,8 +55,8 @@
     <string name="company_phone_outer">(+86)0571-86808267  (境外)</string>
     <string name="grade">去评分</string>
     <string name="use_clauses">使用条款</string>
-    <string name="publisher">\@2015杭州目的地科技有限公司</string>
-    <string name="reserved">Copright (c) 2015 HangZhou Destionation Technology Ltd All rights reserved</string>
+    <string name="publisher">©2015杭州目的地科技有限公司</string>
+    <string name="reserved">Copyright（c）2015 HangZhou Destionation Technology Ltd. All rights reserved.</string>
     <string name="edit_account">编辑账号</string>
     <string name="sex">性别</string>
     <string name="phone">电话</string>
@@ -71,8 +71,13 @@
     <string name="send_again">重新发送</string>
     <string name="change_email">更换邮箱</string>
     <string name="bound_email">绑定邮箱</string>
-
     <string name="send_email_vercode">发送验证</string>
+    <string name="email_or_psw_no_empty">邮箱或密码不能为空</string>
+    <string name="nickname_no_empty">昵称不能为空</string>
+    <string name="psw_limit_dights">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNUVWXYZOPQRST</string>
+    <string name="email_or_psw_no_right">邮箱地址或密码输入不正确,请重试</string>
+    <string name="email_no_change">您的邮箱并未发生改动，无需重复认证</string>
+
 
 
     <!-- XListView -->

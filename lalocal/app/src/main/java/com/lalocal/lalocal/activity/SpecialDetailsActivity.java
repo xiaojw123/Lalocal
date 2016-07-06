@@ -17,7 +17,9 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+
 import android.view.ViewGroup;
+
 import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -102,11 +104,13 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private int praiseId;
     private String h5Url;
     private View mPlayBtnView;
+
     private RelativeLayout relativeLayout;
     private View line;
     private boolean isPause;
     private SecretTextView textContent;
     private SecretTextView textName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -345,9 +349,21 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private void playVideo(final String videoUrl) {
         mPlayBtnView.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
+
         videoView.setAutoHideController(true);
         Uri uri = Uri.parse(videoUrl);
         videoView.loadAndPlay(uri, 0);
+
+        videoView.setAutoHideController(false);
+        Uri uri = Uri.parse(videoUrl);
+        videoView.loadAndPlay(uri, 0);
+    }
+
+
+    /**
+     * 播放器的回调函数
+     */
+    private SuperVideoPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new SuperVideoPlayer.VideoPlayCallbackImpl() {
 
 
     }
@@ -397,6 +413,18 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
 
 
+
+        @Override
+        public void onCloseVideo() {
+            videoView.close();//关闭VideoView
+            mPlayBtnView.setVisibility(View.VISIBLE);
+            videoView.setVisibility(View.GONE);
+            resetPageToPortrait();
+        }
+
+        @Override
+        public void onSwitchPageType() {
+
         }
 
 
@@ -405,6 +433,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
          */
         @Override
         public void onPlayFinish() {
+
 
         }
     };
@@ -435,13 +464,30 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         specialWebView.setWebViewClient(new MyWebViewClient());
 
+
+        }
+    };
+    /***
+     * 恢复屏幕至竖屏
+     */
+    private void resetPageToPortrait() {
+        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            videoView.setPageType(MediaController.PageType.SHRINK);
+        }
     }
+
+
+
+
+
 
 
     //滚动监听，超出视屏区域，暂停播放视屏
     @Override
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
         int i = DensityUtil.dip2px(mContext, 200);
+
         if (y > 600) {
             isPause = videoView.pausePlay(false);
             isPause=true;
@@ -449,6 +495,14 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             isPause=false;
             videoView.goOnPlay();
         }
+
+      /*  if (y > 600) {
+            videoView.pause();
+        } else {
+            videoView.start();
+        }
+*/
+
     }
 
     boolean isLoading = true;
@@ -466,7 +520,12 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                         if (articleDetailsBeanList != null) {
                             for (int i = 0; i < articleDetailsBeanList.size(); i++) {
                                 if (specialToH5Bean.getTargetId() == articleDetailsBeanList.get(i).getTargetId()) {
+
                                     Intent intent1 = new Intent(mContext, ArticleTestAct.class);
+
+                                 //   Intent intent1 = new Intent(mContext, ArticleActivity.class);
+                                    Intent intent1 = new Intent(mContext, TestActivity.class);
+
                                     intent1.putExtra("articleDetailsBean", articleDetailsBeanList.get(i));
                                     startActivity(intent1);
                                 }

@@ -23,7 +23,11 @@ public class VideoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_layout);
+<<<<<<< HEAD
         viewById = (SuperVideoPlayer) findViewById(R.id.video_player_item_1);
+=======
+        VideoView viewById = (VideoView) findViewById(R.id.video_player_item_1);
+>>>>>>> ede52b5d0288a8fcc3e6e5d16340d734514ef6c1
         Intent intent = getIntent();
         String video = intent.getStringExtra("video");
         // mPlayBtnView.setVisibility(View.GONE);

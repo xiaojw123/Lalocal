@@ -1,10 +1,13 @@
 package com.lalocal.lalocal.service;
 
-import android.app.Dialog;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -14,6 +17,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.lalocal.lalocal.activity.RegisterActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
@@ -162,7 +167,7 @@ public class ContentService {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
             response.setEmail(email);
         }
-        ContentRequest request = new   ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
         request.setBodyParams(getCheckParams(email));
         requestQueue.add(request);
     }
@@ -172,6 +177,7 @@ public class ContentService {
     public void login(final String email, final String password) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN);
+            response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.LOGIN_URL, response, response);
         request.setBodyParams(getLoginParams(email, password));
@@ -179,9 +185,10 @@ public class ContentService {
     }
 
     //注册
-    public void register(final String email, final String password, final String nickname) {
+    public void register(final String email, final String password, final String nickname, Button regitsterBtn) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER);
+            response.setResponseView(regitsterBtn);
             response.setUserInfo(email, password);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.REGISTER_URL, response, response);
@@ -347,10 +354,7 @@ public class ContentService {
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-            if (callBack != null) {
-                callBack.onRequestFailed(volleyError.getMessage());
-            }
-
+            Toast.makeText(context, "网络请求异常", Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -368,8 +372,16 @@ public class ContentService {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
-                    //code!=0失败 直接提示用户message
-                    CommonUtil.showPromptDialog(context, message, this);
+                    if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
+                        CustomDialog dialog = new CustomDialog(context);
+                        dialog.setMessage(message);
+                        dialog.setCancelable(false);
+                        dialog.setCancelBtn("取消", null);
+                        dialog.setSurceBtn("去注册", this);
+                        dialog.show();
+                    } else {
+                        CommonUtil.showPromptDialog(context, message, null);
+                    }
                     return;
                 }
                 switch (resultCode) {
@@ -380,6 +392,7 @@ public class ContentService {
                         responseGetMyOrderItems(jsonObj);
                         break;
                     case RequestCode.GET_FAVORITE_ITEMS:
+                        AppLog.print("favorite___result__json__" + json);
                         responseGetFavoriteItems(jsonObj);
                         break;
                     case RequestCode.REGISTER:
@@ -395,20 +408,20 @@ public class ContentService {
                         responseSendVerCode();
                         break;
                     case RequestCode.RESET_PASSWORD:
-                        responseResetPassword(json);
+                        responseResetPassword();
                         break;
                     case RequestCode.MODIFY_USER_PROFILE:
-                        responseModifyUserProfile(json);
+                        responseModifyUserProfile(jsonObj);
                         break;
 
                     case RequestCode.GET_USER_PROFILE:
-                        responseGetUserProfile(json);
+                        responseGetUserProfile(jsonObj);
                         break;
                     case RequestCode.BOUDN_EMAIL:
-                        responseBoundEmail(json);
+                        responseBoundEmail();
                         break;
                     case RequestCode.GET_MY_COUPON:
-                        responseGetMyCoupon(json);
+                        responseGetMyCoupon(jsonObj);
                         break;
                     case RequestCode.RECOMMEND:
                         responseRecommend(json);
@@ -456,32 +469,22 @@ public class ContentService {
 
         }
 
-        private void responseGetMyCoupon(String json) {
-            try {
-                JSONObject jsonObj = new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                if (code == 0) {
-                    JSONArray resultJsonArray = jsonObj.optJSONArray(ResultParams.REULST);
-                    Gson gson = new Gson();
-                    List<Coupon> coupons = new ArrayList<>();
-                    for (int i = 0; i < resultJsonArray.length(); i++) {
-                        JSONObject couponJsonObj = resultJsonArray.optJSONObject(i);
-                        Coupon coupon = gson.fromJson(couponJsonObj.toString(), Coupon.class);
-                        if (coupon.getStatus() == 1) {
-                            continue;
-                        }
-                        coupons.add(coupon);
-                    }
-                    sortCoupon(coupons);
-                    callBack.onGetCounponItem(coupons);
+        private void responseGetMyCoupon(JSONObject jsonObj) {
+            JSONArray resultJsonArray = jsonObj.optJSONArray(ResultParams.REULST);
+            Gson gson = new Gson();
+            List<Coupon> coupons = new ArrayList<>();
+            for (int i = 0; i < resultJsonArray.length(); i++) {
+                JSONObject couponJsonObj = resultJsonArray.optJSONObject(i);
+                Coupon coupon = gson.fromJson(couponJsonObj.toString(), Coupon.class);
+                if (coupon.getStatus() == 1) {
+                    continue;
                 }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+                coupons.add(coupon);
             }
-
-
+            sortCoupon(coupons);
+            callBack.onGetCounponItem(coupons);
         }
+
 
         private void sortCoupon(List<Coupon> coupons) {
             for (int i = 0; i < coupons.size() - 1; i++) {
@@ -526,61 +529,28 @@ public class ContentService {
             callBack.onGetFavoriteItem(items, totalPages, totalRows);
         }
 
-        private void responseBoundEmail(String json) {
-            try {
-                JSONObject jsonObj = new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                String message = jsonObj.optString(ResultParams.MESSAGE);
-                callBack.onSendActivateEmmailComplete(code, message);
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-
-            }
+        private void responseBoundEmail() {
+            callBack.onSendActivateEmmailComplete();
 
         }
 
-        private void responseGetUserProfile(String json) {
-            try {
-                JSONObject jsonObj = new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
-                Gson gson = new Gson();
-                LoginUser user = gson.fromJson(resultJson.toString(), LoginUser.class);
-                callBack.onGetUserProfile(code, user);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
+        private void responseGetUserProfile(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson = new Gson();
+            LoginUser user = gson.fromJson(resultJson.toString(), LoginUser.class);
+            callBack.onGetUserProfile(user);
         }
 
-        private void responseModifyUserProfile(String json) {
-
-            try {
-                JSONObject jsonObj = new JSONObject(json);
-                int code = jsonObj.optInt(ResultParams.RESULT_CODE);
-                JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
-                Gson gson = new Gson();
-                LoginUser user = gson.fromJson(resultJson.toString(), LoginUser.class);
-                callBack.onModifyUserProfile(code, user);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
+        private void responseModifyUserProfile(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson = new Gson();
+            LoginUser user = gson.fromJson(resultJson.toString(), LoginUser.class);
+            callBack.onModifyUserProfile(user);
         }
 
 
-        private void responseResetPassword(String json) {
-            try {
-                JSONObject jsonObject = new JSONObject(json);
-                int code = jsonObject.optInt(ResultParams.RESULT_CODE, 1);
-                String message = jsonObject.optString(ResultParams.MESSAGE);
-                callBack.onResetPasswordComplete(code, message);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        private void responseResetPassword() {
+            callBack.onResetPasswordComplete();
         }
 
         private void responseSendVerCode() {
@@ -609,59 +579,62 @@ public class ContentService {
                 String token = jsonObj.optString("token");
                 callBack.onResigterComplete(email, psw, userid, token);
             }
+
+        }
+
+        //点赞
+        private void responseParises(String json) {
+            AppLog.print("responseParises______" + json);
+
+            PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+            callBack.onInputPariseResult(pariseResult);
+        }
+
+        //取消赞
+        private void responseCancelParises(String json) {
+            AppLog.print("responseCancelParises______" + json);
+            PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+            callBack.onPariseResult(pariseResult);
+        }
+
+        //产品详情
+        private void responseProductDetails(String json) {
+            ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
+            if (productDetailsDataResp != null) {
+                callBack.onProductDetails(productDetailsDataResp);
+            }
+
+        }
+
+
+        //推荐
+        public void responseRecommend(String json) {
+            RecommendDataResp recommendDataResp = new Gson().fromJson(json, RecommendDataResp.class);
+            callBack.onRecommend(recommendDataResp);
+        }
+
+        //推荐广告
+        public void responseRecommendAd(String json) {
+            RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
+            callBack.onRecommendAd(recommendAdResp);
+
+        }
+
+        //specialdetail
+        public void responseSpecialDetail(String json) {
+            SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
+            if (spectialDetailsResp != null) {
+                callBack.onRecommendSpecial(spectialDetailsResp);
+            }
+
         }
 
         @Override
-        public void onDialogClickListener(Dialog dialog, View view) {
-            dialog.dismiss();
+        public void onDialogClickListener() {
+            Intent intent = new Intent(context, RegisterActivity.class);
+            intent.putExtra(KeyParams.EMAIL, email);
+            ((Activity) context).startActivityForResult(intent, 100);
         }
-    }
-
-    //点赞
-    private void responseParises(String json) {
-        AppLog.print("responseParises______" + json);
-
-        PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
-        callBack.onInputPariseResult(pariseResult);
-    }
-
-    //取消赞
-    private void responseCancelParises(String json) {
-        AppLog.print("responseCancelParises______" + json);
-        PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
-        callBack.onPariseResult(pariseResult);
-    }
-
-    //产品详情
-    private void responseProductDetails(String json) {
-        ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
-        if (productDetailsDataResp != null) {
-            callBack.onProductDetails(productDetailsDataResp);
-        }
-
-    }
-
-
-    //推荐
-    public void responseRecommend(String json) {
-        RecommendDataResp recommendDataResp = new Gson().fromJson(json, RecommendDataResp.class);
-        callBack.onRecommend(recommendDataResp);
-    }
-
-    //推荐广告
-    public void responseRecommendAd(String json) {
-        RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
-        callBack.onRecommendAd(recommendAdResp);
-
-    }
-
-    //specialdetail
-    public void responseSpecialDetail(String json) {
-        SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
-        if (spectialDetailsResp != null) {
-            callBack.onRecommendSpecial(spectialDetailsResp);
-        }
-
     }
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
