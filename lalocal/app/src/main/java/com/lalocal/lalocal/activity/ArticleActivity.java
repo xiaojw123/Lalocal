@@ -46,7 +46,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.article_main_layout);
+        setContentView(R.layout.activity_test);
         ShareSDK.initSDK(this);
         Intent intent = getIntent();
         articleDetailsBean = intent.getParcelableExtra("articleDetailsBean");

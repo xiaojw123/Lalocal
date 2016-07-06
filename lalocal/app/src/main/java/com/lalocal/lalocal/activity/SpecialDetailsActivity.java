@@ -2,15 +2,19 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,6 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.tedcoder.wkvideoplayer.view.MediaController;
+import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
@@ -47,10 +54,7 @@ import java.util.List;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
-import io.vov.vitamio.LibsChecker;
-import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.widget.MediaController;
-import io.vov.vitamio.widget.VideoView;
+
 
 
 /**
@@ -72,7 +76,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private ArticleDetailsBean articleDetailsBean;
     private List<ArticleDetailsBean> articleDetailsBeanList;
     private int targetType1;
-    private VideoView videoView;
+    private SuperVideoPlayer videoView;
     private MyScrollView mScrollview;
     private ImageView loadingImg;
     private RelativeLayout photoLayout;
@@ -90,7 +94,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private int targetId;
     private int praiseId;
     private String h5Url;
-
+    private View mPlayBtnView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,14 +116,17 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         imgLayout = (LinearLayout) findViewById(R.id.special_details_img);
         videoLayoout = (RelativeLayout) findViewById(R.id.layout_video);
         main = (LinearLayout) findViewById(R.id.mian);
-        videoView = (VideoView) findViewById(R.id.video);
+        videoView = (SuperVideoPlayer) findViewById(R.id.video_player_item_1);
         banerContent = (RelativeLayout) findViewById(R.id.special_title_content);
 
-
+        mPlayBtnView = findViewById(R.id.play_btn);
+        mPlayBtnView.setOnClickListener(this);
         back.setOnClickListener(this);
         detailsLike.setOnClickListener(this);
         detailsShare.setOnClickListener(this);
         mScrollview.setScrollViewListener(this);
+        videoView.setVideoPlayCallback(mVideoPlayCallback);
+
     }
 
     private void initData() {
@@ -155,7 +162,14 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 if (shareVO != null) {
                     showShare(shareVO);
                 }
+                break;
+            case R.id.play_btn:
+                mPlayBtnView.setVisibility(View.GONE);
+                videoView.setVisibility(View.VISIBLE);
+                videoView.setAutoHideController(false);
 
+                Uri uri = Uri.parse("http://media.lalocal.cn/video/mov/balidao.mov");
+                videoView.loadAndPlay(uri, 0);
                 break;
         }
     }
@@ -329,40 +343,64 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     //播放视频
     private void playVideo(final String videoUrl) {
-
-
-        // 检查包能不能使用
-        if (!LibsChecker.checkVitamioLibs(this)) {
-            return;
-        }
-        videoView.setVideoPath(videoUrl);
-
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                // TODO Auto-generated method stub
-                videoView.start();
-            }
-        });
-        FrameLayout ll = (FrameLayout) findViewById(R.id.ll);
-        MediaController mediaController = new MediaController(this, true, ll);
-        mediaController.setVisibility(View.GONE);
-        mediaController.setAnchorView(videoView);
-        videoView.setMediaController(mediaController);
-
+        mPlayBtnView.setVisibility(View.GONE);
+        videoView.setVisibility(View.VISIBLE);
+        videoView.setAutoHideController(false);
+        Uri uri = Uri.parse(videoUrl);
+        videoView.loadAndPlay(uri, 0);
     }
+
+    /**
+     * 播放器的回调函数
+     */
+    private SuperVideoPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new SuperVideoPlayer.VideoPlayCallbackImpl() {
+
+        @Override
+        public void onCloseVideo() {
+            videoView.close();//关闭VideoView
+            mPlayBtnView.setVisibility(View.VISIBLE);
+            videoView.setVisibility(View.GONE);
+            resetPageToPortrait();
+        }
+
+        @Override
+        public void onSwitchPageType() {
+
+        }
+
+
+        /**
+         * 播放完成回调
+         */
+        @Override
+        public void onPlayFinish() {
+
+        }
+    };
+    /***
+     * 恢复屏幕至竖屏
+     */
+    private void resetPageToPortrait() {
+        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            videoView.setPageType(MediaController.PageType.SHRINK);
+        }
+    }
+
+
+
+
 
     //滚动监听，超出视屏区域，暂停播放视屏
     @Override
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
         int i = DensityUtil.dip2px(mContext, 200);
-        if (y > 600) {
+      /*  if (y > 600) {
             videoView.pause();
         } else {
             videoView.start();
         }
-
+*/
     }
 
 
@@ -383,7 +421,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                         if (articleDetailsBeanList != null) {
                             for (int i = 0; i < articleDetailsBeanList.size(); i++) {
                                 if (specialToH5Bean.getTargetId() == articleDetailsBeanList.get(i).getTargetId()) {
-                                    Intent intent1 = new Intent(mContext, ArticleActivity.class);
+                                 //   Intent intent1 = new Intent(mContext, ArticleActivity.class);
+                                    Intent intent1 = new Intent(mContext, TestActivity.class);
                                     intent1.putExtra("articleDetailsBean", articleDetailsBeanList.get(i));
                                     startActivity(intent1);
                                 }
