@@ -217,19 +217,14 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         } else if (resultCode == SettingActivity.UN_LOGIN_OK) {
             updateFragmentView(false, null);
         } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
-            int status = data.getIntExtra(KeyParams.STATUS, -1);
             String nickname = data.getStringExtra(KeyParams.NICKNAME);
             String avatar = data.getStringExtra(KeyParams.AVATAR);
-            int userid=data.getIntExtra(KeyParams.USERID,-1);
-            String token=data.getStringExtra(KeyParams.TOKEN);
             if (user != null) {
-                user.setStatus(status);
                 user.setNickName(nickname);
                 user.setAvatar(avatar);
                 updateFragmentView(isLogined, user);
+                contentService.getUserProfile(user.getId(), user.getToken());
             }
-            contentService.getUserProfile(userid,token);
-
         } else if (resultCode == SettingActivity.IM_LOGIN) {
             User user = data.getParcelableExtra(USER);
             if (user != null) {

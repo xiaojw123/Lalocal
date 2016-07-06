@@ -109,22 +109,30 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     @Override
     public void onClick(View v) {
         AppLog.print("onClick___");
-        if (!isEidtTextEmpty()) {
-            editText.setText("");
-            clearBtn.setVisibility(GONE);
-        }
-        if (isEnd) {
-            isEnd = false;
-            int len = 0;
-            Editable editable = editText.getText();
-            if (editable != null) {
-                String text = editable.toString();
-                if (!TextUtils.isEmpty(text)) {
-                    len = text.length();
+        switch (v.getId()) {
+            case R.id.input_edit:
+                if (isEnd) {
+                    isEnd = false;
+                    int len = 0;
+                    Editable editable = editText.getText();
+                    if (editable != null) {
+                        String text = editable.toString();
+                        if (!TextUtils.isEmpty(text)) {
+                            len = text.length();
+                        }
+                    }
+                    editText.setSelection(len);
                 }
-            }
-            editText.setSelection(len);
+                break;
+            case R.id.clear_btn:
+                if (!isEidtTextEmpty()) {
+                    editText.setText("");
+                    clearBtn.setVisibility(GONE);
+                }
+                break;
         }
+
+
     }
 
     public boolean isEidtTextEmpty() {
@@ -190,7 +198,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-        AppLog.print("onFoucs____hasFocus==="+hasFocus);
+            AppLog.print("onFoucs____hasFocus===" + hasFocus);
 
 
             if (selecedBtn != null) {

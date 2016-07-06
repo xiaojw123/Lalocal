@@ -59,9 +59,9 @@
     <dimen name="accout_edit_boy_sex_cb_left">60dp</dimen>
     <dimen name="accout_edit_girl_sex_cb_width">12dp</dimen>
     <dimen name="accout_edit_girl_sex_cb_height">16dp</dimen>
-    <dimen name="accout_edit_girl_sex_cb_left">70dp</dimen>
+    <dimen name="accout_edit_girl_sex_cb_left">60dp</dimen>
     <dimen name="accout_edit_sex_line_heigt">25dp</dimen>
-    <dimen name="accout_edit_sex_line_left">73dp</dimen>
+    <dimen name="accout_edit_sex_line_left">63dp</dimen>
     <dimen name="accout_edit_spiner_width">20dp</dimen>
 
 
