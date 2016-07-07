@@ -153,12 +153,10 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        AppLog.print("beforeTextChanged____");
     }
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
-        AppLog.print("onTextChanged___");
         if (isPsw) {
             String editable = editText.getText().toString();
             String str = filterPassword(editable.toString());
@@ -203,8 +201,6 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
 
     @Override
     public void afterTextChanged(Editable s) {
-        AppLog.print("afterTextChanged___");
-
         if (editText.hasFocus()) {
             if (!isClearBtnVisible && !TextUtils.isEmpty(s.toString())) {
                 clearBtn.setVisibility(VISIBLE);

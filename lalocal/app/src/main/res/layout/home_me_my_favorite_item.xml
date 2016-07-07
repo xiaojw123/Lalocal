@@ -38,7 +38,7 @@
             android:layout_marginTop="@dimen/my_favorite_item_title_top"
             android:layout_toRightOf="@+id/my_favorite_item_img"
             android:ellipsize="end"
-            android:lines="3"
+            android:lines="2"
             android:textColor="@color/color_66"
             android:textSize="@dimen/text_size_15_sp" />
 
