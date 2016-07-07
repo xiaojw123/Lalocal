@@ -54,6 +54,7 @@ public class DrawableUtils {
         builder.taskExecutor(Executors.newCachedThreadPool());
         builder.threadPriority(Thread.MAX_PRIORITY);
         builder.writeDebugLogs();
+
         loader.init(builder.build());
     }
 
@@ -67,6 +68,10 @@ public class DrawableUtils {
         builder.cacheInMemory(true);
         builder.cacheOnDisk(true);
         builder.displayer(new RoundedBitmapDisplayer(radius));
+        builder.showStubImage(R.drawable.androidloading);
+        builder.showImageForEmptyUri(R.drawable.androidloading);
+        builder.showImageOnFail(R.drawable.androidloading);
+
 //		builder.displayer(new CircleBitmapDisplayer())
         builder.imageScaleType(ImageScaleType.EXACTLY);
         return builder.build();
