@@ -32,8 +32,6 @@ public class MyFavoriteAdapter extends BaseAdapter {
 
     }
 
-
-
     public void updateListView(List<FavoriteItem> datas) {
         this.datas = datas;
         notifyDataSetChanged();

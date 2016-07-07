@@ -201,14 +201,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     //取消收藏
                     if(praiseFlag){
                         contentService.cancelParises(praiseId);
-
                     }
                     else {//添加收藏
                         int targetId = specialToH5Bean.getTargetId();
                         contentService.specialPraise(targetId, 2);//点赞
-
                     }
-
                 }
                 break;
             case R.id.product_btn_share:
@@ -280,17 +277,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
             }
 
-
         }
 
         @Override
         public void onPariseResult(PariseResult pariseResult) {
             if(pariseResult!=null&&pariseResult.getReturnCode()==0){
                 //btnLike.setImageResource(R.drawable.index_article_btn_like);
-                btnLike.setChecked(false);
+              /*  btnLike.setChecked(false);
                 praiseId=pariseResult.getResult();
-                praiseFlag=false;
+                praiseFlag=false;*/
 
+                btnLike.setChecked(false);
+                praiseFlag = false;
             }
         }
         @Override
@@ -298,8 +296,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             super.onInputPariseResult(pariseResult);
             if(pariseResult.getReturnCode()==0){
                 //btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+             /*   btnLike.setChecked(true);
+                praiseFlag=true;*/
                 btnLike.setChecked(true);
-                praiseFlag=true;
+                praiseId = pariseResult.getResult();
+                praiseFlag = true;
             }
 
         }

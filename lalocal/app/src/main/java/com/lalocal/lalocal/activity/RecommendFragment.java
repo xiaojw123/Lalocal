@@ -51,10 +51,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     boolean firstRefresh = true;
     private int page = 2;
     private  ContentService contentService;
-
     private View header;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +67,9 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         contentService.recommendAd();
         contentService.recommentList(10, 1);
         xlistview = (XListView) view.findViewById(R.id.recommend_xlv);
-
         xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
         xlistview.setXListViewListener(this);
-
         cycleViewPager = new CycleViewPager();
         header = View.inflate(getActivity(), R.layout.viewpager, null);
         View viewById = header.findViewById(R.id.lunbotu_content);
@@ -98,14 +93,12 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         });
         return view;
     }
-
     public class MyCallBack extends ICallBack {
         @Override
         public void onRecommend(RecommendDataResp recommendDataResp) {
             super.onRecommend(recommendDataResp);
             List<RecommendRowsBean> rows = recommendDataResp.getResult().getRows();
             if (recommendDataResp.getReturnCode()==0 && rows != null) {
-
                 totalPages = recommendDataResp.getResult().getTotalPages();
                 totalRows = recommendDataResp.getResult().getTotalRows();
                 if(!isRefresh){
@@ -117,6 +110,9 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     itemCount = allRows.size();
                     allRows.addAll(allRows.size(), rows);
                 }
+                Message message=new Message();
+                message.what=NOTIFI;
+                handler.sendMessage(message);
                 xListviewAdapter = new XListviewAdapter(getActivity(), allRows);
                 if (firstRefresh) {
                     xlistview.setAdapter(xListviewAdapter);
@@ -143,10 +139,19 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            xlistview.stopRefresh();
+            switch (msg.what){
+                case REFRESH:
+                    xlistview.stopRefresh();
+                    break;
+                case NOTIFI:
+                    xListviewAdapter.notifyDataSetChanged();
+                    break;
+            }
+
         }
     };
-
+    public static final int REFRESH=0;
+    public static final int NOTIFI=1;
     boolean isRefresh;
     @Override
     public void onRefresh() {
@@ -156,7 +161,10 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 isRefresh=false;
                 contentService.recommentList(10, 1);
                 page = 2;
-                handler.sendEmptyMessage(0);
+                Message message=new Message();
+                message.what=REFRESH;
+              //  handler.sendEmptyMessage(0);
+                handler.sendMessage(message);
             }
         }, 1000);
 

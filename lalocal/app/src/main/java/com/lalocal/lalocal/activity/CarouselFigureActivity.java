@@ -51,7 +51,6 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
         back.setOnClickListener(this);
         figgure.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View v) {
 
