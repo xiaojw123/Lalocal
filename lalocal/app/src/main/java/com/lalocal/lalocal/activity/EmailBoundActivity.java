@@ -18,7 +18,6 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
     CustomEditText email_edit;
     Button change_email_btn;
     ContentService contentService;
-    boolean isBoundEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

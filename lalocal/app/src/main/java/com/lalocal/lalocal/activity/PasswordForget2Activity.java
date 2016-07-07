@@ -73,7 +73,7 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
     class CallBack extends ICallBack {
         @Override
         public void onResetPasswordComplete() {
-            Toast.makeText(PasswordForget2Activity.this, "密码修改成功!", Toast.LENGTH_LONG).show();
+            CommonUtil.showToast(PasswordForget2Activity.this, "密码修改成功!", Toast.LENGTH_LONG);
             setResult(RESULT_OK, null);
             finish();
         }

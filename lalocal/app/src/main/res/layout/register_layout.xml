@@ -35,7 +35,7 @@
             style="@style/CustomEditTextTheme"
             android:layout_marginTop="@dimen/register_password_edit_top"
             app:maxLen="20"
-            app:dights="@string/psw_limit_dights"
+            app:isPassword="true"
              app:text_hint="@string/write_psw" />
 
         <com.lalocal.lalocal.view.CustomEditText

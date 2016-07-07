@@ -3,7 +3,9 @@ package com.lalocal.lalocal.service;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
@@ -177,7 +180,7 @@ public class ContentService {
     public void login(final String email, final String password) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN);
-            response.setEmail(email);
+            response.setUserInfo(email, password);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.LOGIN_URL, response, response);
         request.setBodyParams(getLoginParams(email, password));
@@ -254,7 +257,7 @@ public class ContentService {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS +targetId, response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -354,7 +357,7 @@ public class ContentService {
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-            Toast.makeText(context, "网络请求异常", Toast.LENGTH_LONG).show();
+            CommonUtil.showToast(context, "网络请求异常", Toast.LENGTH_LONG);
         }
 
         @Override
@@ -570,6 +573,13 @@ public class ContentService {
                 user = gson.fromJson(resutJson.toString(), User.class);
             }
             callBack.onLoginSucess(user);
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(KeyParams.IS_LOGIN, true);
+            bundle.putString(KeyParams.EMAIL, email);
+            bundle.putString(KeyParams.PASSWORD, psw);
+            bundle.putInt(KeyParams.USERID, user.getId());
+            bundle.putString(KeyParams.TOKEN, user.getToken());
+            UserHelper.saveLoginInfo(context,bundle);
         }
 
         private void responseRegister(JSONObject jsonObject) {
@@ -599,6 +609,7 @@ public class ContentService {
 
         //产品详情
         private void responseProductDetails(String json) {
+            AppLog.i("TAG","responseProductDetails:"+json);
             ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
             if (productDetailsDataResp != null) {
                 callBack.onProductDetails(productDetailsDataResp);
@@ -622,6 +633,7 @@ public class ContentService {
 
         //specialdetail
         public void responseSpecialDetail(String json) {
+            AppLog.i("TAG",json);
             SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
             if (spectialDetailsResp != null) {
                 callBack.onRecommendSpecial(spectialDetailsResp);

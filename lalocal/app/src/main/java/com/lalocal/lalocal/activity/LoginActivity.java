@@ -145,7 +145,11 @@ public class LoginActivity extends BaseActivity {
             if (isImLogin) {
                 setResult(SettingActivity.IM_LOGIN, intent);
             } else {
-                setResult(LOGIN_OK, intent);
+                if (KeyParams.SETTING.equals(setting)) {
+                    setResult(SettingActivity.IM_LOGIN, intent);
+                } else {
+                    setResult(LOGIN_OK, intent);
+                }
             }
             finish();
         }

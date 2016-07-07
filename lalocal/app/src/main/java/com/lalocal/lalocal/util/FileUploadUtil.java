@@ -98,7 +98,7 @@ public class FileUploadUtil {
         @Override
         protected void onPostExecute(String result) {
             if (TextUtils.isEmpty(result)) {
-                Toast.makeText(context, "上传头像失败", Toast.LENGTH_SHORT).show();
+                CommonUtil.showToast(context, "上传头像失败", Toast.LENGTH_SHORT);
             } else {
                 try {
                     JSONObject jsonObj = new JSONObject(result);

@@ -211,9 +211,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         @Override
         public void onRecommendSpecial(SpectialDetailsResp spectialDetailsResp) {
             super.onRecommendSpecial(spectialDetailsResp);
+
             if (spectialDetailsResp.returnCode == 0) {
-                getArticDetailsData(spectialDetailsResp);
-                // spectialDetailsResp.result.
+
                 h5Url = spectialDetailsResp.result.url;
                 shareVO = spectialDetailsResp.result.shareVO;
                 praiseId1 = spectialDetailsResp.result.praiseId;
@@ -294,7 +294,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    //获取显示h5页面所需数据
+  /*  //获取显示h5页面所需数据
     private void getArticDetailsData(SpectialDetailsResp spectialDetailsResp) {
         articleDetailsBeanList = new ArrayList<>();
         List<SpecialGroupsBean> groups = spectialDetailsResp.result.groups;
@@ -313,7 +313,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 articleDetailsBeanList.add(articleDetailsBean);
             }
         }
-    }
+    }*/
 
     //显示图片和文字
     private void showArtworkAndText(final SpecialBannerBean bannerBean) {
@@ -496,17 +496,31 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            //AppLog.i("TAG","shouldOverrideUrlLoading:"+url);
             String[] split = url.split("\\?");
             String json = split[1];
-            AppLog.i("TAG","shouldOverrideUrlLoading:"+json);
-            SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
+            // targetType=1&targetId=230;
+            String[] split2=json.split("&");
+            String split3 = split2[0];
+            String[] split4 = split3.split("Type=");
+            String targetTy = split4[1];
+            String[] split1 = json.split("Id=");
 
+
+            String targetID = split1[1];
+            int targetIDD=Integer.parseInt(targetID);
+            int targetTY = Integer.parseInt(targetTy);
+            //  SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
+            SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
+            specialToH5Bean.setTargetId(targetIDD);
+            specialToH5Bean.setTargetType(targetTY);
             if (specialToH5Bean != null) {
                 switch (specialToH5Bean.getTargetType()) {
                     case 1:
                         //文章，调h5接口
                         if (articleDetailsBeanList != null) {
                             for (int i = 0; i < articleDetailsBeanList.size(); i++) {
+
                                 if (specialToH5Bean.getTargetId() == articleDetailsBeanList.get(i).getTargetId()) {
                                     Intent intent1 = new Intent(mContext, ArticleTestAct.class);
                                     intent1.putExtra("articleDetailsBean", articleDetailsBeanList.get(i));

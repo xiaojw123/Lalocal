@@ -13,14 +13,6 @@ public class SpecialToH5Bean implements Parcelable {
     private int targetId;
     private String photoUrl;
 
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public void setPhotoUrl(String photoUrl) {
-        this.photoUrl = photoUrl;
-    }
-
     public int getTargetType() {
         return targetType;
     }
@@ -37,6 +29,13 @@ public class SpecialToH5Bean implements Parcelable {
         this.targetId = targetId;
     }
 
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 
     @Override
     public int describeContents() {

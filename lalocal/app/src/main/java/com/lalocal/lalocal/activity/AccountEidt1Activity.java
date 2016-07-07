@@ -20,6 +20,8 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -119,16 +121,18 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 startEditIntent(AccountEidt2Activity.ACTION_NICKNAME_MODIFY);
                 break;
             case R.id.accout_edit_boy_sex_fl:
+                AppLog.print("boy onclick___");
                 sex = 1;
-                girlsex_cb.setChecked(false);
-                boysex_cb.setChecked(true);
+                girlsex_cb.setSelected(false);
+                boysex_cb.setSelected(true);
                 contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
                 break;
 
             case R.id.accout_edit_girl_sex_fl:
                 sex = 0;
-                girlsex_cb.setChecked(true);
-                boysex_cb.setChecked(false);
+                girlsex_cb.setSelected(true);
+                boysex_cb.setSelected(false);
+                AppLog.print("girl onclick___");
                 contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
                 break;
             case R.id.account_edit_phone:
@@ -195,8 +199,8 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             startActivityForResult(intent,
                     PHOTO_REQUEST_CAREMA);
         } else {
-            Toast.makeText(this, "未找到存储卡，无法存储照片",
-                    Toast.LENGTH_SHORT).show();
+            CommonUtil.showToast(this, "未找到存储卡，无法存储照片",
+                    Toast.LENGTH_SHORT);
         }
 
 
@@ -216,8 +220,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                     Environment.MEDIA_MOUNTED)) {
                 crop(Uri.fromFile(tempFile));
             } else {
-                Toast.makeText(this, "未找到存储卡，无法存储照片",
-                        Toast.LENGTH_SHORT).show();
+                CommonUtil.showToast(this,"未找到存储卡，无法存储照片",Toast.LENGTH_SHORT);
             }
 
         } else if (requestCode == PHOTO_REQUEST_CUT) {
@@ -310,11 +313,11 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             DrawableUtils.displayImg(this, personalheader_civ, user.getAvatar());
             nickaname_tv.setText(user.getNickName());
             if (user.isSex()) {
-                boysex_cb.setChecked(true);
-                girlsex_cb.setChecked(false);
+                boysex_cb.setSelected(true);
+                girlsex_cb.setSelected(false);
             } else {
-                girlsex_cb.setChecked(true);
-                boysex_cb.setChecked(false);
+                girlsex_cb.setSelected(true);
+                boysex_cb.setSelected(false);
             }
             if (!TextUtils.isEmpty(user.getPhone())) {
                 areacode_tv.setText(user.getAreaCode());
@@ -330,8 +333,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             email_tv.setText(user.getEmail());
         }
         backIntent.putExtra(KeyParams.STATUS, status);
-        backIntent.putExtra(KeyParams.USERID, user.getId());
-        backIntent.putExtra(KeyParams.TOKEN, user.getToken());
     }
 
     @Override

@@ -89,14 +89,15 @@
         <activity
             android:name=".activity.VideoActivity"
             android:screenOrientation="portrait" />
+
         <activity android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait"
             ></activity>
         <activity android:name=".activity.OrderActivity"></activity>
 
-        <activity android:name=".activity.ArticleTestAct"></activity>
+        <activity android:name=".activity.ArticleTestAct"/>
 
-        <activity android:name=".activity.TestAct"></activity>
+        <activity android:name=".activity.TestAct"/>
 
 
         <!--分享-->
@@ -126,11 +127,12 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".activity.TravelPersonActivity" />
-        <activity android:name=".activity.BaseActivity"></activity>
+        <activity android:name=".activity.BaseActivity"/>
         <!--//fabric config-->
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e56a6336a6ae8ee217f64a62e29bd01203f377a0" />
+        <meta-data android:name="category" android:value="${CATEGORY}"/>
     </application>
 
 </manifest>
