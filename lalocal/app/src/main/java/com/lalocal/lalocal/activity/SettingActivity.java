@@ -6,10 +6,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DataCleanManager;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
@@ -59,17 +60,26 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 startActivity(aboutUsIntent);
                 break;
             case R.id.setting_clear_cache:
-                final String chacheSize = DataCleanManager.getTotalCacheSize(this);
-                if (!"0KB".equals(chacheSize)) {
+                String chacheSize = DataCleanManager.getTotalCacheSize(this);
+                if (!"0.00MB".equals(chacheSize)) {
                     DataCleanManager.clearAllCache(this);
+                } else {
+                    CommonUtil.showToast(this,"未发现缓存", Toast.LENGTH_SHORT);
+                    return;
                 }
-                if ("0KB".equals(chacheSize)) {
+                chacheSize = DataCleanManager.getTotalCacheSize(this);
+                chacheSizeTv.setText(chacheSize);
+                if ("0.00MB".equals(chacheSize)) {
                     CustomDialog dialog = new CustomDialog(this);
                     dialog.setMessage("已成功清理缓存");
                     dialog.setNeturalBtn("确定", null);
                     dialog.show();
+                } else {
+                    CustomDialog dialog = new CustomDialog(this);
+                    dialog.setMessage("未完全清空缓存,请重新清理");
+                    dialog.setNeturalBtn("确定", null);
+                    dialog.show();
                 }
-                chacheSizeTv.setText(chacheSize);
                 break;
             case R.id.setting_modify_password:
                 Intent intent1 = new Intent(this, PasswordForget1Activity.class);
@@ -84,17 +94,17 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     intent.putExtra(KeyParams.IM_LOGIN, true);
                     startActivityForResult(intent, 100);
                 } else {
-                    CustomDialog dialog = new CustomDialog(this);
-                    dialog.setMessage("确定要退出登录吗");
-                    dialog.setCancelable(false);
-                    dialog.setCancelBtn("取消", null);
-                    dialog.setSurceBtn("确定", new CustomDialog.CustomDialogListener() {
+                    CustomDialog dialog2 = new CustomDialog(this);
+                    dialog2.setMessage("确定要退出登录吗");
+                    dialog2.setCancelable(false);
+                    dialog2.setCancelBtn("取消", null);
+                    dialog2.setSurceBtn("确定", new CustomDialog.CustomDialogListener() {
                         @Override
                         public void onDialogClickListener() {
                             unLogin();
                         }
                     });
-                    dialog.show();
+                    dialog2.show();
                 }
                 break;
 
@@ -115,7 +125,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         } else if (resultCode == UN_LOGIN_OK) {
             unLogin();
         } else if (resultCode == LOGIN) {
-            AppLog.print("rescoude_____login__");
             Intent intent = new Intent(this, LoginActivity.class);
             intent.putExtra(KeyParams.SETTING, KeyParams.SETTING);
             startActivityForResult(intent, 100);

@@ -15,8 +15,9 @@ public class DataCleanManager {
         try {
             cacheSize = getFolderSize(context.getCacheDir());
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                AppLog.print("externalCacheDir___"+context.getExternalCacheDir());
+                AppLog.print("externalCacheDir___" + context.getExternalCacheDir());
                 cacheSize += getFolderSize(context.getExternalCacheDir());
+                cacheSize += getFolderSize(DrawableUtils.getFileDir());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -25,9 +26,13 @@ public class DataCleanManager {
     }
 
     public static void clearAllCache(Context context) {
-        deleteDir(context.getCacheDir());
+        boolean s1 = deleteDir(context.getCacheDir());
+        AppLog.print("s1___" + s1);
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            deleteDir(context.getExternalCacheDir());
+            boolean s2 = deleteDir(context.getExternalCacheDir());
+            AppLog.print("s2___" + s2);
+            boolean s3 = deleteDir(DrawableUtils.getFileDir());
+            AppLog.print("s3___" + s3);
         }
     }
 
@@ -72,35 +77,43 @@ public class DataCleanManager {
      * @return
      */
     public static String getFormatSize(double size) {
-        double kiloByte = size / 1024;
-        if (kiloByte < 1) {
-//            return size + "Byte";
-            return "0KB";
-        }
+        AppLog.print("getFormatSize_toal__" + size);
+        double mByte = size / Math.pow(1024, 2);
+//        if (mByte < 1) {
+        BigDecimal result2 = new BigDecimal(Double.toString(mByte));
+        return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+                .toPlainString() + "MB";
+//        }
 
-        double megaByte = kiloByte / 1024;
-        if (megaByte < 1) {
-            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
-            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
-                    .toPlainString() + "KB";
-        }
-
-        double gigaByte = megaByte / 1024;
-        if (gigaByte < 1) {
-            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
-            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
-                    .toPlainString() + "MB";
-        }
-
-        double teraBytes = gigaByte / 1024;
-        if (teraBytes < 1) {
-            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
-            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
-                    .toPlainString() + "GB";
-        }
-        BigDecimal result4 = new BigDecimal(teraBytes);
-        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
-                + "TB";
+//        double kiloByte = size / 1024;
+//        if (kiloByte < 1) {
+////            return size + "Byte";
+//            return "0KB";
+//        }
+//
+//        double megaByte = kiloByte / 1024;
+//        if (megaByte < 1) {
+//            BigDecimal result1 = new BigDecimal(Double.toString(kiloByte));
+//            return result1.setScale(2, BigDecimal.ROUND_HALF_UP)
+//                    .toPlainString() + "KB";
+//        }
+//
+//        double gigaByte = megaByte / 1024;
+//        if (gigaByte < 1) {
+//            BigDecimal result2 = new BigDecimal(Double.toString(megaByte));
+//            return result2.setScale(2, BigDecimal.ROUND_HALF_UP)
+//                    .toPlainString() + "MB";
+//        }
+//
+//        double teraBytes = gigaByte / 1024;
+//        if (teraBytes < 1) {
+//            BigDecimal result3 = new BigDecimal(Double.toString(gigaByte));
+//            return result3.setScale(2, BigDecimal.ROUND_HALF_UP)
+//                    .toPlainString() + "GB";
+//        }
+//        BigDecimal result4 = new BigDecimal(teraBytes);
+//        return result4.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString()
+//                + "TB";
     }
 
 

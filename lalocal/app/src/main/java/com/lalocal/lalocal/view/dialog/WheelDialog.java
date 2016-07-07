@@ -3,9 +3,13 @@ package com.lalocal.lalocal.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -29,7 +33,8 @@ public class WheelDialog extends Dialog implements View.OnClickListener {
 
 
     public WheelDialog(Context context) {
-        super(context, R.style.prompt_dialog);
+//        super(context);
+        super(context, R.style.test_dialog);
         this.context = context;
 
     }
@@ -42,10 +47,19 @@ public class WheelDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         View view = LayoutInflater.from(context).inflate(R.layout.wheeldialog_layout, null);
         setContentView(view, params);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        Window dialogWindow = getWindow();
+        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
+        DisplayMetrics d = context.getResources().getDisplayMetrics(); // 获取屏幕宽、高用
+        lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        lp.height = (int) (d.heightPixels * 0.5); // 高度设置为屏幕的0.6
+        dialogWindow.setAttributes(lp);
+        dialogWindow.setGravity(Gravity.BOTTOM);
+//        getWindow().setGravity(Gravity.BOTTOM);
+//        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         TextView save_tv = (TextView) findViewById(R.id.wheeldialog_save_tv);
         WheelView wv = (WheelView) view.findViewById(R.id.wheeldialog_wlv);
         List<Country> areaItems = DataSupport.findAll(Country.class);

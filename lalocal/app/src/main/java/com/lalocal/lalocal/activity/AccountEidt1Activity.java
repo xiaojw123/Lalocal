@@ -21,6 +21,7 @@ import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -198,8 +199,8 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             startActivityForResult(intent,
                     PHOTO_REQUEST_CAREMA);
         } else {
-            Toast.makeText(this, "未找到存储卡，无法存储照片",
-                    Toast.LENGTH_SHORT).show();
+            CommonUtil.showToast(this, "未找到存储卡，无法存储照片",
+                    Toast.LENGTH_SHORT);
         }
 
 
@@ -219,8 +220,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                     Environment.MEDIA_MOUNTED)) {
                 crop(Uri.fromFile(tempFile));
             } else {
-                Toast.makeText(this, "未找到存储卡，无法存储照片",
-                        Toast.LENGTH_SHORT).show();
+                CommonUtil.showToast(this,"未找到存储卡，无法存储照片",Toast.LENGTH_SHORT);
             }
 
         } else if (requestCode == PHOTO_REQUEST_CUT) {

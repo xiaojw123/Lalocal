@@ -74,7 +74,7 @@
     <string name="send_email_vercode">发送验证</string>
     <string name="email_or_psw_no_empty">邮箱或密码不能为空</string>
     <string name="nickname_no_empty">昵称不能为空</string>
-    <string name="psw_limit_dights">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNUVWXYZOPQRST</string>
+    <!--<string name="psw_limit_dights">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNUVWXYZOPQRST</string>-->
     <string name="email_or_psw_no_right">邮箱地址或密码输入不正确,请重试</string>
     <string name="email_no_change">您的邮箱并未发生改动，无需重复认证</string>
 

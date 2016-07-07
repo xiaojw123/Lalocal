@@ -3,6 +3,8 @@ package com.lalocal.lalocal.util;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -18,6 +20,7 @@ import java.util.regex.Pattern;
 public class CommonUtil {
     private static int mUserid = -1;
     private static String mToken = null;
+
 
     //人民币
     public static String formartPrice(String price) {
@@ -80,10 +83,18 @@ public class CommonUtil {
         dialog.show();
     }
 
+    public static void showToast(Context context, String message, int duration) {
+        Toast toast = Toast.makeText(context, message, duration);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+
     public static void setUserParams(int userid, String token) {
         mUserid = userid;
         mToken = token;
     }
+
 
     public static int getUserId() {
         return mUserid;
@@ -92,6 +103,8 @@ public class CommonUtil {
     public static String getUserToken() {
         return mToken;
     }
+
+
 
 
 }

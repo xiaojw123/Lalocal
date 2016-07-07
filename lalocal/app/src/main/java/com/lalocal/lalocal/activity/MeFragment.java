@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
@@ -106,7 +107,16 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         favoritePage = 1;
         contentService = new ContentService(getActivity());
         contentService.setCallBack(new MeCallBack());
-        contentService.getMyFavorite(-1, null, 1, 10);
+        if (UserHelper.isLogined(getActivity())) {
+            String email = UserHelper.getUserEmail(getActivity());
+            String psw = UserHelper.getPassword(getActivity());
+            int userid = UserHelper.getUserId(getActivity());
+            String token = UserHelper.getToken(getActivity());
+            contentService.login(email, psw);
+            requetLoginData(userid, token);
+        } else {
+            contentService.getMyFavorite(-1, null, 1, 10);
+        }
     }
 
     private void initView(View view) {
@@ -139,9 +149,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (isLogined) {
                 if (user != null) {
                     contentService.getUserProfile(user.getId(), user.getToken());
-                    contentService.getMyFavorite(user.getId(), user.getToken(), 1, 10);
-                    contentService.getMyCoupon(user.getId(), user.getToken());
-                    contentService.getMyOrder(user.getId(), user.getToken());
+                    requetLoginData(user.getId(), user.getToken());
                 }
             } else {
                 contentService.getMyFavorite(-1, null, 1, 10);
@@ -215,6 +223,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             User user = data.getParcelableExtra(USER);
             updateFragmentView(true, user);
         } else if (resultCode == SettingActivity.UN_LOGIN_OK) {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(KeyParams.IS_LOGIN, false);
+            UserHelper.saveLoginInfo(getActivity(), bundle);
             updateFragmentView(false, null);
         } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
             String nickname = data.getStringExtra(KeyParams.NICKNAME);
@@ -242,7 +253,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     }
 
-    //isLogined=false时注意擦除登陆数据
     private void updateFragmentView(boolean isLogined, User user) {
         this.isLogined = isLogined;
         this.user = user;
@@ -272,9 +282,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 
             }
-            contentService.getMyFavorite(userid, token, 1, 10);
-            contentService.getMyCoupon(userid, token);
-            contentService.getMyOrder(userid, token);
+            requetLoginData(userid, token);
         } else {
             CommonUtil.setUserParams(-1, null);
             username_tv.setActivated(false);
@@ -287,19 +295,29 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             favoriteNum_tv.setText("0");
             orderNum_tv.setText("0");
             couponNum_tv.setText("0");
-            if (favorite_tab.isSelected()) {
-                xListView.setAdapter(favoriteAdapter);
-            }
-            if (coupon_tab.isSelected()) {
-                xListView.setAdapter(couponAdapter);
-            }
-            if (order_tab.isSelected()) {
-                xListView.setAdapter(orderAdapter);
-            }
-            contentService.getMyFavorite(-1, null, 1, 10);
+            resetUnLoginData();
         }
 
 
+    }
+
+    private void resetUnLoginData() {
+        if (favorite_tab.isSelected()) {
+            xListView.setAdapter(favoriteAdapter);
+        }
+        if (coupon_tab.isSelected()) {
+            xListView.setAdapter(couponAdapter);
+        }
+        if (order_tab.isSelected()) {
+            xListView.setAdapter(orderAdapter);
+        }
+        contentService.getMyFavorite(-1, null, 1, 10);
+    }
+
+    private void requetLoginData(int userid, String token) {
+        contentService.getMyFavorite(userid, token, 1, 10);
+        contentService.getMyCoupon(userid, token);
+        contentService.getMyOrder(userid, token);
     }
 
 
@@ -327,7 +345,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             }
 
         } else {
-            Toast.makeText(getActivity(), "没有更多数据", Toast.LENGTH_SHORT).show();
+            CommonUtil.showToast(getActivity(), "没有更多数据", Toast.LENGTH_SHORT);
         }
         xListView.stopLoadMore();
     }

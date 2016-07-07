@@ -7,7 +7,16 @@
     </style>
 
     <!-- prompt message dialog style -->
-    <style name="prompt_dialog" parent="@android:style/Theme.Dialog">
+    <!--<style name="prompt_dialog" parent="@android:style/Theme.Dialog">-->
+        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
+        <!--<item name="android:windowIsFloating">true</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
+        <!--<item name="android:windowIsTranslucent">true</item>-->
+        <!--<item name="android:background">@null</item>-->
+        <!--<item name="android:windowFrame">@null</item>-->
+        <!--<item name="android:backgroundDimEnabled">false</item>-->
+    <!--</style>-->
+    <style name="prompt_dialog" parent="test_dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
@@ -17,6 +26,15 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="test_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@color/thin_dark</item>
+        <item name="android:windowFrame">@null</item>
+        <!--<item name="android:backgroundDimEnabled">false</item>-->//改变背景
+    </style>
 
 
     <style name="RegisterEditTheme">

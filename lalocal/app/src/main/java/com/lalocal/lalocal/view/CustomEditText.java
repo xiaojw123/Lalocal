@@ -6,7 +6,6 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.DigitsKeyListener;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
@@ -19,6 +18,10 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppLog;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Created by xiaojw on 2016/6/2.
@@ -33,6 +36,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     boolean isFilterSpace;
     TextView lightText;
     boolean isEnd;
+    boolean isPsw;
 
 
     public CustomEditText(Context context) {
@@ -48,16 +52,13 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomEditText);
         String hintText = a.getString(R.styleable.CustomEditText_text_hint);
         int maxLen = a.getInt(R.styleable.CustomEditText_maxLen, -1);
-        String dights = a.getString(R.styleable.CustomEditText_dights);
+        isPsw = a.getBoolean(R.styleable.CustomEditText_isPassword, false);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_edit_layout, this);
         editText = (EditText) findViewById(R.id.input_edit);
         clearBtn = (Button) findViewById(R.id.clear_btn);
         if (maxLen != -1) {
             editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLen)});
-        }
-        if (!TextUtils.isEmpty(dights)) {
-            editText.setKeyListener(DigitsKeyListener.getInstance(dights));
         }
 
         if (!TextUtils.isEmpty(hintText)) {
@@ -158,6 +159,16 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         AppLog.print("onTextChanged___");
+        if (isPsw) {
+            String editable = editText.getText().toString();
+            String str = filterPassword(editable.toString());
+            if (!editable.equals(str)) {
+                editText.setText(str);
+                //设置新的光标所在位置
+                editText.setSelection(str.length());
+            }
+        }
+
         if (lightText != null) {
             if (s != null && s.toString() != null && s.toString().length() > 0) {
                 lightText.setTextColor(getResources().getColor(android.R.color.holo_red_light));
@@ -181,6 +192,14 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         }
     }
 
+    public static String filterPassword(String str) throws PatternSyntaxException {
+        // 只允许字母、数字和汉字
+        String regEx = "[^a-zA-Z0-9]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(str);
+        return m.replaceAll("").trim();
+    }
+
 
     @Override
     public void afterTextChanged(Editable s) {
@@ -198,14 +217,11 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-            AppLog.print("onFoucs____hasFocus===" + hasFocus);
-
 
             if (selecedBtn != null) {
                 selecedBtn.setSelected(true);
             }
             if (!isClearBtnVisible && !isEidtTextEmpty()) {
-                AppLog.print("onFocusChange___1");
                 if (clearBtn.getVisibility() != VISIBLE) {
                     clearBtn.setVisibility(VISIBLE);
                 }
@@ -214,7 +230,6 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
             if (selecedBtn != null) {
                 selecedBtn.setSelected(false);
             }
-            AppLog.print("onFocusChange___2");
             if (clearBtn.getVisibility() == VISIBLE) {
                 clearBtn.setVisibility(GONE);
             }

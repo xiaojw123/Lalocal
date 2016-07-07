@@ -72,10 +72,10 @@ public class DrawableUtils {
         return builder.build();
     }
 
-    private static File getFileDir() {
+    public static File getFileDir() {
         String path = Environment.getExternalStorageDirectory().getPath();
         AppLog.print("sdcard path___" + path);
-        File file = new File(path + "/SeeingVideo/Img");
+        File file = new File(path + "/Lalocal/Img");
         if (!file.exists()) {
             file.mkdirs();
         }
