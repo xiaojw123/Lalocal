@@ -33,13 +33,18 @@ android {
         }
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/2'] } }
+    //渠道Flavors，配置不同风格的app
     productFlavors {
-        xiaomi {
-            manifestPlaceholders = [CATEGORY: "xiaomi"]
-        }
-        baidu {
-            manifestPlaceholders = [CATEGORY: "baidu"]
-        }
+        _360 {}
+        baidu {}
+        huawei{}
+        xiaomi {}
+        tencent{}
+        wandoujia {}
+    }
+    //批量配置
+    productFlavors.all { flavor ->
+        flavor.manifestPlaceholders = [CATEGORY: name]
     }
 }
 
