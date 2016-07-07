@@ -52,16 +52,16 @@
         "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\notification_media_action.xml"
     },
     {
+        "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\select_dialog_item_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\select_dialog_item_material.xml"
+    },
+    {
         "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_media.xml",
         "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\notification_template_media.xml"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_content_include.xml",
         "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_screen_content_include.xml"
-    },
-    {
-        "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\select_dialog_item_material.xml",
-        "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\select_dialog_item_material.xml"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\select_dialog_singlechoice_material.xml",
