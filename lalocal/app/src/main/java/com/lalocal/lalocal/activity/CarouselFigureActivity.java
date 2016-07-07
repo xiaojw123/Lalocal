@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,7 +33,7 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       setContentView(R.layout.carous_figure_layout);
+        setContentView(R.layout.carous_figure_layout);
         init();
         Intent intent = getIntent();
         recommendAdResultBean = intent.getParcelableExtra("carousefigure");
@@ -101,6 +102,16 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     @Override
     public void onCancel(Platform platform, int i) {
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        carousFigure.loadUrl("about:blank");
+        finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            carousFigure.onPause(); // 暂停网页中正在播放的视频
+        }
     }
 
     @Override

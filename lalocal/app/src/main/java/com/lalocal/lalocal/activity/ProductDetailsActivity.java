@@ -242,10 +242,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 String photo = result.photo;
                 praiseFlag = result.praiseFlag;
                 if (praiseFlag) {
-                    // btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+
                     btnLike.setChecked(true);
                 } else {
-                    // btnLike.setImageResource(R.drawable.index_article_btn_like);
+
                     btnLike.setChecked(false);
 
                 }
@@ -282,10 +282,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         @Override
         public void onPariseResult(PariseResult pariseResult) {
             if(pariseResult!=null&&pariseResult.getReturnCode()==0){
-                //btnLike.setImageResource(R.drawable.index_article_btn_like);
-              /*  btnLike.setChecked(false);
-                praiseId=pariseResult.getResult();
-                praiseFlag=false;*/
 
                 btnLike.setChecked(false);
                 praiseFlag = false;
@@ -295,9 +291,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         public void onInputPariseResult(PariseResult pariseResult) {
             super.onInputPariseResult(pariseResult);
             if(pariseResult.getReturnCode()==0){
-                //btnLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
-             /*   btnLike.setChecked(true);
-                praiseFlag=true;*/
+
                 btnLike.setChecked(true);
                 praiseId = pariseResult.getResult();
                 praiseFlag = true;

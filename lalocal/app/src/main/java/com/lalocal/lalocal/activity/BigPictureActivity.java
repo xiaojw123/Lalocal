@@ -79,7 +79,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		}
 
 		bigLayout.addView(inflate);
-		shareBtn.setOnClickListener(this);
+		//shareBtn.setOnClickListener(this);
 	}
 
 	@Override
