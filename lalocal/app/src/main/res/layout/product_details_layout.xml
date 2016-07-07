@@ -49,13 +49,14 @@
                     android:id="@+id/product_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_22_sp"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_20_sp"
                     android:textColor="@color/color_ffaa2a"/>
                 <TextView
                     android:paddingRight="10dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="起"/>
+                    android:text="  起"/>
             </LinearLayout>
 
             <View
@@ -153,12 +154,7 @@
         android:background="@android:color/white"
         android:alpha="0"
         >
-        <ImageView
-            android:layout_width="@dimen/recommend_title_img_wdith"
-            android:layout_height="@dimen/recommend_title_img_height"
-            android:layout_centerInParent="true"
-            android:src="@drawable/lalocallogo"
-            />
+
         <include layout="@layout/common_back_layout" />
         <ImageView
             android:id="@+id/product_customer_service"
@@ -168,6 +164,12 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
+            />
+        <ImageView
+            android:layout_width="@dimen/recommend_title_img_wdith"
+            android:layout_height="@dimen/recommend_title_img_height"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lalocallogo"
             />
     </RelativeLayout>
     <include layout="@layout/product_title_layout"></include>

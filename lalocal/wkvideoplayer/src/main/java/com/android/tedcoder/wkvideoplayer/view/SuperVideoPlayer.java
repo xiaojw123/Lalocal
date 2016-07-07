@@ -49,6 +49,7 @@ public class SuperVideoPlayer extends RelativeLayout {
     private MediaController mMediaController;//控制器
     private Timer mUpdateTimer;
     private VideoPlayCallbackImpl mVideoPlayCallback;//回调函数
+   private boolean isPlayerStatus;
     //private View mProgressBarView;//加载中按钮
    // private View mCloseBtnView;//关闭按钮
     private Uri mUri;//网络视频路径
@@ -88,9 +89,15 @@ public class SuperVideoPlayer extends RelativeLayout {
         public void onPlayTurn() {
             if (mVideoView.isPlaying()) {
                 pausePlay(true);
+
+                isPlayerStatus=false;
+               // Toast.makeText(mContext,"暂停",Toast.LENGTH_SHORT).show();
             } else {
                 goOnPlay();
+                isPlayerStatus=true;
+               // Toast.makeText(mContext,"播放",Toast.LENGTH_SHORT).show();
             }
+           mVideoPlayCallback.onPlayStatus(isPlayerStatus);
         }
 
         @Override
@@ -110,6 +117,8 @@ public class SuperVideoPlayer extends RelativeLayout {
                 updatePlayTime();
             }
         }
+
+
     };
 
     // 当MediaPlayer准备好后触发该回调
@@ -402,6 +411,8 @@ public class SuperVideoPlayer extends RelativeLayout {
         void onSwitchPageType();
 
         void onPlayFinish();
+
+        void onPlayStatus(boolean isPlay);
     }
 
 }

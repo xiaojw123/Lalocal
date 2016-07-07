@@ -256,7 +256,7 @@ public class ContentService {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS +targetId, response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -608,6 +608,7 @@ public class ContentService {
 
         //产品详情
         private void responseProductDetails(String json) {
+            AppLog.i("TAG","responseProductDetails:"+json);
             ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
             if (productDetailsDataResp != null) {
                 callBack.onProductDetails(productDetailsDataResp);
@@ -631,6 +632,7 @@ public class ContentService {
 
         //specialdetail
         public void responseSpecialDetail(String json) {
+            AppLog.i("TAG",json);
             SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
             if (spectialDetailsResp != null) {
                 callBack.onRecommendSpecial(spectialDetailsResp);

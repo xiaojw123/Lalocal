@@ -61,14 +61,15 @@
                 android:id="@+id/special_line"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/font_black_2"></View>
+                android:background="@color/ml_gray"></View>
             <LinearLayout
                 android:id="@+id/height_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
-                >
+                android:layout_gravity="center_vertical"
+                android:visibility="gone">
+
             </LinearLayout>
 
             <com.lalocal.lalocal.view.MyScrollView

@@ -14,7 +14,9 @@
         android:text="@string/convert"
         android:textSize="@dimen/text_size_16_sp"
         android:textColor="@color/white"
-        android:background="@drawable/account_edit2_changeemail_btn_bg" />
+        android:background="@color/color_30b3"
+         />
+    <!--android:background="@drawable/account_edit2_changeemail_btn_bg"-->
 
     <TextView
         android:id="@+id/my_coupon_convert_rule"
@@ -36,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/color_b3"
-        android:text="你还没有登录，即使是我们的工程师也不能算出你有多少优惠券"
+        android:text="@string/unlogin_warn"
         android:gravity="center"
         android:textSize="@dimen/text_size_15_sp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"

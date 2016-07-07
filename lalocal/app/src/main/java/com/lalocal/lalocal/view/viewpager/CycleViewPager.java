@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.activity.TestActivity;
 import com.lalocal.lalocal.model.CycleVpEntity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
@@ -318,18 +319,20 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 
 					@Override
 					public void onClick(View v) {
-/*
 						//轮播图页面点击进入相关页面
 						mImageCycleViewListener.onImageClick(infos.get(currentPosition - 1), currentPosition, v);
+						RecommendAdResultBean recommendAdResultBean = infos.get(currentPosition - 1);
 						int targetType = infos.get(currentPosition - 1).targetType;
+						int targetId = infos.get(currentPosition - 1).targetId;
 						if(targetType==-1){
+							//Toast.makeText(getActivity(),url,Toast.LENGTH_SHORT).show();
 							String url = infos.get(currentPosition - 1).url;
-							Intent intent = new Intent(getActivity(), TestActivity.class);
-							intent.putExtra("h5url", url);
+							Intent intent = new Intent(getActivity(), CarouselFigureActivity.class);
+							intent.putExtra("carousefigure", recommendAdResultBean);
 							startActivity(intent);
 						}else {
-						Toast.makeText(getActivity(),"点击了",Toast.LENGTH_SHORT).show();
-						}*/
+						//Toast.makeText(getActivity(),"点击了",Toast.LENGTH_SHORT).show();
+						}
 					}
 				});
 			}

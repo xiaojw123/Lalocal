@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.MeFragment;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.dialog.ConvertDialog;
@@ -26,10 +27,12 @@ import java.util.List;
 public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener {
     Context context;
     List<Coupon> items;
+    MeFragment fragment;
 
-    public MyCouponAdapter(Context context, List<Coupon> items) {
+    public MyCouponAdapter(Context context, List<Coupon> items, MeFragment fragment) {
         this.context = context;
         this.items = items;
+        this.fragment = fragment;
     }
 
     public void updateItems(List<Coupon> items) {
@@ -65,6 +68,11 @@ public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener
             //        Button convertBtn = (Button) convertView.findViewById(my_coupon_convert_btn);
 //        convertBtn.setOnClickListener(this);
             if (items == null || items.size() < 1) {
+                if (fragment.isLogined) {
+                    warnText.setText("没有优惠券");
+                } else {
+                    warnText.setText(context.getResources().getString(R.string.unlogin_warn));
+                }
                 nothingImg.setVisibility(View.VISIBLE);
                 converRuleTv.setVisibility(View.GONE);
                 warnText.setVisibility(View.VISIBLE);
@@ -85,10 +93,10 @@ public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener
                 int left = (int) res.getDimension(R.dimen.home_me_my_favorite_item_left);
                 int top = 0;
                 int bottom = (int) res.getDimension(R.dimen.dimen_size_5_dp);
-                int height=(int) res.getDimension(R.dimen.my_coupon_item_height);
+                int height = (int) res.getDimension(R.dimen.my_coupon_item_height);
                 if (position == 1) {
                     top = (int) res.getDimension(R.dimen.dimen_size_25_dp);
-                    height+=(int)res.getDimension(R.dimen.dimen_size_20_dp);
+                    height += (int) res.getDimension(R.dimen.dimen_size_20_dp);
                 } else {
                     top = (int) res.getDimension(R.dimen.dimen_size_5_dp);
                 }

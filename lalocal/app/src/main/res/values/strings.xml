@@ -120,5 +120,6 @@
     <string name="evaluate_time">评价时间</string>
     <string name="mobile">手机</string>
     <string name="no_more_content">已没有更多内容</string>
+    <string name="unlogin_warn">你还没有登录，即使是我们的工程师也不能算出你有多少优惠券</string>
 
 </resources>
