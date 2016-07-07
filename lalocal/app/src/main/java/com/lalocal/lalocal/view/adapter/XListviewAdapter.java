@@ -1,18 +1,14 @@
 package com.lalocal.lalocal.view.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.util.DrawableUtils;
-
 import java.util.List;
-
 /**
  * Created by lenovo on 2016/6/19.
  */
@@ -49,20 +45,24 @@ public class XListviewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder=null;
+        RecommendRowsBean recommendRowsBean = allRows.get(position);
         if(convertView==null){
             convertView=View.inflate(mContext, R.layout.recommend_listview_item2,null);
             viewHolder=new ViewHolder();
             viewHolder.recommendIv= (ImageView) convertView.findViewById(R.id.recommend_listview_item2_iv);
             viewHolder.recommendIv.setScaleType(ImageView.ScaleType.FIT_XY);
+            viewHolder.recommendIv.setImageResource(R.drawable.androidloading);
             convertView.setTag(viewHolder);
         }else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        RecommendRowsBean recommendRowsBean = allRows.get(position);
-        DrawableUtils.displayImg(mContext, viewHolder.recommendIv, recommendRowsBean.getPhoto());
+       viewHolder.recommendIv.setTag(recommendRowsBean.getPhoto());
+        String tag = (String)viewHolder.recommendIv.getTag();
+        if(tag!=null&&tag.equals(recommendRowsBean.getPhoto())){
+            DrawableUtils.displayImg(mContext, viewHolder.recommendIv, recommendRowsBean.getPhoto());
+        }
         return convertView;
     }
-
     class ViewHolder{
         ImageView recommendIv;
     }

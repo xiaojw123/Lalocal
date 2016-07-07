@@ -294,26 +294,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         }
     }
 
-  /*  //获取显示h5页面所需数据
-    private void getArticDetailsData(SpectialDetailsResp spectialDetailsResp) {
-        articleDetailsBeanList = new ArrayList<>();
-        List<SpecialGroupsBean> groups = spectialDetailsResp.result.groups;
-        for (int i = 0; i < groups.size(); i++) {
-            SpecialGroupsBean specialGroupsBean = groups.get(i);
-            List<RelationListBean> relationList = specialGroupsBean.relationList;
-            for (int j = 0; j < relationList.size(); j++) {
-                articleDetailsBean = new ArticleDetailsBean();
-                articleDetailsBean.setPhone(relationList.get(j).photo);
-                articleDetailsBean.setPraiseNum(relationList.get(j).praiseNum);
-                articleDetailsBean.setReadNum(relationList.get(j).readNum);
-                articleDetailsBean.setTargetName(relationList.get(j).targetName);
-                articleDetailsBean.setTargetId(relationList.get(j).targetId);
-                articleDetailsBean.setPraises(relationList.get(j).id);
-                articleDetailsBean.setTargetType(targetType1);
-                articleDetailsBeanList.add(articleDetailsBean);
-            }
-        }
-    }*/
+
 
     //显示图片和文字
     private void showArtworkAndText(final SpecialBannerBean bannerBean) {
@@ -328,7 +309,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         textName = (SecretTextView) findViewById(R.id.photo_to_text_name);
         DrawableUtils.displayImg(mContext, photoIv, videoScreenShot);
         textContent.setText(bannerBean.content);
-        textName.setText("- -" + bannerBean.authorName);
+        if(!"".equals(bannerBean.authorName)){
+            textName.setText("- -" + bannerBean.authorName);
+        }
         photoLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

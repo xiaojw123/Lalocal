@@ -4,26 +4,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.SharePopupWindow;
-
 import java.util.HashMap;
-
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
-
+import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by android on 2016/7/7.
  */
@@ -108,6 +102,11 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     @Override
     public void onCancel(Platform platform, int i) {
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK();
     }
 }

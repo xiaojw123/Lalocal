@@ -9,9 +9,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
@@ -73,19 +70,17 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		}
 
 		DrawableUtils.displayImg(this, photoIv, bean.getImgUrl());
-		if(bean.getContent()!=null){
+		if(!"".equals(bean.getContent())){
 			textContent.setIsVisible(true);
 			textContent.setText(bean.getContent());
 		}
-		if(bean.getName()!=null){
+		if(!"".equals(bean.getName())){
 			textName.setText("- -"+ bean.getName());
 		}
 
 		bigLayout.addView(inflate);
 		shareBtn.setOnClickListener(this);
 	}
-
-
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -97,7 +92,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 	@Override
 	public void onClick(View v) {
 		SpecialShareVOBean shareVO=new SpecialShareVOBean();
-		shareVO.setUrl(bean.getImgUrl());
+		shareVO.setImg(bean.getImgUrl());
 		shareActivity = new SharePopupWindow(this, shareVO);
 		shareActivity.setPlatformActionListener(this);
 		shareActivity.showShareWindow();
@@ -123,5 +118,11 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 	@Override
 	public void onCancel(Platform platform, int i) {
 
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		ShareSDK.stopSDK();
 	}
 }
