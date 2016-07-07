@@ -11,6 +11,15 @@ import android.os.Parcelable;
 public class SpecialToH5Bean implements Parcelable {
     private int targetType;
     private int targetId;
+    private String photoUrl;
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 
     public int getTargetType() {
         return targetType;
@@ -28,6 +37,7 @@ public class SpecialToH5Bean implements Parcelable {
         this.targetId = targetId;
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -37,6 +47,7 @@ public class SpecialToH5Bean implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.targetType);
         dest.writeInt(this.targetId);
+        dest.writeString(this.photoUrl);
     }
 
     public SpecialToH5Bean() {
@@ -45,6 +56,7 @@ public class SpecialToH5Bean implements Parcelable {
     protected SpecialToH5Bean(Parcel in) {
         this.targetType = in.readInt();
         this.targetId = in.readInt();
+        this.photoUrl = in.readString();
     }
 
     public static final Parcelable.Creator<SpecialToH5Bean> CREATOR = new Parcelable.Creator<SpecialToH5Bean>() {

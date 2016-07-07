@@ -56,5 +56,10 @@ public class VideoActivity extends BaseActivity {
         public void onPlayFinish() {
 
         }
+
+        @Override
+        public void onPlayStatus(boolean isPlay) {
+
+        }
     };
 }

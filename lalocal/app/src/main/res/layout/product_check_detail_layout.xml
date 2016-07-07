@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_actionbar_height">
+        android:layout_height="@dimen/recommend_title_ll_height">
         <include  layout="@layout/common_back_layout"></include>
         <TextView
             android:layout_width="wrap_content"

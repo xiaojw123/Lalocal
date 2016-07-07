@@ -11,6 +11,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Handler.Callback;
 import android.os.Message;
 import android.util.DisplayMetrics;
@@ -64,6 +65,7 @@ import cn.sharesdk.framework.ShareSDK;
 
 
 
+
 /**
  * Created by lenovo on 2016/6/17.
  * 专题详情页
@@ -108,6 +110,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private SecretTextView textContent;
     private SecretTextView textName;
     private int bannerType=5;
+    public static final int RESULT_PLAY=0;
+    private String videoUrl;//视频播放地址
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +144,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         detailsShare.setOnClickListener(this);
         mScrollview.setScrollViewListener(this);
         videoView.setVideoPlayCallback(mVideoPlayCallback);
+
 
     }
 
@@ -177,12 +182,30 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 mPlayBtnView.setVisibility(View.GONE);
                 videoView.setVisibility(View.VISIBLE);
                 videoView.setAutoHideController(false);
-
                 Uri uri = Uri.parse("http://media.lalocal.cn/video/mov/balidao.mov");
                 videoView.loadAndPlay(uri, 0);
                 break;
+            case R.id.fullscreen_back_btn:
+                hideFullScreen();
+                break;
+
         }
     }
+
+    Handler handler=new Handler(){
+        @Override
+        public String getMessageName(Message message) {
+
+            switch (message.what){
+                case RESULT_PLAY:
+
+                    break;
+            }
+            return super.getMessageName(message);
+        }
+    };
+
+
 
     public class MyCallBack extends ICallBack {
         @Override
@@ -190,6 +213,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             super.onRecommendSpecial(spectialDetailsResp);
             if (spectialDetailsResp.returnCode == 0) {
                 getArticDetailsData(spectialDetailsResp);
+                // spectialDetailsResp.result.
                 h5Url = spectialDetailsResp.result.url;
                 shareVO = spectialDetailsResp.result.shareVO;
                 praiseId1 = spectialDetailsResp.result.praiseId;
@@ -221,7 +245,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                         showArtworkAndText(bannerBean);
                     } else if (bannerType == 1) {
                         // 播放视频
-                        String videoUrl = bannerBean.videoUrl;
+                        videoUrl = bannerBean.videoUrl;
                         photoLayout.setVisibility(View.GONE);
                         imgLayout.setVisibility(View.GONE);
                         videoLayoout.setVisibility(View.VISIBLE);
@@ -291,12 +315,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         }
     }
 
-
-
-
     //显示图片和文字
     private void showArtworkAndText(final SpecialBannerBean bannerBean) {
-
         final BigPictureBean bean = new BigPictureBean();
         bean.setContent(bannerBean.content);
         bean.setName(bannerBean.authorName);
@@ -348,8 +368,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         videoView.setAutoHideController(true);
         Uri uri = Uri.parse(videoUrl);
         videoView.loadAndPlay(uri, 0);
-
-
+        videoView.pausePlay(true);
     }
 
     /**
@@ -357,8 +376,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
      */
     private boolean isFullScreen=true;//判断是否全屏
     LinearLayout heightLayout;
+    private boolean isPlayStatus=true;//视频播放状态
+    private boolean isPageFinish=false;//h5页面加载状态
     private SuperVideoPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new SuperVideoPlayer.VideoPlayCallbackImpl() {
-
         @Override
         public void onCloseVideo() {
             videoView.close();//关闭VideoView
@@ -369,45 +389,59 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
         @Override
         public void onSwitchPageType() {
-
             if(isFullScreen){
-                isFullScreen=false;
-                specialWebView.setVisibility(View.GONE);
-                relativeLayout.setVisibility(View.GONE);
-                main.setBackgroundColor(Color.BLACK);
-                line.setVisibility(View.GONE);
-                heightLayout= (LinearLayout) findViewById(R.id.height_layout);
-                heightLayout.setVisibility(View.VISIBLE);
-                View view=new View(mContext);
-                LinearLayout.LayoutParams sp_params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                int height = getWindowManager().getDefaultDisplay().getHeight();
-                sp_params.height=(height-900)/2;
-                heightLayout.addView(view,sp_params);
-
+               showFullScreen();
             }else {
-                isFullScreen=true;
-                specialWebView.setVisibility(View.VISIBLE);
-                relativeLayout.setVisibility(View.VISIBLE);
-                main.setBackgroundColor(Color.WHITE);
-                line.setVisibility(View.VISIBLE);
-                heightLayout.setVisibility(View.GONE);
-                heightLayout.removeAllViews();
+              hideFullScreen();
             }
-
-
-
         }
-
 
         /**
          * 播放完成回调
          */
         @Override
         public void onPlayFinish() {
-
         }
+
+        @Override
+        public void onPlayStatus(boolean isPlay) {
+              isPlayStatus=isPlay;
+        }
+
+
     };
+    //隐藏全屏
+    private void hideFullScreen() {
+        isFullScreen=true;
+        specialWebView.setVisibility(View.VISIBLE);
+        relativeLayout.setVisibility(View.VISIBLE);
+        main.setBackgroundColor(Color.WHITE);
+        line.setVisibility(View.VISIBLE);
+        heightLayout.setVisibility(View.GONE);
+        heightLayout.removeAllViews();
+    }
+
+    //显示全屏
+    private void showFullScreen() {
+        isFullScreen=false;
+        specialWebView.setVisibility(View.GONE);
+        relativeLayout.setVisibility(View.GONE);
+        main.setBackgroundColor(Color.BLACK);
+        line.setVisibility(View.GONE);
+        heightLayout= (LinearLayout) findViewById(R.id.height_layout);
+        View inflate = View.inflate(mContext, R.layout.fullsreen_back_layout, null);
+        ImageView playerBack= (ImageView) inflate.findViewById(R.id.fullscreen_back_btn);
+        heightLayout.addView(inflate);
+        heightLayout.setVisibility(View.VISIBLE);
+        View view=new View(mContext);
+        LinearLayout.LayoutParams sp_params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        int height = getWindowManager().getDefaultDisplay().getHeight();
+        sp_params.height=(height-900)/2;
+        heightLayout.addView(view,sp_params);
+      playerBack.setOnClickListener(this);
+    }
+
     /***
      * 恢复屏幕至竖屏
      */
@@ -437,28 +471,36 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     }
 
-
     //滚动监听，超出视屏区域，暂停播放视屏
     @Override
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
         int i = DensityUtil.dip2px(mContext, 200);
-        if (y > 600) {
+        if (y > i) {
             isPause = videoView.pausePlay(false);
             isPause=true;
         } else if(isPause){
             isPause=false;
-            videoView.goOnPlay();
+            if(!isPlayStatus){
+                videoView.pausePlay(false);
+            }else {
+                videoView.goOnPlay();
+            }
+
         }
     }
 
     boolean isLoading = true;
+    boolean isNextLoading=true;
+    int loadingCount=0;
+
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
             String[] split = url.split("\\?");
             String json = split[1];
+            AppLog.i("TAG","shouldOverrideUrlLoading:"+json);
             SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
+
             if (specialToH5Bean != null) {
                 switch (specialToH5Bean.getTargetType()) {
                     case 1:
@@ -496,43 +538,55 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             super.onPageStarted(view, url, favicon);
 
         }
-        boolean isShowAnim=true;
+
+
+        boolean isShowAnim=true;//画报文字动画
+
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
-            String typeName = networkInfo.getTypeName();
-            if(typeName.equalsIgnoreCase("WIFI")&&isLoading){
-                isLoading=false;
-                specialWebView.reload();
-            }
-
             if(!specialWebView.getSettings().getLoadsImagesAutomatically()) {
                 specialWebView.getSettings().setLoadsImagesAutomatically(true);
             }
-            loadingPage.setVisibility(View.GONE);
+            ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+            String typeName = networkInfo.getTypeName();
+
+
             //文字动画
             if(bannerType==0&&isShowAnim){
-
-                    isShowAnim=false;
-                    textContent.toggle();
-                    textContent.setIsVisible(true);
-                    textContent.setDuration(3000);
-                    textName.toggle();
-                    textName.setIsVisible(true);
-                    textName.setDuration(1500);
-
+                isShowAnim=false;
+                textContent.toggle();
+                textContent.setIsVisible(true);
+                textContent.setDuration(3000);
+                textName.toggle();
+                textName.setIsVisible(true);
+                textName.setDuration(1500);
 
             }
-
+            if(typeName.equalsIgnoreCase("WIFI")&&isLoading){
+                isLoading=false;
+                isNextLoading=false;
+                loadingCount=loadingCount+1;
+                specialWebView.reload();
+                isPageFinish=true;
+                Message message = new Message();
+                message.what =RESULT_PLAY;
+                handler.sendMessage(message);
+            }
+            if(typeName.equalsIgnoreCase("WIFI")&&loadingCount==1){
+                loadingPage.setVisibility(View.GONE);
+            }
+            if(!typeName.equalsIgnoreCase("WIFI")){
+                loadingPage.setVisibility(View.GONE);
+            }
         }
 
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if ((keyCode == KeyEvent.KEYCODE_BACK) && specialWebView.canGoBack()) {
+        if (specialWebView!=null&&(keyCode == KeyEvent.KEYCODE_BACK) && specialWebView.canGoBack()) {
             specialWebView.goBack(); // goBack()表示返回WebView的上一页面
             return true;
         }

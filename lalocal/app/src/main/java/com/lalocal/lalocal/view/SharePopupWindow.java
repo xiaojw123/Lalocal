@@ -74,22 +74,26 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
 
 
-
-
-
     private void shareWeibo() {
         SinaWeibo.ShareParams sp  = new SinaWeibo.ShareParams();
         Platform plat= ShareSDK.getPlatform(SinaWeibo.NAME);
         sp.setShareType(Platform.SHARE_TEXT);
         sp.setShareType(Platform.SHARE_WEBPAGE);
-        sp.setTitle(shareVO.getTitle());
-        sp.setText(shareVO.getUrl());
+        if(shareVO.getTitle()!=null){
+            sp.setTitle(shareVO.getTitle());
+        }
+        if(shareVO.getUrl()!=null){
+            sp.setUrl(shareVO.getUrl());
+            sp.setSiteUrl(shareVO.getUrl());
+        }
+        if(shareVO.getDesc()!=null){
+            sp.setText(shareVO.getDesc());
+        }
 
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
         }
-        sp.setUrl(shareVO.getUrl());
-        sp.setSiteUrl(shareVO.getUrl());
+
         if (platformActionListener != null) {
             plat.setPlatformActionListener(platformActionListener);
         }
@@ -101,16 +105,29 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         Platform plat= ShareSDK.getPlatform(WechatMoments.NAME);
         sp.setShareType(Platform.SHARE_TEXT);
         sp.setShareType(Platform.SHARE_WEBPAGE);
-        sp.setTitle(shareVO.getTitle());
-        sp.setText(shareVO.getUrl());
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
         }
-        sp.setUrl(shareVO.getUrl());
-        sp.setSiteUrl(shareVO.getUrl());
+
+        if(shareVO.getTitle()!=null){
+            sp.setTitle(shareVO.getTitle());
+        }
+        if(shareVO.getUrl()!=null){
+            sp.setUrl(shareVO.getUrl());
+            sp.setSiteUrl(shareVO.getUrl());
+        }
+        if(shareVO.getDesc()!=null){
+            sp.setText(shareVO.getDesc());
+        }
+
+        if (shareVO.getImg() != null) {
+            sp.setImageUrl(shareVO.getImg());
+        }
+
         if (platformActionListener != null) {
             plat.setPlatformActionListener(platformActionListener);
         }
+
         plat.share(sp);
     }
     private void shareWechat() {
@@ -118,13 +135,26 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         Platform plat= ShareSDK.getPlatform(Wechat.NAME);
         sp.setShareType(Platform.SHARE_TEXT);
         sp.setShareType(Platform.SHARE_WEBPAGE);
-        sp.setTitle(shareVO.getTitle());
-        sp.setText(shareVO.getUrl());
+
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
         }
-        sp.setUrl(shareVO.getUrl());
-        sp.setSiteUrl(shareVO.getUrl());
+        if(shareVO.getTitle()!=null){
+            sp.setTitle(shareVO.getTitle());
+        }
+        if(shareVO.getUrl()!=null){
+            sp.setUrl(shareVO.getUrl());
+            sp.setSiteUrl(shareVO.getUrl());
+        }
+        if(shareVO.getDesc()!=null){
+            sp.setText(shareVO.getDesc());
+        }
+
+        if (shareVO.getImg() != null) {
+            sp.setImageUrl(shareVO.getImg());
+        }
+
+
         if (platformActionListener != null) {
             plat.setPlatformActionListener(platformActionListener);
         }

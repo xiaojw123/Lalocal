@@ -1,20 +1,21 @@
 package com.lalocal.lalocal.activity;
-
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
@@ -22,12 +23,12 @@ import com.lalocal.lalocal.model.ArticleDetailsBean;
 /**
  * Created by android on 2016/7/5.
  */
-public class ArticleTestAct extends BaseActivity{
+public class ArticleTestAct extends BaseActivity {
     private ArticleDetailsBean articleDetailsBean;
     private WebSettings settings;
     private WebView webView;
     private boolean isLoading;
-
+    private RelativeLayout reLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class ArticleTestAct extends BaseActivity{
         setContentView(R.layout.article_test);
         webView = (WebView) findViewById(R.id.webview);
         ImageView back= (ImageView) findViewById(R.id.common_back_btn);
+        reLayout = (RelativeLayout) findViewById(R.id.article_relayout);
         Intent intent = getIntent();
         articleDetailsBean = intent.getParcelableExtra("articleDetailsBean");
         back.setOnClickListener(new View.OnClickListener() {
@@ -48,26 +50,32 @@ public class ArticleTestAct extends BaseActivity{
         } else {
             webView.getSettings().setLoadsImagesAutomatically(false);
         }
-
         settings = webView.getSettings();
         settings.setJavaScriptEnabled(true);
+      /*  Drawable btnDrawable = getResources().getDrawable(R.drawable.aritic_mo_bg);
+       webView.setBackgroundResource(R.drawable.aritic_mo_bg);
+       webView.setBackgroundDrawable(btnDrawable);*/
+    //  webView.setBackgroundResource(R.drawable.aritic_mo_bg);
         webView.setBackgroundColor(0);
+      //  webView.getBackground().setAlpha(110);
         if(Build.VERSION.SDK_INT >= 21){
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setBackgroundColor(Color.parseColor("#000000"));
-
+      webView.setBackgroundColor(Color.parseColor("#000000"));
         webView.loadUrl("https://dev.lalocal.cn/wechat/app_article?id=" + articleDetailsBean.getTargetId());
         webView.setWebViewClient(new MyWebViewClient());
 
     }
+
+
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return false;
+
+            return true;
         }
 
         @Override

@@ -2,13 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="目的地页面"
-        android:textColor="@color/colorPrimary"
-        android:textSize="@dimen/text_size_24_sp"
+    <ImageView
+        android:id="@+id/erros_des"
+        android:layout_width="@dimen/erros_width"
+        android:layout_height="@dimen/erros_height"
+        android:src="@drawable/lostinterneterrors_img"
         android:layout_centerInParent="true"
         />
+    <TextView
+        android:id="@+id/tv1_des"
+        android:paddingTop="20dp"
+        android:layout_below="@+id/erros_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="正在建设中"/>
+
+    <TextView
+        android:id="@+id/tv2_des"
+        android:paddingTop="5dp"
+        android:layout_below="@id/tv1_des"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="更多精彩，敬请期待"/>
 </RelativeLayout>

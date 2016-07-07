@@ -160,15 +160,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             //layout全部透明    0.16--0.95
 
             //只是layout背景透明
-
             if(alpha>210.0||scale>0.80){
-
                 titleBack.setVisibility(View.GONE);
                 titleLine.setVisibility(View.VISIBLE);
                 serviceLL.setVisibility(View.VISIBLE);
                 alpha=255;
                 scale=1.0f;
-
             }else {
                 titleBack.setVisibility(View.VISIBLE);
                 titleLine.setVisibility(View.GONE);
@@ -230,7 +227,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);
                 intent.putExtra("checkdetail", url);
                 startActivity(intent);
-                finish();
+
                 break;
         }
     }

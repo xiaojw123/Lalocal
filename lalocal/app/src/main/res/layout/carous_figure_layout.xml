@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/carous"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recommend_title_ll_height"
+        >
+        <include layout="@layout/common_back_layout"></include>
+        <TextView
+            android:id="@+id/carous_figure_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_18_sp"
+            android:textColor="@android:color/black"
+            android:text="“sdfafdsf"
+
+            />
+        <ImageView
+            android:id="@+id/carous_figure_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp"
+            android:paddingLeft="8dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/index_article_btn_share"/>
+    </RelativeLayout>
+
+    <WebView
+        android:id="@+id/carous_figure_webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></WebView>
+
+</LinearLayout>

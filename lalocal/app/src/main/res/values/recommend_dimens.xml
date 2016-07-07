@@ -5,7 +5,7 @@
     <dimen name="recommend_title_img_height">27dp</dimen>
     <dimen name="recommend_listview_item2_height">200dp</dimen>
     <dimen name="recommend_listview_item1_vp_height">200dp</dimen>
-    <dimen name="recommend_listview_item1_view_height">16dp</dimen>
+    <dimen name="recommend_listview_item1_view_height">12dp</dimen>
     <dimen name="special_details_margin">12dp</dimen>
     <dimen name="special_details_img_like">16dp</dimen>
     <dimen name="view_small_padding">1dp</dimen>

@@ -10,6 +10,8 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.lalocal.lalocal.R;
 /**
  * Created by lenovo on 2016/6/23.
@@ -78,6 +80,7 @@ public class ProductCheckDetailActivity extends BaseActivity implements View.OnC
     @Override
     public void onClick(View v) {
         if(v.getId()==R.id.common_back_btn){
+
             finish();
         }
     }

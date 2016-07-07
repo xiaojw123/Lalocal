@@ -89,6 +89,9 @@
         <activity
             android:name=".activity.VideoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".activity.CarouselFigureActivity"
+            android:screenOrientation="portrait"
+            ></activity>
         <activity android:name=".activity.OrderActivity"></activity>
 
         <activity android:name=".activity.ArticleTestAct"></activity>
