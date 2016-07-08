@@ -12,20 +12,20 @@
         "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_action_bar_up_container.xml"
     },
     {
-        "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_part_time.xml",
-        "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\notification_template_part_time.xml"
-    },
-    {
         "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
         "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
     },
     {
-        "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_mode_close_item_material.xml",
-        "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_action_mode_close_item_material.xml"
+        "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\notification_template_part_time.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\notification_template_part_time.xml"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_screen_toolbar.xml",
         "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_mode_close_item_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\23.2.1\\res\\layout\\abc_action_mode_close_item_material.xml"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\shinebuttonlib\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\abc_action_mode_bar.xml",
