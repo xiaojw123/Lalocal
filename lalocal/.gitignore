@@ -5,6 +5,6 @@
 /local.properties
 .DS_Store
 /captures
-/wkvideoplayer/build
-/shinebuttonlib/build
-/library/build
+/wkvideoplayer/build/
+/shinebuttonlib/build/
+/library/build/
