@@ -10,36 +10,29 @@ android {
         applicationId "com.lalocal.lalocal"
         minSdkVersion 19
         targetSdkVersion 23
-        versionCode 1
-        versionName "1.0.0"
+        versionCode 101
+        versionName "1.0.1"
     }
     buildTypes {
         debug {
-            // 显示Log
-            buildConfigField "boolean", "LOG_DEBUG", "true"
-
-            versionNameSuffix "-debug"
+            buildConfigField "boolean", "LOG_DEBUG", "false"
             minifyEnabled false
             zipAlignEnabled false
             shrinkResources false
         }
         release {
-            minifyEnabled true
-            //Zipalign优化
-            zipAlignEnabled true
-            // 移除无用的resource文件
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
         }
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/2'] } }
     //渠道Flavors，配置不同风格的app
     productFlavors {
         _360 {}
         baidu {}
-        huawei{}
+        huawei {}
         xiaomi {}
-        tencent{}
+        tencent {}
         wandoujia {}
     }
     //批量配置
@@ -52,11 +45,9 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile files('libs/universal-image-loader-1.9.5.jar')
     compile 'com.google.code.gson:gson:2.2.4'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile files('libs/google-http-client-1.20.0.jar')
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
@@ -68,27 +59,27 @@ dependencies {
 }
 
 //TODO:bugtags online delete
-apply plugin: 'com.bugtags.library.plugin'
-android {
-    defaultConfig {
-        ndk {
-            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
-        }
-
-    }
-}
-bugtags {
-    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
-    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
-    mappingUploadEnabled true
-
-    //网络跟踪功能配置(企业版)
-    trackingNetworkEnabled true
-}
-dependencies {
-    compile 'com.bugtags.library:bugtags-lib:latest.integration'
-}
+//apply plugin: 'com.bugtags.library.plugin'
+//android {
+//    defaultConfig {
+//        ndk {
+//            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+//        }
+//
+//    }
+//}
+//bugtags {
+//    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
+//    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
+//    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
+//    mappingUploadEnabled true
+//
+//    //网络跟踪功能配置(企业版)
+//    trackingNetworkEnabled true
+//}
+//dependencies {
+//    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+//}
 
 
 

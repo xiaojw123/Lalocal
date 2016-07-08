@@ -48,7 +48,11 @@ public class AreaParseTask extends Thread {
             }
 
         }
+        try {
         DataSupport.saveAll(items);
+        }catch (Exception e){
+
+        }
     }
 
 

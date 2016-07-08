@@ -1,9 +1,10 @@
-*.iml
-.gradle
-/local.properties
-/.idea/workspace.xml
-/.idea/libraries
-.DS_Store
 /build
+/.idea
+.gradle
+*.iml
+/local.properties
+.DS_Store
 /captures
-/vitamio/build
+/wkvideoplayer/build
+/shinebuttonlib/build
+/library/build

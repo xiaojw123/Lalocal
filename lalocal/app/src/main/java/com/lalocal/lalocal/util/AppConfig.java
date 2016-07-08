@@ -54,6 +54,7 @@ public class AppConfig {
             try {
                 PackageManager pm = context.getPackageManager();
                 PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+                    AppLog.print("versionname___"+pi.versionName);
                 return pi.versionName;
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();

@@ -168,7 +168,6 @@
                         android:drawablePadding="@dimen/dimen_size_9_dp"
                         android:gravity="center"
                         android:text="@string/company_phone_outer" />
-                    |
 
                     <ImageView style="@style/AboutUsItemArrowTheme" />
 

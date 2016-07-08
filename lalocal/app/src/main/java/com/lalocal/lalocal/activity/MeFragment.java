@@ -113,7 +113,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             int userid = UserHelper.getUserId(getActivity());
             String token = UserHelper.getToken(getActivity());
             contentService.login(email, psw);
-            requetLoginData(userid, token);
+            contentService.getMyFavorite(userid, token, 1, 10);
+//            requetLoginData(userid, token);
         } else {
             contentService.getMyFavorite(-1, null, 1, 10);
         }
@@ -150,9 +151,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 //                    requetLoginData(user.getId(), user.getToken());
                 }
             }
-//            else {
-//                contentService.getMyFavorite(-1, null, 1, 10);
-//            }
+            else {
+                contentService.getMyFavorite(-1, null, 1, 10);
+            }
         }
     }
 

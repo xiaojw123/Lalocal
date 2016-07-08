@@ -17,10 +17,10 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendDataResp;
+import com.lalocal.lalocal.model.RecommendResultBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
-
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
@@ -28,9 +28,7 @@ import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -40,7 +38,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private int pageNumber;
     private int pageSize;
     private XListView xlistview;
-    private View vhdf;
     private CycleViewPager cycleViewPager;
     private XListviewAdapter xListviewAdapter;
     private List<RecommendRowsBean> rows;
@@ -50,8 +47,9 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private int itemCount = 0;
     boolean firstRefresh = true;
     private int page = 2;
-    private  ContentService contentService;
+    private ContentService contentService;
     private View header;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,12 +78,12 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         xlistview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(allRows!=null){
+                if (allRows != null) {
                     RecommendRowsBean recommendRowsBean = allRows.get(position - 2);
                     int rowId = recommendRowsBean.getId();
-                    AppLog.i("TAG",rowId+"");
-                    Intent intent=new Intent(getActivity(),SpecialDetailsActivity.class);
-                    intent.putExtra("rowId",rowId+"");
+                    AppLog.i("TAG", rowId + "");
+                    Intent intent = new Intent(getActivity(), SpecialDetailsActivity.class);
+                    intent.putExtra("rowId", rowId + "");
                     startActivity(intent);
 
                 }
@@ -93,15 +91,20 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         });
         return view;
     }
+
     public class MyCallBack extends ICallBack {
         @Override
         public void onRecommend(RecommendDataResp recommendDataResp) {
             super.onRecommend(recommendDataResp);
-            List<RecommendRowsBean> rows = recommendDataResp.getResult().getRows();
-            if (recommendDataResp.getReturnCode()==0 && rows != null) {
+            RecommendResultBean result = recommendDataResp.getResult();
+            if (result == null) {
+                return;
+            }
+            List<RecommendRowsBean> rows = result.getRows();
+            if (recommendDataResp.getReturnCode() == 0 && rows != null) {
                 totalPages = recommendDataResp.getResult().getTotalPages();
                 totalRows = recommendDataResp.getResult().getTotalRows();
-                if(!isRefresh){
+                if (!isRefresh) {
                     allRows.clear();
                 }
                 if (allRows.size() == 0) {
@@ -110,8 +113,8 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     itemCount = allRows.size();
                     allRows.addAll(allRows.size(), rows);
                 }
-                Message message=new Message();
-                message.what=NOTIFI;
+                Message message = new Message();
+                message.what = NOTIFI;
                 handler.sendMessage(message);
                 xListviewAdapter = new XListviewAdapter(getActivity(), allRows);
                 if (firstRefresh) {
@@ -127,9 +130,13 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         @Override
         public void onRecommendAd(RecommendAdResp recommendAdResp) {
             super.onRecommendAd(recommendAdResp);
-            if(recommendAdResp.getReturnCode()==0){
-                List<RecommendAdResultBean> result = recommendAdResp.getResult();
-                ViewFactory.initialize(getActivity(), vhdf, cycleViewPager, result);
+            try {
+                if (recommendAdResp.getReturnCode() == 0) {
+                    List<RecommendAdResultBean> result = recommendAdResp.getResult();
+                    ViewFactory.initialize(getActivity(), header, cycleViewPager, result);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
@@ -139,7 +146,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            switch (msg.what){
+            switch (msg.what) {
                 case REFRESH:
                     xlistview.stopRefresh();
                     break;
@@ -150,20 +157,21 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
 
         }
     };
-    public static final int REFRESH=0;
-    public static final int NOTIFI=1;
+    public static final int REFRESH = 0;
+    public static final int NOTIFI = 1;
     boolean isRefresh;
+
     @Override
     public void onRefresh() {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                isRefresh=false;
+                isRefresh = false;
                 contentService.recommentList(10, 1);
                 page = 2;
-                Message message=new Message();
-                message.what=REFRESH;
-              //  handler.sendEmptyMessage(0);
+                Message message = new Message();
+                message.what = REFRESH;
+                //  handler.sendEmptyMessage(0);
                 handler.sendMessage(message);
             }
         }, 1000);
@@ -172,7 +180,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
 
     @Override
     public void onLoadMore() {
-        isRefresh=true;
+        isRefresh = true;
         if (page <= totalPages) {
             contentService.recommentList(10, page);
             page = page + 1;

@@ -426,9 +426,11 @@ public class ContentService {
                         responseGetMyCoupon(jsonObj);
                         break;
                     case RequestCode.RECOMMEND:
+                        AppLog.print("recommend____json__"+json);
                         responseRecommend(json);
                         break;
                     case RequestCode.RECOMMEND_AD:
+                        AppLog.print("recommedn___ad__"+json);
                         responseRecommendAd(json);
                         break;
                     case RequestCode.SPECIAL_DETAIL:
