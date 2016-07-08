@@ -9,7 +9,8 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppConfig;
-
+/*
+* 关于我们页面*/
 public class AboutUsActivity extends BaseActivity implements View.OnClickListener {
     TextView appversion;
     RelativeLayout email_rl, inland_phone_rl, foreign_phone_rl;
