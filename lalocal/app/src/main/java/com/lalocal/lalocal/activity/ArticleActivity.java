@@ -10,7 +10,6 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
@@ -33,7 +32,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private ImageView btnShare;
     private TextView readTv;
     private TextView collectTv;
-    private ImageView backBtn;
     private ContentService contentService;
     private int targetId;
     private int targetType;
@@ -66,7 +64,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         btnShare = (ImageView) findViewById(R.id.article_btn_share);
         readTv = (TextView) findViewById(R.id.article_read_tv);
         collectTv = (TextView) findViewById(R.id.article_collect_tv);
-        backBtn = (ImageView) findViewById(R.id.common_back_btn);
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         placeHolder = findViewById(R.id.place_holder);
 
@@ -74,7 +71,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         btnLike.setOnClickListener(this);
         btnComment.setOnClickListener(this);
         btnShare.setOnClickListener(this);
-        backBtn.setOnClickListener(this);
         back.setOnClickListener(this);
 
     }
@@ -105,9 +101,6 @@ boolean isPraises=true;
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.article_back_btn:
-                finish();
-                break;
             case R.id.article_btn_comment:
                 //评论
                 contentService.cancelParises(result);//取消赞

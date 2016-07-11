@@ -38,6 +38,7 @@ import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.service.ContentService;
 import com.lalocal.lalocal.service.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.MyScrollView;
@@ -61,7 +62,6 @@ import cn.sharesdk.framework.ShareSDK;
  * 专题详情页
  */
 public class SpecialDetailsActivity extends BaseActivity implements View.OnClickListener, PlatformActionListener, Callback, MyScrollView.ScrollViewListener {
-    private ImageView back;
     private ShineButton detailsLike;
     private ImageView detailsShare;
     private WebView specialWebView;
@@ -112,7 +112,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         initData();
     }
     private void initView() {
-        back = (ImageView) findViewById(R.id.common_back_btn);
         detailsLike = (ShineButton) findViewById(R.id.special_details_like_iv);
         detailsShare = (ImageView) findViewById(R.id.special_details_share_iv);
         loadingPage = (LinearLayout) findViewById(R.id.loading_page);
@@ -129,7 +128,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         relativeLayout = (RelativeLayout) findViewById(R.id.reLayout);
         mPlayBtnView = findViewById(R.id.play_btn);
         mPlayBtnView.setOnClickListener(this);
-        back.setOnClickListener(this);
         detailsLike.setOnClickListener(this);
         detailsShare.setOnClickListener(this);
         mScrollview.setScrollViewListener(this);
@@ -153,9 +151,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.common_back_btn:
-                finish();
-                break;
             case R.id.special_details_like_iv:
                 if (praiseFlag) {
                     contentService1.cancelParises(praiseId1);//取消赞
@@ -469,7 +464,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //AppLog.i("TAG","shouldOverrideUrlLoading:"+url);
+            AppLog.i("TAG","shouldOverrideUrlLoading:"+url);
             String[] split = url.split("\\?");
             String json = split[1];
             // targetType=1&targetId=230;

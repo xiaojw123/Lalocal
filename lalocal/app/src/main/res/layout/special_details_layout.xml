@@ -20,8 +20,10 @@
             <RelativeLayout
                 android:id="@+id/reLayout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/recommend_title_ll_height">
-                <include layout="@layout/common_back_layout" />
+                android:layout_height="@dimen/app_actionbar_height">
+                <com.lalocal.lalocal.view.CustomTitleView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
                 <ImageView
                     android:layout_width="@dimen/recommend_title_img_wdith"
                     android:layout_height="@dimen/recommend_title_img_height"

@@ -26,7 +26,6 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     private WebView carousFigure;
     private ImageView figgure;
-    private ImageView back;
     private TextView figureTv;
     private RecommendAdResultBean recommendAdResultBean;
     private SpecialShareVOBean shareVO;
@@ -47,9 +46,7 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
     private void init() {
         carousFigure = (WebView) findViewById(R.id.carous_figure_webview);
         figgure = (ImageView) findViewById(R.id.carous_figure_share);
-        back = (ImageView) findViewById(R.id.common_back_btn);
         figureTv = (TextView) findViewById(R.id.carous_figure_tv);
-        back.setOnClickListener(this);
         figgure.setOnClickListener(this);
     }
     @Override
@@ -58,9 +55,6 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
         switch (v.getId()){
             case R.id.carous_figure_share:
                 showShare(shareVO);
-                break;
-            case R.id.common_back_btn:
-                finish();
                 break;
         }
 
