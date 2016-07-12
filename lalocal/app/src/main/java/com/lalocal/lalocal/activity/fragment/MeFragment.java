@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.activity;
+package com.lalocal.lalocal.activity.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -19,6 +19,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.AccountEidt1Activity;
+import com.lalocal.lalocal.activity.ArticleActivity;
+import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.ProductDetailsActivity;
+import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
@@ -43,8 +48,9 @@ import java.util.List;
 
 /**
  * Created by xiaojw on 2016/6/3.
+ * note: isRefresh更新
  */
-public class MeFragment extends Fragment implements XListView.IXListViewListener, AdapterView.OnItemClickListener {
+public class MeFragment extends Fragment implements XListView.IXListViewListener {
     public static final String USER = "user";
     public static final String LOGIN_STATUS = "loginstatus";
     TextView username_tv, verified_tv;
@@ -54,23 +60,24 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     ViewGroup lastSelectedView;
     ImageButton settingBtn;
     ContentService contentService;
-    public boolean isLogined, isRefresh;
-    int favoriteTotalPages, favoritePage;
+    public boolean isLogined, isRefresh, isImLogin;
+    int favoriteTotalPages, favoritePage = 1;
     User user;
-    XListView xListView;
-    MyFavoriteAdapter favoriteAdapter;
-    MyCouponAdapter couponAdapter;
-    MyOrderAdapter orderAdapter;
+    XListView mListView;
+    MyFavoriteAdapter favoriteAdapter, emptFavoriteAdpater;
+    MyCouponAdapter couponAdapter, emptCouponAapter;
+    MyOrderAdapter orderAdapter, emptOrderAdpater;
     List<FavoriteItem> allItems = new ArrayList<>();
+    OnMeFragmentListener fragmentListener;
+    Intent imLoginData;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            xListView.stopRefresh();
+            mListView.stopRefresh();
         }
     };
-    OnMeFragmentListener fragmentListener;
-
+    //收藏数据是否需要  list
 
     @Override
     public void onAttach(Activity activity) {
@@ -83,41 +90,17 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.me_fragment_layout, container, false);
-        xListView = (XListView) view.findViewById(R.id.home_me_xlistview);
-        xListView.setPullRefreshEnable(true);
-        xListView.setPullLoadEnable(false);
-        xListView.setXListViewListener(this);
-//        xListView.setOnItemClickListener(this);
+        mListView = (XListView) view.findViewById(R.id.home_me_xlistview);
+        mListView.setPullRefreshEnable(true);
+        mListView.setPullLoadEnable(false);
+        mListView.setXListViewListener(this);
+        mListView.setOnItemClickListener(xlvItemClicklistener);
         View headerView = inflater.inflate(R.layout.home_me_layout, null);
-        xListView.addHeaderView(headerView);
+        mListView.addHeaderView(headerView);
         initView(headerView);
         initAdapter();
         initContentService();
         return view;
-    }
-
-    private void initAdapter() {
-        favoriteAdapter = new MyFavoriteAdapter(getActivity(), null);
-        couponAdapter = new MyCouponAdapter(getActivity(), null, this);
-        orderAdapter = new MyOrderAdapter(getActivity(), null);
-        xListView.setAdapter(favoriteAdapter);
-    }
-
-    private void initContentService() {
-        favoritePage = 1;
-        contentService = new ContentService(getActivity());
-        contentService.setCallBack(new MeCallBack());
-        if (UserHelper.isLogined(getActivity())) {
-            String email = UserHelper.getUserEmail(getActivity());
-            String psw = UserHelper.getPassword(getActivity());
-            int userid = UserHelper.getUserId(getActivity());
-            String token = UserHelper.getToken(getActivity());
-            contentService.login(email, psw);
-            contentService.getMyFavorite(userid, token, 1, 10);
-//            requetLoginData(userid, token);
-        } else {
-            contentService.getMyFavorite(-1, null, 1, 10);
-        }
     }
 
     private void initView(View view) {
@@ -141,20 +124,79 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         setSelectedTab(favorite_tab);
     }
 
+
+    private void initAdapter() {
+        emptCouponAapter = new MyCouponAdapter(getActivity(), null, this);
+        emptOrderAdpater = new MyOrderAdapter(getActivity(), null);
+        emptFavoriteAdpater = new MyFavoriteAdapter(getActivity(), null);
+        mListView.setAdapter(emptFavoriteAdpater);
+    }
+
+
+    private void initContentService() {
+        contentService = new ContentService(getActivity());
+        contentService.setCallBack(new MeCallBack());
+        if (UserHelper.isLogined(getActivity())) {
+            //恢复上一次登录的状态
+            String email = UserHelper.getUserEmail(getActivity());
+            String psw = UserHelper.getPassword(getActivity());
+            contentService.login(email, psw);
+        } else {
+            setLoginStatus(-1, null);
+        }
+    }
+
+    //从其他页面切换到我的页面
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden) {
-            if (isLogined) {
+        AppLog.print("onHiddenChanged____hidden___" + hidden);
+        if (isImLogin) {
+            //立即登录
+            isImLogin = false;
+            if (imLoginData != null) {
+                User user = imLoginData.getParcelableExtra(USER);
                 if (user != null) {
-                    contentService.getUserProfile(user.getId(), user.getToken());
-//                    requetLoginData(user.getId(), user.getToken());
+                    updateFragmentView(true, user);
+                } else {
+                    String email = imLoginData.getStringExtra(LoginActivity.EMAIL);
+                    String psw = imLoginData.getStringExtra(LoginActivity.PSW);
+                    contentService.login(email, psw);
                 }
             }
-            else {
-                contentService.getMyFavorite(-1, null, 1, 10);
+        } else {
+            //正常登录方式  刷新邮箱验证状态 刷新我的收藏状态(我的收藏没被选中时更新我的收藏适配器)
+            if (!hidden) {
+                if (isLogined) {
+                    if (user != null) {
+                        int id = user.getId();
+                        String token = user.getToken();
+                        contentService.getUserProfile(id, token);
+                        if (favorite_tab.isSelected()) {
+                            contentService.getMyFavorite(id, token, 1, 10);
+                        }
+                        if (order_tab.isSelected()) {
+                            contentService.getMyOrder(id, token);
+                        }
+                        if (coupon_tab.isSelected()) {
+                            contentService.getMyCoupon(id, token);
+                        }
+                    }
+                } else {
+                    if (favorite_tab.isSelected()) {
+                        contentService.getMyFavorite(-1, null, 1, 10);
+                    }
+                    if (order_tab.isSelected()) {
+                        mListView.setAdapter(emptOrderAdpater);
+                    }
+                    if (coupon_tab.isSelected()) {
+                        mListView.setAdapter(emptCouponAapter);
+                    }
+                }
             }
         }
+
+
     }
 
     private View.OnClickListener meFragmentClickListener = new View.OnClickListener() {
@@ -163,19 +205,45 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (v == favorite_tab || v == order_tab || v == coupon_tab) {
                 setSelectedTab((ViewGroup) v);
                 if (v == favorite_tab) {
-                    xListView.setPullLoadEnable(true);
-                    if (favoriteAdapter != null) {
-                        xListView.setAdapter(favoriteAdapter);
+                    mListView.setPullLoadEnable(true);
+                    if (user != null) {
+                        if (favoriteAdapter != null) {
+                            mListView.setAdapter(favoriteAdapter);
+                        } else {
+                            mListView.setAdapter(emptFavoriteAdpater);
+                        }
+                        contentService.getMyFavorite(user.getId(), user.getToken(), 1, 10);
+                    } else {
+                        if (favoriteAdapter != null) {
+                            mListView.setAdapter(favoriteAdapter);
+                        } else {
+                            mListView.setAdapter(emptFavoriteAdpater);
+                        }
+                        contentService.getMyFavorite(-1, null, 1, 10);
                     }
                 } else if (v == coupon_tab) {
-                    xListView.setPullLoadEnable(false);
-                    if (couponAdapter != null) {
-                        xListView.setAdapter(couponAdapter);
+                    mListView.setPullLoadEnable(false);
+                    if (user != null) {
+                        if (couponAdapter != null) {
+                            mListView.setAdapter(couponAdapter);
+                        } else {
+                            mListView.setAdapter(emptCouponAapter);
+                        }
+                        contentService.getMyCoupon(user.getId(), user.getToken());
+                    } else {
+                        mListView.setAdapter(emptCouponAapter);
                     }
                 } else if (v == order_tab) {
-                    xListView.setPullLoadEnable(false);
-                    if (orderAdapter != null) {
-                        xListView.setAdapter(orderAdapter);
+                    mListView.setPullLoadEnable(false);
+                    if (user != null) {
+                        if (orderAdapter != null) {
+                            mListView.setAdapter(orderAdapter);
+                        } else {
+                            mListView.setAdapter(emptOrderAdpater);
+                        }
+                        contentService.getMyOrder(user.getId(), user.getToken());
+                    } else {
+                        mListView.setAdapter(emptOrderAdpater);
                     }
                 }
             } else if (v == headImg || v == username_tv) {
@@ -237,14 +305,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 contentService.getUserProfile(user.getId(), user.getToken());
             }
         } else if (resultCode == SettingActivity.IM_LOGIN) {
-            User user = data.getParcelableExtra(USER);
-            if (user != null) {
-                updateFragmentView(true, user);
-            } else {
-                String email = data.getStringExtra(LoginActivity.EMAIL);
-                String psw = data.getStringExtra(LoginActivity.PSW);
-                contentService.login(email, psw);
-            }
+            isImLogin = true;
+            imLoginData = data;
             if (fragmentListener != null) {
                 fragmentListener.onShowRecommendFragment();
             }
@@ -282,7 +344,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 
             }
-            requetLoginData(userid, token);
+            setLoginStatus(userid, token);
         } else {
             CommonUtil.setUserParams(-1, null);
             username_tv.setActivated(false);
@@ -295,29 +357,18 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             favoriteNum_tv.setText("0");
             orderNum_tv.setText("0");
             couponNum_tv.setText("0");
-            resetUnLoginData();
+            setLoginStatus(-1, null);
         }
 
 
     }
 
-    private void resetUnLoginData() {
-        if (favorite_tab.isSelected()) {
-            xListView.setAdapter(favoriteAdapter);
-        }
-        if (coupon_tab.isSelected()) {
-            xListView.setAdapter(couponAdapter);
-        }
-        if (order_tab.isSelected()) {
-            xListView.setAdapter(orderAdapter);
-        }
-        contentService.getMyFavorite(-1, null, 1, 10);
-    }
 
-    private void requetLoginData(int userid, String token) {
+    private void setLoginStatus(int userid, String token) {
+        if (!favorite_tab.isSelected()) {
+            setSelectedTab(favorite_tab);
+        }
         contentService.getMyFavorite(userid, token, 1, 10);
-        contentService.getMyCoupon(userid, token);
-        contentService.getMyOrder(userid, token);
     }
 
 
@@ -345,36 +396,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             }
 
         } else {
+            isRefresh = false;
             CommonUtil.showToast(getActivity(), "没有更多数据", Toast.LENGTH_SHORT);
         }
-        xListView.stopLoadMore();
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        FavoriteItem item = (FavoriteItem) view.getTag(R.id.targetId);
-        switch (item.getTargetType()) {//2产品 9线路 10专题 13资讯
-            case 1://文章
-                gotoArticleDetail(item);
-                break;
-            case 2://产品
-                gotoProductDetail(item);
-
-                break;
-            case 9://线路
-                break;
-            case 10://专题
-                break;
-            case 13://资讯
-                Intent intent = new Intent(getActivity(), ArticleActivity.class);
-                ArticleDetailsBean bean = new ArticleDetailsBean();
-                //   bean.setCollected(true);
-                bean.setTargetId(item.getTargetId());
-                intent.putExtra("articleDetailsBean", bean);
-                startActivity(intent);
-                break;
-        }
-
+        mListView.stopLoadMore();
     }
 
 
@@ -398,64 +423,57 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     class MeCallBack extends ICallBack {
         @Override
+        public void onRequestFailed() {
+            isRefresh = false;
+        }
+
+        @Override
         public void onLoginSucess(User user) {
             updateFragmentView(true, user);
         }
 
         @Override
         public void onGetFavoriteItem(List<FavoriteItem> items, int totalPages, int totalRows) {
-            if (items != null && items.size() > 0 && items.equals(allItems)) {
-                if (favorite_tab.isSelected()) {
-                    xListView.setAdapter(favoriteAdapter);
-                }
-                return;
-            }
-            favoriteTotalPages = totalPages;
-            if (!isRefresh) {
-                allItems.clear();
-            } else {
-                isRefresh = false;
-            }
-
-            if (allItems.size() == 0) {
-                allItems.addAll(items);
-                favoriteAdapter = new MyFavoriteAdapter(getActivity(), allItems);
-                if (favorite_tab.isSelected()) {
-                    xListView.setAdapter(favoriteAdapter);
-                }
-            } else {
-                if (allItems.contains(items)) {
-                    return;
-                }
-                int len = allItems.size();
-                allItems.addAll(len, items);
-                favoriteAdapter.updateListView(allItems);
-            }
-            favoriteNum_tv.setText(String.valueOf(allItems.size()));
+            updateFavorite(items, totalPages);
         }
 
         @Override
         public void onGetCounponItem(List<Coupon> items) {
             AppLog.print("me fragment __onGetCounponItem__size__" + items.size());
             couponNum_tv.setText(String.valueOf(items.size()));
-            couponAdapter = new MyCouponAdapter(getActivity(), items, MeFragment.this);
-            if (coupon_tab.isSelected()) {
-                xListView.setAdapter(couponAdapter);
-            }
+            setCouponAdapter(items);
         }
+
 
         @Override
         public void onGetOrderItem(List<OrderItem> items) {
-            AppLog.print("me fragment __onGetOrderItem___size__" + items.size());
-            if (items != null) {
-                orderNum_tv.setText(String.valueOf(items.size()));
-                orderAdapter = new MyOrderAdapter(getActivity(), items);
-            }
-            if (order_tab.isSelected()) {
-                xListView.setAdapter(orderAdapter);
-            }
-
+            orderNum_tv.setText(String.valueOf(items.size()));
+            setOrderAdpater(items);
         }
+
+
+        private void updateFavorite(List<FavoriteItem> items, int totalPages) {
+            favoriteTotalPages = totalPages;
+            if (!isRefresh) {
+                AppLog.print("清理allItems___");
+                allItems.clear();
+            } else {
+                isRefresh = false;
+            }
+            if (allItems.size() == 0) {
+                AppLog.print("初次加载————————");
+                allItems.addAll(items);
+                setFavoriteAdapter();
+            } else {
+                //上拉加载更多
+                AppLog.print("上拉加载更多————————");
+                int len = allItems.size();
+                allItems.addAll(len, items);
+                setFavoriteAdapter();
+            }
+            favoriteNum_tv.setText(String.valueOf(allItems.size()));
+        }
+
 
         //只刷新验证状态————
         @Override
@@ -474,10 +492,83 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         }
     }
 
+    private void setCouponAdapter(List<Coupon> items) {
+        if (items.size() > 0) {
+            if (couponAdapter == null) {
+                couponAdapter = new MyCouponAdapter(getActivity(), items, MeFragment.this);
+            }
+            if (coupon_tab.isSelected()) {
+                mListView.setAdapter(couponAdapter);
+            }
+        } else {
+            mListView.setAdapter(emptCouponAapter);
+        }
+    }
+
+    private void setOrderAdpater(List<OrderItem> items) {
+        if (items.size() > 0) {
+            if (orderAdapter == null) {
+                orderAdapter = new MyOrderAdapter(getActivity(), items);
+            }
+            if (order_tab.isSelected()) {
+                mListView.setAdapter(orderAdapter);
+            }
+        } else {
+            mListView.setAdapter(emptOrderAdpater);
+        }
+    }
+
+    private void setFavoriteAdapter() {
+        if (allItems.size() > 0) {
+            if (favoriteAdapter == null) {
+                favoriteAdapter = new MyFavoriteAdapter(getActivity(), allItems);
+            } else {
+                favoriteAdapter.updateListView(allItems);
+            }
+            if (favorite_tab.isSelected()) {
+                mListView.setAdapter(favoriteAdapter);
+            }
+        } else {
+            if (favorite_tab.isSelected()) {
+                mListView.setAdapter(emptFavoriteAdpater);
+            }
+        }
+    }
+
     public static interface OnMeFragmentListener {
         void onShowRecommendFragment();
 
     }
+
+    private AdapterView.OnItemClickListener xlvItemClicklistener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+            FavoriteItem item = (FavoriteItem) view.getTag(R.id.targetId);
+            switch (item.getTargetType()) {//2产品 9线路 10专题 13资讯
+                case 1://文章
+                    gotoArticleDetail(item);
+                    break;
+                case 2://产品
+                    gotoProductDetail(item);
+
+                    break;
+                case 9://线路
+                    break;
+                case 10://专题
+                    break;
+                case 13://资讯
+                    Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                    ArticleDetailsBean bean = new ArticleDetailsBean();
+                    //   bean.setCollected(true);
+                    bean.setTargetId(item.getTargetId());
+                    intent.putExtra("articleDetailsBean", bean);
+                    startActivity(intent);
+                    break;
+            }
+
+        }
+    };
 
 
 }

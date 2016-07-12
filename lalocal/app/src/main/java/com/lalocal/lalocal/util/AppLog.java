@@ -24,7 +24,6 @@ import android.util.Log;
  * @description And you can turn off the log by set DEBUG_LEVEL = Log.ASSERT.
  */
 public final class AppLog {
-    public  static final String TAG="Lalocal";
     /**
      * Don't let anyone instantiate this class.
      */
@@ -35,6 +34,9 @@ public final class AppLog {
     /**
      * Master switch.To catch error info you need set this value below Log.WARN
      */
+    //close log
+//    public static final int DEBUG_LEVEL = 7;
+    //open log
     public static final int DEBUG_LEVEL = 0;
 
     /**
@@ -230,6 +232,7 @@ public final class AppLog {
      */
     public static void print(Object object) {
         if (Log.DEBUG > DEBUG_LEVEL) {
+            String tag = getClassName();
             String method = callMethodAndLine();
             String content = "";
             if (object != null) {
@@ -239,7 +242,7 @@ public final class AppLog {
                 content = method + "__|¯¯|___   "
                         + null;
             }
-            Log.d(TAG, content);
+            Log.d(tag, content);
         }
     }
 

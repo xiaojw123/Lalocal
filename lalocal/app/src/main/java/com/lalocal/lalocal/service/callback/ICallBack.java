@@ -77,7 +77,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onRequestFailed(String error) {
+    public void onRequestFailed() {
 
 
     }

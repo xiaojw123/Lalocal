@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:bottom="52dp"
+        android:bottom="53dp"
         >
         <shape android:shape="line"
             >
@@ -14,7 +14,7 @@
     </item>
 
     <item
-        android:top="52dp"
+        android:top="53dp"
         >
         <shape android:shape="line"
             >

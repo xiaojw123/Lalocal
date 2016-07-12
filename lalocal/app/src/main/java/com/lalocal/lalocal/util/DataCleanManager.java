@@ -13,10 +13,10 @@ public class DataCleanManager {
     public static String getTotalCacheSize(Context context) {
         long cacheSize = 0;
         try {
-            cacheSize = getFolderSize(context.getCacheDir());
+//            cacheSize = getFolderSize(context.getCacheDir());
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 AppLog.print("externalCacheDir___" + context.getExternalCacheDir());
-                cacheSize += getFolderSize(context.getExternalCacheDir());
+//                cacheSize += getFolderSize(context.getExternalCacheDir());
                 cacheSize += getFolderSize(DrawableUtils.getFileDir());
             }
         } catch (Exception e) {
@@ -26,13 +26,10 @@ public class DataCleanManager {
     }
 
     public static void clearAllCache(Context context) {
-        boolean s1 = deleteDir(context.getCacheDir());
-        AppLog.print("s1___" + s1);
+//deleteDir(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            boolean s2 = deleteDir(context.getExternalCacheDir());
-            AppLog.print("s2___" + s2);
-            boolean s3 = deleteDir(DrawableUtils.getFileDir());
-            AppLog.print("s3___" + s3);
+//       deleteDir(context.getExternalCacheDir());
+            deleteDir(DrawableUtils.getFileDir());
         }
     }
 

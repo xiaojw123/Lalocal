@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.activity;
+package com.lalocal.lalocal.activity.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
+import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.BigPictureBean;
@@ -468,7 +469,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             String[] split = url.split("\\?");
             String json = split[1];
             // targetType=1&targetId=230;
-            String[] split2=json.split("&");
+           /* String[] split2=json.split("&");
             String split3 = split2[0];
             String[] split4 = split3.split("Type=");
             String targetTy = split4[1];
@@ -477,18 +478,19 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
             String targetID = split1[1];
             int targetIDD=Integer.parseInt(targetID);
-            int targetTY = Integer.parseInt(targetTy);
-            //  SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-            SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
-            specialToH5Bean.setTargetId(targetIDD);
-            specialToH5Bean.setTargetType(targetTY);
+            int targetTY = Integer.parseInt(targetTy);*/
+           // SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
+
+             SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
+
+           /* specialToH5Bean.setTargetId(targetIDD);
+            specialToH5Bean.setTargetType(targetTY);*/
             if (specialToH5Bean != null) {
                 switch (specialToH5Bean.getTargetType()) {
                     case 1:
                         //文章，调h5接口
                         if (articleDetailsBeanList != null) {
                             for (int i = 0; i < articleDetailsBeanList.size(); i++) {
-
                                 if (specialToH5Bean.getTargetId() == articleDetailsBeanList.get(i).getTargetId()) {
                                     Intent intent1 = new Intent(mContext, ArticleTestAct.class);
                                     intent1.putExtra("articleDetailsBean", articleDetailsBeanList.get(i));

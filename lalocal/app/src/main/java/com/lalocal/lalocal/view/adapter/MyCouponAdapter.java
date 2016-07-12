@@ -12,7 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.MeFragment;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.dialog.ConvertDialog;

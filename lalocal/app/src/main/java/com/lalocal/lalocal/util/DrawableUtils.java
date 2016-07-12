@@ -50,6 +50,7 @@ public class DrawableUtils {
         builder.diskCache(new LimitedAgeDiskCache(getFileDir(), MAX_AGE));
         builder.diskCacheFileNameGenerator(new Md5FileNameGenerator());
         builder.threadPoolSize(3);
+//        builder.diskCacheSize()
         builder.tasksProcessingOrder(QueueProcessingType.FIFO);
         builder.taskExecutor(Executors.newCachedThreadPool());
         builder.threadPriority(Thread.MAX_PRIORITY);

@@ -4,12 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by xiaojw on 2016/7/7.
  */
 public class UserHelper {
+    //保存收藏 ，订单，优惠券使用记录
+    public static List<String> favorites = new ArrayList<>();
+    public static List<String>  orders=new ArrayList<>();
+    public static List<String> coupon=new ArrayList<>();
     static SharedPreferences sp;
-
     private static void initSPref(Context context) {
         if (sp == null) {
             sp = context.getSharedPreferences("userparams", Context.MODE_PRIVATE);
@@ -51,7 +57,7 @@ public class UserHelper {
 
     public static String getToken(Context context) {
         initSPref(context);
-        return sp.getString(KeyParams.TOKEN,null);
+        return sp.getString(KeyParams.TOKEN, null);
 
     }
 }
