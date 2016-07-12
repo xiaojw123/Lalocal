@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
@@ -17,7 +17,7 @@ public class PasswordForget1Activity extends BaseActivity implements View.OnClic
     public static final String Email = "email";
     CustomEditText email_edit;
     TextView next_tv;
-    ContentService contentService;
+    ContentLoader contentService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class PasswordForget1Activity extends BaseActivity implements View.OnClic
     }
 
     private void initContentSerice() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
     }
 

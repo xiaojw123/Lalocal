@@ -11,8 +11,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.User;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -26,7 +26,7 @@ public class LoginActivity extends BaseActivity {
     CustomTitleView login_ctv;
     TextView register_tv, forgetpsw_tv;
     Button login_btn;
-    ContentService contentService;
+    ContentLoader contentService;
     String setting;
     boolean isImLogin;
 
@@ -45,7 +45,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void initContentService() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
     }
 

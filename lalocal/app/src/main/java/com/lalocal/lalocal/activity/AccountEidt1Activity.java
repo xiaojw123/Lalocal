@@ -18,8 +18,8 @@ import android.widget.Toast;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.LoginUser;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -49,7 +49,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     TextView phone_tv;
     TextView areacode_tv;
     TextView email_tv;
-    ContentService contentService;
+    ContentLoader contentService;
     LoginUser user;
     int sex = -1;
     boolean isEmailUpdate;
@@ -75,7 +75,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     }
 
     private void initService() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
         contentService.getUserProfile(getUserId(), getToken());
 

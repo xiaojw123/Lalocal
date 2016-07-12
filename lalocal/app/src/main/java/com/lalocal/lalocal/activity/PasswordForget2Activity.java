@@ -6,8 +6,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 
@@ -15,7 +15,7 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
     CustomEditText veritiedcode_edit;
     CustomEditText passwrod_edit;
     Button sureBtn;
-    ContentService contentService;
+    ContentLoader contentService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
     }
 
     private void initContentService() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
     }
 

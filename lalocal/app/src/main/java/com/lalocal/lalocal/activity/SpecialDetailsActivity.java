@@ -36,8 +36,8 @@ import com.lalocal.lalocal.model.SpecialGroupsBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -66,9 +66,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private ShineButton detailsLike;
     private ImageView detailsShare;
     private WebView specialWebView;
-    private ContentService contentService;
+    private ContentLoader contentService;
     private WebSettings settings;
-    private ContentService contentService1;
+    private ContentLoader contentService1;
     private LinearLayout mainUi;
     private Context mContext = SpecialDetailsActivity.this;
     private SpecialShareVOBean shareVO;
@@ -142,7 +142,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         String url = AppConfig.SPECIAL_DETAILS_URL + rowId;
 
         if (rowId != null) {
-            contentService1 = new ContentService(this);
+            contentService1 = new ContentLoader(this);
             contentService1.setCallBack(new MyCallBack());
             contentService1.specialDetail(rowId);
         }

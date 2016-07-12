@@ -9,8 +9,8 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
@@ -19,7 +19,7 @@ import com.lalocal.lalocal.view.dialog.CustomDialog;
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     CustomEditText email_edit, psw_edit, nickname_edit;
     Button register_btn;
-    ContentService contentService;
+    ContentLoader contentService;
     TextView userprotocol_tv;
     String loginEmail, loginPsw;
 
@@ -33,7 +33,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
     }
 
     private void initService() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
     }
 

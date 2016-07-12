@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.service;
+package com.lalocal.lalocal.net;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +33,7 @@ import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -52,14 +52,14 @@ import java.util.Map;
 /**
  * Created by xiaojw on 2016/6/1.
  */
-public class ContentService {
+public class ContentLoader {
     public static final String CONTENT_TYPE = "application/json";
     private ICallBack callBack;
     RequestQueue requestQueue;
     ContentResponse response;
     Context context;
 
-    public ContentService(Context context) {
+    public ContentLoader(Context context) {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
