@@ -36,8 +36,8 @@ import com.lalocal.lalocal.model.SpecialGroupsBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -66,9 +66,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private ShineButton detailsLike;
     private ImageView detailsShare;
     private WebView specialWebView;
-    private ContentService contentService;
+    private ContentLoader contentService;
     private WebSettings settings;
-    private ContentService contentService1;
+    private ContentLoader contentService1;
     private LinearLayout mainUi;
     private Context mContext = SpecialDetailsActivity.this;
     private SpecialShareVOBean shareVO;
@@ -142,7 +142,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         String url = AppConfig.SPECIAL_DETAILS_URL + rowId;
 
         if (rowId != null) {
-            contentService1 = new ContentService(this);
+            contentService1 = new ContentLoader(this);
             contentService1.setCallBack(new MyCallBack());
             contentService1.specialDetail(rowId);
         }
@@ -464,68 +464,39 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            AppLog.i("TAG","shouldOverrideUrlLoading:"+url);
+            //AppLog.i("TAG","shouldOverrideUrlLoading:"+url);
             String[] split = url.split("\\?");
             String json = split[1];
-<<<<<<< HEAD
       /*    //生产环境开启
            // targetType=1&targetId=230;
             String[] split2=json.split("&");
-=======
-            // targetType=1&targetId=230;
-           /* String[] split2=json.split("&");
->>>>>>> 81ad621776ea981a50a87aad0cd9fde99d09d500
             String split3 = split2[0];
             String[] split4 = split3.split("Type=");
             String targetTy = split4[1];
             String[] split1 = json.split("Id=");
             String targetID = split1[1];
             int targetIDD=Integer.parseInt(targetID);
-<<<<<<< HEAD
             int targetTY = Integer.parseInt(targetTy);
 */
-           SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
+            SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
             AppLog.i("TAG",specialToH5Bean.toString());
          /*   SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
             specialToH5Bean.setTargetId(targetIDD);
-=======
-            int targetTY = Integer.parseInt(targetTy);*/
-           // SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
-
-             SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-
-           /* specialToH5Bean.setTargetId(targetIDD);
->>>>>>> 81ad621776ea981a50a87aad0cd9fde99d09d500
             specialToH5Bean.setTargetType(targetTY);*/
             if (specialToH5Bean != null) {
                 switch (specialToH5Bean.getTargetType()) {
                     case 1:
                         //文章，调h5接口
-<<<<<<< HEAD
 
                         Intent intent1 = new Intent(mContext, ArticleActivity.class);
-                      intent1.putExtra("targetID",specialToH5Bean.getTargetId()+"");
+                        intent1.putExtra("targetID",specialToH5Bean.getTargetId()+"");
                         startActivity(intent1);
-=======
-                        if (articleDetailsBeanList != null) {
-                            for (int i = 0; i < articleDetailsBeanList.size(); i++) {
-                                if (specialToH5Bean.getTargetId() == articleDetailsBeanList.get(i).getTargetId()) {
-                                    Intent intent1 = new Intent(mContext, ArticleTestAct.class);
-                                    intent1.putExtra("articleDetailsBean", articleDetailsBeanList.get(i));
-                                    startActivity(intent1);
-                                }
-                            }
-                        }
->>>>>>> 81ad621776ea981a50a87aad0cd9fde99d09d500
                         break;
                     case 2:
                         //产品,去产品详情页
-                        if(specialToH5Bean.getTargetType()==2){
-                            Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
-                            intent2.putExtra("productdetails", specialToH5Bean);
-                            startActivity(intent2);
-                        }
-
+                        Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
+                        intent2.putExtra("productdetails", specialToH5Bean);
+                        startActivity(intent2);
                         break;
                     case 3:
                         break;
