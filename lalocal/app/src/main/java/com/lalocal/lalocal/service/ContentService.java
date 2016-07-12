@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
@@ -260,7 +261,13 @@ public class ContentService {
         requestQueue.add(contentRequest);
     }
 
-
+    public void articleDetails(String targetId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.ARTICLE_DETAILS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.ARTICLE_DETAILS +targetId, response, response);
+        requestQueue.add(contentRequest);
+    }
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -446,6 +453,9 @@ public class ContentService {
                         break;
                     case RequestCode.PARISES:
                         responseParises(json);
+                        break;
+                    case RequestCode.ARTICLE_DETAILS:
+                        responseArticle(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -643,6 +653,12 @@ public class ContentService {
             }
 
         }
+        private void responseArticle(String json) {
+            ArticleDetailsResp articleDetailsResp = new Gson().fromJson(json, ArticleDetailsResp.class);
+            if(articleDetailsResp.getReturnCode()==0){
+                callBack.onArticleResult(articleDetailsResp);
+            }
+        }
 
         @Override
         public void onDialogClickListener() {
@@ -651,6 +667,8 @@ public class ContentService {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
+
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
             phone) {
@@ -793,6 +811,7 @@ public class ContentService {
         int PRODUCT_DETAILS = 203;
         int CANCEL_PARISES = 204;
         int PARISES = 205;
+        int ARTICLE_DETAILS=206;
 
     }
 

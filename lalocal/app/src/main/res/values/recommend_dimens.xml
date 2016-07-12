@@ -11,4 +11,6 @@
     <dimen name="view_small_padding">1dp</dimen>
     <dimen name="view_padding">6dp</dimen>
     <dimen name="special_detail_header">200dp</dimen>
+    <dimen name="padding_right">20dp</dimen>
+    <dimen name="pading_left">12dp</dimen>
 </resources>

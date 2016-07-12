@@ -52,7 +52,7 @@ public class ArticleTestAct extends BaseActivity {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setJavaScriptEnabled(true);
-      webView.setBackgroundColor(Color.parseColor("#000000"));
+        webView.setBackgroundColor(Color.parseColor("#000000"));
         webView.loadUrl("https://dev.lalocal.cn/wechat/app_article?id=" + articleDetailsBean.getTargetId());
         webView.setWebViewClient(new MyWebViewClient());
 
