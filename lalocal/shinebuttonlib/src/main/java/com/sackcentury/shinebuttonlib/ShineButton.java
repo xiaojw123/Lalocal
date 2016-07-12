@@ -55,7 +55,7 @@ public class ShineButton extends PorterShapeImageView {
         }
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ShineButton);
         btn_color = a.getColor(R.styleable.ShineButton_btn_color, Color.GRAY);
-        btn_fill_color = a.getColor(R.styleable.ShineButton_btn_fill_color, Color.BLACK);
+        btn_fill_color = a.getColor(R.styleable.ShineButton_btn_fill_color, Color.WHITE);
         shineParams.allowRandomColor = a.getBoolean(R.styleable.ShineButton_allow_random_color, false);
         shineParams.animDuration = a.getInteger(R.styleable.ShineButton_shine_animation_duration, (int) shineParams.animDuration);
         shineParams.bigShineColor = a.getColor(R.styleable.ShineButton_big_shine_color, shineParams.bigShineColor);

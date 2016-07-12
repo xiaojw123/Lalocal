@@ -16,18 +16,21 @@
  */
 
 package com.android.tedcoder.wkvideoplayer.view;
-
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 import com.android.tedcoder.wkvideoplayer.R;
@@ -89,13 +92,10 @@ public class SuperVideoPlayer extends RelativeLayout {
         public void onPlayTurn() {
             if (mVideoView.isPlaying()) {
                 pausePlay(true);
-
                 isPlayerStatus=false;
-               // Toast.makeText(mContext,"暂停",Toast.LENGTH_SHORT).show();
             } else {
                 goOnPlay();
                 isPlayerStatus=true;
-               // Toast.makeText(mContext,"播放",Toast.LENGTH_SHORT).show();
             }
            mVideoPlayCallback.onPlayStatus(isPlayerStatus);
         }
@@ -151,6 +151,7 @@ public class SuperVideoPlayer extends RelativeLayout {
             Toast.makeText(mContext, "视频播放完成", Toast.LENGTH_SHORT).show();
         }
     };
+    private int duration;
 
     //set回调方法，实现回调在本类中的实例化
     public void setVideoPlayCallback(VideoPlayCallbackImpl videoPlayCallback) {
@@ -239,11 +240,19 @@ public class SuperVideoPlayer extends RelativeLayout {
      *
      * @param context
      */
+
+    private LinearLayout touchStatusView;
+    private ImageView touchStatusImg;
+    private TextView touchStatusTime;
     private void initView(Context context) {
         mContext = context;
-        View.inflate(context, R.layout.super_vodeo_player_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
+        View inflate = View.inflate(context, R.layout.super_vodeo_player_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
         mVideoView = (VideoView) findViewById(R.id.video_view);
         mMediaController = (MediaController) findViewById(R.id.controller);
+
+        touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
+        touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
+        touchStatusTime = (TextView) inflate.findViewById(R.id.touch_time);
 
         mMediaController.setMediaControl(mMediaControl);
         mVideoView.setOnTouchListener(mOnTouchVideoListener);
@@ -295,9 +304,12 @@ public class SuperVideoPlayer extends RelativeLayout {
      * 更新播放的进度时间
      */
     private void updatePlayTime() {
-        int allTime = mVideoView.getDuration();
+        duration = mVideoView.getDuration();
+        int[] time = getMinuteAndSecond(duration);
+       // videoTotalTimeText.setText(String.format("%02d:%02d", time[0], time[1]));
+        formatTotalTime = String.format("%02d:%02d", time[0], time[1]);
         int playTime = mVideoView.getCurrentPosition();
-        mMediaController.setPlayProgressTxt(playTime, allTime);
+        mMediaController.setPlayProgressTxt(playTime, duration);
     }
 
     /**
@@ -388,6 +400,82 @@ public class SuperVideoPlayer extends RelativeLayout {
             mUpdateTimer = null;
         }
     }
+
+    private float touchLastX;
+    private int position;
+    private int touchStep = 1000;//快进的时间，1秒
+    private int touchPosition = -1;
+    private String formatTotalTime;
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.i("TAG","触摸事件激发了");
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                if (!mVideoView.isPlaying()) {
+                    return false;
+                }
+                float downX = event.getRawX();
+                touchLastX = downX;
+                this.position = mVideoView.getCurrentPosition();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (!mVideoView.isPlaying()) {
+                    return false;
+                }
+                float currentX = event.getRawX();
+                float deltaX = currentX - touchLastX;
+                float deltaXAbs = Math.abs(deltaX);
+                if (deltaXAbs > 1) {
+                    if (touchStatusView.getVisibility() != View.VISIBLE) {
+                        touchStatusView.setVisibility(View.VISIBLE);
+                    }
+                    touchLastX = currentX;
+                    if (deltaX > 1) {
+                        position += touchStep;
+                        if (position > duration) {
+                            position = duration;
+                        }
+                        touchPosition = position;
+                        touchStatusImg.setImageResource(R.drawable.ic_fast_forward_white_24dp);
+                        int[] time = getMinuteAndSecond(position);
+                        touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
+                    } else if (deltaX < -1) {
+                        position -= touchStep;
+                        if (position < 0) {
+                            position = 0;
+                        }
+                        touchPosition = position;
+                        touchStatusImg.setImageResource(R.drawable.ic_fast_rewind_white_24dp);
+                        int[] time = getMinuteAndSecond(position);
+                        touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
+
+                    }
+                }
+                    break;
+            case MotionEvent.ACTION_UP:
+                if (touchPosition!=-1){
+                    mVideoView.seekTo(touchPosition);
+                    touchStatusView.setVisibility(View.GONE);
+                    touchPosition = -1;
+                    if (mMediaController.getVisibility() == View.VISIBLE){
+                        return true;
+                    }
+                }
+                break;
+                }
+
+
+        return false;
+    }
+
+    private int[] getMinuteAndSecond(int mils) {
+        mils /= 1000;
+        int[] time = new int[2];
+        time[0] = mils / 60;
+        time[1] = mils % 60;
+        return time;
+    }
+
 
     private class AnimationImp implements Animation.AnimationListener {
 

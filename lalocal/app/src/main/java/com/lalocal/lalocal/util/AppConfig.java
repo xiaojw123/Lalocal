@@ -10,9 +10,9 @@ public class AppConfig {
         //用户协议-h5
         public static final String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
         //开发环境
-//        public static final String BASE_URL = "http://dev.lalocal.cn:8080/api/";
+       public static final String BASE_URL = "http://dev.lalocal.cn:8080/api/";
         //生产环境
-        public static final String BASE_URL = "http://api.lalocal.cn/api/";
+      //  public static final String BASE_URL = "http://api.lalocal.cn/api/";
         //注册接口
         public static final String REGISTER_URL = BASE_URL + "users/register";
         //登录接口
@@ -47,6 +47,8 @@ public class AppConfig {
         public static final  String PRAISES=BASE_URL+"praises";
         //取消赞
         public static final String CANCEL_PRAISES=BASE_URL+"praises/";
+        //文章详情
+        public static final String ARTICLE_DETAILS=BASE_URL+"articles/";
         public static  final String IN_LAND_PHONE="400-017-8056";
         public static  final String FOREIGEN_PHONE="(+86)0571-86808267";
 

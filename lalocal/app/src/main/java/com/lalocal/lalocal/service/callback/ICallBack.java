@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.service.callback;
 
 
+import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
@@ -95,4 +96,6 @@ public abstract class ICallBack {
     public void onInputPariseResult(PariseResult pariseResult) {
 
     }
+    //文章详情
+    public void onArticleResult(ArticleDetailsResp articleDetailsResp){}
 }

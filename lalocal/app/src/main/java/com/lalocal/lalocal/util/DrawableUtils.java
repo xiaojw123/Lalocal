@@ -54,7 +54,6 @@ public class DrawableUtils {
         builder.taskExecutor(Executors.newCachedThreadPool());
         builder.threadPriority(Thread.MAX_PRIORITY);
         builder.writeDebugLogs();
-
         loader.init(builder.build());
     }
 

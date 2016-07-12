@@ -43,7 +43,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         shareWeibo.setOnClickListener(this);
         cancel.setOnClickListener(this);
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setContentView(view);
         this.setFocusable(true);
