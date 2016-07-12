@@ -607,16 +607,28 @@ public class ContentLoader {
 
         //点赞
         private void responseParises(String json) {
-            AppLog.print("responseParises______" + json);
+            AppLog.print("TAG" + "responseParises"+json);
+            List<String> favorites = UserHelper.favorites;
 
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+            boolean contains = favorites.contains(String.valueOf(pariseResult.getResult()));
+            if(!contains){
+                favorites.add(String.valueOf(pariseResult.getResult()));
+            }
             callBack.onInputPariseResult(pariseResult);
         }
 
         //取消赞
         private void responseCancelParises(String json) {
-            AppLog.print("responseCancelParises______" + json);
+            AppLog.print("TAG" + "responseCancelParises"+json);
+            List<String> favorites = UserHelper.favorites;
+
+
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+            boolean contains = favorites.contains(String.valueOf(pariseResult.getResult()));
+            if(contains){
+                favorites.remove(String.valueOf(pariseResult.getResult()));
+            }
             callBack.onPariseResult(pariseResult);
         }
 
