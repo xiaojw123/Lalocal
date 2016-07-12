@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 
 public class DrawableUtils {
     public static final int MAX_AGE = 24 * 3600 * 1000;
-    private static final int DRAWABLE_NULL = R.drawable.company_logo;
+    private static final int DRAWABLE_NULL = R.drawable.androidloading;
     private static ImageLoader loader;
 
     public static void displayImg(Context context, ImageView img, String url) {
