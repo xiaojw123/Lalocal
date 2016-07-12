@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.service;
+package com.lalocal.lalocal.net;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +33,7 @@ import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -52,14 +52,14 @@ import java.util.Map;
 /**
  * Created by xiaojw on 2016/6/1.
  */
-public class ContentService {
+public class ContentLoader {
     public static final String CONTENT_TYPE = "application/json";
     private ICallBack callBack;
     RequestQueue requestQueue;
     ContentResponse response;
     Context context;
 
-    public ContentService(Context context) {
+    public ContentLoader(Context context) {
         if (requestQueue == null) {
             requestQueue = Volley.newRequestQueue(context);
         }
@@ -607,16 +607,28 @@ public class ContentService {
 
         //点赞
         private void responseParises(String json) {
-            AppLog.print("responseParises______" + json);
+            AppLog.print("TAG" + "responseParises"+json);
+            List<String> favorites = UserHelper.favorites;
 
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+            boolean contains = favorites.contains(String.valueOf(pariseResult.getResult()));
+            if(!contains){
+                favorites.add(String.valueOf(pariseResult.getResult()));
+            }
             callBack.onInputPariseResult(pariseResult);
         }
 
         //取消赞
         private void responseCancelParises(String json) {
-            AppLog.print("responseCancelParises______" + json);
+            AppLog.print("TAG" + "responseCancelParises"+json);
+            List<String> favorites = UserHelper.favorites;
+
+
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
+            boolean contains = favorites.contains(String.valueOf(pariseResult.getResult()));
+            if(contains){
+                favorites.remove(String.valueOf(pariseResult.getResult()));
+            }
             callBack.onPariseResult(pariseResult);
         }
 

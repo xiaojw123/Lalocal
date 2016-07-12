@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
-import com.nostra13.universalimageloader.cache.disc.impl.ext.LruDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -21,7 +20,7 @@ import java.util.concurrent.Executors;
 public class DrawableUtils {
     public static final int MAX_AGE = 24 * 3600 * 1000;
     public static final  int MAX_SIZE=50*1024*1024;
-    private static final int DRAWABLE_NULL = R.drawable.company_logo;
+    private static final int DRAWABLE_NULL = R.drawable.androidloading;
     private static ImageLoader loader;
 
     public static void displayImg(Context context, ImageView img, String url) {

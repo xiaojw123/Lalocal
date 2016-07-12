@@ -2,11 +2,8 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler.Callback;
@@ -14,7 +11,6 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
@@ -23,24 +19,24 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.SpecialAuthorBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.HashMap;
-import java.util.zip.Inflater;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -57,7 +53,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private ImageView btnShare;
     private TextView readTv;
     private TextView collectTv;
-    private ContentService contentService;
+    private ContentLoader contentService;
     private Context mContext=ArticleActivity.this;
     private LinearLayout back;
     private View placeHolder;
@@ -67,6 +63,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private String targetID;
     private Object praiseId;//点赞id
     private ImageView unLike;
+    private SpecialAuthorBean authorVO;//作者二维码
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,7 +109,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()){
             case R.id.article_btn_comment:
                 //评论
-                Toast.makeText(mContext,"评论功能尚未开启，敬请期待。。。",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext,"评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.article_btn_share:
                 //分享
@@ -135,7 +132,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initData( String targetID) {
-        contentService=new ContentService(this);
+        contentService=new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
         contentService.articleDetails(targetID);
 
@@ -144,12 +141,16 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
 
     public class MyCallBack extends ICallBack {
+
+
+
         @Override
         public void onArticleResult(ArticleDetailsResp articleDetailsResp) {
             super.onArticleResult(articleDetailsResp);
             articleDetailsRespResult = articleDetailsResp.getResult();
             if(articleDetailsRespResult !=null){
                 praiseId = articleDetailsRespResult.getPraiseId();
+                authorVO = articleDetailsRespResult.getAuthorVO();
                 String url = articleDetailsRespResult.getUrl();
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
                 if(praiseFlag){
@@ -229,9 +230,13 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
          //   lalocal://codeImageClick?{"name":"Lalocal","wechatNo":"%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB",
             // "imageUrl":"http://7xpid3.com1.z0.glb.clouddn.com/20160615142707308988042388"}
            // String[] split = url.split("\\?");
+            AppLog.i("TAG",url);
             if(url.matches(".*codeImageClick.*")){
                 //TODO 作者二维码
-                showPopupWindow();
+                if(authorVO!=null){
+                    showPopupWindow(authorVO);
+                }
+
                 return true;
             }else if (url.matches(".*app.*")){
                 String[] split = url.split("\\?");
@@ -262,7 +267,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    private void showPopupWindow() {
+    private void showPopupWindow(SpecialAuthorBean authorVO) {
+
+
         Toast.makeText(this,"ahhaaa",Toast.LENGTH_SHORT).show();
         PopupWindow pw=new PopupWindow(this);
         View view =View.inflate(this,R.layout.author_pop_layout,null);

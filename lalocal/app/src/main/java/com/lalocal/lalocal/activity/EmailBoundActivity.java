@@ -7,8 +7,8 @@ import android.widget.Button;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -17,7 +17,7 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
     public static final int RESULIT_CODE_BOUND_EMAIL = 103;
     CustomEditText email_edit;
     Button change_email_btn;
-    ContentService contentService;
+    ContentLoader contentService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
     }
 
     private void initService() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
     }
 

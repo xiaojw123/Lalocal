@@ -13,8 +13,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.model.LoginUser;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.dialog.WheelDialog;
@@ -29,7 +29,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     EditText nickname_modfiy_edit, phone_modify_edit;
     TextView countrycode_tv;
     int actionType;
-    ContentService contentService;
+    ContentLoader contentService;
     int userid;
     String token;
     String email, emailText;
@@ -61,7 +61,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     }
 
     private void initService() {
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new CallBack());
     }
 

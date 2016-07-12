@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="author_padding_15dp">15dp</dimen>
+    <dimen name="author_padding_25dp">25dp</dimen>
+    <dimen name="author_circle_30dp">30dp</dimen>
+    <dimen name="author_padding_67dp">44dp</dimen>
+    <dimen name="author_padding_62dp">62dp</dimen>
+    <dimen name="author_padding_23dp">23dp</dimen>
+    <dimen name="author_padding_10dp">10dp</dimen>
+</resources>

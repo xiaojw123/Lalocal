@@ -28,8 +28,8 @@ import com.lalocal.lalocal.model.ProductValueBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -71,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private RelativeLayout phones;
     private Context mContext = ProductDetailsActivity.this;
     private SpecialToH5Bean specialToH5Bean;
-    private ContentService contentService;
+    private ContentLoader contentService;
     private Object praiseId;
     private SharePopupWindow sharePopupWindow;
     private ImageView titleBack;
@@ -142,7 +142,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private void initData() {
         Intent intent = getIntent();
         specialToH5Bean = intent.getParcelableExtra("productdetails");
-        contentService = new ContentService(this);
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
         contentService.productDetails(specialToH5Bean.getTargetId() + "");
         left = DensityUtil.dip2px(ProductDetailsActivity.this, 15);

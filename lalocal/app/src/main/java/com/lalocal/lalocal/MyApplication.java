@@ -22,7 +22,6 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-//        ShareSDK.initSDK(this);
         AppLog.print("MyApplication onCreate___");
         LitePalApplication.initialize(this);
         Fabric fabric = new Fabric.Builder(this)

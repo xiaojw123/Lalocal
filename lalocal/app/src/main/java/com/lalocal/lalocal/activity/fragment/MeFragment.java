@@ -33,8 +33,8 @@ import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.User;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -59,7 +59,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     LinearLayout favorite_tab, order_tab, coupon_tab;
     ViewGroup lastSelectedView;
     ImageButton settingBtn;
-    ContentService contentService;
+    ContentLoader contentService;
     public boolean isLogined, isRefresh, isImLogin;
     int favoriteTotalPages, favoritePage = 1;
     User user;
@@ -134,7 +134,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
 
     private void initContentService() {
-        contentService = new ContentService(getActivity());
+        contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MeCallBack());
         if (UserHelper.isLogined(getActivity())) {
             //恢复上一次登录的状态

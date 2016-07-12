@@ -19,8 +19,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.order_layout);
         initParams();
         initView();
-        ContentService service = new ContentService(this);
+        ContentLoader service = new ContentLoader(this);
         service.setCallBack(new CallBack());
         service.getOrderDetail(getOrderId());
     }

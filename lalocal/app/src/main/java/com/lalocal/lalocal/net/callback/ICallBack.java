@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.service.callback;
+package com.lalocal.lalocal.net.callback;
 
 
 import com.lalocal.lalocal.model.ArticleDetailsResp;

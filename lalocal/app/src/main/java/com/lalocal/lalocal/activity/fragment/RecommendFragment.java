@@ -20,8 +20,8 @@ import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendResultBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.service.ContentService;
-import com.lalocal.lalocal.service.callback.ICallBack;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
@@ -48,7 +48,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private int itemCount = 0;
     boolean firstRefresh = true;
     private int page = 2;
-    private ContentService contentService;
+    private ContentLoader contentService;
     private View header;
 
     @Override
@@ -61,7 +61,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_recommend_layout, container, false);
-        contentService = new ContentService(getActivity());
+        contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
         contentService.recommendAd();
         contentService.recommentList(10, 1);
