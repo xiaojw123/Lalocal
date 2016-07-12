@@ -29,7 +29,7 @@
     <dimen name="custom_neutral_btn_height">50dp</dimen>
     <dimen name="custom_neutral_btn_top">15dp</dimen>
     <dimen name="app_statusbar_height">0dp</dimen>
-    <dimen name="app_actionbar_height">74dp</dimen>
+    <dimen name="app_actionbar_height">54dp</dimen>
 
 
 </resources>

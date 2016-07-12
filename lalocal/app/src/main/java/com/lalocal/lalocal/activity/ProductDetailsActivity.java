@@ -62,7 +62,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private ImageView btnShare;
     private TextView productReserve;
     private ImageView customer;
-    private ImageView back;
     private TextView productService;
     private LinearLayout featureLayout;
     private LinearLayout serviceLayout;
@@ -105,7 +104,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         productReserve = (TextView) findViewById(R.id.product_details_reserve);
         customer = (ImageView) findViewById(R.id.product_customer_service);
         phones = (RelativeLayout) findViewById(R.id.product_details_phones);
-        back = (ImageView) findViewById(R.id.common_back_btn);
         productService = (TextView) findViewById(R.id.product_service);
         featureLayout = (LinearLayout) findViewById(R.id.product_content_value);
         serviceLayout = (LinearLayout) findViewById(R.id.product_service_layout);
@@ -123,7 +121,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         btnLike.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         customer.setOnClickListener(this);
-        back.setOnClickListener(this);
         productReserve.setOnClickListener(this);
 
 
@@ -188,9 +185,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_service_relayout:
                 //去客服页面
-                break;
-            case R.id.common_back_btn:
-                finish();
                 break;
             case R.id.product_customer_service:
                 //去客服页面

@@ -2,19 +2,14 @@ package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
@@ -35,16 +30,9 @@ public class ArticleTestAct extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article_test);
         webView = (WebView) findViewById(R.id.webview);
-        ImageView back= (ImageView) findViewById(R.id.common_back_btn);
         reLayout = (RelativeLayout) findViewById(R.id.article_relayout);
         Intent intent = getIntent();
         articleDetailsBean = intent.getParcelableExtra("articleDetailsBean");
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
         if(Build.VERSION.SDK_INT >= 19) {
             webView.getSettings().setLoadsImagesAutomatically(true);
         } else {

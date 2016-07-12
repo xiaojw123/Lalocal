@@ -257,7 +257,7 @@ public class ContentService {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS +targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -360,6 +360,7 @@ public class ContentService {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
+            callBack.onRequestFailed();
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
@@ -381,6 +382,7 @@ public class ContentService {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
+                    callBack.onRequestFailed();
                     if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
                         CustomDialog dialog = new CustomDialog(context);
                         dialog.setMessage(message);
@@ -433,11 +435,11 @@ public class ContentService {
                         responseGetMyCoupon(jsonObj);
                         break;
                     case RequestCode.RECOMMEND:
-                        AppLog.print("recommend____json__"+json);
+                        AppLog.print("recommend____json__" + json);
                         responseRecommend(json);
                         break;
                     case RequestCode.RECOMMEND_AD:
-                        AppLog.print("recommedn___ad__"+json);
+                        AppLog.print("recommedn___ad__" + json);
                         responseRecommendAd(json);
                         break;
                     case RequestCode.SPECIAL_DETAIL:
@@ -590,7 +592,7 @@ public class ContentService {
             bundle.putString(KeyParams.PASSWORD, psw);
             bundle.putInt(KeyParams.USERID, user.getId());
             bundle.putString(KeyParams.TOKEN, user.getToken());
-            UserHelper.saveLoginInfo(context,bundle);
+            UserHelper.saveLoginInfo(context, bundle);
         }
 
         private void responseRegister(JSONObject jsonObject) {
@@ -620,7 +622,7 @@ public class ContentService {
 
         //产品详情
         private void responseProductDetails(String json) {
-            AppLog.i("TAG","responseProductDetails:"+json);
+            AppLog.i("TAG", "responseProductDetails:" + json);
             ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
             if (productDetailsDataResp != null) {
                 callBack.onProductDetails(productDetailsDataResp);
@@ -644,7 +646,7 @@ public class ContentService {
 
         //specialdetail
         public void responseSpecialDetail(String json) {
-            AppLog.i("TAG",json);
+            AppLog.i("TAG", json);
             SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
             if (spectialDetailsResp != null) {
                 callBack.onRecommendSpecial(spectialDetailsResp);

@@ -10,6 +10,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.DestinationFragment;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
+import com.lalocal.lalocal.activity.fragment.NewsFragment;
+import com.lalocal.lalocal.activity.fragment.RecommendFragment;
 import com.lalocal.lalocal.util.AppLog;
 
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {

@@ -5,18 +5,15 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 /**
  * Created by lenovo on 2016/6/23.
  */
-public class ProductCheckDetailActivity extends BaseActivity implements View.OnClickListener{
+public class ProductCheckDetailActivity extends BaseActivity{
     private boolean isLoading;
     private Context mContext=ProductCheckDetailActivity.this;
     private WebView checkWebview;
@@ -26,8 +23,6 @@ public class ProductCheckDetailActivity extends BaseActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_check_detail_layout);
         String checkdetail = getIntent().getStringExtra("checkdetail");
-        ImageView back= (ImageView) findViewById(R.id.common_back_btn);
-        back.setOnClickListener(this);
         checkWebview = (WebView) findViewById(R.id.product_check_detail_webview);
         if(Build.VERSION.SDK_INT >= 19) {
             checkWebview.getSettings().setLoadsImagesAutomatically(true);
@@ -76,12 +71,5 @@ public class ProductCheckDetailActivity extends BaseActivity implements View.OnC
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-    @Override
-    public void onClick(View v) {
-        if(v.getId()==R.id.common_back_btn){
-
-            finish();
-        }
     }
 }

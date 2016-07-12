@@ -13,7 +13,6 @@ import org.litepal.tablemanager.Connector;
 
 import java.util.List;
 
-import cn.sharesdk.framework.ShareSDK;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -23,7 +22,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ShareSDK.initSDK(this);
+//        ShareSDK.initSDK(this);
         AppLog.print("MyApplication onCreate___");
         LitePalApplication.initialize(this);
         Fabric fabric = new Fabric.Builder(this)
