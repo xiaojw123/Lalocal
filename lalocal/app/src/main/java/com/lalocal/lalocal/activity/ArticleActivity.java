@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -112,7 +113,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()){
             case R.id.article_btn_comment:
                 //评论
-                Toast.makeText(mContext,"评论功能尚未开启，敬请期待。。。",Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext,"评论功能尚未开启，敬请期待。。。", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.article_btn_share:
                 //分享
