@@ -50,6 +50,7 @@ public class MediaController extends FrameLayout implements SeekBar.OnSeekBarCha
             mMediaControl.onPlayTurn();
         } else if (view.getId() == R.id.expand) {
             mMediaControl.onPageTurn();
+
         } else if (view.getId() == R.id.shrink) {
             mMediaControl.onPageTurn();
         }

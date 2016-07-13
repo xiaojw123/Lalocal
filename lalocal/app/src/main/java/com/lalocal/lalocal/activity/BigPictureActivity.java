@@ -1,6 +1,14 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -9,6 +17,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
@@ -73,13 +83,16 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		if(!"".equals(bean.getContent())){
 			textContent.setIsVisible(true);
 			textContent.setText(bean.getContent());
+		}else{
+			pictureShare.setVisibility(View.GONE);
+			masking.setVisibility(View.GONE);
 		}
 		if(!"".equals(bean.getName())){
 			textName.setText("- -"+ bean.getName());
 		}
 
 		bigLayout.addView(inflate);
-		//shareBtn.setOnClickListener(this);
+		shareBtn.setOnClickListener(this);
 	}
 
 	@Override
@@ -100,6 +113,28 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 				Gravity.CENTER, 0, 0);
 	}
 
+
+	public static Bitmap drawTextToBitmap(Context gContext, int gResId, String gText) {
+		Resources resources = gContext.getResources();
+		float scale = resources.getDisplayMetrics().density;
+		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
+		android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
+		if (bitmapConfig == null) {
+			bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
+		}
+		bitmap = bitmap.copy(bitmapConfig, true);
+		Canvas canvas = new Canvas(bitmap);
+		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+		paint.setColor(Color.WHITE);
+		paint.setTextSize((int) (12 * scale*2));
+		paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
+		Rect bounds = new Rect();
+		paint.getTextBounds(gText, 0, gText.length(), bounds);
+		int x =((bitmap.getWidth() - bounds.width()))/3 ;
+		int y = (bitmap.getHeight() + bounds.height())/3;
+		canvas.drawText(gText, x , y, paint);
+		return bitmap;
+	}
 	@Override
 	public boolean handleMessage(Message msg) {
 		return false;

@@ -7,4 +7,5 @@
     <dimen name="author_padding_62dp">62dp</dimen>
     <dimen name="author_padding_23dp">23dp</dimen>
     <dimen name="author_padding_10dp">10dp</dimen>
+    <dimen name="author_code_height">220dp</dimen>
 </resources>

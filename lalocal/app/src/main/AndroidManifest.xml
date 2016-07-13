@@ -29,7 +29,6 @@
             android:name=".activity.HomeActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -83,12 +82,6 @@
         <activity
             android:name=".activity.ProductCheckDetailActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.TestActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.VideoActivity"
-            android:screenOrientation="portrait" />
 
         <activity android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait"
@@ -97,8 +90,12 @@
 
         <activity android:name=".activity.ArticleTestAct"/>
 
-        <activity android:name=".activity.TestAct"/>
+        <activity android:name=".activity.TestAct">
 
+
+
+
+        </activity>
 
         <!--分享-->
         <activity

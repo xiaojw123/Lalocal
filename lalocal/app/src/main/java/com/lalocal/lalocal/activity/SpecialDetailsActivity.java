@@ -164,11 +164,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 }
                 break;
             case R.id.play_btn:
-                mPlayBtnView.setVisibility(View.GONE);
-                videoView.setVisibility(View.VISIBLE);
-                videoView.setAutoHideController(false);
-                Uri uri = Uri.parse("http://media.lalocal.cn/video/mov/balidao.mov");
-                videoView.loadAndPlay(uri, 0);
+
                 break;
             case R.id.fullscreen_back_btn:
                 hideFullScreen();
@@ -242,13 +238,12 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                     videoLayoout.setVisibility(View.GONE);
                     photoLayout.setVisibility(View.GONE);
                     imgLayout.setVisibility(View.VISIBLE);
-
                     if (photourl != null) {
                         showArtwork(photourl);
                     }
                 }
             } else {
-                //TODO  待处理
+
 
             }
             //显示h5页面
@@ -314,6 +309,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         loadingImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         final BigPictureBean bean = new BigPictureBean();
         bean.setImgUrl(photourl);
+        bean.setShare(false);
         DrawableUtils.displayImg(mContext, loadingImg, photourl);
 
         //点击图片放大
@@ -334,6 +330,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         mPlayBtnView.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
         videoView.setAutoHideController(true);
+
         Uri uri = Uri.parse(videoUrl);
         videoView.loadAndPlay(uri, 0);
         videoView.pausePlay(true);
@@ -387,15 +384,18 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         line.setVisibility(View.VISIBLE);
         heightLayout.setVisibility(View.GONE);
         heightLayout.removeAllViews();
+        videoView.setPageType(MediaController.PageType.SHRINK);
     }
 
     //显示全屏
     private void showFullScreen() {
+        videoView.setPageType(MediaController.PageType.EXPAND);
         isFullScreen=false;
         specialWebView.setVisibility(View.GONE);
         relativeLayout.setVisibility(View.GONE);
         main.setBackgroundColor(Color.BLACK);
         line.setVisibility(View.GONE);
+
         heightLayout= (LinearLayout) findViewById(R.id.height_layout);
         View inflate = View.inflate(mContext, R.layout.fullsreen_back_layout, null);
         ImageView playerBack= (ImageView) inflate.findViewById(R.id.fullscreen_back_btn);
@@ -487,7 +487,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 switch (specialToH5Bean.getTargetType()) {
                     case 1:
                         //文章，调h5接口
-
                         Intent intent1 = new Intent(mContext, ArticleActivity.class);
                         intent1.putExtra("targetID",specialToH5Bean.getTargetId()+"");
                         startActivity(intent1);
