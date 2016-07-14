@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
 import com.lalocal.lalocal.model.ProductContentBean;
@@ -34,14 +35,17 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ViewFactory;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.mob.tools.utils.UIHandler;
 import com.sackcentury.shinebuttonlib.ShineButton;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
@@ -49,7 +53,11 @@ import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by lenovo on 2016/6/22.
  */
+<<<<<<< HEAD
 public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener,MyScrollView.ScrollByListener ,View.OnClickListener,PlatformActionListener,Handler.Callback {
+=======
+public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener, PlatformActionListener, Handler.Callback, CustomTitleView.onBackBtnClickListener {
+>>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
 
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
@@ -77,6 +85,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private ImageView titleBack;
     private RelativeLayout titleRelayout;
     private ProductDetailsResultBean result;
+    private CustomTitleView backTitleView;
     private boolean praiseFlag;
     private int parise;
     private List<String> photoList;
@@ -97,6 +106,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     private void initView() {
+        backTitleView= (CustomTitleView) findViewById(R.id.product_title_back_ctv);
         detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
         titleTv = (TextView) findViewById(R.id.product_title_tv);
         productPrice = (TextView) findViewById(R.id.product_price);
@@ -119,6 +129,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         serviceLL = (LinearLayout) findViewById(R.id.product_service_ll);
 
         //点击监听
+        backTitleView.setOnBackClickListener(this);
         checkDetails.setOnClickListener(this);
         btnLike.setOnClickListener(this);
         btnShare.setOnClickListener(this);
@@ -156,6 +167,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     @Override
+<<<<<<< HEAD
     public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {//title透明渐变
         boolean isOpactity=true;
 
@@ -178,6 +190,32 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             serviceLL.setVisibility(View.VISIBLE);
             reLayout.setAlpha(1.0f);
             reLayout.setBackgroundColor(Color.argb((int) 255, 250, 250, 250));
+=======
+    public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
+        boolean isOpactity = true;
+        if (y <= height) {
+            float scale = (float) y / height;
+            float alpha = (255 * scale);
+            //layout全部透明    0.16--0.95
+
+            //只是layout背景透明
+            if (alpha > 210.0 || scale > 0.80) {
+                titleBack.setVisibility(View.GONE);
+                titleLine.setVisibility(View.VISIBLE);
+                serviceLL.setVisibility(View.VISIBLE);
+                alpha = 255;
+                scale = 1.0f;
+            } else {
+                titleBack.setVisibility(View.VISIBLE);
+                titleLine.setVisibility(View.GONE);
+                serviceLL.setVisibility(View.GONE);
+            }
+
+            reLayout.setAlpha(scale);
+            reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
+
+            AppLog.i("TAG", "scale:" + scale + "//alpha:" + alpha);
+>>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
         }
 
 
@@ -213,11 +251,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 //TODO 收藏
                 if (result != null) {
                     //取消收藏
-                    if(praiseFlag){
-                        contentService.cancelParises(praiseId);
-                    }
-                    else {//添加收藏
-                        int targetId = specialToH5Bean.getTargetId();
+                    int targetId = specialToH5Bean.getTargetId();
+                    if (praiseFlag) {
+                        contentService.cancelParises(praiseId, targetId);
+                    } else {//添加收藏
                         contentService.specialPraise(targetId, 2);//点赞
                     }
                 }
@@ -244,8 +281,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     @Override
+<<<<<<< HEAD
     public void onScrollBy(int deltaX, int deltaY, int scrollX, int scrollY) {
         AppLog.i("TAG","deltaY:"+deltaY+"scrollY:"+scrollY);
+=======
+    public void onBackClick() {
+        setResult(MeFragment.UPDATE_MY_DATA);
+>>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
     }
 
 
@@ -253,7 +295,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         @Override
         public void onProductDetails(ProductDetailsDataResp detailsDataResp) {
             super.onProductDetails(detailsDataResp);
-            if(detailsDataResp.returnCode==0){
+            if (detailsDataResp.returnCode == 0) {
                 result = detailsDataResp.result;
                 praiseId = result.praiseId;
 
@@ -280,11 +322,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                         list.add(recommendAdResultBean);
                     }
                     showphotos(list);
-                } else if(photoList.size()>0){
+                } else if (photoList.size() > 0) {
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoList.size(); i++) {
                         RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
-                        recommendAdResultBean.photo =photoList.get(i);
+                        recommendAdResultBean.photo = photoList.get(i);
                         list.add(recommendAdResultBean);
                     }
                     showphotos(list);
@@ -299,16 +341,17 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
         @Override
         public void onPariseResult(PariseResult pariseResult) {
-            if(pariseResult!=null&&pariseResult.getReturnCode()==0){
+            if (pariseResult != null && pariseResult.getReturnCode() == 0) {
 
                 btnLike.setChecked(false);
                 praiseFlag = false;
             }
         }
+
         @Override
         public void onInputPariseResult(PariseResult pariseResult) {
             super.onInputPariseResult(pariseResult);
-            if(pariseResult.getReturnCode()==0){
+            if (pariseResult.getReturnCode() == 0) {
 
                 btnLike.setChecked(true);
                 praiseId = pariseResult.getResult();
@@ -326,7 +369,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         viewById.setVisibility(View.GONE);
         CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
 
-        if(list.size()>0){
+        if (list.size() > 0) {
 
             ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
         }
@@ -346,7 +389,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             } else if (i == 1) {
                 //服务介绍
                 serviceIntroduce(details.get(i).content);
-                productService.setText("· "+details.get(i).title+" ·");
+                productService.setText("· " + details.get(i).title + " ·");
                 productService.setTextColor(Color.BLACK);
             } else if (i == 2) {
                 //  purchaseNotes(details.get(i).content);
@@ -370,7 +413,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private void serviceIntroduce(List<ProductContentBean> content) {
         for (int i = 0; i < content.size(); i++) {
             TextView tv = new TextView(ProductDetailsActivity.this);
-            tv.setText("· "+content.get(i).menu + "");
+            tv.setText("· " + content.get(i).menu + "");
             tv.setTextColor(Color.parseColor("#ffaa2a"));
             tv.setPadding(left, left, 0, left);
             serviceLayout.addView(tv);
@@ -378,9 +421,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             List<ProductValueBean> value1 = content.get(i).value;
             photoList = new ArrayList<>();
 
-            for(int k=0;k<value1.size();k++){
+            for (int k = 0; k < value1.size(); k++) {
                 String photo = value1.get(k).photo;
-                if(!photo.equals("")){
+                if (!photo.equals("")) {
                     photoList.add(photo);
                 }
 
@@ -391,19 +434,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 tvContent.setPadding(left, 0, 0, 0);
                 serviceLayout.addView(tvContent);
             }
-            View nullView= new View(ProductDetailsActivity.this);
+            View nullView = new View(ProductDetailsActivity.this);
 
             LinearLayout.LayoutParams nullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60);
             serviceLayout.addView(nullView, nullParams);
-            if(i!=content.size()-1){
+            if (i != content.size() - 1) {
                 View view = new View(ProductDetailsActivity.this);
                 view.setBackgroundColor(Color.parseColor("#aaaaaa"));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
-                params.leftMargin=DensityUtil.dip2px(mContext,12);
-                params.rightMargin=DensityUtil.dip2px(mContext,12);
+                params.leftMargin = DensityUtil.dip2px(mContext, 12);
+                params.rightMargin = DensityUtil.dip2px(mContext, 12);
                 serviceLayout.addView(view, params);
             }
-
 
 
         }
@@ -438,7 +480,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         if (what == 1) {
             Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
         }
-        if (sharePopupWindow!= null) {
+        if (sharePopupWindow != null) {
             sharePopupWindow.dismiss();
         }
         return false;

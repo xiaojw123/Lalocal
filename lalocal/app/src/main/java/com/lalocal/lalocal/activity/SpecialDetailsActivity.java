@@ -28,6 +28,7 @@ import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.PariseResult;
@@ -42,6 +43,7 @@ import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SecretTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
@@ -56,13 +58,11 @@ import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 
 
-
-
 /**
  * Created by lenovo on 2016/6/17.
  * 专题详情页
  */
-public class SpecialDetailsActivity extends BaseActivity implements View.OnClickListener, PlatformActionListener, Callback, MyScrollView.ScrollViewListener {
+public class SpecialDetailsActivity extends BaseActivity implements View.OnClickListener, PlatformActionListener, Callback, MyScrollView.ScrollViewListener, CustomTitleView.onBackBtnClickListener {
     private ShineButton detailsLike;
     private ImageView detailsShare;
     private WebView specialWebView;
@@ -99,9 +99,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private boolean isPause;
     private SecretTextView textContent;
     private SecretTextView textName;
-    private int bannerType=5;
-    public static final int RESULT_PLAY=0;
+    private int bannerType = 5;
+    public static final int RESULT_PLAY = 0;
     private String videoUrl;//视频播放地址
+    private CustomTitleView backTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +112,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         initView();
         initData();
     }
+
     private void initView() {
+        backTitleView = (CustomTitleView) findViewById(R.id.special_details_ctv);
         detailsLike = (ShineButton) findViewById(R.id.special_details_like_iv);
         detailsShare = (ImageView) findViewById(R.id.special_details_share_iv);
         loadingPage = (LinearLayout) findViewById(R.id.loading_page);
@@ -127,6 +130,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         line = findViewById(R.id.special_line);
         relativeLayout = (RelativeLayout) findViewById(R.id.reLayout);
         mPlayBtnView = findViewById(R.id.play_btn);
+        backTitleView.setOnBackClickListener(this);
         mPlayBtnView.setOnClickListener(this);
         detailsLike.setOnClickListener(this);
         detailsShare.setOnClickListener(this);
@@ -153,7 +157,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         switch (v.getId()) {
             case R.id.special_details_like_iv:
                 if (praiseFlag) {
-                    contentService1.cancelParises(praiseId1);//取消赞
+                    contentService1.cancelParises(praiseId1, targetId);//取消赞
                 } else {
                     contentService1.specialPraise(targetId, 10);//点赞
                 }
@@ -173,11 +177,11 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
         @Override
         public String getMessageName(Message message) {
 
-            switch (message.what){
+            switch (message.what) {
                 case RESULT_PLAY:
 
                     break;
@@ -186,6 +190,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         }
     };
 
+    @Override
+    public void onBackClick() {
+        setResult(MeFragment.UPDATE_MY_DATA);
+    }
 
 
     public class MyCallBack extends ICallBack {
@@ -275,7 +283,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     }
 
 
-
     //显示图片和文字
     private void showArtworkAndText(final SpecialBannerBean bannerBean) {
         final BigPictureBean bean = new BigPictureBean();
@@ -289,7 +296,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         textName = (SecretTextView) findViewById(R.id.photo_to_text_name);
         DrawableUtils.displayImg(mContext, photoIv, videoScreenShot);
         textContent.setText(bannerBean.content);
-        if(!"".equals(bannerBean.authorName)){
+        if (!"".equals(bannerBean.authorName)) {
             textName.setText("- -" + bannerBean.authorName);
         }
         photoLayout.setOnClickListener(new View.OnClickListener() {
@@ -340,10 +347,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     /**
      * 播放器的回调函数
      */
-    private boolean isFullScreen=true;//判断是否全屏
+    private boolean isFullScreen = true;//判断是否全屏
     LinearLayout heightLayout;
-    private boolean isPlayStatus=true;//视频播放状态
-    private boolean isPageFinish=false;//h5页面加载状态
+    private boolean isPlayStatus = true;//视频播放状态
+    private boolean isPageFinish = false;//h5页面加载状态
     private SuperVideoPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new SuperVideoPlayer.VideoPlayCallbackImpl() {
         @Override
         public void onCloseVideo() {
@@ -355,10 +362,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
         @Override
         public void onSwitchPageType() {
-            if(isFullScreen){
-               showFullScreen();
-            }else {
-              hideFullScreen();
+            if (isFullScreen) {
+                showFullScreen();
+            } else {
+                hideFullScreen();
             }
         }
 
@@ -371,14 +378,15 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
         @Override
         public void onPlayStatus(boolean isPlay) {
-              isPlayStatus=isPlay;
+            isPlayStatus = isPlay;
         }
 
 
     };
+
     //隐藏全屏
     private void hideFullScreen() {
-        isFullScreen=true;
+        isFullScreen = true;
         specialWebView.setVisibility(View.VISIBLE);
         relativeLayout.setVisibility(View.VISIBLE);
         main.setBackgroundColor(Color.WHITE);
@@ -390,25 +398,25 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     //显示全屏
     private void showFullScreen() {
+        isFullScreen = false;
         videoView.setPageType(MediaController.PageType.EXPAND);
         isFullScreen=false;
         specialWebView.setVisibility(View.GONE);
         relativeLayout.setVisibility(View.GONE);
         main.setBackgroundColor(Color.BLACK);
         line.setVisibility(View.GONE);
-
-        heightLayout= (LinearLayout) findViewById(R.id.height_layout);
+        heightLayout = (LinearLayout) findViewById(R.id.height_layout);
         View inflate = View.inflate(mContext, R.layout.fullsreen_back_layout, null);
-        ImageView playerBack= (ImageView) inflate.findViewById(R.id.fullscreen_back_btn);
+        ImageView playerBack = (ImageView) inflate.findViewById(R.id.fullscreen_back_btn);
         heightLayout.addView(inflate);
         heightLayout.setVisibility(View.VISIBLE);
-        View view=new View(mContext);
+        View view = new View(mContext);
         LinearLayout.LayoutParams sp_params = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         int height = getWindowManager().getDefaultDisplay().getHeight();
-        sp_params.height=(height-900)/2;
-        heightLayout.addView(view,sp_params);
-      playerBack.setOnClickListener(this);
+        sp_params.height = (height - 900) / 2;
+        heightLayout.addView(view, sp_params);
+        playerBack.setOnClickListener(this);
     }
 
     /***
@@ -424,7 +432,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     //显示h5页面
     private void showWebview(String h5Url) {
         specialWebView = (WebView) findViewById(R.id.special_details_webview);
-        if(Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT >= 19) {
             specialWebView.getSettings().setLoadsImagesAutomatically(true);
         } else {
             specialWebView.getSettings().setLoadsImagesAutomatically(false);
@@ -433,7 +441,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         settings.setJavaScriptEnabled(true);
         specialWebView.loadUrl(h5Url);
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
-        if(Build.VERSION.SDK_INT >= 21){
+        if (Build.VERSION.SDK_INT >= 21) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
@@ -447,20 +455,20 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         int i = DensityUtil.dip2px(mContext, 200);
         if (y > i) {
             isPause = videoView.pausePlay(false);
-            isPause=true;
-        } else if(isPause){
-            isPause=false;
-            if(!isPlayStatus){
+            isPause = true;
+        } else if (isPause) {
+            isPause = false;
+            if (!isPlayStatus) {
                 videoView.pausePlay(false);
-            }else {
+            } else {
                 videoView.goOnPlay();
             }
         }
     }
 
     boolean isLoading = true;
-    boolean isNextLoading=true;
-    int loadingCount=0;
+    boolean isNextLoading = true;
+    int loadingCount = 0;
 
     public class MyWebViewClient extends WebViewClient {
         @Override
@@ -480,7 +488,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             int targetTY = Integer.parseInt(targetTy);
 */
             SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-            AppLog.i("TAG",specialToH5Bean.toString());
+            AppLog.i("TAG", specialToH5Bean.toString());
          /*   SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
             specialToH5Bean.setTargetId(targetIDD);
             specialToH5Bean.setTargetType(targetTY);*/
@@ -489,7 +497,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                     case 1:
                         //文章，调h5接口
                         Intent intent1 = new Intent(mContext, ArticleActivity.class);
-                        intent1.putExtra("targetID",specialToH5Bean.getTargetId()+"");
+                        intent1.putExtra("targetID", specialToH5Bean.getTargetId() + "");
                         startActivity(intent1);
                         break;
                     case 2:
@@ -517,12 +525,12 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         }
 
 
-        boolean isShowAnim=true;//画报文字动画
+        boolean isShowAnim = true;//画报文字动画
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            if(!specialWebView.getSettings().getLoadsImagesAutomatically()) {
+            if (!specialWebView.getSettings().getLoadsImagesAutomatically()) {
                 specialWebView.getSettings().setLoadsImagesAutomatically(true);
             }
             ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -531,8 +539,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
 
             //文字动画
-            if(bannerType==0&&isShowAnim){
-                isShowAnim=false;
+            if (bannerType == 0 && isShowAnim) {
+                isShowAnim = false;
                 textContent.toggle();
                 textContent.setIsVisible(true);
                 textContent.setDuration(3000);
@@ -541,20 +549,20 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 textName.setDuration(1500);
 
             }
-            if(typeName.equalsIgnoreCase("WIFI")&&isLoading){
-                isLoading=false;
-                isNextLoading=false;
-                loadingCount=loadingCount+1;
+            if (typeName.equalsIgnoreCase("WIFI") && isLoading) {
+                isLoading = false;
+                isNextLoading = false;
+                loadingCount = loadingCount + 1;
                 specialWebView.reload();
-                isPageFinish=true;
+                isPageFinish = true;
                 Message message = new Message();
-                message.what =RESULT_PLAY;
+                message.what = RESULT_PLAY;
                 handler.sendMessage(message);
             }
-            if(typeName.equalsIgnoreCase("WIFI")&&loadingCount==1){
+            if (typeName.equalsIgnoreCase("WIFI") && loadingCount == 1) {
                 loadingPage.setVisibility(View.GONE);
             }
-            if(!typeName.equalsIgnoreCase("WIFI")){
+            if (!typeName.equalsIgnoreCase("WIFI")) {
                 loadingPage.setVisibility(View.GONE);
             }
         }
@@ -563,12 +571,13 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (specialWebView!=null&&(keyCode == KeyEvent.KEYCODE_BACK) && specialWebView.canGoBack()) {
+        if (specialWebView != null && (keyCode == KeyEvent.KEYCODE_BACK) && specialWebView.canGoBack()) {
             specialWebView.goBack(); // goBack()表示返回WebView的上一页面
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
     //分享
     private void showShare(SpecialShareVOBean shareVO) {
         shareActivity = new SharePopupWindow(mContext, shareVO);

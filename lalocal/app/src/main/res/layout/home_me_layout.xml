@@ -81,12 +81,11 @@
         android:background="@drawable/home_me_content_tab_container_border"
         android:orientation="horizontal">
 
-        <LinearLayout
+        <com.lalocal.lalocal.view.CustomTabLayout
             android:id="@+id/home_me_favorite_tab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/home_me_content_tab_bg"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -98,17 +97,15 @@
                 android:id="@+id/home_me_favorite_num"
                 style="@style/HomeMeTabItemNumTheme"
                 android:text="0" />
-        </LinearLayout>
+        </com.lalocal.lalocal.view.CustomTabLayout>
 
-        <LinearLayout
+        <com.lalocal.lalocal.view.CustomTabLayout
             android:id="@+id/home_me_order_tab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/home_me_content_tab_bg"
             android:gravity="center_horizontal"
             android:orientation="vertical">
-
             <TextView
                 style="@style/HomeMeTabTitleTheme"
                 android:text="@string/my_order" />
@@ -118,14 +115,13 @@
                 style="@style/HomeMeTabItemNumTheme"
                 android:text="0" />
 
-        </LinearLayout>
+        </com.lalocal.lalocal.view.CustomTabLayout>
 
-        <LinearLayout
+        <com.lalocal.lalocal.view.CustomTabLayout
             android:id="@+id/home_me_coupon_tab"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/home_me_content_tab_bg"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -137,6 +133,6 @@
                 android:id="@+id/home_me_coupons_num"
                 style="@style/HomeMeTabItemNumTheme"
                 android:text="0" />
-        </LinearLayout>
+        </com.lalocal.lalocal.view.CustomTabLayout>
     </LinearLayout>
 </RelativeLayout>

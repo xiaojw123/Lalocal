@@ -160,6 +160,7 @@ public class XListView extends ListView implements OnScrollListener {
 		}
 	}
 
+
 	/**
 	 * stop refresh, reset header view.
 	 */
@@ -168,6 +169,13 @@ public class XListView extends ListView implements OnScrollListener {
 			mPullRefreshing = false;
 			resetHeaderHeight();
 		}
+	}
+
+	public void closeLoadMore(){
+		mFooterView.hidenMoreView();
+	}
+	public void openLoadMore(){
+		mFooterView.showMoreView();
 	}
 
 	/**

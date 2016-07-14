@@ -18,9 +18,9 @@
             android:id="@+id/my_favorite_item_img"
             android:layout_width="@dimen/my_favorite_item_img_width"
             android:layout_height="@dimen/my_favorite_item_img_width"
-            android:background="@drawable/home_me_personheadnormal"
-            android:scaleType="fitXY"
+            android:scaleType="centerCrop"
             />
+            <!--android:src="@drawable/home_me_personheadnormal"-->
 
         <TextView
             android:id="@+id/my_favorite_item_type"

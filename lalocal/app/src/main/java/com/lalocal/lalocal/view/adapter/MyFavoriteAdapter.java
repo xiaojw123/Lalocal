@@ -2,12 +2,9 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +12,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.Author;
 import com.lalocal.lalocal.model.FavoriteItem;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.xlistview.XListView;
@@ -61,22 +57,26 @@ public class MyFavoriteAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         XListView xListView = (XListView) parent;
+        LayoutInflater inflater = LayoutInflater.from(context);
         if (position == 0 && (datas == null || datas.size() < 1)) {
+            xListView.setEnabled(false);
             xListView.setPullLoadEnable(false);
-            AppLog.print("无收藏数据）——————————");
-            TextView textView = new TextView(context);
-            textView.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 300));
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.text_size_20_sp));
-            textView.setGravity(Gravity.CENTER);
-            textView.setText("没有收藏");
-            convertView = textView;
+            convertView = inflater.inflate(R.layout.home_me_my_oder_nothing, null);
+            TextView noting_tv = (TextView) convertView.findViewById(R.id.home_me_nothing_tv);
+            noting_tv.setText("没有喜欢");
+        } else if (datas != null && position == datas.size() - 1 && datas.get(position) == null) {
+            xListView.setEnabled(true);
+            convertView = inflater.inflate(R.layout.load_more_layout, null);
+            convertView.setFocusableInTouchMode(false);
+            convertView.setFocusable(false);
         } else {
+            xListView.setEnabled(true);
             FavoriteItem item = datas.get(position);
             ViewHolder holder = null;
             if (holder == null) {
                 xListView.setPullLoadEnable(true);
                 holder = new ViewHolder();
-                convertView = LayoutInflater.from(context).inflate(R.layout.home_me_my_favorite_item, null);
+                convertView = inflater.inflate(R.layout.home_me_my_favorite_item, null);
                 holder.type = (TextView) convertView.findViewById(R.id.my_favorite_item_type);
                 holder.photo = (ImageView) convertView.findViewById(R.id.my_favorite_item_img);
                 holder.title = (TextView) convertView.findViewById(R.id.my_favorite_item_title);
