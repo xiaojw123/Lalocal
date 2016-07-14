@@ -36,7 +36,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onGetFavoriteItem(List<FavoriteItem> items,int totalPages,int toalRows){
+    public void onGetFavoriteItem(List<FavoriteItem> items,int pageNumber,int totalPages,int toalRows){
 
     }
 

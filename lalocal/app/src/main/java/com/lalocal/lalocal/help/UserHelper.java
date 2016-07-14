@@ -14,7 +14,7 @@ public class UserHelper {
     //保存收藏 ，订单，优惠券使用记录
     public static List<String> favorites = new ArrayList<>();
     public static List<String>  orders=new ArrayList<>();
-    public static List<String> coupon=new ArrayList<>();
+    public static List<String> coupons=new ArrayList<>();
     static SharedPreferences sp;
     private static void initSPref(Context context) {
         if (sp == null) {
@@ -28,7 +28,7 @@ public class UserHelper {
         editor.putBoolean(KeyParams.IS_LOGIN, bundle.getBoolean(KeyParams.IS_LOGIN));
         editor.putString(KeyParams.EMAIL, bundle.getString(KeyParams.EMAIL));
         editor.putString(KeyParams.PASSWORD, bundle.getString(KeyParams.PASSWORD));
-        editor.putInt(KeyParams.USERID, bundle.getInt(KeyParams.USERID));
+        editor.putInt(KeyParams.USERID, bundle.getInt(KeyParams.USERID,-1));
         editor.putString(KeyParams.TOKEN, bundle.getString(KeyParams.TOKEN));
         editor.commit();
     }

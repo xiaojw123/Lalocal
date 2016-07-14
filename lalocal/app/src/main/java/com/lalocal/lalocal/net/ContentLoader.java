@@ -11,9 +11,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -75,7 +77,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_ORDER_ITEMS + "/" + id, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(), CommonUtil.getUserToken()));
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -201,22 +203,27 @@ public class ContentLoader {
 
     //点赞
     public void specialPraise(int id, int type) {
+        AppLog.print("specialPraise______" + id);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PARISES);
+            response.setTargetId(id);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.PRAISES, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
     }
 
     //取消收藏
-    public void cancelParises(Object praiseId) {
+    public void cancelParises(Object praiseId, int targetId) {
+        AppLog.print("cancelParises______" + praiseId);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CANCEL_PARISES);
+            response.setTargetId(targetId);
         }
         ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.CANCEL_PRAISES + praiseId, response, response);
+        contentRequest.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
     }
 
@@ -248,6 +255,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.SPECIAL_DETAIL);
         }
         ContentRequest request = new ContentRequest(AppConfig.SPECIAL_DETAILS_URL + rowId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -261,13 +269,14 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
-    public void articleDetails(String targetId){
+    public void articleDetails(String targetId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ARTICLE_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.ARTICLE_DETAILS +targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.ARTICLE_DETAILS + targetId, response, response);
         requestQueue.add(contentRequest);
     }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -276,6 +285,14 @@ public class ContentLoader {
         public ContentRequest(String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             this(Method.GET, url, listener, errorListener);
         }
+
+        @Override
+        public void setRetryPolicy(RetryPolicy retryPolicy) {
+            super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        }
+
 
         public ContentRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);
@@ -333,6 +350,7 @@ public class ContentLoader {
         private int pageSize, pageNumber;
         //responseView发送网络请求时，禁止在响应之前二次请求网络
         private View responseView;
+        private String targetId;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
@@ -342,6 +360,11 @@ public class ContentLoader {
             this.email = email;
             this.psw = psw;
         }
+
+        public void setTargetId(int targetId) {
+            this.targetId = String.valueOf(targetId);
+        }
+
 
         public void setEmail(String email) {
             this.email = email;
@@ -403,7 +426,6 @@ public class ContentLoader {
                         responseGetMyOrderItems(jsonObj);
                         break;
                     case RequestCode.GET_FAVORITE_ITEMS:
-                        AppLog.print("favorite___result__json__" + json);
                         responseGetFavoriteItems(jsonObj);
                         break;
                     case RequestCode.REGISTER:
@@ -534,6 +556,7 @@ public class ContentLoader {
             JSONObject resutJson = jsonObj.optJSONObject(ResultParams.REULST);
             int totalPages = resutJson.optInt("totalPages");
             int totalRows = resutJson.optInt("totalRows");
+            int pageNumber = resutJson.optInt("pageNumber");
             JSONArray rows = resutJson.optJSONArray("rows");
             Gson gson = new Gson();
             List<FavoriteItem> items = new ArrayList<>();
@@ -542,7 +565,7 @@ public class ContentLoader {
                 FavoriteItem item = gson.fromJson(rowJsonObj.toString(), FavoriteItem.class);
                 items.add(item);
             }
-            callBack.onGetFavoriteItem(items, totalPages, totalRows);
+            callBack.onGetFavoriteItem(items, pageNumber, totalPages, totalRows);
         }
 
         private void responseBoundEmail() {
@@ -607,28 +630,21 @@ public class ContentLoader {
 
         //点赞
         private void responseParises(String json) {
-            AppLog.print("TAG" + "responseParises"+json);
-            List<String> favorites = UserHelper.favorites;
-
-            PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
-            boolean contains = favorites.contains(String.valueOf(pariseResult.getResult()));
-            if(!contains){
-                favorites.add(String.valueOf(pariseResult.getResult()));
+            AppLog.print("TAG" + "responseParises" + json);
+            if (!UserHelper.favorites.contains(targetId)) {
+                UserHelper.favorites.add(targetId);
             }
+            PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onInputPariseResult(pariseResult);
         }
 
         //取消赞
         private void responseCancelParises(String json) {
-            AppLog.print("TAG" + "responseCancelParises"+json);
-            List<String> favorites = UserHelper.favorites;
-
-
-            PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
-            boolean contains = favorites.contains(String.valueOf(pariseResult.getResult()));
-            if(contains){
-                favorites.remove(String.valueOf(pariseResult.getResult()));
+            AppLog.print("TAG" + "responseCancelParises" + json);
+            if (UserHelper.favorites.contains(targetId)) {
+                UserHelper.favorites.remove(targetId);
             }
+            PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onPariseResult(pariseResult);
         }
 
@@ -665,9 +681,10 @@ public class ContentLoader {
             }
 
         }
+
         private void responseArticle(String json) {
             ArticleDetailsResp articleDetailsResp = new Gson().fromJson(json, ArticleDetailsResp.class);
-            if(articleDetailsResp.getReturnCode()==0){
+            if (articleDetailsResp.getReturnCode() == 0) {
                 callBack.onArticleResult(articleDetailsResp);
             }
         }
@@ -679,7 +696,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
-
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -823,7 +839,7 @@ public class ContentLoader {
         int PRODUCT_DETAILS = 203;
         int CANCEL_PARISES = 204;
         int PARISES = 205;
-        int ARTICLE_DETAILS=206;
+        int ARTICLE_DETAILS = 206;
 
     }
 

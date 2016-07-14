@@ -18,8 +18,6 @@ import java.util.regex.Pattern;
  * Created by xiaojw on 2016/6/6.
  */
 public class CommonUtil {
-    private static int mUserid = -1;
-    private static String mToken = null;
 
 
     //人民币
@@ -89,20 +87,6 @@ public class CommonUtil {
         toast.show();
     }
 
-
-    public static void setUserParams(int userid, String token) {
-        mUserid = userid;
-        mToken = token;
-    }
-
-
-    public static int getUserId() {
-        return mUserid;
-    }
-
-    public static String getUserToken() {
-        return mToken;
-    }
 
 
 

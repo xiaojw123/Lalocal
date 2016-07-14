@@ -57,12 +57,14 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener 
         LayoutInflater inflater = LayoutInflater.from(context);
         if (position == 0 && (items == null || items.size() < 1)) {
             convertView = inflater.inflate(R.layout.home_me_my_oder_nothing, null);
+            parent.setEnabled(false);
         } else {
             ViewHolder holder = new ViewHolder();
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.home_me_my_oder_item, null);
+                parent.setEnabled(true);
                 holder.adultItemCotainer = (LinearLayout) convertView.findViewById(R.id.my_order_adult_container);
-                holder.itemDetail= (LinearLayout) convertView.findViewById(R.id.my_order_item_detail);
+                holder.itemDetail = (LinearLayout) convertView.findViewById(R.id.my_order_item_detail);
 
                 holder.orderNum = (TextView) convertView.findViewById(R.id.my_oder_ordernum_text);
                 holder.orderStatus = (TextView) convertView.findViewById(R.id.my_order_status_tv);
@@ -148,10 +150,10 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener 
         switch (id) {
             case R.id.my_order_item_detail:
                 if (v.getTag(R.id.orderDetailId) != null) {
-                    OrderItem item= (OrderItem) v.getTag(R.id.orderDetailId);
+                    OrderItem item = (OrderItem) v.getTag(R.id.orderDetailId);
                     Intent intent = new Intent(context, OrderActivity.class);
                     intent.putExtra(KeyParams.ORDER_ID, item.getId());
-                    intent.putExtra(KeyParams.STATUS,item.getStatus());
+                    intent.putExtra(KeyParams.STATUS, item.getStatus());
                     context.startActivity(intent);
                 }
                 break;

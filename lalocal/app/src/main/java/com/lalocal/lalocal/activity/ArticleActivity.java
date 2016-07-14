@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.PariseResult;
@@ -46,7 +47,7 @@ import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by lenovo on 2016/6/21.
  */
-public class ArticleActivity extends BaseActivity implements View.OnClickListener,PlatformActionListener,Callback {
+public class ArticleActivity extends BaseActivity implements View.OnClickListener, PlatformActionListener, Callback {
     private WebView articleWebview;
     private ShineButton btnLike;
     private ImageView btnComment;
@@ -54,7 +55,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private TextView readTv;
     private TextView collectTv;
     private ContentLoader contentService;
-    private Context mContext=ArticleActivity.this;
+    private Context mContext = ArticleActivity.this;
     private LinearLayout back;
     private View placeHolder;
     private WebSettings settings;
@@ -64,6 +65,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private Object praiseId;//点赞id
     private ImageView unLike;
     private SpecialAuthorBean authorVO;//作者二维码
+    private ImageView backBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -79,8 +81,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-
     private void initView() {
+        backBtn = (ImageView) findViewById(R.id.article_common_back_btn);
         articleWebview = (WebView) findViewById(R.id.webview);
         btnLike = (ShineButton) findViewById(R.id.article_btn_like);
         btnComment = (ImageView) findViewById(R.id.article_btn_comment);
@@ -93,6 +95,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         placeHolder = findViewById(R.id.place_holder);
 
         //点击事件
+        backBtn.setOnClickListener(this);
         btnLike.setOnClickListener(this);
         btnComment.setOnClickListener(this);
         btnShare.setOnClickListener(this);
@@ -102,18 +105,22 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
+            case R.id.article_common_back_btn:
+                AppLog.print("onclick___");
+                setResult(MeFragment.UPDATE_MY_DATA);
+                finish();
+                break;
+
             case R.id.article_btn_comment:
                 //评论
-                Toast.makeText(mContext,"评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.article_btn_share:
                 //分享
-                if(articleDetailsRespResult!=null){
+                if (articleDetailsRespResult != null) {
                     showShare(articleDetailsRespResult.getShareVO());
                 }
 
@@ -121,9 +128,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             case R.id.article_btn_like:
                 //点赞
 
-                if(praiseFlag&&praiseId!=null){
-                    contentService.cancelParises(praiseId);//取消赞
-                }else {
+                if (praiseFlag && praiseId != null) {
+                    contentService.cancelParises(praiseId, Integer.parseInt(targetID));//取消赞
+                } else {
                     contentService.specialPraise(Integer.parseInt(targetID), 1);
                 }
                 break;
@@ -131,37 +138,35 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-    private void initData( String targetID) {
-        contentService=new ContentLoader(this);
+    private void initData(String targetID) {
+        contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
         contentService.articleDetails(targetID);
 
     }
 
 
-
     public class MyCallBack extends ICallBack {
-
 
 
         @Override
         public void onArticleResult(ArticleDetailsResp articleDetailsResp) {
             super.onArticleResult(articleDetailsResp);
             articleDetailsRespResult = articleDetailsResp.getResult();
-            if(articleDetailsRespResult !=null){
+            if (articleDetailsRespResult != null) {
                 praiseId = articleDetailsRespResult.getPraiseId();
                 authorVO = articleDetailsRespResult.getAuthorVO();
                 String url = articleDetailsRespResult.getUrl();
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
-                if(praiseFlag){
+                if (praiseFlag) {
 
                     btnLike.setChecked(true);
 
-                }else {
+                } else {
                     btnLike.setChecked(false);
 
                 }
-                if(!TextUtils.isEmpty(url)){
+                if (!TextUtils.isEmpty(url)) {
                     initWebview(url);//显示h5
                 }
 
@@ -174,8 +179,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         @Override
         public void onPariseResult(PariseResult pariseResult) {//取消赞
             super.onPariseResult(pariseResult);
-            if(pariseResult.getReturnCode()==0){
-                praiseFlag=false;
+            if (pariseResult.getReturnCode() == 0) {
+                praiseFlag = false;
                 btnLike.setChecked(false);
 
             }
@@ -185,16 +190,15 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         @Override
         public void onInputPariseResult(PariseResult pariseResult) {//点赞
             super.onInputPariseResult(pariseResult);
-            if(pariseResult.getReturnCode()==0){
-                praiseId= pariseResult.getResult();
-                praiseFlag=true;
+            if (pariseResult.getReturnCode() == 0) {
+                praiseId = pariseResult.getResult();
+                praiseFlag = true;
                 btnLike.setChecked(true);
 
 
             }
         }
     }
-
 
 
     private void showReadAndCollect(ArticleDetailsResultBean articleDetailsRespResult) {
@@ -205,12 +209,12 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
     private void initWebview(String url) {
         settings = articleWebview.getSettings();
-        if(Build.VERSION.SDK_INT >= 19) {
+        if (Build.VERSION.SDK_INT >= 19) {
             settings.setLoadsImagesAutomatically(true);
         } else {
             settings.setLoadsImagesAutomatically(false);
         }
-        if(Build.VERSION.SDK_INT >= 21){
+        if (Build.VERSION.SDK_INT >= 21) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         settings.setJavaScriptEnabled(true);
@@ -223,37 +227,38 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
     }
 
-    boolean isLoading=true;
+    boolean isLoading = true;
+
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-         //   lalocal://codeImageClick?{"name":"Lalocal","wechatNo":"%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB",
+            //   lalocal://codeImageClick?{"name":"Lalocal","wechatNo":"%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB",
             // "imageUrl":"http://7xpid3.com1.z0.glb.clouddn.com/20160615142707308988042388"}
-           // String[] split = url.split("\\?");
-            AppLog.i("TAG",url);
-            if(url.matches(".*codeImageClick.*")){
+            // String[] split = url.split("\\?");
+            AppLog.i("TAG", url);
+            if (url.matches(".*codeImageClick.*")) {
                 //TODO 作者二维码
-                if(authorVO!=null){
+                if (authorVO != null) {
                     showPopupWindow(authorVO);
                 }
 
                 return true;
-            }else if (url.matches(".*app.*")){
+            } else if (url.matches(".*app.*")) {
                 String[] split = url.split("\\?");
                 String json = split[1];
                 SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-                if(specialToH5Bean.getTargetType()==2){
+                if (specialToH5Bean.getTargetType() == 2) {
                     //TODO 去商品详情
                     Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
                     intent2.putExtra("productdetails", specialToH5Bean);
                     startActivity(intent2);
-                    return  false;
-                }else {
-                    return  true;
+                    return false;
+                } else {
+                    return true;
                 }
 
             }
-            AppLog.i("TAG",url);
+            AppLog.i("TAG", url);
             return true;
         }
 
@@ -261,7 +266,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
 
-            if(!articleWebview.getSettings().getLoadsImagesAutomatically()) {
+            if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
                 articleWebview.getSettings().setLoadsImagesAutomatically(true);
             }
         }
@@ -270,9 +275,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private void showPopupWindow(SpecialAuthorBean authorVO) {
 
 
-        Toast.makeText(this,"ahhaaa",Toast.LENGTH_SHORT).show();
-        PopupWindow pw=new PopupWindow(this);
-        View view =View.inflate(this,R.layout.author_pop_layout,null);
+        Toast.makeText(this, "ahhaaa", Toast.LENGTH_SHORT).show();
+        PopupWindow pw = new PopupWindow(this);
+        View view = View.inflate(this, R.layout.author_pop_layout, null);
         pw.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         pw.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         pw.setContentView(view);
@@ -293,15 +298,14 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         }
         return super.onKeyDown(keyCode, event);
     }
+
     private int praisesNum;
-
-
 
 
     //分享
     private void showShare(SpecialShareVOBean shareVO) {
 
-        SharePopupWindow  shareActivity = new SharePopupWindow(mContext, shareVO);
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
         shareActivity.setPlatformActionListener(this);
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
@@ -327,6 +331,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     public void onCancel(Platform platform, int i) {
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

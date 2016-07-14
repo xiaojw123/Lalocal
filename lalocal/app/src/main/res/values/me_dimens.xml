@@ -176,6 +176,8 @@
     <dimen name="order_immediately_evaluate_btn_height">50dp</dimen>
     <dimen name="order_immediately_evaluate_btn_top">92dp</dimen>
     <dimen name="order_detail_cotainer_bottom">188dp</dimen>
+    <dimen name="triangle_drawable_width">10dp</dimen>
+    <dimen name="triangle_drawable_height">3dp</dimen>
 
 
 

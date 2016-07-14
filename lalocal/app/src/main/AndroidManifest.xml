@@ -16,8 +16,9 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-  <!--  android:screenOrientation="portrait"-->
-   <!-- android:hardwareAccelerated="false"-->
+
+    <!-- android:screenOrientation="portrait" -->
+    <!-- android:hardwareAccelerated="false" -->
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -28,9 +29,7 @@
         <activity
             android:name=".activity.HomeActivity"
             android:hardwareAccelerated="false"
-            android:screenOrientation="portrait"
-
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -89,18 +88,14 @@
         <activity
             android:name=".activity.VideoActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CarouselFigureActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.OrderActivity" />
+        <activity android:name=".activity.ArticleTestAct" />
+        <activity android:name=".activity.TestAct" />
 
-        <activity android:name=".activity.CarouselFigureActivity"
-            android:screenOrientation="portrait"
-            ></activity>
-        <activity android:name=".activity.OrderActivity"></activity>
-
-        <activity android:name=".activity.ArticleTestAct"/>
-
-        <activity android:name=".activity.TestAct"/>
-
-
-        <!--分享-->
+        <!-- 分享 -->
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -117,6 +112,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -127,12 +123,16 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".activity.TravelPersonActivity" />
-        <activity android:name=".activity.BaseActivity"/>
-        <!--//fabric config-->
+        <activity android:name=".activity.BaseActivity" />
+        <!-- //fabric config -->
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e56a6336a6ae8ee217f64a62e29bd01203f377a0" />
-        <meta-data android:name="category" android:value="${CATEGORY}"/>
+        <meta-data
+            android:name="category"
+            android:value="${CATEGORY}" />
+
+        <activity android:name=".activity.EmptActivity" />
     </application>
 
 </manifest>

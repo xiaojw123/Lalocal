@@ -22,6 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/app_actionbar_height">
                 <com.lalocal.lalocal.view.CustomTitleView
+                    android:id="@+id/special_details_ctv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
                 <ImageView
