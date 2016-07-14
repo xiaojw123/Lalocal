@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.model;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -12,6 +13,7 @@ public class SpecialShareVOBean implements Parcelable {
     private String desc;
     private String img;
     private int type;
+    private Bitmap bitmap;
 
     public String getUrl() {
         return url;
@@ -53,6 +55,14 @@ public class SpecialShareVOBean implements Parcelable {
         this.type = type;
     }
 
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,6 +75,7 @@ public class SpecialShareVOBean implements Parcelable {
         dest.writeString(this.desc);
         dest.writeString(this.img);
         dest.writeInt(this.type);
+        dest.writeParcelable(this.bitmap, flags);
     }
 
     public SpecialShareVOBean() {
@@ -76,6 +87,7 @@ public class SpecialShareVOBean implements Parcelable {
         this.desc = in.readString();
         this.img = in.readString();
         this.type = in.readInt();
+        this.bitmap = in.readParcelable(Bitmap.class.getClassLoader());
     }
 
     public static final Parcelable.Creator<SpecialShareVOBean> CREATOR = new Parcelable.Creator<SpecialShareVOBean>() {

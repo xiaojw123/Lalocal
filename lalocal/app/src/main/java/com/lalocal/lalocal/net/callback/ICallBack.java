@@ -16,6 +16,7 @@ import com.lalocal.lalocal.model.RecommendDataResp;
 
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.VersionInfo;
 
 import java.util.List;
 
@@ -98,4 +99,7 @@ public abstract class ICallBack {
     }
     //文章详情
     public void onArticleResult(ArticleDetailsResp articleDetailsResp){}
+
+    //版本更新
+    public void onVersionResult(VersionInfo versionInfo){}
 }

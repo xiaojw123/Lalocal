@@ -7,11 +7,18 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +29,8 @@ import android.widget.Toast;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.util.AppConfig;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SecretTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
@@ -45,6 +54,8 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 	private SecretTextView textName;
 	private View masking;
 	private BigPictureBean bean;
+	private Bitmap bitmap;
+	private String content;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +91,12 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		}
 
 		DrawableUtils.displayImg(this, photoIv, bean.getImgUrl());
+
+
 		if(!"".equals(bean.getContent())){
 			textContent.setIsVisible(true);
-			textContent.setText(bean.getContent());
+			content = bean.getContent();
+			textContent.setText(content);
 		}else{
 			pictureShare.setVisibility(View.GONE);
 			masking.setVisibility(View.GONE);
@@ -104,36 +118,94 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 	//分享
 	@Override
 	public void onClick(View v) {
+		bitmap = ((BitmapDrawable) photoIv.getDrawable()).getBitmap();
+		Bitmap bitmap2 = drawTextToBitmap(BigPictureActivity.this, this.bitmap, content);
+		AppLog.i("TAG","ffaff:"+bitmap2.toString());
 		SpecialShareVOBean shareVO=new SpecialShareVOBean();
 		shareVO.setImg(bean.getImgUrl());
+		shareVO.setUrl(bean.getImgUrl());
+		shareVO.setBitmap(bitmap2);
 		shareActivity = new SharePopupWindow(this, shareVO);
 		shareActivity.setPlatformActionListener(this);
 		shareActivity.showShareWindow();
 		shareActivity.showAtLocation(findViewById(R.id.big_picture_main),
 				Gravity.CENTER, 0, 0);
+
+
+
 	}
 
 
-	public static Bitmap drawTextToBitmap(Context gContext, int gResId, String gText) {
+	public static Bitmap drawTextToBitmap(Context gContext, Bitmap bitmap, String gText) {
+	/*	BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		options.inSampleSize=3;*/
+
+		Matrix matrix = new Matrix();
+		matrix.postScale(0.7f,0.7f); //长和宽放大缩小的比例
+		Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
-		Bitmap bitmap = BitmapFactory.decodeResource(resources, gResId);
-		android.graphics.Bitmap.Config bitmapConfig = bitmap.getConfig();
-		if (bitmapConfig == null) {
-			bitmapConfig = android.graphics.Bitmap.Config.ARGB_8888;
-		}
-		bitmap = bitmap.copy(bitmapConfig, true);
-		Canvas canvas = new Canvas(bitmap);
-		Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-		paint.setColor(Color.WHITE);
-		paint.setTextSize((int) (12 * scale*2));
-		paint.setShadowLayer(1f, 0f, 1f, Color.WHITE);
-		Rect bounds = new Rect();
-		paint.getTextBounds(gText, 0, gText.length(), bounds);
-		int x =((bitmap.getWidth() - bounds.width()))/3 ;
-		int y = (bitmap.getHeight() + bounds.height())/3;
-		canvas.drawText(gText, x , y, paint);
-		return bitmap;
+		int totalWidth = resizeBmp.getWidth();
+		int totalHeight = resizeBmp.getHeight();
+		int textWidth = totalWidth*3/6;
+		int textHeight = totalHeight/2;
+		int xWidth = (totalWidth - textWidth) / 2;
+		int yWidth = (totalHeight - totalHeight) / 2;
+		Bitmap icon = Bitmap.createBitmap(totalWidth, totalHeight,
+				Bitmap.Config.RGB_565);
+
+		Canvas canvas = new Canvas(icon);
+
+		Paint photoPaint = new Paint();
+
+		photoPaint.setDither(true);
+
+		// 过滤
+		photoPaint.setFilterBitmap(true);
+		// 创建一个指定的新矩形的坐标
+		Rect src = new Rect(0, 0, totalWidth, totalHeight);
+		// 创建一个指定的新矩形的坐标
+		Rect dst = new Rect(0, 0, totalWidth, totalHeight);
+		// 将photo缩放或扩大到dst使用的填充区photoPaint
+		canvas.drawBitmap(resizeBmp, src, dst, photoPaint);
+		// 设置文字画笔
+		TextPaint textPaint = new TextPaint(Paint.ANTI_ALIAS_FLAG
+				| Paint.DEV_KERN_TEXT_FLAG);
+		// 字体大小
+
+		textPaint.setTextSize((int) (6 * scale*2));
+
+		// 采用默认的宽度
+		textPaint.setTypeface(Typeface.DEFAULT);
+		// 文字画笔采用的颜色
+		textPaint.setColor(Color.WHITE);
+		canvas.translate(xWidth, 180);
+		StaticLayout layout = new StaticLayout(gText, textPaint, textWidth,
+				Layout.Alignment.ALIGN_CENTER, 1.2F, 0.0F, true);// 这个StaticLayout是让文字在图片中多行显示的关键，android之所以强大就是它已经帮你封装好了，通过对StaticLayout的设置就可以让EditText中的文字多行显示
+		layout.draw(canvas);
+	/*	Matrix matrix = new Matrix();
+		matrix.postScale(0.7f,0.7f); //长和宽放大缩小的比例
+		Bitmap resizeBmp = Bitmap.createBitmap(icon,0,0,icon.getWidth(),icon.getHeight(),matrix,true);*/
+		return  icon;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	}
 	@Override
 	public boolean handleMessage(Message msg) {
@@ -147,7 +219,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 
 	@Override
 	public void onError(Platform platform, int i, Throwable throwable) {
-
+		AppLog.i("TAG","BigPicture:"+throwable.toString());
 	}
 
 	@Override

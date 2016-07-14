@@ -49,11 +49,11 @@ import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by lenovo on 2016/6/22.
  */
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener,PlatformActionListener,Handler.Callback {
+public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener,MyScrollView.ScrollByListener ,View.OnClickListener,PlatformActionListener,Handler.Callback {
 
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
-    private int height;
+
     private ImageView detailsPhoto1;
     private TextView titleTv;
     private TextView productPrice;
@@ -82,6 +82,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private List<String> photoList;
     private View titleLine;
     private LinearLayout serviceLL;
+    private int statusHeight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,17 +125,21 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         customer.setOnClickListener(this);
         productReserve.setOnClickListener(this);
 
+       // final int statusHeight = getStatusHeight(this);//获取状态栏高度
+
 
         mScrollView.setScrollViewListener(ProductDetailsActivity.this);
         reLayout.setBackgroundColor(Color.argb(0, 250, 250, 250));
+
         ViewTreeObserver vto = detailsPhoto1.getViewTreeObserver();
 
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 detailsPhoto1.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                height = detailsPhoto1.getHeight();
+                statusHeight = detailsPhoto1.getHeight();
                 detailsPhoto1.getWidth();
+
             }
         });
 
@@ -148,35 +154,49 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         left = DensityUtil.dip2px(ProductDetailsActivity.this, 15);
         top = DensityUtil.dip2px(ProductDetailsActivity.this, 3);
     }
-    @Override
-    public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
-        boolean isOpactity=true;
-        if (y <= height) {
-            float scale = (float) y / height;
-            float alpha = (255 * scale);
-            //layout全部透明    0.16--0.95
 
-            //只是layout背景透明
-            if(alpha>210.0||scale>0.80){
-                titleBack.setVisibility(View.GONE);
-                titleLine.setVisibility(View.VISIBLE);
-                serviceLL.setVisibility(View.VISIBLE);
-                alpha=255;
-                scale=1.0f;
-            }else {
-                titleBack.setVisibility(View.VISIBLE);
-                titleLine.setVisibility(View.GONE);
-                serviceLL.setVisibility(View.GONE);
-            }
+    @Override
+    public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {//title透明渐变
+        boolean isOpactity=true;
+
+       // reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
+        if (y <= 0) {
+            reLayout.setAlpha(0.0f);
+            titleBack.setVisibility(View.VISIBLE);
+            titleLine.setVisibility(View.GONE);
+            serviceLL.setVisibility(View.GONE);
+            reLayout.setBackgroundColor(Color.argb((int) 0, 227, 29, 26));//AGB由相关工具获得，或者美工提供
+        } else if (y > 0 && y <= statusHeight-200) {
+            float scale = (float) y / (statusHeight-200);
+            float alpha = (255 * scale);
 
             reLayout.setAlpha(scale);
             reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
-
-            AppLog.i("TAG", "scale:" + scale + "//alpha:" + alpha );
+        } else {
+            titleBack.setVisibility(View.GONE);
+            titleLine.setVisibility(View.VISIBLE);
+            serviceLL.setVisibility(View.VISIBLE);
+            reLayout.setAlpha(1.0f);
+            reLayout.setBackgroundColor(Color.argb((int) 255, 250, 250, 250));
         }
 
-    }
 
+    }
+    //获取状态栏高度
+    public static int getStatusHeight(Context context) {
+
+        int statusHeight = -1;
+        try {
+            Class clazz = Class.forName("com.android.internal.R$dimen");
+            Object object = clazz.newInstance();
+            int height = Integer.parseInt(clazz.getField("status_bar_height")
+                    .get(object).toString());
+            statusHeight = context.getResources().getDimensionPixelSize(height);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return statusHeight;
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -223,6 +243,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         }
     }
 
+    @Override
+    public void onScrollBy(int deltaX, int deltaY, int scrollX, int scrollY) {
+        AppLog.i("TAG","deltaY:"+deltaY+"scrollY:"+scrollY);
+    }
 
 
     public class MyCallBack extends ICallBack {

@@ -61,10 +61,11 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="6dp"
                 android:layout_marginLeft="@dimen/product_details_padding_left"
                 android:layout_marginRight="@dimen/product_details_padding_left"
-                android:background="@android:color/darker_gray"></View>
+                android:layerType="software"
+                android:background="@drawable/imag_line"></View>
             <LinearLayout
                 android:id="@+id/product_content_value"
                 android:layout_width="match_parent"
@@ -76,10 +77,11 @@
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
+                android:layout_height="6dp"
                 android:layout_marginLeft="@dimen/product_details_padding_left"
                 android:layout_marginRight="@dimen/product_details_padding_left"
-                android:background="@android:color/darker_gray"></View>
+                android:layerType="software"
+                android:background="@drawable/imag_line"></View>
 
             <LinearLayout
                 android:id="@+id/product_check_detail"

@@ -1,11 +1,16 @@
 package com.lalocal.lalocal;
 
 import android.app.Application;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+
 
 import com.crashlytics.android.Crashlytics;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.qihoo.updatesdk.lib.UpdateHelper;
 
 import org.litepal.LitePalApplication;
 import org.litepal.crud.DataSupport;
@@ -24,6 +29,7 @@ public class MyApplication extends Application {
         super.onCreate();
         AppLog.print("MyApplication onCreate___");
         LitePalApplication.initialize(this);
+        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
         Fabric fabric = new Fabric.Builder(this)
                 .kits(new Crashlytics())
                 .debuggable(true)
@@ -44,5 +50,7 @@ public class MyApplication extends Application {
 //        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
 
     }
+
+
 
 }

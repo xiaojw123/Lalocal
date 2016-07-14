@@ -82,13 +82,17 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         if(shareVO.getUrl()!=null){
             sp.setUrl(shareVO.getUrl());
             sp.setSiteUrl(shareVO.getUrl());
+
         }
-        if(shareVO.getDesc()!=null){
+       /* if(shareVO.getDesc()!=null){
             sp.setText(shareVO.getDesc());
         }
-
+*/
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
+        }
+        if(shareVO.getBitmap()!=null){
+            sp.setImageData(shareVO.getBitmap());
         }
 
         if (platformActionListener != null) {
@@ -102,6 +106,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         Platform plat= ShareSDK.getPlatform(WechatMoments.NAME);
         sp.setShareType(Platform.SHARE_TEXT);
         sp.setShareType(Platform.SHARE_WEBPAGE);
+
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
         }
@@ -120,7 +125,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         if (shareVO.getImg() != null) {
             sp.setImageUrl(shareVO.getImg());
         }
-
+        if(shareVO.getBitmap()!=null){
+            sp.setImageData(shareVO.getBitmap());
+        }
         if (platformActionListener != null) {
             plat.setPlatformActionListener(platformActionListener);
         }
@@ -151,7 +158,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
             sp.setImageUrl(shareVO.getImg());
         }
 
-
+        if(shareVO.getBitmap()!=null){
+            sp.setImageData(shareVO.getBitmap());
+        }
         if (platformActionListener != null) {
             plat.setPlatformActionListener(platformActionListener);
         }

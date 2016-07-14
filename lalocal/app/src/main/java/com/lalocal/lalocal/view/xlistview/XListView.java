@@ -313,7 +313,9 @@ public class XListView extends ListView implements OnScrollListener {
 			}
 			break;
 		}
+
 		return super.onTouchEvent(ev);
+
 	}
 
 	@Override

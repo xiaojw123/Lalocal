@@ -139,7 +139,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private void initData() {
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
-        String url = AppConfig.SPECIAL_DETAILS_URL + rowId;
+        String url = AppConfig.getInstance().SPECIAL_DETAILS_URL + rowId;
 
         if (rowId != null) {
             contentService1 = new ContentLoader(this);
@@ -308,6 +308,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private void showArtwork(final String photourl) {
         loadingImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         final BigPictureBean bean = new BigPictureBean();
+
         bean.setImgUrl(photourl);
         bean.setShare(false);
         DrawableUtils.displayImg(mContext, loadingImg, photourl);
@@ -604,6 +605,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         Message msg = new Message();
         msg.what = 1;
         UIHandler.sendMessage(msg, this);
+        AppLog.i("TAG",throwable.toString());
     }
 
     @Override

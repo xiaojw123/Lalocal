@@ -131,7 +131,6 @@ public class ShineView extends View {
 
     }
 
-
     public ShineView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

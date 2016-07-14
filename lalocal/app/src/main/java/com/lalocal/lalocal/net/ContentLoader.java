@@ -33,6 +33,7 @@ import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
@@ -64,6 +65,8 @@ public class ContentLoader {
             requestQueue = Volley.newRequestQueue(context);
         }
         this.context = context;
+
+
     }
 
     public void setCallBack(ICallBack callBack) {
@@ -74,7 +77,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
-        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_ORDER_ITEMS + "/" + id, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getInstance().GET_MY_ORDER_ITEMS + "/" + id, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(), CommonUtil.getUserToken()));
         requestQueue.add(request);
     }
@@ -83,7 +86,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_MY_ORDER);
         }
-        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_ORDER_ITEMS, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getInstance().GET_MY_ORDER_ITEMS, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
 
@@ -93,7 +96,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_MY_COUPON);
         }
-        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_COUPON_ITEMS, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getInstance().GET_MY_COUPON_ITEMS, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
     }
@@ -103,7 +106,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
         }
-        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_FARORITE_ITEMS + "pageNumber=" + pageNumber + "&pageSize=" + pageSize, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getInstance().GET_MY_FARORITE_ITEMS + "pageNumber=" + pageNumber + "&pageSize=" + pageSize, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
     }
@@ -113,7 +116,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_PROFILE);
         }
-        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_USER_PROFILE_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getInstance().GET_USER_PROFILE_URL, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
     }
@@ -123,7 +126,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.MODIFY_USER_PROFILE_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT,AppConfig.getInstance().MODIFY_USER_PROFILE_URL, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
         requestQueue.add(request);
@@ -134,7 +137,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RESET_PASSWORD);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.RESET_PASSWORD_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getInstance().RESET_PASSWORD_URL, response, response);
         request.setBodyParams(getResetPswParams(email, vercode, newpsw));
         requestQueue.add(request);
 
@@ -144,7 +147,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.BOUND_EMAIL_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getInstance().BOUND_EMAIL_URL, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         request.setBodyParams(getBoudEmailParams(email));
         requestQueue.add(request);
@@ -158,7 +161,7 @@ public class ContentLoader {
             response.setResponseView(textView);
             response.setEmail(email);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.SEND_VERIFICATION_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getInstance().SEND_VERIFICATION_URL, response, response);
         request.setBodyParams(getVerParams(email));
         requestQueue.add(request);
 
@@ -170,7 +173,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
             response.setEmail(email);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.CHECK_EMAIL_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getInstance().CHECK_EMAIL_URL, response, response);
         request.setBodyParams(getCheckParams(email));
         requestQueue.add(request);
     }
@@ -182,7 +185,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LOGIN);
             response.setUserInfo(email, password);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.LOGIN_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getInstance().LOGIN_URL, response, response);
         request.setBodyParams(getLoginParams(email, password));
         requestQueue.add(request);
     }
@@ -194,7 +197,7 @@ public class ContentLoader {
             response.setResponseView(regitsterBtn);
             response.setUserInfo(email, password);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.REGISTER_URL, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getInstance().REGISTER_URL, response, response);
         request.setBodyParams(getRegisterParams(email, password, nickname));
         requestQueue.add(request);
     }
@@ -204,7 +207,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PARISES);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.PRAISES, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getInstance().PRAISES, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
@@ -216,7 +219,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CANCEL_PARISES);
         }
-        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.CANCEL_PRAISES + praiseId, response, response);
+        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE,AppConfig.getInstance().CANCEL_PRAISES + praiseId, response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -227,7 +230,7 @@ public class ContentLoader {
             response.setRecommend(pageSize, pageNumber);
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
-        ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_URL + getParameter, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getInstance().RECOMMEND_URL + getParameter, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
         requestQueue.add(request);
 
@@ -238,7 +241,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RECOMMEND_AD);
         }
-        ContentRequest request = new ContentRequest(AppConfig.RECOMMEND_AD, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getInstance().RECOMMEND_AD, response, response);
         requestQueue.add(request);
     }
 
@@ -247,7 +250,8 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SPECIAL_DETAIL);
         }
-        ContentRequest request = new ContentRequest(AppConfig.SPECIAL_DETAILS_URL + rowId, response, response);
+        AppLog.i("TAG","specialDetail:"+AppConfig.getInstance().SPECIAL_DETAILS_URL);
+        ContentRequest request = new ContentRequest(AppConfig.getInstance().SPECIAL_DETAILS_URL + rowId, response, response);
         requestQueue.add(request);
     }
 
@@ -257,7 +261,16 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.PRODUCTIONS_DETILS + targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getInstance().PRODUCTIONS_DETILS + targetId, response, response);
+        requestQueue.add(contentRequest);
+    }
+    //版本更新
+    public void versionUpdate(String versionCode){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.VERSION_CODE);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getInstance().VERSION_UPDATE+versionCode, response, response);
+        contentRequest.setHeaderParams(getHeaderParamsWithUserId(-1, null));
         requestQueue.add(contentRequest);
     }
 
@@ -265,7 +278,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ARTICLE_DETAILS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.ARTICLE_DETAILS +targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getInstance().ARTICLE_DETAILS +targetId, response, response);
         requestQueue.add(contentRequest);
     }
     class ContentRequest extends StringRequest {
@@ -456,6 +469,9 @@ public class ContentLoader {
                         break;
                     case RequestCode.ARTICLE_DETAILS:
                         responseArticle(json);
+                        break;
+                    case RequestCode.VERSION_CODE:
+                        responseVersion(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -671,6 +687,13 @@ public class ContentLoader {
                 callBack.onArticleResult(articleDetailsResp);
             }
         }
+        private void responseVersion(String json) {
+            AppLog.i("TAG","responseVersion:"+json);
+            VersionInfo versionInfo = new Gson().fromJson(json, VersionInfo.class);
+            if(versionInfo.getReturnCode()==0){
+                callBack.onVersionResult(versionInfo);
+            }
+        }
 
         @Override
         public void onDialogClickListener() {
@@ -679,6 +702,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
 
 
 
@@ -778,7 +802,7 @@ public class ContentLoader {
 
     public Map<String, String> getHeaderParams() {
         Map<String, String> headers = new HashMap<>();
-        headers.put("APP_VERSION", AppConfig.getVersionName(context));
+        headers.put("APP_VERSION", AppConfig.getInstance().getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
         return headers;
@@ -824,6 +848,7 @@ public class ContentLoader {
         int CANCEL_PARISES = 204;
         int PARISES = 205;
         int ARTICLE_DETAILS=206;
+        int VERSION_CODE=207;
 
     }
 

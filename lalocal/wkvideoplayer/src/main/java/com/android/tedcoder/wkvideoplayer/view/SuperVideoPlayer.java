@@ -84,6 +84,8 @@ public class SuperVideoPlayer extends RelativeLayout {
 
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
+                    Log.i("TAg", "ACTION_DOWN: "+touchPosition);
+
                     showOrHideController();
                     if (!mVideoView.isPlaying()){
                         return false;
@@ -93,7 +95,9 @@ public class SuperVideoPlayer extends RelativeLayout {
                     position = mVideoView.getCurrentPosition();
                     break;
                 case MotionEvent.ACTION_MOVE:
+                    Log.i("TAg", "ACTION_MOVE: "+touchPosition);
                     float currentX =  event.getRawX();
+                    float currentY = event.getRawY();
                     float deltaX = currentX - touchLastX;
                     float deltaXAbs  =  Math.abs(deltaX);
                     if (!mVideoView.isPlaying()){
@@ -127,15 +131,33 @@ public class SuperVideoPlayer extends RelativeLayout {
                     }
                     break;
                 case MotionEvent.ACTION_UP:
+                    if (!mVideoView.isPlaying()){
+                        return false;
+                    }
+                    Log.i("TAg", "ACTION_UP: "+touchPosition);
                     touchStatusView.setVisibility(View.GONE);
                     if (touchPosition!=-1){
                         mVideoView.seekTo(touchPosition);
                         touchPosition = -1;
-                   /* if (videoControllerShow){
+                  /*  if (videoControllerShow){
                         return true;
                     }*/
                     }
                     break;
+             /*   case MotionEvent.ACTION_CANCEL:
+                    if (!mVideoView.isPlaying()){
+                        return false;
+                    }
+                    Log.i("TAg", "ACTION_UP: "+touchPosition);
+                    touchStatusView.setVisibility(View.GONE);
+                    if (touchPosition!=-1){
+                        mVideoView.seekTo(touchPosition);
+                        touchPosition = -1;
+                  *//*  if (videoControllerShow){
+                        return true;
+                    }*//*
+                    }
+                    break;*/
             }
             return true;
 
@@ -143,6 +165,11 @@ public class SuperVideoPlayer extends RelativeLayout {
             //  return mCurrPageType == MediaController.PageType.EXPAND;
         }
     };
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return true;
+    }
 
     // 播放器控制条的回调函数
     private MediaController.MediaControlImpl mMediaControl = new MediaController.MediaControlImpl() {

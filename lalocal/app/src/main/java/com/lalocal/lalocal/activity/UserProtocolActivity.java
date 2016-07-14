@@ -17,7 +17,7 @@ public class UserProtocolActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.use_clauses_layout);
         webView = (WebView) findViewById(R.id.user_clauses_wv);
-        webView.loadUrl(AppConfig.USER_PROTOCOL_URL);
+        webView.loadUrl(AppConfig.getInstance().USER_PROTOCOL_URL);
         webView.setWebViewClient(new MWebviewClient());
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);

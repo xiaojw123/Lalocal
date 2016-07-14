@@ -2,7 +2,11 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,19 +19,25 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendResultBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
+import com.lalocal.lalocal.model.VersionInfo;
+import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
+import com.qihoo.updatesdk.lib.UpdateHelper;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,16 +65,21 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-    }
 
+    }
+    boolean isCheck=true;
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_recommend_layout, container, false);
-        contentService = new ContentLoader(getActivity());
-        contentService.setCallBack(new MyCallBack());
-        contentService.recommendAd();
-        contentService.recommentList(10, 1);
+
+        if(header!=null){
+            header.setVisibility(View.GONE);
+        }
+
+
+
+
         xlistview = (XListView) view.findViewById(R.id.recommend_xlv);
         xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
@@ -83,7 +98,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     RecommendRowsBean recommendRowsBean = allRows.get(position - 2);
                     int rowId = recommendRowsBean.getId();
                     AppLog.i("TAG", rowId + "");
-
                     Intent intent = new Intent(getActivity(), SpecialDetailsActivity.class);
                     intent.putExtra("rowId", rowId + "");
                     startActivity(intent);
@@ -91,6 +105,11 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 }
             }
         });
+        contentService = new ContentLoader(getActivity());
+        contentService.setCallBack(new MyCallBack());
+
+        contentService.recommendAd();
+        contentService.recommentList(10, 1);
         return view;
     }
 
@@ -127,6 +146,8 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     xListviewAdapter.refresh(allRows);
                 }
             }
+            xlistview.stopLoadMore();
+            xlistview.stopRefresh();
         }
 
         @Override
@@ -141,6 +162,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 e.printStackTrace();
             }
         }
+
     }
 
 
@@ -150,10 +172,10 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
             super.handleMessage(msg);
             switch (msg.what) {
                 case REFRESH:
-                    xlistview.stopRefresh();
+                  //  xlistview.stopRefresh();
                     break;
                 case NOTIFI:
-                    xListviewAdapter.notifyDataSetChanged();
+                  //  xListviewAdapter.notifyDataSetChanged();
                     break;
             }
 
@@ -165,18 +187,25 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
+        isRefresh = false;
+        contentService.recommentList(10, 1);
+        page = 2;
+        Message message = new Message();
+        message.what = REFRESH;
+        handler.sendMessage(message);
+
+      /*  handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                handler.removeCallbacks(this);
                 isRefresh = false;
                 contentService.recommentList(10, 1);
                 page = 2;
                 Message message = new Message();
                 message.what = REFRESH;
-                //  handler.sendEmptyMessage(0);
                 handler.sendMessage(message);
             }
-        }, 1000);
+        }, 1000);*/
 
     }
 
@@ -194,4 +223,24 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     }
 
 
+
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        header.setVisibility(View.GONE);
+        try {
+            Field childFragmentManager = Fragment.class
+                    .getDeclaredField("mChildFragmentManager");
+            childFragmentManager.setAccessible(true);
+            childFragmentManager.set(this, null);
+
+        } catch (NoSuchFieldException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -80,6 +80,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private PopupWindow pw;
     private ImageView authorCodeImg;
     private Bitmap image;
+    private int praiseNum;
+    private int readNum;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -165,7 +167,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         contentService=new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
         contentService.articleDetails(targetID);
-
     }
 
 
@@ -194,8 +195,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 if(!TextUtils.isEmpty(url)){
                     initWebview(url);//显示h5
                 }
-
-                showReadAndCollect(articleDetailsRespResult);//阅读和收藏数
+                praiseNum = articleDetailsRespResult.getPraiseNum();
+                readNum = articleDetailsRespResult.getReadNum();
+                showReadAndCollect(praiseNum, readNum);//阅读和收藏数
 
             }
 
@@ -207,6 +209,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             if(pariseResult.getReturnCode()==0){
                 praiseFlag=false;
                 btnLike.setChecked(false);
+                praiseNum= praiseNum - 1;
+                collectTv.setText(" · 收藏 " + praiseNum);
 
             }
 
@@ -219,7 +223,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 praiseId= pariseResult.getResult();
                 praiseFlag=true;
                 btnLike.setChecked(true);
-
+                praiseNum=praiseNum + 1;
+                collectTv.setText(" · 收藏 " + praiseNum);
 
             }
         }
@@ -227,9 +232,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
 
 
-    private void showReadAndCollect(ArticleDetailsResultBean articleDetailsRespResult) {
-        readTv.setText("阅读 " + articleDetailsRespResult.getReadNum());
-        collectTv.setText("  收藏 " + articleDetailsRespResult.getPraiseNum());
+    private void showReadAndCollect(int praiseNum, int readNum) {
+        readTv.setText("阅读 " +readNum );
+        collectTv.setText(" · 收藏 " + praiseNum);
     }
 
 
