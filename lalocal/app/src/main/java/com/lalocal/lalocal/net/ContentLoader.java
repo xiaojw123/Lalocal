@@ -674,7 +674,7 @@ public class ContentLoader {
 
         //specialdetail
         public void responseSpecialDetail(String json) {
-            AppLog.i("TAG", json);
+            AppLog.i("TAG", "responseSpecialDetail:"+json);
             SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
             if (spectialDetailsResp != null) {
                 callBack.onRecommendSpecial(spectialDetailsResp);

@@ -71,8 +71,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         dismiss();
     }
 
-
-
     private void shareWeibo() {
         SinaWeibo.ShareParams sp  = new SinaWeibo.ShareParams();
         Platform plat= ShareSDK.getPlatform(SinaWeibo.NAME);

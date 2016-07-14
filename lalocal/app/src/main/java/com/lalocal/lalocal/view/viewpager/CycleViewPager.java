@@ -28,13 +28,10 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
-import com.lalocal.lalocal.activity.TestActivity;
-import com.lalocal.lalocal.model.CycleVpEntity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 
 /**

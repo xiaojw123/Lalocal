@@ -83,19 +83,13 @@
             android:name=".activity.ProductCheckDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.TestActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.VideoActivity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.ArticleTestAct" />
         <activity android:name=".activity.TestAct" />
 
-        <!-- 分享 -->
+        <!--分享-->
         <activity
             android:name="com.mob.tools.MobUIShell"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -74,14 +74,73 @@ public class SuperVideoPlayer extends RelativeLayout {
     });
 
 
-
+    private float touchLastX;
+    private int position;
+    private int touchStep = 1000;//快进的时间，1秒
+    private int touchPosition = -111111111;
     private View.OnTouchListener mOnTouchVideoListener = new OnTouchListener() {
         @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                showOrHideController();
+        public boolean onTouch(View view, MotionEvent event) {
+
+            switch (event.getAction()){
+                case MotionEvent.ACTION_DOWN:
+                    showOrHideController();
+                    if (!mVideoView.isPlaying()){
+                        return false;
+                    }
+                    float downX =  event.getRawX();
+                    touchLastX = downX;
+                    position = mVideoView.getCurrentPosition();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    float currentX =  event.getRawX();
+                    float deltaX = currentX - touchLastX;
+                    float deltaXAbs  =  Math.abs(deltaX);
+                    if (!mVideoView.isPlaying()){
+                        return false;
+                    }
+                    if (deltaXAbs>10){
+                        if (touchStatusView.getVisibility()!=View.VISIBLE){
+                            touchStatusView.setVisibility(View.VISIBLE);
+                        }
+                        touchLastX = currentX;
+                        if (deltaX > 1) {
+                            position += touchStep;
+                            if (position > duration) {
+                                position = duration;
+                            }
+                            touchPosition = position;
+                            touchStatusImg.setImageResource(R.drawable.ic_fast_forward_white_24dp);
+                            int[] time = getMinuteAndSecond(position);
+                            touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
+                        } else if (deltaX < -1) {
+                            position -= touchStep;
+                            if (position < 0) {
+                                position = 0;
+                            }
+                            touchPosition = position;
+                            touchStatusImg.setImageResource(R.drawable.ic_fast_rewind_white_24dp);
+                            int[] time = getMinuteAndSecond(position);
+                            touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
+                            mVideoView.seekTo(position);
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    touchStatusView.setVisibility(View.GONE);
+                    if (touchPosition!=-1){
+                        mVideoView.seekTo(touchPosition);
+                        touchPosition = -1;
+                   /* if (videoControllerShow){
+                        return true;
+                    }*/
+                    }
+                    break;
             }
-            return mCurrPageType == MediaController.PageType.EXPAND;
+            return true;
+
+
+            //  return mCurrPageType == MediaController.PageType.EXPAND;
         }
     };
 
@@ -244,12 +303,12 @@ public class SuperVideoPlayer extends RelativeLayout {
     private LinearLayout touchStatusView;
     private ImageView touchStatusImg;
     private TextView touchStatusTime;
+    private String formatTotalTime;
     private void initView(Context context) {
         mContext = context;
         View inflate = View.inflate(context, R.layout.super_vodeo_player_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
         mVideoView = (VideoView) findViewById(R.id.video_view);
         mMediaController = (MediaController) findViewById(R.id.controller);
-
         touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
         touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
         touchStatusTime = (TextView) inflate.findViewById(R.id.touch_time);
@@ -304,12 +363,12 @@ public class SuperVideoPlayer extends RelativeLayout {
      * 更新播放的进度时间
      */
     private void updatePlayTime() {
+        int allTime = mVideoView.getDuration();
+        int playTime = mVideoView.getCurrentPosition();
         duration = mVideoView.getDuration();
         int[] time = getMinuteAndSecond(duration);
-       // videoTotalTimeText.setText(String.format("%02d:%02d", time[0], time[1]));
         formatTotalTime = String.format("%02d:%02d", time[0], time[1]);
-        int playTime = mVideoView.getCurrentPosition();
-        mMediaController.setPlayProgressTxt(playTime, duration);
+        mMediaController.setPlayProgressTxt(playTime, allTime);
     }
 
     /**
@@ -401,72 +460,7 @@ public class SuperVideoPlayer extends RelativeLayout {
         }
     }
 
-    private float touchLastX;
-    private int position;
-    private int touchStep = 1000;//快进的时间，1秒
-    private int touchPosition = -1;
-    private String formatTotalTime;
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Log.i("TAG","触摸事件激发了");
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                if (!mVideoView.isPlaying()) {
-                    return false;
-                }
-                float downX = event.getRawX();
-                touchLastX = downX;
-                this.position = mVideoView.getCurrentPosition();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (!mVideoView.isPlaying()) {
-                    return false;
-                }
-                float currentX = event.getRawX();
-                float deltaX = currentX - touchLastX;
-                float deltaXAbs = Math.abs(deltaX);
-                if (deltaXAbs > 1) {
-                    if (touchStatusView.getVisibility() != View.VISIBLE) {
-                        touchStatusView.setVisibility(View.VISIBLE);
-                    }
-                    touchLastX = currentX;
-                    if (deltaX > 1) {
-                        position += touchStep;
-                        if (position > duration) {
-                            position = duration;
-                        }
-                        touchPosition = position;
-                        touchStatusImg.setImageResource(R.drawable.ic_fast_forward_white_24dp);
-                        int[] time = getMinuteAndSecond(position);
-                        touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
-                    } else if (deltaX < -1) {
-                        position -= touchStep;
-                        if (position < 0) {
-                            position = 0;
-                        }
-                        touchPosition = position;
-                        touchStatusImg.setImageResource(R.drawable.ic_fast_rewind_white_24dp);
-                        int[] time = getMinuteAndSecond(position);
-                        touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
 
-                    }
-                }
-                    break;
-            case MotionEvent.ACTION_UP:
-                if (touchPosition!=-1){
-                    mVideoView.seekTo(touchPosition);
-                    touchStatusView.setVisibility(View.GONE);
-                    touchPosition = -1;
-                    if (mMediaController.getVisibility() == View.VISIBLE){
-                        return true;
-                    }
-                }
-                break;
-                }
-
-
-        return false;
-    }
 
     private int[] getMinuteAndSecond(int mils) {
         mils /= 1000;

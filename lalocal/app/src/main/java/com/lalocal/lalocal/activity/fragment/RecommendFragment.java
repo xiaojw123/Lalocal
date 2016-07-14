@@ -83,6 +83,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                     RecommendRowsBean recommendRowsBean = allRows.get(position - 2);
                     int rowId = recommendRowsBean.getId();
                     AppLog.i("TAG", rowId + "");
+
                     Intent intent = new Intent(getActivity(), SpecialDetailsActivity.class);
                     intent.putExtra("rowId", rowId + "");
                     startActivity(intent);
