@@ -233,18 +233,11 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-<<<<<<< HEAD
 
     private void showReadAndCollect(int praiseNum, int readNum) {
-        readTv.setText("阅读 " +readNum );
+        readTv.setText("阅读 " + readNum);
         collectTv.setText(" · 收藏 " + praiseNum);
-=======
-    private void showReadAndCollect(ArticleDetailsResultBean articleDetailsRespResult) {
-        readTv.setText("阅读 " + articleDetailsRespResult.getReadNum());
-        collectTv.setText("  收藏 " + articleDetailsRespResult.getPraiseNum());
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
     }
-
 
     private void initWebview(String url) {
         settings = articleWebview.getSettings();
@@ -408,7 +401,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
 
         }
-
 
         private int praisesNum;
 

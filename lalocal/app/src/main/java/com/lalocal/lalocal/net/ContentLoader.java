@@ -79,13 +79,11 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
-<<<<<<< HEAD
+
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getInstance().GET_MY_ORDER_ITEMS + "/" + id, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(CommonUtil.getUserId(), CommonUtil.getUserToken()));
-=======
-        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.GET_MY_ORDER_ITEMS + "/" + id, response, response);
+
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
         requestQueue.add(request);
     }
 
@@ -216,13 +214,10 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.PARISES);
             response.setTargetId(id);
         }
-<<<<<<< HEAD
+
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getInstance().PRAISES, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
-=======
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.PRAISES, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
@@ -235,12 +230,11 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.CANCEL_PARISES);
             response.setTargetId(targetId);
         }
-<<<<<<< HEAD
+
         ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE,AppConfig.getInstance().CANCEL_PRAISES + praiseId, response, response);
-=======
-        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.CANCEL_PRAISES + praiseId, response, response);
+
         contentRequest.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
         requestQueue.add(contentRequest);
     }
 
@@ -271,13 +265,10 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SPECIAL_DETAIL);
         }
-<<<<<<< HEAD
+
         AppLog.i("TAG","specialDetail:"+AppConfig.getInstance().SPECIAL_DETAILS_URL);
         ContentRequest request = new ContentRequest(AppConfig.getInstance().SPECIAL_DETAILS_URL + rowId, response, response);
-=======
-        ContentRequest request = new ContentRequest(AppConfig.SPECIAL_DETAILS_URL + rowId, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
         requestQueue.add(request);
     }
 
@@ -304,11 +295,9 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ARTICLE_DETAILS);
         }
-<<<<<<< HEAD
+
         ContentRequest contentRequest = new ContentRequest(AppConfig.getInstance().ARTICLE_DETAILS +targetId, response, response);
-=======
-        ContentRequest contentRequest = new ContentRequest(AppConfig.ARTICLE_DETAILS + targetId, response, response);
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
         requestQueue.add(contentRequest);
     }
 
@@ -743,11 +732,7 @@ public class ContentLoader {
     }
 
 
-<<<<<<< HEAD
 
-
-=======
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
             phone) {
         JSONObject jsonObj = new JSONObject();
@@ -889,12 +874,10 @@ public class ContentLoader {
         int PRODUCT_DETAILS = 203;
         int CANCEL_PARISES = 204;
         int PARISES = 205;
-<<<<<<< HEAD
+
         int ARTICLE_DETAILS=206;
         int VERSION_CODE=207;
-=======
-        int ARTICLE_DETAILS = 206;
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
 
     }
 

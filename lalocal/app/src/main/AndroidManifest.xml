@@ -17,18 +17,13 @@
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
-<<<<<<< HEAD
+
 
     <!--360更新-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 
-  <!--  android:screenOrientation="portrait"-->
-   <!-- android:hardwareAccelerated="false"-->
-=======
-    <!-- android:screenOrientation="portrait" -->
-    <!-- android:hardwareAccelerated="false" -->
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
@@ -39,14 +34,15 @@
         <activity
             android:name=".activity.HomeActivity"
             android:hardwareAccelerated="false"
-<<<<<<< HEAD
+
             android:screenOrientation="portrait"
             >
-=======
-            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
@@ -95,7 +91,7 @@
         <activity
             android:name=".activity.ProductCheckDetailActivity"
             android:screenOrientation="portrait" />
-<<<<<<< HEAD
+
 
         <activity android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait"
@@ -122,14 +118,7 @@
             android:name="com.qihoo.appstore.updatelib.CheckUpdateService"
             android:exported="false" />
 
-=======
-        <activity
-            android:name=".activity.CarouselFigureActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".activity.OrderActivity" />
-        <activity android:name=".activity.ArticleTestAct" />
-        <activity android:name=".activity.TestAct" />
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
 
         <!--分享-->
         <activity

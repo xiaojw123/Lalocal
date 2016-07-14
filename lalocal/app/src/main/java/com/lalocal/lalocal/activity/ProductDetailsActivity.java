@@ -53,11 +53,11 @@ import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by lenovo on 2016/6/22.
  */
-<<<<<<< HEAD
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener,MyScrollView.ScrollByListener ,View.OnClickListener,PlatformActionListener,Handler.Callback {
-=======
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, View.OnClickListener, PlatformActionListener, Handler.Callback, CustomTitleView.onBackBtnClickListener {
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
+public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener,MyScrollView.ScrollByListener ,
+        View.OnClickListener,PlatformActionListener,Handler.Callback , CustomTitleView.onBackBtnClickListener{
+
+
 
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
@@ -167,19 +167,19 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     @Override
-<<<<<<< HEAD
-    public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {//title透明渐变
-        boolean isOpactity=true;
 
-       // reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
+    public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {//title透明渐变
+        boolean isOpactity = true;
+
+        // reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
         if (y <= 0) {
             reLayout.setAlpha(0.0f);
             titleBack.setVisibility(View.VISIBLE);
             titleLine.setVisibility(View.GONE);
             serviceLL.setVisibility(View.GONE);
             reLayout.setBackgroundColor(Color.argb((int) 0, 227, 29, 26));//AGB由相关工具获得，或者美工提供
-        } else if (y > 0 && y <= statusHeight-200) {
-            float scale = (float) y / (statusHeight-200);
+        } else if (y > 0 && y <= statusHeight - 200) {
+            float scale = (float) y / (statusHeight - 200);
             float alpha = (255 * scale);
 
             reLayout.setAlpha(scale);
@@ -190,36 +190,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             serviceLL.setVisibility(View.VISIBLE);
             reLayout.setAlpha(1.0f);
             reLayout.setBackgroundColor(Color.argb((int) 255, 250, 250, 250));
-=======
-    public void onScrollChanged(View scrollView, int x, int y, int oldx, int oldy) {
-        boolean isOpactity = true;
-        if (y <= height) {
-            float scale = (float) y / height;
-            float alpha = (255 * scale);
-            //layout全部透明    0.16--0.95
-
-            //只是layout背景透明
-            if (alpha > 210.0 || scale > 0.80) {
-                titleBack.setVisibility(View.GONE);
-                titleLine.setVisibility(View.VISIBLE);
-                serviceLL.setVisibility(View.VISIBLE);
-                alpha = 255;
-                scale = 1.0f;
-            } else {
-                titleBack.setVisibility(View.VISIBLE);
-                titleLine.setVisibility(View.GONE);
-                serviceLL.setVisibility(View.GONE);
-            }
-
-            reLayout.setAlpha(scale);
-            reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
-
-            AppLog.i("TAG", "scale:" + scale + "//alpha:" + alpha);
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
         }
-
-
     }
+
     //获取状态栏高度
     public static int getStatusHeight(Context context) {
 
@@ -280,14 +253,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         }
     }
 
-    @Override
-<<<<<<< HEAD
-    public void onScrollBy(int deltaX, int deltaY, int scrollX, int scrollY) {
-        AppLog.i("TAG","deltaY:"+deltaY+"scrollY:"+scrollY);
-=======
+
+        @Override
+    public void onScrollBy(int deltaX, int deltaY, int scrollX, int scrollY){
+            AppLog.i("TAG", "deltaY:" + deltaY + "scrollY:" + scrollY);
+        }
+
+
     public void onBackClick() {
         setResult(MeFragment.UPDATE_MY_DATA);
->>>>>>> c6debb6e5cb22307ec4515ca58d9a5987f1df595
+
     }
 
 
