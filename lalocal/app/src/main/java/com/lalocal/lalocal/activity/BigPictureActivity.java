@@ -122,8 +122,8 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		Bitmap bitmap2 = drawTextToBitmap(BigPictureActivity.this, this.bitmap, content);
 		AppLog.i("TAG","ffaff:"+bitmap2.toString());
 		SpecialShareVOBean shareVO=new SpecialShareVOBean();
-		shareVO.setImg(bean.getImgUrl());
-		shareVO.setUrl(bean.getImgUrl());
+		/*shareVO.setImg(bean.getImgUrl());
+		shareVO.setUrl(bean.getImgUrl());*/
 		shareVO.setBitmap(bitmap2);
 		shareActivity = new SharePopupWindow(this, shareVO);
 		shareActivity.setPlatformActionListener(this);
@@ -142,7 +142,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		options.inSampleSize=3;*/
 
 		Matrix matrix = new Matrix();
-		matrix.postScale(0.7f,0.7f); //长和宽放大缩小的比例
+		matrix.postScale(0.6f,0.6f); //长和宽放大缩小的比例
 		Bitmap resizeBmp = Bitmap.createBitmap(bitmap,0,0,bitmap.getWidth(),bitmap.getHeight(),matrix,true);
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
@@ -184,9 +184,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		StaticLayout layout = new StaticLayout(gText, textPaint, textWidth,
 				Layout.Alignment.ALIGN_CENTER, 1.2F, 0.0F, true);// 这个StaticLayout是让文字在图片中多行显示的关键，android之所以强大就是它已经帮你封装好了，通过对StaticLayout的设置就可以让EditText中的文字多行显示
 		layout.draw(canvas);
-	/*	Matrix matrix = new Matrix();
-		matrix.postScale(0.7f,0.7f); //长和宽放大缩小的比例
-		Bitmap resizeBmp = Bitmap.createBitmap(icon,0,0,icon.getWidth(),icon.getHeight(),matrix,true);*/
+
 		return  icon;
 
 

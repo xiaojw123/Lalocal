@@ -339,9 +339,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     //轮播图
     private void showphotos(List<RecommendAdResultBean> list) {
 
-        View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.viewpager, null);
-        View viewById = inflate.findViewById(R.id.fragment_cycle_viewpager_content);
-        viewById.setVisibility(View.GONE);
+        View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.product_viewpager, null);
+
         CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
 
         if (list.size() > 0) {

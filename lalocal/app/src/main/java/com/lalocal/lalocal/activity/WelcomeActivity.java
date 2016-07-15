@@ -9,6 +9,7 @@ import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
+import com.qihoo.updatesdk.lib.UpdateHelper;
 
 /**
  * Created by android on 2016/7/14.

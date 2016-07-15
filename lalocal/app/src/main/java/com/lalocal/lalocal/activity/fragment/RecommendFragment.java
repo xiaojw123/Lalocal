@@ -52,23 +52,23 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private ContentLoader contentService;
     private View header;
 
-    boolean isCheck=true;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+
+    }
+
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_recommend_layout, container, false);
-
-        if(header!=null){
-            header.setVisibility(View.GONE);
-        }
         xlistview = (XListView) view.findViewById(R.id.recommend_xlv);
         xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
         xlistview.setXListViewListener(this);
         cycleViewPager = new CycleViewPager();
         header = View.inflate(getActivity(), R.layout.viewpager, null);
-        View viewById = header.findViewById(R.id.lunbotu_content);
-        viewById.setVisibility(View.GONE);
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         transaction.add(R.id.fragment_cycle_viewpager_content, cycleViewPager).commit();
         xlistview.addHeaderView(header);
@@ -215,6 +215,12 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     public void onDestroyView() {
         super.onDestroyView();
         header.setVisibility(View.GONE);
+
+
+        CycleViewPager userProfileFragment1 =(CycleViewPager)getFragmentManager().findFragmentById(R.id.layout_viewager_content);
+        if(userProfileFragment1 !=null ){
+            getFragmentManager().beginTransaction().remove(userProfileFragment1).commit();
+        }
         try {
             Field childFragmentManager = Fragment.class
                     .getDeclaredField("mChildFragmentManager");
