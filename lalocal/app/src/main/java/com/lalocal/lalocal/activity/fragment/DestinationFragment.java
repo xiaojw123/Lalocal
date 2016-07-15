@@ -8,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lalocal.lalocal.R;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * Created by xiaojw on 2016/6/3.
  */
 public class DestinationFragment extends Fragment{
+    private static final String PAGE_NAME="DestinationFragment";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,4 +27,17 @@ public class DestinationFragment extends Fragment{
         View view=inflater.inflate(R.layout.home_destination_layout,container,false);
         return view;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(PAGE_NAME);
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(PAGE_NAME);
+    }
+
+
 }

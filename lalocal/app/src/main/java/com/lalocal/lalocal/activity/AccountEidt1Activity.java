@@ -57,6 +57,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     Bitmap bitmap;
     CustomTitleView customTitleView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -172,7 +173,9 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 intent.putExtra(KeyParams.PHONE, phone_tv.getText().toString());
                 break;
         }
-        intent.putExtra(KeyParams.USERID, user.getId());
+        if (user != null) {
+            intent.putExtra(KeyParams.USERID, user.getId());
+        }
         intent.putExtra(KeyParams.TOKEN, getToken());
         startActivityForResult(intent, MODIFY_USER_PROFILE);
     }
@@ -220,7 +223,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                     Environment.MEDIA_MOUNTED)) {
                 crop(Uri.fromFile(tempFile));
             } else {
-                CommonUtil.showToast(this,"未找到存储卡，无法存储照片",Toast.LENGTH_SHORT);
+                CommonUtil.showToast(this, "未找到存储卡，无法存储照片", Toast.LENGTH_SHORT);
             }
 
         } else if (requestCode == PHOTO_REQUEST_CUT) {
@@ -310,7 +313,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     private void updateUserProfileView(LoginUser user) {
         this.user = user;
         if (!isEmailUpdate) {
-            DrawableUtils.displayImg(this, personalheader_civ, user.getAvatar());
+            DrawableUtils.displayImg(this, personalheader_civ, user.getAvatar(), R.drawable.home_me_personheadnormal);
             nickaname_tv.setText(user.getNickName());
             if (user.isSex()) {
                 boysex_cb.setSelected(true);

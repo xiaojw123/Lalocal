@@ -144,11 +144,9 @@
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="e56a6336a6ae8ee217f64a62e29bd01203f377a0" />
-        <meta-data
-            android:name="category"
-            android:value="${CATEGORY}" />
-
         <activity android:name=".activity.EmptActivity" />
+        <meta-data android:value="57885600e0f55a60d5000b3f" android:name="UMENG_APPKEY"></meta-data>
+        <meta-data android:value="${CATEGORY}" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>

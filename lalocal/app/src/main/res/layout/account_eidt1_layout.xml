@@ -23,8 +23,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/account_edit_personalheader_bottom"
         android:layout_marginTop="@dimen/account_edit_personalheader_top"
-        android:scaleType="centerCrop"
-        android:src="@drawable/home_me_personheadnormal" />
+        android:src="@drawable/home_me_personheadnormal"
+        android:scaleType="centerCrop" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -110,8 +110,8 @@
                     android:id="@+id/accout_edit_boy_sex_cb"
                     android:layout_width="@dimen/accout_edit_boy_sex_cb_width"
                     android:layout_height="@dimen/accout_edit_boy_sex_cb_height"
-                    android:layout_margin="@dimen/dimen_size_15_dp"
                     android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/dimen_size_15_dp"
                     android:background="@drawable/accout_edit_boy_sex_cb_bg"
                     android:button="@null" />
             </FrameLayout>

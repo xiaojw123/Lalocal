@@ -27,6 +27,7 @@ import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ import java.util.List;
  * Created by xiaojw on 2016/6/3.
  */
 public class RecommendFragment extends Fragment implements XListView.IXListViewListener {
+    private static final  String PAGE_NAME="RecommendFragment";
     private int pageNumber;
     private int pageSize;
     private XListView xlistview;
@@ -89,6 +91,8 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         initLoader();
         return view;
     }
+
+
 
     private void initLoader() {
         contentService = new ContentLoader(getActivity());
@@ -232,5 +236,16 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(PAGE_NAME);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(PAGE_NAME);
     }
 }
