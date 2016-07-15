@@ -26,7 +26,7 @@ public class FileUploadUtil {
         UploadTask task = new UploadTask(context, backIntent);
         task.setHeadParams(String.valueOf(userid), token);
         task.setBodyBytes(bodyData);
-        task.execute(AppConfig.getInstance().UPLOAD_HEDARE_URL);
+        task.execute(AppConfig.getHeaderUpdateUrl());
     }
 
     static class UploadTask extends AsyncTask<String, Void, String> {
@@ -66,7 +66,7 @@ public class FileUploadUtil {
                 urlConnection.setDoInput(true);
                 urlConnection.setDoOutput(true);
                 urlConnection.setRequestProperty("Content-Type", "multipart/form-data; charset=utf-8; boundary=__X_PAW_BOUNDARY__");
-                urlConnection.setRequestProperty("APP_VERSION", AppConfig.getInstance().getVersionName(context));
+                urlConnection.setRequestProperty("APP_VERSION", AppConfig.getVersionName(context));
                 urlConnection.setRequestProperty("DEVICE", "android");
                 urlConnection.setRequestProperty("DEVICE_ID", uuid);
                 urlConnection.setRequestProperty("USER_ID", String.valueOf(userid));

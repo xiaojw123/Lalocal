@@ -26,7 +26,7 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
         foreign_phone_rl = (RelativeLayout) findViewById(R.id.about_us_phone_outer);
         grade_rl = (RelativeLayout) findViewById(R.id.about_us_grade);
         useclauses_rl = (RelativeLayout) findViewById(R.id.about_us_use_clauses);
-        appversion.setText("版本" + AppConfig.getInstance().getVersionName(this));
+        appversion.setText("版本" + AppConfig.getVersionName(this));
         email_rl.setOnClickListener(this);
         inland_phone_rl.setOnClickListener(this);
         foreign_phone_rl.setOnClickListener(this);
@@ -41,10 +41,10 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
                 sendEmail();
                 break;
             case R.id.about_us_phone_inner:
-                callPhone(AppConfig.getInstance().getInlandPhone());
+                callPhone(AppConfig.IN_LAND_PHONE);
                 break;
             case R.id.about_us_phone_outer:
-                callPhone(AppConfig.getInstance().getForeigenPhone());
+                callPhone(AppConfig.FOREIGEN_PHONE);
                 break;
             case R.id.about_us_grade:
                 grade();

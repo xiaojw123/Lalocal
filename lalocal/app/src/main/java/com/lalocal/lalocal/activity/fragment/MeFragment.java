@@ -60,10 +60,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     ViewGroup lastSelectedView;
     ImageButton settingBtn;
     ContentLoader contentService;
-    public boolean isLogined, isRefresh, isImLogin;
+    public boolean isLogined, isRefresh, isImLogin, isDownRefresh;
     public boolean isFirstFavorite = true, isFristOrder = true, isFirstCoupon = false;
     int favoriteTotalPages, favoritePage = 1;
-    int defaultPageNumb=1,defaultPageSize=10;
+    int defaultPageNumb = 1, defaultPageSize = 10;
     User user;
     XListView mListView;
     MyFavoriteAdapter favoriteAdapter, emptfAdpater;
@@ -81,6 +81,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            isDownRefresh = false;
             mListView.stopRefresh();
         }
     };
@@ -429,9 +430,12 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             @Override
             public void run() {
                 isRefresh = false;
-                handler.sendEmptyMessage(0);
-
-
+                isDownRefresh = true;
+                if (isLogined && user != null) {
+                    contentService.getUserProfile(user.getId(), user.getToken());
+                } else {
+                    handler.sendEmptyMessage(0);
+                }
             }
         }, 1000);
 
@@ -569,6 +573,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     verified_tv.setActivated(false);
                     verified_tv.setText(getResources().getString(R.string.no_verified));
                 }
+            }
+            if (isDownRefresh) {
+                handler.sendEmptyMessage(0);
             }
 
         }

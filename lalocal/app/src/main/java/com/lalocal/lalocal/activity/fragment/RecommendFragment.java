@@ -2,11 +2,7 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,23 +15,18 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
-import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendResultBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.model.VersionInfo;
-import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
-import com.qihoo.updatesdk.lib.UpdateHelper;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -61,12 +52,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     private ContentLoader contentService;
     private View header;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
     boolean isCheck=true;
     @Nullable
     @Override
@@ -76,10 +61,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         if(header!=null){
             header.setVisibility(View.GONE);
         }
-
-
-
-
         xlistview = (XListView) view.findViewById(R.id.recommend_xlv);
         xlistview.setPullLoadEnable(true);
         xlistview.setPullRefreshEnable(true);
@@ -105,12 +86,15 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 }
             }
         });
+        initLoader();
+        return view;
+    }
+
+    private void initLoader() {
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-
         contentService.recommendAd();
         contentService.recommentList(10, 1);
-        return view;
     }
 
     public class MyCallBack extends ICallBack {
