@@ -1,1 +1,1 @@
-#lalocal_Android
+BugTags修改处：lalocal/build.gradle lalocal/app/build.gradle   lalocal/app/java/com.lalocal/lalocal/activity/MyApplication
