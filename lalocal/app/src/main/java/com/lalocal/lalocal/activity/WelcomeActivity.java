@@ -25,15 +25,10 @@ public class WelcomeActivity extends BaseActivity {
         setContentView(R.layout.welcome_layout);
         contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
-        contentService.versionUpdate("1.0.2");
+        contentService.versionUpdate(AppConfig.getInstance().getVersionName(this));
 
     }
-    Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-        }
-    };
+
 
     public class MyCallBack extends ICallBack {
         @Override
@@ -47,8 +42,7 @@ public class WelcomeActivity extends BaseActivity {
             VersionResult result = versionInfo.getResult();
             String apiUrl = result.getApiUrl();
             AppConfig.getInstance().BASE_URL=apiUrl;
-            AppLog.i("TAG","apiUrl:"+apiUrl+"BASE_URL:"+ AppConfig.getInstance().BASE_URL+"/hhhhhhhh:"+AppConfig.getInstance().CHECK_EMAIL_URL);
-           // UpdateHelper.getInstance().manualUpdate("com.lalocal.lalocal");
+           UpdateHelper.getInstance().autoUpdate("com.lalocal.lalocal");
             Intent intent=new Intent(WelcomeActivity.this,HomeActivity.class);
             startActivity(intent);
             finish();

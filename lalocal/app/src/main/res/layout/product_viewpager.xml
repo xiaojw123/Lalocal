@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <fragment
+        android:id="@+id/lunbotu_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recommend_listview_item1_vp_height"
+        android:name="com.lalocal.lalocal.view.viewpager.CycleViewPager"
+        >
+    </fragment>
+</LinearLayout>
