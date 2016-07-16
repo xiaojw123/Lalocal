@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
@@ -23,14 +24,14 @@ public class ArticleTestAct extends BaseActivity {
     private WebSettings settings;
     private WebView webView;
     private boolean isLoading;
-    private RelativeLayout reLayout;
+    private LinearLayout reLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article_test);
         webView = (WebView) findViewById(R.id.webview);
-        reLayout = (RelativeLayout) findViewById(R.id.article_relayout);
+        reLayout = (LinearLayout) findViewById(R.id.article_relayout);
         Intent intent = getIntent();
         articleDetailsBean = intent.getParcelableExtra("articleDetailsBean");
         if(Build.VERSION.SDK_INT >= 19) {

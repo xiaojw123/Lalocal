@@ -21,9 +21,9 @@ public class AppConfig {
     //用户协议-h5
         public  String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
         //开发环境http://api.lalocal.cn/api//themes/12
-     //  public  String BASE_URL = "http://dev.lalocal.cn:8080/api/";
+       public  String BASE_URL = "http://dev.lalocal.cn:8080/api/";
         //生产环境
-       public  String BASE_URL = "http://api.lalocal.cn/api/";
+       //public  String BASE_URL = "http://api.lalocal.cn/api/";
         //注册接口
         public  String REGISTER_URL = BASE_URL + "users/register";
         //登录接口

@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -11,8 +12,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Handler.Callback;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,7 +23,6 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
@@ -46,23 +46,24 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SecretTextView;
-import com.lalocal.lalocal.view.SharePopupWindow;
-import com.mob.tools.utils.UIHandler;
-import com.sackcentury.shinebuttonlib.ShineButton;
 
-import java.util.HashMap;
+import com.lalocal.lalocal.view.SharePopupWindow;
+import com.sackcentury.shinebuttonlib.ShineButton;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+
 import java.util.List;
 
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
+
 
 
 /**
  * Created by lenovo on 2016/6/17.
  * 专题详情页
  */
-public class SpecialDetailsActivity extends BaseActivity implements View.OnClickListener, PlatformActionListener, Callback, MyScrollView.ScrollViewListener, CustomTitleView.onBackBtnClickListener {
+public class SpecialDetailsActivity extends BaseActivity implements View.OnClickListener, MyScrollView.ScrollViewListener, CustomTitleView.onBackBtnClickListener,UMShareListener {
     private ShineButton detailsLike;
     private ImageView detailsShare;
     private WebView specialWebView;
@@ -82,7 +83,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private LinearLayout imgLayout;
     private RelativeLayout videoLayoout;
     private String description;
-    private SharePopupWindow shareActivity;
+  //  private SharePopupWindow shareActivity;
     private LinearLayout main;
     private RelativeLayout banerContent;
     private LinearLayout loadingPage;
@@ -107,10 +108,12 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ShareSDK.initSDK(this);
+
         setContentView(R.layout.special_details_layout);
         initView();
         initData();
+        String[] mPermissionList = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS};
+        ActivityCompat.requestPermissions(this,mPermissionList, 100);
     }
 
     private void initView() {
@@ -164,7 +167,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.special_details_share_iv:
                 if (shareVO != null) {
-                    showShare(shareVO);
+                    SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
+                    shareActivity.showShareWindow();
+                    shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
+                            Gravity.CENTER, 0, 0);
                 }
                 break;
             case R.id.play_btn:
@@ -176,6 +182,15 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
         }
     }
+
+
+
+
+
+
+
+
+
 
     Handler handler = new Handler() {
         @Override
@@ -193,6 +208,21 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     public void onBackClick() {
         setResult(MeFragment.UPDATE_MY_DATA);
+    }
+
+    @Override
+    public void onResult(SHARE_MEDIA share_media) {
+
+    }
+
+    @Override
+    public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+
+    }
+
+    @Override
+    public void onCancel(SHARE_MEDIA share_media) {
+
     }
 
 
@@ -335,13 +365,18 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     //播放视频
     private void playVideo(final String videoUrl) {
+
+        ConnectivityManager manager = (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        String typeName = networkInfo.getTypeName();
+
         mPlayBtnView.setVisibility(View.GONE);
         videoView.setVisibility(View.VISIBLE);
         videoView.setAutoHideController(true);
-
         Uri uri = Uri.parse(videoUrl);
         videoView.loadAndPlay(uri, 0);
         videoView.pausePlay(true);
+
     }
 
     /**
@@ -473,7 +508,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //AppLog.i("TAG","shouldOverrideUrlLoading:"+url);
+           AppLog.i("TAG","SpecialDetails:"+url);
             String[] split = url.split("\\?");
             String json = split[1];
       /*    //生产环境开启
@@ -561,6 +596,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             }
             if (typeName.equalsIgnoreCase("WIFI") && loadingCount == 1) {
                 loadingPage.setVisibility(View.GONE);
+                videoView.goOnPlay();
             }
             if (!typeName.equalsIgnoreCase("WIFI")) {
                 loadingPage.setVisibility(View.GONE);
@@ -578,7 +614,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         return super.onKeyDown(keyCode, event);
     }
 
-    //分享
+   /* //分享
     private void showShare(SpecialShareVOBean shareVO) {
         shareActivity = new SharePopupWindow(mContext, shareVO);
         shareActivity.setPlatformActionListener(this);
@@ -630,5 +666,5 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         super.onDestroy();
         ShareSDK.stopSDK(this);
 
-    }
+    }*/
 }

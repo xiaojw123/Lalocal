@@ -1,6 +1,12 @@
 package com.lalocal.lalocal.view;
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.sina.weibo.SinaWeibo;
-import cn.sharesdk.wechat.friends.Wechat;
-import cn.sharesdk.wechat.moments.WechatMoments;
+import com.lalocal.lalocal.util.AppConfig;
+import com.lalocal.lalocal.util.AppLog;
+import com.sina.weibo.sdk.net.openapi.ShareWeiboApi;
+import com.umeng.socialize.PlatformConfig;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.ShareContent;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.media.UMImage;
 /**
  * Created by lenovo on 2016/6/30.
  */
@@ -26,10 +35,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private LinearLayout shareWeibo;
     private SpecialShareVOBean shareVO;
     private TextView cancel;
-
+    private static final int REQUEST_PERM = 151;
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
         this.shareVO=shareVO;
+            String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
+            ActivityCompat.requestPermissions((Activity) context,mPermissionList,REQUEST_PERM);
+
     }
 
     public void showShareWindow() {
@@ -71,111 +83,98 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         dismiss();
     }
 
-    private void shareWeibo() {
-        SinaWeibo.ShareParams sp  = new SinaWeibo.ShareParams();
-        Platform plat= ShareSDK.getPlatform(SinaWeibo.NAME);
-        sp.setShareType(Platform.SHARE_TEXT);
-        sp.setShareType(Platform.SHARE_WEBPAGE);
-        if(shareVO.getTitle()!=null){
-            sp.setTitle(shareVO.getTitle());
-        }
-        if(shareVO.getUrl()!=null){
-            sp.setUrl(shareVO.getUrl());
-            sp.setSiteUrl(shareVO.getUrl());
-
-        }
-       /* if(shareVO.getDesc()!=null){
-            sp.setText(shareVO.getDesc());
-        }
-*/
-        if (shareVO.getImg() != null) {
-            sp.setImageUrl(shareVO.getImg());
-        }
-        if(shareVO.getBitmap()!=null){
-            sp.setImageData(shareVO.getBitmap());
-        }
-
-        if (platformActionListener != null) {
-            plat.setPlatformActionListener(platformActionListener);
-        }
-        plat.share(sp);
-    }
-
-    private void shareFriends() {
-        WechatMoments.ShareParams sp  = new WechatMoments.ShareParams();
-        Platform plat= ShareSDK.getPlatform(WechatMoments.NAME);
-        sp.setShareType(Platform.SHARE_TEXT);
-        sp.setShareType(Platform.SHARE_WEBPAGE);
-
-        if (shareVO.getImg() != null) {
-            sp.setImageUrl(shareVO.getImg());
-        }
-
-        if(shareVO.getTitle()!=null){
-            sp.setTitle(shareVO.getTitle());
-        }
-        if(shareVO.getUrl()!=null){
-            sp.setUrl(shareVO.getUrl());
-            sp.setSiteUrl(shareVO.getUrl());
-        }
-        if(shareVO.getDesc()!=null){
-            sp.setText(shareVO.getDesc());
-        }
-
-        if (shareVO.getImg() != null) {
-            sp.setImageUrl(shareVO.getImg());
-        }
-        if(shareVO.getBitmap()!=null){
-            sp.setImageData(shareVO.getBitmap());
-        }
-        if (platformActionListener != null) {
-            plat.setPlatformActionListener(platformActionListener);
-        }
-
-        plat.share(sp);
-    }
     private void shareWechat() {
-        Wechat.ShareParams sp  = new Wechat.ShareParams();
-        Platform plat= ShareSDK.getPlatform(Wechat.NAME);
-        sp.setShareType(Platform.SHARE_TEXT);
-        sp.setShareType(Platform.SHARE_WEBPAGE);
+        ShareAction sp = new ShareAction((Activity) context);
+        sp.setPlatform(SHARE_MEDIA.WEIXIN);
+        sp.setCallback(callBackListener);
+        if(shareVO.getBitmap()!=null){
+            UMImage image = new UMImage((Activity)context,shareVO.getBitmap());
+            sp.withMedia(image);
+        }
+        if(shareVO.getImg()!=null){
+            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+            sp.withMedia(image);
+        }
+        sp .withTitle(shareVO.getTitle());
+        sp .withText(shareVO.getDesc());
+        sp .withTargetUrl(shareVO.getUrl());
+        sp.share();
 
-        if (shareVO.getImg() != null) {
-            sp.setImageUrl(shareVO.getImg());
-        }
-        if(shareVO.getTitle()!=null){
-            sp.setTitle(shareVO.getTitle());
-        }
-        if(shareVO.getUrl()!=null){
-            sp.setUrl(shareVO.getUrl());
-            sp.setSiteUrl(shareVO.getUrl());
-        }
-        if(shareVO.getDesc()!=null){
-            sp.setText(shareVO.getDesc());
-        }
-
-        if (shareVO.getImg() != null) {
-            sp.setImageUrl(shareVO.getImg());
-        }
+    }
+    private void shareFriends() {
+        ShareAction sp = new ShareAction((Activity) context);
+        sp.setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE);
+        sp .setCallback(new MyUMListener());
 
         if(shareVO.getBitmap()!=null){
-            sp.setImageData(shareVO.getBitmap());
+            UMImage image = new UMImage((Activity)context,shareVO.getBitmap());
+            // UMImage image = new UMImage((Activity)context,R.drawable.a);
+            sp.withMedia(image);
         }
-        if (platformActionListener != null) {
-            plat.setPlatformActionListener(platformActionListener);
+        if(shareVO.getImg()!=null){
+            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+            sp.withMedia(image);
         }
-        plat.share(sp);
+        sp .withTitle(shareVO.getTitle());
+        sp .withText(shareVO.getDesc());
+        sp .withTargetUrl(shareVO.getUrl());
+        sp.share();
+
+
+    }
+    private void shareWeibo() {
+        ShareAction sp = new ShareAction((Activity) context);
+        sp.setPlatform(SHARE_MEDIA.SINA);
+
+        sp .setCallback(new MyUMListener());
+        if(shareVO.getBitmap()!=null){
+            ShareContent shareContent=new ShareContent();
+
+            Bitmap bitmap = shareVO.getBitmap();
+            UMImage image = new UMImage((Activity)context,bitmap);
+            sp.withMedia(image);
+
+        }
+       /* if(shareVO.getImg()!=null){
+            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+            sp.withMedia(image);
+        }
+        sp .withTitle(shareVO.getTitle());
+        sp .withText(shareVO.getDesc());
+        sp .withTargetUrl(shareVO.getUrl());*/
+        sp.share();
 
     }
 
+    private  UMShareListener callBackListener;
 
-    private PlatformActionListener platformActionListener;
-    public PlatformActionListener getPlatformActionListener() {
-        return platformActionListener;
+    public void  setCallBackListener(UMShareListener callBackListener){
+        this.callBackListener=callBackListener;
     }
 
-    public void setPlatformActionListener(
-            PlatformActionListener platformActionListener) {
-        this.platformActionListener = platformActionListener;
+
+
+    class  MyUMListener implements  UMShareListener{
+
+        @Override
+        public void onResult(SHARE_MEDIA share_media) {
+
+            AppLog.i("TAG","onResult"+share_media.toString());
+
+        }
+
+
+        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            Toast.makeText(context,throwable.toString(),Toast.LENGTH_SHORT).show();
+            AppLog.i("TAG","onError"+throwable.toString());
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media) {
+            AppLog.i("TAG","onError"+share_media.toString());
+        }
     }
+
+
+
 }

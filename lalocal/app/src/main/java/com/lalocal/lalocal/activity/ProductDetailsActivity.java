@@ -39,23 +39,21 @@ import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
-import com.mob.tools.utils.UIHandler;
+
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
+
 
 /**
  * Created by lenovo on 2016/6/22.
  */
 
 public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener,MyScrollView.ScrollByListener ,
-        View.OnClickListener,PlatformActionListener,Handler.Callback , CustomTitleView.onBackBtnClickListener{
+        View.OnClickListener,CustomTitleView.onBackBtnClickListener{
 
 
 
@@ -81,7 +79,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private SpecialToH5Bean specialToH5Bean;
     private ContentLoader contentService;
     private Object praiseId;
-    private SharePopupWindow sharePopupWindow;
+   // private SharePopupWindow sharePopupWindow;
     private ImageView titleBack;
     private RelativeLayout titleRelayout;
     private ProductDetailsResultBean result;
@@ -98,7 +96,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_details_layout);
-        ShareSDK.initSDK(this);
+    //    ShareSDK.initSDK(this);
         initView();
         initData();
 
@@ -354,7 +352,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     //产品详情介绍
     private void productDetail(ProductDetailsResultBean result) {
         titleTv.setText(result.title);
-        productPrice.setText("¥" + result.price);
+        productPrice.setText("¥ " + result.price);
         List<ProductDetailsBean> details = result.details;
         for (int i = 0; i < details.size(); i++) {
             if (i == 0) {
@@ -415,9 +413,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             if (i != content.size() - 1) {
                 View view = new View(ProductDetailsActivity.this);
                 view.setBackgroundColor(Color.parseColor("#aaaaaa"));
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 3);
-                params.leftMargin = DensityUtil.dip2px(mContext, 12);
-                params.rightMargin = DensityUtil.dip2px(mContext, 12);
+                view.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+                view.setBackgroundResource(R.drawable.imag_line);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,  DensityUtil.dip2px(mContext, 2));
+
+                params.leftMargin = DensityUtil.dip2px(mContext, 15);
+                params.rightMargin = DensityUtil.dip2px(mContext, 15);
                 serviceLayout.addView(view, params);
             }
 
@@ -439,15 +441,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        ShareSDK.initSDK(this);
-        sharePopupWindow = new SharePopupWindow(mContext, shareVO);
-        sharePopupWindow.setPlatformActionListener(this);
+        SharePopupWindow   sharePopupWindow = new SharePopupWindow(mContext, shareVO);
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
                 Gravity.CENTER, 0, 0);
 
     }
-
+/*
     @Override
     public boolean handleMessage(Message msg) {
         int what = msg.what;
@@ -487,5 +487,5 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK();
-    }
+    }*/
 }

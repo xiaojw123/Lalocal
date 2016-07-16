@@ -10,8 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler.Callback;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -43,22 +41,18 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
+import com.umeng.socialize.ShareAction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 
 
 /**
  * Created by lenovo on 2016/6/21.
  */
-public class ArticleActivity extends BaseActivity implements View.OnClickListener, PlatformActionListener, Callback {
+public class ArticleActivity extends BaseActivity implements View.OnClickListener{
     private WebView articleWebview;
     private ShineButton btnLike;
     private ImageView btnComment;
@@ -87,7 +81,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article_test);
-        ShareSDK.initSDK(this);
+
         Intent intent = getIntent();
         targetID = intent.getStringExtra("targetID");
         initView();
@@ -151,14 +145,22 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
             case R.id.author_code_close:
-                pw.dismiss();//关闭popuwindow
-
+              pw.dismiss();
                 break;
             case R.id.author_code_download:
 
                 if (authorCodeImg != null) {
+
                     image = ((BitmapDrawable) authorCodeImg.getDrawable()).getBitmap();
-                    saveImageToGallery(mContext, image);//保存图片到相册
+
+                   if(fileIsExists()){
+                       Toast.makeText(mContext,"已下载过啦！",Toast.LENGTH_SHORT).show();
+                   }else {
+                       saveImageToGallery(mContext, image);//保存图片到相册
+                   }
+
+
+
                 }
 
                 break;
@@ -166,6 +168,33 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
+    private void showShare(SpecialShareVOBean shareVO) {
+
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
+        shareActivity.showShareWindow();
+        shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
+                Gravity.CENTER, 0, 0);
+
+    }
+
+    //判断二维码是否下载过
+    public boolean fileIsExists(){
+
+        try{
+
+            File appDir = new File(Environment.getExternalStorageDirectory(), "ywq");
+            String fileName =authorVO.authorId + ".jpg";
+            File file = new File(appDir, fileName);
+            if(!file.exists()){
+                return false;
+            }
+
+        }catch (Exception e) {
+            // TODO: handle exception
+            return false;
+        }
+        return true;
+    }
 
     private void initData(String targetID) {
         contentService = new ContentLoader(this);
@@ -264,21 +293,16 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            //   lalocal://codeImageClick?{"name":"Lalocal","wechatNo":"%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB%E5%98%BB",
-            // "imageUrl":"http://7xpid3.com1.z0.glb.clouddn.com/20160615142707308988042388"}
-            // String[] split = url.split("\\?");
-            AppLog.i("TAG", url);
+
+            AppLog.i("TAG", "shouldOverrideUrlLoading"+url);
             if (url.matches(".*codeImageClick.*")) {
-                // String[] split = url.split("\\?");
-                AppLog.i("TAG", url);
-                if (url.matches(".*codeImageClick.*")) {
                     //TODO 作者二维码
                     if (authorVO != null) {
                         showPopupWindow(authorVO);
                     }
+            }
+            if (url.matches(".*app.*")) {
 
-                    return true;
-                } else if (url.matches(".*app.*")) {
                     String[] split = url.split("\\?");
                     String json = split[1];
                     SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
@@ -287,15 +311,13 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                         Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
                         intent2.putExtra("productdetails", specialToH5Bean);
                         startActivity(intent2);
-                        return false;
-                    } else {
-                        return true;
-                    }
 
-                }}
-                AppLog.i("TAG", url);
-                return true;
+                    }
+                }
+
+            return  true;
         }
+
             @Override
             public void onPageFinished (WebView view, String url){
                 super.onPageFinished(view, url);
@@ -307,8 +329,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         }
 
         private void showPopupWindow(SpecialAuthorBean authorVO) {
-            Toast.makeText(this, "ahhaaa", Toast.LENGTH_SHORT).show();
-            PopupWindow pw = new PopupWindow(this);
+
             pw = new PopupWindow(this);
             View view = View.inflate(this, R.layout.author_pop_layout, null);
             LinearLayout codeDownload = (LinearLayout) view.findViewById(R.id.author_code_download);
@@ -322,7 +343,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             WindowManager.LayoutParams lp = this.getWindow().getAttributes();
             lp.alpha = 0.5f;
             getWindow().setAttributes(lp);
-            authorName.setText(authorVO.publicTitle.toString());
+            authorName.setText(authorVO.authorName);
             authorContent.setText(authorVO.publicDescription.toString());
             codeClose.setOnClickListener(this);
             codeDownload.setOnClickListener(this);
@@ -367,7 +388,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             if (!appDir.exists()) {
                 appDir.mkdir();
             }
-            String fileName = System.currentTimeMillis() + ".jpg";
+            String fileName =authorVO.authorId + ".jpg";
             File file = new File(appDir, fileName);
             try {
                 FileOutputStream fos = new FileOutputStream(file);
@@ -405,7 +426,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         private int praisesNum;
 
 
-        //分享
+     /*   //分享
         private void showShare(SpecialShareVOBean shareVO) {
 
             SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
@@ -439,5 +460,5 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         protected void onDestroy() {
             super.onDestroy();
             ShareSDK.stopSDK();
-        }
+        }*/
     }

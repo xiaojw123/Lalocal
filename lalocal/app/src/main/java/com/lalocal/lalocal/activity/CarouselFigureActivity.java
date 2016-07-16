@@ -15,14 +15,13 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.view.SharePopupWindow;
+
 import java.util.HashMap;
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
+
 /**
  * Created by android on 2016/7/7.
  */
-public class CarouselFigureActivity extends  BaseActivity implements View.OnClickListener, PlatformActionListener, Handler.Callback {
+public class CarouselFigureActivity extends  BaseActivity implements View.OnClickListener {
 
     private WebView carousFigure;
     private ImageView figgure;
@@ -62,12 +61,11 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     private void showShare(SpecialShareVOBean shareVO) {
         SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO);
-        shareActivity.setPlatformActionListener(this);
+
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.CENTER, 0, 0);
     }
-
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -78,7 +76,7 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
         return super.onKeyDown(keyCode, event);
     }
 
-
+/*
     @Override
     public boolean handleMessage(Message msg) {
         return false;
@@ -112,5 +110,5 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK();
-    }
+    }*/
 }

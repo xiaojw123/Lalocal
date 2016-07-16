@@ -41,7 +41,10 @@
                 <com.lalocal.lalocal.view.xlistview.XListView
                     android:id="@+id/recommend_xlv"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></com.lalocal.lalocal.view.xlistview.XListView>
+                    android:layout_height="match_parent"
+                    android:divider="#00000000"
+                    android:dividerHeight="0dip"
+                    ></com.lalocal.lalocal.view.xlistview.XListView>
             </LinearLayout>
 
         </LinearLayout>

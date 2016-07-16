@@ -1,39 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/article_relayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     >
-
-<WebView
-    android:id="@+id/webview"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-
-    >
-</WebView>
-    <LinearLayout
-        android:id="@+id/article_back_btn"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:background="@drawable/back_bg"
-        android:gravity="center"
-        android:alpha="0.7"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="15dp"
-        >
-        <ImageView
-            android:id="@+id/article_common_back_btn"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="11dp"
-            android:paddingRight="11dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
-            android:layout_gravity="center"
-            android:src="@drawable/common_btn_back_white_nor" />
-    </LinearLayout>
-    <include layout="@layout/article_bottom_layout"></include>
-</RelativeLayout>
+            android:layout_height="0dp"
+            android:layout_weight="1">
+            <WebView
+                android:id="@+id/webview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+            </WebView>
+            <LinearLayout
+                android:id="@+id/article_back_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/back_bg"
+                android:gravity="center"
+                android:alpha="0.7"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="15dp"
+                >
+                <ImageView
+                    android:id="@+id/article_common_back_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="11dp"
+                    android:paddingRight="11dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/common_btn_back_white_nor"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+
+        <include layout="@layout/article_bottom_layout"></include>
+</LinearLayout>
