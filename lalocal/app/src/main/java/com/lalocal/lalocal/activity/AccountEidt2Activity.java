@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +35,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     String token;
     String email, emailText;
     Button sendagain_btn;
+    boolean isEnd=true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +80,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         nickname_modfiy_edit.setText(getNickname());
         email_tv.setText(getEmailText());
         save_tv.setOnClickListener(this);
+        phone_modify_edit.setOnClickListener(this);
         sendagain_btn.setOnClickListener(this);
         changeemail_btn.setOnClickListener(this);
         countrycode_tv.setOnClickListener(this);
@@ -124,6 +127,20 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.account_edit2_phone:
+                if (isEnd) {
+                    isEnd = false;
+                    int len = 0;
+                    Editable editable = phone_modify_edit.getText();
+                    if (editable != null) {
+                        String text = editable.toString();
+                        if (!TextUtils.isEmpty(text)) {
+                            len = text.length();
+                        }
+                    }
+                    phone_modify_edit.setSelection(len);
+                }
+                break;
             case R.id.account_edit2_countrycode:
                 showAreaCodeSeletor();
                 break;
@@ -191,11 +208,12 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
             CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), null);
             return true;
         }
-        if (areaCode.equals(getAreaCode())) {
-            areaCode = null;
-        } else if (phoneNumber.equals(getPhone())) {
-            phoneNumber = null;
-        } else if (areaCode.equals(getAreaCode()) && phoneNumber.equals(getPhone())) {
+//        if (areaCode.equals(getAreaCode())) {
+//            areaCode = null;
+//        } else if (phoneNumber.equals(getPhone())) {
+//            phoneNumber = null;
+//        } else
+        if (areaCode.equals(getAreaCode()) && phoneNumber.equals(getPhone())) {
             finish();
             return true;
         }

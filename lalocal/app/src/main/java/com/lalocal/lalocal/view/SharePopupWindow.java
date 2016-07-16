@@ -1,12 +1,8 @@
 package com.lalocal.lalocal.view;
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +10,11 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
-import com.sina.weibo.sdk.net.openapi.ShareWeiboApi;
-import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -139,19 +132,28 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sp.setPlatform(SHARE_MEDIA.SINA);
         sp .setCallback(new MyUMListener());
         if(shareVO.getBitmap()!=null){
+
             Bitmap bitmap = shareVO.getBitmap();
             UMImage image = new UMImage((Activity)context,bitmap);
             sp.withMedia(image);
             sp.share();
             return;
         }
+
         if(shareVO.getImg()!=null){
             UMImage image = new UMImage((Activity)context,shareVO.getImg());
             sp.withMedia(image);
         }
-        sp .withTitle(shareVO.getTitle());
-        sp .withText(shareVO.getDesc());
-        sp .withTargetUrl(shareVO.getUrl());
+        if(shareVO.getTitle()!=null){
+            sp .withTitle(shareVO.getTitle());
+        }
+        if(shareVO.getDesc()!=null){
+            sp .withText(shareVO.getDesc());
+        }
+        if(shareVO.getUrl()!=null){
+            sp .withTargetUrl(shareVO.getUrl());
+        }
+
         sp.share();
 
 

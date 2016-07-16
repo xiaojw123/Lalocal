@@ -24,50 +24,6 @@ public class AppConfig {
         return baseUrl + "users/checkEmail";
     }
 
-
-
-        //开发环境http://api.lalocal.cn/api//themes/12
-       public  String BASE_URL = "http://dev.lalocal.cn:8080/api/";
-        //生产环境
-       //public  String BASE_URL = "http://api.lalocal.cn/api/";
-        //注册接口
-        public  String REGISTER_URL = BASE_URL + "users/register";
-        //登录接口
-        public String LOGIN_URL = BASE_URL + "users/login";
-        //检测邮箱是否被注册过
-        public  String CHECK_EMAIL_URL=BASE_URL+"users/checkEmail";
-        //发送验证码接口
-        public   String SEND_VERIFICATION_URL=BASE_URL+"system/sendEmail";
-        //忘记密码接口
-        public  String RESET_PASSWORD_URL=BASE_URL+"users/forgetPassword";
-        //我的收藏接口
-        public  String GET_MY_FARORITE_ITEMS=BASE_URL+"praises?";
-        //我的优惠券接口
-        public   String GET_MY_COUPON_ITEMS=BASE_URL+"coupons?";
-        //我的订单接口
-        public  String GET_MY_ORDER_ITEMS=BASE_URL+"orders";
-        public  String UPLOAD_HEDARE_URL=BASE_URL+"users/avatar";
-        public   String MODIFY_USER_PROFILE_URL=BASE_URL+"users/profile";
-        public  String GET_USER_PROFILE_URL=BASE_URL+"users/profile";
-        public   String BOUND_EMAIL_URL=BASE_URL+"users/bindEmail";
-
-        //推荐接口
-        public String RECOMMEND_URL=BASE_URL+"themes?";
-        //推荐广告位接口
-        public  String RECOMMEND_AD=BASE_URL+"advertising?type=0";
-
-        //专题详情接口"http://api.lalocal.cn/api/";
-        public  String SPECIAL_DETAILS_URL=BASE_URL+"themes/";
-        //产品详情接口
-        public    String PRODUCTIONS_DETILS=BASE_URL+"productions/";
-        //点赞接口
-        public    String PRAISES=BASE_URL+"praises";
-        //取消赞
-        public   String CANCEL_PRAISES=BASE_URL+"praises/";
-        //文章详情
-        public   String ARTICLE_DETAILS=BASE_URL+"articles/";
-
-
     //发送验证码接口
     public static String getVerCodeSendUrl() {
         return baseUrl + "system/sendEmail";
