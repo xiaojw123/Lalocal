@@ -61,7 +61,6 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     private void showShare(SpecialShareVOBean shareVO) {
         SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO);
-
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.CENTER, 0, 0);
@@ -76,39 +75,5 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
         return super.onKeyDown(keyCode, event);
     }
 
-/*
-    @Override
-    public boolean handleMessage(Message msg) {
-        return false;
-    }
 
-    @Override
-    public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
-    }
-
-    @Override
-    public void onError(Platform platform, int i, Throwable throwable) {
-
-    }
-
-    @Override
-    public void onCancel(Platform platform, int i) {
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        carousFigure.loadUrl("about:blank");
-        finish();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            carousFigure.onPause(); // 暂停网页中正在播放的视频
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShareSDK.stopSDK();
-    }*/
 }

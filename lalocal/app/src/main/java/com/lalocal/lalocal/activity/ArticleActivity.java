@@ -341,7 +341,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             AppLog.i("TAG", authorVO.qrCode.toString());
             DrawableUtils.displayImg(mContext, authorCodeImg, authorVO.qrCode.toString());
             WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-            lp.alpha = 0.5f;
+            lp.alpha = 0.15f;
             getWindow().setAttributes(lp);
             authorName.setText(authorVO.authorName);
             authorContent.setText(authorVO.publicDescription.toString());
@@ -426,39 +426,4 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         private int praisesNum;
 
 
-     /*   //分享
-        private void showShare(SpecialShareVOBean shareVO) {
-
-            SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-            shareActivity.setPlatformActionListener(this);
-            shareActivity.showShareWindow();
-            shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
-                    Gravity.CENTER, 0, 0);
-        }
-
-        @Override
-        public boolean handleMessage(Message msg) {
-            return false;
-        }
-
-        @Override
-        public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-
-        }
-
-        @Override
-        public void onError(Platform platform, int i, Throwable throwable) {
-
-        }
-
-        @Override
-        public void onCancel(Platform platform, int i) {
-
-        }
-
-        @Override
-        protected void onDestroy() {
-            super.onDestroy();
-            ShareSDK.stopSDK();
-        }*/
     }

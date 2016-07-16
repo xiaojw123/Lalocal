@@ -39,9 +39,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
         this.shareVO=shareVO;
-            String[] mPermissionList = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS,Manifest.permission.WRITE_APN_SETTINGS};
-            ActivityCompat.requestPermissions((Activity) context,mPermissionList,REQUEST_PERM);
-
     }
 
     public void showShareWindow() {
@@ -87,19 +84,26 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.WEIXIN);
         sp.setCallback(callBackListener);
-        if(shareVO.getBitmap()!=null){
-            UMImage image = new UMImage((Activity)context,shareVO.getBitmap());
+        if (shareVO.getBitmap() != null) {
+            UMImage image = new UMImage((Activity) context, shareVO.getBitmap());
             sp.withMedia(image);
         }
-        if(shareVO.getImg()!=null){
-            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+        if (shareVO.getImg() != null) {
+            UMImage image = new UMImage((Activity) context, shareVO.getImg());
             sp.withMedia(image);
+            sp.share();
+            return;
         }
-        sp .withTitle(shareVO.getTitle());
-        sp .withText(shareVO.getDesc());
-        sp .withTargetUrl(shareVO.getUrl());
+        if (shareVO.getTitle() != null) {
+            sp.withTitle(shareVO.getTitle());
+        }
+        if (shareVO.getDesc() != null) {
+            sp.withText(shareVO.getDesc());
+        }
+        if (shareVO.getUrl() != null) {
+            sp.withTargetUrl(shareVO.getUrl());
+        }
         sp.share();
-
     }
     private void shareFriends() {
         ShareAction sp = new ShareAction((Activity) context);
@@ -108,8 +112,37 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         if(shareVO.getBitmap()!=null){
             UMImage image = new UMImage((Activity)context,shareVO.getBitmap());
-            // UMImage image = new UMImage((Activity)context,R.drawable.a);
             sp.withMedia(image);
+            sp.share();
+            return;
+        }
+        if(shareVO.getImg()!=null){
+            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+            sp.withMedia(image);
+        }
+        if(shareVO.getTitle()!=null){
+            sp .withTitle(shareVO.getTitle());
+        }
+        if(shareVO.getDesc()!=null){
+            sp .withText(shareVO.getDesc());
+        }
+        if(shareVO.getUrl()!=null){
+            sp .withTargetUrl(shareVO.getUrl());
+        }
+
+        sp.share();
+
+    }
+    private void shareWeibo() {
+        ShareAction sp = new ShareAction((Activity) context);
+        sp.setPlatform(SHARE_MEDIA.SINA);
+        sp .setCallback(new MyUMListener());
+        if(shareVO.getBitmap()!=null){
+            Bitmap bitmap = shareVO.getBitmap();
+            UMImage image = new UMImage((Activity)context,bitmap);
+            sp.withMedia(image);
+            sp.share();
+            return;
         }
         if(shareVO.getImg()!=null){
             UMImage image = new UMImage((Activity)context,shareVO.getImg());
@@ -120,23 +153,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sp .withTargetUrl(shareVO.getUrl());
         sp.share();
 
-
-    }
-    private void shareWeibo() {
-        ShareAction sp = new ShareAction((Activity) context);
-        sp.setPlatform(SHARE_MEDIA.SINA);
-
-        sp .setCallback(new MyUMListener());
-        if(shareVO.getBitmap()!=null){
-            ShareContent shareContent=new ShareContent();
-
-            Bitmap bitmap = shareVO.getBitmap();
-            UMImage image = new UMImage((Activity)context,bitmap);
-            sp.withMedia(image);
-
-        }
-
-        sp.share();
 
     }
 
