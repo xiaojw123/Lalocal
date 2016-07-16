@@ -17,7 +17,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -124,13 +123,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         sp .setCallback(new MyUMListener());
         if(shareVO.getBitmap()!=null){
-            ShareContent shareContent=new ShareContent();
 
             Bitmap bitmap = shareVO.getBitmap();
             UMImage image = new UMImage((Activity)context,bitmap);
             sp.withMedia(image);
 
         }
+
         if(shareVO.getImg()!=null){
             UMImage image = new UMImage((Activity)context,shareVO.getImg());
             sp.withMedia(image);
@@ -138,6 +137,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         sp .withTitle(shareVO.getTitle());
         sp .withText(shareVO.getDesc());
         sp .withTargetUrl(shareVO.getUrl());
+
         sp.share();
 
     }
