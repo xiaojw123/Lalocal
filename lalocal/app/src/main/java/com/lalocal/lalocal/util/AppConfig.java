@@ -25,7 +25,7 @@ public class AppConfig {
     }
 
 
-    
+
         //开发环境http://api.lalocal.cn/api//themes/12
        public  String BASE_URL = "http://dev.lalocal.cn:8080/api/";
         //生产环境

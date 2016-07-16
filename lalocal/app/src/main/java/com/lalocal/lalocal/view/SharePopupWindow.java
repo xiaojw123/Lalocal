@@ -135,13 +135,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
             sp.withMedia(image);
 
         }
-       /* if(shareVO.getImg()!=null){
-            UMImage image = new UMImage((Activity)context,shareVO.getImg());
-            sp.withMedia(image);
-        }
-        sp .withTitle(shareVO.getTitle());
-        sp .withText(shareVO.getDesc());
-        sp .withTargetUrl(shareVO.getUrl());*/
+
         sp.share();
 
     }
