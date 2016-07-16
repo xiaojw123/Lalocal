@@ -191,11 +191,12 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
             CommonUtil.showPromptDialog(this, getResources().getString(R.string.message_not_empty), null);
             return true;
         }
-        if (areaCode.equals(getAreaCode())) {
-            areaCode = null;
-        } else if (phoneNumber.equals(getPhone())) {
-            phoneNumber = null;
-        } else if (areaCode.equals(getAreaCode()) && phoneNumber.equals(getPhone())) {
+//        if (areaCode.equals(getAreaCode())) {
+//            areaCode = null;
+//        } else if (phoneNumber.equals(getPhone())) {
+//            phoneNumber = null;
+//        } else
+        if (areaCode.equals(getAreaCode()) && phoneNumber.equals(getPhone())) {
             finish();
             return true;
         }

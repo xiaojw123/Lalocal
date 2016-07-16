@@ -472,6 +472,7 @@ public class ContentLoader {
                         break;
 
                     case RequestCode.GET_USER_PROFILE:
+                        AppLog.print("get user proflie json___"+json);
                         responseGetUserProfile(jsonObj);
                         break;
                     case RequestCode.BOUDN_EMAIL:

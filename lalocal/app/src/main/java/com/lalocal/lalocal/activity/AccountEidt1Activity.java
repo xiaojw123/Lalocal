@@ -323,6 +323,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 boysex_cb.setSelected(false);
             }
             if (!TextUtils.isEmpty(user.getPhone())) {
+                AppLog.print("updateUser___areacode___"+user.getAreaCode());
                 areacode_tv.setText(user.getAreaCode());
                 phone_tv.setText(user.getPhone());
             }

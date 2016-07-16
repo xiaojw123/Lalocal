@@ -3,9 +3,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
-import com.sina.weibo.sdk.net.openapi.ShareWeiboApi;
-import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.ShareContent;
 import com.umeng.socialize.UMShareListener;
@@ -135,13 +131,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
             sp.withMedia(image);
 
         }
-       /* if(shareVO.getImg()!=null){
+        if(shareVO.getImg()!=null){
             UMImage image = new UMImage((Activity)context,shareVO.getImg());
             sp.withMedia(image);
         }
         sp .withTitle(shareVO.getTitle());
         sp .withText(shareVO.getDesc());
-        sp .withTargetUrl(shareVO.getUrl());*/
+        sp .withTargetUrl(shareVO.getUrl());
         sp.share();
 
     }
