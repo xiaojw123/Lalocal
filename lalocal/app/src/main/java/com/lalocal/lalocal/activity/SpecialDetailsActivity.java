@@ -146,7 +146,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private void initData() {
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
-        String url = AppConfig.getInstance().SPECIAL_DETAILS_URL + rowId;
+        String url = AppConfig.getSepcailDetailUrl() + rowId;
 
         if (rowId != null) {
             contentService1 = new ContentLoader(this);

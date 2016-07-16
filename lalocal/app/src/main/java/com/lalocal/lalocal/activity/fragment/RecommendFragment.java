@@ -2,11 +2,7 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,23 +15,19 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
-import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendResultBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.model.VersionInfo;
-import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.adapter.XListviewAdapter;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.lalocal.lalocal.view.xlistview.XListView;
-import com.qihoo.updatesdk.lib.UpdateHelper;
+import com.umeng.analytics.MobclickAgent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,6 +38,7 @@ import java.util.List;
  * Created by xiaojw on 2016/6/3.
  */
 public class RecommendFragment extends Fragment implements XListView.IXListViewListener {
+    private static final  String PAGE_NAME="RecommendFragment";
     private int pageNumber;
     private int pageSize;
     private XListView xlistview;
@@ -95,12 +88,17 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
                 }
             }
         });
+        initLoader();
+        return view;
+    }
+
+
+
+    private void initLoader() {
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-
         contentService.recommendAd();
         contentService.recommentList(10, 1);
-        return view;
     }
 
     public class MyCallBack extends ICallBack {
@@ -238,5 +236,16 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        MobclickAgent.onPageStart(PAGE_NAME);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPageEnd(PAGE_NAME);
     }
 }

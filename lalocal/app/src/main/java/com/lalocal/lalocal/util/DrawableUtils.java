@@ -19,15 +19,20 @@ import java.util.concurrent.Executors;
 
 public class DrawableUtils {
     public static final int MAX_AGE = 24 * 3600 * 1000;
-    public static final  int MAX_SIZE=30*1024*1024;
+        public static final  int MAX_SIZE=30*1024*1024;
     private static final int DRAWABLE_NULL = R.drawable.androidloading;
     private static ImageLoader loader;
 
     public static void displayImg(Context context, ImageView img, String url) {
-        displayImg(context, img, url, 0);
+        displayImg(context, img, url, 0, DRAWABLE_NULL);
     }
 
-    public static void displayImg(Context context, ImageView img, String url, int radius) {
+    public static void displayImg(Context context, ImageView img, String url, int drawable) {
+        displayImg(context, img, url, 0, drawable);
+    }
+
+
+    public static void displayImg(Context context, ImageView img, String url, int radius, int drawable) {
         if (loader == null) {
             loader = ImageLoader.getInstance();
         }
@@ -36,9 +41,8 @@ public class DrawableUtils {
         }
 
         File imgFile = loader.getDiskCache().get(url);
-
         if (imgFile == null || !imgFile.exists()) {
-            loader.displayImage(url, img, getImageOptions(radius, DRAWABLE_NULL));
+            loader.displayImage(url, img, getImageOptions(radius, drawable));
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
             loader.displayImage(fileUri, img);
@@ -61,26 +65,23 @@ public class DrawableUtils {
 
     private static DisplayImageOptions getImageOptions(int radius, int resID) {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
-        if (resID != DRAWABLE_NULL) {
+        if (resID != -1) {
             builder.showImageForEmptyUri(resID);
             builder.showImageOnLoading(resID);
             builder.showImageOnFail(resID);
         }
+        if (radius > 0) {
+            builder.displayer(new RoundedBitmapDisplayer(radius));
+        }
         builder.cacheInMemory(true);
         builder.cacheOnDisk(true);
-        builder.displayer(new RoundedBitmapDisplayer(radius));
-        builder.showStubImage(R.drawable.androidloading);
-        builder.showImageForEmptyUri(R.drawable.androidloading);
-        builder.showImageOnFail(R.drawable.androidloading);
-
-//		builder.displayer(new CircleBitmapDisplayer())
         builder.imageScaleType(ImageScaleType.EXACTLY);
+//		builder.displayer(new CircleBitmapDisplayer())
         return builder.build();
     }
 
     public static File getFileDir() {
         String path = Environment.getExternalStorageDirectory().getPath();
-        AppLog.print("sdcard path___" + path);
         File file = new File(path + "/Lalocal/Img");
         if (!file.exists()) {
             file.mkdirs();

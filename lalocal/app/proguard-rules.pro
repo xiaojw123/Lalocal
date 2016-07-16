@@ -33,7 +33,16 @@
 -keepattributes *Annotation*     # 保持注解
 -ignorewarning                   # 忽略警告
 -dontoptimize                    # 优化不优化输入的类文件
-
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keep public class [com.lalocal.lalocal].R$*{
+public static final int *;
+}                             #避免R文件被移除
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
 -optimizations !code/simplification/arithmetic,!field/*,!class/merging/*  # 混淆时所采用的算法
 
 #保持哪些类不被混淆

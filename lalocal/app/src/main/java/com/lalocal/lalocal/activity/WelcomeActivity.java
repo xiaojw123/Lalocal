@@ -2,8 +2,6 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.VersionInfo;
@@ -11,7 +9,6 @@ import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
-import com.lalocal.lalocal.util.AppLog;
 import com.qihoo.updatesdk.lib.UpdateHelper;
 
 /**
@@ -19,31 +16,25 @@ import com.qihoo.updatesdk.lib.UpdateHelper;
  */
 public class WelcomeActivity extends BaseActivity {
     private ContentLoader contentService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_layout);
         contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
-        contentService.versionUpdate(AppConfig.getInstance().getVersionName(this));
+        contentService.versionUpdate(AppConfig.getVersionName(this));
 
     }
 
-
     public class MyCallBack extends ICallBack {
-        @Override
-        public void onRequestFailed() {
-            super.onRequestFailed();
-        }
 
         @Override
         public void onVersionResult(VersionInfo versionInfo) {
-
             VersionResult result = versionInfo.getResult();
             String apiUrl = result.getApiUrl();
-            AppConfig.getInstance().BASE_URL=apiUrl;
-           UpdateHelper.getInstance().autoUpdate("com.lalocal.lalocal");
-            Intent intent=new Intent(WelcomeActivity.this,HomeActivity.class);
+            AppConfig.setBaseUrl(apiUrl);
+            Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();
         }
