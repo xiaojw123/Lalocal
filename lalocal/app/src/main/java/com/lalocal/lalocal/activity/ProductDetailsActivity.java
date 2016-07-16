@@ -126,6 +126,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         titleLine = findViewById(R.id.product_title_line);
         serviceLL = (LinearLayout) findViewById(R.id.product_service_ll);
 
+
+
         //点击监听
         backTitleView.setOnBackClickListener(this);
         checkDetails.setOnClickListener(this);
@@ -179,7 +181,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         } else if (y > 0 && y <= statusHeight - 200) {
             float scale = (float) y / (statusHeight - 200);
             float alpha = (255 * scale);
-
+            titleLine.setVisibility(View.GONE);
             reLayout.setAlpha(scale);
             reLayout.setBackgroundColor(Color.argb((int) alpha, 250, 250, 250));
         } else {
@@ -242,10 +244,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_check_detail:
                 //TODO 查看详情
-                String url = result.url;
-                Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);
-                intent.putExtra("checkdetail", url);
-                startActivity(intent);
+                if(result!=null&&result.url!=null){
+                    String url = result.url;
+                    Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);
+                    intent.putExtra("checkdetail", url);
+                    startActivity(intent);
+                }
 
                 break;
         }
