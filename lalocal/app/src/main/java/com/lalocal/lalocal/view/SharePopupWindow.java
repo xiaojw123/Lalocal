@@ -1,4 +1,5 @@
 package com.lalocal.lalocal.view;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
+
 /**
  * Created by lenovo on 2016/6/30.
  */
@@ -29,9 +31,10 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private SpecialShareVOBean shareVO;
     private TextView cancel;
     private static final int REQUEST_PERM = 151;
+
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
-        this.shareVO=shareVO;
+        this.shareVO = shareVO;
     }
 
     public void showShareWindow() {
@@ -52,11 +55,12 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         ColorDrawable dw = new ColorDrawable();
 
         this.setBackgroundDrawable(dw);
+
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.share_friends:
                 shareFriends();
                 break;
@@ -98,59 +102,61 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         }
         sp.share();
     }
+
     private void shareFriends() {
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE);
-        sp .setCallback(new MyUMListener());
+        sp.setCallback(new MyUMListener());
 
-        if(shareVO.getBitmap()!=null){
-            UMImage image = new UMImage((Activity)context,shareVO.getBitmap());
+        if (shareVO.getBitmap() != null) {
+            UMImage image = new UMImage((Activity) context, shareVO.getBitmap());
             sp.withMedia(image);
             sp.share();
             return;
         }
-        if(shareVO.getImg()!=null){
-            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+        if (shareVO.getImg() != null) {
+            UMImage image = new UMImage((Activity) context, shareVO.getImg());
             sp.withMedia(image);
         }
-        if(shareVO.getTitle()!=null){
-            sp .withTitle(shareVO.getTitle());
+        if (shareVO.getTitle() != null) {
+            sp.withTitle(shareVO.getTitle());
         }
-        if(shareVO.getDesc()!=null){
-            sp .withText(shareVO.getDesc());
+        if (shareVO.getDesc() != null) {
+            sp.withText(shareVO.getDesc());
         }
-        if(shareVO.getUrl()!=null){
-            sp .withTargetUrl(shareVO.getUrl());
+        if (shareVO.getUrl() != null) {
+            sp.withTargetUrl(shareVO.getUrl());
         }
 
         sp.share();
 
     }
+
     private void shareWeibo() {
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.SINA);
-        sp .setCallback(new MyUMListener());
-        if(shareVO.getBitmap()!=null){
+        sp.setCallback(new MyUMListener());
+        if (shareVO.getBitmap() != null) {
 
             Bitmap bitmap = shareVO.getBitmap();
-            UMImage image = new UMImage((Activity)context,bitmap);
+            UMImage image = new UMImage((Activity) context, bitmap);
             sp.withMedia(image);
             sp.share();
             return;
         }
 
-        if(shareVO.getImg()!=null){
-            UMImage image = new UMImage((Activity)context,shareVO.getImg());
+        if (shareVO.getImg() != null) {
+            UMImage image = new UMImage((Activity) context, shareVO.getImg());
             sp.withMedia(image);
         }
-        if(shareVO.getTitle()!=null){
-            sp .withTitle(shareVO.getTitle());
+        if (shareVO.getTitle() != null) {
+            sp.withTitle(shareVO.getTitle());
         }
-        if(shareVO.getDesc()!=null){
-            sp .withText(shareVO.getDesc());
+        if (shareVO.getDesc() != null) {
+            sp.withText(shareVO.getDesc());
         }
-        if(shareVO.getUrl()!=null){
-            sp .withTargetUrl(shareVO.getUrl());
+        if (shareVO.getUrl() != null) {
+            sp.withTargetUrl(shareVO.getUrl());
         }
 
         sp.share();
@@ -158,35 +164,33 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
     }
 
-    private  UMShareListener callBackListener;
+    private UMShareListener callBackListener;
 
-    public void  setCallBackListener(UMShareListener callBackListener){
-        this.callBackListener=callBackListener;
+    public void setCallBackListener(UMShareListener callBackListener) {
+        this.callBackListener = callBackListener;
     }
 
 
-
-    class  MyUMListener implements  UMShareListener{
+    class MyUMListener implements UMShareListener {
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
 
-            AppLog.i("TAG","onResult"+share_media.toString());
+            AppLog.i("TAG", "onResult" + share_media.toString());
 
         }
 
 
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            Toast.makeText(context,throwable.toString(),Toast.LENGTH_SHORT).show();
-            AppLog.i("TAG","onError"+throwable.toString());
+            Toast.makeText(context, throwable.toString(), Toast.LENGTH_SHORT).show();
+            AppLog.i("TAG", "onError" + throwable.toString());
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            AppLog.i("TAG","onError"+share_media.toString());
+            AppLog.i("TAG", "onError" + share_media.toString());
         }
     }
-
 
 
 }

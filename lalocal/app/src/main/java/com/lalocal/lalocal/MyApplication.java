@@ -9,13 +9,10 @@ import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.qihoo.updatesdk.lib.UpdateHelper;
-
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.utils.Log;
-
-import com.umeng.analytics.MobclickAgent;
-
 
 import org.litepal.LitePalApplication;
 import org.litepal.crud.DataSupport;
@@ -45,7 +42,6 @@ public class MyApplication extends Application {
         intCountryDB();
         //TODO:bugtags online delete
         Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
-
     }
 
     private void intCountryDB() {
