@@ -33,7 +33,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/author_padding_62dp"
         android:layout_marginRight="@dimen/author_padding_62dp"
-        android:src="@drawable/a"/>
+        />
     <TextView
         android:id="@+id/author_name_tv"
         android:layout_width="wrap_content"

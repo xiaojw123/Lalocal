@@ -133,6 +133,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     }
 
     private void shareWeibo() {
+
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.SINA);
         sp.setCallback(new MyUMListener());
