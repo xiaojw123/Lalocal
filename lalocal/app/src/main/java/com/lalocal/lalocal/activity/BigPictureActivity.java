@@ -67,14 +67,6 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		com.umeng.socialize.utils.Log.LOG = true;
-		Log.LOG=true;
-
-		Config.IsToastTip = true;
-
-
-		String[] mPermissionList = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW, Manifest.permission.GET_ACCOUNTS};
-		ActivityCompat.requestPermissions(this,mPermissionList, 100);
 		setContentView(R.layout.big_picture_layout);
 		initView();
 		initData();
@@ -152,7 +144,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		Resources resources = gContext.getResources();
 		float scale = resources.getDisplayMetrics().density;
 		int totalWidth = resizeBmp.getWidth();
-		int totalHeight = resizeBmp.getHeight();
+		int totalHeight =totalWidth*9/16;
 		int textWidth = totalWidth/2;
 		int textHeight = totalHeight/2;
 		int xWidth = (totalWidth - textWidth) / 2;

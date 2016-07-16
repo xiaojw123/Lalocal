@@ -112,8 +112,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         setContentView(R.layout.special_details_layout);
         initView();
         initData();
-        String[] mPermissionList = new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CALL_PHONE,Manifest.permission.READ_LOGS,Manifest.permission.READ_PHONE_STATE, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.SET_DEBUG_APP,Manifest.permission.SYSTEM_ALERT_WINDOW,Manifest.permission.GET_ACCOUNTS};
-        ActivityCompat.requestPermissions(this,mPermissionList, 100);
     }
 
     private void initView() {
