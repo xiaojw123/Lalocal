@@ -58,6 +58,7 @@
     <string name="photograph">拍照</string>
     <string name="photoalbum">相册获取</string>
     <string name="cancel">取消</string>
+    <string name="continue_liveplay">继续直播</string>
     <string name="country_code">国家号</string>
     <string name="phone_number">手机号</string>
     <string name="send_again">重新发送</string>
@@ -148,6 +149,54 @@
     <string name="showdetail">明细</string>
     <string name="go_to_pay">去支付</string>
     <string name="liveplay">直播</string>
+    <string name="pull_to_refresh_pull_label" translatable="false">向下拉动可以刷新</string>
+    <string name="pull_to_refresh_release_label" translatable="false">松开可以刷新</string>
+    <string name="pull_to_refresh_refreshing_label" translatable="false">加载中...</string>
+    <!--im-->
+    <string name="empty"></string>
+
+
+    <string name="clear_empty">清空</string>
+    <string name="iknow">知道了</string>
+    <string name="send">发送</string>
+    <string name="unknow_size">未知大小</string>
+
+
+    <string name="copyright">Copyright ©1997-2016 网易公司版权所有</string>
+    <string name="net_broken">当前网络不可用</string>
+
+    <!-- 登录/注册 -->
+
+    <string name="login_failed">帐号或密码错误</string>
+
+    <string name="recording_init_failed">初始化录音失败</string>
+    <string name="recording_max_time">录音达到最大时间，是否发送？</string>
+
+    <string name="repeat_download_message">重新下载?</string>
+
+    <string name="unsupport_title">无法显示该内容</string>
+    <string name="unsupport_desc">客户端版本不支持该内容</string>
+
+    <string name="input_edittext_hint">请输入内容（弹幕限时免费）</string>
+    <!--entertainement-->
+    <string name="finish_confirm">确定结束直播？</string>
+    <string name="send_gift">送了</string>
+    <string name="confirm">结束直播</string>
+    <string name="no_gift">当前还没收到礼物</string>
+    <string name="live_finish">直播结束</string>
+    <string name="live_over_expression">表现很棒 ！ ！</string>
+    <string name="live_audience_count">观众人数</string>
+    <string name="live_time_count">直播时间</string>
+    <string name="live_back">返回首页</string>
+    <string name="live_over_share">与好友分享成功的喜悦</string>
+    <string name="live_master_attention">关注</string>
+    <string name="live_master_fans">粉丝</string>
+    <string name="live_master_contribute">货币贡献</string>
+    <string name="live_master_home">主页</string>
+
+
+
+
 
 
 </resources>

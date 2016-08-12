@@ -3,12 +3,15 @@ package com.lalocal.lalocal.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +23,8 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
+import net.robinx.lib.blur.utils.BlurUtils;
+import net.robinx.lib.blur.widget.BlurDrawable;
 /**
  * Created by lenovo on 2016/6/30.
  */
@@ -31,14 +36,30 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private SpecialShareVOBean shareVO;
     private TextView cancel;
     private static final int REQUEST_PERM = 151;
-
+    private RelativeLayout shareBlur;
+    private View view;
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
         this.shareVO = shareVO;
     }
 
     public void showShareWindow() {
-        View view = LayoutInflater.from(context).inflate(R.layout.share_layout, null);
+        view = LayoutInflater.from(context).inflate(R.layout.share_layout, null);
+        shareBlur = (RelativeLayout) view.findViewById(R.id.share_blur);
+
+        shareBlur.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                shareBlur.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                BlurDrawable blurDrawable = new BlurDrawable((Activity) context);
+                blurDrawable.setDrawOffset(shareBlur.getLeft(), shareBlur.getTop() + BlurUtils.getStatusBarHeight(context));
+                blurDrawable.setCornerRadius(10);
+                blurDrawable.setBlurRadius(25);
+                blurDrawable.setOverlayColor(Color.parseColor("#dcffffff"));
+                shareBlur.setBackgroundDrawable(blurDrawable);
+            }
+        });
+
         shareFriends = (LinearLayout) view.findViewById(R.id.share_friends);
         shareWechat = (LinearLayout) view.findViewById(R.id.share_wechat);
         shareWeibo = (LinearLayout) view.findViewById(R.id.share_weibo);

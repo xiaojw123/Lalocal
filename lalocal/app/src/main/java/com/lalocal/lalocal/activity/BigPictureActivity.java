@@ -1,7 +1,5 @@
 package com.lalocal.lalocal.activity;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,11 +13,9 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,16 +29,10 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SecretTextView;
-
 import com.lalocal.lalocal.view.SharePopupWindow;
-import com.umeng.socialize.Config;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
-import com.umeng.socialize.utils.Log;
-
 
 import java.io.ByteArrayOutputStream;
 

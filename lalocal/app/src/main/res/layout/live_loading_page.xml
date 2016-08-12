@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/live_loading_page"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_centerInParent="true"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/loading_page_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
+    <RelativeLayout
+        android:id="@+id/blur_drawable_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true">
+    </RelativeLayout>
+
+    <com.lalocal.lalocal.view.xlistview.PowerImageView
+        android:id="@+id/xlistview_header_anim"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:src="@drawable/loading"
+        android:scaleType="centerCrop"
+        attr:auto_play="true"
+        />
+</RelativeLayout>

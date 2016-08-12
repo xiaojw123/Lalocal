@@ -5,12 +5,7 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 android {
-//    compileSdkVersion 23
-//    buildToolsVersion "23.0.3"
-//    defaultConfig {
-//        applicationId "com.lalocal.lalocal"
-//        minSdkVersion 19
-//        targetSdkVersion 23
+    useLibrary 'org.apache.http.legacy'
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     sourceSets{
@@ -25,11 +20,6 @@ android {
         versionCode 200
         versionName "2.0.0"
         multiDexEnabled true
-        compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_7
-            targetCompatibility JavaVersion.VERSION_1_7
-        }
-
     }
     dexOptions {
         javaMaxHeapSize "4g"
@@ -57,6 +47,12 @@ android {
     //批量配置
     productFlavors.all { flavor ->
         flavor.manifestPlaceholders = [CATEGORY: name]
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs =['libs']
+        }
     }
 }
 
@@ -86,30 +82,35 @@ dependencies {
     compile files('libs/easemobchat_2.3.0.jar')
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:multidex:1.0.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile 'com.qiniu:qiniu-android-sdk:7.2.+'
+    compile project(':lib.blur')
 }
 
 //TODO:bugtags online delete
-//apply plugin: 'com.bugtags.library.plugin'
-//android {
-//    defaultConfig {
-//        ndk {
-//            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
-//        }
-//
-//    }
-//}
-//bugtags {
-//    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-//    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
-//    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
-//    mappingUploadEnabled true
-//
-//    //网络跟踪功能配置(企业版)
-//    trackingNetworkEnabled true
-//}
-//dependencies {
-//    compile 'com.bugtags.library:bugtags-lib:latest.integration'
-//}
+apply plugin: 'com.bugtags.library.plugin'
+android {
+    defaultConfig {
+        ndk {
+            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+    }
+}
+bugtags {
+    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
+    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
+    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
+    mappingUploadEnabled true
+
+    //网络跟踪功能配置(企业版)
+    trackingNetworkEnabled true
+}
+dependencies {
+    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+}
+
 
 
 

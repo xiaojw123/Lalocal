@@ -63,7 +63,7 @@ public class ArticleTestAct extends BaseActivity {
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-
+            view.loadUrl(url);
             return true;
         }
 

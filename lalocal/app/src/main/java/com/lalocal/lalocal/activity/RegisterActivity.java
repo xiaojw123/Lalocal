@@ -15,6 +15,8 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
     CustomEditText email_edit, psw_edit, nickname_edit;
@@ -110,6 +112,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         if (contentService != null) {
             register_btn.setEnabled(false);
             contentService.register(email, psw, nickname,register_btn);
+
         }
     }
 
@@ -118,6 +121,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         public void onResigterComplete(String email, String psw, int userid, String token) {
             loginEmail = email;
             loginPsw = psw;
+            saveLoginInfo(email,token);
             CommonUtil.showPromptDialog(RegisterActivity.this, getResources().getString(R.string.register_success_prompt), this);
         }
 
@@ -131,5 +135,9 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    private void saveLoginInfo(final String account, final String token) {
+        AuthPreferences.saveUserAccount(account);
+        AuthPreferences.saveUserToken(token);
+    }
 
 }

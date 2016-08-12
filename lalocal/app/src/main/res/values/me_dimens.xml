@@ -150,9 +150,11 @@
     <dimen name="order_detail_padding">15dp</dimen>
     <dimen name="order_detail_img_width">80dp</dimen>
     <dimen name="order_detail_title_left">10dp</dimen>
+    <dimen name="order_detail_arrow_right_width">6dp</dimen>
+    <dimen name="order_detail_arrow_right_height">12dp</dimen>
     <dimen name="order_travel_information_container_top">15dp</dimen>
-<dimen name="order_card_item_top">14dp</dimen>
-<dimen name="order_card_item_left">15dp</dimen>
+    <dimen name="order_card_item_top">14dp</dimen>
+    <dimen name="order_card_item_left">15dp</dimen>
     <dimen name="order_packages_choose_top">8dp</dimen>
     <dimen name="order_travel_time_height">36dp</dimen>
     <dimen name="order_travel_person_title_height">50dp</dimen>
@@ -163,9 +165,6 @@
     <dimen name="order_detail_cotainer_bottom">188dp</dimen>
     <dimen name="triangle_drawable_width">10dp</dimen>
     <dimen name="triangle_drawable_height">3dp</dimen>
-
-
-
 
 
 </resources>

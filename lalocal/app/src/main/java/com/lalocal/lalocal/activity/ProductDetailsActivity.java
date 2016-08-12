@@ -93,7 +93,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_details_layout);
-        //    ShareSDK.initSDK(this);
         initView();
         initData();
 
@@ -503,7 +502,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO);
+        SharePopupWindow   sharePopupWindow = new SharePopupWindow(mContext, shareVO);
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
                 Gravity.CENTER, 0, 0);

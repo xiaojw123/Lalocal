@@ -46,7 +46,6 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
     }
     @Override
     public void onClick(View v) {
-
         switch (v.getId()){
             case R.id.carous_figure_share:
                 showShare(shareVO);

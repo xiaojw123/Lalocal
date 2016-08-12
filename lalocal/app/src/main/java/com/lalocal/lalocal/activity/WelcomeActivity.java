@@ -43,6 +43,9 @@ public class WelcomeActivity extends BaseActivity {
             String apiUrl = result.getApiUrl();
             AppConfig.setBaseUrl(apiUrl);
             loginChatService();
+            Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
+            startActivity(intent);
+            finish();
         }
     }
 

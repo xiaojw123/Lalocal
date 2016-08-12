@@ -7,7 +7,7 @@
     <declare-styleable name="RoundImageView">
         <attr name="type" />
         <attr name="borderColor" />
-        <attr name="borderWidth" />
+        <attr name="borderWidths" />
         <attr name="rectRoundRadius" />
     </declare-styleable>
     <attr name="type">
@@ -16,7 +16,7 @@
         <enum name="rounded_rect" value="2" />
     </attr>
     <attr name="borderColor" format="color" />
-    <attr name="borderWidth" format="dimension" />
+    <attr name="borderWidths" format="dimension" />
     <attr name="rectRoundRadius" format="dimension" />
     <!--CustomEditText style-->
     <declare-styleable name="CustomEditText">

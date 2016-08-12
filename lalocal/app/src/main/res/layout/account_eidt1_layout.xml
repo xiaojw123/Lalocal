@@ -62,9 +62,7 @@
             style="@style/CommonDeLineTheme"
             android:layout_below="@+id/setting_clear_cache" />
 
-        <RelativeLayout
-            android:id="@+id/account_edit_sex"
-            style="@style/AccoutEditItemTheme">
+        <RelativeLayout style="@style/AccoutEditItemTheme">
 
             <TextView
                 android:id="@+id/sex_text"

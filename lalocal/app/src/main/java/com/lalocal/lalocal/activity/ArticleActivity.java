@@ -100,17 +100,13 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         btnLike.setImageResource(R.drawable.index_article_btn_like);
 
-
         //点击事件
         backBtn.setOnClickListener(this);
         btnLike.setOnClickListener(this);
         btnComment.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         back.setOnClickListener(this);
-
-
     }
-
 
     @Override
     public void onClick(View v) {

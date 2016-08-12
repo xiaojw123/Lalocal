@@ -26,8 +26,18 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
+import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
+import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.ImgTokenBean;
+import com.lalocal.lalocal.model.LiveAttentionStatusBean;
+import com.lalocal.lalocal.model.LiveCancelAttention;
+import com.lalocal.lalocal.model.LiveDetailsDataResp;
+import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
+import com.lalocal.lalocal.model.LiveListDataResp;
+import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
@@ -47,11 +57,14 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.MD5Util;
 import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -236,9 +249,9 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
 
-        AppLog.print("getOrder__url____"+AppConfig.getOrderItemsUrl() + "/" + id);
+        AppLog.print("getOrder__url____" + AppConfig.getOrderItemsUrl() + "/" + id);
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderItemsUrl() + "/" + id, response, response);
-        AppLog.print("userid__"+UserHelper.getUserId(context)+"____token___"+UserHelper.getToken(context));
+        AppLog.print("userid__" + UserHelper.getUserId(context) + "____token___" + UserHelper.getToken(context));
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
 
         requestQueue.add(request);
@@ -349,6 +362,8 @@ public class ContentLoader {
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getLoginUrl(), response, response);
         request.setBodyParams(getLoginParams(email, password));
+
+
         requestQueue.add(request);
     }
 
@@ -374,7 +389,6 @@ public class ContentLoader {
 
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPraisesUrl(), response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
-
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
@@ -406,6 +420,157 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
         requestQueue.add(request);
 
+    }
+
+    //直播列表
+    public void liveList(final int pageSize, final int pageNumber) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_LIST);
+        }
+        String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
+        ContentRequest request = new ContentRequest(AppConfig.getLiveListUrl() + getParameter, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        requestQueue.add(request);
+    }
+
+    //推荐直播列表
+    public void liveRecommendList() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_RECOMMEND_LIST);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveRecommendListUrl(), response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        requestQueue.add(request);
+    }
+
+    //直播详情
+    public void liveDetails(final String skipId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_DETAILS);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveDetails() + skipId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+    //创建直播间
+    public void createLiveRoom() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CREATE_LIVE_ROOM);
+        }
+        AppLog.i("TAG", "createLiveRoom:创建直播");
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCreateLiveRoom(), response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getCreateLiveRoom());
+        requestQueue.add(request);
+    }
+
+    //修改直播
+    public void alterLive(String title, String userId, String photo, String announcement, String longitude, String latitude) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.ALTER_LIVE_ROOM);
+        }
+        AppLog.i("TAG", "alterLive:修改直播");
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
+        requestQueue.add(request);
+    }
+
+    //上传直播封面
+    public void alterLiveCover(String title, String userId, String photo, String announcement, String longitude, String latitude) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.ALTER_LIVE_COVER);
+        }
+        AppLog.i("TAG", "alterLive:修改直播");
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
+        requestQueue.add(request);
+    }
+
+
+    //关闭直播间
+    public void cancelLiveRoom(String userId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CANCEL_LIVE_ROOM);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getCancelLive() + userId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        //  request.setBodyParams(getCreateLiveRoom());
+        requestQueue.add(request);
+    }
+
+    //获取游客账号
+    public void getTouristInfo() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_TOURIST);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getTourist(), response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+    //获取图片的上传的token
+    public void getImgToken() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.IMG_TOKEN);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getImgToken(), response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+    //获取直播用户信息
+    public void getLiveUserInfo(String userId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_USER_INFO);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveUserInfo() + userId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+    //直播添加关注
+    public void getAddAttention(String userId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_ADD_ATTENTION);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getAddAttention() + userId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+
+    }
+
+    //取消关注
+    public void getCancelAttention(String userId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_CANCEL_ATTENTION);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getAddAttention() + userId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+    //查看粉丝和关注列表
+    public void getAttentionOrFansList(String typeId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_FANS_OR_ATTENTION);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getAttentionOrFansList() + typeId, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+
+    }
+
+    //搜索关注粉丝
+    public void getSearchUser(String nickName) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_SEARCH_USER);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getSearchUser() + nickName, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
     }
 
     //推荐页广告位
@@ -580,6 +745,7 @@ public class ContentLoader {
                 responseView.setEnabled(true);
             }
             CommonUtil.showToast(context, "网络请求异常", Toast.LENGTH_LONG);
+            AppLog.i("TAG", "createRoom:" + volleyError.toString());
         }
 
         @Override
@@ -720,6 +886,48 @@ public class ContentLoader {
                         break;
                     case RequestCode.VERSION_CODE:
                         responseVersion(json);
+                        break;
+                    case RequestCode.LIVE_LIST:
+                        responseLiveList(json);
+                        break;
+                    case RequestCode.LIVE_RECOMMEND_LIST:
+                        responseLiveRecommendList(json);
+                        break;
+                    case RequestCode.LIVE_DETAILS:
+                        responseLiveDetails(json);
+                        break;
+                    case RequestCode.CREATE_LIVE_ROOM:
+                        responseCreateLiveRoom(json);
+                        break;
+                    case RequestCode.CANCEL_LIVE_ROOM:
+                        responseCancelLive(json);
+                        break;
+                    case RequestCode.ALTER_LIVE_ROOM:
+                        responseAlterLiveRoom(json);
+                        break;
+                    case RequestCode.GET_TOURIST:
+                        responseTourist(json);
+                        break;
+                    case RequestCode.IMG_TOKEN:
+                        responseImgToken(json);
+                        break;
+                    case RequestCode.ALTER_LIVE_COVER:
+                        responseAlterLiveCover(json);
+                        break;
+                    case RequestCode.LIVE_USER_INFO:
+                        responseLiveUserInfo(json);
+                        break;
+                    case RequestCode.LIVE_ADD_ATTENTION:
+                        responseAddAttention(json);
+                        break;
+                    case RequestCode.LIVE_CANCEL_ATTENTION:
+                        responseCancelAttention(json);
+                        break;
+                    case RequestCode.LIVE_FANS_OR_ATTENTION:
+                        responseFansOrAttention(json, false);
+                        break;
+                    case RequestCode.LIVE_SEARCH_USER:
+                        responseFansOrAttention(json, true);
                         break;
                 }
             } catch (JSONException e) {
@@ -907,6 +1115,11 @@ public class ContentLoader {
             callBack.onGetDestinationAreas(items);
         }
 
+        private void responseTourist(String json) {
+
+
+        }
+
         private void responseGetOrderDetail(JSONObject jsonObj) {
             JSONObject resultJsObj = jsonObj.optJSONObject(ResultParams.REULST);
             Gson gson = new Gson();
@@ -1018,11 +1231,12 @@ public class ContentLoader {
         }
 
         private void responseCheckMail() {
-            AppLog.print("checkMail___");
+
             callBack.onCheckEmail(email);
         }
 
         private void responseLogin(JSONObject jsonObject) {
+            AppLog.i("TAG", "responseLogin" + jsonObject.toString());
             JSONObject resutJson = jsonObject.optJSONObject(ResultParams.REULST);
             User user = null;
             if (resutJson != null) {
@@ -1037,7 +1251,19 @@ public class ContentLoader {
             bundle.putInt(KeyParams.USERID, user.getId());
             bundle.putString(KeyParams.TOKEN, user.getToken());
             bundle.putString(KeyParams.AVATAR, user.getAvatar());
+            bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
+            bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
             UserHelper.saveLoginInfo(context, bundle);
+            //saveimuserinfo
+            DemoCache.setAccount(user.getImUserInfo().getAccId());
+            saveLoginInfo(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken(), user.getAvatar());
+
+        }
+
+        private void saveLoginInfo(final String account, final String token, final String avatar) {
+            AuthPreferences.saveUserAccount(account);
+            AuthPreferences.saveUserToken(token);
+            AuthPreferences.saveUserAvatar(avatar);
         }
 
         private void responseRegister(JSONObject jsonObject) {
@@ -1052,7 +1278,7 @@ public class ContentLoader {
 
         //点赞
         private void responseParises(String json) {
-            AppLog.print("TAG" + "responseParises" + json);
+
             if (!UserHelper.favorites.contains(targetId)) {
                 UserHelper.favorites.add(targetId);
             }
@@ -1062,7 +1288,7 @@ public class ContentLoader {
 
         //取消赞
         private void responseCancelParises(String json) {
-            AppLog.print("TAG" + "responseCancelParises" + json);
+
             if (UserHelper.favorites.contains(targetId)) {
                 UserHelper.favorites.remove(targetId);
             }
@@ -1072,7 +1298,7 @@ public class ContentLoader {
 
         //产品详情
         private void responseProductDetails(String json) {
-            AppLog.i("TAG", "responseProductDetails:" + json);
+
             ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
             if (productDetailsDataResp != null) {
                 callBack.onProductDetails(productDetailsDataResp);
@@ -1093,6 +1319,93 @@ public class ContentLoader {
             callBack.onRecommendAd(recommendAdResp);
 
         }
+
+        //直播列表
+        private void responseLiveList(String json) {
+            LiveListDataResp liveListDataResp = new Gson().fromJson(json, LiveListDataResp.class);
+            callBack.onLiveList(liveListDataResp);
+        }
+
+        //推荐直播列表
+        private void responseLiveRecommendList(String json) {
+            LiveRecommendListDataResp liveRecommendListDataResp = new Gson().fromJson(json, LiveRecommendListDataResp.class);
+            callBack.onLiveRecommendList(liveRecommendListDataResp);
+        }
+
+        //直播详情
+        private void responseLiveDetails(String json) {
+            AppLog.i("TAG", "responseLiveDetails" + json);
+            LiveDetailsDataResp liveDetailsDataResp = new Gson().fromJson(json, LiveDetailsDataResp.class);
+            callBack.onLiveDetails(liveDetailsDataResp);
+        }
+
+        //创建直播间
+        private void responseCreateLiveRoom(String json) {
+            AppLog.i("TAG", "创建直播间id:" + json);
+            CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
+            int id = createLiveRoomDataResp.getResult().getId();
+            callBack.onCreateLiveRoom(createLiveRoomDataResp);
+        }
+
+        //修改直播间
+        private void responseAlterLiveRoom(String json) {
+            AppLog.i("TAG", "responseAlterLiveRoom:" + json);
+            CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
+            callBack.onAlterLiveRoom(createLiveRoomDataResp);
+        }
+
+        //修改直播封面
+        private void responseAlterLiveCover(String json) {
+            CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
+            callBack.onAlterLiveCover(createLiveRoomDataResp);
+        }
+
+
+        //关闭直播间
+        private void responseCancelLive(String json) {
+            CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
+            callBack.onCloseLive(closeLiveBean);
+        }
+
+        //上传图片token
+        private void responseImgToken(String json) {
+            ImgTokenBean imgTokenBean = new Gson().fromJson(json, ImgTokenBean.class);
+            callBack.onImgToken(imgTokenBean);
+        }
+
+        //获取直播用户信息
+        private void responseLiveUserInfo(String json) {
+            LiveUserInfosDataResp liveUserInfosDataResp = new Gson().fromJson(json, LiveUserInfosDataResp.class);
+            callBack.onLiveUserInfo(liveUserInfosDataResp);
+        }
+
+        //直播添加关注
+        private void responseAddAttention(String json) {
+            AppLog.i("TAG", "responseAddAttention" + json);
+            LiveAttentionStatusBean liveAttentionStatusBean = new Gson().fromJson(json, LiveAttentionStatusBean.class);
+            callBack.onLiveAttentionStatus(liveAttentionStatusBean);
+        }
+
+        //取消关注
+        private void responseCancelAttention(String json) {
+            LiveCancelAttention liveCancelAttention = new Gson().fromJson(json, LiveCancelAttention.class);
+            callBack.onLiveCancelAttention(liveCancelAttention);
+
+        }
+
+
+        //获取粉丝或关注列表
+        private void responseFansOrAttention(String json, boolean isSearch) {
+            AppLog.i("TAG", "responseFansOrAttention:" + json);
+            LiveFansOrAttentionResp liveFansOrAttentionResp = new Gson().fromJson(json, LiveFansOrAttentionResp.class);
+            callBack.onLiveFansOrAttention(liveFansOrAttentionResp, isSearch);
+        }
+        /*//搜索关注粉丝
+        private void responseSearchUser(String json) {
+            AppLog.i("TAG","responseSearchUser:"+json);
+            LiveFansOrAttentionResp liveFansOrAttentionResp = new Gson().fromJson(json, LiveFansOrAttentionResp.class);
+            callBack.onSearchAttentionOrFans(liveFansOrAttentionResp);
+        }*/
 
         //specialdetail
         public void responseSpecialDetail(String json) {
@@ -1221,12 +1534,49 @@ public class ContentLoader {
         return jsonObject.toString();
     }
 
+    //创建直播间
+    public String getCreateLiveRoom() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("style", 0);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    //修改直播
+    private String getAlterLiveRoom(String title, String photo, String announcement, String longitude, String latitude) {
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", title);
+            jsonObject.put("photo", photo);
+            jsonObject.put("announcement", announcement);
+            jsonObject.put("longitude", longitude);
+            jsonObject.put("latitude", latitude);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
 
     public Map<String, String> getHeaderParams() {
         Map<String, String> headers = new HashMap<>();
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
+        headers.put("LATITUDE", "38.65777");
+        headers.put("LONGITUDE", "104.08296");
+        headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
+        headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
+        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
+                "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
+                + DensityUtil.getWindowHeight((Activity) context) + "");
         return headers;
     }
 
@@ -1239,6 +1589,7 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
+        AppLog.i("TAG", "USER_ID=" + String.valueOf(userid) + "&TOKEN=" + token);
         return map;
 
     }
@@ -1289,7 +1640,20 @@ public class ContentLoader {
 
         int ARTICLE_DETAILS = 206;
         int VERSION_CODE = 207;
-
+        int LIVE_LIST = 208;
+        int LIVE_RECOMMEND_LIST = 209;
+        int LIVE_DETAILS = 210;
+        int CREATE_LIVE_ROOM = 211;
+        int CANCEL_LIVE_ROOM = 212;
+        int ALTER_LIVE_ROOM = 213;
+        int GET_TOURIST = 214;
+        int IMG_TOKEN = 215;
+        int ALTER_LIVE_COVER = 216;
+        int LIVE_USER_INFO = 217;
+        int LIVE_ADD_ATTENTION = 218;
+        int LIVE_CANCEL_ATTENTION = 219;
+        int LIVE_FANS_OR_ATTENTION = 220;
+        int LIVE_SEARCH_USER = 221;
 
     }
 

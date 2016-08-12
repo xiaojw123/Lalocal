@@ -31,6 +31,8 @@ public class UserHelper {
         editor.putInt(KeyParams.USERID, bundle.getInt(KeyParams.USERID,-1));
         editor.putString(KeyParams.TOKEN, bundle.getString(KeyParams.TOKEN));
         editor.putString(KeyParams.AVATAR,bundle.getString(KeyParams.AVATAR));
+        editor.putString(KeyParams.IM_TOKEN,bundle.getString(KeyParams.IM_TOKEN));
+        editor.putString(KeyParams.IM_CCID,bundle.getString(KeyParams.IM_CCID));
         editor.commit();
     }
 

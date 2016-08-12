@@ -181,20 +181,6 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
         Message message = new Message();
         message.what = REFRESH;
         handler.sendMessage(message);
-
-      /*  handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                handler.removeCallbacks(this);
-                isRefresh = false;
-                contentService.recommentList(10, 1);
-                page = 2;
-                Message message = new Message();
-                message.what = REFRESH;
-                handler.sendMessage(message);
-            }
-        }, 1000);*/
-
     }
 
     @Override

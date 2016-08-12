@@ -1,34 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
-    
-    
+    >
+
     <ImageView
-        android:id="@+id/erros"
-        android:layout_width="@dimen/erros_width"
-        android:layout_height="@dimen/erros_height"
-        android:src="@drawable/lostinterneterrors_img"
-        android:layout_centerInParent="true"
-        />
-   <TextView
-       android:id="@+id/tv1"
-       android:paddingTop="20dp"
-       android:layout_below="@+id/erros"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_centerInParent="true"
-       android:text="正在建设中"/>
-
-
-    <TextView
-        android:id="@+id/tv2"
-        android:paddingTop="5dp"
-        android:layout_below="@id/tv1"
-        android:layout_width="wrap_content"
+        android:id="@+id/home_news_layout_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/live_height_50dp"
+        android:scaleType="fitXY"/>
+    <RelativeLayout
+        android:id="@+id/home_news_bg_blur"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/live_title_back_ctv"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="更多精彩，敬请期待"/>
+        app:lineVisible="false"
+        />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/live_recy_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:overScrollMode="never"
+        ></android.support.v7.widget.RecyclerView>
+    <ImageView
+        android:id="@+id/live_create_room"
+        android:layout_width="@dimen/live_height_125dp"
+        android:layout_height="@dimen/live_height_125dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/takevideobtn"/>
+</RelativeLayout>
+
+</LinearLayout>
 </RelativeLayout>

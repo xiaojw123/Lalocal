@@ -3,8 +3,18 @@ package com.lalocal.lalocal.net.callback;
 
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
+import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
+import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.ImgTokenBean;
+import com.lalocal.lalocal.model.LiveAttentionStatusBean;
+import com.lalocal.lalocal.model.LiveCancelAttention;
+import com.lalocal.lalocal.model.LiveDetailsDataResp;
+import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
+import com.lalocal.lalocal.model.LiveListDataResp;
+import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
@@ -144,4 +154,39 @@ public abstract class ICallBack {
 
     //版本更新
     public void onVersionResult(VersionInfo versionInfo){}
+    //直播列表
+    public  void onLiveList(LiveListDataResp liveListDataResp){}
+    //推荐直播列表
+    public void onLiveRecommendList(LiveRecommendListDataResp liveRecommendListDataResp) {
+    }
+    //直播详情
+    public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
+    }
+    //创建直播间
+    public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
+    }
+    //修改直播间
+    public void onAlterLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp){}
+    //关闭直播
+    public void onCloseLive(CloseLiveBean closeLiveBean){}
+    //上传图片token
+    public void onImgToken(ImgTokenBean imgTokenBean) {
+    }
+    //修改直播封面
+    public void onAlterLiveCover(CreateLiveRoomDataResp createLiveRoomDataResp) {
+    }
+    //获取直播用户信息
+    public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
+    }
+    //添加关注
+    public void onLiveAttentionStatus( LiveAttentionStatusBean liveAttentionStatusBean){}
+    //粉丝或关注列表
+    public void onLiveFansOrAttention(LiveFansOrAttentionResp liveFansOrAttentionResp,boolean isSearch) {
+    }
+    //驱取消关注
+    public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
+    }
+   /* //搜索关注和粉丝
+    public void onSearchAttentionOrFans(LiveFansOrAttentionResp liveFansOrAttentionResp) {
+    }*/
 }

@@ -4,8 +4,10 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.umeng.analytics.MobclickAgent;
@@ -49,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //注：回调 1
-//        Bugtags.onResume(this);
+        Bugtags.onResume(this);
         MobclickAgent.onResume(this);
     }
 
@@ -58,17 +60,17 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //注：回调 2
-//        Bugtags.onPause(this);
+        Bugtags.onPause(this);
         MobclickAgent.onPause(this);
     }
 
     //TODO:bugtags online delete
-//    @Override
-//    public boolean dispatchTouchEvent(MotionEvent event) {
-//        //注：回调 3
-//        Bugtags.onDispatchTouchEvent(this, event);
-//        return super.dispatchTouchEvent(event);
-//    }
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        //注：回调 3
+        Bugtags.onDispatchTouchEvent(this, event);
+        return super.dispatchTouchEvent(event);
+    }
 
     /**
      * 通过xml查找相应的ID，通用方法
