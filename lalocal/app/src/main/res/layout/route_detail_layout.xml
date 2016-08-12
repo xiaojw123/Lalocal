@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lalocal.lalocal.activity.RouteDetailActivity">
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/route_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/route_overview" />
+
+    <TextView
+        android:id="@+id/route_detail_service"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/app_actionbar_height"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/app_statusbar_height"
+        android:drawableTop="@drawable/serviceicon"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/dimen_size_4_dp"
+        android:text="@string/service" />
+
+    <com.amap.api.maps2d.MapView
+        android:id="@+id/route_detail_mapview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/route_detail_map_height"
+        android:layout_below="@+id/route_detail_title" />
+
+    <HorizontalScrollView
+        android:id="@+id/route_detail_hsv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/route_detail_mapview"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:scrollbars="none">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/route_detail_routedate_llt"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/route_detail_comb_llt_height"
+                android:orientation="horizontal" />
+            <ImageView
+                android:id="@+id/route_detail_day_point"
+                android:layout_width="@dimen/route_detail_day_point_width"
+                android:layout_height="@dimen/route_detail_day_point_height"
+                android:layout_below="@+id/route_detail_routedate_llt"
+                android:layout_marginTop="@dimen/dimen_size_6_dp"
+                android:background="@drawable/nowtriangle"
+                android:visibility="invisible"
+                 />
+
+
+        </RelativeLayout>
+    </HorizontalScrollView>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/route_detail_day_point"-->
+        <!--android:layout_width="@dimen/route_detail_day_point_width"-->
+        <!--android:layout_height="@dimen/route_detail_day_point_height"-->
+        <!--android:layout_below="@+id/route_detail_hsv"-->
+        <!--android:layout_marginTop="@dimen/dimen_size_6_dp"-->
+        <!--android:background="@drawable/nowtriangle"-->
+        <!--android:visibility="invisible" />-->
+
+
+    <com.lalocal.lalocal.view.CustomViewPager
+        android:id="@+id/route_detail_viewpager_route"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/route_detail_bottom"
+        android:layout_below="@+id/route_detail_hsv"
+        android:layout_marginTop="@dimen/dimen_size_15_dp" />
+
+
+    <FrameLayout
+        android:id="@+id/route_detail_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/route_detail_bottom_height"
+        android:layout_alignParentBottom="true">
+
+        <TextView style="@style/CommonD9LineTheme" />
+
+        <ImageView
+            android:id="@+id/route_detail_btn_share"
+            android:layout_width="@dimen/route_detail_btn_share_width"
+            android:layout_height="@dimen/route_detail_btn_share_height"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/dimen_size_15_dp"
+            android:src="@drawable/index_article_btn_share" />
+
+        <com.sackcentury.shinebuttonlib.ShineButton
+            android:id="@+id/route_detail_collect_sbtn"
+            android:layout_width="@dimen/special_details_img_like"
+            android:layout_height="@dimen/special_details_img_like"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/route_detail_btn_collect_left"
+            android:background="@drawable/index_article_btn_like"
+            app:btn_color="@android:color/darker_gray"
+            app:btn_fill_color="#ff6f6f"
+            app:siShape="@raw/heart" />
+
+
+        <FrameLayout
+            android:id="@+id/route_detail_buy"
+            android:layout_width="@dimen/route_detail_buy_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@color/color_ffaa2a"
+            android:focusable="true"
+            android:paddingLeft="@dimen/dimen_size_20_dp"
+            android:paddingRight="@dimen/dimen_size_20_dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="@string/buy"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16_sp" />
+
+            <TextView
+                android:id="@+id/route_detail_buy_between"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/route_detail_buy_between_hegiht"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/route_detail_day_bg"
+                android:gravity="center"
+                android:paddingEnd="@dimen/dimen_size_10_dp"
+                android:paddingStart="@dimen/dimen_size_10_dp"
+                android:textColor="@color/color_ffaa2a"
+                android:textSize="@dimen/text_size_12_sp"
+
+                />
+
+
+        </FrameLayout>
+
+
+    </FrameLayout>
+    <!--day item detail-->
+    <LinearLayout
+        android:id="@+id/day_item_detail_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/route_detail_mapview"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="invisible"
+
+        >
+        <!--android:layout_above="@+id/route_detail_bottom"-->
+        <!--android:visibility="invisible"-->
+        <RelativeLayout
+            android:id="@+id/day_item_detail_title_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/day_item_detail_title_height"
+            android:background="@color/color_fa">
+
+            <ImageView
+                android:layout_width="@dimen/arrow_down_width"
+                android:layout_height="@dimen/arrow_down_hegiht"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dimen_size_2_dp"
+                android:background="@drawable/index_article_comment_back" />
+
+            <TextView
+                android:id="@+id/day_item_detail_loc_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dimen_size_20_dp"
+                android:background="@drawable/index_article_tipes_icon_location_1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/dimen_size_8_dp" />
+
+            <TextView
+                android:id="@+id/day_item_detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/day_item_detail_loc_tv"
+                android:layout_marginStart="@dimen/day_item_detail_name_left"
+                android:layout_marginTop="-8dp"
+                android:layout_toEndOf="@+id/day_item_detail_loc_tv"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="@color/color_1a"
+                android:textSize="@dimen/text_size_16_sp" />
+
+            <TextView
+                android:id="@+id/day_item_detail_subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/day_item_detail_title"
+                android:layout_below="@+id/day_item_detail_title"
+                android:layout_marginTop="@dimen/dimen_size_10_dp"
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_11_sp" />
+
+            <ImageView
+                android:id="@+id/day_item_detail_loc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginBottom="@dimen/dimen_size_12_dp"
+                android:layout_marginEnd="@dimen/dimen_size_15_dp"
+                android:background="@drawable/index_article_tipes_btn_position" />
+
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/day_item_detail_rlv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="@dimen/day_item_detail_rlv_right"
+            android:paddingStart="@dimen/day_item_detail_rlv_left" />
+
+        <Button
+            android:id="@+id/day_item_detail_buy_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginEnd="@dimen/dimen_size_15_dp"
+            android:layout_marginStart="@dimen/dimen_size_15_dp"
+            android:layout_marginTop="-55dp"
+            android:background="@color/color_ffaa2a"
+            android:gravity="center"
+            android:text="@string/buy"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18_sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

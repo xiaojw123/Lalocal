@@ -52,7 +52,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomEditText);
         String hintText = a.getString(R.styleable.CustomEditText_text_hint);
         int maxLen = a.getInt(R.styleable.CustomEditText_maxLen, -1);
-        isPsw = a.getBoolean(R.styleable.CustomEditText_isPassword, false);
+        isPsw = a.getBoolean(R.styleable.CustomEditText_isPsw, false);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_edit_layout, this);
         editText = (EditText) findViewById(R.id.input_edit);

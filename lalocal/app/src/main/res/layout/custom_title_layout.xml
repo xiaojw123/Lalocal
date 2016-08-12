@@ -21,7 +21,6 @@
         android:gravity="center"
         android:layout_gravity="center"
         android:textStyle="bold"
-        android:text="编辑账号"
         android:textColor="@color/color_1a"
         android:textSize="@dimen/text_size_17_sp" />
     <View

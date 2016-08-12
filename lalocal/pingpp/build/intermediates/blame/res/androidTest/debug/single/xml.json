@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_with_dot.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_with_dot.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_symbols.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_symbols.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_with_x.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_with_x.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_qwerty.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_qwerty.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_symbols.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_symbols.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_with_change.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_with_change.xml"
+    }
+]

@@ -47,7 +47,6 @@
     <dimen name="about_us_contact_item1_top">12dp</dimen>
     <dimen name="about_us_publisher_top">62dp</dimen>
     <dimen name="about_us_reserved_top">6dp</dimen>
-    <dimen name="about_us_layout_container_bottom">16dp</dimen>
     <!--编辑账号-->
     <dimen name="account_edit_personalheader_width">88dp</dimen>
     <dimen name="account_edit_personalheader_top">36dp</dimen>
@@ -62,7 +61,6 @@
     <dimen name="accout_edit_girl_sex_cb_left">60dp</dimen>
     <dimen name="accout_edit_sex_line_heigt">25dp</dimen>
     <dimen name="accout_edit_sex_line_left">63dp</dimen>
-    <dimen name="accout_edit_spiner_width">20dp</dimen>
 
 
     <!--登录-->
@@ -74,7 +72,6 @@
     <dimen name="login_way_social_container_top">20dp</dimen>
     <dimen name="login_way_social_container_left_padding">20dp</dimen>
     <dimen name="login_way_logo_width">59dp</dimen>
-    <dimen name="login_way_logo_height">59dp</dimen>
     <dimen name="login_way_logo_top">15dp</dimen>
 
     <dimen name="forgetpsw_next_text_left">12dp</dimen>
@@ -87,20 +84,18 @@
     <dimen name="setting_sign_out_left">12dp</dimen>
     <dimen name="setting_sign_out_bottom">62dp</dimen>
     <dimen name="setting_sign_out_height">46dp</dimen>
-    <dimen name="setting_item_arrow_right_width">7dp</dimen>
-    <dimen name="setting_item_arrow_right_height">12dp</dimen>
+    <dimen name="arrow_right_width">7dp</dimen>
+    <dimen name="arrow_right_height">12dp</dimen>
     <dimen name="setting_item_cahe_size_left">22dp</dimen>
 
 
     <!--注册  -->
     <!--<dimen name="common_back_btn_width">8dp</dimen>-->
     <dimen name="common_back_btn_width">32dp</dimen>
-    <dimen name="common_back_btn_height">48dp</dimen>
     <dimen name="common_back_btn_top_padding">15dp</dimen>
     <dimen name="common_back_btn_left_padding">12dp</dimen>
-    <dimen name="register_title_divde_line_height">0.5px</dimen>
+    <dimen name="register_title_divde_line_height">0.5dp</dimen>
     <dimen name="register_edit_left">12dp</dimen>
-    <dimen name="register_edit_right">12dp</dimen>
     <dimen name="register_edit_height">50dp</dimen>
     <dimen name="register_edit_left_padding">19dp</dimen>
     <dimen name="register_email_edit_top">20dp</dimen>
@@ -114,14 +109,12 @@
 
     <dimen name="wheel_dialog_item_height">43dp</dimen>
     <dimen name="my_coupon_corner_img_width">50dp</dimen>
-    <dimen name="my_coupon_item_width">345dp</dimen>
     <dimen name="my_coupon_item_height">182dp</dimen>
     <dimen name="my_coupon_item_bottom_bg">49dp</dimen>
     <dimen name="my_conpon_denomination_left">82dp</dimen>
     <dimen name="my_conpon_denomination_top">27dp</dimen>
     <dimen name="my_conpon_denomination_units_left">14dp</dimen>
     <dimen name="my_conpon_denomination_units_top">60dp</dimen>
-    <dimen name="my_conpon_denomination_units_width">29dp</dimen>
     <dimen name="my_conpon_denomination_units_height">28dp</dimen>
     <dimen name="my_favorite_item_authoravatar_width">22dp</dimen>
     <dimen name="my_favorite_item_authoravatar_height">22dp</dimen>
@@ -136,7 +129,6 @@
     <dimen name="my_order_item_left">12dp</dimen>
     <dimen name="my_order_item_right">11dp</dimen>
     <dimen name="my_order_item_top">11dp</dimen>
-    <dimen name="my_order_item_ordernumber_left">12dp</dimen>
     <dimen name="my_oder_ordernum_text_left">20dp</dimen>
     <dimen name="my_order_line1_top">13dp</dimen>
     <dimen name="my_oder_img_width">81dp</dimen>
@@ -153,22 +145,15 @@
     <dimen name="my_order_adult_container_height">64dp</dimen>
     <dimen name="order_service_right">16dp</dimen>
     <dimen name="order_more_width">39dp</dimen>
-    <dimen name="order_more_height">4dp</dimen>
     <dimen name="order_more_right">15dp</dimen>
     <dimen name="order_detail_height">110dp</dimen>
     <dimen name="order_detail_padding">15dp</dimen>
     <dimen name="order_detail_img_width">80dp</dimen>
-    <dimen name="order_detail_title_wdith">241dp</dimen>
     <dimen name="order_detail_title_left">10dp</dimen>
-    <dimen name="order_detail_arrow_right_width">6dp</dimen>
-    <dimen name="order_detail_arrow_right_height">12dp</dimen>
-    <dimen name="order_travel_information_container_height">251dp</dimen>
     <dimen name="order_travel_information_container_top">15dp</dimen>
 <dimen name="order_card_item_top">14dp</dimen>
 <dimen name="order_card_item_left">15dp</dimen>
     <dimen name="order_packages_choose_top">8dp</dimen>
-    <dimen name="order_packages_intro_width">240dp</dimen>
-    <dimen name="order_packages_intro_height">50dp</dimen>
     <dimen name="order_travel_time_height">36dp</dimen>
     <dimen name="order_travel_person_title_height">50dp</dimen>
     <dimen name="order_travel_person_title_right">15dp</dimen>

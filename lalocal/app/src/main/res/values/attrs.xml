@@ -23,7 +23,7 @@
         <attr name="text_hint" format="string"/>
         <attr name="maxLen" format="integer"/>
         <attr name="dights" format="string"/>
-        <attr name="isPassword" format="boolean"/>
+        <attr name="isPsw" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="CustomTitleView">
         <attr name="title_name" format="string"/>

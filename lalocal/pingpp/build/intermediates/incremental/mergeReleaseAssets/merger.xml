@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="D:\Git_lalocal\lalocal\pingpp\assets"><file name="data.bin" path="D:\Git_lalocal\lalocal\pingpp\assets\data.bin"/><file name="pingpp_web.html" path="D:\Git_lalocal\lalocal\pingpp\assets\pingpp_web.html"/></source><source path="D:\Git_lalocal\lalocal\pingpp\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\Git_lalocal\lalocal\pingpp\src\release\assets"/></dataSet></merger>

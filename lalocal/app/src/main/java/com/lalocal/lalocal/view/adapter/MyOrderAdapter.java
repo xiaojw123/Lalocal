@@ -129,7 +129,7 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener 
                         holder.payBtn.setVisibility(View.VISIBLE);
                         holder.cancleBtn.setVisibility(View.GONE);
                     }
-                    DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(), 2);
+                    DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(),R.drawable.my_oder_img_drawable);
                     holder.itemDetail.setTag(R.id.orderDetailId, item);
                 }
                 convertView.setTag(holder);

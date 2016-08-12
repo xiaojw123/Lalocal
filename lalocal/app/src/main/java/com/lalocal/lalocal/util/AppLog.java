@@ -44,6 +44,7 @@ public final class AppLog {
      * Otherwise, you cannot.
      */
     public static final boolean DEBUG_SYSOUT = false;
+    public static final String APPLICATION_NAME="lalocal";
 
     /**
      * Send a {@link Log#VERBOSE} log message.
@@ -232,7 +233,7 @@ public final class AppLog {
      */
     public static void print(Object object) {
         if (Log.DEBUG > DEBUG_LEVEL) {
-            String tag = getClassName();
+//            String tag = getClassName();
             String method = callMethodAndLine();
             String content = "";
             if (object != null) {
@@ -242,7 +243,7 @@ public final class AppLog {
                 content = method + "__|¯¯|___   "
                         + null;
             }
-            Log.d(tag, content);
+            Log.d(APPLICATION_NAME, content);
         }
     }
 

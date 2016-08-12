@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
-    <color name="color_fa">#FAFAFA</color>
+    <color name="color_fa">#fafafa</color>
     <color name="color_de">#dedede</color>
     <color name="color_b3">#b3b3b3</color>
     <color name="color_30b3">#30b3b3b3</color>
+    <color name="color_60b3">#60b3b3b3</color>
     <color name="color_xb3">#90b3b3b3</color>
     <color name="color_ee">#eeeeee</color>
+    <color name="color_e5">#e5e5e5</color>
     <color name="color_d9">#d9d9d9</color>
     <color name="color_66">#666666</color>
     <color name="color_006">#00666666</color>
@@ -17,17 +17,16 @@
     <color name="thin_blue">#408fe6ff</color>
     <color name="color_1a">#1a1a1a</color>
     <color name="color_f8">#f8f8f8</color>
-    <color name="color_ffaa2a">#ffaa2a</color>\
+    <color name="color_ffaa2a">#ffaa2a</color>
     <color name="color_ff6f6f">#ff6f6f</color>
     <color name="color_4a90e2">#4a90e2</color>
+    <color name="color_4a">#4a4a4a</color>
     <color name="color_f07e3c">#f07e3c</color>
-    <color name="color_7ed321">#7ed321</color>
     <color name="color_bd10e0">#bd10e0</color>
     <color name="color_c5">#c5c5c5</color>
     <color name="color_8c">#8c8c8c</color>
     <color name="thin_dark">#70000000</color>
     <color name="color_20_dark">#20000000</color>
-    <color name="color_ffe7a6">#ffe7a6</color>
     <color name="color_60ffe7a6">#60ffe7a6</color>
     <color name="color_fffca6">#fffca6</color>
     <color name="color_70_dark">#70000000</color>
@@ -40,13 +39,6 @@
     <color name="color_eeee00">#90eaad3a</color>
 
 
-    <color name="backgroundColorPress">#DBDBD3</color>
-    <color name="backgroundColor">#FFFFFF</color>
-
-    <color name="half_transparent">#8f000000</color>
-    <color name="orange">#f27242</color>
-
-
     <!-- common -->
 
     <color name="black">#000000</color>
@@ -54,30 +46,25 @@
 
 
     <!-- background -->
-    <color name="bg">#FFF5F5F5</color>
-    <color name="bg_pressed">#FFF2F2F2</color>
 
     <!-- material design black font color -->
-    <color name="font_black_0">#212121</color>
-    <color name="font_black_1">#424242</color>
-    <color name="font_black_2">#616161</color>
-    <color name="font_black_3">#757575</color>
-    <color name="font_black_4">#9e9e9e</color>
-    <color name="font_black_5">#bdbdbd</color>
-    <color name="font_black_6">#e0e0e0</color>
 
     <!-- divider -->
-    <color name="divider_1">#e2e2e2</color>
-    <color name="divider_2">#e6e6e6</color>
 
-    <color name="ml_white">#ffffffff</color>
     <color name="ml_gray">#ff9e9e9e</color>
-    <color name="ml_blue">#ff239efe</color>
-    <color name="ml_red">#ffff0000</color>
+    <color name="black_70">#b2000000</color>
 
+    <!--lalocal service chat -->
+    <color name="common_bg">#fcfcfc</color>
+    <color name="top_bar_normal_bg">#ED5485</color>
+    <color name="btn_gray_normal">#c0c0c0</color>
+    <color name="btn_gray_pressed_status">#b5b5b6</color>
+    <color name="btn_blue_normal">#1e90ff</color>
+    <color name="btn_blue_pressed">#0066FF</color>
+    <color name="gray_normal">#666667</color>
 
-
-
+    <!-- leave -->
+    <!--========================-->
 
 
 </resources>

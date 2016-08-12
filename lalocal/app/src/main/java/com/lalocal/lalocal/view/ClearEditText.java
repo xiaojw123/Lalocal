@@ -105,7 +105,9 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     protected void setClearIconVisible(boolean visible) {  
         Drawable right = visible ? mClearDrawable : null;  
         setCompoundDrawables(getCompoundDrawables()[0],  
-                getCompoundDrawables()[1], right, getCompoundDrawables()[3]);  
+                getCompoundDrawables()[1], right, getCompoundDrawables()[3]);
+        setCompoundDrawablePadding((int) getResources().getDimension(R.dimen.dimen_size_5_dp));
+        setPadding((int) getResources().getDimension(R.dimen.dimen_size_5_dp),0,(int) getResources().getDimension(R.dimen.dimen_size_10_dp),0);
     }  
   
     @Override  

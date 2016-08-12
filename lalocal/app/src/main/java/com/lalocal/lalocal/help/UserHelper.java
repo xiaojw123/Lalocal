@@ -30,6 +30,7 @@ public class UserHelper {
         editor.putString(KeyParams.PASSWORD, bundle.getString(KeyParams.PASSWORD));
         editor.putInt(KeyParams.USERID, bundle.getInt(KeyParams.USERID,-1));
         editor.putString(KeyParams.TOKEN, bundle.getString(KeyParams.TOKEN));
+        editor.putString(KeyParams.AVATAR,bundle.getString(KeyParams.AVATAR));
         editor.commit();
     }
 
@@ -58,6 +59,12 @@ public class UserHelper {
     public static String getToken(Context context) {
         initSPref(context);
         return sp.getString(KeyParams.TOKEN, null);
+
+    }
+
+    public static String getUserAvatar(Context context){
+        initSPref(context);
+        return sp.getString(KeyParams.AVATAR, null);
 
     }
 }

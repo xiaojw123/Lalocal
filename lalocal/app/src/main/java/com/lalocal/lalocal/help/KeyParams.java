@@ -18,4 +18,5 @@ public interface KeyParams {
     public static  final  String IM_LOGIN="im_login";
     public static  final  String PASSWORD="psw";
     public static  final  String IS_LOGIN="isLogin";
+
 }

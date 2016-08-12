@@ -24,36 +24,41 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_tab_container_height"
         android:layout_alignParentBottom="true"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/home_tab_recommend"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
             android:background="@drawable/home_tab_bg">
 
             <ImageView
                 android:id="@+id/home_tab_recoommend_img"
                 android:layout_width="@dimen/home_tab_img_width"
                 android:layout_height="@dimen/home_tab_img_width"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/home_tab_recommend_img_top"
                 android:background="@drawable/home_recommend_img_bg" />
 
             <TextView
+                android:id="@+id/home_tab_title_recommend"
                 style="@style/HomeTabTextTheme"
-                android:layout_below="@+id/home_tab_recoommend_img"
-                android:text="@string/recommend" />
+                android:text="@string/recommend"
+                android:visibility="gone"
+                />
 
             <View style="@style/HomeTabIndicateTheme" />
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/home_tab_destination"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:gravity="center_horizontal"
             android:background="@drawable/home_tab_bg"
             android:orientation="vertical">
 
@@ -61,24 +66,26 @@
                 android:id="@+id/home_tab_destination_img"
                 android:layout_width="@dimen/home_tab_img_width"
                 android:layout_height="@dimen/home_tab_img_width"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/home_tab_recommend_img_top"
                 android:background="@drawable/home_destination_img_bg" />
 
             <TextView
+                android:id="@+id/home_tab_title_destination"
                 style="@style/HomeTabTextTheme"
-                android:layout_below="@+id/home_tab_destination_img"
-                android:text="@string/destination" />
+                android:text="@string/destination"
+                android:visibility="gone"
+                />
 
             <View style="@style/HomeTabIndicateTheme" />
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/home_tab_news"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
             android:layout_weight="1"
             android:background="@drawable/home_tab_bg"
             android:orientation="vertical">
@@ -87,23 +94,24 @@
                 android:id="@+id/home_tab_news_img"
                 android:layout_width="@dimen/home_tab_img_width"
                 android:layout_height="@dimen/home_tab_img_width"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/home_tab_recommend_img_top"
                 android:background="@drawable/home_news_img_bg" />
 
             <TextView
+                android:id="@+id/home_tab_title_liveplay"
                 style="@style/HomeTabTextTheme"
-                android:layout_below="@+id/home_tab_news_img"
-                android:text="@string/news" />
+                android:text="@string/liveplay"
+                android:visibility="gone"
+                />
 
             <View style="@style/HomeTabIndicateTheme" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/home_tab_me"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/home_tab_bg"
             android:gravity="center_horizontal"
@@ -113,18 +121,19 @@
                 android:id="@+id/home_tab_me_img"
                 android:layout_width="@dimen/home_tab_img_width"
                 android:layout_height="@dimen/home_tab_img_width"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/home_tab_recommend_img_top"
                 android:background="@drawable/home_me_img_bg" />
 
             <TextView
+                android:id="@+id/home_tab_title_me"
                 style="@style/HomeTabTextTheme"
-                android:layout_below="@+id/home_tab_me_img"
-                android:text="@string/me" />
+                android:text="@string/me"
+                android:visibility="gone"
+                />
 
             <View style="@style/HomeTabIndicateTheme" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
 
     </LinearLayout>

@@ -41,7 +41,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
-import com.umeng.socialize.ShareAction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,7 +61,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private ContentLoader contentService;
     private Context mContext = ArticleActivity.this;
     private LinearLayout back;
-    private View placeHolder;
     private WebSettings settings;
     private boolean praiseFlag;//是否点赞
     private ArticleDetailsResultBean articleDetailsRespResult;
@@ -102,7 +100,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         btnLike.setImageResource(R.drawable.index_article_btn_like);
 
-        placeHolder = findViewById(R.id.place_holder);
 
         //点击事件
         backBtn.setOnClickListener(this);

@@ -23,7 +23,9 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
+import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.LoginUser;
@@ -31,8 +33,13 @@ import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
+import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
+import com.lalocal.lalocal.model.RouteDetail;
+import com.lalocal.lalocal.model.RouteItem;
+import com.lalocal.lalocal.model.SearchItem;
+import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.model.VersionInfo;
@@ -41,6 +48,9 @@ import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.MD5Util;
+import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
+import com.lalocal.lalocal.view.adapter.MoreAdpater;
+import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import org.json.JSONArray;
@@ -75,13 +85,160 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
+
+    public void payOrder(String json) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_PAY_RESULT);
+        }
+        AppLog.print("支付url___" + AppConfig.getPayUrl());
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPayUrl(), response, response);
+        request.setBodyParams(json);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+
+    public void getRouteDetails(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ROUTE_DETAILS);
+        }
+        AppLog.print("request url____" + AppConfig.getRouteDetailsUrl(id));
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getRouteDetailsUrl(id), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+
+    }
+
+
+    public void getDestinationCollections() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_DESTINATION_COLLECTIONS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getDestinationCollectionsUrl(), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getSearchTag(String name) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SEARCH_TAG);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSearchTagUrl(name), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getMoreAritleResult(String name, int pageNumber, int pageSize) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MORE_ARITLE);
+            response.setSearchKey(name);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMoreArticleUrl(name, pageNumber, pageSize), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getMoreProductResult(String name, int pageNumber, int pageSize) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MORE_PRODUCT);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMoreProductUrl(name, pageNumber, pageSize), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getMoreRouteResult(String name, int pageNumber, int pageSize) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MORE_ROUTE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMoreRouteUrl(name, pageNumber, pageSize), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getSearchResult(String name) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SEARCH_RESULT);
+            response.setSearchKey(name);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSearchResultUrl(name), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getSearhHot() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SEARCH_HOT);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSearchHotUrl(), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getAreaProducts(int pageSize, int pageNub, int areaId, int type, int collectionId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_AREA_PRODUCTS);
+            response.setType(type);
+        }
+
+        AppLog.print("areadProudcts_____url=" + AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId));
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+
+    //热门
+    public void getHotProducts(int areaId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_HOT_PRODUCTS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getHotProducts(areaId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+
+    }
+
+    //热门
+    public void getHotRoutes(int areaId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_HOT_ROUTES);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getHotRoutes(areaId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+
+    }
+
+    //攻略
+    public void getDesAreaRoutes(int pageSize, int pageNub, int areaId, int type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_DESTIANTION_AREA_ROUTES);
+            response.setType(type);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getRoutesUrl(pageSize, pageNub, areaId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+
+    }
+
+    public void getDestinationAreas() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_DESTINATION_AREAS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getDestinationAreasUrl(), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
     public void getOrderDetail(int id) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
 
+        AppLog.print("getOrder__url____"+AppConfig.getOrderItemsUrl() + "/" + id);
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderItemsUrl() + "/" + id, response, response);
-
+        AppLog.print("userid__"+UserHelper.getUserId(context)+"____token___"+UserHelper.getToken(context));
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
 
         requestQueue.add(request);
@@ -131,7 +288,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT,AppConfig.getUserProfileModifyUrl(), response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserProfileModifyUrl(), response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
         requestQueue.add(request);
@@ -231,7 +388,7 @@ public class ContentLoader {
             response.setTargetId(targetId);
         }
 
-        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE,AppConfig.getParisesCancelUrl() + praiseId, response, response);
+        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.getParisesCancelUrl() + praiseId, response, response);
 
         contentRequest.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
 
@@ -266,8 +423,8 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.SPECIAL_DETAIL);
         }
 
-        AppLog.i("TAG","specialDetail:"+AppConfig.getSepcailDetailUrl());
-        ContentRequest request = new ContentRequest(AppConfig.getSepcailDetailUrl()+ rowId, response, response);
+        AppLog.i("TAG", "specialDetail:" + AppConfig.getSepcailDetailUrl());
+        ContentRequest request = new ContentRequest(AppConfig.getSepcailDetailUrl() + rowId, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -281,12 +438,13 @@ public class ContentLoader {
         ContentRequest contentRequest = new ContentRequest(AppConfig.getProductDetailsUrl() + targetId, response, response);
         requestQueue.add(contentRequest);
     }
+
     //版本更新
-    public void versionUpdate(String versionCode){
+    public void versionUpdate(String versionCode) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.VERSION_CODE);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.VERSION_UPDATE+versionCode, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.VERSION_UPDATE + versionCode, response, response);
         contentRequest.setHeaderParams(getHeaderParamsWithUserId(-1, null));
         requestQueue.add(contentRequest);
     }
@@ -296,7 +454,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.ARTICLE_DETAILS);
         }
 
-        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleDetailsUrl() +targetId, response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleDetailsUrl() + targetId, response, response);
 
         requestQueue.add(contentRequest);
     }
@@ -375,9 +533,19 @@ public class ContentLoader {
         //responseView发送网络请求时，禁止在响应之前二次请求网络
         private View responseView;
         private String targetId;
+        private String key;
+        private int pageType;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
+        }
+
+        public void setType(int type) {
+            pageType = type;
+        }
+
+        public void setSearchKey(String key) {
+            this.key = key;
         }
 
         public void setUserInfo(String email, String psw) {
@@ -416,7 +584,6 @@ public class ContentLoader {
 
         @Override
         public void onResponse(String json) {
-            AppLog.print("onResponse__");
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
@@ -443,7 +610,55 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.GET_PAY_RESULT:
+                        JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+                        callBack.onGetPayResult(resultJobj.toString());
+                        break;
+                    case RequestCode.GET_ROUTE_DETAILS:
+                        responseGetRouteDetails(jsonObj);
+                        break;
+                    case RequestCode.GET_AREA_PRODUCTS:
+                        responseGetAreaDetailItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_PRODUCT);
+                        break;
+                    case RequestCode.GET_DESTIANTION_AREA_ROUTES:
+                        responseGetAreaDetailItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_ROUTE);
+                        break;
+                    case RequestCode.GET_HOT_ROUTES:
+                        responseGetHotItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_ROUTE);
+                        break;
+                    case RequestCode.GET_HOT_PRODUCTS:
+                        responseGetHotItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_PRODUCT);
+                        break;
+                    case RequestCode.GET_SEARCH_TAG:
+                        responseGetSearchTag(jsonObj);
+                        break;
+                    case RequestCode.GET_MORE_ROUTE:
+                        responsMoreItems(jsonObj, MoreAdpater.MODUEL_TYPE_ROUTE);
+                        break;
+                    case RequestCode.GET_MORE_PRODUCT:
+                        responsMoreItems(jsonObj, MoreAdpater.MODUEL_TYPE_PRODUCT);
+                        break;
+                    case RequestCode.GET_MORE_ARITLE:
+                        responsMoreItems(jsonObj, MoreAdpater.MODUEL_TYPE_ARTICLE);
+                        break;
+
+                    case RequestCode.GET_SEARCH_RESULT:
+                        responseGetSearchResult(jsonObj);
+                        break;
+
+                    case RequestCode.GET_SEARCH_HOT:
+                        responseGetSearchHot(jsonObj);
+                        break;
+
+                    case RequestCode.GET_DESTINATION_COLLECTIONS:
+                        responseGetCollections(jsonObj);
+                        break;
+
+                    case RequestCode.GET_DESTINATION_AREAS:
+                        responseGetDesAreas(jsonObj);
+                        break;
                     case RequestCode.GET_ORDER_DETAIL:
+                        AppLog.print("get order_detail___" + json);
                         responseGetOrderDetail(jsonObj);
                         break;
                     case RequestCode.GET_MY_ORDER:
@@ -472,7 +687,6 @@ public class ContentLoader {
                         break;
 
                     case RequestCode.GET_USER_PROFILE:
-                        AppLog.print("get user proflie json___"+json);
                         responseGetUserProfile(jsonObj);
                         break;
                     case RequestCode.BOUDN_EMAIL:
@@ -512,6 +726,185 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+
+        private void responseGetRouteDetails(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson = new Gson();
+            RouteDetail routeDetail = gson.fromJson(resultJobj.toString(), RouteDetail.class);
+            callBack.onGetRouteDetail(routeDetail);
+
+
+        }
+
+        private void responseGetAreaDetailItems(JSONObject jsonObj, int moduleType) {
+            JSONObject resJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            int pageNumber = resJobj.optInt(ResultParams.PAGE_NUMBER);
+            int toalPages = resJobj.optInt(ResultParams.TOTAL_PAGES);
+            JSONArray itemsJarray = resJobj.optJSONArray(ResultParams.ROWS);
+            List<SearchItem> items = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < itemsJarray.length(); i++) {
+                JSONObject itemJobj = itemsJarray.optJSONObject(i);
+                SearchItem item = null;
+                switch (moduleType) {
+                    case AreaDetailAdapter.MODULE_TYPE_PRODUCT:
+                        item = gson.fromJson(itemJobj.toString(), ProductItem.class);
+                        break;
+                    case AreaDetailAdapter.MODULE_TYPE_ROUTE:
+                        item = gson.fromJson(itemJobj.toString(), RouteItem.class);
+                        break;
+
+                }
+                if (item != null) {
+                    items.add(item);
+                }
+            }
+            callBack.onGetAreaItems(pageNumber, toalPages, items, pageType);
+
+
+        }
+
+
+        private void responsMoreItems(JSONObject jsonObj, int type) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            int pageNumber = resultJobj.optInt("pageNumber");
+            int totalPages = resultJobj.optInt("totalPages");
+            int totalRows = resultJobj.optInt("totalRows");
+            JSONArray rowsJarray = resultJobj.optJSONArray("rows");
+            List<SearchItem> items = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < rowsJarray.length(); i++) {
+                JSONObject itemJobj = rowsJarray.optJSONObject(i);
+                SearchItem item = null;
+                switch (type) {
+                    case MoreAdpater.MODUEL_TYPE_ARTICLE:
+                        item = gson.fromJson(itemJobj.toString(), ArticleItem.class);
+                        break;
+                    case MoreAdpater.MODUEL_TYPE_PRODUCT:
+                        item = gson.fromJson(itemJobj.toString(), ProductItem.class);
+                        break;
+                    case MoreAdpater.MODUEL_TYPE_ROUTE:
+                        item = gson.fromJson(itemJobj.toString(), RouteItem.class);
+                        break;
+                }
+                if (item != null) {
+                    item.setModeltype(type);
+                    items.add(item);
+                }
+            }
+            callBack.onGetMoreItems(pageNumber, totalPages, items);
+
+        }
+
+        private void responseGetHotItems(JSONObject jsonObj, int type) {
+            JSONArray itemsJarray = jsonObj.optJSONArray(ResultParams.REULST);
+            List<SearchItem> items = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < itemsJarray.length(); i++) {
+                JSONObject itemJobj = itemsJarray.optJSONObject(i);
+                SearchItem item = null;
+                switch (type) {
+                    case AreaDetailAdapter.MODULE_TYPE_PRODUCT:
+                        item = gson.fromJson(itemJobj.toString(), ProductItem.class);
+                        break;
+                    case AreaDetailAdapter.MODULE_TYPE_ROUTE:
+                        item = gson.fromJson(itemJobj.toString(), RouteItem.class);
+                        break;
+                }
+                if (item != null) {
+                    items.add(item);
+                }
+            }
+            callBack.onGetHotItems(items, type);
+        }
+
+        private void responseGetAreaRoutes(JSONObject jsonObj) {
+
+
+        }
+
+        private void responseGetSearchTag(JSONObject jsonObj) {
+            JSONArray itemsArray = jsonObj.optJSONArray(ResultParams.REULST);
+            List<String> items = new ArrayList<>();
+            for (int i = 0; i < itemsArray.length(); i++) {
+                String key = itemsArray.optString(i);
+                items.add(key);
+            }
+            callBack.onGetSearchTag(items);
+        }
+
+        private void responseGetSearchResult(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            JSONObject articlesJobj = resultJobj.optJSONObject("articleList");
+            JSONObject productsJobj = resultJobj.optJSONObject("productionList");
+            JSONObject routesJobj = resultJobj.optJSONObject("routeList");
+            JSONArray articlesJarray = articlesJobj.optJSONArray(ResultParams.REULST);
+            JSONArray productsJarray = productsJobj.optJSONArray(ResultParams.REULST);
+            JSONArray routesJarray = routesJobj.optJSONArray(ResultParams.REULST);
+            int articlesTotalNumb = articlesJobj.optInt("totalNumb");
+            int productsTotalNumb = productsJobj.optInt("totalNumb");
+            int routesToalNumb = routesJobj.optInt("totalNumb");
+            List<ArticleItem> articleItems = new ArrayList<>();
+            List<ProductItem> productItems = new ArrayList<>();
+            List<RouteItem> routeItems = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < articlesJarray.length(); i++) {
+                JSONObject articleJobj = articlesJarray.optJSONObject(i);
+                ArticleItem item = gson.fromJson(articleJobj.toString(), ArticleItem.class);
+                item.setModeltype(SearchResultAapter.MODE_TYPE_ARTICLE);
+                articleItems.add(item);
+            }
+            for (int i = 0; i < productsJarray.length(); i++) {
+                JSONObject productJobj = productsJarray.optJSONObject(i);
+                ProductItem item = gson.fromJson(productJobj.toString(), ProductItem.class);
+                item.setModeltype(SearchResultAapter.MODE_TYPE_PRODUCT);
+                productItems.add(item);
+            }
+            for (int i = 0; i < routesJarray.length(); i++) {
+                JSONObject routeJobj = routesJarray.optJSONObject(i);
+                RouteItem item = gson.fromJson(routeJobj.toString(), RouteItem.class);
+                item.setModeltype(SearchResultAapter.MODE_TYPE_ROUTE);
+                routeItems.add(item);
+            }
+            callBack.onGetSearchResult(key, articleItems, articlesTotalNumb, productItems, productsTotalNumb, routeItems, routesToalNumb);
+        }
+
+        private void responseGetSearchHot(JSONObject jsonObj) {
+            JSONArray itemsArray = jsonObj.optJSONArray(ResultParams.REULST);
+            List<String> items = new ArrayList<>();
+            for (int i = 0; i < itemsArray.length(); i++) {
+                String key = itemsArray.optString(i);
+                items.add(key);
+            }
+            callBack.onGetSearchHot(items);
+        }
+
+
+        private void responseGetCollections(JSONObject jsonObj) {
+            JSONArray jsonArray = jsonObj.optJSONArray(ResultParams.REULST);
+            List<SiftModle> items = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject itemJobj = jsonArray.optJSONObject(i);
+                SiftModle item = gson.fromJson(itemJobj.toString(), SiftModle.class);
+                items.add(item);
+            }
+            callBack.onGetDestinationCollections(items);
+
+        }
+
+        private void responseGetDesAreas(JSONObject jsonObj) {
+            JSONArray itemsJsArray = jsonObj.optJSONArray(ResultParams.REULST);
+            List<AreaItem> items = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < itemsJsArray.length(); i++) {
+                JSONObject itemJson = itemsJsArray.optJSONObject(i);
+                AreaItem item = gson.fromJson(itemJson.toString(), AreaItem.class);
+                items.add(item);
+            }
+            callBack.onGetDestinationAreas(items);
         }
 
         private void responseGetOrderDetail(JSONObject jsonObj) {
@@ -643,6 +1036,7 @@ public class ContentLoader {
             bundle.putString(KeyParams.PASSWORD, psw);
             bundle.putInt(KeyParams.USERID, user.getId());
             bundle.putString(KeyParams.TOKEN, user.getToken());
+            bundle.putString(KeyParams.AVATAR, user.getAvatar());
             UserHelper.saveLoginInfo(context, bundle);
         }
 
@@ -702,7 +1096,7 @@ public class ContentLoader {
 
         //specialdetail
         public void responseSpecialDetail(String json) {
-            AppLog.i("TAG", "responseSpecialDetail:"+json);
+            AppLog.i("TAG", "responseSpecialDetail:" + json);
             SpectialDetailsResp spectialDetailsResp = new Gson().fromJson(json, SpectialDetailsResp.class);
             if (spectialDetailsResp != null) {
                 callBack.onRecommendSpecial(spectialDetailsResp);
@@ -716,10 +1110,11 @@ public class ContentLoader {
                 callBack.onArticleResult(articleDetailsResp);
             }
         }
+
         private void responseVersion(String json) {
-            AppLog.i("TAG","responseVersion:"+json);
+            AppLog.i("TAG", "responseVersion:" + json);
             VersionInfo versionInfo = new Gson().fromJson(json, VersionInfo.class);
-            if(versionInfo.getReturnCode()==0){
+            if (versionInfo.getReturnCode() == 0) {
                 callBack.onVersionResult(versionInfo);
             }
         }
@@ -731,7 +1126,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
-
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -853,6 +1247,9 @@ public class ContentLoader {
         String RESULT_CODE = "returnCode";
         String MESSAGE = "message";
         String REULST = "result";
+        String PAGE_NUMBER = "pageNumber";
+        String TOTAL_PAGES = "totalPages";
+        String ROWS = "rows";
     }
 
     interface RequestCode {
@@ -867,8 +1264,22 @@ public class ContentLoader {
         int BOUDN_EMAIL = 109;
         int GET_MY_COUPON = 110;
         int GET_MY_ORDER = 111;
-
         int GET_ORDER_DETAIL = 112;
+        int GET_DESTINATION_AREAS = 113;
+        int GET_DESTINATION_COLLECTIONS = 114;
+        int GET_SEARCH_HOT = 116;
+        int GET_SEARCH_RESULT = 117;
+        int GET_SEARCH_TAG = 118;
+        int GET_DESTIANTION_AREA_ROUTES = 119;
+        int GET_HOT_ROUTES = 120;
+        int GET_HOT_PRODUCTS = 121;
+        int GET_AREA_PRODUCTS = 122;
+        int GET_MORE_ARITLE = 123;
+        int GET_MORE_PRODUCT = 124;
+        int GET_MORE_ROUTE = 125;
+        int GET_ROUTE_DETAILS = 126;
+        int GET_PAY_RESULT = 127;
+
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
         int SPECIAL_DETAIL = 202;
@@ -876,8 +1287,8 @@ public class ContentLoader {
         int CANCEL_PARISES = 204;
         int PARISES = 205;
 
-        int ARTICLE_DETAILS=206;
-        int VERSION_CODE=207;
+        int ARTICLE_DETAILS = 206;
+        int VERSION_CODE = 207;
 
 
     }

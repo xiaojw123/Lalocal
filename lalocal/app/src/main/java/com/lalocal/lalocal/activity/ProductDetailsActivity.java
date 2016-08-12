@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,10 +13,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
+import com.lalocal.lalocal.easemob.Constant;
+import com.lalocal.lalocal.easemob.ui.ChatActivity;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
 import com.lalocal.lalocal.model.ProductContentBean;
@@ -31,6 +31,7 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -39,22 +40,18 @@ import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
-
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
 
 
 /**
  * Created by lenovo on 2016/6/22.
  */
 
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener,MyScrollView.ScrollByListener ,
-        View.OnClickListener,CustomTitleView.onBackBtnClickListener{
-
+public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
+        View.OnClickListener, CustomTitleView.onBackBtnClickListener {
 
 
     private MyScrollView mScrollView;
@@ -79,7 +76,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private SpecialToH5Bean specialToH5Bean;
     private ContentLoader contentService;
     private Object praiseId;
-   // private SharePopupWindow sharePopupWindow;
+    // private SharePopupWindow sharePopupWindow;
     private ImageView titleBack;
     private RelativeLayout titleRelayout;
     private ProductDetailsResultBean result;
@@ -96,7 +93,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_details_layout);
-    //    ShareSDK.initSDK(this);
+        //    ShareSDK.initSDK(this);
         initView();
         initData();
 
@@ -104,7 +101,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     private void initView() {
-        backTitleView= (CustomTitleView) findViewById(R.id.product_title_back_ctv);
+        backTitleView = (CustomTitleView) findViewById(R.id.product_title_back_ctv);
         detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
         titleTv = (TextView) findViewById(R.id.product_title_tv);
         productPrice = (TextView) findViewById(R.id.product_price);
@@ -127,7 +124,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         serviceLL = (LinearLayout) findViewById(R.id.product_service_ll);
 
 
-
         //点击监听
         backTitleView.setOnBackClickListener(this);
         checkDetails.setOnClickListener(this);
@@ -135,8 +131,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         btnShare.setOnClickListener(this);
         customer.setOnClickListener(this);
         productReserve.setOnClickListener(this);
+        serviceLL.setOnClickListener(this);
 
-       // final int statusHeight = getStatusHeight(this);//获取状态栏高度
+        // final int statusHeight = getStatusHeight(this);//获取状态栏高度
 
 
         mScrollView.setScrollViewListener(ProductDetailsActivity.this);
@@ -208,6 +205,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         }
         return statusHeight;
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -218,6 +216,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 //去客服页面
                 break;
             case R.id.product_customer_service:
+                startOnlineService();
                 //去客服页面
                 break;
             case R.id.product_btn_like:
@@ -241,10 +240,22 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_details_reserve:
                 //TODO 预定
+                if (result == null) {
+                    return;
+                }
+                if (UserHelper.isLogined(this)) {
+                    preOrderProduct();
+                } else {
+                    Intent preIntent = new Intent();
+                    preIntent.setClass(this, LoginActivity.class);
+                    startActivityForResult(preIntent, 100);
+                }
+
+
                 break;
             case R.id.product_check_detail:
                 //TODO 查看详情
-                if(result!=null&&result.url!=null){
+                if (result != null && result.url != null) {
                     String url = result.url;
                     Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);
                     intent.putExtra("checkdetail", url);
@@ -252,14 +263,36 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 }
 
                 break;
+            case R.id.product_service_ll:
+                startOnlineService();
+
+                break;
         }
     }
 
+    private void preOrderProduct() {
+        Intent intent = new Intent();
+        intent.setClass(this, PreOrderActivity.class);
+        intent.putExtra(PreOrderActivity.PRE_ORDER_URL, AppConfig.getPreOrderProductUrl(this, result.id, UserHelper.getUserId(this), UserHelper.getToken(this)));
+        startActivity(intent);
+    }
 
-        @Override
-    public void onScrollBy(int deltaX, int deltaY, int scrollX, int scrollY){
-            AppLog.i("TAG", "deltaY:" + deltaY + "scrollY:" + scrollY);
+    public void startOnlineService() {
+        Intent intent = new Intent(this, ChatActivity.class);
+        if (result != null) {
+            intent.putExtra(Constant.ITEM_TITLE, result.title);
+            intent.putExtra(Constant.ITEM_DES, result.description);
+            intent.putExtra(Constant.ITEM_POST_URL, result.photo);
+            intent.putExtra(Constant.ITEM_PRICE, String.valueOf((int) result.price));
         }
+        startActivity(intent);
+    }
+
+
+    @Override
+    public void onScrollBy(int deltaX, int deltaY, int scrollX, int scrollY) {
+        AppLog.i("TAG", "deltaY:" + deltaY + "scrollY:" + scrollY);
+    }
 
 
     public void onBackClick() {
@@ -355,6 +388,31 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //产品详情介绍
     private void productDetail(ProductDetailsResultBean result) {
+        switch (result.status){
+            case 0:
+                productReserve.setText("预定");
+                productReserve.setEnabled(true);
+                productReserve.setBackgroundColor(getResources().getColor(R.color.color_ffaa2a));
+                break;
+            case 1:
+                productReserve.setText("已售罄");
+                productReserve.setEnabled(false);
+                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                break;
+            case 2:
+                productReserve.setText("已过期");
+                productReserve.setEnabled(false);
+                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                break;
+            case -1:
+                productReserve.setText("已删除");
+                productReserve.setEnabled(false);
+                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                break;
+
+
+        }
+
         titleTv.setText(result.title);
         productPrice.setText("¥ " + result.price);
         List<ProductDetailsBean> details = result.details;
@@ -417,10 +475,10 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             if (i != content.size() - 1) {
                 View view = new View(ProductDetailsActivity.this);
                 view.setBackgroundColor(Color.parseColor("#aaaaaa"));
-                view.setLayerType(View.LAYER_TYPE_SOFTWARE,null);
+                view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
                 view.setBackgroundResource(R.drawable.imag_line);
 
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,  DensityUtil.dip2px(mContext, 2));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(mContext, 2));
 
                 params.leftMargin = DensityUtil.dip2px(mContext, 15);
                 params.rightMargin = DensityUtil.dip2px(mContext, 15);
@@ -445,11 +503,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow   sharePopupWindow = new SharePopupWindow(mContext, shareVO);
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO);
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
                 Gravity.CENTER, 0, 0);
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == LoginActivity.LOGIN_OK) {
+            preOrderProduct();
+        }
+
+    }
 }

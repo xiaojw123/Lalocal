@@ -1,22 +1,38 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
+apply plugin: 'com.neenbedankt.android-apt'
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 android {
+//    compileSdkVersion 23
+//    buildToolsVersion "23.0.3"
+//    defaultConfig {
+//        applicationId "com.lalocal.lalocal"
+//        minSdkVersion 19
+//        targetSdkVersion 23
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
+    sourceSets{
+        main(){
+            jniLibs.srcDirs=['libs']
+        }
+    }
     defaultConfig {
         applicationId "com.lalocal.lalocal"
         minSdkVersion 19
         targetSdkVersion 23
+        versionCode 200
+        versionName "2.0.0"
+        multiDexEnabled true
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_7
+            targetCompatibility JavaVersion.VERSION_1_7
+        }
 
-
-
-
-        versionCode 102
-        versionName "1.0.2"
-
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
     buildTypes {
         debug {
@@ -24,6 +40,7 @@ android {
         }
         release {
             minifyEnabled false
+            shrinkResources true
         }
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
@@ -44,11 +61,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-
     compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.google.code.gson:gson:2.2.4'
+    compile 'com.google.code.gson:gson:2.4'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.belerweb:pinyin4j:2.5.1'
@@ -59,31 +76,40 @@ dependencies {
     compile 'org.litepal.android:core:1.3.2'
     compile project(':wkvideoplayer')
     compile project(':shinebuttonlib')
+    compile project(':easeui')
+    compile project(':pingpp')
     compile 'com.umeng.analytics:analytics:latest.integration'
+    compile 'com.jakewharton:butterknife:8.2.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    compile 'com.android.support:cardview-v7:23.4.0'
+    compile files('libs/AMap_2DMap_V2.9.0_20160525.jar')
+    compile files('libs/easemobchat_2.3.0.jar')
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:multidex:1.0.1'
 }
 
 //TODO:bugtags online delete
-apply plugin: 'com.bugtags.library.plugin'
-android {
-    defaultConfig {
-        ndk {
-            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
-        }
-
-    }
-}
-bugtags {
-    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
-    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
-    mappingUploadEnabled true
-
-    //网络跟踪功能配置(企业版)
-    trackingNetworkEnabled true
-}
-dependencies {
-    compile 'com.bugtags.library:bugtags-lib:latest.integration'
-}
+//apply plugin: 'com.bugtags.library.plugin'
+//android {
+//    defaultConfig {
+//        ndk {
+//            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+//        }
+//
+//    }
+//}
+//bugtags {
+//    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
+//    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
+//    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
+//    mappingUploadEnabled true
+//
+//    //网络跟踪功能配置(企业版)
+//    trackingNetworkEnabled true
+//}
+//dependencies {
+//    compile 'com.bugtags.library:bugtags-lib:latest.integration'
+//}
 
 
 

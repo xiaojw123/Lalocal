@@ -33,8 +33,8 @@ public class OrderDetail {
 
     private int id;
     private String orderNumb;
-    private int fee;
-    private int originFee;
+    private double fee;
+    private double originFee;
     private String name;
     private String photo;
     private String orderDate;
@@ -43,7 +43,7 @@ public class OrderDetail {
     private String payTime;
     private String payType;
     private int status;
-    private int couponValue;
+    private double couponValue;
     private int productionId;
     /**
      * contactInfoList : [{"itemList":[{"description":"","name":"姓名","value":"Hh","type":5,"nessary":true},{"description":"","name":"拼音","value":"Hhg","type":0,"nessary":true},{"description":"","name":"性别","value":"男","type":1,"nessary":true},{"description":"","name":"邮件","value":"Hh","type":0,"nessary":true},{"description":"","name":"电话","value":"+86 1111","type":3,"nessary":true}]}]
@@ -83,19 +83,19 @@ public class OrderDetail {
         this.orderNumb = orderNumb;
     }
 
-    public int getFee() {
+    public double getFee() {
         return fee;
     }
 
-    public void setFee(int fee) {
+    public void setFee(double fee) {
         this.fee = fee;
     }
 
-    public int getOriginFee() {
+    public double getOriginFee() {
         return originFee;
     }
 
-    public void setOriginFee(int originFee) {
+    public void setOriginFee(double originFee) {
         this.originFee = originFee;
     }
 
@@ -163,11 +163,11 @@ public class OrderDetail {
         this.status = status;
     }
 
-    public int getCouponValue() {
+    public double getCouponValue() {
         return couponValue;
     }
 
-    public void setCouponValue(int couponValue) {
+    public void setCouponValue(double couponValue) {
         this.couponValue = couponValue;
     }
 

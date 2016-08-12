@@ -1,5 +1,5 @@
 
-include ':app', ':library', ':shinebuttonlib', ':wkvideoplayer'
+include ':app', ':library', ':shinebuttonlib', ':wkvideoplayer', ':easeui', ':pingpp'
 
 include ':app'
 

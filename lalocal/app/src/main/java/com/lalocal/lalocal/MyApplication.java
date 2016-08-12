@@ -1,13 +1,18 @@
 package com.lalocal.lalocal;
 
 import android.app.Application;
+import android.content.Context;
 import android.graphics.Color;
+import android.support.multidex.MultiDex;
 
-import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
+import com.easemob.chat.EMChat;
+import com.lalocal.lalocal.easemob.DemoHelper;
+import com.lalocal.lalocal.easemob.utils.HelpDeskPreferenceUtils;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.pingplusplus.android.PingppLog;
 import com.qihoo.updatesdk.lib.UpdateHelper;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.Config;
@@ -32,16 +37,31 @@ public class MyApplication extends Application {
         super.onCreate();
         com.umeng.socialize.utils.Log.LOG = true;
         Log.LOG=true;
+        PingppLog.DEBUG = true;
         Config.IsToastTip = true;
         AppLog.print("MyApplication onCreate___");
         //360更新
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
+        EMChat.getInstance().init(this);
+        EMChat.getInstance().setDebugMode(true);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         startFabric();
         startUmeng();
         //数据库
         intCountryDB();
         //TODO:bugtags online delete
-        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+//        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+
+        //代码中设置环信IM的Appkey
+        String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
+        EMChat.getInstance().setAppkey(appkey);
+        // init demo helper
+        DemoHelper.getInstance().init(this);
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     private void intCountryDB() {
