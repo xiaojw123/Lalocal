@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/live_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+        <com.lalocal.lalocal.view.liveroomview.thirdparty.video.NEVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center" />
+        <include layout="@layout/live_loading_page"></include>
+        <com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView
+            android:id="@+id/barrageView_test"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_125dp"
+            android:layout_marginTop="80dp"
+            ></com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView>
+    </RelativeLayout>
+<RelativeLayout
+    android:id="@+id/live_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="right"
+    android:layout_marginLeft="-65dp"
+    >
+
+    <LinearLayout
+        android:id="@+id/live_telecast_model_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_40dp"
+        android:paddingLeft="@dimen/live_padding_10dp"
+        android:layout_marginTop="@dimen/live_padding_12dp"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:id="@+id/live_master_info_layout"
+            android:layout_width="@dimen/live_height_119dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/live_emcee_info_shape"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/live_emcee_head"
+                android:layout_width="@dimen/live_height_40dp"
+                android:layout_height="@dimen/live_height_40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/androidloading"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/live_emcee_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxEms="4"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/live_text_12sp"
+                    android:text="lalocal"/>
+                <TextView
+                    android:id="@+id/live_online_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/live_text_12sp"
+                    android:textColor="@android:color/white"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/live_visitors_list_recy"
+            android:layout_width="match_parent"
+            android:paddingLeft="@dimen/live_padding_20dp"
+            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/messageActivityBottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            >
+            <include layout="@layout/nim_message_activity_text_layout" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setting_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            >
+            <include layout="@layout/live_telecast_bottom_tab"></include>
+        </LinearLayout>
+        <com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout
+            android:id="@+id/periscope"
+            android:layout_width="70dp"
+            android:layout_height="350dp"
+            android:layout_above="@id/setting_bottom_layout"
+            android:layout_marginLeft="195dp"
+            android:layout_alignParentBottom="true"
+             />
+        <com.lalocal.lalocal.view.liveroomview.entertainment.ui.MessageListViewEx
+            android:id="@+id/messageListView"
+            style="@style/list_view"
+            android:layout_width="320dp"
+            android:layout_height="150dp"
+            android:layout_above="@id/messageActivityBottomLayout"
+            android:layout_marginBottom="10dp"
+            android:cacheColorHint="@android:color/transparent"
+            android:divider="@null"
+            android:fadingEdge="none"
+            android:focusable="false"
+            android:listSelector="@android:color/transparent"
+            android:scrollbars="vertical" />
+
+        <include
+            android:id="@+id/gift_animation_view"
+            layout="@layout/gift_layout"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_above="@id/messageListView"
+            android:layout_marginBottom="3dp" />
+
+        <include
+            android:id="@+id/gift_animation_view_up"
+            layout="@layout/gift_layout"
+            android:layout_width="220dp"
+            android:layout_height="50dp"
+            android:layout_above="@id/gift_animation_view"
+            android:layout_marginBottom="3dp" />
+
+
+
+        <LinearLayout
+            android:id="@+id/control_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/messageActivityBottomLayout"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/share_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/share_icon_selector"
+                android:visibility="gone"/>
+
+            <ImageButton
+                android:id="@+id/gift_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/gift_icon_selector"
+                android:visibility="gone"/>
+
+            <ImageButton
+                android:id="@+id/like_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/like_icon_selector"
+               />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/gift_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/send_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="@color/gift_background_color"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/send_gift_btn"
+                android:layout_width="60dp"
+                android:layout_height="35dp"
+                android:layout_gravity="right"
+                android:layout_marginBottom="7dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="7dp"
+                android:background="@drawable/g_white_btn_selector"
+                android:text="赠送"
+                android:textColor="@color/color_black_333333"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <GridView
+            android:id="@+id/gift_grid_view"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_above="@id/send_layout"
+            android:background="@color/gift_background_color"
+            android:listSelector="@drawable/item_border_selected"
+            android:numColumns="4" />
+    </RelativeLayout>
+
+</RelativeLayout>
+
+</com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout>

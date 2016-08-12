@@ -12,7 +12,10 @@ buildscript {
         // in the individual module build.gradle files
         //TODO:bugtags online delete
         classpath 'com.bugtags.library:bugtags-gradle:latest.integration'
-
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.3'
     }
 }
 

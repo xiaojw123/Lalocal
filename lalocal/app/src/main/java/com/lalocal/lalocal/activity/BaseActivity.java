@@ -6,6 +6,8 @@ import android.view.MotionEvent;
 
 import com.bugtags.library.Bugtags;
 import com.umeng.analytics.MobclickAgent;
+
+import butterknife.ButterKnife;
 /*
 *
 * Activity基类
@@ -19,6 +21,7 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
     }
 
     //TODO:bugtags online delete

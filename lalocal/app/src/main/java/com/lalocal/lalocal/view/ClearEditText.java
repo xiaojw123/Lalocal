@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.lalocal.lalocal.R;
 
+
 /**
  * @说明： 自定义带删除按钮的EditText 
  * 

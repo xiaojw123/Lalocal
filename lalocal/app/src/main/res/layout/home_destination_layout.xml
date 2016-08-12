@@ -22,7 +22,6 @@
 
 
     <TextView
-        android:id="@+id/tv2_des"
         android:paddingTop="5dp"
         android:layout_below="@id/tv1_des"
         android:layout_width="wrap_content"

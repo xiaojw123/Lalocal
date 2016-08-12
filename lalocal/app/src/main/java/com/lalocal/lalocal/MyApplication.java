@@ -2,20 +2,33 @@ package com.lalocal.lalocal;
 
 import android.app.Application;
 import android.graphics.Color;
+import android.os.Environment;
+import android.text.TextUtils;
 
-import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.base.util.ScreenUtil;
+import com.lalocal.lalocal.view.liveroomview.base.util.crash.AppCrashHandler;
+import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
+import com.lalocal.lalocal.view.liveroomview.base.util.sys.SystemUtil;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
+import com.lalocal.lalocal.view.liveroomview.im.util.storage.StorageType;
+import com.lalocal.lalocal.view.liveroomview.im.util.storage.StorageUtil;
+import com.lalocal.lalocal.view.liveroomview.inject.FlavorDependent;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.SDKOptions;
+import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.qihoo.updatesdk.lib.UpdateHelper;
-
+import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.utils.Log;
-
-import com.umeng.analytics.MobclickAgent;
-
 
 import org.litepal.LitePalApplication;
 import org.litepal.crud.DataSupport;
@@ -37,6 +50,7 @@ public class MyApplication extends Application {
         Log.LOG=true;
         Config.IsToastTip = true;
         AppLog.print("MyApplication onCreate___");
+        AppCrashHandler.getInstance(this);
         //360更新
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
         startFabric();
@@ -44,9 +58,89 @@ public class MyApplication extends Application {
         //数据库
         intCountryDB();
         //TODO:bugtags online delete
-        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+     //   Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+
+        DemoCache.setContext(this);
+        NIMClient.init(this, getLoginInfo(), getOptions());
+        if (inMainProcess()) {
+            // 注册自定义消息附件解析器
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
+            // init tools
+            StorageUtil.init(this, null);
+            ScreenUtil.init(this);
+            DemoCache.initImageLoaderKit();
+
+            // init log
+            initLog();
+            FlavorDependent.getInstance().onApplicationCreate();
+        }
+    }
+
+    private SDKOptions getOptions() {
+        SDKOptions options = new SDKOptions();
+        // 如果将新消息通知提醒托管给SDK完成，需要添加以下配置。
+        StatusBarNotificationConfig config = UserPreferences.getStatusConfig();
+        if (config == null) {
+            config = new StatusBarNotificationConfig();
+        }
+        // 点击通知需要跳转到的界面
+      //  config.notificationEntrance = WelcomeActivity.class;
+      //  config.notificationSmallIconId = R.drawable.ic_stat_notify_msg;
+
+        // 通知铃声的uri字符串
+        config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";
+        options.statusBarNotificationConfig = config;
+        UserPreferences.setStatusConfig(config);
+
+        // 配置保存图片，文件，log等数据的目录
+        String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim/";
+        options.sdkStorageRootPath = sdkPath;
+        android.util.Log.i("demo", FlavorDependent.getInstance().getFlavorName() + " demo nim sdk log path=" + sdkPath);
+
+        // 配置数据库加密秘钥
+        options.databaseEncryptKey = "NETEASE";
+
+        // 配置是否需要预下载附件缩略图
+        options.preloadAttach = true;
+
+        // 配置附件缩略图的尺寸大小，
+        options.thumbnailSize = (int) (0.5 * ScreenUtil.screenWidth);
+
+        // 用户信息提供者
+        options.userInfoProvider = null;
+
+        // 定制通知栏提醒文案（可选，如果不定制将采用SDK默认文案）
+        options.messageNotifierCustomization = null;
+
+        return options;
+    }
+
+    private boolean inMainProcess() {
+        String packageName = getPackageName();
+        String processName = SystemUtil.getProcessName(this);
+        return packageName.equals(processName);
+    }
+
+    private void initLog() {
+        String path = StorageUtil.getDirectoryByDirType(StorageType.TYPE_LOG);
+        LogUtil.init(path, android.util.Log.DEBUG);
+        LogUtil.i("demo", FlavorDependent.getInstance().getFlavorName() + " demo log path=" + path);
+    }
+
+    private LoginInfo getLoginInfo() {
+
+        String account = AuthPreferences.getUserAccount();
+        String token = AuthPreferences.getUserToken();
+
+        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
+            DemoCache.setAccount(account.toLowerCase());
+            return new LoginInfo(account, token);
+        } else {
+            return null;
+        }
 
     }
+
 
     private void intCountryDB() {
         LitePalApplication.initialize(this);

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/homepage_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        attr:lineVisible="false"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/homepage_head">
+    <RelativeLayout
+        android:id="@+id/line_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_title_height"
+        android:background="@color/color_f8">
+        <View
+            android:id="@+id/line_heheh"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_title_divde_line_height"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_b3" />
+        <TextView
+            android:id="@+id/live_verified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/line_heheh"
+            android:layout_marginLeft="155dp"
+            android:background="@drawable/home_me_verified_bg"
+            android:layout_marginBottom="@dimen/live_padding_5dp"
+            android:text="未验证"/>
+
+
+    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/homepage_master_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/line_layout"
+            android:layout_marginTop="@dimen/live_padding_5dp"
+            android:layout_marginLeft="155dp"
+            android:text="主播在路上"/>
+        <TextView
+            android:id="@+id/homepage_master_signature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/homepage_master_name"
+            android:layout_marginLeft="155dp"
+            android:textColor="#b3b3b3"
+            android:text="这家伙啥也没写"/>
+
+            <ImageView
+                android:id="@+id/personal_home_page"
+                android:layout_width="@dimen/home_me_headportrait_img_width"
+                android:layout_height="@dimen/home_me_headportrait_img_height"
+                android:background="@drawable/home_me_head_bg"
+                android:paddingBottom="@dimen/home_me_headportrait_img_bottom"
+                android:paddingLeft="@dimen/home_me_headportrait_img_left"
+                android:paddingRight="@dimen/home_me_headportrait_img_right"
+                android:paddingTop="@dimen/home_me_headportrait_img_top"
+                android:scaleType="fitXY"
+                android:src="@drawable/home_me_personheadnormal" />
+        <View
+            android:id="@+id/ffdffhfd"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_title_divde_line_height"
+            android:layout_marginTop="@dimen/live_height_40dp"
+            android:layout_below="@+id/homepage_master_signature"
+            android:background="@color/color_b3" />
+
+        <LinearLayout
+            android:id="@+id/line_g"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:orientation="horizontal"
+            android:layout_below="@+id/ffdffhfd">
+            <LinearLayout
+                android:id="@+id/homepage_attention_layout"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="关注"/>
+                <TextView
+                    android:id="@+id/homepage_attention_count_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/homepage_fans_layout"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="粉丝"/>
+                <TextView
+                    android:id="@+id/homepage_fans_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10"/>
+            </LinearLayout>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_title_divde_line_height"
+          android:layout_below="@+id/line_g"
+            android:background="@color/color_b3" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+        android:textColor="#b3b3b3"
+        android:text="更多展示,敬请期待"/>
+
+       <TextView
+           android:id="@+id/master_attention"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+
+           android:layout_alignParentBottom="true"
+           android:layout_centerHorizontal="true"
+           android:paddingBottom="@dimen/author_padding_15dp"
+          />
+
+</RelativeLayout>

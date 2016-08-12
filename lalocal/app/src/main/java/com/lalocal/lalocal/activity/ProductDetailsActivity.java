@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
@@ -39,11 +36,9 @@ import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
-
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -96,7 +91,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_details_layout);
-    //    ShareSDK.initSDK(this);
+
         initView();
         initData();
 
@@ -446,7 +441,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
         SharePopupWindow   sharePopupWindow = new SharePopupWindow(mContext, shareVO);
-        sharePopupWindow.showShareWindow();
+        sharePopupWindow.showShareWindow("#7dffffff");
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
                 Gravity.CENTER, 0, 0);
 

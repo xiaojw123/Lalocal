@@ -37,9 +37,6 @@
     <string name="veritied_code_no_empty">验证码不能为空</string>
     <string name="psw_no_empty">密码不能为空</string>
     <string name="email_no_empty">邮箱不能为空</string>
-    <string name="email_no_exisit">邮箱尚未注册</string>
-    <string name="ver_code_send_success">验证码已成功发送至你的邮箱</string>
-    <string name="ver_code_send_failed">验证码发送失败</string>
     <string name="next">下一步</string>
     <string name="setting">设置</string>
     <string name="sign_out">退出账号</string>
@@ -64,7 +61,7 @@
     <string name="select">选择</string>
     <string name="photograph">拍照</string>
     <string name="photoalbum">相册获取</string>
-    <string name="cancel">取消</string>
+    <string name="cancel">继续直播</string>
     <string name="save">保存</string>
     <string name="country_code">国家号</string>
     <string name="phone_number">手机号</string>
@@ -86,7 +83,6 @@
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    <string name="coupon_can_overlay">此优惠券可与同色优惠券叠加使用</string>
     <string name="article">文章</string>
     <string name="goods">商品</string>
     <string name="route">路线</string>
@@ -98,27 +94,23 @@
     <string name="convert_coupon">兑换</string>
     <string name="input_favorable_code">请输入优惠码</string>
     <string name="order_number">订单编号</string>
-    <string name="adult">成人</string>
     <string name="toal">合计:</string>
     <string name="payment">付款</string>
-    <string name="evaluate">评价</string>
-    <string name="child">儿童</string>
     <string name="orderdetail">订单详情</string>
     <string name="service">客服</string>
     <string name="travel_information">出行信息</string>
     <string name="packages_choose">套餐选择</string>
     <string name="travel_time">出行时间</string>
-    <string name="pick_up_location">接送地点</string>
     <string name="travel_person">出行人</string>
     <string name="pay_money">支付金额</string>
     <string name="order_info">订单信息</string>
     <string name="order_time">下单时间</string>
     <string name="pay_time">支付时间</string>
     <string name="pay_channel">支付渠道</string>
-    <string name="immediately_evaluate">立即评价</string>
     <string name="evaluate_time">评价时间</string>
     <string name="mobile">手机</string>
-    <string name="no_more_content">已没有更多内容</string>
     <string name="unlogin_warn">你还没有登录，即使是我们的工程师也不能算出你有多少优惠券</string>
+
+
 
 </resources>

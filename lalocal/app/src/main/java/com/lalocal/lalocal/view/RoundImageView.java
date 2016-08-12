@@ -45,7 +45,7 @@ public class RoundImageView extends ImageView {
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RoundImageView);
         mType = ta.getInt(R.styleable.RoundImageView_type, DEFAULT_TYPE);
         mBorderColor = ta.getColor(R.styleable.RoundImageView_borderColor, DEFAULT_BORDER_COLOR);
-        mBorderWidth = ta.getDimensionPixelSize(R.styleable.RoundImageView_borderWidth, dip2px(DEFAULT_BORDER_WIDTH));
+        mBorderWidth = ta.getDimensionPixelSize(R.styleable.RoundImageView_borderWidths, dip2px(DEFAULT_BORDER_WIDTH));
         mRectRoundRadius = ta.getDimensionPixelSize(R.styleable.RoundImageView_rectRoundRadius, dip2px(DEFAULT_RECT_ROUND_RADIUS));
         ta.recycle();
     }

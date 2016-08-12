@@ -1,0 +1,28 @@
+<resources>
+    <string name="empty"></string>
+
+    <string name="ok">确定</string>
+
+    <string name="clear_empty">清空</string>
+    <string name="iknow">知道了</string>
+    <string name="send">发送</string>
+    <string name="unknow_size">未知大小</string>
+
+
+    <string name="copyright">Copyright ©1997-2016 网易公司版权所有</string>
+    <string name="net_broken">当前网络不可用</string>
+
+    <!-- 登录/注册 -->
+
+    <string name="login_failed">帐号或密码错误</string>
+
+    <string name="recording_init_failed">初始化录音失败</string>
+    <string name="recording_max_time">录音达到最大时间，是否发送？</string>
+
+    <string name="repeat_download_message">重新下载?</string>
+
+    <string name="unsupport_title">无法显示该内容</string>
+    <string name="unsupport_desc">客户端版本不支持该内容</string>
+
+    <string name="input_edittext_hint">请输入内容（弹幕限时免费）</string>
+</resources>

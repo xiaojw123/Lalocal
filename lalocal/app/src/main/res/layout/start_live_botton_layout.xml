@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/live_height_50dp"
+   android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_alignParentBottom="true"
+    >
+    <TextView
+        android:id="@+id/input_start_live"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="开始直播"
+        android:layout_gravity="center"
+        android:textSize="@dimen/text_size_16_sp"
+        android:textColor="@color/live_start_tv" />
+</LinearLayout>

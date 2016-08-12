@@ -1,5 +1,5 @@
 
-include ':app', ':library', ':shinebuttonlib', ':wkvideoplayer'
+include ':app', ':library', ':shinebuttonlib', ':wkvideoplayer', ':lib.blur'
 
 include ':app'
 

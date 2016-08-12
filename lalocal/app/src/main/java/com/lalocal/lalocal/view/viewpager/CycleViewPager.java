@@ -33,6 +33,7 @@ import android.widget.RelativeLayout;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
+import com.lalocal.lalocal.util.AppLog;
 
 /**
  * 实现可循环，可轮播的viewpager
@@ -324,6 +325,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 						if(targetType==-1){
 							//Toast.makeText(getActivity(),url,Toast.LENGTH_SHORT).show();
 							String url = infos.get(currentPosition - 1).url;
+							AppLog.i("TAG","mImageCycleViewListener:"+url);
 							Intent intent = new Intent(getActivity(), CarouselFigureActivity.class);
 							intent.putExtra("carousefigure", recommendAdResultBean);
 							startActivity(intent);

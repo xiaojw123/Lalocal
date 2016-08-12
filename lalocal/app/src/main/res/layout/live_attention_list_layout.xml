@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@android:color/white"
+    android:layout_height="match_parent">
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/user_attention_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        attr:lineVisible="false"
+        app:title_name="关注(0)"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_40dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/live_attention_search_et"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/live_attenton_search_bg"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_marginRight="@dimen/live_padding_10dp"
+            android:drawableLeft="@drawable/search_icon"
+            android:hint="搜索"
+           android:paddingLeft="@dimen/live_padding_10dp"
+            android:paddingRight="@dimen/live_padding_5dp"
+            />
+        <TextView
+            android:id="@+id/live_attention_search_cancel"
+            android:layout_width="@dimen/live_height_50dp"
+            android:layout_height="@dimen/live_height_40dp"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:text="取消"
+
+            android:paddingRight="@dimen/live_padding_10dp"
+            android:textSize="@dimen/text_size_16_sp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+
+    <com.lalocal.lalocal.view.xlistview.XListView
+        android:id="@+id/live_attention_listview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+    </com.lalocal.lalocal.view.xlistview.XListView>
+
+</LinearLayout>

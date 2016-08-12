@@ -6,7 +6,6 @@
     android:layout_alignParentBottom="true"
     android:layout_height="44dp"
     android:layout_gravity="center"
-    android:id="@+id/product_bottom"
     android:background="@android:color/white">
     <View
         android:layout_width="match_parent"

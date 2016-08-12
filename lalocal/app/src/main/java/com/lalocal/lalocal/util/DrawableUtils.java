@@ -41,13 +41,28 @@ public class DrawableUtils {
         }
 
         File imgFile = loader.getDiskCache().get(url);
+
         if (imgFile == null || !imgFile.exists()) {
             loader.displayImage(url, img, getImageOptions(radius, drawable));
+
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
             loader.displayImage(fileUri, img);
+
         }
 
+    }
+
+    public static void displayRadiusImg(Context context, ImageView img, String url, int radius, int drawable) {
+        if (loader == null) {
+            loader = ImageLoader.getInstance();
+        }
+        if (!loader.isInited()) {
+            init(context);
+        }
+
+        File imgFile = loader.getDiskCache().get(url);
+          loader.displayImage(url, img, getImageOptions(radius, drawable));
     }
 
     private static void init(Context context) {
@@ -76,7 +91,7 @@ public class DrawableUtils {
         builder.cacheInMemory(true);
         builder.cacheOnDisk(true);
         builder.imageScaleType(ImageScaleType.EXACTLY);
-//		builder.displayer(new CircleBitmapDisplayer())
+
         return builder.build();
     }
 

@@ -41,7 +41,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
-import com.umeng.socialize.ShareAction;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -102,18 +101,13 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         btnLike.setImageResource(R.drawable.index_article_btn_like);
 
-        placeHolder = findViewById(R.id.place_holder);
-
         //点击事件
         backBtn.setOnClickListener(this);
         btnLike.setOnClickListener(this);
         btnComment.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         back.setOnClickListener(this);
-
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -171,7 +165,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private void showShare(SpecialShareVOBean shareVO) {
 
         SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-        shareActivity.showShareWindow();
+        shareActivity.showShareWindow("#7dffffff");
         shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
                 Gravity.CENTER, 0, 0);
 

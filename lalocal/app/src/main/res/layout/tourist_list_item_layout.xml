@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="@dimen/live_height_52dp"
+    android:layout_height="@dimen/live_height_40dp">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tourist_item"
+        android:layout_width="@dimen/live_height_40dp"
+        android:layout_height="@dimen/live_height_40dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/androidloading"/>
+
+</LinearLayout>

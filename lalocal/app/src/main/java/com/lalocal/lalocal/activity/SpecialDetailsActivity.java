@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.activity;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -13,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -46,13 +44,10 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SecretTextView;
-
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
-import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
-
 
 import java.util.List;
 
@@ -166,7 +161,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             case R.id.special_details_share_iv:
                 if (shareVO != null) {
                     SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-                    shareActivity.showShareWindow();
+                    shareActivity.showShareWindow("#7dffffff");
                     shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
                             Gravity.CENTER, 0, 0);
                 }
@@ -243,10 +238,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 }
 
                 if (praiseFlag) {
-                    //   detailsLike.setImageResource(R.drawable.index_huabao_btn_like_nor);
+
                     detailsLike.setChecked(true);
                 } else {
-                    //  detailsLike.setImageResource(R.drawable.index_article_btn_like);
+
                     detailsLike.setChecked(false);
                 }
                 bannerBean = spectialDetailsResp.result.banner;
@@ -303,8 +298,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         @Override
         public void onPariseResult(PariseResult pariseResult) {
             super.onPariseResult(pariseResult);
-
-            //  detailsLike.setImageResource(R.drawable.index_article_btn_like);
             detailsLike.setChecked(false);
             praiseFlag = false;
         }

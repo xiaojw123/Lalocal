@@ -18,4 +18,7 @@ public interface KeyParams {
     public static  final  String IM_LOGIN="im_login";
     public static  final  String PASSWORD="psw";
     public static  final  String IS_LOGIN="isLogin";
+
+    public static final String IM_TOKEN="imtoken";
+    public static final String IM_CCID="ccid";
 }

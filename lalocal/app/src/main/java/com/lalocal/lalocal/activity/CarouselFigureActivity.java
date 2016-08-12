@@ -1,22 +1,18 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.view.SharePopupWindow;
-
-import java.util.HashMap;
 
 /**
  * Created by android on 2016/7/7.
@@ -50,7 +46,6 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
     }
     @Override
     public void onClick(View v) {
-
         switch (v.getId()){
             case R.id.carous_figure_share:
                 showShare(shareVO);
@@ -61,7 +56,7 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     private void showShare(SpecialShareVOBean shareVO) {
         SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO);
-        shareActivity.showShareWindow();
+        shareActivity.showShareWindow("#7dffffff");
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.CENTER, 0, 0);
     }
@@ -75,5 +70,9 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
         return super.onKeyDown(keyCode, event);
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }

@@ -8,12 +8,12 @@ import android.content.pm.PackageManager;
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
-
-
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
-    private static String baseUrl = "http://api.lalocal.cn/api/";
-
+ // private static String baseUrl = "http://api.lalocal.cn/api/";
+  // http://dev.lalocal.cn:8080/api/channels
+    //http://api.lalocal.cn/api/system/im/tourist
+   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     //登录接口
     public static String getLoginUrl() {
         return baseUrl + "users/login";
@@ -28,22 +28,16 @@ public class AppConfig {
     public static String getVerCodeSendUrl() {
         return baseUrl + "system/sendEmail";
     }
-
-
     //忘记密码接口
     public static String getPasswordResetUrl() {
-
         return baseUrl + "users/forgetPassword";
     }
-
     //我的收藏接口 GET_MY_FARORITE_ITEMS
     public static String getFavoriteItemsUrl() {
         return baseUrl + "praises?";
     }
-
     //我的优惠券接口 GET_MY_COUPON_ITEMS
     public static String getCouponItemsUrl() {
-
         return baseUrl + "coupons?";
     }
 
@@ -112,6 +106,55 @@ public class AppConfig {
     public static  String getArticleDetailsUrl(){
 
     return baseUrl + "articles/";
+    }
+   //直播列表
+    public static String getLiveListUrl(){
+        return  baseUrl+"channels?";
+    }
+    //推荐直播列表
+    public  static String getLiveRecommendListUrl(){
+        return  baseUrl+"channels/recommends";
+    }
+    //直播详情 http://dev.lalocal.cn:8080/api/channels/2
+    public static String getLiveDetails(){
+        return baseUrl+"channels/";
+    }
+    //创建直播间  http://api.lalocal.cn/api/channels
+    public static String getCreateLiveRoom(){
+        return  baseUrl+"channels";
+    }
+    //修改直播
+    public static  String getAlterLive(){
+        return  baseUrl+"channels/";
+    }
+    //关闭直播
+    public static String getCancelLive(){
+        return baseUrl+"channels/";
+    }
+    //游客账号 http://dev.lalocal.cn:8080/api/system/im/tourist
+    public  static String getTourist(){
+        return baseUrl+"system/im/tourist";
+    }
+    //获取图片上传的token   http://dev.lalocal.cn:8080/api/system/imgs/token
+    public static  String getImgToken(){
+        return  baseUrl+"system/imgs/token";
+    }
+
+    //获取直播用户信息  http://dev.lalocal.cn:8080/api/users/userInfos/112
+    public static final String getLiveUserInfo(){
+        return  baseUrl+"users/userInfos/";
+    }
+    //直播添加关注接口http://dev.lalocal.cn:8080/api/users/attentions/2
+    public static final  String getAddAttention(){
+        return baseUrl+"users/attentions/";
+    }
+    //查看⽤户关注/粉丝列  http://dev.lalocal.cn:8080/api/users/attentions?type=0&userId=8386
+    public static final String getAttentionOrFansList(){
+        return baseUrl+"users/attentions?";
+    }
+    //搜索关注粉丝http://dev.lalocal.cn:8080/api/users?pageSize=10&pageNumber=1&nickName=%E6%9D%8E
+    public static final String getSearchUser(){
+        return baseUrl+"users?";
     }
     //版本更新
     public static String VERSION_UPDATE = "http://api.lalocal.cn/api/" + "system/version?version=";

@@ -6,16 +6,7 @@
         <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
 
-    <!-- prompt message dialog style -->
-    <!--<style name="prompt_dialog" parent="@android:style/Theme.Dialog">-->
-        <!--<item name="android:windowBackground">@android:color/transparent</item>-->
-        <!--<item name="android:windowIsFloating">true</item>-->
-        <!--<item name="android:windowNoTitle">true</item>-->
-        <!--<item name="android:windowIsTranslucent">true</item>-->
-        <!--<item name="android:background">@null</item>-->
-        <!--<item name="android:windowFrame">@null</item>-->
-        <!--<item name="android:backgroundDimEnabled">false</item>-->
-    <!--</style>-->
+
     <style name="prompt_dialog" parent="test_dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
@@ -49,24 +40,9 @@
         <item name="android:singleLine">true</item>
     </style>
 
-    <style name="ReisterClearBtnTheme">
-        <item name="android:layout_width">@dimen/register_clear_btn_width</item>
-        <item name="android:layout_height">@dimen/register_clear_btn_height</item>
-        <item name="android:layout_gravity">right|center_vertical</item>
-        <item name="android:layout_marginRight">@dimen/register_clear_btn_right</item>
-        <item name="android:background">@drawable/icon_clear</item>
-    </style>
-
     <style name="CustomEditTextTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-    </style>
-
-    <style name="RegisterEditContainerTheme">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/register_edit_height</item>
-        <item name="android:layout_marginLeft">@dimen/register_edit_left</item>
-        <item name="android:layout_marginRight">@dimen/register_edit_left</item>
     </style>
 
     <style name="HomeTabTextTheme">
@@ -130,13 +106,6 @@
         <item name="android:layout_marginRight">@dimen/dimen_size_11_dp</item>
     </style>
 
-    <style name="CommonTitleNameTheme">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/color_1a</item>
-        <item name="android:textSize">@dimen/text_size_17_sp</item>
-        <item name="android:gravity">center</item>
-    </style>
     <style name="AboutUsItemTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/about_us_contact_item_height</item>
@@ -255,4 +224,22 @@
 
     </style>
     <style name="Widget.GifView" parent="@android:style/Widget"></style>
+   <!-- &lt;!&ndash;网易视频播放器&ndash;&gt;
+    <style name="MediaController_SeekBar" parent="android:Widget.SeekBar">
+        <item name="android:progressDrawable">@drawable/nemediacontroller_progressbar</item>
+        <item name="android:indeterminateDrawable">@drawable/nemediacontroller_progressbar</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
+        <item name="android:thumb">@drawable/nemediacontroller_progressbar_thumb</item>
+        <item name="android:thumbOffset">8dip</item>
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:paddingRight">8dip</item>
+    </style>-->
+
+   <!-- <style name="MediaController_Text">
+        <item name="android:textColor">#bfbfbf</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>-->
+
 </resources>

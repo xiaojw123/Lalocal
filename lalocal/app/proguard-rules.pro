@@ -90,3 +90,9 @@ public static final int *;
 -keep class * implements android.os.Parcelable {         # 保持 Parcelable 不被混淆
     public static final android.os.Parcelable$Creator *;
 }
+
+#网易云信
+-dontwarn com.netease.**
+-dontwarn io.netty.**
+-keep class com.netease.** {*;}
+-keep class io.netty.** {*;}

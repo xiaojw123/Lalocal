@@ -33,7 +33,7 @@ public class WelcomeActivity extends BaseActivity {
         public void onVersionResult(VersionInfo versionInfo) {
             VersionResult result = versionInfo.getResult();
             String apiUrl = result.getApiUrl();
-            AppConfig.setBaseUrl(apiUrl);
+           // AppConfig.setBaseUrl(apiUrl);
             Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
             startActivity(intent);
             finish();

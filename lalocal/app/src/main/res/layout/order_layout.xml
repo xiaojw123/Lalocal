@@ -21,7 +21,6 @@
             app:title_name="@string/orderdetail" />
 
         <TextView
-            android:id="@+id/order_service"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/dimen_size_4_dp"
@@ -93,9 +92,7 @@
 
             <View style="@style/CommonD9LineTheme" />
 
-            <RelativeLayout
-                android:id="@+id/order_travel_information_container"
-                style="@style/OrderCarditemContainerStyle">
+            <RelativeLayout style="@style/OrderCarditemContainerStyle">
                 <!--android:layout_height="@dimen/order_travel_information_container_height"-->
                 <TextView
                     android:id="@+id/travel_information"
@@ -202,13 +199,10 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/order_info_title"
                     style="@style/OrderCardItemIitleStyle"
                     android:text="@string/order_info" />
 
-                <View
-                    android:id="@+id/order_info_line"
-                    style="@style/CommonD9LineTheme" />
+                <View style="@style/CommonD9LineTheme" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
@@ -250,7 +244,6 @@
                     android:layout_marginRight="@dimen/dimen_size_15_dp">
 
                     <TextView
-                        android:id="@+id/order_pay_time_name"
                         style="@style/OrderCardItemTextStyle"
                         android:gravity="center_vertical"
                         android:text="@string/pay_time" />
@@ -269,7 +262,6 @@
                     android:layout_marginRight="@dimen/dimen_size_15_dp">
 
                     <TextView
-                        android:id="@+id/order_pay_channel_name"
                         style="@style/OrderCardItemTextStyle"
                         android:text="@string/pay_channel" />
 

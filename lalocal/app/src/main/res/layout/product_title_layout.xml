@@ -26,7 +26,6 @@
             android:paddingRight="-20dp">
 
             <ImageView
-                android:id="@+id/product_service_iv"
                 android:layout_width="wrap_content"
                 android:layout_height="26dp"
                 android:src="@drawable/serviceicon"
