@@ -63,7 +63,6 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
@@ -143,7 +142,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private TouristAdapter tourisAdapter;
     private ChatRoomMember master;
     public String avatar;
-    private boolean barrageSelectorStatus=false;
+    protected boolean barrageSelectorStatus=false;
     protected EditText editTextInput;
     protected ImageView inputChar;
     private String avatarIntetn;
@@ -322,7 +321,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 ChatRoomMessage chatRoomMessage = messages.get(0);
                 String content = chatRoomMessage.getContent();
                 String fromNick = chatRoomMessage.getChatRoomMessageExtension().getSenderNick();
-
+                AppLog.i("TAG","BarrageAttachment弹幕监听到了啊a:"+content+"    "+fromNick);
                 if(content!=null&&!"点赞".equals(content)){
                     barrageView.addTextBarrage(fromNick+":"+content);
                 }
@@ -509,12 +508,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         //弹幕开关状态
         inputPanel.setOnBarrageViewCheckStatusListener(new InputPanel.OnBarrageViewCheckStatusListener() {
             @Override
-            public void getBarrageViewCheckStatus(boolean isCheck,String text) {
+            public void getBarrageViewCheckStatus(boolean isCheck) {
                 barrageSelectorStatus = isCheck;
-                BarrageAttachment barrageAttachment = new BarrageAttachment();
-                ChatRoomMessage barrageMessage = ChatRoomMessageBuilder.createChatRoomCustomMessage(roomId, barrageAttachment);
-                setMemberType(barrageMessage);
-                NIMClient.getService(ChatRoomService.class).sendMessage(barrageMessage, false);
+
+
             }
         });
         //软键盘输入框

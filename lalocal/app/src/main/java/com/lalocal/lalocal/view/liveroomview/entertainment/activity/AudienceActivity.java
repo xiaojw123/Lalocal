@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
@@ -89,6 +90,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private String playType;
     private View loadingPage;
     private RelativeLayout mBlurDrawableRelativeLayout1;
+    private TextView send;
 
 
     public static void start(Context context, String roomId, String url,String avatar,String nickName,String userId,SpecialShareVOBean shareVO,String type) {
@@ -376,8 +378,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     liveSettingLayout.setVisibility(View.GONE);
                     inputPanel.switchToTextLayout(true);
                     break;
-
-
             }
         }
     };

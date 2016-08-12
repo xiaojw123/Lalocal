@@ -69,8 +69,6 @@ public class MyApplication extends Application {
             StorageUtil.init(this, null);
             ScreenUtil.init(this);
             DemoCache.initImageLoaderKit();
-
-            // init log
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
         }
@@ -83,9 +81,6 @@ public class MyApplication extends Application {
         if (config == null) {
             config = new StatusBarNotificationConfig();
         }
-        // 点击通知需要跳转到的界面
-      //  config.notificationEntrance = WelcomeActivity.class;
-      //  config.notificationSmallIconId = R.drawable.ic_stat_notify_msg;
 
         // 通知铃声的uri字符串
         config.notificationSound = "android.resource://com.netease.nim.demo/raw/msg";

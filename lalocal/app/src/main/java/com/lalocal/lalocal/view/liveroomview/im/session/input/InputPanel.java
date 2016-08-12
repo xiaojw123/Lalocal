@@ -28,6 +28,7 @@ import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.util.StringUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMemberCache;
+import com.lalocal.lalocal.view.liveroomview.entertainment.module.BarrageAttachment;
 import com.lalocal.lalocal.view.liveroomview.im.session.Container;
 import com.lalocal.lalocal.view.liveroomview.im.session.actions.BaseAction;
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.EmoticonPickerView;
@@ -35,7 +36,9 @@ import com.lalocal.lalocal.view.liveroomview.im.session.emoji.IEmoticonSelectedL
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.MoonUtil;
 import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.media.record.AudioRecorder;
@@ -297,7 +300,9 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 barrageAndChat.setSelected(isSelector);
                 isCheckBarrage++;
                 AppLog.i("TAG","isSelector:"+ (isSelector==true?"开启": "关闭"));
-
+                if(onBarrageViewCheckStatusListener!=null){
+                    onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector);
+                }
             }
         }
     };
@@ -305,7 +310,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     //弹幕开关状态监听
     private  OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener;
     public interface OnBarrageViewCheckStatusListener {
-        void getBarrageViewCheckStatus(boolean isCheck,String text);
+        void getBarrageViewCheckStatus(boolean isCheck);
     }
 
     public void setOnBarrageViewCheckStatusListener(OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener) {
@@ -337,10 +342,27 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
             textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
             if(isSelector){
+                BarrageAttachment barrageAttachment=new BarrageAttachment();
+                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(container.account, barrageAttachment);
+                message.setContent(text);
+                setMemberType(message);
+                NIMClient.getService(ChatRoomService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        AppLog.i("TAG","发送成功");
+                    }
 
-                if(onBarrageViewCheckStatusListener!=null){
-                    onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector,text);
-                }
+                    @Override
+                    public void onFailed(int i) {
+                        AppLog.i("TAG","失败部分就回复发的fdfd"+i);
+                    }
+
+                    @Override
+                    public void onException(Throwable throwable) {
+                        AppLog.i("TAG","发送成功throwable");
+                    }
+                });
+
                 AppLog.i("TAG","弹幕开启了吗");
 
 
