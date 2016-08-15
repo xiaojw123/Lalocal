@@ -107,7 +107,7 @@ public class MyFavoriteAdapter extends BaseAdapter {
                         //产品类型
                         holder.type.setText(res.getString(R.string.goods));
                         holder.type.setBackgroundColor(res.getColor(R.color.color_ffaa2a));
-                        holder.price.setText(CommonUtil.formartPrice(item.getPrice()));
+                        holder.price.setText(CommonUtil.formartOrderPrice(item.getPrice()));
                         holder.author.setVisibility(View.GONE);
                         holder.authorAvatar.setVisibility(View.GONE);
                         holder.praiseNum.setVisibility(View.GONE);

@@ -48,7 +48,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
-      final  ChatRoomMember member = items.get(position);
+      final ChatRoomMember member = items.get(position);
         DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, member.getAvatar());
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,7 +84,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
     private OnTouristItemClickListener onTouristItemClickListener;
 
     public interface OnTouristItemClickListener {
-        void showTouristInfo( ChatRoomMember member,boolean isMasterAccount );
+        void showTouristInfo(ChatRoomMember member, boolean isMasterAccount);
     }
 
     public void setOnTouristItemClickListener(OnTouristItemClickListener onTouristItemClickListener) {

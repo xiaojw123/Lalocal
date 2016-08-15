@@ -782,7 +782,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
     	Log.d(TAG, "AudioStreamType = " + mediaInfo.mAudioStreamType);
 
         if (mediaInfo == null || mediaInfo.mAudioDecoderMode == null) {
-            Toast.makeText(mContext, "暂无视频流，无法截图", Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(mContext, "暂无视频流，无法截图", Toast.LENGTH_SHORT).show();
             return;
         }
     	

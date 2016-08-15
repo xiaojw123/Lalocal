@@ -23,7 +23,7 @@ public class FavoriteItem {
     private String targetName;
     private String photo;
     private Author author;
-    private String price;
+    private double price;
     private int commentNum;
     private int praiseNum;
     private int status;
@@ -68,11 +68,11 @@ public class FavoriteItem {
         this.author = author;
     }
 
-    public String getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

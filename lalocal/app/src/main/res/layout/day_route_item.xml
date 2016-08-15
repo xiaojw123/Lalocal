@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/day_route_item_img"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/day_route_item_img_height"
+        android:scaleType="centerCrop"
+        />
+    <TextView
+        android:id="@+id/day_route_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_4a"
+        android:textSize="@dimen/text_size_16_sp"
+        android:text="富士御室浅间神社"
+        android:drawableStart="@drawable/route_place"
+        android:drawablePadding="@dimen/dimen_size_10_dp"
+        android:layout_marginStart="@dimen/day_route_place_left"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:layout_below="@+id/day_route_item_img"
+        />
+    <TextView
+        android:id="@+id/day_route_buy_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/one_sale"
+        android:layout_marginStart="@dimen/day_one_sale_left"
+        android:layout_below="@+id/day_route_title"
+        android:layout_marginTop="@dimen/dimen_size_2_dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/dimen_size_10_dp"
+        android:padding="@dimen/dimen_size_3_dp"
+        android:visibility="gone"
+        android:background="@drawable/route_deital_one_salebg"
+        />
+
+    <TextView
+        android:id="@+id/day_route_line"
+        android:layout_width="0.5dp"
+        android:layout_height="@dimen/dimen_size_20_dp"
+        android:background="@color/color_e5"
+        android:layout_below="@+id/day_route_title"
+        android:layout_alignStart="@+id/day_route_title"
+        android:layout_marginStart="@dimen/dimen_size_10_dp"
+        android:layout_marginTop="@dimen/dimen_size_10_dp"
+        android:layout_marginBottom="@dimen/dimen_size_10_dp"
+        />
+    <TextView
+        android:id="@+id/day_route_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_16_sp"
+        android:textColor="@color/color_8c"
+        android:layout_alignStart="@+id/day_route_title"
+        android:drawableStart="@drawable/route_location"
+        android:text="距离0.0公里"
+        android:layout_below="@+id/day_route_line"
+        android:drawablePadding="@dimen/dimen_size_10_dp"
+        android:layout_marginBottom="@dimen/dimen_size_20_dp"
+        />
+
+
+
+
+
+
+
+    
+
+</RelativeLayout>

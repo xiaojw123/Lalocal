@@ -56,7 +56,7 @@ public class CarouselFigureActivity extends  BaseActivity implements View.OnClic
 
     private void showShare(SpecialShareVOBean shareVO) {
         SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO);
-        shareActivity.showShareWindow("#7dffffff");
+        shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.CENTER, 0, 0);
     }

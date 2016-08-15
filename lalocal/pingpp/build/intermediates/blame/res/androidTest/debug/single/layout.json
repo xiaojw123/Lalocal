@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\cmbkeyboard.xml",
+        "source": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\layout\\cmbkeyboard.xml"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\layout\\activity_pingpp_payment.xml",
+        "source": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\layout\\activity_pingpp_payment.xml"
+    }
+]

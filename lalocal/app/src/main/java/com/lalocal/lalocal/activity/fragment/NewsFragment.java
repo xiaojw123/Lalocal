@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -112,12 +111,12 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
     };
     @OnMPermissionGranted(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionSuccess(){
-        Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
+   //     Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
     }
 
     @OnMPermissionDenied(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionFailed(){
-        Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
     }
 
     @Nullable
@@ -148,7 +147,7 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
                     contentService.createLiveRoom();//直播接口
                 }else {
                     EasyAlertDialogHelper.createOkCancelDiolag(getActivity(), null,"没登录，快去登录吧",
-                            getString(R.string.confirm), getString(R.string.cancel), true,
+                            "确定", getString(R.string.cancel), true,
                             new EasyAlertDialogHelper.OnDialogActionListener(){
                                 @Override
                                 public void doCancelAction() {

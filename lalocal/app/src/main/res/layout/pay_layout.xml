@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lalocal.lalocal.activity.PayActivity">
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/pay_title_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/pay" />
+
+    <FrameLayout
+        android:id="@+id/pay_order_info_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pay_order_info_item_height"
+        android:layout_below="@+id/pay_title_view"
+        android:focusable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:layout_marginStart="@dimen/dimen_size_15_dp"
+            android:gravity="center"
+            android:text="@string/order_info"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <TextView
+            android:id="@+id/pay_order_title"
+            android:layout_width="@dimen/pay_order_title_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:layout_marginEnd="@dimen/dimen_size_15_dp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:drawableEnd="@drawable/arrow_right"
+            android:drawablePadding="@dimen/dimen_size_8_dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/color_8c"
+            android:textSize="@dimen/text_size_16_sp" />
+
+
+        <View
+            style="@style/CommonD9LineTheme"
+            android:layout_height="@dimen/dimen_size_1_dp"
+            android:layout_gravity="bottom" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/paly_manner_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_order_info_item"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:text="@string/pay_manner"
+        android:textColor="@color/color_1a"
+        android:textSize="@dimen/text_size_12_sp" />
+
+    <FrameLayout
+        android:id="@+id/pay_manner_alipay_fl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pay_manner_alipay_fl_height"
+        android:layout_below="@+id/paly_manner_text"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_9_dp"
+        android:background="@drawable/alipaybg_img"
+        android:paddingEnd="@dimen/dimen_size_15_dp"
+        android:paddingStart="@dimen/dimen_size_15_dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/alipay"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_15_sp" />
+
+        <ImageView
+            android:id="@+id/pay_manner_alipay_cb"
+            android:layout_width="@dimen/pay_check_rb_width"
+            android:layout_height="@dimen/pay_check_rb_width"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/pay_manner_checkbox_bg" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/pay_manner_weixin_fl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pay_manner_alipay_fl_height"
+        android:layout_below="@+id/pay_manner_alipay_fl"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:background="@drawable/wechatpay_img"
+        android:paddingEnd="@dimen/dimen_size_15_dp"
+        android:paddingStart="@dimen/dimen_size_15_dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/weixin"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_15_sp" />
+
+        <ImageView
+            android:id="@+id/pay_manner_weixin_cb"
+            android:layout_width="@dimen/pay_check_rb_width"
+            android:layout_height="@dimen/pay_check_rb_width"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/pay_manner_checkbox_bg" />
+
+    </FrameLayout>
+
+    <!--信诚支付暂不支持-->
+    <FrameLayout
+        android:id="@+id/pay_manner_instalments_fl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pay_manner_alipay_fl_height"
+        android:layout_below="@+id/pay_manner_weixin_fl"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:background="@drawable/xcpaybg_img"
+        android:descendantFocusability="afterDescendants"
+        android:paddingEnd="@dimen/dimen_size_15_dp"
+        android:paddingStart="@dimen/dimen_size_15_dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/xincheng_instalments"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_15_sp" />
+
+        <ImageView
+            android:id="@+id/pay_manner_instalments_cb"
+            android:layout_width="@dimen/pay_check_rb_width"
+            android:layout_height="@dimen/pay_check_rb_width"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/pay_manner_checkbox_bg" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/pay_available_instalments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/pay_manner_instalments_fl"
+        android:layout_below="@+id/pay_manner_instalments_fl"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:text="可用分期金额：5,000元"
+        android:textColor="@color/color_8c"
+        android:textSize="@dimen/text_size_12_sp" />
+
+    <LinearLayout
+        android:id="@+id/order_pays_llt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_above="@+id/pay_bottom_container"
+        android:visibility="invisible"
+        />
+
+    <RelativeLayout
+        android:id="@+id/pay_bottom_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pay_bottom_container_height"
+        android:layout_alignParentBottom="true"
+        >
+
+        <View style="@style/CommonD9LineTheme" />
+        <FrameLayout
+            android:id="@+id/pay_showdetail_triangle_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/dimen_size_15_dp"
+            android:paddingTop="@dimen/dimen_size_5_dp"
+            android:paddingBottom="@dimen/dimen_size_5_dp"
+            android:layout_centerVertical="true"
+            >
+            <Button
+                android:id="@+id/pay_showdetail_triangle_btn"
+                android:layout_width="@dimen/pay_showdetail_triangle_btn_width"
+                android:layout_height="@dimen/pay_showdetail_triangle_btn_height"
+                android:background="@drawable/pay_detail_triangle_bg"
+                android:layout_gravity="center_vertical"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@color/color_8c"
+                android:text="@string/showdetail"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/dimen_size_10_dp"
+                />
+
+        </FrameLayout>
+        <TextView
+            android:id="@+id/pay_money_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="￥0"
+            android:textColor="@color/color_ffaa2a"
+            android:textSize="@dimen/text_size_18_sp"
+            android:gravity="center_vertical"
+            android:layout_toEndOf="@+id/pay_showdetail_triangle_container"
+            android:layout_marginStart="@dimen/dimen_size_20_dp"
+            />
+
+        <Button
+            android:id="@+id/pay_btn"
+            android:layout_width="@dimen/pay_to_btn_width"
+            android:layout_height="match_parent"
+            android:background="@color/color_ffaa2a"
+            android:text="@string/go_to_pay"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18_sp"
+            android:layout_alignParentRight="true"
+            />
+
+
+
+
+
+
+        <View style="@style/CommonD9LineTheme"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

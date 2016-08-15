@@ -22,6 +22,7 @@ import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.EmptActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
+import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.help.KeyParams;
@@ -462,8 +463,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     public void onLoadMore() {
         isRefresh = true;
         favoritePage = favoritePage + 1;
+        AppLog.print("favoriete___" + favoritePage + ", toalPgae___" + favoriteTotalPages);
         if (favoritePage <= favoriteTotalPages) {
-        AppLog.print("加载更多——————");
+            AppLog.print("加载更多——————");
             if (isLogined && user != null) {
                 mUserid = user.getId();
                 mToken = user.getToken();
@@ -509,6 +511,12 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         startActivityForResult(intent, 100);
     }
 
+    private void gotoRouteDetail(FavoriteItem item){
+        Intent intent=new Intent(getActivity(), RouteDetailActivity.class);
+        intent.putExtra(RouteDetailActivity.DETAILS_ID,item.getTargetId());
+        startActivityForResult(intent, 100);
+    }
+
     private void gotoEmptDetail() {
         Intent intent = new Intent(getActivity(), EmptActivity.class);
         startActivity(intent);
@@ -529,6 +537,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         public void onGetFavoriteItem(List<FavoriteItem> items, int pageNumber, int totalPages, int totalRows) {
             favoriteTotalPages = totalPages;
             favoritePage = pageNumber;
+            AppLog.print("onGetFavoriteItem pageNumber__" + pageNumber + ", toalpage__" + totalPages);
             favoriteNum_tv.setText(String.valueOf(totalRows));
             updateFavorite(items);
         }
@@ -640,16 +649,22 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             //有数据
             if (favoriteAdapter == null) {
                 favoriteAdapter = new MyFavoriteAdapter(getActivity(), allItems);
+                if (favorite_tab.isSelected()) {
+                    mListView.setAdapter(favoriteAdapter);
+                }
             } else {
                 favoriteAdapter.updateListView(allItems);
             }
+
+
         } else {
             //没有数据
             favoriteAdapter = emptfAdpater;
+            if (favorite_tab.isSelected()) {
+                mListView.setAdapter(favoriteAdapter);
+            }
         }
-        if (favorite_tab.isSelected()) {
-            mListView.setAdapter(favoriteAdapter);
-        }
+
     }
 
 
@@ -674,7 +689,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     gotoProductDetail(item);
                     break;
                 case 9://线路
-                    gotoEmptDetail();
+                    gotoRouteDetail(item);
                     break;
                 case 10://专题
                     gotoSpecialDetail(item);

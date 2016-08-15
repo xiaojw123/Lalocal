@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,15 +42,18 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     TextView liveAttentionSearchCancel;
     @BindView(R.id.live_attention_listview)
     XListView liveAttentionListview;
+
+    @BindView(R.id.live_search_layout_to)
+    LinearLayout liveSearchLayout;
+    @BindView(R.id.live_search_layout_font)
+    LinearLayout liveSearchLayoutFont;
     private String liveType;
     private AttentionOrFansAdapter attentionOrFansAdapter;
     private String typeId;
     private ContentLoader contentLoader;
     private int totalPages;
     private String userId;
-    private String encoderName;
-    private String searchName;
-    private int searchTotalPages;
+
     private List<LiveFansOrAttentionRowsBean> searchRows;
 
     @Override
@@ -89,7 +93,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         @Override
         public void afterTextChanged(Editable s) {
 
-           String  searchName = liveAttentionSearchEt.getText().toString().trim();
+            String  searchName = liveAttentionSearchEt.getText().toString().trim();
             AppLog.i("TAG","afterTextChanged走了:"+searchName);
             allRows.clear();
             for (LiveFansOrAttentionRowsBean liveFansOrAttentionRowsBean : allSearchRows) {
@@ -122,9 +126,13 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     }
 
 
-    @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel})
+    @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel,R.id.live_search_layout_font})
     public void clickButton(View view) {
         switch (view.getId()) {
+            case R.id.live_search_layout_font:
+                liveAttentionListview.setPullRefreshEnable(false);
+                liveSearchLayoutFont.setVisibility(View.GONE);
+                liveSearchLayout.setVisibility(View.VISIBLE);
             case R.id.live_attention_search_et:
                 liveAttentionSearchCancel.setVisibility(View.VISIBLE);
                 userAttentionTitle.setVisibility(View.GONE);
@@ -135,14 +143,16 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 liveAttentionSearchEt.setText("");
                 allRows.clear();
                 for (int i = 1; i <=totalPages; i++) {
-                   String  typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber="+ i;
+                    String  typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber="+ i;
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
                 break;
             case R.id.live_attention_search_cancel:
+                liveSearchLayoutFont.setVisibility(View.VISIBLE);
+                liveSearchLayout.setVisibility(View.GONE);
+                liveAttentionListview.setPullRefreshEnable(true);
                 isSearchFansOrAttention = false;
                 allRows.clear();
-
                 liveAttentionSearchCancel.setVisibility(View.GONE);
                 userAttentionTitle.setVisibility(View.VISIBLE);
                 liveAttentionSearchEt.setText("");

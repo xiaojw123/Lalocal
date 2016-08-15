@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.util.AttributeSet;
 import android.view.View;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.im.session.image.ImageLoaderKit;

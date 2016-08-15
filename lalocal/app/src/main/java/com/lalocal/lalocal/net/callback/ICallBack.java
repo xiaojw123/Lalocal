@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.net.callback;
 
 
+import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
@@ -15,15 +16,18 @@ import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
-
 import com.lalocal.lalocal.model.OrderDetail;
-
-import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.OrderItem;
+import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
-
+import com.lalocal.lalocal.model.ArticleItem;
+import com.lalocal.lalocal.model.RouteDetail;
+import com.lalocal.lalocal.model.SearchItem;
+import com.lalocal.lalocal.model.ProductItem;
+import com.lalocal.lalocal.model.RouteItem;
+import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.model.VersionInfo;
@@ -34,6 +38,44 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+    public void onGetPayResult(String result){
+
+    }
+
+    public void onGetRouteDetail(RouteDetail routeDetail){}
+
+
+    public void onGetHotItems(List<SearchItem> items,int type){
+
+    }
+
+    public void onGetAreaItems(int pageNumber, int totalPages, List<SearchItem> items, int type){
+
+
+    }
+    public void onGetMoreItems(int pageNumber,int totalPages,List<SearchItem> items){
+
+
+    }
+
+    public void onGetDestinationCollections(List<SiftModle> items){
+
+    }
+
+    public void onGetSearchResult(String searchKey, List<ArticleItem> articleItems, int aritcleToalNmb, List<ProductItem> productItems, int productToalNmb , List<RouteItem> routeItems, int routeToalNumb){
+
+    }
+
+    public void onGetSearchTag(List<String> keys){
+
+    }
+
+    public void onGetSearchHot(List<String> keys){}
+
+
+    public void onGetDestinationAreas(List<AreaItem> items){
+    }
+
     public void onGetOrderDetail(OrderDetail detail){
 
     }
@@ -130,6 +172,7 @@ public abstract class ICallBack {
     //上传图片token
     public void onImgToken(ImgTokenBean imgTokenBean) {
     }
+
     //修改直播封面
     public void onAlterLiveCover(CreateLiveRoomDataResp createLiveRoomDataResp) {
     }

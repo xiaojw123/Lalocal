@@ -2,6 +2,7 @@ package com.lalocal.lalocal.view.liveroomview.im.session.emoji;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 
 import java.io.IOException;

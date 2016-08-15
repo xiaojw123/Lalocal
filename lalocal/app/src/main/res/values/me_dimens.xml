@@ -84,8 +84,8 @@
     <dimen name="setting_sign_out_left">12dp</dimen>
     <dimen name="setting_sign_out_bottom">62dp</dimen>
     <dimen name="setting_sign_out_height">46dp</dimen>
-    <dimen name="setting_item_arrow_right_width">7dp</dimen>
-    <dimen name="setting_item_arrow_right_height">12dp</dimen>
+    <dimen name="arrow_right_width">7dp</dimen>
+    <dimen name="arrow_right_height">12dp</dimen>
     <dimen name="setting_item_cahe_size_left">22dp</dimen>
 
 
@@ -94,7 +94,7 @@
     <dimen name="common_back_btn_width">32dp</dimen>
     <dimen name="common_back_btn_top_padding">15dp</dimen>
     <dimen name="common_back_btn_left_padding">12dp</dimen>
-    <dimen name="register_title_divde_line_height">0.5px</dimen>
+    <dimen name="register_title_divde_line_height">0.5dp</dimen>
     <dimen name="register_edit_left">12dp</dimen>
     <dimen name="register_edit_height">50dp</dimen>
     <dimen name="register_edit_left_padding">19dp</dimen>
@@ -153,8 +153,8 @@
     <dimen name="order_detail_arrow_right_width">6dp</dimen>
     <dimen name="order_detail_arrow_right_height">12dp</dimen>
     <dimen name="order_travel_information_container_top">15dp</dimen>
-<dimen name="order_card_item_top">14dp</dimen>
-<dimen name="order_card_item_left">15dp</dimen>
+    <dimen name="order_card_item_top">14dp</dimen>
+    <dimen name="order_card_item_left">15dp</dimen>
     <dimen name="order_packages_choose_top">8dp</dimen>
     <dimen name="order_travel_time_height">36dp</dimen>
     <dimen name="order_travel_person_title_height">50dp</dimen>
@@ -165,9 +165,6 @@
     <dimen name="order_detail_cotainer_bottom">188dp</dimen>
     <dimen name="triangle_drawable_width">10dp</dimen>
     <dimen name="triangle_drawable_height">3dp</dimen>
-
-
-
 
 
 </resources>

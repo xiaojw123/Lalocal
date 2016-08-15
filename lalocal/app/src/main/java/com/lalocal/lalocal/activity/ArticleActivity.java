@@ -61,7 +61,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private ContentLoader contentService;
     private Context mContext = ArticleActivity.this;
     private LinearLayout back;
-    private View placeHolder;
     private WebSettings settings;
     private boolean praiseFlag;//是否点赞
     private ArticleDetailsResultBean articleDetailsRespResult;
@@ -165,7 +164,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private void showShare(SpecialShareVOBean shareVO) {
 
         SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-        shareActivity.showShareWindow("#7dffffff");
+        shareActivity.showShareWindow();
         shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
                 Gravity.CENTER, 0, 0);
 

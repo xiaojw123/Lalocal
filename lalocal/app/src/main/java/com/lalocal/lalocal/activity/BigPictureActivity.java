@@ -119,7 +119,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		shareVO.setBitmap(bitmap3);
 
 		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this, shareVO);
-		shareActivity.showShareWindow("#7dffffff");
+		shareActivity.showShareWindow();
 		shareActivity.setCallBackListener(this);
 		shareActivity.showAtLocation(BigPictureActivity.this.findViewById(R.id.big_picture_main),
 				Gravity.CENTER, 0, 0);

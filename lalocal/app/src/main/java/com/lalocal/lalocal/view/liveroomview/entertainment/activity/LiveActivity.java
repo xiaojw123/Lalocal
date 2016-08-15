@@ -25,7 +25,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -133,6 +132,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private ImageView overLiveShareWeixin;
     private ScrollView startLiveScrollview;
     private TextView textCount;
+    private Timer timer;
+    private String userOnLineCountParameter;
+
     //保存二维码图片到相册
     public void saveImageToGallery(byte[] bytes) {
         // 首先保存图片
@@ -340,6 +342,19 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         livePlayer.screenShot();
                         AppLog.i("TAG","getStartLiveStatus");
                         contentLoader.getImgToken();//获取上传图片的token
+                        userOnLineCountParameter = userId+"/onlineUsers";
+                        //上传在线人数
+                        contentLoader.getUserOnLine(userOnLineCountParameter,onlineCounts);
+                        if(timer==null){
+                            timer = new Timer();
+                        }
+                        timer.schedule(new TimerTask() {
+
+                            @Override
+                            public void run() {
+                                contentLoader.getUserOnLine(userOnLineCountParameter,onlineCounts);
+                            }
+                        },1000,5*60*6000);
                     }
 
                     @Override
@@ -347,6 +362,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     }
                 });
                 enterRoom();
+
 
             }
         }
@@ -836,7 +852,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
-        Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
         if (livePlayer.startStopLive()) {
             isStartLive = true;
             AppLog.i("TAG","摄像头权限授权成功");
@@ -847,7 +863,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public void onLivePermissionDenied() {
         List<String> deniedPermissions = MPermission.getDeniedPermissions(this, LIVE_PERMISSIONS);
         String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
-        Toast.makeText(getActivity(), tip, Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(getActivity(), tip, Toast.LENGTH_SHORT).show();
     }
 
     @OnMPermissionNeverAskAgain(LIVE_PERMISSION_REQUEST_CODE)
@@ -862,6 +878,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             sb.append(MPermissionUtil.toString(deniedPermissions));
         }
 
-        Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
+     //   Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
     }
 }

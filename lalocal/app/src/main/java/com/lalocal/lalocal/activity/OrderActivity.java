@@ -16,10 +16,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.easemob.Constant;
+import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
-import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener {
+    public static final String ORDER_DETAIL = "order_detail";
     private LinearLayout travel_people_container;
     private LinearLayout pay_money_container;
     private FrameLayout pay_time_container;
@@ -45,7 +47,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     private TextView evalute_time;
     private int height, left;
     private Button evalute_btn;
+    private TextView service_tv;
+    private  OrderDetail mOrderDetail;
     private List<OrderDetail.PeopleItemListBean.ContactInfoListBean> travelpersonsInfo;
+    private double mAccoutPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +58,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         setContentView(R.layout.order_layout);
         initParams();
         initView();
-        ContentLoader service = new ContentLoader(this);
-        service.setCallBack(new CallBack());
-        service.getOrderDetail(getOrderId());
+        setLoaderCallBack(new CallBack());
+        mContentloader.getOrderDetail(getOrderId());
     }
 
     private void initParams() {
@@ -64,10 +68,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
+        service_tv=(TextView) findViewById(R.id.order_service);
         evalute_btn = (Button) findViewById(R.id.order_immediately_evaluate_btn);
         travel_people_container = (LinearLayout) findViewById(R.id.order_travel_people_container);
-        pay_channel_cotainer=(FrameLayout) findViewById(R.id.order_pay_channel_container);
-        pay_time_container= (FrameLayout) findViewById(R.id.order_pay_time_container);
+        pay_channel_cotainer = (FrameLayout) findViewById(R.id.order_pay_channel_container);
+        pay_time_container = (FrameLayout) findViewById(R.id.order_pay_time_container);
         pay_money_container = (LinearLayout) findViewById(R.id.order_pay_money_contaienr);
         post_img = (ImageView) findViewById(R.id.order_detail_img);
         title_tv = (TextView) findViewById(R.id.order_detail_title);
@@ -80,19 +85,20 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         pay_time = (TextView) findViewById(R.id.order_pay_time_text);
         pay_channel = (TextView) findViewById(R.id.order_pay_channel_text);
         evalute_time = (TextView) findViewById(R.id.order_evaluate_time_text);
-        evaluteTimeCotainer= (FrameLayout) findViewById(R.id.order_evaluate_time_cotainer);
+        evaluteTimeCotainer = (FrameLayout) findViewById(R.id.order_evaluate_time_cotainer);
         travel_person_num.setOnClickListener(this);
-        int status=getStaus();
-        if (status==2){
+        service_tv.setOnClickListener(this);
+        int status = getStaus();
+        if (status == 2) {
             evalute_btn.setVisibility(View.VISIBLE);
             evalute_btn.setText("立即评价");
-        }else if (status==1){
+        } else if (status == 1) {
             evalute_btn.setVisibility(View.VISIBLE);
             pay_time_container.setVisibility(View.GONE);
             pay_channel_cotainer.setVisibility(View.GONE);
             evaluteTimeCotainer.setVisibility(View.GONE);
             evalute_btn.setText("立即支付");
-        }else{
+        } else {
             evalute_btn.setVisibility(View.GONE);
         }
     }
@@ -100,8 +106,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     private int getOrderId() {
         return getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
     }
-    private int getStaus(){
-        return  getIntent().getIntExtra(KeyParams.STATUS,-1);
+
+    private int getStaus() {
+        return getIntent().getIntExtra(KeyParams.STATUS, -1);
     }
 
 
@@ -109,16 +116,29 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.order_person_num_tv:
-                if (travelpersonsInfo==null){
+                if (travelpersonsInfo == null) {
                     return;
                 }
-                Intent intent=new Intent(this,TravelPersonActivity.class);
+                Intent intent = new Intent(this, TravelPersonActivity.class);
                 intent.putParcelableArrayListExtra(KeyParams.TRAVEL_PERSONS_CONCACT, (ArrayList<? extends Parcelable>) travelpersonsInfo);
                 startActivity(intent);
+                break;
+            case R.id.order_service:
+                startOnlineService();
                 break;
 
         }
     }
+    public void startOnlineService() {
+        Intent intent = new Intent(this, ChatActivity.class);
+        if (mOrderDetail != null) {
+            intent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
+            intent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
+            intent.putExtra(Constant.ITEM_PRICE, String.valueOf(mAccoutPrice));
+        }
+        startActivity(intent);
+    }
+
 
     class CallBack extends ICallBack {
         @Override
@@ -133,6 +153,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         if (detail == null) {
             return;
         }
+        mOrderDetail=detail;
         DrawableUtils.displayImg(this, post_img, detail.getPhoto());
         title_tv.setText(detail.getName());
         travel_time_tv.setText(detail.getOrderDate());
@@ -144,18 +165,18 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
             }
         }
         setTravelPerson(detail.getPeopleItemList());
-        int couponValue = detail.getCouponValue();
+        double couponValue = detail.getCouponValue();
         setOrderPayPrice(detail.getOrderPayList(), couponValue);
         setCoupon(couponValue);
         order_numb.setText(detail.getOrderNumb());
         order_created_time.setText(detail.getCreatedTime());
         pay_time.setText(detail.getPayTime());
-        String payType=detail.getPayType();
-        if (payType==null){
+        String payType = detail.getPayType();
+        if (payType == null) {
 //            pay_channel.setText("");
         }
-        String praiseTime=detail.getAppraiseTime();
-        if (!TextUtils.isEmpty(praiseTime)){
+        String praiseTime = detail.getAppraiseTime();
+        if (!TextUtils.isEmpty(praiseTime)) {
             evaluteTimeCotainer.setVisibility(View.GONE);
             evalute_time.setText(praiseTime);
         }
@@ -163,7 +184,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
 
     }
 
-    private void setCoupon(int couponValue) {
+    private void setCoupon(double couponValue) {
         FrameLayout itemContainer = getItemContainer();
         pay_money_container.addView(itemContainer);
         FrameLayout.LayoutParams params1 = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -202,7 +223,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         if (peopleList != null && peopleList.size() > 0) {
             OrderDetail.PeopleItemListBean peopleItemListBean = peopleList.get(0);
             travel_person_num.setText(String.valueOf(peopleItemListBean.getAmount()));
-             travelpersonsInfo = peopleItemListBean.getContactInfoList();
+            travelpersonsInfo = peopleItemListBean.getContactInfoList();
             for (OrderDetail.PeopleItemListBean.ContactInfoListBean contactInfoListBean : travelpersonsInfo) {
                 TextView textView = new TextView(this);
                 textView.setGravity(Gravity.CENTER_VERTICAL);
@@ -223,8 +244,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    private void setOrderPayPrice(List<OrderItem.OrderPay> orderPayList, int couponValue) {
-        int orderPayPrice = 0;
+    private void setOrderPayPrice(List<OrderItem.OrderPay> orderPayList, double couponValue) {
+        double orderPayPrice = 0;
         for (OrderItem.OrderPay orderPay : orderPayList) {
             FrameLayout itemContainer = getItemContainer();
             pay_money_container.addView(itemContainer);
@@ -240,15 +261,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
             value.setLayoutParams(params2);
             value.setGravity(Gravity.CENTER_VERTICAL);
             value.setTextAppearance(this, R.style.OrderCardItemTextStyle);
-            int toalPrice = (int) orderPay.getUnit() * orderPay.getAmount();
+            double toalPrice =orderPay.getUnit() * orderPay.getAmount();
             orderPayPrice += toalPrice;
             value.setText("¥ " + String.valueOf(toalPrice));
             itemContainer.addView(name);
             itemContainer.addView(value);
         }
-        int paymoeny = orderPayPrice - couponValue;
+        double paymoeny = orderPayPrice - couponValue;
+        mAccoutPrice=paymoeny;
         paymoeny = Math.max(paymoeny, 0);
-        pay_money.setText("¥ "+String.valueOf(paymoeny));
+        pay_money.setText("¥ " + String.valueOf(paymoeny));
 
     }
 

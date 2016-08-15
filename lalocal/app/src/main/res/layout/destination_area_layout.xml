@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.lalocal.lalocal.activity.DestinationAreaActivity">
+<com.lalocal.lalocal.view.CustomTitleView
+    android:id="@+id/destination_area_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:lineVisible="false"
+    android:background="@color/white"
+    />
+<include
+    layout="@layout/search_view"
+    />
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/destination_area_nav_container_height">
+    <LinearLayout
+        android:id="@+id/des_area_menunav_container"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        >
+
+        <TextView
+            android:id="@+id/des_areanav_menu_hot"
+            style="@style/DesAreaNavMenuStye"
+            android:text="@string/hot"
+            android:layout_marginStart="@dimen/des_area_nav_menu1_left"
+            android:visibility="gone"
+            />
+        <TextView
+            android:id="@+id/des_areanav_menu_strategy"
+            style="@style/DesAreaNavMenuStye"
+            android:text="@string/strategy"
+            android:layout_marginStart="@dimen/des_area_nav_menu2_left"
+            android:visibility="gone"
+             />
+
+        <TextView
+            android:id="@+id/des_areanav_menu_packagetour"
+            style="@style/DesAreaNavMenuStye"
+            android:text="@string/packagetour"
+            android:layout_marginStart="@dimen/des_area_nav_menu2_left"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/des_areanav_menu_freewarker"
+            style="@style/DesAreaNavMenuStye"
+            android:text="@string/freewarker"
+            android:layout_marginStart="@dimen/des_area_nav_menu2_left"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/des_areanav_menu_lacoalplay"
+        android:layout_width="@dimen/des_areanav_menu_lacoalplay_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:drawableTop="@drawable/des_area_combinedshape"
+        android:drawablePadding="@dimen/dimen_size_2_dp"
+        android:text="@string/lacoalplay"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_10_sp"
+        android:textColor="@drawable/lalocal_play_textcolor"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        />
+</FrameLayout>
+    <TextView
+        style="@style/CommonD9LineTheme"
+         />
+
+
+    <com.lalocal.lalocal.view.xlistview.XListView
+        android:id="@+id/des_area_items_xlv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:dividerHeight="0dp"
+        android:scrollbars="none"
+        android:divider="@color/transparent"
+        android:background="@color/color_f8"
+        android:padding="@dimen/dimen_size_15_dp"
+        />
+
+
+
+</LinearLayout>

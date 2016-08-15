@@ -21,6 +21,7 @@
             app:title_name="@string/orderdetail" />
 
         <TextView
+            android:id="@+id/order_service"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:paddingTop="@dimen/dimen_size_4_dp"
@@ -83,8 +84,8 @@
 
                 <ImageView
                     android:id="@+id/order_arrow_right"
-                    android:layout_width="@dimen/order_detail_arrow_right_width"
-                    android:layout_height="@dimen/order_detail_arrow_right_height"
+                    android:layout_width="@dimen/arrow_right_width"
+                    android:layout_height="@dimen/arrow_right_height"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:background="@drawable/arrow_right" />

@@ -91,8 +91,58 @@ public static final int *;
     public static final android.os.Parcelable$Creator *;
 }
 
+<<<<<<< HEAD
+#    3D 地图
+
+    -keep   class com.amap.api.mapcore.**{*;}
+    -keep   class com.amap.api.maps.**{*;}
+    -keep   class com.autonavi.amap.mapcore.*{*;}
+
+#    定位
+
+   -keep class com.amap.api.location.**{*;}
+   -keep class com.amap.api.fence.**{*;}
+   -keep class com.autonavi.aps.amapapi.model.**{*;}
+
+#    搜索
+
+    -keep   class com.amap.api.services.**{*;}
+
+#    2D地图
+
+    -keep class com.amap.api.maps2d.**{*;}
+    -keep class com.amap.api.mapcore2d.**{*;}
+
+#    导航
+
+    -keep class com.amap.api.navi.**{*;}
+    -keep class com.autonavi.**{*;}
+    -keep class com.easemob.** {*;}
+    -keep class org.jivesoftware.** {*;}
+    -keep class org.apache.** {*;}
+    -dontwarn  com.easemob.**
+    #2.0.9后的不需要加下面这个keep
+    #-keep class org.xbill.DNS.** {*;}
+    #另外，demo中发送表情的时候使用到反射，需要keep SmileUtils
+    -keep class com.easemob.chatuidemo.utils.SmileUtils {*;}
+    #注意前面的包名，如果把这个类复制到自己的项目底下，比如放在com.example.utils底下，应该这么写（实际要去掉#）
+    #-keep class com.example.utils.SmileUtils {*;}
+    #如果使用EaseUI库，需要这么写
+    -keep class com.easemob.easeui.utils.EaseSmileUtils {*;}
+
+    #2.0.9后加入语音通话功能，如需使用此功能的API，加入以下keep
+    -dontwarn ch.imvs.**
+    -dontwarn org.slf4j.**
+    -keep class org.ice4j.** {*;}
+    -keep class net.java.sip.** {*;}
+    -keep class org.webrtc.voiceengine.** {*;}
+    -keep class org.bitlet.** {*;}
+    -keep class org.slf4j.** {*;}
+    -keep class ch.imvs.** {*;}
+=======
 #网易云信
 -dontwarn com.netease.**
 -dontwarn io.netty.**
 -keep class com.netease.** {*;}
 -keep class io.netty.** {*;}
+>>>>>>> 6cc2021664b12ecaa1e69835c2d9f3a63643bd55

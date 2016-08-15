@@ -36,7 +36,6 @@ import com.lalocal.lalocal.view.liveroomview.im.session.emoji.IEmoticonSelectedL
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.MoonUtil;
 import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
@@ -295,7 +294,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 toggleActionPanelLayout();
             } else if (v == emojiButtonInInputBar) {
                 toggleEmojiLayout();
-            }else if(v.getId()==R.id.im_barrage_and_chat_iv){
+            }else if(v.getId()== R.id.im_barrage_and_chat_iv){
                 isSelector = isCheckBarrage % 2 == 0 ? true : false;
                 barrageAndChat.setSelected(isSelector);
                 isCheckBarrage++;
@@ -341,28 +340,14 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         }
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
             textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
+
             if(isSelector){
                 BarrageAttachment barrageAttachment=new BarrageAttachment();
+
                 ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(container.account, barrageAttachment);
                 message.setContent(text);
                 setMemberType(message);
-                NIMClient.getService(ChatRoomService.class).sendMessage(message, false).setCallback(new RequestCallback<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        AppLog.i("TAG","发送成功");
-                    }
-
-                    @Override
-                    public void onFailed(int i) {
-                        AppLog.i("TAG","失败部分就回复发的fdfd"+i);
-                    }
-
-                    @Override
-                    public void onException(Throwable throwable) {
-                        AppLog.i("TAG","发送成功throwable");
-                    }
-                });
-
+                NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
                 AppLog.i("TAG","弹幕开启了吗");
 
 
@@ -379,11 +364,15 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     }
 
     private void setMemberType(ChatRoomMessage message) {
-
+        String content = message.getContent();
+        String fromNick = message.getFromNick();
+        AppLog.i("TAG","测试magessn内容:"+content);
         Map<String, Object> ext = new HashMap<>();
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
+
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
+            ext.put("barrag",fromNick+":"+content);
             message.setRemoteExtension(ext);
         }
     }

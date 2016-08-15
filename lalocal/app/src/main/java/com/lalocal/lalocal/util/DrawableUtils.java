@@ -80,6 +80,7 @@ public class DrawableUtils {
 
     private static DisplayImageOptions getImageOptions(int radius, int resID) {
         DisplayImageOptions.Builder builder = new DisplayImageOptions.Builder();
+
         if (resID != -1) {
             builder.showImageForEmptyUri(resID);
             builder.showImageOnLoading(resID);

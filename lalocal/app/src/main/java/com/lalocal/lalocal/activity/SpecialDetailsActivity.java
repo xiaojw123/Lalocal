@@ -161,7 +161,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             case R.id.special_details_share_iv:
                 if (shareVO != null) {
                     SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-                    shareActivity.showShareWindow("#7dffffff");
+                    shareActivity.showShareWindow();
                     shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
                             Gravity.CENTER, 0, 0);
                 }

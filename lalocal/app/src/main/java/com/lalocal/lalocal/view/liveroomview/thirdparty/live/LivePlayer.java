@@ -8,7 +8,6 @@ import android.media.AudioFormat;
 import android.os.Bundle;
 import android.os.Looper;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
@@ -327,7 +326,7 @@ public class LivePlayer implements lsMessageHandler {
             mLSMediaCapture.startLiveStreaming();
             m_liveStreamingOn = true;
             m_liveStreamingPause = false;
-            Toast.makeText(getActivity(), "开始直播", Toast.LENGTH_SHORT).show();
+         //   Toast.makeText(getActivity(), "开始直播", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -50,8 +50,8 @@
         android:layout_gravity="center"
        android:paddingTop="@dimen/author_padding_10dp"
         android:paddingBottom="@dimen/author_circle_30dp"
-        android:layout_marginRight="@dimen/author_padding_15dp"
         android:layout_marginLeft="@dimen/author_padding_15dp"
+        android:layout_marginRight="@dimen/author_padding_15dp"
         android:gravity="center"
         />
     <LinearLayout
