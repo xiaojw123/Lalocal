@@ -58,8 +58,10 @@ public class DestinationAreaActivity extends BaseActivity {
     LinearLayout desAreaMenunavContainer;
     @BindView(R.id.des_area_items_xlv)
     XListView desAreaItemsXlv;
+    @BindView(R.id.loading_page)
+    LinearLayout loadingPage;
     int areaId;
-    String areaTile="%1$s地区";
+    String areaTile = "%1$s地区";
     ContentLoader loader;
     boolean isHotLoading;
     List<SearchItem> toalItems = new ArrayList<>();
@@ -69,13 +71,14 @@ public class DestinationAreaActivity extends BaseActivity {
     AreaDetailAdapter hotAdapter, strategyAdpater, packageAdpater, freeAdpater, localAdapter;
     SiftPoupWindow poupWindow;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.destination_area_layout);
         unbinder = ButterKnife.bind(this);
-        String areaName=getIntent().getStringExtra(AREA_NAME);
-        destinationAreaTitle.setTitle(String.format(areaTile,areaName));
+        String areaName = getIntent().getStringExtra(AREA_NAME);
+        destinationAreaTitle.setTitle(String.format(areaTile, areaName));
         desAreaItemsXlv.setOnItemClickListener(areaDetailClickListener);
         setSeletedMenu(desAreanavMenuHot);
         intLoader();
@@ -151,17 +154,24 @@ public class DestinationAreaActivity extends BaseActivity {
 
         @Override
         public void onGetHotItems(List<SearchItem> items, int type) {
-
+            if (loadingPage!=null&&loadingPage.getVisibility() == View.VISIBLE) {
+                loadingPage.setVisibility(View.GONE);
+            }
+            AppLog.print("onGetHotItems  item size___"+items.size());
             if (type == AreaDetailAdapter.MODULE_TYPE_PRODUCT) {
-                SearchItem productTile = new SearchItem();
-                productTile.setTitle("热门商品");
-                productItems.add(productTile);
-                productItems.addAll(items);
+                if (items.size() > 0) {
+                    SearchItem productTile = new SearchItem();
+                    productTile.setTitle("热门商品");
+                    productItems.add(productTile);
+                    productItems.addAll(items);
+                }
             } else if (type == AreaDetailAdapter.MODULE_TYPE_ROUTE) {
-                SearchItem routeTile = new SearchItem();
-                routeTile.setTitle("热门攻略");
-                routeItems.add(routeTile);
-                routeItems.addAll(items);
+                if (items.size() > 0) {
+                    SearchItem routeTile = new SearchItem();
+                    routeTile.setTitle("热门攻略");
+                    routeItems.add(routeTile);
+                    routeItems.addAll(items);
+                }
             }
             if (isHotLoading) {
                 isHotLoading = false;
@@ -170,8 +180,14 @@ public class DestinationAreaActivity extends BaseActivity {
             if (hotItems.size() > 0) {
                 hotItems.clear();
             }
-            hotItems.addAll(routeItems);
-            hotItems.addAll(productItems);
+            AppLog.print("routeItems size__"+routeItems.size()+",, productItems__"+productItems.size());
+
+            if (routeItems.size() > 0) {
+                hotItems.addAll(routeItems);
+            }
+            if (productItems.size() > 0) {
+                hotItems.addAll(productItems);
+            }
             if (hotItems.size() > 0) {
                 if (desAreanavMenuHot.getVisibility() != View.VISIBLE) {
                     desAreanavMenuHot.setVisibility(View.VISIBLE);
@@ -362,7 +378,7 @@ public class DestinationAreaActivity extends BaseActivity {
     private void gotoRouteDetail(SearchItem item) {
         Intent intent = new Intent();
         intent.setClass(DestinationAreaActivity.this, RouteDetailActivity.class);
-        intent.putExtra(RouteDetailActivity.DETAILS_ID,item.getId());
+        intent.putExtra(RouteDetailActivity.DETAILS_ID, item.getId());
         startActivity(intent);
     }
 
@@ -419,9 +435,10 @@ public class DestinationAreaActivity extends BaseActivity {
                 break;
         }
     }
+
     @OnClick(R.id.search_view)
-    public void search(){
-        Intent intent=new Intent(this,SearchActivity.class);
+    public void search() {
+        Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
 

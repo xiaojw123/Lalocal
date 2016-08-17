@@ -2,18 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_f8"
-    android:fitsSystemWindows="true"
-    android:clipToPadding="true"
-    >
+    android:background="@android:color/white"
+    android:hardwareAccelerated="false">
+
     <com.lalocal.lalocal.view.xlistview.XListView
         android:id="@+id/home_me_xlistview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp"
-        />
+        android:scrollbars="none" />
 
 
 </LinearLayout>

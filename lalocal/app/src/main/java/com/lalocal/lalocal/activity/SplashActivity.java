@@ -2,6 +2,13 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.text.Html;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
@@ -14,25 +21,41 @@ import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.VersionResult;
-import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.model.WelcomeImg;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DrawableUtils;
 
 /**
  * Created by android on 2016/7/14.
  */
-public class WelcomeActivity extends BaseActivity {
-    private ContentLoader contentService;
+public class SplashActivity extends BaseActivity implements View.OnClickListener {
+    private static final int UPDATE_TIME = 0x001;
+    ImageView startImg;
+    ImageView welImg;
+    TextView timeTv;
+    int totalTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_layout);
-        contentService = new ContentLoader(this);
-        contentService.setCallBack(new MyCallBack());
-        contentService.versionUpdate(AppConfig.getVersionName(this));
+        welImg = (ImageView) findViewById(R.id.wel_img);
+        timeTv = (TextView) findViewById(R.id.wel_time_tv);
+        startImg = (ImageView) findViewById(R.id.wel_start_img);
+        timeTv.setOnClickListener(this);
+        setLoaderCallBack(new MyCallBack());
+        mContentloader.versionUpdate(AppConfig.getVersionName(this));
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mHandler.hasMessages(UPDATE_TIME)) {
+            mHandler.removeMessages(UPDATE_TIME);
+        }
+        loginChatService();
     }
 
     public class MyCallBack extends ICallBack {
@@ -42,15 +65,26 @@ public class WelcomeActivity extends BaseActivity {
             VersionResult result = versionInfo.getResult();
             String apiUrl = result.getApiUrl();
             AppConfig.setBaseUrl(apiUrl);
-            loginChatService();
-            Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
-            startActivity(intent);
-            finish();
+            mContentloader.getWelcommenImgs();
+        }
+
+        @Override
+        public void onGetWelcomeImgs(WelcomeImg welcomeImg) {
+            AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
+            String photo = welcomeImg.getPhoto();
+            if (TextUtils.isEmpty(photo)) {
+                loginChatService();
+            } else {
+                DrawableUtils.displayImg(SplashActivity.this, welImg, welcomeImg.getPhoto());
+                totalTime = welcomeImg.getSecond();
+                startImg.setVisibility(View.GONE);
+                mHandler.sendEmptyMessage(UPDATE_TIME);
+            }
         }
     }
 
     private void startHomePage() {
-        Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
+        Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
     }
@@ -165,4 +199,29 @@ public class WelcomeActivity extends BaseActivity {
             }
         });
     }
+
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == UPDATE_TIME) {
+                if (totalTime > 0) {
+                    if (timeTv.getVisibility() != View.VISIBLE) {
+                        timeTv.setVisibility(View.VISIBLE);
+                    }
+                    timeTv.setText(Html.fromHtml("跳过" + totalTime));
+                    --totalTime;
+                    sendEmptyMessageDelayed(UPDATE_TIME, 1000);
+                } else {
+                    if (hasMessages(UPDATE_TIME)) {
+                        removeMessages(UPDATE_TIME);
+                    }
+                    loginChatService();
+                }
+
+            }
+
+
+        }
+    };
+
 }

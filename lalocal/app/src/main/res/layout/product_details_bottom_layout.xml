@@ -49,11 +49,11 @@
                 android:id="@+id/product_details_reserve"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
-                android:background="@color/color_ffaa2a"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_18_sp"
                 android:gravity="center"
                />
+                <!--android:background="@color/color_ffaa2a"-->
 
         </LinearLayout>
     </LinearLayout>

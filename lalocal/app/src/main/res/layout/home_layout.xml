@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:fitsSystemWindows="true"
+    android:background="@color/white"
     >
 
     <FrameLayout
@@ -30,12 +29,17 @@
         <LinearLayout
             android:id="@+id/home_tab_recommend"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:background="@drawable/home_tab_bg">
-
+            android:gravity="center"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
             <ImageView
                 android:id="@+id/home_tab_recoommend_img"
                 android:layout_width="@dimen/home_tab_img_width"
@@ -49,19 +53,22 @@
                 android:text="@string/recommend"
                 android:visibility="gone"
                 />
-
-            <View style="@style/HomeTabIndicateTheme" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/home_tab_destination"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center_horizontal"
-            android:background="@drawable/home_tab_bg"
+            android:gravity="center"
             android:orientation="vertical">
-
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
             <ImageView
                 android:id="@+id/home_tab_destination_img"
                 android:layout_width="@dimen/home_tab_img_width"
@@ -75,23 +82,28 @@
                 android:text="@string/destination"
                 android:visibility="gone"
                 />
+            </LinearLayout>
 
-            <View style="@style/HomeTabIndicateTheme" />
 
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/home_tab_news"
+            android:id="@+id/home_tab_liveplay"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:gravity="center"
             android:layout_weight="1"
-            android:background="@drawable/home_tab_bg"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
 
             <ImageView
-                android:id="@+id/home_tab_news_img"
+                android:id="@+id/home_tab_liveplay_img"
                 android:layout_width="@dimen/home_tab_img_width"
                 android:layout_height="@dimen/home_tab_img_width"
                 android:layout_marginTop="@dimen/home_tab_recommend_img_top"
@@ -103,19 +115,24 @@
                 android:text="@string/liveplay"
                 android:visibility="gone"
                 />
+            </LinearLayout>
 
-            <View style="@style/HomeTabIndicateTheme" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/home_tab_me"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/home_tab_bg"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
 
             <ImageView
                 android:id="@+id/home_tab_me_img"
@@ -130,8 +147,8 @@
                 android:text="@string/me"
                 android:visibility="gone"
                 />
+            </LinearLayout>
 
-            <View style="@style/HomeTabIndicateTheme" />
 
         </LinearLayout>
 

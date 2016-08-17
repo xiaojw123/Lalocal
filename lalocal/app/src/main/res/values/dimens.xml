@@ -64,6 +64,7 @@
     <dimen name="product_details_title_tv">18sp</dimen>
     <dimen name="product_details_padding_left">15dp</dimen>
     <dimen name="product_details_padding_bottom">10dp</dimen>
+    <dimen name="dialog_card_margin">5dp</dimen>
 
 
 

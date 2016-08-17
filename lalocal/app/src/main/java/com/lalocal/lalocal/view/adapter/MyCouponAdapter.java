@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.dialog.ConvertDialog;
@@ -65,10 +66,8 @@ public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener
             ImageView nothingImg = (ImageView) convertView.findViewById(R.id.my_coupon_nothing_img);
             TextView converRuleTv = (TextView) convertView.findViewById(R.id.my_coupon_convert_rule);
             TextView warnText = (TextView) convertView.findViewById(R.id.my_coupon_nothing_warn);
-            //        Button convertBtn = (Button) convertView.findViewById(my_coupon_convert_btn);
-//        convertBtn.setOnClickListener(this);
             if (items == null || items.size() < 1) {
-                if (fragment.isLogined) {
+                if (UserHelper.isLogined(context)) {
                     warnText.setText("没有优惠券");
                 } else {
                     warnText.setText(context.getResources().getString(R.string.unlogin_warn));

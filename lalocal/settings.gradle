@@ -1,1 +1,1 @@
-include ':app', ':library', ':shinebuttonlib', ':wkvideoplayer', ':easeui', ':pingpp',':lib.blur'
+include ':app', ':shinebuttonlib', ':wkvideoplayer', ':easeui', ':pingpp',':lib.blur'

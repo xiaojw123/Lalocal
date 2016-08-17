@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.webkit.JavascriptInterface;
 
 import com.lalocal.lalocal.activity.PayActivity;
-import com.lalocal.lalocal.activity.PreOrderActivity;
+import com.lalocal.lalocal.activity.BookActivity;
 import com.lalocal.lalocal.util.AppLog;
 
 /**
@@ -22,7 +22,7 @@ public class JsModeul {
     public void postMessage(String callback, String message) {
         AppLog.print("callback___" + callback + ", message__" + message);
         switch (callback){
-            case PreOrderActivity.PAGE_TO_PAY:
+            case BookActivity.PAGE_TO_PAY:
                 Intent intent=new Intent(mContext,PayActivity.class);
                 intent.putExtra(PayActivity.ORDER_ID,Integer.parseInt(message));
                 mContext.startActivity(intent);

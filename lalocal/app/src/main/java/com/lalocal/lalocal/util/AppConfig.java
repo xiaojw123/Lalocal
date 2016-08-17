@@ -16,6 +16,10 @@ public class AppConfig {
     private static String baseUrl = "http://api.lalocal.cn/api/";
 //   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
 
+    public static String getWelcommeImgs(){
+        return baseUrl+"system/welcomeImgs";
+    }
+
     // private static String baseUrl = "http://api.lalocal.cn/api/";
     // http://dev.lalocal.cn:8080/api/channels
     //http://api.lalocal.cn/api/system/im/tourist
@@ -190,7 +194,7 @@ public class AppConfig {
     //生产环境:http://api.lalocal.cn/api
     public static void setBaseUrl(String url) {
         AppLog.print("APP当前环境基准地址：" + url);
-        baseUrl = url;
+        baseUrl = url+"/";
     }
 
     public static String getVersionName(Context context) {

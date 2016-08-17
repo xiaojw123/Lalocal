@@ -53,6 +53,7 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.model.VersionInfo;
+import com.lalocal.lalocal.model.WelcomeImg;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
@@ -96,6 +97,16 @@ public class ContentLoader {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+
+
+    public void getWelcommenImgs() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_WELCOME_IMGS);
+        }
+        AppLog.print("startPage url_____"+AppConfig.getWelcommeImgs());
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getWelcommeImgs(), response, response);
+        requestQueue.add(request);
     }
 
 
@@ -739,13 +750,12 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————" + volleyError);
+            AppLog.print("volley error——————" + volleyError + ", message__" + volleyError.getMessage() + ", LocalizedMessage__" + volleyError.getLocalizedMessage() + "__StackTrace_" + volleyError.getStackTrace());
             callBack.onRequestFailed();
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
             CommonUtil.showToast(context, "网络请求异常", Toast.LENGTH_LONG);
-            AppLog.i("TAG", "createRoom:" + volleyError.toString());
         }
 
         @Override
@@ -776,6 +786,10 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.GET_WELCOME_IMGS:
+                        AppLog.print("res___"+json);
+                        responseGetWelcomeImgs(jsonObj);
+                        break;
                     case RequestCode.GET_PAY_RESULT:
                         JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
                         callBack.onGetPayResult(resultJobj.toString());
@@ -934,6 +948,14 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseGetWelcomeImgs(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson=new Gson();
+            AppLog.print("resutlJoj__"+resultJobj.toString());
+            WelcomeImg img=gson.fromJson(resultJobj.toString(),WelcomeImg.class);
+            callBack.onGetWelcomeImgs(img);
         }
 
 
@@ -1630,6 +1652,7 @@ public class ContentLoader {
         int GET_MORE_ROUTE = 125;
         int GET_ROUTE_DETAILS = 126;
         int GET_PAY_RESULT = 127;
+        int GET_WELCOME_IMGS = 128;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

@@ -3,10 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.lalocal.lalocal.activity.PreOrderActivity">
+    tools:context=".activity.BookActivity">
 <WebView
     android:id="@+id/pre_order_wv"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     />
+    <include
+        layout="@layout/page_loading"
+        />
 </merge>

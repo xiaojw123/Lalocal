@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.view.GifView;
 
 
 public class XListViewHeader extends LinearLayout {

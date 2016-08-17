@@ -91,6 +91,6 @@
         android:padding="@dimen/dimen_size_15_dp"
         />
 
-
+    <include layout="@layout/page_loading"/>
 
 </LinearLayout>

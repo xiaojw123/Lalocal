@@ -35,11 +35,11 @@
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/dimen_size_15_dp"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:drawableEnd="@drawable/arrow_right"
             android:drawablePadding="@dimen/dimen_size_8_dp"
+            android:ellipsize="end"
             android:gravity="center_vertical"
+            android:singleLine="true"
             android:textColor="@color/color_8c"
             android:textSize="@dimen/text_size_16_sp" />
 
@@ -131,7 +131,8 @@
         android:background="@drawable/xcpaybg_img"
         android:descendantFocusability="afterDescendants"
         android:paddingEnd="@dimen/dimen_size_15_dp"
-        android:paddingStart="@dimen/dimen_size_15_dp">
+        android:paddingStart="@dimen/dimen_size_15_dp"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -159,83 +160,77 @@
         android:layout_marginTop="@dimen/dimen_size_5_dp"
         android:text="可用分期金额：5,000元"
         android:textColor="@color/color_8c"
-        android:textSize="@dimen/text_size_12_sp" />
+        android:textSize="@dimen/text_size_12_sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/order_pays_llt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_above="@+id/pay_bottom_container"
-        android:visibility="invisible"
-        />
+        android:orientation="vertical"
+        android:visibility="invisible" />
 
     <RelativeLayout
         android:id="@+id/pay_bottom_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/pay_bottom_container_height"
-        android:layout_alignParentBottom="true"
-        >
+        android:layout_alignParentBottom="true">
 
         <View style="@style/CommonD9LineTheme" />
+
         <FrameLayout
             android:id="@+id/pay_showdetail_triangle_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="@dimen/dimen_size_15_dp"
-            android:paddingTop="@dimen/dimen_size_5_dp"
-            android:paddingBottom="@dimen/dimen_size_5_dp"
             android:layout_centerVertical="true"
-            >
+            android:paddingBottom="@dimen/dimen_size_5_dp"
+            android:paddingStart="@dimen/dimen_size_15_dp"
+            android:paddingTop="@dimen/dimen_size_5_dp">
+
             <Button
                 android:id="@+id/pay_showdetail_triangle_btn"
                 android:layout_width="@dimen/pay_showdetail_triangle_btn_width"
                 android:layout_height="@dimen/pay_showdetail_triangle_btn_height"
-                android:background="@drawable/pay_detail_triangle_bg"
                 android:layout_gravity="center_vertical"
-                />
+                android:background="@drawable/pay_detail_triangle_bg" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_12_sp"
-                android:textColor="@color/color_8c"
-                android:text="@string/showdetail"
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="@dimen/dimen_size_10_dp"
-                />
+                android:text="@string/showdetail"
+                android:textColor="@color/color_8c"
+                android:textSize="@dimen/text_size_12_sp" />
 
         </FrameLayout>
+
         <TextView
             android:id="@+id/pay_money_amount"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginStart="@dimen/dimen_size_20_dp"
+            android:layout_toEndOf="@+id/pay_showdetail_triangle_container"
+            android:gravity="center_vertical"
             android:text="￥0"
             android:textColor="@color/color_ffaa2a"
-            android:textSize="@dimen/text_size_18_sp"
-            android:gravity="center_vertical"
-            android:layout_toEndOf="@+id/pay_showdetail_triangle_container"
-            android:layout_marginStart="@dimen/dimen_size_20_dp"
-            />
+            android:textSize="@dimen/text_size_18_sp" />
 
         <Button
             android:id="@+id/pay_btn"
             android:layout_width="@dimen/pay_to_btn_width"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:background="@color/color_ffaa2a"
             android:text="@string/go_to_pay"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_18_sp"
-            android:layout_alignParentRight="true"
-            />
+            android:textSize="@dimen/text_size_18_sp" />
 
 
-
-
-
-
-        <View style="@style/CommonD9LineTheme"
-            android:layout_alignParentBottom="true"
-            />
+        <View
+            style="@style/CommonD9LineTheme"
+            android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
 

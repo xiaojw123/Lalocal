@@ -73,7 +73,7 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
-        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());
         if (inMainProcess()) {
@@ -176,8 +176,6 @@ public class MyApplication extends Application {
             AppLog.print("未找到数据库");
         }
 
-        //TODO:bugtags online delete
-//        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
         Config.REDIRECT_URL="http://sns.whalecloud.com/sina2/callback";
         PlatformConfig.setWeixin("wx6117251010e95624", "9154c280dd8a7a9a6b5f57d08dae2930");
         //微信 appid appsecret

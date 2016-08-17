@@ -30,6 +30,14 @@
         android:layout_height="@dimen/route_detail_map_height"
         android:layout_below="@+id/route_detail_title" />
 
+    <WebView
+        android:id="@+id/route_detail_wv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/route_detail_map_height"
+        android:layout_below="@+id/route_detail_title"
+        android:visibility="invisible" />
+
+
     <HorizontalScrollView
         android:id="@+id/route_detail_hsv"
         android:layout_width="match_parent"
@@ -47,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/route_detail_comb_llt_height"
                 android:orientation="horizontal" />
+
             <ImageView
                 android:id="@+id/route_detail_day_point"
                 android:layout_width="@dimen/route_detail_day_point_width"
@@ -54,21 +63,11 @@
                 android:layout_below="@+id/route_detail_routedate_llt"
                 android:layout_marginTop="@dimen/dimen_size_6_dp"
                 android:background="@drawable/nowtriangle"
-                android:visibility="invisible"
-                 />
+                android:visibility="invisible" />
 
 
         </RelativeLayout>
     </HorizontalScrollView>
-
-    <!--<ImageView-->
-        <!--android:id="@+id/route_detail_day_point"-->
-        <!--android:layout_width="@dimen/route_detail_day_point_width"-->
-        <!--android:layout_height="@dimen/route_detail_day_point_height"-->
-        <!--android:layout_below="@+id/route_detail_hsv"-->
-        <!--android:layout_marginTop="@dimen/dimen_size_6_dp"-->
-        <!--android:background="@drawable/nowtriangle"-->
-        <!--android:visibility="invisible" />-->
 
 
     <com.lalocal.lalocal.view.CustomViewPager
@@ -116,7 +115,9 @@
             android:background="@color/color_ffaa2a"
             android:focusable="true"
             android:paddingLeft="@dimen/dimen_size_20_dp"
-            android:paddingRight="@dimen/dimen_size_20_dp">
+            android:paddingRight="@dimen/dimen_size_20_dp"
+            android:visibility="gone"
+            >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -157,8 +158,6 @@
         android:visibility="invisible"
 
         >
-        <!--android:layout_above="@+id/route_detail_bottom"-->
-        <!--android:visibility="invisible"-->
         <RelativeLayout
             android:id="@+id/day_item_detail_title_container"
             android:layout_width="match_parent"
@@ -239,7 +238,6 @@
             android:textSize="@dimen/text_size_18_sp"
             android:textStyle="bold"
             android:visibility="gone" />
-
 
     </LinearLayout>
 

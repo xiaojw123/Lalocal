@@ -1,10 +1,8 @@
 package com.lalocal.lalocal.activity;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -42,7 +40,6 @@ import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
-import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomViewPager;
@@ -63,7 +60,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     public static final String DETAILS_ID = "detail_id";
     private static final String FORMART_BETWEEN = "Day  %1$s - %2$s";
     RouteDetail mRouteDetail;
-    ContentLoader loader;
     @BindView(R.id.day_item_detail_rlv)
     RecyclerView dayItemDetailRlv;
     @BindView(R.id.day_item_detail_container)
@@ -82,8 +78,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     ImageView dayItemDetailLoc;
     @BindView(R.id.day_item_detail_buy_btn)
     Button dayItemDetailBuyBtn;
-    @BindView(R.id.route_detail_bottom)
-    FrameLayout routeDetailBottom;
     private boolean praiseFlag;
     private Object praiseId;
     @BindView(R.id.route_detail_service)
@@ -109,26 +103,17 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     ImageView dayPointImg;
     Bundle savedInstanceState;
     DayRouteItemAdpater mItemAdapter;
-    public static final LatLng SHANGHAI = new LatLng(31.238068, 121.501654);// 上海市经纬度
-    public static final LatLng FANGHENG = new LatLng(39.989614, 116.481763);// 方恒国际中心经纬度
-    public static final LatLng CHENGDU = new LatLng(30.679879, 104.064855);// 成都市经纬度
-    public static final LatLng XIAN = new LatLng(34.341568, 108.940174);// 西安市经纬度
 
-    @TargetApi(Build.VERSION_CODES.M)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.savedInstanceState = savedInstanceState;
         setContentView(R.layout.route_detail_layout);
-        ButterKnife.bind(this);
-        initParams();
+        unbinder = ButterKnife.bind(this);
+        this.savedInstanceState = savedInstanceState;
+        dayItemLeft = (int) getResources().getDimension(R.dimen.dimen_size_36_dp);
         initLoader();
 
-    }
-
-    private void initParams() {
-        dayItemLeft = (int) getResources().getDimension(R.dimen.dimen_size_36_dp);
-        firstDayLeft = (int) getResources().getDimension(R.dimen.first_day_left);
     }
 
     private void initViewPager(List<RouteDetail.RouteDatesBean> routeDates) {
@@ -344,9 +329,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
 
     private void initLoader() {
-        loader = new ContentLoader(this);
-        loader.setCallBack(new RouteDetailCallBack());
-        loader.getRouteDetails(getDetailId());
+        setLoaderCallBack(new RouteDetailCallBack());
+        mContentloader.getRouteDetails(getDetailId());
     }
 
     private int getDetailId() {
@@ -382,9 +366,9 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             //取消收藏
             int id = mRouteDetail.getId();
             if (praiseFlag) {
-                loader.cancelParises(praiseId, id);
+                mContentloader.cancelParises(praiseId, id);
             } else {//添加收藏
-                loader.specialPraise(id, 2);//点赞
+                mContentloader.specialPraise(id, 2);//点赞
             }
         }
 
@@ -414,6 +398,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                         int left = view.getLeft();
                         RelativeLayout.LayoutParams pointParams = (RelativeLayout.LayoutParams) dayPointImg.getLayoutParams();
                         pointParams.leftMargin = pointParams.leftMargin == 0 ? firstDayLeft : left + width;
+                        AppLog.print("day left margin__" + pointParams.leftMargin + "__width___" + width);
                         dayPointImg.setLayoutParams(pointParams);
                         view.setSelected(true);
                         List<RouteDetail.RouteDatesBean> dates = mRouteDetail.getRouteDates();
@@ -492,23 +477,30 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                 }
             }
         }
+        int firstId = 0;
         out1:
         for (int i = 0; i < routeDates.size(); i++) {
             RouteDetail.RouteDatesBean routeDate = routeDates.get(i);
-            if (dates == null || dates.size() < 1 || !dates.contains(routeDate.getId())) {
+            int dateId = routeDate.getId();
+            if (i == 0) {
+                firstId = dateId;
+            }
+            if (dates == null || dates.size() < 1 || !dates.contains(dateId)) {
                 //无组合订单
-                routeDetailRoutedateLlt.addView(getDateItem(i + 1, routeDate));
+                routeDetailRoutedateLlt.addView(getDateItem(i + 1, false,routeDate));
                 continue;
             }
             for (Integer id : dates) {
                 if (id == routeDate.getId()) {
                     int pos = dates.indexOf(id);
                     if (pos == 0) {
-
+                        if (routeDetailBuy.getVisibility() != View.VISIBLE) {
+                            routeDetailBuy.setVisibility(View.VISIBLE);
+                        }
                         routeDetailBuyBetween.setText(String.format(FORMART_BETWEEN, i + 1, i + dates.size()));
                     }
                     if (comboContainer != null) {
-                        comboContainer.addView(getDateItem(i + 1, routeDate));
+                        comboContainer.addView(getDateItem(i + 1,true, routeDate));
                         continue out1;
                     }
                 }
@@ -517,11 +509,15 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
 
         }
-
+        if (dates != null && dates.contains(firstId)) {
+            firstDayLeft = (int) getResources().getDimension(R.dimen.first_day_left1);
+        } else {
+            firstDayLeft = (int) getResources().getDimension(R.dimen.first_day_left2);
+        }
     }
 
 
-    public TextView getDateItem(int dateNum, RouteDetail.RouteDatesBean routeDate) {
+    public TextView getDateItem(int dateNum,boolean isFlag, RouteDetail.RouteDatesBean routeDate) {
         TextView view = new TextView(this);
         ColorStateList stateList = getResources().getColorStateList(R.color.date_item_textcolor);
         view.setTextColor(stateList);
@@ -534,7 +530,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         view.setTag(R.id.routeDateItem, routeDate);
         view.setId(dateNum);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (dateNum == 1) {
+        if (dateNum == 1&&isFlag) {
             params.leftMargin = 0;
             updateMap(routeDate.getRouteItems());
         } else {
@@ -547,6 +543,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
     private void updateMap(List<RouteDetail.RouteDatesBean.RouteItemsBean> routeItems) {
         if (aMap == null) {
+
             mapView.onCreate(savedInstanceState);
             aMap = mapView.getMap();
             aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
@@ -591,7 +588,9 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             bulder.include(latLng);
         }
         LatLngBounds bounds = bulder.build();
-        aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+        if (aMap != null) {
+            aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
+        }
 
     }
 
@@ -601,8 +600,11 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
      */
     @Override
     protected void onResume() {
+        if (mapView != null) {
+            mapView.onResume();
+        }
         super.onResume();
-        mapView.onResume();
+
     }
 
     /**
@@ -610,8 +612,11 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
      */
     @Override
     protected void onPause() {
+        if (mapView != null) {
+            mapView.onPause();
+        }
         super.onPause();
-        mapView.onPause();
+
     }
 
     /**
@@ -619,8 +624,11 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
      */
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        if (mapView != null) {
+            mapView.onSaveInstanceState(outState);
+        }
         super.onSaveInstanceState(outState);
-        mapView.onSaveInstanceState(outState);
+
     }
 
     /**
@@ -628,8 +636,10 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
      */
     @Override
     protected void onDestroy() {
+        if (mapView != null) {
+            mapView.onDestroy();
+        }
         super.onDestroy();
-        mapView.onDestroy();
     }
 
     class RoutePagerAdpater extends PagerAdapter {
