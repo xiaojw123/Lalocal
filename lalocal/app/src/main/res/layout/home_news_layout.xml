@@ -14,6 +14,7 @@
     <RelativeLayout
         android:id="@+id/home_news_bg_blur"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/live_height_50dp"
         android:layout_height="match_parent">
     </RelativeLayout>
 <LinearLayout

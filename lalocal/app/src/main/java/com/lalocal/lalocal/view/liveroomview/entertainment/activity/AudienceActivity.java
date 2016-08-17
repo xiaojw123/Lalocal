@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
@@ -32,6 +33,7 @@ import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermission
 import com.lalocal.lalocal.view.liveroomview.thirdparty.video.NEVideoView;
 import com.lalocal.lalocal.view.liveroomview.thirdparty.video.VideoPlayer;
 import com.lalocal.lalocal.view.liveroomview.thirdparty.video.constant.VideoConstant;
+import com.lalocal.lalocal.view.xlistview.PowerImageView;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
@@ -89,9 +91,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private String playType;
     private View loadingPage;
     private RelativeLayout mBlurDrawableRelativeLayout1;
+    private TextView send;
+    private PowerImageView loadingPageLayout;
+    private TextView andiuence;
 
 
-    public static void start(Context context, String roomId, String url,String avatar,String nickName,String userId,SpecialShareVOBean shareVO,String type) {
+    public static void start(Context context, String roomId, String url, String avatar, String nickName, String userId, SpecialShareVOBean shareVO, String type) {
         Intent intent = new Intent();
         intent.setClass(context, AudienceActivity.class);
         intent.putExtra(EXTRA_ROOM_ID, roomId);
@@ -128,6 +133,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void initView() {
         viewById = findViewById(R.id.live_layout);
         loadingPage = findViewById(R.id.live_loading_page);
+        andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
+        loadingPageLayout = (PowerImageView) loadingPage.findViewById(R.id.xlistview_header_anim);
         ImageView imageView= (ImageView) findViewById(R.id.loading_page_bg);
 
         //获取屏幕高度
@@ -302,7 +309,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         keyboardLayout.setAlpha(0);
         keyboardLayout.setFocusable(false);
         keyboardLayout.setClickable(false);
-        //     audienceMasterInfo = (LinearLayout) findViewById(R.id.audience_master_info_layout);
         shareBtn.setOnClickListener(buttonClickListener);
         giftBtn.setOnClickListener(buttonClickListener);
         likeBtn.setOnClickListener(buttonClickListener);
@@ -376,8 +382,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     liveSettingLayout.setVisibility(View.GONE);
                     inputPanel.switchToTextLayout(true);
                     break;
-
-
             }
         }
     };
@@ -409,14 +413,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @OnMPermissionGranted(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionSuccess(){
-        Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
         initAudienceParam();
 
     }
 
     @OnMPermissionDenied(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionFailed(){
-        Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
+    //    Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
         finish();
 
     }
@@ -468,7 +472,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     // 发送礼物
     private void sendGift() {
         if (giftPosition == -1) {
-            Toast.makeText(AudienceActivity.this, "请选择礼物", Toast.LENGTH_SHORT).show();
+          //  Toast.makeText(AudienceActivity.this, "请选择礼物", Toast.LENGTH_SHORT).show();
             return;
         }
         giftLayout.setVisibility(View.GONE);
@@ -481,7 +485,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         giftPosition = -1; // 发送完毕，置空
     }
 
-    private void setMemberType(ChatRoomMessage message,String type) {
+    private void setMemberType(ChatRoomMessage message, String type) {
         Map<String, Object> ext = new HashMap<>();
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, DemoCache.getAccount());
         if (chatRoomMember != null) {
@@ -520,7 +524,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     // 显示直播已结束布局
     private void showFinishLayout() {
-
+        loadingPageLayout.setVisibility(View.GONE);
+        loadingPage.setVisibility(View.VISIBLE);
+        andiuence.setVisibility(View.VISIBLE);
         inputPanel.collapse(true);
     }
 

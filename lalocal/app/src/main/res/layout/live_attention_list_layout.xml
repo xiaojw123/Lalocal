@@ -13,23 +13,29 @@
         attr:lineVisible="false"
         app:title_name="关注(0)"
         />
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/live_height_40dp"
-        android:orientation="horizontal">
-
+        android:layout_height="@dimen/live_height_35dp">
+    <LinearLayout
+        android:id="@+id/live_search_layout_to"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:visibility="gone">
         <EditText
             android:id="@+id/live_attention_search_et"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="40dp"
+            android:layout_height="30dp"
             android:gravity="center"
             android:background="@drawable/live_attenton_search_bg"
-            android:layout_marginLeft="@dimen/live_padding_10dp"
-            android:layout_marginRight="@dimen/live_padding_10dp"
+            android:layout_marginLeft="@dimen/author_padding_15dp"
+            android:layout_marginRight="@dimen/author_padding_15dp"
             android:drawableLeft="@drawable/search_icon"
             android:hint="搜索"
-           android:paddingLeft="@dimen/live_padding_10dp"
+            android:textSize="@dimen/text_size_14_sp"
+            android:paddingLeft="@dimen/live_padding_10dp"
             android:paddingRight="@dimen/live_padding_5dp"
             />
         <TextView
@@ -39,14 +45,37 @@
             android:gravity="center"
             android:layout_gravity="center"
             android:text="取消"
-
             android:paddingRight="@dimen/live_padding_10dp"
             android:textSize="@dimen/text_size_16_sp"
             android:visibility="gone"/>
     </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/live_search_layout_font"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/live_padding_5dp"
+            android:background="@drawable/search_view_bg"
+            android:layout_marginLeft="@dimen/author_padding_15dp"
+            android:layout_marginRight="@dimen/author_padding_15dp"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search"
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_14_sp"
+                android:layout_marginLeft="@dimen/live_padding_10dp"
+                android:drawableStart="@drawable/destination_icon_search"
+                android:layout_gravity="center"
+                android:drawablePadding="@dimen/dimen_size_8_dp"
+                />
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <com.lalocal.lalocal.view.xlistview.XListView
+        android:layout_marginTop="@dimen/live_padding_5dp"
         android:id="@+id/live_attention_listview"
         android:layout_width="match_parent"
         android:layout_height="0dp"

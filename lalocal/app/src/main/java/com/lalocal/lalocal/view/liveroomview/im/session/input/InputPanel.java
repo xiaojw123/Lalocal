@@ -28,6 +28,7 @@ import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.util.StringUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMemberCache;
+import com.lalocal.lalocal.view.liveroomview.entertainment.module.BarrageAttachment;
 import com.lalocal.lalocal.view.liveroomview.im.session.Container;
 import com.lalocal.lalocal.view.liveroomview.im.session.actions.BaseAction;
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.EmoticonPickerView;
@@ -36,6 +37,7 @@ import com.lalocal.lalocal.view.liveroomview.im.session.emoji.MoonUtil;
 import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.media.record.AudioRecorder;
@@ -292,12 +294,14 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 toggleActionPanelLayout();
             } else if (v == emojiButtonInInputBar) {
                 toggleEmojiLayout();
-            }else if(v.getId()==R.id.im_barrage_and_chat_iv){
+            }else if(v.getId()== R.id.im_barrage_and_chat_iv){
                 isSelector = isCheckBarrage % 2 == 0 ? true : false;
                 barrageAndChat.setSelected(isSelector);
                 isCheckBarrage++;
                 AppLog.i("TAG","isSelector:"+ (isSelector==true?"开启": "关闭"));
-
+                if(onBarrageViewCheckStatusListener!=null){
+                    onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector);
+                }
             }
         }
     };
@@ -305,7 +309,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     //弹幕开关状态监听
     private  OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener;
     public interface OnBarrageViewCheckStatusListener {
-        void getBarrageViewCheckStatus(boolean isCheck,String text);
+        void getBarrageViewCheckStatus(boolean isCheck);
     }
 
     public void setOnBarrageViewCheckStatusListener(OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener) {
@@ -336,11 +340,14 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         }
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
             textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
-            if(isSelector){
 
-                if(onBarrageViewCheckStatusListener!=null){
-                    onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector,text);
-                }
+            if(isSelector){
+                BarrageAttachment barrageAttachment=new BarrageAttachment();
+
+                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(container.account, barrageAttachment);
+                message.setContent(text);
+                setMemberType(message);
+                NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
                 AppLog.i("TAG","弹幕开启了吗");
 
 
@@ -357,11 +364,15 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     }
 
     private void setMemberType(ChatRoomMessage message) {
-
+        String content = message.getContent();
+        String fromNick = message.getFromNick();
+        AppLog.i("TAG","测试magessn内容:"+content);
         Map<String, Object> ext = new HashMap<>();
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
+
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
+            ext.put("barrag",fromNick+":"+content);
             message.setRemoteExtension(ext);
         }
     }

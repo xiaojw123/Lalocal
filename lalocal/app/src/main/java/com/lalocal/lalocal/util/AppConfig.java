@@ -164,6 +164,10 @@ public class AppConfig {
     public static String getImgToken() {
         return baseUrl + "system/imgs/token";
     }
+    //上传在线人数http://dev.lalocal.cn:8080/api/channels/2/onlineUsers
+    public  static String getUserOnLine(){
+        return baseUrl+"channels/";
+    }
 
     //获取直播用户信息  http://dev.lalocal.cn:8080/api/users/userInfos/112
     public static final String getLiveUserInfo() {

@@ -27,6 +27,9 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.like:
                     attachment = new LikeAttachment();
                     break;
+                case CustomAttachmentType.barrage:
+                    attachment=new BarrageAttachment();
+                    break;
                 default:
                     attachment = new DefaultCustomAttachment();
                     break;

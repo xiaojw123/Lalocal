@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.view.liveroomview.entertainment.adapter;
 
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
@@ -13,7 +14,6 @@ import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
-
 
 /**
  * Created by android on 2016/8/7.
@@ -63,17 +63,20 @@ public class AttentionOrFansAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         LiveFansOrAttentionRowsBean liveFansOrAttentionRowsBean = allRows.get(position);
-       DrawableUtils.displayImg(mContext, viewHolder.attentionHead, liveFansOrAttentionRowsBean.getAvatar());
-
+        String description = liveFansOrAttentionRowsBean.getDescription();
+        DrawableUtils.displayImg(mContext, viewHolder.attentionHead, liveFansOrAttentionRowsBean.getAvatar());
         viewHolder.attentionName.setText(liveFansOrAttentionRowsBean.getNickName());
         int status = liveFansOrAttentionRowsBean.getAttentionVO().getStatus();
         if(status==2){
             viewHolder.attentionAttention.setText("已相互关注");
             viewHolder.attentionAttention.setTextColor(Color.parseColor("#666666"));
         }
-        if(liveFansOrAttentionRowsBean.getDescription()!=null){
-            viewHolder.attentionSingture.setText(liveFansOrAttentionRowsBean.getDescription());
+        if(description!=null&&description.length()>0){
+            viewHolder.attentionSingture.setText(description);
+        }else {
+            viewHolder.attentionSingture.setText("这家伙很懒啥也没写");
         }
+
         return convertView;
     }
 

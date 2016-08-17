@@ -175,7 +175,7 @@ public class BarrageViewTest extends RelativeLayout {
         textViewContent.setTextColor(Color.parseColor("#ffffff"));
         linearLayout.addView(textViewName);
         linearLayout.addView(textViewContent);
-        LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+        LayoutParams params = (LayoutParams) linearLayout.getLayoutParams();
         params.topMargin = line * lineHeight;
         linearLayout.setLayoutParams(params);
 

@@ -499,7 +499,17 @@ public class ContentLoader {
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
         requestQueue.add(request);
     }
-
+    //上传在线人数
+    public void getUserOnLine(String onLineUsers,int onlinecount){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_ON_LINE_COUNT);
+        }
+        AppLog.i("TAG", "alterLive:修改直播");
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserOnLine() + onLineUsers, response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
+        requestQueue.add(request);
+    }
 
     //关闭直播间
     public void cancelLiveRoom(String userId) {
@@ -943,6 +953,9 @@ public class ContentLoader {
                     case RequestCode.LIVE_SEARCH_USER:
                         responseFansOrAttention(json, true);
                         break;
+                    case RequestCode.LIVE_ON_LINE_COUNT:
+                        responseOnLinesCount(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1375,6 +1388,10 @@ public class ContentLoader {
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             callBack.onAlterLiveRoom(createLiveRoomDataResp);
         }
+        //上传在线人数
+        private void responseOnLinesCount(String json) {
+            AppLog.i("TAG","responseOnLinesCount："+json);
+        }
 
         //修改直播封面
         private void responseAlterLiveCover(String json) {
@@ -1461,6 +1478,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -1561,6 +1579,18 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("style", 0);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    //上传在线人数
+    public  String getUserOnLines(String onLinesUser){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("onlineUser ", onLinesUser);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -1677,6 +1707,7 @@ public class ContentLoader {
         int LIVE_CANCEL_ATTENTION = 219;
         int LIVE_FANS_OR_ATTENTION = 220;
         int LIVE_SEARCH_USER = 221;
+        int LIVE_ON_LINE_COUNT=222;
 
     }
 

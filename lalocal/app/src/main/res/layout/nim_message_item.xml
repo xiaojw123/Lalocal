@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="6dp">
+    android:padding="3dp">
   <!--  android:layout_marginTop="@dimen/bubble_time_layout_margin_top"-->
     <TextView
         android:id="@+id/message_item_time"
@@ -15,7 +15,6 @@
         android:paddingRight="7dip"
         android:textColor="#ffffff"
         android:textSize="14sp"
-
         android:visibility="gone" />
 
     <ImageView

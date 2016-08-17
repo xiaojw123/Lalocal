@@ -177,6 +177,7 @@ public abstract class ICallBack {
     //上传图片token
     public void onImgToken(ImgTokenBean imgTokenBean) {
     }
+
     //修改直播封面
     public void onAlterLiveCover(CreateLiveRoomDataResp createLiveRoomDataResp) {
     }

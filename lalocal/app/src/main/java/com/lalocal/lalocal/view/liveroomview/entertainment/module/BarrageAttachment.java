@@ -3,7 +3,7 @@ package com.lalocal.lalocal.view.liveroomview.entertainment.module;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 点赞附件
+ * 弹幕
  * Created by hzxuwen on 2016/3/30.
  */
 public class BarrageAttachment extends CustomAttachment {

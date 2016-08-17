@@ -22,7 +22,7 @@
                 android:id="@+id/live_cover_iv"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/live_height_345dp"
-                android:src="@drawable/a"
+                android:src="@drawable/androidloading"
                 android:scaleType="fitXY"
                 />
             <View
@@ -117,7 +117,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/live_text_10sp"
-                    android:text="主播还在路上..."/>
+                    android:text="lalocal"/>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

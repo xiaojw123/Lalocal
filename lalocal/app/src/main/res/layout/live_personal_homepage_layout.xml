@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:attr="http://schemas.android.com/apk/res-auto"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.lalocal.lalocal.view.CustomTitleView
@@ -45,7 +44,10 @@
             android:layout_below="@+id/line_layout"
             android:layout_marginTop="@dimen/live_padding_5dp"
             android:layout_marginLeft="155dp"
-            android:text="主播在路上"/>
+            android:maxLength="15"
+           android:singleLine="true"
+            android:ellipsize="end"
+            android:text="lalocal"/>
         <TextView
             android:id="@+id/homepage_master_signature"
             android:layout_width="wrap_content"
@@ -53,6 +55,8 @@
             android:layout_below="@+id/homepage_master_name"
             android:layout_marginLeft="155dp"
             android:textColor="#b3b3b3"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:text="这家伙啥也没写"/>
 
             <ImageView
@@ -97,6 +101,10 @@
                     android:layout_height="wrap_content"
                     android:text="10"/>
             </LinearLayout>
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/color_b3"></View>
             <LinearLayout
                 android:id="@+id/homepage_fans_layout"
                 android:layout_width="0dp"
@@ -121,6 +129,7 @@
           android:layout_below="@+id/line_g"
             android:background="@color/color_b3" />
     </RelativeLayout>
+
 
     <TextView
         android:layout_width="wrap_content"

@@ -29,5 +29,14 @@
         android:src="@drawable/loading"
         android:scaleType="centerCrop"
         attr:auto_play="true"
+
         />
+
+    <TextView
+        android:id="@+id/audience_over_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="直播已结束!"/>
 </RelativeLayout>

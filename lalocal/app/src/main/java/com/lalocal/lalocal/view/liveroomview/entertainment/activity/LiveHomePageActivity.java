@@ -99,12 +99,9 @@ public class LiveHomePageActivity extends BaseActivity {
         }
     }
 
-
+    private int attentionNum;
+    private int fansNum;
     public class MyCallBack extends ICallBack {
-
-        private int attentionNum;
-        private int fansNum;
-
         @Override
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
@@ -142,8 +139,8 @@ public class LiveHomePageActivity extends BaseActivity {
                 if (status == 1) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已关注");
-                    attentionNum = attentionNum + 1;
-                    homepageFansCount.setText(String.valueOf(attentionNum));
+                    fansNum = fansNum + 1;
+                    homepageFansCount.setText(String.valueOf(fansNum));
                     masterAttention.setTextColor(Color.BLACK);
                 }
 
@@ -158,8 +155,8 @@ public class LiveHomePageActivity extends BaseActivity {
                 Toast.makeText(LiveHomePageActivity.this, "已取消关注", Toast.LENGTH_SHORT).show();
                 masterAttention.setText("关注");
                 masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
-                attentionNum = attentionNum - 1;
-                homepageFansCount.setText(String.valueOf(attentionNum));
+                fansNum = fansNum - 1;
+                homepageFansCount.setText(String.valueOf(fansNum));
 
 
             }

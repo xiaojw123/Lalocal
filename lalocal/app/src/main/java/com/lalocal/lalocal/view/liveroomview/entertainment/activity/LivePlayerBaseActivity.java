@@ -63,7 +63,6 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.ResponseCode;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
@@ -94,7 +93,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 直播端和观众端的基类
- * Created by hzxuwen on 2016/4/5.
+ *
  */
 public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy{
     private static final String TAG = LivePlayerBaseActivity.class.getSimpleName();
@@ -104,7 +103,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private final static String AVATAR="AVATAR";
     private final static String USER_ID = "USER_ID";
     public static final String LIVE_USER_ID="LIVE_USER_ID";
-    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 10 * 1000;
+    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 60 * 1000;
     private Timer timer;
     // 聊天室信息
     protected String roomId;
@@ -143,7 +142,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private TouristAdapter tourisAdapter;
     private ChatRoomMember master;
     public String avatar;
-    private boolean barrageSelectorStatus=false;
+    protected boolean barrageSelectorStatus=false;
     protected EditText editTextInput;
     protected ImageView inputChar;
     private String avatarIntetn;
@@ -155,6 +154,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private SpecialShareVOBean shareVO;
     protected DrawerLayout drawerLayout;
     protected Container container;
+    private String barrageContent;
+    public int onlineCounts;
 
     protected abstract int getActivityLayout(); // activity布局文件
 
@@ -186,8 +187,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         parseIntent();
         findViews();
         initParam();
-
-
     }
 
     public class MyCallBack extends ICallBack {
@@ -210,6 +209,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onResume() {
         super.onResume();
+      isFirstClick=true;
         if (messageListPanel != null) {
             messageListPanel.onResume();
         }
@@ -248,7 +248,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     inputPanel.hideInputMethod();
                     break;
                 case R.id.live_master_info_layout:
-
                     inputPanel.hideInputMethod();
                     if(isFirstClick){
                         isFirstClick=false;
@@ -290,7 +289,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 return;
             }
             IMMessage message = messages.get(0);
-
+            AppLog.i("TAG","弹幕content:"+message.getContent()+"    fromNick:"+message.getFromNick());
             Map<String, Object> remoteExtension = message.getRemoteExtension();
             if(remoteExtension!=null){
                 Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
@@ -298,6 +297,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
+                    if("barrag".equals(key)){
+                        barrageContent = value.toString();
+                    }
                     AppLog.i("TAG","key:"+key+"    value:"+value);
                 }
                 AppLog.i("TAG","content:"+message.getContent()+"nick:"+message.getFromNick());
@@ -319,12 +321,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }else if(message != null && message.getAttachment() instanceof BarrageAttachment){//弹幕
                 AppLog.i("TAG","BarrageAttachment弹幕监听到了啊a");
                 barrageView.init(new BarrageConfig());
-                ChatRoomMessage chatRoomMessage = messages.get(0);
-                String content = chatRoomMessage.getContent();
-                String fromNick = chatRoomMessage.getChatRoomMessageExtension().getSenderNick();
-
-                if(content!=null&&!"点赞".equals(content)){
-                    barrageView.addTextBarrage(fromNick+":"+content);
+                if(barrageContent!=null){
+                    barrageView.addTextBarrage(barrageContent);
                 }
 
 
@@ -347,15 +345,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             } else {
                 AppLog.i("TAG","incomingChatRoomMsg"+"其他消息");
                 messageListPanel.onIncomingMessage(messages);
-               /* if(barrageSelectorStatus){
-                    barrageView.init(new BarrageConfig());
-                    ChatRoomMessage chatRoomMessage = messages.get(0);
-                    String content = chatRoomMessage.getContent();
-                    String fromNick = chatRoomMessage.getFromNick();
-                    if(content!=null&&!"点赞".equals(content)){
-                        barrageView.addTextBarrage(fromNick+":"+content);
-                    }
-                }*/
 
             }
         }
@@ -509,12 +498,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         //弹幕开关状态
         inputPanel.setOnBarrageViewCheckStatusListener(new InputPanel.OnBarrageViewCheckStatusListener() {
             @Override
-            public void getBarrageViewCheckStatus(boolean isCheck,String text) {
+            public void getBarrageViewCheckStatus(boolean isCheck) {
                 barrageSelectorStatus = isCheck;
-                BarrageAttachment barrageAttachment = new BarrageAttachment();
-                ChatRoomMessage barrageMessage = ChatRoomMessageBuilder.createChatRoomCustomMessage(roomId, barrageAttachment);
-                setMemberType(barrageMessage);
-                NIMClient.getService(ChatRoomService.class).sendMessage(barrageMessage, false);
             }
         });
         //软键盘输入框
@@ -582,7 +567,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 enterroomgetnick = member.getNick();
                 String avatar = member.getAvatar();
                 member.setRoomId(roomInfo.getRoomId());
-
                 ChatRoomMemberCache.getInstance().saveMyMember(member);
                 DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead,avatar);
                 masterName.setText(enterroomgetnick);
@@ -591,6 +575,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
             @Override
             public void onFailed(int code) {
+                AppLog.i("TAG","进入聊天室失败："+code);
                 onLoginDone();
 
             }
@@ -598,7 +583,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void onException(Throwable exception) {
                 onLoginDone();
-                Toast.makeText(LivePlayerBaseActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+          //      Toast.makeText(LivePlayerBaseActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -677,7 +662,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
         tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
             @Override
-            public void showTouristInfo(ChatRoomMember member,boolean isMasterAccount) {
+            public void showTouristInfo(ChatRoomMember member, boolean isMasterAccount) {
                 Map<String, Object> extension = member.getExtension();
                 inputPanel.hideInputMethod();
                 if(isFirstClick){
@@ -745,7 +730,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 NIMClient.getService(ChatRoomService.class).fetchRoomInfo(roomId).setCallback(new RequestCallback<ChatRoomInfo>() {
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
-                        onlineCountText.setText(String.format("%s人", String.valueOf(param.getOnlineUserCount())));
+                        onlineCounts = param.getOnlineUserCount();
+                        onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
                         clearCache();
                         fetchData();
                         int onlineUserCount = param.getOnlineUserCount();
@@ -788,6 +774,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, DemoCache.getAccount());
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
+
             message.setRemoteExtension(ext);
         }
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
@@ -801,9 +788,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onFailed(int code) {
                         if (code == ResponseCode.RES_CHATROOM_MUTED) {
-                            Toast.makeText(DemoCache.getContext(), "用户被禁言", Toast.LENGTH_SHORT).show();
+                         //  Toast.makeText(DemoCache.getContext(), "用户被禁言", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(DemoCache.getContext(), "消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+                           // Toast.makeText(DemoCache.getContext(), "消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
                         }
                     }
 

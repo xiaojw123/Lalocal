@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 public class MPermission {
     private String[] permissions;
     private int requestCode;
