@@ -64,6 +64,7 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
     @Nullable
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AppLog.print("recommend fragment___onceateview__");
         View view = inflater.inflate(R.layout.home_recommend_layout, container, false);
         xlistview = (XListView) view.findViewById(R.id.recommend_xlv);
         xlistview.setPullLoadEnable(true);

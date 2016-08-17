@@ -9,8 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DataCleanManager;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -38,7 +38,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         chacheSizeTv = (TextView) findViewById(R.id.setting_cache_size);
         signOUtBtn = (Button) findViewById(R.id.setting_sign_out);
         chacheSizeTv.setText(DataCleanManager.getTotalCacheSize(this));
-        if (isLogin()) {
+        if (UserHelper.isLogined(this)) {
             modifyPswContianer.setVisibility(View.VISIBLE);
             signOUtBtn.setText(getResources().getString(R.string.sign_out));
         } else {
@@ -114,9 +114,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
 
-    public boolean isLogin() {
-        return getIntent().getBooleanExtra(MeFragment.LOGIN_STATUS, false);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

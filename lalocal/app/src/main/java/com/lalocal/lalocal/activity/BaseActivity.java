@@ -24,6 +24,7 @@ public class BaseActivity extends AppCompatActivity {
     Unbinder unbinder;
     ContentLoader mContentloader;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +33,8 @@ public class BaseActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mContentloader = new ContentLoader(this);
     }
+
+
 
     public void setLoaderCallBack(ICallBack callBack) {
         mContentloader.setCallBack(callBack);

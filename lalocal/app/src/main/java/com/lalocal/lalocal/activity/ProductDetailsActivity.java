@@ -19,6 +19,7 @@ import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
 import com.lalocal.lalocal.model.ProductContentBean;
@@ -33,6 +34,7 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ViewFactory;
@@ -243,7 +245,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     return;
                 }
                 if (UserHelper.isLogined(this)) {
-                    preOrderProduct();
+                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
                 } else {
                     Intent preIntent = new Intent();
                     preIntent.setClass(this, LoginActivity.class);
@@ -271,8 +273,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     private void preOrderProduct() {
         Intent intent = new Intent();
-        intent.setClass(this, PreOrderActivity.class);
-        intent.putExtra(PreOrderActivity.PRE_ORDER_URL, AppConfig.getPreOrderProductUrl(this, result.id, UserHelper.getUserId(this), UserHelper.getToken(this)));
+        intent.setClass(this, BookActivity.class);
+        intent.putExtra(BookActivity.BOOK_URL, AppConfig.getPreOrderProductUrl(this, result.id, UserHelper.getUserId(this), UserHelper.getToken(this)));
         startActivity(intent);
     }
 
@@ -301,9 +303,21 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onGetUserProfile(LoginUser user) {
+            if (user != null) {
+                if (user.getStatus() == 0) {
+                    preOrderProduct();
+                } else {
+                    CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", null);
+                }
+            }
+
+        }
+
         @Override
         public void onProductDetails(ProductDetailsDataResp detailsDataResp) {
-            super.onProductDetails(detailsDataResp);
             if (detailsDataResp.returnCode == 0) {
                 result = detailsDataResp.result;
                 praiseId = result.praiseId;
@@ -388,7 +402,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //产品详情介绍
     private void productDetail(ProductDetailsResultBean result) {
-        switch (result.status){
+        switch (result.status) {
             case 0:
                 productReserve.setText("预定");
                 productReserve.setEnabled(true);
@@ -503,7 +517,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow   sharePopupWindow = new SharePopupWindow(mContext, shareVO);
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO);
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
                 Gravity.CENTER, 0, 0);
@@ -513,7 +527,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == LoginActivity.LOGIN_OK) {
-            preOrderProduct();
+            contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
         }
 
     }

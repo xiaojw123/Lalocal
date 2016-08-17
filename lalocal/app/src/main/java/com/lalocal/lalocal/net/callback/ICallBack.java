@@ -31,6 +31,7 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.model.VersionInfo;
+import com.lalocal.lalocal.model.WelcomeImg;
 
 import java.util.List;
 
@@ -38,6 +39,10 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+    public void onGetWelcomeImgs(WelcomeImg welcomeImg){
+
+    }
+
     public void onGetPayResult(String result){
 
     }

@@ -265,7 +265,16 @@ public class OrderDetail {
                 private String name;
                 private String value;
                 private int type;
+                private String code;
                 private boolean nessary;
+
+                public String getCode() {
+                    return code;
+                }
+
+                public void setCode(String code) {
+                    this.code = code;
+                }
 
                 public String getDescription() {
                     return description;
@@ -317,6 +326,7 @@ public class OrderDetail {
                     dest.writeString(this.description);
                     dest.writeString(this.name);
                     dest.writeString(this.value);
+                    dest.writeString(this.code);
                     dest.writeInt(this.type);
                     dest.writeByte(this.nessary ? (byte) 1 : (byte) 0);
                 }
@@ -328,6 +338,7 @@ public class OrderDetail {
                     this.description = in.readString();
                     this.name = in.readString();
                     this.value = in.readString();
+                    this.code=in.readString();
                     this.type = in.readInt();
                     this.nessary = in.readByte() != 0;
                 }

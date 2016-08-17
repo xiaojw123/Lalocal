@@ -58,7 +58,6 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.google.code.gson:gson:2.4'
@@ -99,7 +98,7 @@ android {
 }
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "f0e34b0e2c605ee7f54158da0c3c08c9"  //这里是你的 appKey
+    appKey "fa970dd98b61298053b6a9cb88597605"  //这里是你的 appKey
     appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
     mappingUploadEnabled true
 

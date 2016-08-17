@@ -63,7 +63,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     ViewGroup lastSelectedView;
     ImageButton settingBtn;
     ContentLoader contentService;
-    public boolean isLogined, isRefresh, isImLogin, isDownRefresh;
+    public boolean isRefresh, isImLogin, isDownRefresh;
     public boolean isFirstFavorite = true, isFristOrder = true, isFirstCoupon = true;
     int favoriteTotalPages, favoritePage = 1;
     int defaultPageNumb = 1, defaultPageSize = 10;
@@ -193,7 +193,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         } else {
             //正常登录方式  刷新邮箱验证状态 刷新我的收藏状态(我的收藏没被选中时更新我的收藏适配器)
             if (!hidden) {
-                if (isLogined && user != null) {
+                if (UserHelper.isLogined(getActivity()) && user != null) {
                     mUserid = user.getId();
                     mToken = user.getToken();
                     contentService.getUserProfile(mUserid, mToken);
@@ -228,7 +228,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     setSelectedTab((ViewGroup) v);
                     mListView.setPullLoadEnable(true);
                     mListView.setAdapter(favoriteAdapter);
-                    if (isLogined && user != null) {
+                    if (UserHelper.isLogined(getActivity()) && user != null) {
                         mUserid = user.getId();
                         mToken = user.getToken();
                     } else {
@@ -252,7 +252,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     setSelectedTab((ViewGroup) v);
                     mListView.setPullLoadEnable(false);
                     mListView.setAdapter(orderAdapter);
-                    if (isLogined && user != null) {
+                    if (UserHelper.isLogined(getActivity()) && user != null) {
                         if (isFristOrder) {
                             isFristOrder = false;
                             contentService.getMyOrder(user.getId(), user.getToken());
@@ -276,7 +276,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     setSelectedTab((ViewGroup) v);
                     mListView.setPullLoadEnable(false);
                     mListView.setAdapter(couponAdapter);
-                    if (isLogined && user != null) {
+                    if (UserHelper.isLogined(getActivity()) && user != null) {
                         if (isFirstCoupon) {
                             isFirstCoupon = false;
                             contentService.getMyCoupon(user.getId(), user.getToken());
@@ -293,7 +293,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     break;
                 case R.id.home_me_headportrait_img:
                 case R.id.home_me_username:
-                    if (isLogined) {
+                    if (UserHelper.isLogined(getActivity())) {
                         Intent intent = new Intent(getActivity(), AccountEidt1Activity.class);
                         intent.putExtra(KeyParams.USERID, user.getId());
                         intent.putExtra(KeyParams.TOKEN, user.getToken());
@@ -306,7 +306,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     break;
                 case R.id.home_me_set_btn:
                     Intent intent = new Intent(getActivity(), SettingActivity.class);
-                    intent.putExtra(LOGIN_STATUS, isLogined);
                     startActivityForResult(intent, 101);
                     break;
 
@@ -353,7 +352,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (user != null) {
                 user.setNickName(nickname);
                 user.setAvatar(avatar);
-                updateFragmentView(isLogined, user);
+                updateFragmentView(UserHelper.isLogined(getActivity()), user);
                 contentService.getUserProfile(user.getId(), user.getToken());
             }
         } else if (resultCode == SettingActivity.IM_LOGIN) {
@@ -363,7 +362,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 fragmentListener.onShowRecommendFragment();
             }
         } else if (resultCode == UPDATE_MY_DATA) {
-            if (isLogined && user != null) {
+            if (UserHelper.isLogined(getActivity()) && user != null) {
                 mUserid = user.getId();
                 mToken = user.getToken();
                 if (coupon_tab.isSelected() && !lastCopons.equals(UserHelper.coupons)) {
@@ -385,7 +384,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     }
 
     private void updateFragmentView(boolean isLogined, User user) {
-        this.isLogined = isLogined;
         this.user = user;
         if (isLogined && user != null) {
             mToken = user.getToken();
@@ -449,7 +447,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             public void run() {
                 isRefresh = false;
                 isDownRefresh = true;
-                if (isLogined && user != null) {
+                if (UserHelper.isLogined(getActivity()) && user != null) {
                     contentService.getUserProfile(user.getId(), user.getToken());
                 } else {
                     handler.sendEmptyMessage(0);
@@ -466,7 +464,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         AppLog.print("favoriete___" + favoritePage + ", toalPgae___" + favoriteTotalPages);
         if (favoritePage <= favoriteTotalPages) {
             AppLog.print("加载更多——————");
-            if (isLogined && user != null) {
+            if (UserHelper.isLogined(getActivity()) && user != null) {
                 mUserid = user.getId();
                 mToken = user.getToken();
             } else {

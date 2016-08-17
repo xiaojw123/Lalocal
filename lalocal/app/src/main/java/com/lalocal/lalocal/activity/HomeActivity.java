@@ -44,7 +44,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         home_tab_container = (LinearLayout) findViewById(R.id.home_tab_containner);
         home_recommend_tab = (LinearLayout) findViewById(R.id.home_tab_recommend);
         home_destination_tab = (LinearLayout) findViewById(R.id.home_tab_destination);
-        home_news_tab = (LinearLayout) findViewById(R.id.home_tab_news);
+        home_news_tab = (LinearLayout) findViewById(R.id.home_tab_liveplay);
         home_me_tab = (LinearLayout) findViewById(R.id.home_tab_me);
         home_recommend_tab.setOnClickListener(tabClickListener);
         home_destination_tab.setOnClickListener(tabClickListener);
@@ -74,10 +74,13 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 title_destination.setVisibility(View.GONE);
                 title_liveplay.setVisibility(View.GONE);
                 title_me.setVisibility(View.GONE);
+                AppLog.print("recommend__"+recommendFragment);
                 if (recommendFragment == null) {
+                    AppLog.print("___add");
                     recommendFragment = new RecommendFragment();
                     ft.add(R.id.home_fragment_container, recommendFragment);
                 } else {
+                    AppLog.print("___show");
                     ft.show(recommendFragment);
                 }
                 break;
@@ -93,7 +96,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                     ft.show(distinationFragment);
                 }
                 break;
-            case R.id.home_tab_news:
+            case R.id.home_tab_liveplay:
                 title_recommed.setVisibility(View.GONE);
                 title_destination.setVisibility(View.GONE);
                 title_liveplay.setVisibility(View.VISIBLE);
@@ -106,7 +109,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_me:
-                title_recommed.setVisibility(View.VISIBLE);
+                title_recommed.setVisibility(View.GONE);
                 title_destination.setVisibility(View.GONE);
                 title_liveplay.setVisibility(View.GONE);
                 title_me.setVisibility(View.VISIBLE);

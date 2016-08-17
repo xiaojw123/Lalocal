@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener {
-    public static final String ORDER_DETAIL = "order_detail";
     private LinearLayout travel_people_container;
     private LinearLayout pay_money_container;
     private FrameLayout pay_time_container;
@@ -49,6 +48,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     private Button evalute_btn;
     private TextView service_tv;
     private  OrderDetail mOrderDetail;
+    private FrameLayout mTravelPersonContainer;
     private List<OrderDetail.PeopleItemListBean.ContactInfoListBean> travelpersonsInfo;
     private double mAccoutPrice;
 
@@ -68,6 +68,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     }
 
     private void initView() {
+        mTravelPersonContainer= (FrameLayout) findViewById(R.id.order_person_container);
         service_tv=(TextView) findViewById(R.id.order_service);
         evalute_btn = (Button) findViewById(R.id.order_immediately_evaluate_btn);
         travel_people_container = (LinearLayout) findViewById(R.id.order_travel_people_container);
@@ -86,7 +87,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         pay_channel = (TextView) findViewById(R.id.order_pay_channel_text);
         evalute_time = (TextView) findViewById(R.id.order_evaluate_time_text);
         evaluteTimeCotainer = (FrameLayout) findViewById(R.id.order_evaluate_time_cotainer);
-        travel_person_num.setOnClickListener(this);
+        mTravelPersonContainer.setOnClickListener(this);
         service_tv.setOnClickListener(this);
         int status = getStaus();
         if (status == 2) {
@@ -115,7 +116,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.order_person_num_tv:
+            case R.id.order_person_container:
                 if (travelpersonsInfo == null) {
                     return;
                 }

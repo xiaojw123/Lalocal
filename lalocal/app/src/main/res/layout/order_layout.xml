@@ -88,7 +88,9 @@
                     android:layout_height="@dimen/arrow_right_height"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:background="@drawable/arrow_right" />
+                    android:background="@drawable/arrow_right"
+                    android:visibility="gone"
+                    />
             </RelativeLayout>
 
             <View style="@style/CommonD9LineTheme" />
@@ -144,6 +146,7 @@
                 android:orientation="vertical">
 
                 <FrameLayout
+                    android:id="@+id/order_person_container"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/order_travel_person_title_height"
                     android:paddingRight="@dimen/order_travel_person_title_right">

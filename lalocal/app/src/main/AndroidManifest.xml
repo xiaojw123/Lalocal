@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lalocal.lalocal">
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -71,6 +70,7 @@
             android:name=".activity.HomeActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -123,7 +123,7 @@
         <activity android:name=".activity.OrderActivity" />
 
         <activity android:name=".activity.ArticleTestAct" />
-        <activity android:name=".activity.WelcomeActivity">
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -204,8 +204,12 @@
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity">
         </activity>
-        <activity android:name=".activity.DestinationAreaActivity" />
-        <activity android:name=".activity.RouteDetailActivity" />
+        <activity android:name=".activity.DestinationAreaActivity"
+            android:hardwareAccelerated="false"
+            />
+        <activity
+            android:name=".activity.RouteDetailActivity"
+            />
 
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -234,7 +238,9 @@
             android:name="com.easemob.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <activity android:name=".activity.PreOrderActivity" />
+        <activity android:name=".activity.BookActivity"
+            android:hardwareAccelerated="false"
+            />
         <activity android:name=".activity.PayActivity" />
 
         <!-- ping++-->
@@ -256,13 +262,15 @@
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind"/>
+            android:screenOrientation="behind" />
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|adjustPan"
             android:screenOrientation="behind"/>
+
+
 
         <!-- 银联支付 sdk -->
         <activity
@@ -313,7 +321,10 @@
             android:hardwareAccelerated="false"
 
            />
-        <activity android:name=".view.liveroomview.entertainment.activity.LiveActivity"/>
+        <activity android:name=".view.liveroomview.entertainment.activity.LiveActivity"
+            android:hardwareAccelerated="false" />
+
+
         <activity android:name=".view.liveroomview.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".view.liveroomview.entertainment.activity.LiveAttentionOrFansActivity"

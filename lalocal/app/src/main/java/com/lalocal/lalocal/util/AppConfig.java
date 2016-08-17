@@ -13,8 +13,16 @@ public class AppConfig {
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
- //   private static String baseUrl = "http://api.lalocal.cn/api/";
-    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+    private static String baseUrl = "http://api.lalocal.cn/api/";
+//   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+
+    public static String getWelcommeImgs(){
+        return baseUrl+"system/welcomeImgs";
+    }
+
+    // private static String baseUrl = "http://api.lalocal.cn/api/";
+    // http://dev.lalocal.cn:8080/api/channels
+    //http://api.lalocal.cn/api/system/im/tourist
     //登录接口
     public static String getLoginUrl() {
         return baseUrl + "users/login";
@@ -190,7 +198,7 @@ public class AppConfig {
     //生产环境:http://api.lalocal.cn/api
     public static void setBaseUrl(String url) {
         AppLog.print("APP当前环境基准地址：" + url);
-        baseUrl = url;
+        baseUrl = url+"/";
     }
 
     public static String getVersionName(Context context) {
