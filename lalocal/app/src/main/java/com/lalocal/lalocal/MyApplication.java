@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
 import com.easemob.chat.EMChat;
 import com.lalocal.lalocal.easemob.DemoHelper;
@@ -18,7 +17,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.util.ScreenUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.crash.AppCrashHandler;
-import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.sys.SystemUtil;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
@@ -73,7 +71,7 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
-        Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+     //   Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());
         if (inMainProcess()) {
@@ -138,15 +136,13 @@ public class MyApplication extends Application {
 
     private void initLog() {
         String path = StorageUtil.getDirectoryByDirType(StorageType.TYPE_LOG);
-        LogUtil.init(path, android.util.Log.DEBUG);
-        LogUtil.i("demo", FlavorDependent.getInstance().getFlavorName() + " demo log path=" + path);
     }
 
     private LoginInfo getLoginInfo() {
 
         String account = AuthPreferences.getUserAccount();
         String token = AuthPreferences.getUserToken();
-
+        AppLog.i("TAG","MyApplication：account:"+account+"token:"+token);
         if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
             DemoCache.setAccount(account.toLowerCase());
             return new LoginInfo(account, token);

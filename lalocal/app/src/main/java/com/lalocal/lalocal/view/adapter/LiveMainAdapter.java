@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.xlistview.PowerImageView;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
 
@@ -59,8 +61,9 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         LiveUserBean user = liveRowsBean.getUser();
         liveViewHodler.liveCompereHeadTv.setText(user.getNickName());
         DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, user.getAvatar());
-
         DrawableUtils.displayRadiusImg(mContext,liveViewHodler.liveCoverIv,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+        Bitmap bitmap = ImageLoader.getInstance().loadImageSync(liveRowsBean.getPhoto());
+
 
 
         liveViewHodler.liveCoverIv.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +76,8 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
             }
         });
     }
+
+
 
     @Override
     public int getItemCount() {

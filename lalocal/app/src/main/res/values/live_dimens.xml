@@ -25,9 +25,9 @@
     <dimen name="live_height_90dp">90dp</dimen>
     <dimen name="live_height_119dp">119dp</dimen>
     <dimen name="live_height_125dp">125dp</dimen>
-    <dimen name="live_height_345dp">347dp</dimen>
+    <dimen name="live_height_345dp">345dp</dimen>
     <dimen name="live_height_355dp">355dp</dimen>
-    <dimen name="live_height_442dp">442dp</dimen>
+    <dimen name="live_height_442dp">445dp</dimen>
 
 
 

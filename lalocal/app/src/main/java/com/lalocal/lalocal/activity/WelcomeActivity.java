@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
@@ -18,6 +19,9 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 
 /**
  * Created by android on 2016/7/14.
@@ -32,8 +36,20 @@ public class WelcomeActivity extends BaseActivity {
         contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
         contentService.versionUpdate(AppConfig.getVersionName(this));
-
+        getLoginInfo();
     }
+
+    private LoginInfo getLoginInfo() {
+        String account = AuthPreferences.getUserAccount();
+        String token = AuthPreferences.getUserToken();
+        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
+            DemoCache.setAccount(account.toLowerCase());
+            return new LoginInfo(account, token);
+        } else {
+            return null;
+        }
+    }
+
 
     public class MyCallBack extends ICallBack {
 

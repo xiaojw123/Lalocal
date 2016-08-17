@@ -5,11 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -37,6 +34,7 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.ReversalBitmapUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.lalocal.lalocal.view.liveroomview.entertainment.adapter.GiftAdapter;
 import com.lalocal.lalocal.view.liveroomview.entertainment.constant.GiftConstant;
@@ -54,6 +52,7 @@ import com.lalocal.lalocal.view.liveroomview.thirdparty.live.LivePlayer;
 import com.lalocal.lalocal.view.liveroomview.thirdparty.live.LiveSurfaceView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
+import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
@@ -63,10 +62,6 @@ import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -83,6 +78,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private final static String USER_ID = "USER_ID";
     private final static String AVATAR="AVATAR";
     public static final String LIVE_USER_ID="LIVE_USER_ID";
+    public static final String ANNOUCEMENT="ANNOUCEMENT";
     private final int LIVE_PERMISSION_REQUEST_CODE = 100;
     // view
     private LiveSurfaceView liveView;
@@ -135,44 +131,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private Timer timer;
     private String userOnLineCountParameter;
 
-    //保存二维码图片到相册
-    public void saveImageToGallery(byte[] bytes) {
-        // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), "ywq");
-        if (!appDir.exists()) {
-            appDir.mkdir();
-        }
-        String fileName = "ghggj" + ".jpg";
-        File file = new File(appDir, fileName);
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bytes);
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-
-            e.printStackTrace();
-        } catch (Exception e) {
-
-            e.printStackTrace();
-        }
-
-        // 最后通知图库更新
-        try {
-            MediaStore.Images.Media.insertImage(getContentResolver(), file.getAbsolutePath(), fileName, null);
-            AppLog.i(TAG, "图片保存成功");
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        Uri uri = Uri.fromFile(file);
-        intent.setData(uri);
-        sendBroadcast(intent);
-    }
-
     //监听屏幕焦点改变，控制软键盘显示与隐藏
 
     @Override
@@ -188,9 +146,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     //判断软键盘显示与隐藏
+
+
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-
+        AppLog.i("TAG","onLayoutChange:"+left+"  top;"+top+"  bottom:"+bottom+"  oldTop:"+oldTop+"   oldBottom:"+oldBottom);
         if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {
             AppLog.i("TAG","软键盘弹起");
         } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {
@@ -210,13 +170,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-    public static void start(Context context, String roomId, String url, String userId,String avatag,String liveUserId,SpecialShareVOBean shareVO) {
+    public static void start(Context context, String roomId, String url, String userId,String avatag,String liveUserId,SpecialShareVOBean shareVO,String annoucement) {
         Intent intent = new Intent();
         intent.setClass(context, LiveActivity.class);
         intent.putExtra(EXTRA_ROOM_ID, roomId);
         intent.putExtra(EXTRA_URL, url);
         intent.putExtra(USER_ID, userId);
         intent.putExtra(AVATAR,avatag);
+        intent.putExtra(ANNOUCEMENT,annoucement);
         Bundle mBundle = new Bundle();
         mBundle.putParcelable("shareVO",shareVO);
         intent.putExtras(mBundle);
@@ -242,15 +203,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (Build.VERSION.SDK_INT >= 23) {
             requestLivePermission();
         }
-
-
     }
 
     @Override
     protected int getActivityLayout() {
         return R.layout.live_player_activity;
     }
-
     @Override
     protected int getLayoutId() {
         return R.id.live_layout;
@@ -305,11 +263,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
     }
-
+    public String annoucement;//公告
     private void gainIntent() {
         userId = getIntent().getStringExtra(USER_ID);
         shareVO = getIntent().getParcelableExtra("shareVO");
         String s = new Gson().toJson(shareVO);
+        annoucement = getIntent().getStringExtra(ANNOUCEMENT);
         AppLog.i("TAG","shareVO:"+s);
 
     }
@@ -322,6 +281,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public void onStop() {
         super.onStop();
     }
+
+    @Override
+    public boolean sendBarrageMessage(IMMessage msg) {
+        return false;
+    }
+
     public class MyCallBack extends ICallBack {
         @Override
         public void onAlterLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {//修改直播间
@@ -390,8 +355,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
                     @Override
                     public void screenShot(byte[] bytes) {
-                        saveImageToGallery(bytes);
-                        uploadManager.put(bytes, filename, token, new UpCompletionHandler() {
+                        //翻转图片
+                        byte[] reversal = ReversalBitmapUtil.reversal(bytes);
+                       if(reversal==null) {
+                            reversal=bytes;
+                            AppLog.i("TAG","图片翻转失败");
+                        }
+                       //上传图片
+                        uploadManager.put(reversal, filename, token, new UpCompletionHandler() {
                             @Override
                             public void complete(String key, ResponseInfo info, JSONObject response) {
                                 contentLoader.alterLiveCover(roomName, userId, key, null, null, null);
@@ -410,6 +381,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
     //设置直播title的popuwindow
+    boolean isClickStartLiveBtn=false;
     private void showCreateLiveRoomPopuwindow(Context applicationContext) {
         createLivePw = new PopupWindow(this);
         View view = View.inflate(this, R.layout.live_create_room_pop_layout, null);
@@ -501,22 +473,26 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         if (livePlayer != null) {
                             livePlayer.resetLive();
                         }
-                        inputPanel.collapse(true);// 收起软键盘
-                        contentLoader.cancelLiveRoom(userId);
-                        isStartLive = false;
-                        livePlayer.setOnQuitLiveListener(new LivePlayer.OnQuitLiveListener() {
-                            @Override
-                            public void getLiveTime(long liveTime) {
-                                drawerLayout.closeDrawer(Gravity.RIGHT);
-                                SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");//初始化Formatter的转换格式。
-                                formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
-                                String hms = formatter.format(liveTime);
-                                overTime.setText(hms);
-                                aucienceCount.setText(String.valueOf(maxOnLineCount));
-                                liveFinishLayout.setVisibility(View.VISIBLE);
+                        if(isClickStartLiveBtn){
+                            inputPanel.collapse(true);// 收起软键盘
+                            contentLoader.cancelLiveRoom(userId);
+                            isStartLive = false;
+                            livePlayer.setOnQuitLiveListener(new LivePlayer.OnQuitLiveListener() {
+                                @Override
+                                public void getLiveTime(long liveTime) {
+                                    drawerLayout.closeDrawer(Gravity.RIGHT);
+                                    SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");//初始化Formatter的转换格式。
+                                    formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
+                                    String hms = formatter.format(liveTime);
+                                    overTime.setText(hms);
+                                    aucienceCount.setText(String.valueOf(maxOnLineCount));
+                                    liveFinishLayout.setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }else {
+                            finish();
+                        }
 
-                            }
-                        });
                     }
                 }).show();
     }
@@ -665,6 +641,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     liveSettingLayout.setVisibility(View.GONE);
                     if (!TextUtils.isEmpty(roomName)) {
                         //TODO 进入直播间
+                        isClickStartLiveBtn=true;
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(startLiveScrollview.getWindowToken(), 0);
                         if(isShareSelector==0){
@@ -680,7 +657,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     break;
                 case R.id.live_telecast_like:
                     periscopeLayout.addHeart();
-                   // sendLike();
+                    // sendLike();
                     break;
                 case R.id.live_telecast_quit:
                     finishLive();
@@ -852,7 +829,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @OnMPermissionGranted(LIVE_PERMISSION_REQUEST_CODE)
     public void onLivePermissionGranted() {
-    //    Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(getActivity(), "授权成功", Toast.LENGTH_SHORT).show();
         if (livePlayer.startStopLive()) {
             isStartLive = true;
             AppLog.i("TAG","摄像头权限授权成功");
@@ -863,7 +840,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public void onLivePermissionDenied() {
         List<String> deniedPermissions = MPermission.getDeniedPermissions(this, LIVE_PERMISSIONS);
         String tip = "您拒绝了权限" + MPermissionUtil.toString(deniedPermissions) + "，无法开启直播";
-      //  Toast.makeText(getActivity(), tip, Toast.LENGTH_SHORT).show();
+        //  Toast.makeText(getActivity(), tip, Toast.LENGTH_SHORT).show();
     }
 
     @OnMPermissionNeverAskAgain(LIVE_PERMISSION_REQUEST_CODE)
@@ -878,6 +855,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             sb.append(MPermissionUtil.toString(deniedPermissions));
         }
 
-     //   Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
+        //   Toast.makeText(getActivity(), sb.toString(), Toast.LENGTH_LONG).show();
     }
 }

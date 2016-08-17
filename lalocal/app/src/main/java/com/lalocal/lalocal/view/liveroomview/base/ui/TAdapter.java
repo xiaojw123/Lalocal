@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
+import com.lalocal.lalocal.util.AppLog;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,7 +79,7 @@ public class TAdapter<T> extends BaseAdapter implements IViewReclaimer {
             try {
                 holder.refresh(getItem(position));
             } catch (RuntimeException e) {
-                LogUtil.e("TAdapter", "refresh viewholder error. " + e.getMessage());
+                AppLog.i("TAG", "Tadapter refresh viewholder error. " + e.getMessage());
             }
 		}
 

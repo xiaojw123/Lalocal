@@ -161,11 +161,13 @@ public class LoginActivity extends BaseActivity {
                     setResult(LOGIN_OK, intent);
                 }
             }
+
             loginRequest=  NIMClient.getService(AuthService.class).login(new LoginInfo(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken()));
             loginRequest.setCallback(new RequestCallback<LoginInfo>() {
                 @Override
                 public void onSuccess(LoginInfo param) {
                     Log.i("TAG", "IM:"+"login success");
+                    DemoCache.clear();
                     DemoCache.setAccount(user.getImUserInfo().getAccId());
                     // 初始化消息提醒
                     NIMClient.toggleNotification(UserPreferences.getNotificationToggle());

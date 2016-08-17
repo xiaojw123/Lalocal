@@ -2,7 +2,9 @@ package com.lalocal.lalocal.view.liveroomview.thirdparty.live;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.SurfaceHolder;
 
+import com.lalocal.lalocal.util.AppLog;
 import com.netease.LSMediaCapture.lsSurfaceView;
 
 public class LiveSurfaceView extends lsSurfaceView {
@@ -13,14 +15,37 @@ public class LiveSurfaceView extends lsSurfaceView {
 
     public LiveSurfaceView(Context context) {
         super(context);
+        init();
     }
 
     public LiveSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public LiveSurfaceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        init();
+
+    }
+
+    private void init() {
+        getHolder().addCallback(new SurfaceHolder.Callback() {
+            @Override
+            public void surfaceCreated(SurfaceHolder holder) {
+
+            }
+
+            @Override
+            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+                AppLog.i("TAG","LiveSurfaceView:width:"+width+"//height:"+height);
+            }
+
+            @Override
+            public void surfaceDestroyed(SurfaceHolder holder) {
+
+            }
+        });
     }
 
     public void setPreviewSize(int width, int height) {

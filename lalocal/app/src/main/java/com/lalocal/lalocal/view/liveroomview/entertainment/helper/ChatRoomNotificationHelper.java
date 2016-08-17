@@ -15,7 +15,6 @@ public class ChatRoomNotificationHelper {
         if (attachment == null) {
             return "";
         }
-
         String targets = getTargetNicks(attachment);
         String text;
         switch (attachment.getType()) {

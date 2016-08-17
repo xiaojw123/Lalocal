@@ -5,31 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <RelativeLayout
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        >
-        <com.lalocal.lalocal.view.liveroomview.thirdparty.video.NEVideoView
-            android:id="@+id/video_view"
+        <LinearLayout
+            android:id="@+id/video_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center" />
+            android:layout_height="match_parent">
+          <com.lalocal.lalocal.view.liveroomview.thirdparty.video.NEVideoView
+              android:id="@+id/video_view"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_alignParentBottom="true"
+              />
+        </LinearLayout>
         <include layout="@layout/live_loading_page"></include>
+
+
         <com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_125dp"
             android:layout_marginTop="80dp"
             ></com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView>
-    </RelativeLayout>
-<RelativeLayout
+    </FrameLayout>
+<FrameLayout
     android:id="@+id/live_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="right"
     android:layout_marginLeft="-65dp"
     >
-
     <LinearLayout
         android:id="@+id/live_telecast_model_layout"
         android:layout_width="match_parent"
@@ -85,6 +93,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
             android:id="@+id/messageActivityBottomLayout"
             android:layout_width="match_parent"
@@ -93,14 +102,16 @@
             >
             <include layout="@layout/nim_message_activity_text_layout" />
         </LinearLayout>
-        <LinearLayout
-            android:id="@+id/setting_bottom_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            >
-            <include layout="@layout/live_telecast_bottom_tab"></include>
-        </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/setting_bottom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
+                <include layout="@layout/live_telecast_bottom_tab"></include>
+            </LinearLayout>
+
         <com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout
             android:id="@+id/periscope"
             android:layout_width="70dp"
@@ -217,6 +228,6 @@
             android:numColumns="4" />
     </RelativeLayout>
 
-</RelativeLayout>
+</FrameLayout>
 
 </com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout>

@@ -63,8 +63,6 @@ import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
-import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1130,7 +1128,8 @@ public class ContentLoader {
 
         private void responseTourist(String json) {
 
-
+            AppLog.i("TAG","responseTourist:"+json);
+            callBack.onTouristInfo(json);
         }
 
         private void responseGetOrderDetail(JSONObject jsonObj) {
@@ -1267,24 +1266,19 @@ public class ContentLoader {
             bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
             bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
             UserHelper.saveLoginInfo(context, bundle);
-            //saveimuserinfo
-            DemoCache.setAccount(user.getImUserInfo().getAccId());
-            saveLoginInfo(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken(), user.getAvatar());
 
         }
 
-        private void saveLoginInfo(final String account, final String token, final String avatar) {
-            AuthPreferences.saveUserAccount(account);
-            AuthPreferences.saveUserToken(token);
-            AuthPreferences.saveUserAvatar(avatar);
-        }
+
 
         private void responseRegister(JSONObject jsonObject) {
             JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
+            User user = null;
             if (jsonObj != null) {
                 int userid = jsonObj.optInt("id");
                 String token = jsonObj.optString("token");
                 callBack.onResigterComplete(email, psw, userid, token);
+
             }
 
         }

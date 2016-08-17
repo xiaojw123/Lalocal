@@ -69,4 +69,13 @@ public class UserHelper {
         return sp.getString(KeyParams.AVATAR, null);
 
     }
+
+    public static String getImccId(Context context){
+        initSPref(context);
+        return sp.getString(KeyParams.IM_CCID, null);
+    }
+    public  static  String getImToken(Context context){
+        initSPref(context);
+        return sp.getString(KeyParams.IM_TOKEN, null);
+    }
 }

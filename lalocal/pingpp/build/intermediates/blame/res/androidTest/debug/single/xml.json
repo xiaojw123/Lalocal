@@ -8,12 +8,12 @@
         "source": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_symbols.xml"
     },
     {
-        "merged": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_with_change.xml",
-        "source": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_with_change.xml"
-    },
-    {
         "merged": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_with_dot.xml",
         "source": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_with_dot.xml"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_number_with_change.xml",
+        "source": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\bundles\\debug\\res\\xml\\cmbkb_number_with_change.xml"
     },
     {
         "merged": "D:\\lalocal\\lalocal\\pingpp\\build\\intermediates\\res\\merged\\androidTest\\debug\\xml\\cmbkb_qwerty.xml",
