@@ -44,7 +44,6 @@ import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMember
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.GiftAnimation;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.SimpleCallback;
 import com.lalocal.lalocal.view.liveroomview.entertainment.module.ChatRoomMsgListPanel;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.session.Container;
 import com.lalocal.lalocal.view.liveroomview.im.session.ModuleProxy;
 import com.lalocal.lalocal.view.liveroomview.im.session.actions.BaseAction;
@@ -279,7 +278,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
         NIMClient.getService(ChatRoomServiceObserver.class).observeOnlineStatus(onlineStatus, register);
         NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
+
     }
+
 
     Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
         @Override
@@ -317,14 +318,15 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case "1"://弹幕
                         AppLog.i("TAG","多端统一之弹幕：");
                         ChatRoomMessage barrageMessage = (ChatRoomMessage) message;
+                        String senderNick = barrageMessage.getChatRoomMessageExtension().getSenderNick();
                         String content = barrageMessage.getContent();
-                        if(enterroomgetnick!=null){
+                        if(senderNick!=null){
                             barrageView.init(new BarrageConfig());
                             if(content!=null){
-                                barrageView.addTextBarrage(enterroomgetnick+":"+content);
+                                barrageView.addTextBarrage(senderNick+":"+content);
                             }
                         }
-                        AppLog.i("TAG","多端统一之弹幕："+enterroomgetnick+ "//"+content);
+                        AppLog.i("TAG","多端统一之弹幕："+senderNick+ "//"+content);
                         break;
                     case "2"://点赞
                         if(message.getContent()!=null){
@@ -565,12 +567,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
         EnterChatRoomData data = new EnterChatRoomData(roomId);
         data.setRoomId(roomId);
-        data.setAvatar(AuthPreferences.getKeyUserAvatar());
+        data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
         enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
         enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
             @Override
             public void onSuccess(EnterChatRoomResultData result) {
-
 
                 String s = new Gson().toJson(result);
                 AppLog.i("TAG","EnterChatRoomResultData:"+s);

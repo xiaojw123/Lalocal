@@ -41,7 +41,10 @@ import com.lalocal.lalocal.view.CustomTabLayout;
 import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
 import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
 import com.lalocal.lalocal.view.adapter.MyOrderAdapter;
+import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.xlistview.XListView;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
@@ -345,6 +348,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             Bundle bundle = new Bundle();
             bundle.putBoolean(KeyParams.IS_LOGIN, false);
             UserHelper.saveLoginInfo(getActivity(), bundle);
+            UserHelper.clearUserInfo(getActivity());
+            DemoCache.clear();
+            NIMClient.getService(AuthService.class).logout();
             updateFragmentView(false, null);
         } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
             String nickname = data.getStringExtra(KeyParams.NICKNAME);

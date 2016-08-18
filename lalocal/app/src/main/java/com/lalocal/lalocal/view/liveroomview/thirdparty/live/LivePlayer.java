@@ -182,7 +182,7 @@ public class LivePlayer implements lsMessageHandler {
 
     // 设置推流参数
     private void initLiveParam() {
-       AppLog.i("TAG","初始化推流");
+        AppLog.i("TAG","初始化推流");
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
         List<Camera.Size> backCameraSupportSize = getCameraSupportSize(CAMERA_POSITION_BACK);
         List<Camera.Size> frontCameraSupportSize = getCameraSupportSize(CAMERA_POSITION_FRONT);
@@ -196,7 +196,6 @@ public class LivePlayer implements lsMessageHandler {
                        mVideoEncodeWidth=320;
                        mVideoEncodeHeight=240;
                        AppLog.i("TAG","摄像头分辨率："+"width:"+backSize.width+"  height:"+backSize.height);
-
                        break;
                    }
                     break;
@@ -292,6 +291,7 @@ public class LivePlayer implements lsMessageHandler {
         if (mLSMediaCapture != null) {
             //开始本地视频预览
             mLSMediaCapture.startVideoPreview(liveView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
+            AppLog.i("TAG","开启本得视频预览了啊啊啊");
         }
     }
 

@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
@@ -796,6 +797,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     // 网络断开
     protected void onDisconnected() {
         LogUtil.i(TAG, "live on disconnected");
+        String imccId = UserHelper.getImccId(this);
+        String imToken = UserHelper.getImToken(this);
+
 
         if (livePlayer != null) {
             livePlayer.stopLive();

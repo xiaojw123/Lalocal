@@ -64,6 +64,9 @@ import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1288,6 +1291,7 @@ public class ContentLoader {
             bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
             bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
             UserHelper.saveLoginInfo(context, bundle);
+            NIMClient.getService(AuthService.class).login(new LoginInfo(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken()));
 
         }
 
@@ -1352,7 +1356,10 @@ public class ContentLoader {
         //直播列表
         private void responseLiveList(String json) {
             LiveListDataResp liveListDataResp = new Gson().fromJson(json, LiveListDataResp.class);
-            callBack.onLiveList(liveListDataResp);
+            if(liveListDataResp!=null){
+                callBack.onLiveList(liveListDataResp);
+            }
+
         }
 
         //推荐直播列表

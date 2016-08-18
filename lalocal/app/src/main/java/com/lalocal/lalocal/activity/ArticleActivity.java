@@ -40,6 +40,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
+import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveHomePageActivity;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.io.File;
@@ -300,11 +301,17 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                     String json = split[1];
                     SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
                     if (specialToH5Bean.getTargetType() == 2) {
-                        //TODO 去商品详情
+                        // 去商品详情
                         Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
                         intent2.putExtra("productdetails", specialToH5Bean);
                         startActivity(intent2);
 
+                    }else if(specialToH5Bean.getTargetType()==12){
+                        // 去用户详情页
+                        int targetId = specialToH5Bean.getTargetId();
+                        Intent intent=new Intent(ArticleActivity.this,LiveHomePageActivity.class);
+                        intent.putExtra("userId",String.valueOf(targetId));
+                        startActivity(intent);
                     }
                 }
 

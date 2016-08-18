@@ -48,6 +48,7 @@ import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.umeng.analytics.MobclickAgent;
 
 import net.robinx.lib.blur.widget.BlurMaskRelativeLayout;
@@ -70,6 +71,7 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
     private ImageView layoutBg;
     private RelativeLayout bgBlur;
     private BlurMaskRelativeLayout blurMaskRelativeLayout;
+    private int roomId=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +94,9 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
             isFirstLoad=true;
             allRows.clear();
             contentService.liveList(10,1);
+            String imccId = UserHelper.getImccId(getActivity());
+            String imToken = UserHelper.getImToken(getActivity());
+            AppLog.i("TAG","onHiddenChanged:imccId"+imccId+"imToken:"+imToken);
         }
 
     }
@@ -110,20 +115,23 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
     private void registerObservers(boolean register) {
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
+
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
         @Override
         public void onEvent(StatusCode statusCode) {
             if (statusCode.wontAutoLogin()) {
                 AppLog.i("TAG","NewsFragment:密码错误等");
             }else if(statusCode.shouldReLogin()) {
-                AppLog.i("TAG", "NewsFragment:没有登录");
-                String imccId = UserHelper.getImccId(getActivity());
+                AppLog.i("TAG", "NewsFragment:没有登录  roomId:"+roomId);
+                final String imccId = UserHelper.getImccId(getActivity());
                 String imToken = UserHelper.getImToken(getActivity());
                 if (imccId != null || imToken != null) {
+                    AppLog.i("TAG","没有登录并走了这里1："+"imccId:"+imccId+"   imToken:"+imToken);
                     NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
                         @Override
                         public void onSuccess(Object o) {
                             AppLog.i("TAG", "NewsFragment,手动登录成功");
+                            DemoCache.setAccount(imccId);
                         }
 
                         @Override
@@ -136,10 +144,11 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
                             AppLog.i("TAG", "NewsFragment,手动登录失败2");
                         }
                     });
-                } else {
+                }else if(roomId==0){
                     contentService.getTouristInfo();
                 }
             }
+
         }
     };
 
@@ -167,6 +176,7 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
                 if(userId!=-1){
                     contentService.createLiveRoom();//直播接口
                 }else {
+
                     EasyAlertDialogHelper.createOkCancelDiolag(getActivity(), null,"没登录，快去登录吧",
                             "确定", getString(R.string.cancel), true,
                             new EasyAlertDialogHelper.OnDialogActionListener(){
@@ -176,6 +186,13 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
                                 @Override
                                 public void doOkAction() {
                                     //TODO 去登录页面
+                                    if(roomId!=0){
+                                        roomId=0;
+                                       UserHelper.clearUserInfo(getActivity());
+                                        DemoCache.clear();
+                                        NIMClient.getService(AuthService.class).logout();
+                                        NIMClient.getService(ChatRoomService.class).exitChatRoom(String.valueOf(roomId));
+                                    }
                                     startActivity(new Intent(getActivity(), LoginActivity.class));
                                 }
                             }).show();
@@ -249,18 +266,23 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
         @Override
         public void onTouristInfo(String json) {
             super.onTouristInfo(json);
+            AppLog.i("TAG","onTouristInfo:"+json);
             TouristInfoResp touristInfoResp = new Gson().fromJson(json, TouristInfoResp.class);
             if(touristInfoResp.getReturnCode()==0){
                 TouristInfoResp.ResultBean result = touristInfoResp.getResult();
                 String accid = result.getAccid();
                 String token = result.getToken();
                 Bundle bundle=new Bundle();
-                bundle.putString(KeyParams.IM_CCID, accid);
-                bundle.putString(KeyParams.IM_TOKEN,token);
-                UserHelper.saveLoginInfo(getActivity(),bundle);
-                DemoCache.clear();
-                DemoCache.setAccount(accid);
-                NIMClient.getService(AuthService.class).login(new LoginInfo(accid,token));//手动登录直播间
+                if(accid!=null||token!=null){
+                    bundle.putString(KeyParams.IM_CCID, accid);
+                    bundle.putString(KeyParams.IM_TOKEN,token);
+                    UserHelper.saveLoginInfo(getActivity(),bundle);
+                    DemoCache.clear();
+                    DemoCache.setAccount(accid);
+                    AppLog.i("TAG","走了tourist");
+                    NIMClient.getService(AuthService.class).login(new LoginInfo(accid,token));//手动登录直播间
+                }
+
             }
         }
 
@@ -273,6 +295,7 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
     private int pageCount=2;
     private boolean isLoading=false;
     private int pageSize=9;
+
     private void initRecyclerView(final List<LiveRowsBean> rows) {
         if(getActivity()!=null) {
 
@@ -281,8 +304,17 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
             liveRecyclearView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    String imccId = UserHelper.getImccId(getActivity());
+                    String imToken = UserHelper.getImToken(getActivity());
+                    AppLog.i("TAG","setOnItemClickListener:"+"imccId:"+imccId+"   imToken:"+imToken);
+                  /*  if(imccId==null||imToken==null){
+
+                        contentService.getTouristInfo();
+                    }*/
                     LiveRowsBean liveRowsBean = allRows.get(position);
-                    int roomId = liveRowsBean.getRoomId();
+
+                    roomId = liveRowsBean.getRoomId();
                     String avatar = liveRowsBean.getUser().getAvatar();
                     String nickName = liveRowsBean.getUser().getNickName();
                     String pullUrl = liveRowsBean.getPullUrl();

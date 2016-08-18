@@ -78,4 +78,11 @@ public class UserHelper {
         initSPref(context);
         return sp.getString(KeyParams.IM_TOKEN, null);
     }
+    public  static void clearUserInfo(Context context){
+        initSPref(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(KeyParams.IM_TOKEN,null);
+        editor.putString(KeyParams.IM_CCID,null);
+        editor.commit();
+    }
 }

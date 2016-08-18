@@ -12,6 +12,7 @@ import com.crashlytics.android.Crashlytics;
 import com.easemob.chat.EMChat;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.HelpDeskPreferenceUtils;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
@@ -19,7 +20,6 @@ import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.util.ScreenUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.crash.AppCrashHandler;
 import com.lalocal.lalocal.view.liveroomview.base.util.sys.SystemUtil;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.util.storage.StorageType;
 import com.lalocal.lalocal.view.liveroomview.im.util.storage.StorageUtil;
@@ -144,13 +144,13 @@ public class MyApplication extends Application {
     }
 
     private LoginInfo getLoginInfo() {
+        String imccId = UserHelper.getImccId(this);
+        String imToken = UserHelper.getImToken(this);
 
-        String account = AuthPreferences.getUserAccount();
-        String token = AuthPreferences.getUserToken();
-        AppLog.i("TAG","MyApplication：account:"+account+"token:"+token);
-        if (!TextUtils.isEmpty(account) && !TextUtils.isEmpty(token)) {
-            DemoCache.setAccount(account.toLowerCase());
-            return new LoginInfo(account, token);
+        AppLog.i("TAG","MyApplication：account:"+imccId+"token:"+imToken);
+        if (!TextUtils.isEmpty(imccId) && !TextUtils.isEmpty(imToken)) {
+            DemoCache.setAccount(imccId.toLowerCase());
+            return new LoginInfo(imccId, imToken);
         } else {
             return null;
         }

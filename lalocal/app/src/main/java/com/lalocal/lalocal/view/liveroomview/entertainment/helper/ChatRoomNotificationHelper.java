@@ -77,8 +77,14 @@ public class ChatRoomNotificationHelper {
         List<String> targets = attachment.getTargetNicks();
         if (attachment.getTargetNicks() != null) {
             for (int i = 0; i < targets.size(); i++) {
-                sb.append(DemoCache.getAccount().equals(accounts.get(i)) ? "你" : targets.get(i));
-                sb.append(",");
+                if(DemoCache.getAccount()!=null){
+                    sb.append(DemoCache.getAccount().equals(accounts.get(i)) ? "你" : targets.get(i));
+                    sb.append(",");
+                }else{
+                    sb.append(targets.get(i));
+                    sb.append(",");
+                }
+
             }
             sb.deleteCharAt(sb.length() - 1);
         }

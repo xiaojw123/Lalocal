@@ -3,15 +3,14 @@ package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -19,11 +18,7 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
 import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
 public class LoginActivity extends BaseActivity {
@@ -91,6 +86,8 @@ public class LoginActivity extends BaseActivity {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivityForResult(intent, 100);
             } else if (v == login_btn) {
+                DemoCache.clear();
+                UserHelper.clearUserInfo(LoginActivity.this);
                 String email = email_edit.getText().toString();
                 String psw = psw_edit.getText().toString();
                 login(email, psw);
@@ -162,35 +159,6 @@ public class LoginActivity extends BaseActivity {
                 }
             }
 
-            loginRequest=  NIMClient.getService(AuthService.class).login(new LoginInfo(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken()));
-            loginRequest.setCallback(new RequestCallback<LoginInfo>() {
-                @Override
-                public void onSuccess(LoginInfo param) {
-                    Log.i("TAG", "IM:"+"login success");
-                    DemoCache.clear();
-                    DemoCache.setAccount(user.getImUserInfo().getAccId());
-                    // 初始化消息提醒
-                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
-                    // 初始化免打扰
-                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-
-                }
-
-                @Override
-                public void onFailed(int code) {
-
-                    if (code == 302 || code == 404) {
-                        Toast.makeText(LoginActivity.this, R.string.login_failed, Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(LoginActivity.this, "登录失败: " + code, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-
-                }
-            });
             finish();
         }
 
