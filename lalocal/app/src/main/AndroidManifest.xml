@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <!-- 高德地图 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!--360更新-->
+    <!-- 360更新 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 环信 -->
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -36,7 +36,7 @@
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.NFC" />
-    <!--网易视频云推流-->
+    <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
 
@@ -49,6 +49,7 @@
     <permission
         android:name="com.lalocal.lalocal.permission.RECEIVE_MSG"
         android:protectionLevel="signature" />
+
     <uses-permission android:name="com.lalocal.lalocal.permission.RECEIVE_MSG" />
     <!-- 直播权限声明 -->
     <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
@@ -121,7 +122,6 @@
             android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity" />
-
         <activity android:name=".activity.ArticleTestAct" />
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -129,13 +129,9 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-        <activity android:name=".view.liveroomview.entertainment.activity.TestActivity">
-
-
-        </activity>
-        <!--友盟-->
+        <activity android:name=".view.liveroomview.entertainment.activity.TestActivity"></activity>
+        <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
@@ -211,12 +207,10 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".activity.DestinationAreaActivity"
-            android:hardwareAccelerated="false"
-            />
         <activity
-            android:name=".activity.RouteDetailActivity"
-            />
+            android:name=".activity.DestinationAreaActivity"
+            android:hardwareAccelerated="false" />
+        <activity android:name=".activity.RouteDetailActivity" />
 
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -234,7 +228,6 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
 
-
         <!-- 显示下载大图页面 -->
         <activity
             android:name="com.easemob.easeui.ui.EaseShowBigImageActivity"
@@ -245,12 +238,12 @@
             android:name="com.easemob.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <activity android:name=".activity.BookActivity"
-            android:hardwareAccelerated="false"
-            />
+        <activity
+            android:name=".activity.BookActivity"
+            android:hardwareAccelerated="false" />
         <activity android:name=".activity.PayActivity" />
 
-        <!-- ping++-->
+        <!-- ping++ -->
         <!-- Ping++ SDK -->
         <activity
             android:name="com.pingplusplus.android.PaymentActivity"
@@ -281,10 +274,10 @@
             android:name="com.unionpay.uppay.PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
 
-        <!--网易视频云推流-->
+        <!-- 网易视频云推流 -->
         <!-- 声明网络信息查询服务 -->
         <service android:name=".service.NetInfoService" />
-        <!-- 声明伴音功能服务-->
+        <!-- 声明伴音功能服务 -->
         <service android:name=".service.MixAudioService" />
         <!-- 声明直播异常报警服务 -->
         <service android:name=".service.AlertService" />
@@ -294,6 +287,7 @@
                 <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.netease.nim.appKey"
             android:value="efc9614a32336704ec2577f2129929fb" />
@@ -301,7 +295,6 @@
         <service
             android:name="com.netease.nimlib.service.NimService"
             android:process=":core" />
-
         <service
             android:name="com.netease.nimlib.service.NimService$Aux"
             android:process=":core" />
@@ -329,6 +322,7 @@
             android:name=".view.liveroomview.entertainment.activity.LiveAttentionOrFansActivity"
             android:hardwareAccelerated="false"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".activity.PayCompleteActivity"></activity>
     </application>
 
 </manifest>

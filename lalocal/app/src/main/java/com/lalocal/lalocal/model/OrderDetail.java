@@ -8,27 +8,41 @@ import java.util.List;
 
 /**
  * Created by xiaojw on 2016/6/28.
+ * 部分数据严重不足 注意更新数据类型
  */
-public class OrderDetail {
+public class OrderDetail implements Parcelable {
+
 
     /**
-     * id : 186
-     * orderNumb : 1466586493457
-     * fee : 0
-     * originFee : 676
-     * name : 威拉米特葡萄酒乡单车之旅（波特兰出发）
-     * photo : http://7xpid3.com1.z0.glb.clouddn.com/201605261253025729829081676
-     * orderDate : 2016-06-30
-     * createdTime : 2016-06-22 17:08:03
+     * id : 1008
+     * orderNumb : 1471490247742
+     * fee : 874.0
+     * originFee : 874.0
+     * name : 私人订制之旅：含晚餐与演出的吉隆坡（Kuala Lumpur）文化之夜
+     * photo : http://7xpid3.com1.z0.glb.clouddn.com/2016050611121915155076137897
+     * orderDate : 2016-08-18
+     * createdTime : 2016-08-18 11:17:27
      * appraiseTime : null
-     * payTime : 2016-06-22 17:08:03
+     * payTime : null
      * payType : null
-     * status : 2
-     * couponValue : 676
-     * productionId : 15605
-     * peopleItemList : [{"contactInfoList":[{"itemList":[{"description":"","name":"姓名","value":"Hh","type":5,"nessary":true},{"description":"","name":"拼音","value":"Hhg","type":0,"nessary":true},{"description":"","name":"性别","value":"男","type":1,"nessary":true},{"description":"","name":"邮件","value":"Hh","type":0,"nessary":true},{"description":"","name":"电话","value":"+86 1111","type":3,"nessary":true}]}],"name":"成人1人票","amount":1,"id":42583}]
-     * orderPayList : []
-     * produItemList : [{"id":42582,"name":"标准行程","category":"套餐种类","type":5,"description":"Willamette wine bike tour. Hotel pickup and drop-off not included.","contactLimit":1,"contactItems":[{"description":"","name":"姓名","value":"","type":5,"nessary":true},{"description":"","name":"拼音","value":"","type":0,"nessary":true},{"description":"","name":"性别","value":"","type":1,"nessary":true},{"description":"","name":"邮件","value":"","type":0,"nessary":true},{"description":"","name":"电话","value":"","type":3,"nessary":true},{"description":"","name":"乘客身高：出于安全考虑，请填写所有乘客的个人身高，请用英寸或厘米表示(例如：5'2\", 158cm等等)","value":"","type":0,"nessary":true}],"produItemAdditionVOs":null}]
+     * status : 0
+     * couponValue : null
+     * productionId : 3058
+     * peopleItemList : [{"contactInfoList":[{"itemList":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"HHH","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"GGGG","type":5,"nessary":true}]},{"itemList":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"ZHANG","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"SAN","type":5,"nessary":true},{"description":"","code":"-1","name":"isLeader","value":"1","type":8,"nessary":true},{"description":"","code":"2","name":"email","value":"yyy@qq.com","type":0,"nessary":true},{"description":"","code":"12","name":"phone","value":"+86-1875888597","type":3,"nessary":true}]}],"name":"成人","amount":2,"id":17242}]
+     * orderPayList : [{"name":"成人","unit":437,"amount":2}]
+     * produItemList : [{"id":11672,"name":"私人订制之旅：含晚餐与演出的吉隆坡（Kuala Lumpur）文化之夜","category":"套餐种类","type":5,"description":"","needLeader":true,"contactLimit":1,"maxBookNum":9,"contactItems":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"","type":5,"nessary":true}],"produItemAdditionVOs":[],"langService":{}}]
+     * creditStatus : null
+     * billUrl : null
+     * userName : GEGE GQ
+     * email : 134@24.com
+     * phone : +86-122555
+     * pickUpCode :
+     * pickUpPoint : Hgg
+     * orderQuestions : []
+     * refundLog : null
+     * languageName :
+     * remark : Hhhh
+     * supplierId : null
      */
 
     private int id;
@@ -45,27 +59,48 @@ public class OrderDetail {
     private int status;
     private double couponValue;
     private int productionId;
+    private Object creditStatus;
+    private Object billUrl;
+    private String userName;
+    private String email;
+    private String phone;
+    private String pickUpCode;
+    private String pickUpPoint;
+    private Object refundLog;
+    private String languageName;
+    private String remark;
+    private Object supplierId;
     /**
-     * contactInfoList : [{"itemList":[{"description":"","name":"姓名","value":"Hh","type":5,"nessary":true},{"description":"","name":"拼音","value":"Hhg","type":0,"nessary":true},{"description":"","name":"性别","value":"男","type":1,"nessary":true},{"description":"","name":"邮件","value":"Hh","type":0,"nessary":true},{"description":"","name":"电话","value":"+86 1111","type":3,"nessary":true}]}]
-     * name : 成人1人票
-     * amount : 1
-     * id : 42583
+     * contactInfoList : [{"itemList":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"HHH","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"GGGG","type":5,"nessary":true}]},{"itemList":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"ZHANG","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"SAN","type":5,"nessary":true},{"description":"","code":"-1","name":"isLeader","value":"1","type":8,"nessary":true},{"description":"","code":"2","name":"email","value":"yyy@qq.com","type":0,"nessary":true},{"description":"","code":"12","name":"phone","value":"+86-1875888597","type":3,"nessary":true}]}]
+     * name : 成人
+     * amount : 2
+     * id : 17242
      */
 
     private List<PeopleItemListBean> peopleItemList;
-    private List<OrderItem.OrderPay> orderPayList;
     /**
-     * id : 42582
-     * name : 标准行程
+     * name : 成人
+     * unit : 437.0
+     * amount : 2
+     */
+
+    private List<OrderPayListBean> orderPayList;
+    /**
+     * id : 11672
+     * name : 私人订制之旅：含晚餐与演出的吉隆坡（Kuala Lumpur）文化之夜
      * category : 套餐种类
      * type : 5
-     * description : Willamette wine bike tour. Hotel pickup and drop-off not included.
+     * description :
+     * needLeader : true
      * contactLimit : 1
-     * contactItems : [{"description":"","name":"姓名","value":"","type":5,"nessary":true},{"description":"","name":"拼音","value":"","type":0,"nessary":true},{"description":"","name":"性别","value":"","type":1,"nessary":true},{"description":"","name":"邮件","value":"","type":0,"nessary":true},{"description":"","name":"电话","value":"","type":3,"nessary":true},{"description":"","name":"乘客身高：出于安全考虑，请填写所有乘客的个人身高，请用英寸或厘米表示(例如：5'2\", 158cm等等)","value":"","type":0,"nessary":true}]
-     * produItemAdditionVOs : null
+     * maxBookNum : 9
+     * contactItems : [{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"","type":5,"nessary":true}]
+     * produItemAdditionVOs : []
+     * langService : {}
      */
 
     private List<ProduItemListBean> produItemList;
+    private List<?> orderQuestions;
 
     public int getId() {
         return id;
@@ -179,6 +214,94 @@ public class OrderDetail {
         this.productionId = productionId;
     }
 
+    public Object getCreditStatus() {
+        return creditStatus;
+    }
+
+    public void setCreditStatus(Object creditStatus) {
+        this.creditStatus = creditStatus;
+    }
+
+    public Object getBillUrl() {
+        return billUrl;
+    }
+
+    public void setBillUrl(Object billUrl) {
+        this.billUrl = billUrl;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getPickUpCode() {
+        return pickUpCode;
+    }
+
+    public void setPickUpCode(String pickUpCode) {
+        this.pickUpCode = pickUpCode;
+    }
+
+    public String getPickUpPoint() {
+        return pickUpPoint;
+    }
+
+    public void setPickUpPoint(String pickUpPoint) {
+        this.pickUpPoint = pickUpPoint;
+    }
+
+    public Object getRefundLog() {
+        return refundLog;
+    }
+
+    public void setRefundLog(Object refundLog) {
+        this.refundLog = refundLog;
+    }
+
+    public String getLanguageName() {
+        return languageName;
+    }
+
+    public void setLanguageName(String languageName) {
+        this.languageName = languageName;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Object getSupplierId() {
+        return supplierId;
+    }
+
+    public void setSupplierId(Object supplierId) {
+        this.supplierId = supplierId;
+    }
+
     public List<PeopleItemListBean> getPeopleItemList() {
         return peopleItemList;
     }
@@ -187,11 +310,11 @@ public class OrderDetail {
         this.peopleItemList = peopleItemList;
     }
 
-    public List<OrderItem.OrderPay> getOrderPayList() {
+    public List<OrderPayListBean> getOrderPayList() {
         return orderPayList;
     }
 
-    public void setOrderPayList(List<OrderItem.OrderPay> orderPayList) {
+    public void setOrderPayList(List<OrderPayListBean> orderPayList) {
         this.orderPayList = orderPayList;
     }
 
@@ -201,6 +324,14 @@ public class OrderDetail {
 
     public void setProduItemList(List<ProduItemListBean> produItemList) {
         this.produItemList = produItemList;
+    }
+
+    public List<?> getOrderQuestions() {
+        return orderQuestions;
+    }
+
+    public void setOrderQuestions(List<?> orderQuestions) {
+        this.orderQuestions = orderQuestions;
     }
 
     public static class PeopleItemListBean {
@@ -243,10 +374,11 @@ public class OrderDetail {
 
         public static class ContactInfoListBean implements Parcelable {
             /**
-             * description :
-             * name : 姓名
-             * value : Hh
-             * type : 5
+             * description : 如张三填写为'zhang'
+             * code : 0
+             * name : 姓(拼音)
+             * value : HHH
+             * type : 9
              * nessary : true
              */
 
@@ -262,19 +394,11 @@ public class OrderDetail {
 
             public static class ItemListBean implements Parcelable {
                 private String description;
+                private String code;
                 private String name;
                 private String value;
                 private int type;
-                private String code;
                 private boolean nessary;
-
-                public String getCode() {
-                    return code;
-                }
-
-                public void setCode(String code) {
-                    this.code = code;
-                }
 
                 public String getDescription() {
                     return description;
@@ -282,6 +406,14 @@ public class OrderDetail {
 
                 public void setDescription(String description) {
                     this.description = description;
+                }
+
+                public String getCode() {
+                    return code;
+                }
+
+                public void setCode(String code) {
+                    this.code = code;
                 }
 
                 public String getName() {
@@ -324,9 +456,9 @@ public class OrderDetail {
                 @Override
                 public void writeToParcel(Parcel dest, int flags) {
                     dest.writeString(this.description);
+                    dest.writeString(this.code);
                     dest.writeString(this.name);
                     dest.writeString(this.value);
-                    dest.writeString(this.code);
                     dest.writeInt(this.type);
                     dest.writeByte(this.nessary ? (byte) 1 : (byte) 0);
                 }
@@ -336,9 +468,9 @@ public class OrderDetail {
 
                 protected ItemListBean(Parcel in) {
                     this.description = in.readString();
+                    this.code = in.readString();
                     this.name = in.readString();
                     this.value = in.readString();
-                    this.code=in.readString();
                     this.type = in.readInt();
                     this.nessary = in.readByte() != 0;
                 }
@@ -374,7 +506,7 @@ public class OrderDetail {
                 in.readList(this.itemList, ItemListBean.class.getClassLoader());
             }
 
-            public static final Parcelable.Creator<ContactInfoListBean> CREATOR = new Parcelable.Creator<ContactInfoListBean>() {
+            public static final Creator<ContactInfoListBean> CREATOR = new Creator<ContactInfoListBean>() {
                 @Override
                 public ContactInfoListBean createFromParcel(Parcel source) {
                     return new ContactInfoListBean(source);
@@ -386,6 +518,39 @@ public class OrderDetail {
                 }
             };
         }
+
+    }
+
+    public static class OrderPayListBean {
+        private String name;
+        private double unit;
+        private int amount;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public double getUnit() {
+            return unit;
+        }
+
+        public void setUnit(double unit) {
+            this.unit = unit;
+        }
+
+        public int getAmount() {
+            return amount;
+        }
+
+        public void setAmount(int amount) {
+            this.amount = amount;
+        }
+
+
     }
 
     public static class ProduItemListBean {
@@ -394,17 +559,21 @@ public class OrderDetail {
         private String category;
         private int type;
         private String description;
+        private boolean needLeader;
         private int contactLimit;
-        private Object produItemAdditionVOs;
+        private int maxBookNum;
+        private LangServiceBean langService;
         /**
-         * description :
-         * name : 姓名
+         * description : 如张三填写为'zhang'
+         * code : 0
+         * name : 姓(拼音)
          * value :
-         * type : 5
+         * type : 9
          * nessary : true
          */
 
         private List<ContactItemsBean> contactItems;
+        private List<?> produItemAdditionVOs;
 
         public int getId() {
             return id;
@@ -446,6 +615,14 @@ public class OrderDetail {
             this.description = description;
         }
 
+        public boolean isNeedLeader() {
+            return needLeader;
+        }
+
+        public void setNeedLeader(boolean needLeader) {
+            this.needLeader = needLeader;
+        }
+
         public int getContactLimit() {
             return contactLimit;
         }
@@ -454,12 +631,20 @@ public class OrderDetail {
             this.contactLimit = contactLimit;
         }
 
-        public Object getProduItemAdditionVOs() {
-            return produItemAdditionVOs;
+        public int getMaxBookNum() {
+            return maxBookNum;
         }
 
-        public void setProduItemAdditionVOs(Object produItemAdditionVOs) {
-            this.produItemAdditionVOs = produItemAdditionVOs;
+        public void setMaxBookNum(int maxBookNum) {
+            this.maxBookNum = maxBookNum;
+        }
+
+        public LangServiceBean getLangService() {
+            return langService;
+        }
+
+        public void setLangService(LangServiceBean langService) {
+            this.langService = langService;
         }
 
         public List<ContactItemsBean> getContactItems() {
@@ -470,8 +655,20 @@ public class OrderDetail {
             this.contactItems = contactItems;
         }
 
+        public List<?> getProduItemAdditionVOs() {
+            return produItemAdditionVOs;
+        }
+
+        public void setProduItemAdditionVOs(List<?> produItemAdditionVOs) {
+            this.produItemAdditionVOs = produItemAdditionVOs;
+        }
+
+        public static class LangServiceBean {
+        }
+
         public static class ContactItemsBean {
             private String description;
+            private String code;
             private String name;
             private String value;
             private int type;
@@ -483,6 +680,14 @@ public class OrderDetail {
 
             public void setDescription(String description) {
                 this.description = description;
+            }
+
+            public String getCode() {
+                return code;
+            }
+
+            public void setCode(String code) {
+                this.code = code;
             }
 
             public String getName() {
@@ -516,7 +721,50 @@ public class OrderDetail {
             public void setNessary(boolean nessary) {
                 this.nessary = nessary;
             }
+
+
         }
+
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.photo);
+        dest.writeString(this.userName);
+        dest.writeString(this.email);
+        dest.writeString(this.phone);
+    }
+
+    public OrderDetail() {
+    }
+
+    protected OrderDetail(Parcel in) {
+        this.id = in.readInt();
+        this.name=in.readString();
+        this.photo=in.readString();
+        this.userName = in.readString();
+        this.email = in.readString();
+        this.phone = in.readString();
+
+    }
+
+    public static final Parcelable.Creator<OrderDetail> CREATOR = new Parcelable.Creator<OrderDetail>() {
+        @Override
+        public OrderDetail createFromParcel(Parcel source) {
+            return new OrderDetail(source);
+        }
+
+        @Override
+        public OrderDetail[] newArray(int size) {
+            return new OrderDetail[size];
+        }
+    };
 }
 

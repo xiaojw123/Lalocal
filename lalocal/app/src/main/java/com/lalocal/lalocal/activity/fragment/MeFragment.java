@@ -193,9 +193,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         } else {
             //正常登录方式  刷新邮箱验证状态 刷新我的收藏状态(我的收藏没被选中时更新我的收藏适配器)
             if (!hidden) {
-                if (UserHelper.isLogined(getActivity()) && user != null) {
-                    mUserid = user.getId();
-                    mToken = user.getToken();
+                if (UserHelper.isLogined(getActivity())) {
+                    mUserid = UserHelper.getUserId(getActivity());
+                    mToken = UserHelper.getToken(getActivity());
                     contentService.getUserProfile(mUserid, mToken);
                     if (order_tab.isSelected() && !lastOrders.equals(UserHelper.orders)) {
                         contentService.getMyOrder(mUserid, mToken);
@@ -228,9 +228,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     setSelectedTab((ViewGroup) v);
                     mListView.setPullLoadEnable(true);
                     mListView.setAdapter(favoriteAdapter);
-                    if (UserHelper.isLogined(getActivity()) && user != null) {
-                        mUserid = user.getId();
-                        mToken = user.getToken();
+                    if (UserHelper.isLogined(getActivity())) {
+                        mUserid = UserHelper.getUserId(getActivity());
+                        mToken = UserHelper.getToken(getActivity());
                     } else {
                         mUserid = -1;
                         mToken = null;
@@ -252,13 +252,13 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     setSelectedTab((ViewGroup) v);
                     mListView.setPullLoadEnable(false);
                     mListView.setAdapter(orderAdapter);
-                    if (UserHelper.isLogined(getActivity()) && user != null) {
+                    if (UserHelper.isLogined(getActivity())) {
                         if (isFristOrder) {
                             isFristOrder = false;
-                            contentService.getMyOrder(user.getId(), user.getToken());
+                            contentService.getMyOrder(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
                         } else {
                             if (!lastOrders.equals(UserHelper.orders)) {
-                                contentService.getMyOrder(user.getId(), user.getToken());
+                                contentService.getMyOrder(UserHelper.getUserId(getActivity()),UserHelper.getToken(getActivity()));
                             }
                         }
 
@@ -276,14 +276,14 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     setSelectedTab((ViewGroup) v);
                     mListView.setPullLoadEnable(false);
                     mListView.setAdapter(couponAdapter);
-                    if (UserHelper.isLogined(getActivity()) && user != null) {
+                    if (UserHelper.isLogined(getActivity())) {
                         if (isFirstCoupon) {
                             isFirstCoupon = false;
-                            contentService.getMyCoupon(user.getId(), user.getToken());
+                            contentService.getMyCoupon(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
                         } else {
                             AppLog.print("");
                             if (!lastCopons.equals(UserHelper.coupons)) {
-                                contentService.getMyCoupon(user.getId(), user.getToken());
+                                contentService.getMyCoupon(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
                             }
                         }
                     } else {
@@ -294,10 +294,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 case R.id.home_me_headportrait_img:
                 case R.id.home_me_username:
                     if (UserHelper.isLogined(getActivity())) {
-                        Intent intent = new Intent(getActivity(), AccountEidt1Activity.class);
-                        intent.putExtra(KeyParams.USERID, user.getId());
-                        intent.putExtra(KeyParams.TOKEN, user.getToken());
-                        startActivityForResult(intent, 100);
+                            Intent intent = new Intent(getActivity(), AccountEidt1Activity.class);
+                            intent.putExtra(KeyParams.USERID, UserHelper.getUserId(getActivity()));
+                            intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(getActivity()));
+                            startActivityForResult(intent, 100);
                     } else {
                         Intent intent = new Intent(getActivity(), LoginActivity.class);
                         startActivityForResult(intent, 100);
@@ -464,9 +464,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         AppLog.print("favoriete___" + favoritePage + ", toalPgae___" + favoriteTotalPages);
         if (favoritePage <= favoriteTotalPages) {
             AppLog.print("加载更多——————");
-            if (UserHelper.isLogined(getActivity()) && user != null) {
-                mUserid = user.getId();
-                mToken = user.getToken();
+            if (UserHelper.isLogined(getActivity())) {
+                mUserid =UserHelper.getUserId(getActivity());
+                mToken = UserHelper.getToken(getActivity());
             } else {
                 mUserid = -1;
                 mToken = null;
@@ -509,9 +509,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         startActivityForResult(intent, 100);
     }
 
-    private void gotoRouteDetail(FavoriteItem item){
-        Intent intent=new Intent(getActivity(), RouteDetailActivity.class);
-        intent.putExtra(RouteDetailActivity.DETAILS_ID,item.getTargetId());
+    private void gotoRouteDetail(FavoriteItem item) {
+        Intent intent = new Intent(getActivity(), RouteDetailActivity.class);
+        intent.putExtra(RouteDetailActivity.DETAILS_ID, item.getTargetId());
         startActivityForResult(intent, 100);
     }
 

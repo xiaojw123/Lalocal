@@ -260,11 +260,8 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_ORDER_DETAIL);
         }
 
-        AppLog.print("getOrder__url____" + AppConfig.getOrderItemsUrl() + "/" + id);
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderItemsUrl() + "/" + id, response, response);
-        AppLog.print("userid__" + UserHelper.getUserId(context) + "____token___" + UserHelper.getToken(context));
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
-
         requestQueue.add(request);
     }
 

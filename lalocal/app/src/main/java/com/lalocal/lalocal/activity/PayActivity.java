@@ -17,7 +17,6 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
-import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -82,6 +81,7 @@ public class PayActivity extends BaseActivity {
     @BindView(R.id.order_pays_llt)
     LinearLayout orderPaysLlt;
     double mAccout;
+    String mFormartPrice;
     int mOrderid;
 
     @Override
@@ -145,6 +145,7 @@ public class PayActivity extends BaseActivity {
     private void showOrderDetail() {
         Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra(KeyParams.ORDER_ID, mOrderid);
+        intent.putExtra(KeyParams.PAGE_ACTION,OrderActivity.PRE_VIEW);
         startActivity(intent);
     }
 
@@ -197,18 +198,27 @@ public class PayActivity extends BaseActivity {
                 String text="未支付";
                 switch (result){
                     case "success":
-                        text="支付成功";
+                        showCompletePay();
                         break;
                     case "cancel":
                         text="支付取消";
+                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
                         break;
                     case "invalid":
                         text="支付失效";
+                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
                         break;
                 }
-                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void showCompletePay(){
+        Intent  intent=new Intent(this,PayCompleteActivity.class);
+        intent.putExtra(KeyParams.ORDDER_DETFAIL,mOrderDetail);
+        intent.putExtra(KeyParams.AMOUNT_PRICE,mAccout);
+        startActivity(intent);
+        finish();
     }
 
 
@@ -245,9 +255,9 @@ public class PayActivity extends BaseActivity {
             payOrderTitle.setText(detail.getName());
             double couponValue = detail.getCouponValue();
             double accout = -couponValue;
-            List<OrderItem.OrderPay> payList = detail.getOrderPayList();
+            List<OrderDetail.OrderPayListBean> payList = detail.getOrderPayList();
             LayoutInflater inflater = LayoutInflater.from(this);
-            for (OrderItem.OrderPay orderpay : payList) {
+            for (OrderDetail.OrderPayListBean orderpay : payList) {
                 double unit = orderpay.getUnit();
                 int num = orderpay.getAmount();
                 accout += unit * num;

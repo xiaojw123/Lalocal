@@ -18,6 +18,7 @@
     <dimen name="dimen_size_15_dp">15dp</dimen>
     <dimen name="dimen_size_20_dp">20dp</dimen>
     <dimen name="dimen_size_25_dp">25dp</dimen>
+    <dimen name="dimen_size_35_dp">35dp</dimen>
     <dimen name="dimen_size_50_dp">50dp</dimen>
     <dimen name="dimen_size_36_dp">36dp</dimen>
     <dimen name="dimen_size_60_dp">60dp</dimen>
@@ -58,15 +59,13 @@
     <dimen name="dialog_text_margin_horizontal">15dip</dimen>
     <dimen name="dialog_padding_vertical">20dip</dimen>
     <dimen name="custom_dialog_padding_vertical">15dip</dimen>
-<!--product_detail-->
+    <!--product_detail-->
     <dimen name="product_details_photo_height">204dp</dimen>
     <dimen name="product_details_interval">20dp</dimen>
     <dimen name="product_details_title_tv">18sp</dimen>
     <dimen name="product_details_padding_left">15dp</dimen>
     <dimen name="product_details_padding_bottom">10dp</dimen>
     <dimen name="dialog_card_margin">5dp</dimen>
-
-
 
 
 </resources>

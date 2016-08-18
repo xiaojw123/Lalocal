@@ -5,6 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimaryDark">@android:color/transparent</item>
     </style>
+
     <style name="prompt_dialog" parent="test_dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsFloating">true</item>
@@ -94,6 +95,7 @@
         <item name="android:background">@drawable/arrow_right</item>
         <item name="android:layout_gravity">center_vertical|right</item>
     </style>
+
     <style name="AboutUsItemArrowTheme" parent="AcountEditItemArrowRight">
         <item name="android:layout_marginRight">@dimen/dimen_size_11_dp</item>
     </style>
@@ -106,7 +108,7 @@
 
     </style>
 
-    
+
     <style name="AcountEditItemTitle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -122,6 +124,7 @@
         <item name="android:textColor">@color/color_66</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
+
     <style name="AcountEditItemArrowRight">
         <item name="android:layout_width">@dimen/arrow_right_width</item>
         <item name="android:layout_height">@dimen/arrow_right_height</item>
@@ -130,18 +133,21 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_centerVertical">true</item>
     </style>
+
     <style name="AccoutEditItemTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/setting_about_us_height</item>
         <item name="android:paddingLeft">@dimen/account_edit_nickname_left</item>
         <item name="android:paddingRight">@dimen/account_edit_nickname_right</item>
     </style>
+
     <style name="MyOrderTripPeopleTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_13_sp</item>
         <item name="android:textColor">@color/color_b3</item>
     </style>
+
     <style name="OrderCarditemContainerStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -150,6 +156,7 @@
         <item name="android:layout_marginRight">@dimen/order_travel_information_container_top</item>
         <item name="android:background">@drawable/order_card_item_bg</item>
     </style>
+
     <style name="OrderCardItemIitleStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -159,14 +166,16 @@
         <item name="android:layout_marginTop">@dimen/order_card_item_top</item>
         <item name="android:layout_marginBottom">@dimen/order_card_item_top</item>
     </style>
+
     <style name="OrderCardItemTextStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/order_travel_time_height</item>
         <item name="android:textSize">@dimen/text_size_15_sp</item>
         <item name="android:textColor">@color/color_b3</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
     </style>
-    
 
 
     <!--bigpicturedialog-->
@@ -210,12 +219,14 @@
     </style>
 
     <style name="PopupAnimation" parent="android:Animation">
-    <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
-    <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
 
 
     </style>
-    <style name="Widget.GifView" parent="@android:style/Widget"/>
+
+    <style name="Widget.GifView" parent="@android:style/Widget" />
+
     <style name="DesAreaNavMenuStye">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">match_parent</item>
@@ -261,6 +272,7 @@
         <item name="android:layout_margin">@dimen/live_padding_10dp</item>
 
     </style>
+
     <style name="dialog_button_text_cancel_style">
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/live_over_dialog_cancel_bg</item>
@@ -276,11 +288,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
         <item name="android:itemTextAppearance">?android:attr/actionMenuTextAppearance</item>
         <item name="android:actionMenuTextAppearance">@style/ActionMenuTheme</item>
     </style>
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- navigation style -->
     <style name="myToolbarNavigationButtonStyle" parent="@style/Widget.AppCompat.Toolbar.Button.Navigation">
@@ -359,7 +373,8 @@
     <!-- list view-->
     <style name="list_view" parent="@android:style/Widget.ListView">
         <item name="android:scrollbarThumbVertical">@drawable/nim_scrollbar_handle_holo_dark</item>
-        <item name="android:scrollbarThumbHorizontal">@drawable/nim_scrollbar_handle_holo_dark</item>
+        <item name="android:scrollbarThumbHorizontal">@drawable/nim_scrollbar_handle_holo_dark
+        </item>
     </style>
 
     <style name="horizontal_light_thin_divider">
@@ -440,8 +455,10 @@
     </style>
 
     <style name="umeng_socialize_shareboard_animation">
-        <item name="android:windowEnterAnimation">@anim/umeng_socialize_shareboard_animation_in</item>
-        <item name="android:windowExitAnimation">@anim/umeng_socialize_shareboard_animation_out</item>
+        <item name="android:windowEnterAnimation">@anim/umeng_socialize_shareboard_animation_in
+        </item>
+        <item name="android:windowExitAnimation">@anim/umeng_socialize_shareboard_animation_out
+        </item>
     </style>
 
     <style name="Theme.UMDialog" parent="android:style/Theme.Dialog">
@@ -475,7 +492,23 @@
         <item name="android:layout_marginBottom">6dp</item>
     </style>
 
-
+    <style name="PayCompleteInfoStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/color_b3</item>
+        <item name="android:textSize">@dimen/text_size_15_sp</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="PayCompletePriceStyle1">
+        <item name="android:textColor">@color/color_1a</item>
+        <item name="android:textSize">@dimen/text_size_18_sp</item>
+    </style>
+    <style name="PayCompletePriceStyle2">
+        <item name="android:textColor">@color/color_1a</item>
+        <item name="android:textSize">@dimen/text_size_36_sp</item>
+    </style>
+    
 
 
 </resources>

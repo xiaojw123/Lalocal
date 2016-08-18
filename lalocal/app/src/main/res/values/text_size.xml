@@ -13,6 +13,7 @@
     <dimen name="text_size_20_sp">20sp</dimen>
     <dimen name="text_size_22_sp">22sp</dimen>
     <dimen name="text_size_24_sp">24sp</dimen>
+    <dimen name="text_size_36_sp">36sp</dimen>
     <dimen name="text_size_70_sp">70sp</dimen>
 
 

@@ -277,9 +277,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         }
 
         private void scroll(int index) {
-            AppLog.print("index____" + index);
             View v = getChildView(routeDetailRoutedateLlt, index);
-            AppLog.print("v____" + v);
             if (v != null) {
                 int distacne = v.getMeasuredWidth() + dayItemLeft;
                 int x = mLeft ? 0 - distacne : distacne;
@@ -299,15 +297,12 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                 if (view instanceof ViewGroup) {
                     return getChildView((ViewGroup) view, pos);
                 } else {
-                    AppLog.print("view_取id___");
                     if (view.getId() == (pos + 1)) {
-                        AppLog.print("匹配完成___");
                         return view;
                     }
                 }
 
             }
-            AppLog.print("轮询结束——————");
             return null;
         }
 

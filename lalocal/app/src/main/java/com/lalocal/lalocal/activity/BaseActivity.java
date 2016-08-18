@@ -24,19 +24,19 @@ public class BaseActivity extends AppCompatActivity {
     Unbinder unbinder;
     ContentLoader mContentloader;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        mContentloader = new ContentLoader(this);
     }
 
 
-
     public void setLoaderCallBack(ICallBack callBack) {
+        if (mContentloader == null) {
+            mContentloader = new ContentLoader(this);
+        }
         mContentloader.setCallBack(callBack);
     }
 

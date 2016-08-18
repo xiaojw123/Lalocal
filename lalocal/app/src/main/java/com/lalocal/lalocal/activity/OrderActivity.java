@@ -20,7 +20,6 @@ import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
-import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener {
+    public static final String PRE_VIEW = "pre_view";
     private LinearLayout travel_people_container;
     private LinearLayout pay_money_container;
     private FrameLayout pay_time_container;
@@ -47,10 +47,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     private int height, left;
     private Button evalute_btn;
     private TextView service_tv;
-    private  OrderDetail mOrderDetail;
+    private OrderDetail mOrderDetail;
     private FrameLayout mTravelPersonContainer;
     private List<OrderDetail.PeopleItemListBean.ContactInfoListBean> travelpersonsInfo;
+    //  联系人模块
+    private TextView contact_name_tv;
+    private TextView contact_phone_tv;
+    private TextView contact_email_tv;
     private double mAccoutPrice;
+    private String mPageAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,11 +70,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     private void initParams() {
         height = (int) getResources().getDimension(R.dimen.order_travel_time_height);
         left = (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
+        mPageAction=getIntent().getStringExtra(KeyParams.PAGE_ACTION);
     }
 
     private void initView() {
-        mTravelPersonContainer= (FrameLayout) findViewById(R.id.order_person_container);
-        service_tv=(TextView) findViewById(R.id.order_service);
+        contact_name_tv = (TextView) findViewById(R.id.orderdetail_contact_name_tv);
+        contact_phone_tv = (TextView) findViewById(R.id.orderdetail_contact_phone_tv);
+        contact_email_tv = (TextView) findViewById(R.id.orderdetail_contact_email_tv);
+        mTravelPersonContainer = (FrameLayout) findViewById(R.id.order_person_container);
+        service_tv = (TextView) findViewById(R.id.order_service);
         evalute_btn = (Button) findViewById(R.id.order_immediately_evaluate_btn);
         travel_people_container = (LinearLayout) findViewById(R.id.order_travel_people_container);
         pay_channel_cotainer = (FrameLayout) findViewById(R.id.order_pay_channel_container);
@@ -102,6 +111,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         } else {
             evalute_btn.setVisibility(View.GONE);
         }
+        if (PRE_VIEW.equals(mPageAction)){
+
+
+        }
+
+
     }
 
     private int getOrderId() {
@@ -130,6 +145,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
 
         }
     }
+
     public void startOnlineService() {
         Intent intent = new Intent(this, ChatActivity.class);
         if (mOrderDetail != null) {
@@ -144,39 +160,42 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     class CallBack extends ICallBack {
         @Override
         public void onGetOrderDetail(OrderDetail detail) {
-            updateView(detail);
+            mOrderDetail = detail;
+            updateView();
         }
 
 
     }
 
-    private void updateView(OrderDetail detail) {
-        if (detail == null) {
+    private void updateView() {
+        if (mOrderDetail == null) {
             return;
         }
-        mOrderDetail=detail;
-        DrawableUtils.displayImg(this, post_img, detail.getPhoto());
-        title_tv.setText(detail.getName());
-        travel_time_tv.setText(detail.getOrderDate());
-        List<OrderDetail.ProduItemListBean> productList = detail.getProduItemList();
+        contact_name_tv.setText(mOrderDetail.getName());
+        contact_phone_tv.setText(mOrderDetail.getPhone());
+        contact_email_tv.setText(mOrderDetail.getEmail());
+        DrawableUtils.displayImg(this, post_img, mOrderDetail.getPhoto());
+        title_tv.setText(mOrderDetail.getName());
+        travel_time_tv.setText(mOrderDetail.getOrderDate());
+        List<OrderDetail.ProduItemListBean> productList = mOrderDetail.getProduItemList();
         if (productList != null && productList.size() > 0) {
             OrderDetail.ProduItemListBean item = productList.get(0);
             if (item != null) {
                 packages_tv.setText(item.getName());
             }
         }
-        setTravelPerson(detail.getPeopleItemList());
-        double couponValue = detail.getCouponValue();
-        setOrderPayPrice(detail.getOrderPayList(), couponValue);
+        setTravelPerson(mOrderDetail.getPeopleItemList());
+        double couponValue = mOrderDetail.getCouponValue();
+        setOrderPayPrice(mOrderDetail.getOrderPayList(), couponValue);
         setCoupon(couponValue);
-        order_numb.setText(detail.getOrderNumb());
-        order_created_time.setText(detail.getCreatedTime());
-        pay_time.setText(detail.getPayTime());
-        String payType = detail.getPayType();
+        order_numb.setText(mOrderDetail.getOrderNumb());
+        order_created_time.setText(mOrderDetail.getCreatedTime());
+        pay_time.setText(mOrderDetail.getPayTime());
+        String payType = mOrderDetail.getPayType();
         if (payType == null) {
 //            pay_channel.setText("");
         }
-        String praiseTime = detail.getAppraiseTime();
+        String praiseTime = mOrderDetail.getAppraiseTime();
         if (!TextUtils.isEmpty(praiseTime)) {
             evaluteTimeCotainer.setVisibility(View.GONE);
             evalute_time.setText(praiseTime);
@@ -245,9 +264,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
     }
 
 
-    private void setOrderPayPrice(List<OrderItem.OrderPay> orderPayList, double couponValue) {
+    private void setOrderPayPrice(List<OrderDetail.OrderPayListBean> orderPayList, double couponValue) {
         double orderPayPrice = 0;
-        for (OrderItem.OrderPay orderPay : orderPayList) {
+        for (OrderDetail.OrderPayListBean orderPay : orderPayList) {
             FrameLayout itemContainer = getItemContainer();
             pay_money_container.addView(itemContainer);
             TextView name = new TextView(this);
@@ -262,14 +281,14 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
             value.setLayoutParams(params2);
             value.setGravity(Gravity.CENTER_VERTICAL);
             value.setTextAppearance(this, R.style.OrderCardItemTextStyle);
-            double toalPrice =orderPay.getUnit() * orderPay.getAmount();
+            double toalPrice = orderPay.getUnit() * orderPay.getAmount();
             orderPayPrice += toalPrice;
             value.setText("¥ " + String.valueOf(toalPrice));
             itemContainer.addView(name);
             itemContainer.addView(value);
         }
         double paymoeny = orderPayPrice - couponValue;
-        mAccoutPrice=paymoeny;
+        mAccoutPrice = paymoeny;
         paymoeny = Math.max(paymoeny, 0);
         pay_money.setText("¥ " + String.valueOf(paymoeny));
 

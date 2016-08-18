@@ -193,10 +193,13 @@
     <string name="live_master_fans">粉丝</string>
     <string name="live_master_contribute">货币贡献</string>
     <string name="live_master_home">主页</string>
-
-
-
-
+    <string name="pay_complete">支付完成</string>
+    <string name="pay_success">支付成功</string>
+    <string name="commodity_information">商品信息</string>
+    <string name="contacts_information">联系人信息</string>
+    <string name="name">姓名</string>
+    <string name="view_order">查看订单</string>
+    <string name="contacts">联系人</string>
 
 
 </resources>
