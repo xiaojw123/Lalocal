@@ -347,6 +347,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     showphotos(list);
                 } else if (photoList.size() > 0) {
                     detailsPhoto1.setVisibility(View.GONE);
+
                     for (int i = 0; i < photoList.size(); i++) {
                         RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
                         recommendAdResultBean.photo = photoList.get(i);

@@ -118,17 +118,21 @@ public class LiveHomePageActivity extends BaseActivity {
             if (!TextUtils.isEmpty(result.getDescription())) {
                 homepageMasterSignature.setText(result.getDescription());
             }
-            Object statusa = result.getAttentionVO().getStatus();
-            double parseDouble = Double.parseDouble(String.valueOf(statusa));
-            int status = (int) parseDouble;
-            if (status == 0) {
-                masterAttention.setText("关注");
-                masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
 
-            } else {
-                masterAttention.setText("已关注");
-                masterAttention.setTextColor(Color.BLACK);
+            Object statusa = result.getAttentionVO().getStatus();
+            if(statusa!=null){
+                double parseDouble = Double.parseDouble(String.valueOf(statusa));
+                int status = (int) parseDouble;
+                if (status == 0) {
+                    masterAttention.setText("关注");
+                    masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
+
+                } else {
+                    masterAttention.setText("已关注");
+                    masterAttention.setTextColor(Color.BLACK);
+                }
             }
+
         }
 
         @Override

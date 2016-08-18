@@ -65,7 +65,7 @@ public abstract class BaseAction implements Serializable {
     }
 
     protected void sendMessage(IMMessage message) {
-        container.proxy.sendMessage(message);
+        container.proxy.sendMessage(message,"0");
     }
 
     protected int makeRequestCode(int requestCode) {

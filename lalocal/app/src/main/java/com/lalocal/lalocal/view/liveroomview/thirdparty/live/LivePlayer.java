@@ -7,6 +7,7 @@ import android.hardware.Camera;
 import android.media.AudioFormat;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.Message;
 import android.view.WindowManager;
 
 import com.lalocal.lalocal.util.AppLog;
@@ -181,7 +182,7 @@ public class LivePlayer implements lsMessageHandler {
 
     // 设置推流参数
     private void initLiveParam() {
-       AppLog.i("TAG","初始化推流");
+        AppLog.i("TAG","初始化推流");
         getActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
         List<Camera.Size> backCameraSupportSize = getCameraSupportSize(CAMERA_POSITION_BACK);
         List<Camera.Size> frontCameraSupportSize = getCameraSupportSize(CAMERA_POSITION_FRONT);
@@ -190,12 +191,11 @@ public class LivePlayer implements lsMessageHandler {
             for (Camera.Size backSize : backCameraSupportSize) {
                 for (Camera.Size frontSize : frontCameraSupportSize) {
                    if(backSize.width==frontSize.width&&backSize.height==frontSize.height){
-                      /* mVideoEncodeWidth=backSize.width;
+                     /*  mVideoEncodeWidth=backSize.width;
                        mVideoEncodeHeight=backSize.height;*/
                        mVideoEncodeWidth=320;
                        mVideoEncodeHeight=240;
                        AppLog.i("TAG","摄像头分辨率："+"width:"+backSize.width+"  height:"+backSize.height);
-
                        break;
                    }
                     break;
@@ -291,6 +291,7 @@ public class LivePlayer implements lsMessageHandler {
         if (mLSMediaCapture != null) {
             //开始本地视频预览
             mLSMediaCapture.startVideoPreview(liveView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
+            AppLog.i("TAG","开启本得视频预览了啊啊啊");
         }
     }
 
@@ -394,7 +395,7 @@ public class LivePlayer implements lsMessageHandler {
                 }
 
             }
-        }, 15 * 60 * 1000, 15 * 60 * 1000);
+        }, 40 * 1000, 40 * 1000);
         isFirstScreennShot = false;
     }
 
@@ -445,6 +446,8 @@ public class LivePlayer implements lsMessageHandler {
     private long mLastVideoProcessErrorAlertTime = 0;
     private long mLastAudioProcessErrorAlertTime = 0;
 
+    private lsMediaCapture.Statistics mStatistics = null;
+
     //处理SDK抛上来的异常和事件
     @Override
     public void handleMessage(int msg, Object object) {
@@ -481,10 +484,29 @@ public class LivePlayer implements lsMessageHandler {
 
             }
             break;
+            case MSG_CAMERA_PREVIEW_SIZE_NOT_SUPPORT_ERROR://camera采集分辨率不支持
+            {
+                AppLog.i("TAG", "camera采集分辨率不支持");
+                break;
+            }
             case MSG_START_LIVESTREAMING_ERROR:
                 AppLog.i("TAG", "MSG_START_LIVESTREAMING_ERROR");
                 break;
-
+            case MSG_GET_STATICS_INFO://获取统计信息的反馈消息
+            {
+                //Log.i(TAG, "test: in handleMessage, MSG_GET_STATICS_INFO");
+                Message message = new Message();
+                mStatistics = (lsMediaCapture.Statistics) object;
+             /*   int videoSendFrameRate = mStatistics.videoSendFrameRate;
+                int videoSendBitRate = mStatistics.videoSendBitRate;
+                int audioSendBitRate = mStatistics.audioSendBitRate;
+                int totalRealSendBitRate = mStatistics.totalRealSendBitRate;
+                AppLog.i("TAG","videoSendFrameRate:"+String.valueOf(videoSendFrameRate) +"fps");
+                AppLog.i("TAG","videoSendBitRate:"+String.valueOf(videoSendBitRate) +"fps");
+                AppLog.i("TAG","audioSendBitRate:"+String.valueOf(audioSendBitRate) +"fps");
+                AppLog.i("TAG","totalRealSendBitRate:"+String.valueOf(totalRealSendBitRate) +"fps");*/
+                break;
+            }
             case MSG_AUDIO_PROCESS_ERROR: {
                 AppLog.i("TAG", "MSG_AUDIO_PROCESS_ERROR");
                 if (context == null) {

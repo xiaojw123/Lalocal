@@ -10,13 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        >
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
         <com.lalocal.lalocal.view.liveroomview.thirdparty.live.LiveSurfaceView
             android:id="@+id/live_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             />
-
+        </ScrollView>
         <com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
@@ -128,7 +131,6 @@
     </RelativeLayout>
 
 
-
     <RelativeLayout
         android:id="@+id/BackBtn"
         android:layout_width="50dp"
@@ -210,11 +212,11 @@
 
     <com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout
         android:id="@+id/periscope"
-        android:layout_width="50dp"
+        android:layout_width="75dp"
         android:layout_height="350dp"
         android:layout_above="@id/setting_bottom_layout"
        android:layout_alignParentRight="true"
-       android:layout_marginRight="155dp"
+       android:layout_marginRight="143dp"
         android:layout_alignParentBottom="true"
 
         ></com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout>

@@ -109,8 +109,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         if (shareVO.getImg() != null) {
             UMImage image = new UMImage((Activity) context, shareVO.getImg());
             sp.withMedia(image);
-            sp.share();
-            return;
         }
         if (shareVO.getTitle() != null) {
             sp.withTitle(shareVO.getTitle());
@@ -148,7 +146,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         if (shareVO.getUrl() != null) {
             sp.withTargetUrl(shareVO.getUrl());
         }
-
         sp.share();
 
     }

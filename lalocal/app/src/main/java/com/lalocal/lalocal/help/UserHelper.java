@@ -69,4 +69,20 @@ public class UserHelper {
         return sp.getString(KeyParams.AVATAR, null);
 
     }
+
+    public static String getImccId(Context context){
+        initSPref(context);
+        return sp.getString(KeyParams.IM_CCID, null);
+    }
+    public  static  String getImToken(Context context){
+        initSPref(context);
+        return sp.getString(KeyParams.IM_TOKEN, null);
+    }
+    public  static void clearUserInfo(Context context){
+        initSPref(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(KeyParams.IM_TOKEN,null);
+        editor.putString(KeyParams.IM_CCID,null);
+        editor.commit();
+    }
 }

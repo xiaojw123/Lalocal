@@ -4,10 +4,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.view.liveroomview.base.ui.TAdapterDelegate;
 import com.lalocal.lalocal.view.liveroomview.base.ui.TViewHolder;
+import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.view.liveroomview.entertainment.ui.MessageListViewEx;
 import com.lalocal.lalocal.view.liveroomview.entertainment.viewholder.ChatRoomMsgViewHolderFactory;
 import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
@@ -85,13 +87,23 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         this.uiHandler = new Handler();
         registerObservers(true);
     }
-
+    String headInfo;
+    public  void setHeadInfo(String headInfo){
+      this.headInfo=headInfo;
+    }
+    private String getHeadInfo(){
+        return headInfo;
+    }
     private void initListView() {
         items = new LinkedList<>();
         adapter = new MsgAdapter(container.activity, items, this);
         adapter.setEventListener(new MsgItemEventListener());
 
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
+       View view= View.inflate(container.activity,R.layout.chat_head_items,null);
+       TextView headInfo= (TextView) view.findViewById(R.id.chat_info_head);
+           headInfo.setText(container.activity.getIntent().getStringExtra(LivePlayerBaseActivity.ANNOUCEMENT));
+        messageListView.addHeaderView(view);
         messageListView.requestDisallowInterceptTouchEvent(true);
 
         messageListView.setMode(AutoRefreshListView.Mode.START);
@@ -166,6 +178,10 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         ListViewUtil.scrollToBottom(messageListView);
     }
 
+    //显示本地消息
+    public  void onSendLocalMsg(IMMessage message){
+
+    }
     private void saveMessage(final List<IMMessage> messageList, boolean addFirst) {
         if (messageList == null || messageList.isEmpty()) {
             return;

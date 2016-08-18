@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lalocal.lalocal">
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -53,7 +52,7 @@
     <uses-permission android:name="com.lalocal.lalocal.permission.RECEIVE_MSG" />
     <!-- 直播权限声明 -->
     <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
-    <!-- 配置一个程序用于调试 -->
+
     <uses-permission android:name="android.permission.SET_DEBUG_APP" />
     <!-- 声明程序使用OpenGL ES 2.0 -->
     <uses-feature
@@ -72,6 +71,7 @@
             android:name=".activity.HomeActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -153,7 +153,6 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
-
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -199,13 +198,6 @@
 
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".activity.DestinationAreaActivity"
@@ -267,7 +259,10 @@
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:screenOrientation="behind" />
+            android:windowSoftInputMode="adjustResize|adjustPan"
+            android:screenOrientation="behind"/>
+
+
 
         <!-- 银联支付 sdk -->
         <activity
@@ -312,11 +307,16 @@
 
         <!-- 云信进程间通信receiver -->
         <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
-
+     <!--   android:windowSoftInputMode="stateHidden|adjustResize"-->
         <activity
             android:name=".view.liveroomview.entertainment.activity.AudienceActivity"
+            android:hardwareAccelerated="false"
+
+           />
+        <activity android:name=".view.liveroomview.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false" />
-        <activity android:name=".view.liveroomview.entertainment.activity.LiveActivity" />
+
+
         <activity android:name=".view.liveroomview.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".view.liveroomview.entertainment.activity.LiveAttentionOrFansActivity"

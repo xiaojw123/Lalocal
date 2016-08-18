@@ -192,6 +192,9 @@ public abstract class ICallBack {
     //驱取消关注
     public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
     }
+    //获取游客账号登录聊天
+    public void onTouristInfo(String json) {
+    }
    /* //搜索关注和粉丝
     public void onSearchAttentionOrFans(LiveFansOrAttentionResp liveFansOrAttentionResp) {
     }*/

@@ -28,16 +28,15 @@ import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.util.StringUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMemberCache;
-import com.lalocal.lalocal.view.liveroomview.entertainment.module.BarrageAttachment;
 import com.lalocal.lalocal.view.liveroomview.im.session.Container;
 import com.lalocal.lalocal.view.liveroomview.im.session.actions.BaseAction;
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.EmoticonPickerView;
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.IEmoticonSelectedListener;
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.MoonUtil;
+import com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView;
 import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.EasyAlertDialogHelper;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
-import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.media.record.AudioRecorder;
@@ -102,6 +101,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     // data
     private long typingTime = 0;
     private ImageView barrageAndChat;
+    private BarrageView barrageView;
+
     public InputPanel(Container container, View view, List<BaseAction> actions, InputConfig inputConfig) {
         this.container = container;
         this.view = view;
@@ -121,12 +122,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
             onEndAudioRecord(true);
         }
     }
-
     // 收起键盘
     public boolean collapse(boolean immediately) {
         boolean respond = (emoticonPickerView != null && emoticonPickerView.getVisibility() == View.VISIBLE
                 || actionPanelBottomLayout != null && actionPanelBottomLayout.getVisibility() == View.VISIBLE);
-
         hideAllInputLayout(immediately);
 
         return respond;
@@ -155,32 +154,18 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         // input bar
         messageActivityBottomLayout = (LinearLayout) view.findViewById(R.id.messageActivityBottomLayout);
         messageInputBar = view.findViewById(R.id.textMessageLayout);
+        barrageView = (BarrageView) view.findViewById(R.id.barrageView_test);
         barrageAndChat = (ImageView) view.findViewById(R.id.im_barrage_and_chat_iv);
-
         moreFuntionButtonInInputBar = view.findViewById(R.id.buttonMoreFuntionInText);
-
         moreFuntionButtonInInputBar.setVisibility(inputConfig.isMoreFunctionShow ? View.VISIBLE : View.GONE);
-
         emojiButtonInInputBar = view.findViewById(R.id.emoji_button);
         emojiButtonInInputBar.setVisibility(inputConfig.isEmojiButtonShow ? View.VISIBLE : View.GONE);
-
         sendMessageButtonInInputBar = view.findViewById(R.id.buttonSendMessage);
         messageEditText = (EditText) view.findViewById(R.id.editTextMessage);
-
-
-
-
-
-
-
-
         // 表情
         emoticonPickerView = (EmoticonPickerView) view.findViewById(R.id.emoticon_picker_view);
 
         // 显示录音按钮
-
-
-
         // 文本录音按钮切换布局
         textAudioSwitchLayout = (FrameLayout) view.findViewById(R.id.switchLayout);
 
@@ -299,9 +284,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 barrageAndChat.setSelected(isSelector);
                 isCheckBarrage++;
                 AppLog.i("TAG","isSelector:"+ (isSelector==true?"开启": "关闭"));
-                if(onBarrageViewCheckStatusListener!=null){
-                    onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector);
-                }
+
             }
         }
     };
@@ -309,7 +292,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     //弹幕开关状态监听
     private  OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener;
     public interface OnBarrageViewCheckStatusListener {
-        void getBarrageViewCheckStatus(boolean isCheck);
+        void getBarrageViewCheckStatus(boolean isCheck,String content);
     }
 
     public void setOnBarrageViewCheckStatusListener(OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener) {
@@ -339,40 +322,39 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
             return;
         }
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
+            if(container.account!=null){
+                AppLog.i("TAG","onTextMessageSendButtonPressed:"+container.account);
+            }
             textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
 
-            if(isSelector){
-                BarrageAttachment barrageAttachment=new BarrageAttachment();
-
-                ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(container.account, barrageAttachment);
-                message.setContent(text);
-                setMemberType(message);
-                NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
-                AppLog.i("TAG","弹幕开启了吗");
-
-
-            }
         } else {
             textMessage = MessageBuilder.createTextMessage(container.account, container.sessionType, text);
-
+        }
+        if(isSelector){
+            if (container.proxy.sendMessage(textMessage,"1")) {
+                restoreText(true);
+            }
+        }else {
+            if (container.proxy.sendMessage(textMessage,"0")) {
+                restoreText(true);
+            }
         }
 
-        if (container.proxy.sendMessage(textMessage)) {
-            restoreText(true);
-        }
 
     }
 
     private void setMemberType(ChatRoomMessage message) {
         String content = message.getContent();
         String fromNick = message.getFromNick();
-        AppLog.i("TAG","测试magessn内容:"+content);
         Map<String, Object> ext = new HashMap<>();
+        if(onBarrageViewCheckStatusListener!=null){
+            onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector,fromNick+":"+content);
+        }
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
-
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("barrag",fromNick+":"+content);
+            ext.put("style","1");
             message.setRemoteExtension(ext);
         }
     }
@@ -709,7 +691,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     @Override
     public void onRecordSuccess(File audioFile, long audioLength, RecordType recordType) {
         IMMessage audioMessage = MessageBuilder.createAudioMessage(container.account, container.sessionType, audioFile, audioLength);
-        container.proxy.sendMessage(audioMessage);
+        container.proxy.sendMessage(audioMessage,"0");
     }
 
     @Override

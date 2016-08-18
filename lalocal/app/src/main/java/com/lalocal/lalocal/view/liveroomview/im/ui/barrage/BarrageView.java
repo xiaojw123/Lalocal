@@ -124,8 +124,8 @@ public class BarrageView extends RelativeLayout {
         textView.setSingleLine();
 
         // text size
-        int textSizeSp = config.getMinTextSizeSp() + random.nextInt(config.getMaxTextSizeSp() - config.getMinTextSizeSp() + 1);
-        textView.setTextSize(textSizeSp);
+      /*  int textSizeSp = config.getMinTextSizeSp() + random.nextInt(config.getMaxTextSizeSp() - config.getMinTextSizeSp() + 1);
+        textView.setTextSize(textSizeSp);*/
 
         // text color
         int textColor;
