@@ -83,13 +83,21 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.share_friends:
-                shareFriends();
+                if(shareVO!=null){
+                    shareFriends();
+                }
+
                 break;
             case R.id.share_wechat:
-                shareWechat();
+                if(shareVO!=null){
+                    shareWechat();
+                }
+
                 break;
             case R.id.share_weibo:
-                shareWeibo();
+                if(shareVO!=null){
+                    shareWeibo();
+                }
                 break;
             case R.id.cancel_share:
                 dismiss();
@@ -102,6 +110,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.WEIXIN);
         sp.setCallback(callBackListener);
+
         if (shareVO.getBitmap() != null) {
             UMImage image = new UMImage((Activity) context, shareVO.getBitmap());
             sp.withMedia(image);
@@ -180,8 +189,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         sp.share();
 
-
     }
+
+
 
     private UMShareListener callBackListener;
 

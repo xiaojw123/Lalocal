@@ -10,15 +10,19 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.netease.nimlib.sdk.AbortableFuture;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
 public class LoginActivity extends BaseActivity {
@@ -44,8 +48,15 @@ public class LoginActivity extends BaseActivity {
         isImLogin = intent.getBooleanExtra(KeyParams.IM_LOGIN, false);
         initContentService();
         initView();
+        claerImLoginInfo();//清除im登錄信息
 
+    }
 
+    private void claerImLoginInfo() {
+        DemoCache.clear();;
+        AuthPreferences.clearUserInfo();
+        NIMClient.getService(AuthService.class).logout();
+        DemoCache.setLoginStatus(false);
     }
 
     private void initContentService() {
@@ -68,6 +79,8 @@ public class LoginActivity extends BaseActivity {
         register_tv.setOnClickListener(loginClickListener);
         forgetpsw_tv.setOnClickListener(loginClickListener);
         login_btn.setOnClickListener(loginClickListener);
+
+
     }
 
     private CustomTitleView.onBackBtnClickListener backClicklistener = new CustomTitleView.onBackBtnClickListener() {
@@ -86,8 +99,7 @@ public class LoginActivity extends BaseActivity {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivityForResult(intent, 100);
             } else if (v == login_btn) {
-                DemoCache.clear();
-                UserHelper.clearUserInfo(LoginActivity.this);
+
                 String email = email_edit.getText().toString();
                 String psw = psw_edit.getText().toString();
                 login(email, psw);
@@ -101,15 +113,20 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
+            AppLog.i("TAG","data为空");
             return;
         }
         if (isImLogin) {
             setResult(SettingActivity.IM_LOGIN, data);
+            AppLog.i("TAG","LoginActivity:走了这里1");
         } else {
+            AppLog.i("TAG","LoginActivity:走了这里2");
             setResult(REGISTER_OK, data);
         }
+
         finish();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -158,10 +175,40 @@ public class LoginActivity extends BaseActivity {
                     setResult(LOGIN_OK, intent);
                 }
             }
+            loginIM(user);//登錄IM
 
-            finish();
         }
 
+
+    }
+
+    private void loginIM(final User user) {
+        DemoCache.clear();
+        DemoCache.setAccount(AuthPreferences.getUserAccount());
+        DemoCache.getRegUserInfo();
+        NIMClient.getService(AuthService.class).login(new LoginInfo(AuthPreferences.getUserAccount(), AuthPreferences.getUserToken())).setCallback(new RequestCallback() {
+            @Override
+            public void onSuccess(Object o) {
+                setResult(600);
+                DemoCache.setLoginStatus(true);
+                finish();
+              AppLog.i("TAG","LoginActivity成功 " );
+            }
+
+            @Override
+            public void onFailed(int i) {
+                DemoCache.setLoginStatus(false);
+                AppLog.i("TAG","LoginActivity失败 "+i );
+                finish();
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                DemoCache.setLoginStatus(false);
+                AppLog.i("TAG","LoginActivity是失败 " );
+                finish();
+            }
+        });
 
     }
 

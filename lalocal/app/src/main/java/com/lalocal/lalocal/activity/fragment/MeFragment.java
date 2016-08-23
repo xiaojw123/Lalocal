@@ -42,6 +42,7 @@ import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
 import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
 import com.lalocal.lalocal.view.adapter.MyOrderAdapter;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.xlistview.XListView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -348,9 +349,11 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             Bundle bundle = new Bundle();
             bundle.putBoolean(KeyParams.IS_LOGIN, false);
             UserHelper.saveLoginInfo(getActivity(), bundle);
-            UserHelper.clearUserInfo(getActivity());
+            AuthPreferences.clearUserInfo();
+
             DemoCache.clear();
             NIMClient.getService(AuthService.class).logout();
+            DemoCache.setLoginStatus(false);
             updateFragmentView(false, null);
         } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
             String nickname = data.getStringExtra(KeyParams.NICKNAME);
@@ -367,6 +370,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (fragmentListener != null) {
                 fragmentListener.onShowRecommendFragment();
             }
+            String ccid = imLoginData.getStringExtra(KeyParams.IM_CCID);
+            String imtken = imLoginData.getStringExtra(KeyParams.IM_TOKEN);
+            AppLog.i("TAG","ccid:"+ccid+"token:"+imtken);
         } else if (resultCode == UPDATE_MY_DATA) {
             if (UserHelper.isLogined(getActivity()) && user != null) {
                 mUserid = user.getId();

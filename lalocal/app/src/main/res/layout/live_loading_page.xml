@@ -37,7 +37,9 @@
         android:id="@+id/audience_over_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+       android:paddingTop="68dp"
+      android:layout_centerHorizontal="true"
         android:visibility="gone"
-        android:text="直播已结束!"/>
+        android:textSize="@dimen/text_size_18_sp"
+        android:text="主播暂时离开了！!"/>
 </RelativeLayout>

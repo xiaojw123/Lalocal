@@ -54,12 +54,12 @@ public class TouristAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 if(onTouristItemClickListener!=null){
-                    if(position==0){
+                   /* if(position==0){
                         onTouristItemClickListener.showTouristInfo(member,true);
                     }else {
                         onTouristItemClickListener.showTouristInfo(member,false);
-                    }
-
+                    }*/
+                    onTouristItemClickListener.showTouristInfo(member,false);
                 }
             }
         });

@@ -62,10 +62,12 @@
         android:layout_gravity="center"
         android:paddingLeft="@dimen/author_padding_25dp"
         android:paddingRight="@dimen/author_padding_25dp"
-        android:paddingTop="@dimen/live_padding_30dp"
+        android:paddingTop="@dimen/live_padding_20dp"
         android:textSize="@dimen/live_text_13sp"
+        android:maxLines="2"
+        android:ellipsize="end"
         android:textColor="@color/color_b3b3b3"
-        android:text="好久放假案发后发货客服回复返回房间号方式可恢复是方法安抚地方"/>
+        android:text="神秘人拒绝透露自己的个人简介！"/>
 
         <LinearLayout
             android:layout_width="match_parent"

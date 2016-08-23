@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:attr="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/live_attention_homepage"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.lalocal.lalocal.view.CustomTitleView
@@ -17,7 +18,7 @@
         android:id="@+id/line_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_me_title_height"
-        android:background="@color/color_f8">
+       >
         <View
             android:id="@+id/line_heheh"
             android:layout_width="match_parent"
@@ -99,7 +100,7 @@
                     android:id="@+id/homepage_attention_count_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10"/>
+                    android:text="0"/>
             </LinearLayout>
             <View
                 android:layout_width="0.5dp"
@@ -120,7 +121,7 @@
                     android:id="@+id/homepage_fans_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10"/>
+                    android:text="0"/>
             </LinearLayout>
         </LinearLayout>
         <View

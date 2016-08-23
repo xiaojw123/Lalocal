@@ -17,7 +17,7 @@ public class UserHelper {
     public static List<String> coupons=new ArrayList<>();
     static SharedPreferences sp;
     private static void initSPref(Context context) {
-        if (sp == null) {
+        if (sp == null&&context!=null) {
             sp = context.getSharedPreferences("userparams", Context.MODE_PRIVATE);
         }
     }

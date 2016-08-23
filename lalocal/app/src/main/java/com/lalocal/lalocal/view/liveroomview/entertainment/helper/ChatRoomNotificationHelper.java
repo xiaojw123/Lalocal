@@ -11,6 +11,7 @@ import java.util.List;
  * Created by android on 2016/7/29.
  */
 public class ChatRoomNotificationHelper {
+    public  static String content;
     public static String getNotificationText(ChatRoomNotificationAttachment attachment) {
         if (attachment == null) {
             return "";
@@ -63,8 +64,11 @@ public class ChatRoomNotificationHelper {
             case ChatRoomMemberTempMuteRemove:
                 text = buildText(targets, "被解除临时禁言");
                 break;
+            case AVChatRecord:
+                text=buildText(content);
+                break;
             default:
-                text = attachment.toString();
+                text = buildText(content);
                 break;
         }
 
@@ -109,11 +113,12 @@ public class ChatRoomNotificationHelper {
         return sb.toString();
     }
 
-    private static String buildText(String targets, String operate) {
+    public static String buildText(String targets, String operate) {
         return buildText(null, targets, operate);
     }
 
-    private static String buildText(String operate) {
+    public static String buildText(String operate) {
         return buildText(null, operate);
     }
+
 }

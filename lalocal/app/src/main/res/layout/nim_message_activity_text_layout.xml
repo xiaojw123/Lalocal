@@ -34,7 +34,6 @@
         android:layout_toRightOf="@+id/switchLayout"
         android:autoLink="all"
         android:background="@null"
-        android:gravity="center"
         android:hint="@string/input_edittext_hint"
         android:maxHeight="72dip"
         android:maxLines="4"

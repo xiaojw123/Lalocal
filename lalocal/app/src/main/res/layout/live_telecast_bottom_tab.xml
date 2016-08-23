@@ -22,7 +22,6 @@
         android:layout_height="@dimen/live_padding_30dp"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
-
         android:layout_marginRight="@dimen/live_padding_15dp"
         android:scaleType="centerCrop"
         android:src="@drawable/peopleliving_quit" />

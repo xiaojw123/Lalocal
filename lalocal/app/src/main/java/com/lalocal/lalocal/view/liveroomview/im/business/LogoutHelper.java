@@ -23,6 +23,7 @@ public class LogoutHelper {
         DemoCache.clear();
 
         NIMClient.getService(AuthService.class).logout();
+        DemoCache.setLoginStatus(false);
 
         // 启动登录
    //     LoginActivity.start(context, isKickOut);

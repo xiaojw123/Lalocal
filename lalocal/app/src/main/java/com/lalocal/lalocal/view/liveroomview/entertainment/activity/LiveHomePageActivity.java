@@ -2,11 +2,16 @@ package com.lalocal.lalocal.view.liveroomview.entertainment.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +60,9 @@ public class LiveHomePageActivity extends BaseActivity {
     LinearLayout homepageFansLayout;
     private ContentLoader contentLoader;
     private String userId;
+    private TextView popuCancel;
+    private TextView popuConfirm;
+    private PopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,13 +100,52 @@ public class LiveHomePageActivity extends BaseActivity {
                 if ("关注".equals(text)) {
                     contentLoader.getAddAttention(userId);
                 } else {
-                    contentLoader.getCancelAttention(userId);
+                    showAttentionPopuwindow(userId);
                 }
-
                 break;
         }
     }
 
+    private void showAttentionPopuwindow(final String userId) {
+        popupWindow = new PopupWindow(this);
+        View inflate = View.inflate(this, R.layout.live_attention_popu_layout, null);
+        popuCancel = (TextView) inflate.findViewById(R.id.live_attention_popu_cancel);
+        popuConfirm = (TextView) inflate.findViewById(R.id.live_attention_popu_confirm);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        popupWindow.setContentView(inflate);
+        popupWindow.setFocusable(true);
+        popupWindow.setAnimationStyle(R.style.AnimBottom);
+        ColorDrawable dw = new ColorDrawable();
+        popupWindow.setBackgroundDrawable(dw);
+        popupWindow.showAtLocation(this.findViewById(R.id.live_attention_homepage),
+                Gravity.BOTTOM, 0, 0);
+        backgroundAlpha(0.5f);
+        popuConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contentLoader.getCancelAttention(userId);
+            }
+        });
+        popuCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindow.dismiss();
+            }
+        });
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1f);
+            }
+        });
+    }
+    public void backgroundAlpha(float bgAlpha)
+    {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha;
+        getWindow().setAttributes(lp);
+    }
     private int attentionNum;
     private int fansNum;
     public class MyCallBack extends ICallBack {
@@ -131,6 +178,8 @@ public class LiveHomePageActivity extends BaseActivity {
                     masterAttention.setText("已关注");
                     masterAttention.setTextColor(Color.BLACK);
                 }
+            }else {
+              Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -155,6 +204,7 @@ public class LiveHomePageActivity extends BaseActivity {
         @Override
         public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
             super.onLiveCancelAttention(liveCancelAttention);
+            popupWindow.dismiss();
             if (liveCancelAttention.getReturnCode() == 0) {
                 Toast.makeText(LiveHomePageActivity.this, "已取消关注", Toast.LENGTH_SHORT).show();
                 masterAttention.setText("关注");

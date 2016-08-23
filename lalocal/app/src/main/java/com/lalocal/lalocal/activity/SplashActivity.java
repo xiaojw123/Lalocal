@@ -19,7 +19,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
-import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -28,6 +27,8 @@ import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -57,45 +58,56 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         setLoaderCallBack(new MyCallBack());
         mContentloader.versionUpdate(AppConfig.getVersionName(this));
         registerObservers(true);
+    //   loginIMService();
+
 
     }
 
     private void registerObservers(boolean register) {
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>(){
+
         @Override
         public void onEvent(StatusCode statusCode) {
-            if (statusCode.wontAutoLogin()) {
-                AppLog.i("TAG","NewsFragment:密码错误等");
-            }else if(statusCode.shouldReLogin()) {
-
-                final String imccId = UserHelper.getImccId(SplashActivity.this);
-                String imToken = UserHelper.getImToken(SplashActivity.this);
-                if (imccId != null || imToken != null) {
-                    AppLog.i("TAG","SplashActivity没有登录并走了这里1："+"imccId:"+imccId+"   imToken:"+imToken);
-                    NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
-                        @Override
-                        public void onSuccess(Object o) {
-                            AppLog.i("TAG", "SplashActivity,手动登录成功");
-                            DemoCache.setAccount(imccId);
-                        }
-
-                        @Override
-                        public void onFailed(int i) {
-                            AppLog.i("TAG", "SplashActivity,手动登录失败" + i);
-                        }
-
-                        @Override
-                        public void onException(Throwable throwable) {
-                            AppLog.i("TAG", "SplashActivity,手动登录失败2");
-                        }
-                    });
-                }
-            }
-
+            AppLog.i("TAG","監聽自動登錄狀態："+statusCode);
         }
     };
+    private void loginIMService() {
+        final String imccId = AuthPreferences.getUserAccount();
+        String imToken = AuthPreferences.getUserToken();
+        if (imccId != null || imToken != null) {
+            AppLog.i("TAG", "SplashActivity没有登录并走了这里1：" + "imccId:" + imccId + "   imToken:" + imToken);
+            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
+                @Override
+                public void onSuccess(Object o) {
+                    AppLog.i("TAG","splashactivity登錄成功");
+                    DemoCache.setAccount(imccId);
+                    DemoCache.getRegUserInfo();
+                    DemoCache.setLoginStatus(true);
+                    // 初始化消息提醒
+                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
+
+                    // 初始化免打扰
+                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
+                }
+
+                @Override
+                public void onFailed(int i) {
+                    AppLog.i("TAG", "SplashActivity,手动登录失败" + i);
+                    DemoCache.setLoginStatus(false);
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    AppLog.i("TAG", "SplashActivity,手动登录失败2");
+                    DemoCache.setLoginStatus(false);
+                }
+            });
+        }
+    }
+
+
 
     @Override
     public void onClick(View v) {

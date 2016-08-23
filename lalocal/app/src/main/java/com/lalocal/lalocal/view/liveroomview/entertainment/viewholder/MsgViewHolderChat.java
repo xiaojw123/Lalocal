@@ -1,10 +1,12 @@
 package com.lalocal.lalocal.view.liveroomview.entertainment.viewholder;
 
+import android.graphics.Color;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ImageSpan;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.ui.TViewHolder;
 import com.lalocal.lalocal.view.liveroomview.im.session.emoji.MoonUtil;
@@ -36,7 +38,14 @@ public class MsgViewHolderChat extends TViewHolder {
     protected void refresh(Object item) {
         message = (ChatRoomMessage) item;
         setNameTextView();
-        MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText, message.getContent(), ImageSpan.ALIGN_BOTTOM);
+        String content = message.getContent();
+        if("点赞".equals(content.trim())){
+            content="给主播点了个赞";
+            bodyText.setTextColor(Color.parseColor("#97d3e9"));
+        }else if("给主播点了个赞".equals(content.trim())){
+            bodyText.setTextColor(Color.parseColor("#97d3e9"));
+        }
+        MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BOTTOM);
         bodyText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
@@ -47,6 +56,10 @@ public class MsgViewHolderChat extends TViewHolder {
                 nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
             } else {
                 nameText.setText(DemoCache.getUserInfo() == null ? DemoCache.getAccount() : DemoCache.getUserInfo().getName());
+                AppLog.i("TAG","MsgViewHolderChat:getAccount:"+DemoCache.getAccount());
+                if(DemoCache.getUserInfo()!=null){
+                    AppLog.i("TAG","MsgViewHolderChat:getUserInfo:"+DemoCache.getUserInfo().getName());
+                }
             }
 
             if(message.getRemoteExtension() != null && message.getRemoteExtension().containsKey("type")) {

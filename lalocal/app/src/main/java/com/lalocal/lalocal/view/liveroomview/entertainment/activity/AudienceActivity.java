@@ -5,9 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,10 +22,10 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.liveroomview.entertainment.adapter.GiftAdapter;
 import com.lalocal.lalocal.view.liveroomview.entertainment.constant.GiftType;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.view.liveroomview.entertainment.module.GiftAttachment;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.EasyAlertDialogHelper;
 import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
 import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionDenied;
@@ -100,6 +100,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private PowerImageView loadingPageLayout;
     private TextView andiuence;
     public String annoucement;//公告
+    private SpecialShareVOBean shareVO;
+    private ImageView liveQuit;
 
 
     public static void start(Context context, String roomId, String url, String avatar, String nickName, String userId, SpecialShareVOBean shareVO, String type,String annoucement) {
@@ -114,6 +116,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         intent.putExtra(PLAYER_TYPE,type);
         Bundle mBundle = new Bundle();
         mBundle.putParcelable("shareVO",shareVO);
+        intent.putExtras(mBundle);
         intent.putExtra(LIVE_USER_ID,userId);
         context.startActivity(intent);
 
@@ -135,6 +138,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         avatar = getIntent().getStringExtra(AVATAR_AUDIENCE);
         playType = getIntent().getStringExtra(PLAYER_TYPE);
         annoucement = getIntent().getStringExtra(ANNOUCEMENT);
+        shareVO = getIntent().getParcelableExtra("shareVO");
     }
 
     private void initView() {
@@ -316,6 +320,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     protected void findViews() {
         super.findViews();
         controlLayout = findView(R.id.control_layout);
+        liveQuit = (ImageView) findViewById(R.id.live_quit);
         shareBtn = findView(R.id.share_btn);
         shareBtn.setVisibility(View.GONE);
         likeBtn = findView(R.id.like_btn);
@@ -338,10 +343,32 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         clickPraise.setOnClickListener(buttonClickListener);
         quit.setOnClickListener(buttonClickListener);
         inputChar.setOnClickListener(buttonClickListener);
+        liveQuit.setOnClickListener(buttonClickListener);
 
+        drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                liveQuit.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                liveQuit.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
-    // 初始化礼物布局
+  /*  // 初始化礼物布局
     protected void findGiftLayout() {
         super.findGiftLayout();
         sendGiftBtn = findView(R.id.send_gift_btn);
@@ -359,7 +386,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         });
 
     }
-
+*/
     protected  void updateUI(String nick){
         super.updateUI( nick);
         DrawableUtils.displayImg(this, maseterHead,avatar);
@@ -367,6 +394,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
+
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -386,24 +414,39 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     sendGift();
                     break;
                 case R.id.live_telecast_like:
-                    int[] locations = new int[2];
-                    v.getLocationOnScreen(locations);
-                    int x = locations[0];//获取组件当前位置的横坐标
-                    int y = locations[1];
-                    int i = DensityUtil.px2dip(AudienceActivity.this, x);
-                    AppLog.i("TAG","likeLocation:"+i+"    Y:"+y);
+                    int userId = UserHelper.getUserId(AudienceActivity.this);
+                    if(userId ==-1){
+                        showLoginViewDialog();
+                    }else {
+                        int[] locations = new int[2];
+                        v.getLocationOnScreen(locations);
+                        int x = locations[0];//获取组件当前位置的横坐标
+                        int y = locations[1];
+                        int i = DensityUtil.px2dip(AudienceActivity.this, x);
+                        AppLog.i("TAG","likeLocation:"+i+"    Y:"+y);
 
-                    periscopeLayout.addHeart();
-                    sendLike();
+                        periscopeLayout.addHeart();
+                        sendLike();
+                    }
+
                     break;
                 case R.id.live_telecast_quit:
                     finishLive();
                     break;
+                case R.id.live_quit:
+                    finishLive();
+                    break;
                 case R.id.live_telecast_input_text:
-                    keyboardLayout.setAlpha(1.0f);
-                    keyboardLayout.setClickable(true);
-                    liveSettingLayout.setVisibility(View.GONE);
-                    inputPanel.switchToTextLayout(true);
+                    int userId1 = UserHelper.getUserId(AudienceActivity.this);
+                    if(userId1==-1){
+                        showLoginViewDialog();
+                    }else {
+                        keyboardLayout.setAlpha(1.0f);
+                        keyboardLayout.setClickable(true);
+                        liveSettingLayout.setVisibility(View.GONE);
+                        inputPanel.switchToTextLayout(true);
+                    }
+
                     break;
             }
         }
@@ -498,7 +541,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     private void setMemberType(ChatRoomMessage message, String type) {
         Map<String, Object> ext = new HashMap<>();
-        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, UserHelper.getImccId(AudienceActivity.this));
+        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         if (chatRoomMember != null) {
             // ext.put("type", type);
             ext.put("type", chatRoomMember.getMemberType().getValue());
@@ -537,8 +580,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         loadingPageLayout.setVisibility(View.GONE);
         loadingPage.setVisibility(View.VISIBLE);
         andiuence.setVisibility(View.VISIBLE);
+        contentLoader.getLiveUserInfo(userId);
         inputPanel.collapse(true);
     }
+
+
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {

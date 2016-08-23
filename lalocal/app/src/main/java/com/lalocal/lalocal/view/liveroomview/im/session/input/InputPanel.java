@@ -274,6 +274,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         @Override
         public void onClick(View v) {
             if (v == sendMessageButtonInInputBar) {
+
                 onTextMessageSendButtonPressed(messageEditText.getText().toString());
             } else if (v == moreFuntionButtonInInputBar) {
                 toggleActionPanelLayout();
@@ -322,24 +323,19 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
             return;
         }
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
-            if(container.account!=null){
-                AppLog.i("TAG","onTextMessageSendButtonPressed:"+container.account);
-            }
+
             textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
-
-        } else {
-            textMessage = MessageBuilder.createTextMessage(container.account, container.sessionType, text);
-        }
-        if(isSelector){
-            if (container.proxy.sendMessage(textMessage,"1")) {
-                restoreText(true);
+            if(isSelector){
+                if (container.proxy.sendMessage(textMessage,"1")) {
+                    restoreText(true);
+                }
+            }else {
+                if (container.proxy.sendMessage(textMessage,"0")) {
+                    restoreText(true);
+                }
             }
-        }else {
-            if (container.proxy.sendMessage(textMessage,"0")) {
-                restoreText(true);
-            }
-        }
 
+        }
 
     }
 
@@ -407,8 +403,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     // 隐藏键盘布局
     public void hideInputMethod() {
         isKeyboardShowed = false;
+       if(isSelector){
+           isCheckBarrage++;
+       }
         uiHandler.removeCallbacks(showTextRunnable);
-
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(messageEditText.getWindowToken(), 0);
         messageEditText.clearFocus();

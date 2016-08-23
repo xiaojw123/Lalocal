@@ -182,7 +182,7 @@ public abstract class MsgViewHolderBase extends TViewHolder {
             alertButton.setVisibility(View.VISIBLE);
             break;
         case sending:
-            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
             alertButton.setVisibility(View.GONE);
             break;
         default:

@@ -41,7 +41,10 @@ public class AuthPreferences {
         editor.putString(key, value);
         editor.commit();
     }
-
+    public static  void clearUserInfo(){
+        saveString(KEY_USER_ACCOUNT,null);
+        saveString(KEY_USER_TOKEN,null);
+    }
     private static String getString(String key) {
         return getSharedPreferences().getString(key, null);
     }

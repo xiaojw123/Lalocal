@@ -259,6 +259,7 @@ public class ChatRoomMemberCache {
             case ChatRoomCommonRemove:
                 member.setMemberType(MemberType.GUEST);
                 break;
+
             default:
                 break;
         }

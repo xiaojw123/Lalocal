@@ -21,6 +21,21 @@
               android:layout_alignParentBottom="true"
               />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:layout_gravity="bottom"
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/live_quit"
+                android:layout_width="@dimen/live_padding_30dp"
+                android:layout_height="@dimen/live_padding_30dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/live_padding_15dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/peopleliving_quit" />
+        </LinearLayout>
+
         <include layout="@layout/live_loading_page"></include>
 
 

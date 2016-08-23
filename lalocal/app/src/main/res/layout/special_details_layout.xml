@@ -39,15 +39,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/special_details_margin"
                     android:src="@drawable/index_article_btn_share"/>
-                <!--  <ImageView
-                      android:id="@+id/special_details_like_iv"
-                      android:layout_width="@dimen/special_details_img_like"
-                      android:layout_height="@dimen/special_details_img_like"
-                      android:layout_centerVertical="true"
-                      android:layout_toLeftOf="@+id/special_details_share_iv"
-                      android:layout_marginRight="@dimen/special_details_margin"
-                      android:scaleType="fitXY"
-                      android:src="@drawable/index_article_btn_like"/>-->
+
 
                 <com.sackcentury.shinebuttonlib.ShineButton
                     android:layout_width="@dimen/special_details_img_like"

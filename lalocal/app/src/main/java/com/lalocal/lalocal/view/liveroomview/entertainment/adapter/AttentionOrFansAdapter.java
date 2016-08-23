@@ -70,6 +70,9 @@ public class AttentionOrFansAdapter extends BaseAdapter {
         if(status==2){
             viewHolder.attentionAttention.setText("已相互关注");
             viewHolder.attentionAttention.setTextColor(Color.parseColor("#666666"));
+        }else if(status==1){
+            viewHolder.attentionAttention.setText("已关注");
+            viewHolder.attentionAttention.setTextColor(Color.parseColor("#666666"));
         }
         if(description!=null&&description.length()>0){
             viewHolder.attentionSingture.setText(description);

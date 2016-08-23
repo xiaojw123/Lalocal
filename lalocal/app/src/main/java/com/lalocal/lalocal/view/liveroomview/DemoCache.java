@@ -18,10 +18,12 @@ public class DemoCache {
 
     private static NimUserInfo userInfo;
 
+    private static boolean isLogin;
+
     // 图片加载、缓存与管理组件
     private static ImageLoaderKit imageLoaderKit;
 
-    public static void clear() {
+    public static void    clear() {
         account = null;
         userInfo = null;
     }
@@ -41,7 +43,12 @@ public class DemoCache {
     public static void setContext(Context context) {
         DemoCache.context = context.getApplicationContext();
     }
-
+    public  static  boolean getLoginStatus(){
+        return isLogin;
+    }
+    public static void setLoginStatus(boolean isLogin){
+        DemoCache.isLogin=isLogin;
+    }
     public static NimUserInfo getUserInfo() {
         if (userInfo == null) {
             userInfo = NIMClient.getService(UserService.class).getUserInfo(account);
@@ -50,6 +57,10 @@ public class DemoCache {
         return userInfo;
     }
 
+    public static NimUserInfo getRegUserInfo(){
+        userInfo=NIMClient.getService(UserService.class).getUserInfo(account);
+        return  userInfo;
+    }
     public static ImageLoaderKit getImageLoaderKit() {
         return imageLoaderKit;
     }
