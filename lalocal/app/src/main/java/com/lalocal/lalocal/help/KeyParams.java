@@ -22,6 +22,6 @@ public interface KeyParams {
     public static final String IM_CCID="ccid";
     public static final String ORDDER_DETFAIL="orderdetail";
     public static  final  String AMOUNT_PRICE="amountprice";
-    public static final  String PAGE_ACTION ="orderaction";
+    public static final  String PRE_VIEW_PARAMS="previewparams";
 
 }

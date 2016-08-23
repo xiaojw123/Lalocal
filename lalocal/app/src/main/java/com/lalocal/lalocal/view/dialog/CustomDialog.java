@@ -13,6 +13,7 @@ import com.lalocal.lalocal.R;
 
 /**
  * Created by xiaojw on 2016/6/6.
+ * 关闭硬件加速CardView显示阴影会有问题
  */
 public class CustomDialog extends Dialog implements View.OnClickListener {
     TextView title_tv;
@@ -98,33 +99,18 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     public void setNeturalBtn(String text, CustomDialogListener listener) {
         neturalText = text;
         neutralBtnlistener = listener;
-//        if (neutral_btn != null) {
-//            neutral_btn.setText(neturalText);
-//            neutral_btn.setOnClickListener(this);
-//        }
 
     }
 
     public void setSurceBtn(String text, CustomDialogListener listener) {
         sureText = text;
         sureBtnLisener = listener;
-//        if (sure_btn != null) {
-//            sure_btn.setSelected(true);
-//            sure_btn.setText(sureText);
-//            sure_btn.setVisibility(View.VISIBLE);
-//            sure_btn.setOnClickListener(this);
-//        }
 
     }
 
     public void setCancelBtn(String text, CustomDialogListener listener) {
         cancelText = text;
         cancelBtnListener = listener;
-//        if (cancel_btn != null) {
-//            cancel_btn.setVisibility(View.VISIBLE);
-//            cancel_btn.setText(cancelText);
-//            cancel_btn.setOnClickListener(this);
-//        }
     }
 
     @Override

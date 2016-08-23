@@ -72,15 +72,6 @@
                 android:textSize="@dimen/text_size_15_sp" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/my_order_adult_container"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/my_order_adult_container_height"
-            android:layout_below="@+id/my_order_item_detail"
-            android:layout_marginTop="@dimen/my_order_adult_container_top"
-            android:orientation="vertical" />
-
-
         <TextView
             android:id="@+id/my_order_line2"
             style="@style/CommonD9LineTheme"
@@ -104,9 +95,9 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/my_order_toal"
             android:layout_toRightOf="@+id/my_order_toal"
-            android:textColor="@color/color_ff6f6f"
+            android:textColor="@color/color_ffaa2a"
             android:textSize="@dimen/text_size_15_sp"
-            android:textStyle="bold" />
+            />
         <!--支付，取消-->
         <Button
             android:id="@+id/my_order_pay_btn"
@@ -114,7 +105,6 @@
             android:layout_height="@dimen/my_order_pay_btn_height"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/my_order_line2"
-            android:layout_marginRight="@dimen/my_order_pay_btn_right"
             android:layout_marginTop="@dimen/my_order_pay_btn_top"
             android:background="@drawable/my_order_btn_bg"
             android:text="@string/payment"

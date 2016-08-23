@@ -135,7 +135,7 @@
     <dimen name="my_oder_img_height">61dp</dimen>
     <dimen name="my_oder_img_top">12dp</dimen>
     <dimen name="my_order_name_tv_left">12dp</dimen>
-    <dimen name="my_order_line2_top">151dp</dimen>
+    <dimen name="my_order_line2_top">131dp</dimen>
     <dimen name="my_order_pay_btn_width">60dp</dimen>
     <dimen name="my_order_pay_btn_height">29dp</dimen>
     <dimen name="my_order_pay_btn_right">12dp</dimen>
@@ -144,8 +144,7 @@
     <dimen name="my_order_adult_item_top">10dp</dimen>
     <dimen name="my_order_adult_container_height">64dp</dimen>
     <dimen name="order_service_right">16dp</dimen>
-    <dimen name="order_more_width">39dp</dimen>
-    <dimen name="order_more_right">15dp</dimen>
+    <dimen name="order_more_width">37dp</dimen>
     <dimen name="order_detail_height">110dp</dimen>
     <dimen name="order_detail_padding">15dp</dimen>
     <dimen name="order_detail_img_width">80dp</dimen>
@@ -161,8 +160,7 @@
     <dimen name="order_travel_person_title_right">15dp</dimen>
     <dimen name="order_pay_money_right">15dp</dimen>
     <dimen name="order_immediately_evaluate_btn_height">50dp</dimen>
-    <dimen name="order_immediately_evaluate_btn_top">92dp</dimen>
-    <dimen name="order_detail_cotainer_bottom">188dp</dimen>
+    <dimen name="order_immediately_evaluate_btn_top">40dp</dimen>
     <dimen name="triangle_drawable_width">10dp</dimen>
     <dimen name="triangle_drawable_height">3dp</dimen>
 

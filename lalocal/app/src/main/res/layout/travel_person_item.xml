@@ -7,40 +7,42 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
         android:layout_marginRight="@dimen/dimen_size_15_dp">
 
+
         <TextView
-            android:id="@+id/travel_person_fullname"
+            android:id="@+id/travel_person_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@drawable/travel_person_nam_ch_textcolor"
-            android:textSize="@dimen/text_size_16_sp"
             android:gravity="center_vertical"
-            />
+            android:text="小肖"
+            android:textColor="@drawable/travel_person_nam_ch_textcolor"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <ImageView
+            android:id="@+id/travel_person_leader_ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:visibility="invisible"
+            android:background="@drawable/teamleader_ic" />
+
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/travel_person_surname"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_size_15_dp"
-        android:layout_marginRight="@dimen/dimen_size_15_dp"
-        android:layout_marginTop="@dimen/dimen_size_10_dp"
-        android:textColor="@color/color_b3"
-        android:textSize="@dimen/text_size_12_sp"
-        android:gravity="center_vertical"
-        />
-    <TextView
-        android:id="@+id/travel_person_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_size_15_dp"
-        android:layout_marginRight="@dimen/dimen_size_15_dp"
-        android:textColor="@color/color_b3"
-        android:textSize="@dimen/text_size_12_sp"
-        android:gravity="center_vertical"
-        />
+
+    <!--<TextView-->
+        <!--android:id="@+id/travel_person_name_en"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="@dimen/dimen_size_15_dp"-->
+        <!--android:layout_marginRight="@dimen/dimen_size_15_dp"-->
+        <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="xiao xiao"-->
+        <!--android:textColor="@color/color_b3"-->
+        <!--android:textSize="@dimen/text_size_12_sp" />-->
 
     <View
         style="@style/CommonD9LineTheme"

@@ -39,6 +39,14 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+
+    public void onCancelSuccess(){
+
+    }
+    public void onDelSuccess(){
+
+    }
+
     public void onGetWelcomeImgs(WelcomeImg welcomeImg){
 
     }

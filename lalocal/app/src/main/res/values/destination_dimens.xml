@@ -64,6 +64,8 @@
     <dimen name="pay_to_btn_width">120dp</dimen>
     <dimen name="pay_order_title_width">255dp</dimen>
     <dimen name="order_pay_list_item_height">50dp</dimen>
+    <dimen name="more_function_container_width">110dp</dimen>
+
 
 
 

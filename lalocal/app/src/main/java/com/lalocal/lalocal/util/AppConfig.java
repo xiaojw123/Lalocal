@@ -298,6 +298,16 @@ public class AppConfig {
     public static String getPayUrl() {
         return baseUrl + "pay/charges";
     }
+    //取消订单
+    public static String getCancelOrderUrl(int orderId){
+        return  baseUrl+"orders/"+orderId+"/cancel";
+    }
+    //删除订单
+    public static String getDelOrderUrl(int orderId){
+        return  baseUrl+"orders/"+orderId;
+    }
+
+
 
 
 }

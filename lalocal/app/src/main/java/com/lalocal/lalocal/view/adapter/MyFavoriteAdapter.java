@@ -77,6 +77,9 @@ public class MyFavoriteAdapter extends BaseAdapter {
                 xListView.setPullLoadEnable(true);
                 holder = new ViewHolder();
                 convertView = inflater.inflate(R.layout.home_me_my_favorite_item, null);
+                if (position==0){
+                    convertView.setPadding(0,(int) context.getResources().getDimension(R.dimen.dimen_size_15_dp),0,0);
+                }
                 holder.type = (TextView) convertView.findViewById(R.id.my_favorite_item_type);
                 holder.photo = (ImageView) convertView.findViewById(R.id.my_favorite_item_img);
                 holder.title = (TextView) convertView.findViewById(R.id.my_favorite_item_title);

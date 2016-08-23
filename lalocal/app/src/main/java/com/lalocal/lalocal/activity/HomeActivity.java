@@ -30,8 +30,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         super.onCreate(savedInstanceState);
         AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
-        AppLog.print("memory size___" + Runtime.getRuntime().freeMemory());
-
         initView();
         UpdateHelper.getInstance().autoUpdate("com.lalocal.lalocal");
     }

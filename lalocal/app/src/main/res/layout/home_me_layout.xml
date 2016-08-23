@@ -4,13 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="@dimen/app_statusbar_height"
-    android:paddingBottom="@dimen/dimen_size_15_dp"
+    android:background="@color/white"
     >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/home_me_title_height"
-        android:background="@color/color_f8">
+        android:background="@color/color_f8"
+        >
 
         <ImageButton
             android:src="@drawable/home_me_setting"
@@ -75,8 +76,72 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/home_me_content_tab_height"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_marginTop="@dimen/home_me_content_tab_top_margin"
+        >
+        <LinearLayout
+            android:id="@+id/home_me_fans_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <View
+                style="@style/CommonD9LineTheme"
+                />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_content_tab_height"
+        android:orientation="horizontal"
+        >
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_favorite_fans_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/live_master_fans" />
+
+            <TextView
+                android:id="@+id/home_me_fans_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+        </com.lalocal.lalocal.view.CustomTabLayout>
+        <View
+            style="@style/CommonD9LineTheme"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/dimen_size_1_dp"
+            />
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_favorite_follow_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/live_master_attention" />
+
+            <TextView
+                android:id="@+id/home_me_follow_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+        </com.lalocal.lalocal.view.CustomTabLayout>
+        </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_content_tab_height"
         android:background="@drawable/home_me_content_tab_container_border"
         android:orientation="horizontal">
 
@@ -134,4 +199,6 @@
                 android:text="0" />
         </com.lalocal.lalocal.view.CustomTabLayout>
     </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>

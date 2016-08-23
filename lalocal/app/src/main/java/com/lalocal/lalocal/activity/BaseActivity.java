@@ -30,7 +30,10 @@ public class BaseActivity extends AppCompatActivity {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+
     }
+
 
 
     public void setLoaderCallBack(ICallBack callBack) {

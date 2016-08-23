@@ -100,6 +100,25 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
+    public void cancelOrder(int orderId){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.CANCEL_ORDER);
+        }
+        AppLog.print("cancelOrderUrl___"+AppConfig.getCancelOrderUrl(orderId));
+        ContentRequest request=new ContentRequest(Request.Method.PUT,AppConfig.getCancelOrderUrl(orderId),response,response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context),UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    public void delOrder(int orderId){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.DEL_ORDER);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.DELETE,AppConfig.getDelOrderUrl(orderId),response,response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context),UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+
 
     public void getWelcommenImgs() {
         if (callBack != null) {
@@ -619,6 +638,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
+        AppLog.print("获取产品详情———url———"+AppConfig.getProductDetailsUrl()+ targetId);
         ContentRequest contentRequest = new ContentRequest(AppConfig.getProductDetailsUrl() + targetId, response, response);
         requestQueue.add(contentRequest);
     }
@@ -763,7 +783,15 @@ public class ContentLoader {
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
+//            if ("com.android.volley.AuthFailureError".equals(volleyError.toString())){
+//                Intent intent=new Intent(context, LoginActivity.class);
+////                ((Activity)context).startActivityForResult(intent,100);
+//                ((Activity)context).startActivity(intent);
+//                ((Activity)context).finish();
+//
+//            }else{
             CommonUtil.showToast(context, "网络请求异常", Toast.LENGTH_LONG);
+//            }
         }
 
         @Override
@@ -794,6 +822,14 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.CANCEL_ORDER:
+                        AppLog.print("CANCEL_ORDER___"+json);
+                        callBack.onCancelSuccess();
+                        break;
+                    case RequestCode.DEL_ORDER:
+                        AppLog.print("DEL_ORDER___"+json);
+                        callBack.onDelSuccess();
+                        break;
                     case RequestCode.GET_WELCOME_IMGS:
                         AppLog.print("res___"+json);
                         responseGetWelcomeImgs(jsonObj);
@@ -850,6 +886,7 @@ public class ContentLoader {
                         responseGetOrderDetail(jsonObj);
                         break;
                     case RequestCode.GET_MY_ORDER:
+                        AppLog.print("get my order____"+json);
                         responseGetMyOrderItems(jsonObj);
                         break;
                     case RequestCode.GET_FAVORITE_ITEMS:
@@ -1681,6 +1718,8 @@ public class ContentLoader {
         int GET_ROUTE_DETAILS = 126;
         int GET_PAY_RESULT = 127;
         int GET_WELCOME_IMGS = 128;
+        int CANCEL_ORDER=129;
+        int DEL_ORDER=130;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

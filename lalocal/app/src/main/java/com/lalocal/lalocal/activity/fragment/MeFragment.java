@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -29,6 +28,8 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.LiveUserInfoResultBean;
+import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
@@ -42,6 +43,7 @@ import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
 import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
 import com.lalocal.lalocal.view.adapter.MyOrderAdapter;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveAttentionOrFansActivity;
 import com.lalocal.lalocal.view.xlistview.XListView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -60,9 +62,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     public static final String USER = "user";
     public static final String LOGIN_STATUS = "loginstatus";
     TextView username_tv, verified_tv;
-    TextView favoriteNum_tv, orderNum_tv, couponNum_tv;
+    TextView favoriteNum_tv, orderNum_tv, couponNum_tv,fansNum_tv,followNum_tv;
     ImageView headImg;
-    CustomTabLayout favorite_tab, order_tab, coupon_tab;
+    CustomTabLayout favorite_tab, order_tab, coupon_tab,fans_tab,follow_tab;
     ViewGroup lastSelectedView;
     ImageButton settingBtn;
     ContentLoader contentService;
@@ -72,6 +74,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     int defaultPageNumb = 1, defaultPageSize = 10;
     User user;
     XListView mListView;
+    LinearLayout fansContainer;
     MyFavoriteAdapter favoriteAdapter, emptfAdpater;
     MyCouponAdapter couponAdapter, emptcAdpater;
     MyOrderAdapter orderAdapter, emptoAdpater;
@@ -83,15 +86,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     List<String> lastFavorites = new ArrayList<>();
     List<String> lastOrders = new ArrayList<>();
     List<String> lastCopons = new ArrayList<>();
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            isDownRefresh = false;
-            mListView.stopRefresh();
-        }
-    };
-    //收藏数据是否需要  list
+
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -130,6 +126,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     }
 
     private void initView(View view) {
+        fansContainer= (LinearLayout) view.findViewById(R.id.home_me_fans_container);
         settingBtn = (ImageButton) view.findViewById(R.id.home_me_set_btn);
         headImg = (ImageView) view.findViewById(R.id.home_me_headportrait_img);
         verified_tv = (TextView) view.findViewById(R.id.home_me_verified);
@@ -137,6 +134,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         favorite_tab = (CustomTabLayout) view.findViewById(R.id.home_me_favorite_tab);
         order_tab = (CustomTabLayout) view.findViewById(R.id.home_me_order_tab);
         coupon_tab = (CustomTabLayout) view.findViewById(R.id.home_me_coupon_tab);
+        fans_tab= (CustomTabLayout) view.findViewById(R.id.home_me_favorite_fans_tab);
+        follow_tab= (CustomTabLayout) view.findViewById(R.id.home_me_favorite_follow_tab);
+        fansNum_tv= (TextView) view.findViewById(R.id.home_me_fans_num);
+        followNum_tv= (TextView) view.findViewById(R.id.home_me_follow_num);
         favoriteNum_tv = (TextView) view.findViewById(R.id.home_me_favorite_num);
         orderNum_tv = (TextView) view.findViewById(R.id.home_me_order_num);
         couponNum_tv = (TextView) view.findViewById(R.id.home_me_coupons_num);
@@ -147,6 +148,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         favorite_tab.setOnClickListener(meFragmentClickListener);
         order_tab.setOnClickListener(meFragmentClickListener);
         coupon_tab.setOnClickListener(meFragmentClickListener);
+        fans_tab.setOnClickListener(meFragmentClickListener);
+        follow_tab.setOnClickListener(meFragmentClickListener);
         setSelectedTab(favorite_tab);
     }
 
@@ -200,7 +203,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     mUserid = UserHelper.getUserId(getActivity());
                     mToken = UserHelper.getToken(getActivity());
                     contentService.getUserProfile(mUserid, mToken);
-                    if (order_tab.isSelected() && !lastOrders.equals(UserHelper.orders)) {
+//                    && !lastOrders.equals(UserHelper.orders)
+                    if (order_tab.isSelected()) {
                         contentService.getMyOrder(mUserid, mToken);
                     }
                     if (coupon_tab.isSelected() && !lastCopons.equals(UserHelper.coupons)) {
@@ -224,6 +228,18 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         public void onClick(View v) {
             int id = v.getId();
             switch (id) {
+                case R.id.home_me_favorite_fans_tab:
+                    Intent fansIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
+                    fansIntent.putExtra("liveType", "1");
+                    fansIntent.putExtra("userId",String.valueOf( UserHelper.getUserId(getActivity())));
+                    startActivity(fansIntent);
+                    break;
+                case R.id.home_me_favorite_follow_tab:
+                    Intent followIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
+                    followIntent.putExtra("liveType", "0");
+                    followIntent.putExtra("userId", String.valueOf( UserHelper.getUserId(getActivity())));
+                    startActivity(followIntent);
+                    break;
                 case R.id.home_me_favorite_tab:
                     if (v.isSelected()) {
                         return;
@@ -256,14 +272,14 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     mListView.setPullLoadEnable(false);
                     mListView.setAdapter(orderAdapter);
                     if (UserHelper.isLogined(getActivity())) {
-                        if (isFristOrder) {
-                            isFristOrder = false;
+//                        if (isFristOrder) {
+//                            isFristOrder = false;
                             contentService.getMyOrder(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
-                        } else {
-                            if (!lastOrders.equals(UserHelper.orders)) {
-                                contentService.getMyOrder(UserHelper.getUserId(getActivity()),UserHelper.getToken(getActivity()));
-                            }
-                        }
+//                        } else {
+//                            if (!lastOrders.equals(UserHelper.orders)) {
+//                                contentService.getMyOrder(UserHelper.getUserId(getActivity()),UserHelper.getToken(getActivity()));
+//                            }
+//                        }
 
                     } else {
                         orderAdapter = emptoAdpater;
@@ -382,8 +398,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 mToken = null;
             }
             contentService.getMyFavorite(mUserid, mToken, defaultPageNumb, defaultPageSize);
-//            if (favorite_tab.isSelected() && !lastFavorites.equals(UserHelper.favorites)) {
-//            }
         }
 
 
@@ -392,6 +406,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     private void updateFragmentView(boolean isLogined, User user) {
         this.user = user;
         if (isLogined && user != null) {
+            if (fansContainer.getVisibility()!=View.VISIBLE){
+                fansContainer.setVisibility(View.VISIBLE);
+            }
             mToken = user.getToken();
             mUserid = user.getId();
             String nickname = user.getNickName();
@@ -414,14 +431,14 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 
             }
-            if (coupon_tab.isSelected()) {
                 contentService.getMyCoupon(mUserid, mToken);
-            }
-            if (order_tab.isSelected()) {
                 contentService.getMyOrder(mUserid, mToken);
-            }
+            contentService.getLiveUserInfo(String.valueOf(mUserid));
 
         } else {
+            if (fansContainer.getVisibility()==View.VISIBLE){
+                fansContainer.setVisibility(View.GONE);
+            }
             username_tv.setActivated(false);
             username_tv.setText(getResources().getString(R.string.please_login));
             verified_tv.setVisibility(View.GONE);
@@ -448,18 +465,14 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     @Override
     public void onRefresh() {
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                isRefresh = false;
-                isDownRefresh = true;
-                if (UserHelper.isLogined(getActivity()) && user != null) {
-                    contentService.getUserProfile(user.getId(), user.getToken());
-                } else {
-                    handler.sendEmptyMessage(0);
-                }
-            }
-        }, 1000);
+        isRefresh = false;
+        isDownRefresh = true;
+        if (UserHelper.isLogined(getActivity()) && user != null) {
+            contentService.getUserProfile(user.getId(), user.getToken());
+        } else {
+            isDownRefresh=false;
+            mListView.stopRefresh();
+        }
 
     }
 
@@ -528,6 +541,11 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     class MeCallBack extends ICallBack {
         @Override
+        public void onCancelSuccess() {
+            contentService.getMyOrder(UserHelper.getUserId(getActivity()),UserHelper.getToken(getActivity()));
+        }
+
+        @Override
         public void onRequestFailed() {
             isRefresh = false;
         }
@@ -535,6 +553,13 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         @Override
         public void onLoginSucess(User user) {
             updateFragmentView(true, user);
+        }
+
+        @Override
+        public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
+            LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
+            followNum_tv.setText(String.valueOf(result.getAttentionNum()));
+            fansNum_tv.setText(String.valueOf(result.getFansNum()));
         }
 
         @Override
@@ -549,14 +574,18 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         @Override
         public void onGetCounponItem(List<Coupon> items) {
             couponNum_tv.setText(String.valueOf(items.size()));
-            setCouponAdapter(items);
+            if (coupon_tab.isSelected()){
+               setCouponAdapter(items);
+            }
         }
 
 
         @Override
         public void onGetOrderItem(List<OrderItem> items) {
             orderNum_tv.setText(String.valueOf(items.size()));
+            if (order_tab.isSelected()){
             setOrderAdpater(items);
+            }
         }
 
 
@@ -607,7 +636,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 }
             }
             if (isDownRefresh) {
-                handler.sendEmptyMessage(0);
+//                handler.sendEmptyMessage(0);
+                isDownRefresh=false;
+                mListView.stopRefresh();
             }
 
         }
@@ -632,6 +663,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         if (items.size() > 0) {
             if (orderAdapter == null) {
                 orderAdapter = new MyOrderAdapter(getActivity(), items);
+                orderAdapter.setContentLoader(contentService);
             } else {
                 orderAdapter.updateListView(items);
             }
