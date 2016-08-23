@@ -79,6 +79,7 @@ public class DestinationAreaActivity extends BaseActivity {
         unbinder = ButterKnife.bind(this);
         String areaName = getIntent().getStringExtra(AREA_NAME);
         destinationAreaTitle.setTitle(String.format(areaTile, areaName));
+        desAreaItemsXlv.setPullRefreshEnable(true);
         desAreaItemsXlv.setOnItemClickListener(areaDetailClickListener);
         setSeletedMenu(desAreanavMenuHot);
         intLoader();
@@ -193,8 +194,8 @@ public class DestinationAreaActivity extends BaseActivity {
                     desAreanavMenuHot.setVisibility(View.VISIBLE);
                 }
                 AppLog.print("get hot toalItems ___size___" + hotItems.size());
+                desAreaItemsXlv.setXListViewListener(this);
                 desAreaItemsXlv.setPullLoadEnable(false);
-                desAreaItemsXlv.setPullRefreshEnable(false);
                 desAreaItemsXlv.closeLoadMore();
                 if (hotAdapter == null) {
                     hotAdapter = new AreaDetailAdapter(DestinationAreaActivity.this, hotItems);
@@ -299,10 +300,9 @@ public class DestinationAreaActivity extends BaseActivity {
         }
 
         private void setAreaItemXlv() {
-            desAreaItemsXlv.setPullLoadEnable(true);
-            desAreaItemsXlv.setPullRefreshEnable(false);
-            desAreaItemsXlv.openLoadMore();
             desAreaItemsXlv.setXListViewListener(this);
+            desAreaItemsXlv.setPullLoadEnable(true);
+            desAreaItemsXlv.openLoadMore();
         }
 
 
@@ -318,7 +318,7 @@ public class DestinationAreaActivity extends BaseActivity {
 
         @Override
         public void onRefresh() {
-
+            desAreaItemsXlv.stopRefresh();
         }
 
         @Override

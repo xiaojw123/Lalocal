@@ -99,7 +99,8 @@ android {
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
     appKey "fa970dd98b61298053b6a9cb88597605"  //这里是你的 appKey
-    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
+    appSecret "76f72474a71536c759f78f82d2121c30"    //这里是你的 appSecret，管理员在设置页可以查看
+//    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
     mappingUploadEnabled true
 
     //网络跟踪功能配置(企业版)

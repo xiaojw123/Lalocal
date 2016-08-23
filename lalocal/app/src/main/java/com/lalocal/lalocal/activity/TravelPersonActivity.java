@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,22 +34,25 @@ public class TravelPersonActivity extends BaseActivity {
         AppLog.print("contact size___" + personsContact.size());
         LayoutInflater inflater = LayoutInflater.from(this);
         for (OrderDetail.PeopleItemListBean.ContactInfoListBean bean : personsContact) {
-            View itemView = inflater.inflate(R.layout.travel_person_item, persons_container, true);
-            TextView fullNameTv = (TextView) itemView.findViewById(R.id.travel_person_fullname);
-            TextView surnNameEnTv = (TextView) itemView.findViewById(R.id.travel_person_surname);
-            TextView nameEnTv = (TextView) itemView.findViewById(R.id.travel_person_name);
+            View itemView = inflater.inflate(R.layout.travel_person_item, persons_container, false);
+            ImageView leaderIc = (ImageView) itemView.findViewById(R.id.travel_person_leader_ic);
+            TextView nameChTv = (TextView) itemView.findViewById(R.id.travel_person_name);
             TextView mobileNumbTv = (TextView) itemView.findViewById(R.id.travel_person_mobile_numb);
             TextView emailTv = (TextView) itemView.findViewById(R.id.travel_person_email);
             TextView sexTv = (TextView) itemView.findViewById(R.id.travel_person_sex);
             List<OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean> contacts = bean.getItemList();
-            String fullName = "";
+            String enName = "";
             for (OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean contact : contacts) {
-                AppLog.print("contants_name_____" + contact.getName() + ",,,,, value...." + contact.getValue()+"_code___"+contact.getCode());
                 String value = contact.getValue();
                 switch (contact.getCode()) {
-                    case "-1": // isleader  1: true 0: false
-                        String sex = value == "1" ? "女" : "男";
-                        sexTv.setText(sex);
+                    case "7": // isleader  1: true 0: false
+                        sexTv.setText(value);
+                        break;
+                    case "-1":
+                        if ("1".equals(value)){
+                        nameChTv.setTextColor(getResources().getColor(R.color.color_ffaa2a));
+                        leaderIc.setVisibility(View.VISIBLE);
+                        }
                         break;
                     case "2":
                         emailTv.setText(value);
@@ -57,17 +61,21 @@ public class TravelPersonActivity extends BaseActivity {
                         mobileNumbTv.setText(value);
                         break;
                     case "0":
-                        surnNameEnTv.setText("姓(拼音)： "+value);
-                        fullName += value;
+                        enName += value;
                         break;
                     case "1":
-                        nameEnTv.setText("名(拼音)： "+value);
-                        fullName += "  " + value;
+                        enName += "  " + value;
                         break;
                 }
 
             }
-            fullNameTv.setText(fullName);
+            nameChTv.setText(enName);
+            if (leaderIc.getVisibility()==View.VISIBLE){
+                persons_container.addView(itemView,0);
+            }else{
+                persons_container.addView(itemView);
+            }
+
         }
 
 

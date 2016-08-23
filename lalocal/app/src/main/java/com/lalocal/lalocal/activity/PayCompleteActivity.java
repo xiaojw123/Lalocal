@@ -84,6 +84,7 @@ public class PayCompleteActivity extends BaseActivity {
                     Intent intent = new Intent(this, OrderActivity.class);
                     intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
                     startActivity(intent);
+                    finish();
                 }
                 break;
         }

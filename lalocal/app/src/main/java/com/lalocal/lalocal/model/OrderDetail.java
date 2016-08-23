@@ -55,7 +55,7 @@ public class OrderDetail implements Parcelable {
     private String createdTime;
     private String appraiseTime;
     private String payTime;
-    private String payType;
+    private int payType;
     private int status;
     private double couponValue;
     private int productionId;
@@ -100,7 +100,48 @@ public class OrderDetail implements Parcelable {
      */
 
     private List<ProduItemListBean> produItemList;
-    private List<?> orderQuestions;
+    private List<Question> orderQuestions;
+
+    public static class Question{
+
+
+        /**
+         * id : 511
+         * content : 请提供酒店英文名称、英文地址，电话
+         * answer : 天字一号
+         */
+
+        private int id;
+        private String content;
+        private String answer;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+        public String getAnswer() {
+            return answer;
+        }
+
+        public void setAnswer(String answer) {
+            this.answer = answer;
+        }
+    }
+
+
+
 
     public int getId() {
         return id;
@@ -182,11 +223,11 @@ public class OrderDetail implements Parcelable {
         this.payTime = payTime;
     }
 
-    public String getPayType() {
+    public int getPayType() {
         return payType;
     }
 
-    public void setPayType(String payType) {
+    public void setPayType(int payType) {
         this.payType = payType;
     }
 
@@ -326,11 +367,11 @@ public class OrderDetail implements Parcelable {
         this.produItemList = produItemList;
     }
 
-    public List<?> getOrderQuestions() {
+    public List<Question> getOrderQuestions() {
         return orderQuestions;
     }
 
-    public void setOrderQuestions(List<?> orderQuestions) {
+    public void setOrderQuestions(List<Question> orderQuestions) {
         this.orderQuestions = orderQuestions;
     }
 

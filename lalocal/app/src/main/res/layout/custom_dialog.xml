@@ -25,7 +25,8 @@
             android:layout_height="wrap_content"
             android:textColor="@color/color_1a"
             android:textSize="@dimen/text_size_17_sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
         <TextView
             android:id="@+id/custom_dialog_message"
@@ -35,7 +36,8 @@
             android:layout_marginRight="@dimen/custom_dialog_message_left"
             android:layout_marginTop="@dimen/custom_dialog_message_top_margin"
             android:textColor="@color/color_66"
-            android:textSize="@dimen/text_size_18_sp" />
+            android:textSize="@dimen/text_size_18_sp"
+            />
 
         <Button
             android:id="@+id/custom_neutral_btn"

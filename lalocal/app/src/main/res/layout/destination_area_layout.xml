@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lalocal.lalocal.activity.DestinationAreaActivity">
 <com.lalocal.lalocal.view.CustomTitleView
@@ -12,7 +13,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:lineVisible="false"
-    android:background="@color/white"
+
     />
 <include
     layout="@layout/search_view"

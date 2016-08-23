@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  */
 public class CommonUtil {
     private static double EARTH_RADIUS = 6378.137;
+    private  static  final  int READ_PHONE_STATE_CODE=112;
     /**
      * 根据两个位置的经纬度，来计算两地的距离（单位为KM）
      * 参数为String类型
@@ -85,6 +86,7 @@ public class CommonUtil {
 //        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
 //        return deviceUuid.toString();
     }
+
 
     public static boolean isEmpty(String str) {
         if (str == null || str.trim().length() < 1) {

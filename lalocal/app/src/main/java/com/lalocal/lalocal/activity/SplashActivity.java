@@ -1,14 +1,21 @@
 package com.lalocal.lalocal.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
@@ -42,6 +49,7 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
  */
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
     private static final int UPDATE_TIME = 0x001;
+    private  static  final  int READ_PHONE_STATE_CODE=112;
     ImageView startImg;
     ImageView welImg;
     TextView timeTv;
@@ -56,12 +64,47 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         startImg = (ImageView) findViewById(R.id.wel_start_img);
         timeTv.setOnClickListener(this);
         setLoaderCallBack(new MyCallBack());
-        mContentloader.versionUpdate(AppConfig.getVersionName(this));
         registerObservers(true);
+
     //   loginIMService();
 
 
+        if (Build.VERSION.SDK_INT>=23){
+            requestPhonePermission();
+        }else{
+            mContentloader.versionUpdate(AppConfig.getVersionName(this));
+        }
+
+
     }
+    public   void requestPhonePermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_PHONE_STATE},
+                    READ_PHONE_STATE_CODE);
+        }else{
+            mContentloader.versionUpdate(AppConfig.getVersionName(this));
+        }
+
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        doNext(requestCode,grantResults);
+    }
+    private void doNext(int requestCode, int[] grantResults) {
+        if (requestCode == READ_PHONE_STATE_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mContentloader.versionUpdate(AppConfig.getVersionName(this));
+            } else {
+                // Permission Denied
+                Toast.makeText(this,"权限被拒绝,请允许!",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
 
     private void registerObservers(boolean register) {
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);

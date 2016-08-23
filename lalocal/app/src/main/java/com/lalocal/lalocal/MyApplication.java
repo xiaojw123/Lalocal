@@ -89,6 +89,8 @@ public class MyApplication extends Application {
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
         }
+
+
     }
 
     @Override

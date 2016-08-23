@@ -145,7 +145,7 @@ public class PayActivity extends BaseActivity {
     private void showOrderDetail() {
         Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra(KeyParams.ORDER_ID, mOrderid);
-        intent.putExtra(KeyParams.PAGE_ACTION,OrderActivity.PRE_VIEW);
+        intent.putExtra(KeyParams.PRE_VIEW_PARAMS,true);
         startActivity(intent);
     }
 

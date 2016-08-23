@@ -143,6 +143,7 @@
 
     <string name="adapter_no_content">没有任何内容</string>
     <string name="pay">支付</string>
+    <string name="pay_amount">付款</string>
     <string name="pay_manner">支付方式</string>
     <string name="alipay">支付宝</string>
     <string name="xincheng_instalments">信诚分期付</string>
@@ -200,6 +201,13 @@
     <string name="name">姓名</string>
     <string name="view_order">查看订单</string>
     <string name="contacts">联系人</string>
+    <string name="supplementary_information">补充信息</string>
+    <string name="shuttle_location">接送地点</string>
+    <string name="shuttle_time">接送时间</string>
+    <string name="language_of_guide">导游语言</string>
+    <string name="pay_immediately">立即支付</string>
+    <string name="evaluate_immediately">立即评价</string>
+    <string name="evaluate">评价</string>
 
 
 </resources>

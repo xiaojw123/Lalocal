@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,56 +8,41 @@
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="com.lalocal.lalocal.activity.OrderActivity">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/app_actionbar_height"
-        android:background="@color/white">
-
         <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/orderdetail_title_ctv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title_name="@string/orderdetail" />
 
-        <TextView
-            android:id="@+id/order_service"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="@dimen/order_service_right"
-            android:layout_marginTop="@dimen/app_statusbar_height"
-            android:layout_toLeftOf="@+id/order_more"
-            android:drawableTop="@drawable/serviceicon"
-            android:paddingTop="@dimen/dimen_size_4_dp"
-            android:text="@string/service" />
-
-        <TextView
-            android:id="@+id/order_more"
+        <ImageView
+            android:id="@+id/order_more_img"
             android:layout_width="@dimen/order_more_width"
             android:layout_height="match_parent"
+            android:layout_alignTop="@+id/orderdetail_title_ctv"
+            android:layout_alignBottom="@+id/orderdetail_title_ctv"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="@dimen/app_statusbar_height"
-            android:gravity="top"
-            android:paddingRight="@dimen/order_more_right"
-            android:text="..."
-            android:textColor="@color/color_66"
-            android:textSize="@dimen/text_size_24_sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
+            android:paddingTop="@dimen/dimen_size_14_dp"
+            android:paddingBottom="@dimen/dimen_size_14_dp"
+            android:paddingEnd="@dimen/dimen_size_15_dp"
+            android:src="@drawable/morefuncation_ic"
+            />
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_below="@+id/orderdetail_title_ctv"
         android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/order_toalinfo_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="@dimen/order_detail_cotainer_bottom">
+           >
 
 
             <RelativeLayout
+                android:id="@+id/orderdetail_tiltle_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/order_detail_height"
                 android:background="@color/white"
@@ -74,21 +59,17 @@
                     android:id="@+id/order_detail_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/order_detail_title_left"
-                    android:layout_marginRight="@dimen/dimen_size_7_dp"
-                    android:layout_toLeftOf="@+id/order_arrow_right"
-                    android:layout_toRightOf="@+id/order_detail_img"
-                    android:textColor="@color/color_66"
-                    android:textSize="@dimen/text_size_15_sp" />
-
-                <ImageView
-                    android:id="@+id/order_arrow_right"
-                    android:layout_width="@dimen/arrow_right_width"
-                    android:layout_height="@dimen/arrow_right_height"
+                    android:layout_marginStart="@dimen/order_detail_title_left"
+                    android:layout_marginEnd="@dimen/dimen_size_15_dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/arrow_right"
-                    android:visibility="gone" />
+                    android:layout_toEndOf="@+id/order_detail_img"
+                    android:textColor="@color/color_66"
+                    android:textSize="@dimen/text_size_15_sp"
+                    android:ellipsize="end"
+                    android:layout_alignTop="@+id/order_detail_img"
+                    android:layout_alignBottom="@+id/order_detail_img"
+                    />
+
             </RelativeLayout>
 
             <View style="@style/CommonD9LineTheme" />
@@ -122,7 +103,9 @@
                     android:layout_marginLeft="@dimen/dimen_size_15_dp"
                     android:layout_marginRight="@dimen/dimen_size_15_dp"
                     android:layout_toRightOf="@+id/order_packages_choose"
-                    android:gravity="right" />
+                    android:gravity="right|center_vertical" />
+
+
 
                 <TextView
                     style="@style/OrderCardItemTextStyle"
@@ -135,8 +118,77 @@
                     style="@style/OrderCardItemTextStyle"
                     android:layout_alignRight="@+id/order_packages_intro"
                     android:layout_below="@+id/order_packages_intro"
-                    android:text="2016/06/17 08:05" />
+                    />
             </RelativeLayout>
+
+            <!--补充信息-->
+
+            <LinearLayout
+                android:id="@+id/orderdetail_additional_info_container"
+                style="@style/OrderCarditemContainerStyle"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/OrderCardItemIitleStyle"
+                    android:text="@string/supplementary_information" />
+
+                <View style="@style/CommonD9LineTheme" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp">
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/shuttle_location" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_shuttle_location_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp">
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/shuttle_time" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_shuttle_time_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp">
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/language_of_guide" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_guide_language_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+                </FrameLayout>
+                <!--问题1 2. 3.。。-->
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/order_contacts_container"
@@ -206,185 +258,244 @@
                 </FrameLayout>
             </LinearLayout>
 
-
             <LinearLayout
-                android:id="@+id/order_travel_people_container"
-                style="@style/OrderCarditemContainerStyle"
-                android:orientation="vertical">
+                android:id="@+id/order_preview_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dimen_size_15_dp"
+                android:orientation="vertical"
+                />
 
-                <FrameLayout
-                    android:id="@+id/order_person_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/order_travel_person_title_height"
-                    android:paddingRight="@dimen/order_travel_person_title_right">
+
+            <!--,Pre View forbiden-->
+            <LinearLayout
+                android:id="@+id/order_pay_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+
+                <LinearLayout
+                    android:id="@+id/order_travel_people_container"
+                    style="@style/OrderCarditemContainerStyle"
+                    android:orientation="vertical">
+
+                    <FrameLayout
+                        android:id="@+id/order_person_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/order_travel_person_title_height"
+                        android:paddingRight="@dimen/order_travel_person_title_right">
+
+                        <TextView
+                            style="@style/OrderCardItemIitleStyle"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/travel_person" />
+
+                        <TextView
+                            android:id="@+id/order_person_num_tv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:drawablePadding="@dimen/dimen_size_8_dp"
+                            android:drawableRight="@drawable/arrow_right" />
+                    </FrameLayout>
+
+                    <View style="@style/CommonD9LineTheme" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    style="@style/OrderCarditemContainerStyle"
+                    >
+
+                    <TextView
+                        android:id="@+id/pay_money_title"
+                        style="@style/OrderCardItemIitleStyle"
+                        android:text="@string/pay_money" />
+
+                    <TextView
+                        android:id="@+id/order_pay_money"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignTop="@+id/pay_money_title"
+                        android:layout_marginRight="@dimen/order_pay_money_right"
+                        android:textColor="@color/color_ffaa2a"
+                        android:textSize="@dimen/text_size_16_sp" />
+
+                    <View
+                        android:id="@+id/pay_money_line"
+                        style="@style/CommonD9LineTheme"
+                        android:layout_below="@+id/pay_money_title" />
+
+                    <LinearLayout
+                        android:id="@+id/order_pay_money_contaienr"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pay_money_line"
+                        android:orientation="vertical" />
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/orderdetail_orderinfo_container"
+                    style="@style/OrderCarditemContainerStyle"
+                    android:layout_marginBottom="@dimen/dimen_size_15_dp"
+                    android:orientation="vertical"
+                 >
 
                     <TextView
                         style="@style/OrderCardItemIitleStyle"
-                        android:layout_gravity="center_vertical"
-                        android:text="@string/travel_person" />
+                        android:text="@string/order_info" />
 
-                    <TextView
-                        android:id="@+id/order_person_num_tv"
-                        android:layout_width="wrap_content"
+                    <View style="@style/CommonD9LineTheme" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical|right"
-                        android:drawablePadding="@dimen/dimen_size_8_dp"
-                        android:drawableRight="@drawable/arrow_right" />
-                </FrameLayout>
+                        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                        android:layout_marginRight="@dimen/dimen_size_15_dp">
 
-                <View style="@style/CommonD9LineTheme" />
-            </LinearLayout>
+                        <TextView
+                            style="@style/OrderCardItemTextStyle"
+                            android:text="@string/order_number" />
 
-            <RelativeLayout
-                style="@style/OrderCarditemContainerStyle"
-                android:visibility="invisible">
+                        <TextView
+                            android:id="@+id/order_num_text"
+                            style="@style/OrderCardItemTextStyle"
+                            android:layout_gravity="right" />
+                    </FrameLayout>
 
-                <TextView
-                    android:id="@+id/pay_money_title"
-                    style="@style/OrderCardItemIitleStyle"
-                    android:text="@string/pay_money" />
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                        android:layout_marginRight="@dimen/dimen_size_15_dp">
 
-                <TextView
-                    android:id="@+id/order_pay_money"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/pay_money_title"
-                    android:layout_marginRight="@dimen/order_pay_money_right"
-                    android:textColor="@color/color_ffaa2a"
+                        <TextView
+                            style="@style/OrderCardItemTextStyle"
+                            android:text="@string/order_time" />
+
+                        <TextView
+                            android:id="@+id/order_created_time_text"
+                            style="@style/OrderCardItemTextStyle"
+                            android:layout_gravity="right" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/order_pay_time_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                        android:layout_marginRight="@dimen/dimen_size_15_dp">
+
+                        <TextView
+                            style="@style/OrderCardItemTextStyle"
+                            android:gravity="center_vertical"
+                            android:text="@string/pay_time" />
+
+                        <TextView
+                            android:id="@+id/order_pay_time_text"
+                            style="@style/OrderCardItemTextStyle"
+                            android:layout_gravity="right" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/order_pay_channel_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                        android:layout_marginRight="@dimen/dimen_size_15_dp">
+
+                        <TextView
+                            style="@style/OrderCardItemTextStyle"
+                            android:text="@string/pay_channel" />
+
+                        <TextView
+                            android:id="@+id/order_pay_channel_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="right|center_vertical"
+                            android:drawableRight="@drawable/arrow_right"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/color_ff6f6f"
+                            android:textSize="@dimen/text_size_15_sp"
+                            android:visibility="gone" />
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/order_evaluate_time_cotainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                        android:layout_marginRight="@dimen/dimen_size_15_dp"
+                        >
+
+                        <TextView
+                            style="@style/OrderCardItemTextStyle"
+                            android:gravity="center_vertical"
+                            android:text="@string/evaluate_time" />
+
+                        <TextView
+                            android:id="@+id/order_evaluate_time_text"
+                            style="@style/OrderCardItemTextStyle"
+                            android:layout_gravity="right" />
+
+                    </FrameLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/order_immediately_evaluate_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/order_immediately_evaluate_btn_height"
+                    android:layout_marginTop="@dimen/order_immediately_evaluate_btn_top"
+                    android:background="@color/color_ffaa2a"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
                     android:textSize="@dimen/text_size_16_sp" />
 
-                <View
-                    android:id="@+id/pay_money_line"
-                    style="@style/CommonD9LineTheme"
-                    android:layout_below="@+id/pay_money_title" />
 
-                <LinearLayout
-                    android:id="@+id/order_pay_money_contaienr"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/pay_money_line"
-                    android:orientation="vertical" />
-            </RelativeLayout>
-
-            <LinearLayout
-                style="@style/OrderCarditemContainerStyle"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    style="@style/OrderCardItemIitleStyle"
-                    android:text="@string/order_info" />
-
-                <View style="@style/CommonD9LineTheme" />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                    android:layout_marginRight="@dimen/dimen_size_15_dp">
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/order_number" />
-
-                    <TextView
-                        android:id="@+id/order_num_text"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="right" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                    android:layout_marginRight="@dimen/dimen_size_15_dp">
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/order_time" />
-
-                    <TextView
-                        android:id="@+id/order_created_time_text"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="right" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/order_pay_time_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                    android:layout_marginRight="@dimen/dimen_size_15_dp">
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:gravity="center_vertical"
-                        android:text="@string/pay_time" />
-
-                    <TextView
-                        android:id="@+id/order_pay_time_text"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="right" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/order_pay_channel_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                    android:layout_marginRight="@dimen/dimen_size_15_dp">
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/pay_channel" />
-
-                    <TextView
-                        android:id="@+id/order_pay_channel_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="right|center_vertical"
-                        android:drawableRight="@drawable/arrow_right"
-                        android:gravity="center_vertical"
-                        android:textColor="@color/color_ff6f6f"
-                        android:textSize="@dimen/text_size_15_sp"
-                        android:visibility="gone" />
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/order_evaluate_time_cotainer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                    android:layout_marginRight="@dimen/dimen_size_15_dp"
-                    android:visibility="invisible">
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:gravity="center_vertical"
-                        android:text="@string/evaluate_time" />
-
-                    <TextView
-                        android:id="@+id/order_evaluate_time_text"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="right" />
-
-                </FrameLayout>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/order_immediately_evaluate_btn"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/order_immediately_evaluate_btn_height"
-                android:layout_marginTop="@dimen/order_immediately_evaluate_btn_top"
-                android:background="@color/color_ffaa2a"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_16_sp"
-                android:visibility="gone" />
+        </LinearLayout>
         </LinearLayout>
 
 
     </ScrollView>
 
+    <!--<LinearLayout-->
+        <!--android:id="@+id/morefunction_container"-->
+        <!--android:layout_width="@dimen/more_function_container_width"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical"-->
+        <!--android:background="@drawable/longtap_btn_bg"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_below="@+id/orderdetail_title_ctv"-->
+        <!--android:layout_marginEnd="@dimen/dimen_size_5_dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:layout_marginTop="-10dp"-->
+        <!--android:paddingTop="@dimen/dimen_size_10_dp"-->
+        <!--android:paddingBottom="@dimen/dimen_size_10_dp"-->
+        <!--android:visibility="invisible"-->
+        <!--&gt;-->
+        <!--<TextView-->
+            <!--android:id="@+id/morefunction_cancel_order"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="@dimen/dimen_size_40_dp"-->
+            <!--android:text="取消订单"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:drawablePadding="@dimen/dimen_size_6_dp"-->
+            <!--android:drawableStart="@drawable/icon_clear"-->
+            <!--android:visibility="gone"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:id="@+id/morefunction_customer_sevice"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="@dimen/dimen_size_40_dp"-->
+            <!--android:text="在线客服"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:drawablePadding="@dimen/dimen_size_6_dp"-->
+            <!--android:drawableStart="@drawable/serviceicon_small"-->
+            <!--/>-->
 
-</LinearLayout>
+    <!--</LinearLayout>-->
+
+
+</RelativeLayout>
