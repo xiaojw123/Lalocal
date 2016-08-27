@@ -58,7 +58,6 @@
                     android:id="@+id/product_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
                     android:textSize="@dimen/text_size_20_sp"
                     android:textColor="@color/color_ffaa2a"/>
                 <TextView
@@ -144,7 +143,7 @@
                 android:orientation="vertical"
                 android:background="@android:color/white"
                 >
-
+\
             </LinearLayout>
 
             <LinearLayout

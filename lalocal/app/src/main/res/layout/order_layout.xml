@@ -12,7 +12,7 @@
             android:id="@+id/orderdetail_title_ctv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:title_name="@string/orderdetail" />
+           />
 
         <ImageView
             android:id="@+id/order_more_img"
@@ -103,7 +103,9 @@
                     android:layout_marginLeft="@dimen/dimen_size_15_dp"
                     android:layout_marginRight="@dimen/dimen_size_15_dp"
                     android:layout_toRightOf="@+id/order_packages_choose"
-                    android:gravity="right|center_vertical" />
+                    android:gravity="right|center_vertical"
+                    android:text="fafafafjlkj李发卡机了房间爱老费劲了啥方法就俺俩房间爱垃圾分类案发节流阀发送Safari发大发发"
+                    />
 
 
 
@@ -126,7 +128,9 @@
             <LinearLayout
                 android:id="@+id/orderdetail_additional_info_container"
                 style="@style/OrderCarditemContainerStyle"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
 
                 <TextView
                     style="@style/OrderCardItemIitleStyle"
@@ -135,17 +139,20 @@
                 <View style="@style/CommonD9LineTheme" />
 
                 <FrameLayout
+                    android:id="@+id/orderdetail_shuttle_setup_container"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_size_36_dp"
                     android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp">
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         style="@style/OrderCardItemTextStyle"
-                        android:text="@string/shuttle_location" />
+                        android:text="@string/shuttle_setup" />
 
                     <TextView
-                        android:id="@+id/orderdetail_shuttle_location_tv"
+                        android:id="@+id/orderdetail_shuttle_setup_tv"
                         style="@style/OrderCardItemTextStyle"
                         android:layout_gravity="end"
                         android:layout_marginStart="@dimen/dimen_size_36_dp" />
@@ -153,39 +160,78 @@
                 </FrameLayout>
 
                 <FrameLayout
+                    android:id="@+id/orderdetail_remark_container"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_size_36_dp"
                     android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp">
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         style="@style/OrderCardItemTextStyle"
-                        android:text="@string/shuttle_time" />
+                        android:text="@string/remark" />
 
                     <TextView
-                        android:id="@+id/orderdetail_shuttle_time_tv"
+                        android:id="@+id/orderdetail_shuttle_remark_tv"
                         style="@style/OrderCardItemTextStyle"
                         android:layout_gravity="end"
                         android:layout_marginStart="@dimen/dimen_size_36_dp" />
 
                 </FrameLayout>
-
                 <FrameLayout
+                    android:id="@+id/orderdetail_language_container"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_size_36_dp"
                     android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp">
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
 
                     <TextView
                         style="@style/OrderCardItemTextStyle"
-                        android:text="@string/language_of_guide" />
+                        android:text="@string/language" />
 
                     <TextView
-                        android:id="@+id/orderdetail_guide_language_tv"
+                        android:id="@+id/orderdetail_language_tv"
                         style="@style/OrderCardItemTextStyle"
                         android:layout_gravity="end"
                         android:layout_marginStart="@dimen/dimen_size_36_dp" />
                 </FrameLayout>
+                <!--<FrameLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/dimen_size_36_dp"-->
+                    <!--android:paddingEnd="@dimen/dimen_size_15_dp"-->
+                    <!--android:paddingStart="@dimen/dimen_size_15_dp">-->
+
+                    <!--<TextView-->
+                        <!--style="@style/OrderCardItemTextStyle"-->
+                        <!--android:text="@string/shuttle_time" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/orderdetail_shuttle_time_tv"-->
+                        <!--style="@style/OrderCardItemTextStyle"-->
+                        <!--android:layout_gravity="end"-->
+                        <!--android:layout_marginStart="@dimen/dimen_size_36_dp" />-->
+
+                <!--</FrameLayout>-->
+
+                <!--<FrameLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="@dimen/dimen_size_36_dp"-->
+                    <!--android:paddingEnd="@dimen/dimen_size_15_dp"-->
+                    <!--android:paddingStart="@dimen/dimen_size_15_dp">-->
+
+                    <!--<TextView-->
+                        <!--style="@style/OrderCardItemTextStyle"-->
+                        <!--android:text="@string/language_of_guide" />-->
+
+                    <!--<TextView-->
+                        <!--android:id="@+id/orderdetail_guide_language_tv"-->
+                        <!--style="@style/OrderCardItemTextStyle"-->
+                        <!--android:layout_gravity="end"-->
+                        <!--android:layout_marginStart="@dimen/dimen_size_36_dp" />-->
+                <!--</FrameLayout>-->
                 <!--问题1 2. 3.。。-->
             </LinearLayout>
 
@@ -225,7 +271,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_size_36_dp"
                     android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp">
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    >
 
                     <TextView
                         style="@style/OrderCardItemTextStyle"
@@ -243,11 +290,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dimen_size_36_dp"
                     android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp">
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    >
 
                     <TextView
                         style="@style/OrderCardItemTextStyle"
-                        android:text="@string/email" />
+                        android:text="@string/email"
+                        />
 
                     <TextView
                         android:id="@+id/orderdetail_contact_email_tv"
@@ -264,6 +313,7 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="@dimen/dimen_size_15_dp"
                 android:orientation="vertical"
+                android:visibility="gone"
                 />
 
 
@@ -279,7 +329,9 @@
                 <LinearLayout
                     android:id="@+id/order_travel_people_container"
                     style="@style/OrderCarditemContainerStyle"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    >
 
                     <FrameLayout
                         android:id="@+id/order_person_container"
@@ -419,7 +471,7 @@
                             android:gravity="center_vertical"
                             android:textColor="@color/color_ff6f6f"
                             android:textSize="@dimen/text_size_15_sp"
-                            android:visibility="gone" />
+                           />
                     </FrameLayout>
 
                     <FrameLayout
@@ -460,42 +512,6 @@
 
     </ScrollView>
 
-    <!--<LinearLayout-->
-        <!--android:id="@+id/morefunction_container"-->
-        <!--android:layout_width="@dimen/more_function_container_width"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"-->
-        <!--android:background="@drawable/longtap_btn_bg"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_below="@+id/orderdetail_title_ctv"-->
-        <!--android:layout_marginEnd="@dimen/dimen_size_5_dp"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:layout_marginTop="-10dp"-->
-        <!--android:paddingTop="@dimen/dimen_size_10_dp"-->
-        <!--android:paddingBottom="@dimen/dimen_size_10_dp"-->
-        <!--android:visibility="invisible"-->
-        <!--&gt;-->
-        <!--<TextView-->
-            <!--android:id="@+id/morefunction_cancel_order"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="@dimen/dimen_size_40_dp"-->
-            <!--android:text="取消订单"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:drawablePadding="@dimen/dimen_size_6_dp"-->
-            <!--android:drawableStart="@drawable/icon_clear"-->
-            <!--android:visibility="gone"-->
-            <!--/>-->
-        <!--<TextView-->
-            <!--android:id="@+id/morefunction_customer_sevice"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="@dimen/dimen_size_40_dp"-->
-            <!--android:text="在线客服"-->
-            <!--android:gravity="center_vertical"-->
-            <!--android:drawablePadding="@dimen/dimen_size_6_dp"-->
-            <!--android:drawableStart="@drawable/serviceicon_small"-->
-            <!--/>-->
-
-    <!--</LinearLayout>-->
 
 
 </RelativeLayout>

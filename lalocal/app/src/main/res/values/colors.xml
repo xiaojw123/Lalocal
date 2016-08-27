@@ -55,6 +55,7 @@
 
     <color name="ml_gray">#ff9e9e9e</color>
     <color name="black_70">#b2000000</color>
+    <color name="white_99">#90FFFFFF</color>
 
     <!--lalocal service chat -->
     <color name="common_bg">#fcfcfc</color>

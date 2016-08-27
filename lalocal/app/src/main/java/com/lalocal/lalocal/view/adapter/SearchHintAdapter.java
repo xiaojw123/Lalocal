@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -15,12 +16,14 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 /**
  * Created by xiaojw on 2016/7/19.
  */
-public class SearchHintAdapter extends BaseRecyclerAdapter{
+public class SearchHintAdapter extends BaseRecyclerAdapter {
     public static final int ITEM_HISTORY = 10;
     public static final int ITEM_HOT = 11;
     public static final int ITEM_HISTORY_TITLE = 12;
@@ -36,11 +39,10 @@ public class SearchHintAdapter extends BaseRecyclerAdapter{
         res = context.getResources();
     }
 
-    public void updateItems(List<SparseArray<String>> datas){
+    public void updateItems(List<SparseArray<String>> datas) {
         this.datas = datas;
         notifyDataSetChanged();
     }
-
 
 
     @Override
@@ -117,7 +119,7 @@ public class SearchHintAdapter extends BaseRecyclerAdapter{
                 public void onClick(View v) {
                     if (listener != null) {
                         v.setTag(value);
-                        listener.onItemClickListener(v,position);
+                        listener.onItemClickListener(v, position);
                     }
                 }
             });
@@ -137,9 +139,17 @@ public class SearchHintAdapter extends BaseRecyclerAdapter{
     }
 
     public void remove(int position) {
+        SparseArray<String> sp = datas.get(position);
+        if (sp != null) {
+            String value = sp.valueAt(0);
+            if (!TextUtils.isEmpty(value)) {
+                DataSupport.deleteAll(com.lalocal.lalocal.model.HistoryItem.class, "name=?", value);
+            }
+        }
         datas.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, getItemCount());
+
 
     }
 

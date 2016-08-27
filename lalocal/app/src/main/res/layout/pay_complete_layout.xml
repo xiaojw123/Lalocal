@@ -13,18 +13,17 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:title_name="@string/pay_complete" />
-
     <TextView
         android:id="@+id/pay_complete_service"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_alignTop="@+id/pay_complete_ctv"
         android:layout_alignBottom="@+id/pay_complete_ctv"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="@dimen/app_statusbar_height"
+        android:layout_marginEnd="@dimen/dimen_size_15_dp"
         android:drawableTop="@drawable/serviceicon"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/dimen_size_15_dp"
-        android:paddingTop="@dimen/dimen_size_4_dp"
+        android:gravity="center_horizontal"
+        android:paddingTop="@dimen/dimen_size_8_dp"
         android:text="@string/service" />
 
     <TextView
@@ -34,7 +33,6 @@
         android:layout_below="@+id/pay_complete_service"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dimen_size_25_dp"
-        android:text="¥ 1001,1"
         android:textColor="@color/color_1a"
         android:textSize="@dimen/text_size_36_sp" />
 
@@ -73,7 +71,7 @@
             android:id="@+id/pay_complete_good_name"
             style="@style/PayCompleteInfoStyle"
             android:layout_marginTop="@dimen/dimen_size_5_dp"
-            android:text="富士山温泉和御fafafafaffafafafas殿场奥特莱斯一日游场奥特莱斯" />
+            />
 
         <TextView
             android:layout_width="wrap_content"

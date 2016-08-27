@@ -196,7 +196,9 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".activity.SearchActivity"
+            android:hardwareAccelerated="false"
+            />
         <activity android:name=".test.TestActivity">
         </activity>
         <activity

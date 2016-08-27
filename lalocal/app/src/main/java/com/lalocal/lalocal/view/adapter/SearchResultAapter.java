@@ -53,7 +53,8 @@ public class SearchResultAapter extends BaseRecyclerAdapter {
             case MODE_TYPE_TITLE:
                 TextView title = new TextView(mContext);
                 title.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) res.getDimension(R.dimen.search_history_title_Height)));
-                title.setTextColor(res.getColor(R.color.color_b3));
+//                title.setTextColor(res.getColor(R.color.color_b3));
+                title.setTextColor(res.getColor(R.color.black));
                 title.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_size_12_sp));
                 title.setGravity(Gravity.CENTER_VERTICAL);
                 return new TitleHolder(title);
@@ -101,7 +102,9 @@ public class SearchResultAapter extends BaseRecyclerAdapter {
                 } else if (holder instanceof ProductHolder) {
                     DrawableUtils.displayImg(mContext, ((ProductHolder) holder).photo, item.getPhoto());
                     ((ProductHolder) holder).title.setText(item.getTitle());
-                    ((ProductHolder) holder).price.setText(CommonUtil.formartOrderPrice( ((ProductItem) item).getPrice()));
+                    String text=CommonUtil.fomartStartOrderPrice( ((ProductItem) item).getPrice());
+                    int len=text.length();
+                    ((ProductHolder) holder).price.setText(CommonUtil.getSpannelStyle(mContext,text,R.style.SearchOrderPriceStyle,len-1,len));
                 } else if (holder instanceof RouteHolder) {
                     DrawableUtils.displayImg(mContext, ((RouteHolder) holder).photo, item.getPhoto());
                     ((RouteHolder) holder).title.setText(item.getTitle());

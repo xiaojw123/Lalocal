@@ -11,8 +11,10 @@ import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.SearchItem;
@@ -58,8 +60,8 @@ public class DestinationAreaActivity extends BaseActivity {
     LinearLayout desAreaMenunavContainer;
     @BindView(R.id.des_area_items_xlv)
     XListView desAreaItemsXlv;
-    @BindView(R.id.loading_page)
-    LinearLayout loadingPage;
+    @BindView(R.id.content_page_loading)
+    View loadingPage;
     int areaId;
     String areaTile = "%1$s地区";
     ContentLoader loader;
@@ -70,6 +72,8 @@ public class DestinationAreaActivity extends BaseActivity {
     List<SearchItem> routeItems = new ArrayList<>();
     AreaDetailAdapter hotAdapter, strategyAdpater, packageAdpater, freeAdpater, localAdapter;
     SiftPoupWindow poupWindow;
+    @BindView(R.id.destination_area_emptv)
+    TextView destinationAreaEmpView;
 
 
     @Override
@@ -90,8 +94,8 @@ public class DestinationAreaActivity extends BaseActivity {
         loader.setCallBack(new AreaCallBack());
         areaId = getIntent().getIntExtra(AREA_ID, -1);
         isHotLoading = true;
-        loader.getHotRoutes(areaId);
         loader.getHotProducts(areaId);
+        loader.getHotRoutes(areaId);
         loader.getDesAreaRoutes(10, 1, areaId, 2);
         loader.getAreaProducts(10, 1, areaId, 0, -1);
         loader.getAreaProducts(10, 1, areaId, 1, -1);
@@ -138,12 +142,6 @@ public class DestinationAreaActivity extends BaseActivity {
         unbinder.unbind();
     }
 
-    public void clearItems() {
-        if (toalItems != null && toalItems.size() > 0) {
-            toalItems.clear();
-        }
-    }
-
 
     class AreaCallBack extends ICallBack implements XListView.IXListViewListener {
 
@@ -155,10 +153,11 @@ public class DestinationAreaActivity extends BaseActivity {
 
         @Override
         public void onGetHotItems(List<SearchItem> items, int type) {
-            if (loadingPage!=null&&loadingPage.getVisibility() == View.VISIBLE) {
-                loadingPage.setVisibility(View.GONE);
+            if (!desAreanavMenuHot.isSelected()) {
+                return;
             }
-            AppLog.print("onGetHotItems  item size___"+items.size());
+            hidenLoadingView();
+            AppLog.print("onGetHotItems  item size___" + items.size());
             if (type == AreaDetailAdapter.MODULE_TYPE_PRODUCT) {
                 if (items.size() > 0) {
                     SearchItem productTile = new SearchItem();
@@ -181,15 +180,17 @@ public class DestinationAreaActivity extends BaseActivity {
             if (hotItems.size() > 0) {
                 hotItems.clear();
             }
-            AppLog.print("routeItems size__"+routeItems.size()+",, productItems__"+productItems.size());
+            AppLog.print("routeItems size__" + routeItems.size() + ",, productItems__" + productItems.size());
 
-            if (routeItems.size() > 0) {
-                hotItems.addAll(routeItems);
-            }
+
             if (productItems.size() > 0) {
                 hotItems.addAll(productItems);
             }
+            if (routeItems.size() > 0) {
+                hotItems.addAll(routeItems);
+            }
             if (hotItems.size() > 0) {
+                hidenEmptView();
                 if (desAreanavMenuHot.getVisibility() != View.VISIBLE) {
                     desAreanavMenuHot.setVisibility(View.VISIBLE);
                 }
@@ -202,20 +203,42 @@ public class DestinationAreaActivity extends BaseActivity {
                     hotAdapter.setPageType(AreaDetailAdapter.PAGE_HOT);
                     desAreaItemsXlv.setAdapter(hotAdapter);
                 } else {
-                    hotAdapter.setPageType(AreaDetailAdapter.PAGE_HOT);
                     hotAdapter.updateItems(hotItems);
                 }
+            } else {
+                showEmptView();
+            }
+        }
+
+        public void hidenEmptView() {
+            if (destinationAreaEmpView != null && destinationAreaEmpView.getVisibility() == View.VISIBLE) {
+                destinationAreaEmpView.setVisibility(View.GONE);
+            }
+
+        }
+
+        public void showEmptView() {
+            if (destinationAreaEmpView != null && destinationAreaEmpView.getVisibility() != View.VISIBLE) {
+                destinationAreaEmpView.setVisibility(View.VISIBLE);
             }
         }
 
         @Override
-        public void onRequestFailed() {
+        public void onRequestFailed(VolleyError error) {
+            hidenLoadingView();
+            showEmptView();
             isLoadMore = false;
             isHotLoading = false;
         }
 
         @Override
-        public void onGetAreaItems(int pageNumber, int totalPages, List<SearchItem> items, int type) {
+        public void onResponseFailed() {
+            showEmptView();
+        }
+
+        @Override
+        public void onGetAreaItems(int pageNumber, int totalPages, List<SearchItem> items, int type, int collectionId) {
+            hidenLoadingView();
             AppLog.print("getareaItems___type___" + type + ", itemsize___" + items.size());
             this.pageNumber = pageNumber;
             this.toalPages = totalPages;
@@ -225,23 +248,26 @@ public class DestinationAreaActivity extends BaseActivity {
                 toalItems.clear();
             }
             toalItems.addAll(items);
-
-
             switch (type) {
                 case 0:
                     if (toalItems.size() > 0) {
                         if (desAreanavMenuPackagetour.getVisibility() != View.VISIBLE) {
                             desAreanavMenuPackagetour.setVisibility(View.VISIBLE);
                         } else {
-                            setAreaItemXlv();
-                            if (packageAdpater == null) {
-                                packageAdpater = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
-
-                                setItemType(packageAdpater, type);
-                                desAreaItemsXlv.setAdapter(packageAdpater);
-                            } else {
-                                setItemType(packageAdpater, type);
-                                packageAdpater.updateItems(toalItems);
+                            if (desAreanavMenuPackagetour.isSelected()) {
+                                hidenEmptView();
+                                setAreaItemXlv();
+                                if (packageAdpater == null) {
+                                    packageAdpater = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
+                                    setItemType(packageAdpater, type);
+                                    desAreaItemsXlv.setAdapter(packageAdpater);
+                                } else {
+                                    setItemType(packageAdpater, type);
+                                    if (pageNumber <= 1) {
+                                        desAreaItemsXlv.setAdapter(packageAdpater);
+                                    }
+                                    packageAdpater.updateItems(toalItems);
+                                }
                             }
                         }
                     }
@@ -251,14 +277,21 @@ public class DestinationAreaActivity extends BaseActivity {
                         if (desAreanavMenuFreewarker.getVisibility() != View.VISIBLE) {
                             desAreanavMenuFreewarker.setVisibility(View.VISIBLE);
                         } else {
-                            setAreaItemXlv();
-                            if (freeAdpater == null) {
-                                freeAdpater = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
-                                setItemType(freeAdpater, type);
-                                desAreaItemsXlv.setAdapter(freeAdpater);
-                            } else {
-                                setItemType(freeAdpater, type);
-                                freeAdpater.updateItems(toalItems);
+                            if (desAreanavMenuFreewarker.isSelected()) {
+                                hidenEmptView();
+                                setAreaItemXlv();
+                                if (freeAdpater == null) {
+                                    freeAdpater = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
+                                    setItemType(freeAdpater, type);
+                                    desAreaItemsXlv.setAdapter(freeAdpater);
+                                } else {
+                                    setItemType(freeAdpater, type);
+//                                updateListView(freeAdpater,toalItems);
+                                    if (pageNumber <= 1) {
+                                        desAreaItemsXlv.setAdapter(freeAdpater);
+                                    }
+                                    freeAdpater.updateItems(toalItems);
+                                }
                             }
                         }
                     }
@@ -268,34 +301,61 @@ public class DestinationAreaActivity extends BaseActivity {
                         if (desAreanavMenuStrategy.getVisibility() != View.VISIBLE) {
                             desAreanavMenuStrategy.setVisibility(View.VISIBLE);
                         } else {
-                            setAreaItemXlv();
-                            if (strategyAdpater == null) {
-                                strategyAdpater = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
-                                setItemType(strategyAdpater, type);
-                                desAreaItemsXlv.setAdapter(strategyAdpater);
-                            } else {
-                                setItemType(strategyAdpater, type);
-                                strategyAdpater.updateItems(toalItems);
+                            if (desAreanavMenuStrategy.isSelected()) {
+                                hidenEmptView();
+                                setAreaItemXlv();
+                                if (strategyAdpater == null) {
+                                    strategyAdpater = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
+                                    setItemType(strategyAdpater, type);
+                                    desAreaItemsXlv.setAdapter(strategyAdpater);
+                                } else {
+                                    setItemType(strategyAdpater, type);
+//                                updateListView(strategyAdpater,toalItems);
+                                    if (pageNumber <= 1) {
+                                        desAreaItemsXlv.setAdapter(strategyAdpater);
+                                    }
+                                    strategyAdpater.updateItems(toalItems);
+                                }
                             }
                         }
                     }
                     break;
                 case -1:
-                    AppLog.print("onGetAreaItems____-1");
-                    if (toalItems.size() > 0) {
-                        setAreaItemXlv();
-                        if (localAdapter == null) {
-                            localAdapter = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
-                            setItemType(localAdapter, type);
-                            desAreaItemsXlv.setAdapter(localAdapter);
+                    if (desAreanavMenuLacoalplay.isSelected()) {
+                        if (toalItems.size() > 0) {
+                            hidenEmptView();
+                            setAreaItemXlv();
+                            if (localAdapter == null) {
+                                localAdapter = new AreaDetailAdapter(DestinationAreaActivity.this, toalItems);
+                                setItemType(localAdapter, type);
+                                desAreaItemsXlv.setAdapter(localAdapter);
+                            } else {
+                                setItemType(localAdapter, type);
+                                if (pageNumber <= 1) {
+                                    desAreaItemsXlv.setAdapter(localAdapter);
+                                }
+                                localAdapter.updateItems(toalItems);
+                            }
+                            localAdapter.setCollectionId(collectionId);
                         } else {
-                            setItemType(localAdapter, type);
-                            localAdapter.updateItems(toalItems);
+                            showEmptView();
                         }
                     }
                     break;
             }
 
+
+        }
+
+        public void updateListView(AreaDetailAdapter areaAdapter, List<SearchItem> items) {
+            ListAdapter adapter = ((HeaderViewListAdapter) desAreaItemsXlv.getAdapter()).getWrappedAdapter();
+            AppLog.print("adpater___" + adapter);
+            AppLog.print("areaAdapter____" + areaAdapter);
+            AppLog.print("____=====___" + (areaAdapter == adapter));
+            areaAdapter.updateItems(items);
+            if (areaAdapter != adapter) {
+                desAreaItemsXlv.setAdapter(areaAdapter);
+            }
 
         }
 
@@ -313,6 +373,8 @@ public class DestinationAreaActivity extends BaseActivity {
                 adapter.setPageType(AreaDetailAdapter.PAGE_FREEWARKER);
             } else if (type == 2) {
                 adapter.setPageType(AreaDetailAdapter.PAGE_STRATEGY);
+            } else if (type == -1) {
+                adapter.setPageType(AreaDetailAdapter.PAGE_LOCAL);
             }
         }
 
@@ -338,6 +400,9 @@ public class DestinationAreaActivity extends BaseActivity {
                         break;
                     case AreaDetailAdapter.PAGE_PACKAGETOUR:
                         loader.getAreaProducts(10, numb, areaId, 0, -1);
+                        break;
+                    case AreaDetailAdapter.PAGE_LOCAL:
+                        loader.getAreaProducts(10, numb, areaId, -1, adapter.getCollectionId());
                         break;
                 }
 
@@ -385,8 +450,7 @@ public class DestinationAreaActivity extends BaseActivity {
 
     @OnClick({R.id.des_areanav_menu_hot, R.id.des_areanav_menu_strategy, R.id.des_areanav_menu_packagetour, R.id.des_areanav_menu_freewarker, R.id.des_areanav_menu_lacoalplay})
     public void onClick(View view) {
-        clearItems();
-        AppLog.print("onclick____toalItems_size__" + toalItems.size());
+//        clearItems();
         switch (view.getId()) {
             case R.id.des_areanav_menu_lacoalplay:
                 setSeletedMenu(desAreanavMenuLacoalplay);
@@ -399,21 +463,24 @@ public class DestinationAreaActivity extends BaseActivity {
 
             case R.id.des_areanav_menu_hot:
                 setSeletedMenu(desAreanavMenuHot);
+                showLoadingView();
                 isHotLoading = true;
-                if (routeItems.size() > 0) {
-                    routeItems.clear();
-                }
+
                 if (productItems.size() > 0) {
                     productItems.clear();
+                }
+                if (routeItems.size() > 0) {
+                    routeItems.clear();
                 }
                 if (hotAdapter != null) {
                     desAreaItemsXlv.setAdapter(hotAdapter);
                 }
-                loader.getHotRoutes(areaId);
                 loader.getHotProducts(areaId);
+                loader.getHotRoutes(areaId);
                 break;
             case R.id.des_areanav_menu_strategy:
                 setSeletedMenu(desAreanavMenuStrategy);
+                showLoadingView();
                 if (strategyAdpater != null) {
                     desAreaItemsXlv.setAdapter(strategyAdpater);
                 }
@@ -421,6 +488,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 break;
             case R.id.des_areanav_menu_packagetour:
                 setSeletedMenu(desAreanavMenuPackagetour);
+                showLoadingView();
                 if (packageAdpater != null) {
                     desAreaItemsXlv.setAdapter(packageAdpater);
                 }
@@ -428,6 +496,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 break;
             case R.id.des_areanav_menu_freewarker:
                 setSeletedMenu(desAreanavMenuFreewarker);
+                showLoadingView();
                 if (freeAdpater != null) {
                     desAreaItemsXlv.setAdapter(freeAdpater);
                 }
@@ -448,11 +517,25 @@ public class DestinationAreaActivity extends BaseActivity {
             poupWindow.dismiss();
             SiftModle item = (SiftModle) view.getTag();
             if (item != null) {
+                showLoadingView();
                 desAreanavMenuLacoalplay.setText(item.getName());
                 loader.getAreaProducts(10, 1, areaId, -1, item.getId());
             }
 
         }
     };
+
+    public void showLoadingView() {
+        if (loadingPage != null && loadingPage.getVisibility() != View.VISIBLE) {
+            loadingPage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void hidenLoadingView() {
+        if (loadingPage != null && loadingPage.getVisibility() == View.VISIBLE) {
+            loadingPage.setVisibility(View.GONE);
+        }
+    }
+
 
 }

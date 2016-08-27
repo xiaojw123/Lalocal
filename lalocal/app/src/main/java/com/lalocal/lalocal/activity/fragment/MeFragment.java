@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.ArticleActivity;
@@ -418,8 +419,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             if (fansContainer.getVisibility()!=View.VISIBLE){
                 fansContainer.setVisibility(View.VISIBLE);
             }
-            mToken = user.getToken();
-            mUserid = user.getId();
+//            mToken = user.getToken();
+//            mUserid = user.getId();
+            mToken=UserHelper.getToken(getActivity());
+            mUserid=UserHelper.getUserId(getActivity());
             String nickname = user.getNickName();
             if (!TextUtils.isEmpty(nickname)) {
                 username_tv.setActivated(true);
@@ -440,8 +443,8 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 
             }
-                contentService.getMyCoupon(mUserid, mToken);
                 contentService.getMyOrder(mUserid, mToken);
+//                contentService.getMyCoupon(mUserid, mToken);
             contentService.getLiveUserInfo(String.valueOf(mUserid));
 
         } else {
@@ -555,9 +558,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         }
 
         @Override
-        public void onRequestFailed() {
+        public void onRequestFailed(VolleyError volleyError) {
             isRefresh = false;
         }
+
 
         @Override
         public void onLoginSucess(User user) {
@@ -634,16 +638,17 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         //只刷新验证状态————
         @Override
         public void onGetUserProfile(LoginUser user) {
-            if (user != null) {
-                if (user.getStatus() == 0) {
-                    verified_tv.setActivated(true);
-
-                    verified_tv.setText(getResources().getString(R.string.verified));
-                } else {
-                    verified_tv.setActivated(false);
-                    verified_tv.setText(getResources().getString(R.string.no_verified));
-                }
-            }
+            updateFragmentView(true,user);
+//            if (user != null) {
+//                if (user.getStatus() == 0) {
+//                    verified_tv.setActivated(true);
+//
+//                    verified_tv.setText(getResources().getString(R.string.verified));
+//                } else {
+//                    verified_tv.setActivated(false);
+//                    verified_tv.setText(getResources().getString(R.string.no_verified));
+//                }
+//            }
             if (isDownRefresh) {
 //                handler.sendEmptyMessage(0);
                 isDownRefresh=false;

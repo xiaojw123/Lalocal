@@ -508,7 +508,13 @@
         <item name="android:textColor">@color/color_1a</item>
         <item name="android:textSize">@dimen/text_size_36_sp</item>
     </style>
-    
+
+    <style name="SearchOrderPriceStyle">
+        <item name="android:textSize">@dimen/text_size_12_sp</item>
+        <item name="android:textColor">@color/color_66</item>
+    </style>
+
+
 
 
 </resources>

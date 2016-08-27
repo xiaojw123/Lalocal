@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.net.callback;
 
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.CloseLiveBean;
@@ -62,7 +63,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onGetAreaItems(int pageNumber, int totalPages, List<SearchItem> items, int type){
+    public void onGetAreaItems(int pageNumber, int totalPages, List<SearchItem> items, int type,int collectionId){
 
 
     }
@@ -144,8 +145,11 @@ public abstract class ICallBack {
 
     }
 
-    public void onRequestFailed() {
+    public void onRequestFailed(VolleyError volleyError) {
 
+
+    }
+    public void onResponseFailed(){
 
     }
     //推荐

@@ -17,7 +17,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="小肖"
             android:textColor="@drawable/travel_person_nam_ch_textcolor"
             android:textSize="@dimen/text_size_16_sp" />
 
@@ -32,27 +31,19 @@
     </FrameLayout>
 
 
-    <!--<TextView-->
-        <!--android:id="@+id/travel_person_name_en"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginLeft="@dimen/dimen_size_15_dp"-->
-        <!--android:layout_marginRight="@dimen/dimen_size_15_dp"-->
-        <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:text="xiao xiao"-->
-        <!--android:textColor="@color/color_b3"-->
-        <!--android:textSize="@dimen/text_size_12_sp" />-->
 
     <View
         style="@style/CommonD9LineTheme"
         android:layout_marginTop="@dimen/dimen_size_5_dp" />
 
     <FrameLayout
+        android:id="@+id/travelperson_phone_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
-        android:layout_marginRight="@dimen/dimen_size_15_dp">
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:visibility="gone"
+        >
 
         <TextView
             style="@style/OrderCardItemTextStyle"
@@ -68,10 +59,13 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/travelperson_email_cotainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
-        android:layout_marginRight="@dimen/dimen_size_15_dp">
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:visibility="gone"
+        >
 
         <TextView
             style="@style/OrderCardItemTextStyle"
@@ -87,10 +81,13 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/travelperson_sex_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
-        android:layout_marginRight="@dimen/dimen_size_15_dp">
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:visibility="gone"
+        >
 
         <TextView
             style="@style/OrderCardItemTextStyle"

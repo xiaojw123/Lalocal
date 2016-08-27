@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -354,8 +355,8 @@ public class NewsFragment extends Fragment implements  View.OnClickListener{
         }
 
         @Override
-        public void onRequestFailed() {
-            super.onRequestFailed();
+        public void onRequestFailed(VolleyError volleyError) {
+            super.onRequestFailed(volleyError);
         }
 
     }

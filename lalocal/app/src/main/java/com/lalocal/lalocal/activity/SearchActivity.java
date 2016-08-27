@@ -13,15 +13,17 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.HistoryItem;
 import com.lalocal.lalocal.model.ArticleItem;
-import com.lalocal.lalocal.model.SearchItem;
+import com.lalocal.lalocal.model.HistoryItem;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RouteItem;
+import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -68,6 +70,8 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     ContentLoader loader;
     SearchTagAdapter tagAdapter;
     boolean isResultSearch;
+    @BindView(R.id.search_back_img)
+    ImageView searchBackImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,16 +96,53 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         unbinder.unbind();
     }
 
-    @OnClick(R.id.search_key_cancel)
-    public void cancel() {
-        finish();
+    @OnClick(R.id.search_back_img)
+    public void back() {
+        searchBackImg.setVisibility(View.INVISIBLE);
+        showListView(searchResultRlv);
     }
 
+
+    @OnClick(R.id.search_key_cancel)
+    public void cancel() {
+        if (searchBackImg.getVisibility() == View.VISIBLE) {
+            searchBackImg.setVisibility(View.INVISIBLE);
+            showListView(searchResultRlv);
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AppLog.print("onBackPressed___");
+        if (searchBackImg.getVisibility() == View.VISIBLE) {
+            searchBackImg.setVisibility(View.INVISIBLE);
+            showListView(searchResultRlv);
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         String text = v.getText().toString();
         if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(text)) {
+            //TODO: showListView
+//            showListView(searchResultRlv);
+//            if (text.contains(" ")){
+//               char[] values=text.toCharArray();
+//                for (int i=0;i<values.length;i++){
+//                       char value=values[i];
+//                        if (" ".equals(value)){
+//                            text= CommonUtil.removeCharAt(text,i);
+//                        }else{
+//                            break;
+//                        }
+//                }
+//                searchKeyCet.setText(text);
+//            }
             AppLog.print("onEditorAction___actionSearch__text__" + text);
             loader.getSearchResult(text);
             try {
@@ -153,6 +194,15 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
             if (!isResultSearch) {
                 loader.getSearchTag(s.toString());
             } else {
+                Editable editable = searchKeyCet.getEditableText();
+                int len = 0;
+                if (editable != null) {
+                    String text = editable.toString();
+                    if (!TextUtils.isEmpty(text)) {
+                        len = text.length();
+                    }
+                }
+                searchKeyCet.setSelection(len);
                 isResultSearch = false;
             }
 
@@ -182,13 +232,13 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         List<SearchItem> toalItems = new ArrayList<>();
 
         @Override
-        public void onRequestFailed() {
+        public void onRequestFailed(VolleyError volleyError) {
             isRefresh = false;
         }
 
         @Override
         public void onGetMoreItems(int pageNumber, int totalPages, List<SearchItem> items) {
-            showListView(searchResultMoreXlv);
+            searchBackImg.setVisibility(View.VISIBLE);
             morePageNumb = pageNumber;
             moreToalPages = totalPages;
             if (isRefresh) {
@@ -204,13 +254,17 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 searchResultMoreXlv.setOnItemClickListener(moreItemClickListener);
                 searchResultMoreXlv.setAdapter(moreAdpater);
             } else {
+                if (pageNumber == 1) {
+                    searchResultMoreXlv.setAdapter(moreAdpater);
+                }
                 moreAdpater.updateItems(toalItems);
             }
+            showListView(searchResultMoreXlv);
         }
 
         @Override
         public void onGetSearchResult(String key, List<ArticleItem> articleItems, int aritcleToalNmb, List<ProductItem> productItems, int productToalNmb, List<RouteItem> routeItems, int routeToalNumb) {
-            showListView(searchResultRlv);
+            AppLog.print("onGetSearchResult____size___" + articleItems.size());
             List<SearchItem> items = new ArrayList<>();
             if (articleItems.size() > 0) {
                 //标题
@@ -221,13 +275,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                     items.add(getModuleTitle("查看更多相关文章", SearchResultAapter.MODE_TYPE_MORE, key));
                 }
             }
-            if (productItems.size() > 0) {
-                items.add(getModuleTitle("商品", SearchResultAapter.MODE_TYPE_TITLE, null));
-                items.addAll(productItems);
-                if (productToalNmb > productItems.size()) {
-                    items.add(getModuleTitle("查看更多相关商品", SearchResultAapter.MODE_TYPE_MORE, key));
-                }
-            }
             if (routeItems.size() > 0) {
                 items.add(getModuleTitle("路线", SearchResultAapter.MODE_TYPE_TITLE, null));
                 items.addAll(routeItems);
@@ -235,8 +282,15 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                     items.add(getModuleTitle("查看更多相关路线", SearchResultAapter.MODE_TYPE_MORE, key));
                 }
             }
+            if (productItems.size() > 0) {
+                items.add(getModuleTitle("商品", SearchResultAapter.MODE_TYPE_TITLE, null));
+                items.addAll(productItems);
+                if (productToalNmb > productItems.size()) {
+                    items.add(getModuleTitle("查看更多相关商品", SearchResultAapter.MODE_TYPE_MORE, key));
+                }
+            }
             if (resultAapter == null) {
-                AppLog.print("onGetSearchResult____items__"+items.size());
+                AppLog.print("onGetSearchResult____items__" + items.size());
                 resultAapter = new SearchResultAapter(SearchActivity.this, items);
                 resultAapter.setOnItemClickListener(resultItemClickListener);
                 searchResultRlv.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
@@ -245,7 +299,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
             } else {
                 resultAapter.updateItems(items);
             }
-
+            showListView(searchResultRlv);
         }
 
 
@@ -264,17 +318,17 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         @Override
         public void onGetSearchTag(List<String> keys) {
             AppLog.print("onGetSearchTag___tags__" + keys.size());
-            showListView(searchTagRlv);
             if (tagAdapter == null) {
                 tagAdapter = new SearchTagAdapter(SearchActivity.this, keys);
                 LinearLayoutManager lm = new LinearLayoutManager(SearchActivity.this);
                 searchTagRlv.setLayoutManager(lm);
-                searchHintRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchTagRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
                 tagAdapter.setOnItemClickListener(this);
                 searchTagRlv.setAdapter(tagAdapter);
             } else {
                 tagAdapter.updateItems(keys);
             }
+            showListView(searchTagRlv);
         }
 
         @Override
@@ -318,11 +372,13 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
             } else {
                 hintAdapter.updateItems(datas);
             }
+            showListView(searchHintRlv);
+
         }
 
         @Override
         public void onItemClickListener(View view, int position) {
-            showListView(searchResultRlv);
+//            showListView(searchResultRlv);
             String text = (String) view.getTag();
             if (!TextUtils.isEmpty(text)) {
                 isResultSearch = true;
@@ -389,7 +445,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         private void gotoRouteDetail(SearchItem item) {
             Intent intent = new Intent();
             intent.setClass(SearchActivity.this, RouteDetailActivity.class);
-            intent.putExtra(RouteDetailActivity.DETAILS_ID,item.getId());
+            intent.putExtra(RouteDetailActivity.DETAILS_ID, item.getId());
             startActivity(intent);
         }
 
@@ -411,7 +467,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
 
         @Override
         public void onRefresh() {
-
+            searchResultMoreXlv.stopRefresh();
         }
 
         @Override

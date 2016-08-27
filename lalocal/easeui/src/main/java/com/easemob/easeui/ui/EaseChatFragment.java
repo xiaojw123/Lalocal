@@ -1,18 +1,27 @@
 package com.easemob.easeui.ui;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.AppLaunchChecker;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.ClipboardManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -70,6 +79,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
     protected static final int REQUEST_CODE_MAP = 1;
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
+    public static  final int CAMERA_RQUEST_CODE=0x24;
 
     /**
      * 传入fragment的参数
@@ -552,7 +562,18 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
             }
             switch (itemId) {
             case ITEM_TAKE_PICTURE: // 拍照
+                if (Build.VERSION.SDK_INT>=23){
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("xiaojw","checkSelfPermission____");
+                    requestPermissions(new String[]{Manifest.permission.CAMERA},
+                            CAMERA_RQUEST_CODE);
+                }else{
                 selectPicFromCamera();
+                }
+                }else{
+                selectPicFromCamera();
+                }
                 break;
             case ITEM_PICTURE:
                 selectPicFromLocal(); // 图库选择图片
@@ -564,7 +585,31 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
         }
 
     }
-    
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d("xiaojw","onRequestPermissionsResult____");
+        doNext(requestCode,grantResults);
+    }
+    private void doNext(int requestCode, int[] grantResults) {
+        if (requestCode == CAMERA_RQUEST_CODE) {
+            Log.d("xiaojw","CAMERA_RQUEST_CODE____");
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("xiaojw","grantResults____");
+                // Permission Granted
+                selectPicFromCamera();
+            } else {
+                // Permission Denied
+                Toast.makeText(getActivity(),"权限被拒绝，允许之后可以使用该功能",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     //发送消息方法
     //==========================================================================
@@ -691,6 +736,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
      * 照相获取图片
      */
     protected void selectPicFromCamera() {
+        Log.d("xiaojw","selectPicFromCamera____");
         if (!EaseCommonUtils.isExitsSdcard()) {
             Toast.makeText(getActivity(), R.string.sd_card_does_not_exist, 0).show();
             return;
