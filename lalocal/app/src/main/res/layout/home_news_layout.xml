@@ -6,19 +6,12 @@
     android:background="@android:color/white"
     >
 
-    <ImageView
+    <com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView
         android:id="@+id/home_news_layout_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/live_height_50dp"
-        android:src="@drawable/androidloading"
-        android:scaleType="fitXY"/>
-    <RelativeLayout
-        android:id="@+id/home_news_bg_blur"
-        android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/live_height_50dp"
-        android:layout_height="match_parent">
-    </RelativeLayout>
+        android:layout_marginTop="@dimen/live_height_50dp" />
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,14 +26,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <ListView
-        android:id="@+id/live_recy_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:divider="@null"
-        android:overScrollMode="never"
-        ></ListView>
+
+        <ListView
+            android:id="@+id/live_recy_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:divider="@null"
+            android:overScrollMode="never"
+            ></ListView>
+
     <ImageView
         android:id="@+id/live_create_room"
         android:layout_width="@dimen/live_height_125dp"

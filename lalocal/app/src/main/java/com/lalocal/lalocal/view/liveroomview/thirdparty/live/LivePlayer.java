@@ -85,6 +85,7 @@ public class LivePlayer implements lsMessageHandler {
     private boolean m_tryToStopLiveStreaming = false;
 
     public LivePlayer(LiveSurfaceView liveView, String url, ActivityProxy proxy) {
+
         this.liveView = liveView;
         this.mliveStreamingURL = url;
         this.activityProxy = proxy;
@@ -139,6 +140,8 @@ public class LivePlayer implements lsMessageHandler {
                     mCamera = Camera.open(cameraID);
                 } catch (RuntimeException e) {
                     exception[0] = e;
+                    AppLog.i("TAG","没有开启摄像头");
+
                 } finally {
                     lock.release();
                     Looper.loop();
@@ -154,6 +157,7 @@ public class LivePlayer implements lsMessageHandler {
         try {
             mCamera.reconnect();
         } catch (Exception e) {
+            AppLog.i("TAG","视频采集异常");
         }
     }
 
@@ -161,7 +165,17 @@ public class LivePlayer implements lsMessageHandler {
     public void releaseCamera() {
         if (mCamera != null) {
             lockCamera();
-            mCamera.setPreviewCallback(null);
+            mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+                @Override
+                public void onPreviewFrame(byte[] data, Camera camera) {
+                    AppLog.i("TAG","摄像头开启了3");
+                    if(data!=null){
+                        AppLog.i("TAG","摄像头开启了3,且data不为空");
+                    }else{
+                        AppLog.i("TAG","摄像头开启了3,data为空");
+                    }
+                }
+            });
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
@@ -209,6 +223,7 @@ public class LivePlayer implements lsMessageHandler {
         //创建直播实例
         mLSMediaCapture = new lsMediaCapture(this, getActivity(), mVideoEncodeWidth, mVideoEncodeHeight);
         mLSMediaCapture.setCameraFocus();
+
         liveView.setPreviewSize(mVideoEncodeWidth, mVideoEncodeHeight);
 
         //创建参数实例
@@ -339,6 +354,8 @@ public class LivePlayer implements lsMessageHandler {
     }
     //初始化直播推流
     public void initLiveStream() {
+
+
         //初始化直播推流
         m_liveStreamingInitFinished = mLSMediaCapture.initLiveStream(mliveStreamingURL, mLSLiveStreamingParaCtx);
         m_liveStreamingInit = true;
@@ -697,8 +714,22 @@ public class LivePlayer implements lsMessageHandler {
                 AppLog.i("TAG", "test: in handleMessage, MSG_SEND_STATICS_LOG_FINISHED");
                 break;
             }
-        }
+            case MSG_START_PREVIEW_ERROR:
+                AppLog.i("TAG", "视频预览出错！！！！！！！！！！！！！！！！！");
+                if(onCheckCameraListener!=null){
+                    AppLog.i("TAG","没有开启嘎嘎嘎摄像头");
+                    onCheckCameraListener.getCameraOpenStatus();
 
+                }
+                break;
+
+            case MSG_AUDIO_RECORD_ERROR:
+                AppLog.i("TAG", "音频权限开启失败！！！！！！！！！！！！！！！！！");
+                if(onCheckCameraListener!=null){
+                    onCheckCameraListener.getAudioOpenStatus();
+                }
+                break;
+        }
     }
 
     private OnQuitLiveListener onQuitLiveListener;
@@ -722,6 +753,17 @@ public class LivePlayer implements lsMessageHandler {
     public void setOnStartLiveListener(OnStartLiveListener onStartLiveListener) {
         this.onStartLiveListener = onStartLiveListener;
     }
+
+    private  OnCheckCameraListener onCheckCameraListener;
+    public interface OnCheckCameraListener{
+        void getCameraOpenStatus();
+        void getAudioOpenStatus();
+    }
+    public void setOnCheckCameraListener(OnCheckCameraListener onCheckCameraListener){
+        this.onCheckCameraListener=onCheckCameraListener;
+    }
+
+
 
 
 

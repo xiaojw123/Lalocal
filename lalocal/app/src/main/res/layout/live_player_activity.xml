@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        >
@@ -96,7 +95,7 @@
         android:fadingEdge="none"
         android:focusable="false"
         android:listSelector="@android:color/transparent"
-        android:scrollbars="vertical" />
+        android:scrollbars="none" />
 
     <include
         android:id="@+id/gift_animation_view"

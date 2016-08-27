@@ -3,13 +3,11 @@ package com.lalocal.lalocal.view.liveroomview.entertainment.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +30,7 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.model.TouristInfoResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -40,7 +39,6 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.ui.TActivity;
-import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.lalocal.lalocal.view.liveroomview.entertainment.adapter.GiftAdapter;
 import com.lalocal.lalocal.view.liveroomview.entertainment.adapter.TouristAdapter;
 import com.lalocal.lalocal.view.liveroomview.entertainment.constant.GiftType;
@@ -49,6 +47,8 @@ import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomNotifi
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.GiftAnimation;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.SimpleCallback;
 import com.lalocal.lalocal.view.liveroomview.entertainment.module.ChatRoomMsgListPanel;
+import com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.view.liveroomview.entertainment.ui.LiveUserInfoPopuwindow;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.session.Container;
 import com.lalocal.lalocal.view.liveroomview.im.session.ModuleProxy;
@@ -58,7 +58,6 @@ import com.lalocal.lalocal.view.liveroomview.im.session.input.InputPanel;
 import com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageConfig;
 import com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView;
 import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.DialogMaker;
-import com.lalocal.lalocal.view.liveroomview.im.ui.dialog.EasyAlertDialogHelper;
 import com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
@@ -111,7 +110,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public static final String LIVE_USER_ID = "LIVE_USER_ID";
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
     private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 60 * 1000;
-    public static final  int LIVE_BASE_RESQUEST_CODE=701;
+    public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private Timer timer;
     // 聊天室信息
     protected String roomId;
@@ -160,9 +159,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private SpecialShareVOBean shareVO;
     protected DrawerLayout drawerLayout;
     protected Container container;
-    private String barrageContent;
     public int onlineCounts;
-    private String fromNickBarrage;
     private View view;
     ChatRoomMember member1;
 
@@ -187,6 +184,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private static final int LIMIT = 100;
     protected int maxOnLineCount = 0;
     boolean isFirstClick = true;//防止快速点击，出现两个popuwindow
+    protected String masterAvatar;
+    protected LiveUserInfoPopuwindow liveUserInfoPopuwindow;
+    protected String creatorAccount;//聊天室创建者账号
+    private String barrageContent;
+    private String fromNickBarrage;
 
 
     protected abstract int getActivityLayout(); // activity布局文件
@@ -223,27 +225,22 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        AppLog.i("TAG","LivePlayerBaseActivity:走了onActivityResult"+"requestCode:"+requestCode+"resultCode:"+resultCode);
-        if(requestCode==LIVE_BASE_RESQUEST_CODE&&(resultCode==101||resultCode==105)){
-            if(data!=null){
+
+        if (requestCode == LIVE_BASE_RESQUEST_CODE && (resultCode == 101 || resultCode == 105)) {
+            if (data != null) {
                 String email = data.getStringExtra(LoginActivity.EMAIL);
                 String psw = data.getStringExtra(LoginActivity.PSW);
                 contentLoader.login(email, psw);
-                AppLog.i("TAG","LivePlayerBaseActivity：走了登錄方法"+email);
-
             }
-        }else if(requestCode==LIVE_BASE_RESQUEST_CODE&&(resultCode==102||resultCode==600)){
-
-         enterRoom();
         }
+
     }
 
     private void claerImLoginInfo() {
-        DemoCache.clear();;
+        DemoCache.clear();
         AuthPreferences.clearUserInfo();
         NIMClient.getService(AuthService.class).logout();
         DemoCache.setLoginStatus(false);
@@ -258,6 +255,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         userId = getIntent().getStringExtra(LIVE_USER_ID);
         shareVO = getIntent().getParcelableExtra("shareVO");
         annoucement = getIntent().getStringExtra(ANNOUCEMENT);
+
     }
 
     protected void registerObservers(boolean register) {
@@ -281,7 +279,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         onlineCountText = findView(R.id.live_online_count);
         giftBtn = (ImageButton) findViewById(R.id.gift_btn);
         // 礼物列表
-      //  findGiftLayout();
+        //  findGiftLayout();
         // 点赞的爱心布局
         periscopeLayout = (PeriscopeLayout) findViewById(R.id.periscope);
         View liveSettingLayout = findViewById(R.id.setting_bottom_layout);
@@ -296,7 +294,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         inputConfig.isMoreFunctionShow = false;
         inputConfig.isEmojiButtonShow = false;
         if (inputPanel == null) {
-            inputPanel = new InputPanel(container, view, getActionList(), inputConfig);
+            inputPanel = new InputPanel(this,container, view, getActionList(), inputConfig);
         } else {
             inputPanel.reload(container, inputConfig);
         }
@@ -306,9 +304,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 shouldCollapseInputPanel();
             }
         });
-        if (messageListPanel == null) {
-            messageListPanel = new ChatRoomMsgListPanel(container, view);
-        }
+
         //弹幕开关状态
         inputPanel.setOnBarrageViewCheckStatusListener(new InputPanel.OnBarrageViewCheckStatusListener() {
             @Override
@@ -359,59 +355,69 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
             LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
-            int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
-            if(userId==-1){
+            String s = new Gson().toJson(result);
+            AppLog.i("TAG","聊天室成员信息："+s);
+            //  int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
+            boolean logined = UserHelper.isLogined(LivePlayerBaseActivity.this);
+            if (!logined) {
                 showLoginViewDialog();
-            }else {
-                showMasterInfoPopuwindow(result);
+            } else {
+                showMasterInfoPopuwindow(result, false);
             }
+        }
+        @Override
+        public void onLoginSucess(User user) {
+            super.onLoginSucess(user);
 
         }
 
         @Override
-        public void onLoginSucess(User user) {
-            super.onLoginSucess(user);
-            claerImLoginInfo();//清除im登錄信息
-            AppLog.i("TAG","登录成功");
-            String accId = user.getImUserInfo().getAccId();
-            String token = user.getImUserInfo().getToken();
-            loginIM(accId,token);
+        public void onTouristInfo(String json) {
+            super.onTouristInfo(json);
+            TouristInfoResp touristInfoResp = new Gson().fromJson(json, TouristInfoResp.class);
+            if (touristInfoResp.getReturnCode() == 0) {
+                TouristInfoResp.ResultBean result = touristInfoResp.getResult();
+                final String accid = result.getAccid();
+                final String token = result.getToken();
+
+                if (accid != null || token != null) {
+                    DemoCache.clear();
+                    AuthPreferences.saveUserAccount(accid);
+                    AuthPreferences.saveUserToken(token);
+                    AppLog.i("TAG", "走了tourist");
+                    loginIMServer(accid, token);
+
+                }
+
+            }
         }
     }
 
-    private void loginIM(final String accId,final String token) {
-        DemoCache.clear();
-        DemoCache.setAccount(accId);
-        DemoCache.getRegUserInfo();
-        chatRoomStatusRemind("正在登陆新的账号....");
-        AppLog.i("TAG","LivePlayerBaseActivity+LoginIm"+accId);
-        NIMClient.getService(AuthService.class).login(new LoginInfo(accId,token)).setCallback(new RequestCallback() {
+
+
+
+    protected void loginIMServer(final String imccId, String imToken) {
+        AppLog.i("TAG", "走了loginIMServer"+imccId+"imToken:"+imToken);
+        NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
             @Override
             public void onSuccess(Object o) {
+                AppLog.i("TAG", "NewsFragment,手动登录成功");
+                DemoCache.setAccount(imccId);
+                DemoCache.getRegUserInfo();
                 DemoCache.setLoginStatus(true);
-                enterRoom();
-                chatRoomStatusRemind("登陆成功....");
-                AppLog.i("TAG","LivePlayerBaseActivity+LoginIm:登录成功");
             }
-
             @Override
             public void onFailed(int i) {
+                AppLog.i("TAG", "NewsFragment,手动登录失败" + i);
                 DemoCache.setLoginStatus(false);
-                AppLog.i("TAG","LivePlayerBaseActivity+LoginIm:失败"+i);
-                chatRoomStatusRemind("连接失败....重新连接...");
-                loginIM(accId,token);
             }
-
             @Override
             public void onException(Throwable throwable) {
+                AppLog.i("TAG", "NewsFragment,手动登录失败2");
                 DemoCache.setLoginStatus(false);
-                AppLog.i("TAG","LivePlayerBaseActivity+LoginIm:失败");
-                chatRoomStatusRemind("连接失败....重新连接...");
-                loginIM(accId,token);
             }
         });
     }
-
 
     /***************************
      * 监听
@@ -421,17 +427,13 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.master_info_close_iv:
-                  //  isFirstClick = true;
-                    masterInfoPopuwindow.dismiss();
-                    inputPanel.hideInputMethod();
-                    break;
+
                 case R.id.live_master_info_layout:
                     inputPanel.hideInputMethod();
                     if (isFirstClick) {
                         isFirstClick = false;
                         contentLoader.getLiveUserInfo(userId);
-                        new Handler().postDelayed(new Runnable(){
+                        new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 isFirstClick = true;
                             }
@@ -439,13 +441,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     }
                     userIdItem = userId;
                     break;
-                case R.id.live_master_home:
-                    //直播用户信息主页
-                    Intent intent = new Intent(LivePlayerBaseActivity.this, LiveHomePageActivity.class);
-                    intent.putExtra("userId", userIdItem);
-                    startActivity(intent);
-                    masterInfoPopuwindow.dismiss();
-                    break;
+
                 case R.id.live_telecast_share:
                     if (shareVO != null) {
                         String s = new Gson().toJson(shareVO);
@@ -459,15 +455,18 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         AppLog.i("TAG", "分享内容为空");
                     }
                     break;
+                case R.id.master_info_back_home:
+                    finish();
+                    break;
 
             }
         }
     };
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>(){
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
 
         @Override
         public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG","LivePlayerBaseActivity監聽用戶登錄狀態愛;"+statusCode);
+            AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
         }
     };
 
@@ -475,13 +474,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
         @Override
         public void onEvent(List<ChatRoomMessage> messages) {
-AppLog.i("TAG","监听通知。。。。。");
+
             String style = null;
             if (messages == null || messages.isEmpty()) {
                 return;
             }
             IMMessage message = messages.get(0);
-
             Map<String, Object> remoteExtension = message.getRemoteExtension();
 
             if (remoteExtension != null) {
@@ -506,28 +504,29 @@ AppLog.i("TAG","监听通知。。。。。");
                         messageListPanel.onIncomingMessage(messages);
                         break;
                     case "1"://弹幕
-                        AppLog.i("TAG", "多端统一之弹幕：");
+
                         ChatRoomMessage barrageMessage = (ChatRoomMessage) message;
                         String senderNick = barrageMessage.getChatRoomMessageExtension().getSenderNick();
+
                         String content = barrageMessage.getContent();
                         if (senderNick != null) {
                             barrageView.init(new BarrageConfig());
                             if (content != null) {
                                 barrageView.addTextBarrage(senderNick + ":" + content);
+
                             }
                         }
-                        AppLog.i("TAG", "多端统一之弹幕：" + senderNick + "//" + content);
+
                         break;
                     case "2"://点赞
-                        if (message.getContent() != null) {
-                            AppLog.i("TAG", "多端统一之点赞：" + message.getContent());
-                        }
+
                         if ("点赞2".equals(message.getContent())) {
                             return;
                         }
                         periscopeLayout.addHeart();
                         messageListPanel.onIncomingMessage(messages);
                         break;
+
                 }
             }
 
@@ -541,15 +540,19 @@ AppLog.i("TAG","监听通知。。。。。");
                         break;
                     case ChatRoomMemberExit:
                         //发送离开直播间的通知
-                    //    sendMessage(message, "0");
+                        //   sendMessage(message, "0");
+
                         break;
                     case ChatRoomInfoUpdated:
                         sendMessage(message, "0");
                         break;
+                    case ChatRoomClose:
+                        Toast.makeText(LivePlayerBaseActivity.this,"直播间被关闭",Toast.LENGTH_SHORT).show();
+                        break;
 
                 }
             } else {
-                AppLog.i("TAG", "incomingChatRoomMsg" + "其他消息");
+
 
             }
         }
@@ -576,57 +579,22 @@ AppLog.i("TAG","监听通知。。。。。");
                 AppLog.i("TAG", "聊天室wontAutoLogin");
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
                 onOnlineStatusChanged(false);
-                AppLog.i("TAG", "NET_BROKEN");
+
             }
             AppLog.i("TAG", "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
         }
     };
 
-    protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result) {
-        masterInfoPopuwindow = new PopupWindow(this);
-        masterInfoLayoutPw = View.inflate(this, R.layout.master_info_layout, null);
-        masterInfoCloseIv = (ImageView) masterInfoLayoutPw.findViewById(R.id.master_info_close_iv);
-        masterInfoHeadIv = (CircleImageView) masterInfoLayoutPw.findViewById(R.id.master_info_head_iv);
-        masterInfoNickTv = (TextView) masterInfoLayoutPw.findViewById(R.id.master_info_nick_tv);
-        masterInfoSignature = (TextView) masterInfoLayoutPw.findViewById(R.id.master_info_signature);
-        liveAttention = (TextView) masterInfoLayoutPw.findViewById(R.id.live_attention);
-        liveFans = (TextView) masterInfoLayoutPw.findViewById(R.id.live_fans);
-        liveContribute = (TextView) masterInfoLayoutPw.findViewById(R.id.live_contribute);
-        liveMasterHome = (TextView) masterInfoLayoutPw.findViewById(R.id.live_master_home);
-        masterInfoPopuwindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        masterInfoPopuwindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        masterInfoPopuwindow.setContentView(masterInfoLayoutPw);
-        masterInfoPopuwindow.setFocusable(true);
-        masterInfoPopuwindow.setAnimationStyle(R.style.AnimBottom);
-        ColorDrawable dw = new ColorDrawable();
-        masterInfoPopuwindow.setBackgroundDrawable(dw);
-        masterInfoCloseIv.setOnClickListener(clickListener);
-        liveMasterHome.setOnClickListener(clickListener);
-
-
-        String avatar = result.getAvatar();
-        String nickName = result.getNickName();
-        int fansNum = result.getFansNum();
-        int attentionNum = result.getAttentionNum();
-
-        String description = result.getDescription();
-        liveFans.setText(String.valueOf(fansNum));
-        liveAttention.setText(String.valueOf(attentionNum));
-        if (!TextUtils.isEmpty(description)) {
-            masterInfoSignature.setText(description);
-        }
-        DrawableUtils.displayImg(LivePlayerBaseActivity.this, masterInfoHeadIv, avatar);
-        masterInfoPopuwindow.showAtLocation(this.findViewById(R.id.live_layout),
+    protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result, boolean isLiveOver) {
+        liveUserInfoPopuwindow = new LiveUserInfoPopuwindow(this,result,isLiveOver);
+        liveUserInfoPopuwindow.showLiveUserInfoPopuwindow();
+        liveUserInfoPopuwindow.showAtLocation(this.findViewById(R.id.live_drawer_layout),
                 Gravity.CENTER, 0, 0);
-        masterInfoNickTv.setText(nickName);
-        liveMasterHome.setOnClickListener(clickListener);
-
     }
 
     /**************************
      * 断网重连
      ****************************/
-
     protected void onOnlineStatusChanged(boolean isOnline) {
         if (isOnline) {
             onConnected();
@@ -635,16 +603,19 @@ AppLog.i("TAG","监听通知。。。。。");
             enterRoom();
         }
     }
-
     // 进入聊天室
     protected void enterRoom() {
+        if (messageListPanel == null) {
+            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement);
 
+        }
         EnterChatRoomData data = new EnterChatRoomData(roomId);
         data.setRoomId(roomId);
-        Map<String,Object> map=new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
-        AppLog.i("TAG","enterRoom:"+userId);
+        AppLog.i("TAG", "enterRoom:" + userId);
         map.put("userId", String.valueOf(userId));
+        map.put("roomExt",String.valueOf(userId));
         data.setExtension(map);
         data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
         enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
@@ -657,32 +628,40 @@ AppLog.i("TAG","监听通知。。。。。");
                 roomInfo = result.getRoomInfo();
                 member1 = result.getMember();
                 enterroomgetnick = member1.getNick();
-                String avatar = member1.getAvatar();
+                masterAvatar = member1.getAvatar();
+                creatorAccount = roomInfo.getCreator();
+
                 member1.setRoomId(roomInfo.getRoomId());
                 ChatRoomMemberCache.getInstance().saveMyMember(member1);
                 DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
 
                 masterName.setText(enterroomgetnick);
                 updateUI(enterroomgetnick);
-
+                DemoCache.setLoginChatRoomStatus(true);
                 chatRoomStatusRemind("登陆聊天室成功...");
             }
 
             @Override
             public void onFailed(int code) {
-                AppLog.i("TAG", "进入聊天室失败：" + code);
-                final String imccId = AuthPreferences.getUserAccount();
-                String imToken = AuthPreferences.getUserToken();
-                NIMClient.getService(AuthService.class).logout();
-                DemoCache.setLoginStatus(false);
-                loginIM(imccId,imToken);
-
+                AppLog.i("TAG","登录聊天室失败："+code);
+                DemoCache.setLoginChatRoomStatus(false);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(300);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        enterRoom();
+                    }
+                });
                 onLoginDone();
-
             }
 
             @Override
             public void onException(Throwable exception) {
+                DemoCache.setLoginChatRoomStatus(false);
                 onLoginDone();
                 //      Toast.makeText(LivePlayerBaseActivity.this, "enter chat room exception, e=" + exception.getMessage(), Toast.LENGTH_SHORT).show();
                 finish();
@@ -692,22 +671,23 @@ AppLog.i("TAG","监听通知。。。。。");
         fetchData();
     }
 
-     private  void chatRoomStatusRemind(String remindContent){
-         ChatRoomNotificationHelper.content=remindContent;
-         ChatRoomNotificationAttachment notificationAttachment = new ChatRoomNotificationAttachment();
-         notificationAttachment.setType(NotificationType.AVChatRecord);
+    private void chatRoomStatusRemind(String remindContent) {
+        ChatRoomNotificationHelper.content = remindContent;
+        ChatRoomNotificationAttachment notificationAttachment = new ChatRoomNotificationAttachment();
+        notificationAttachment.setType(NotificationType.AVChatRecord);
 
-         IMMessage customMessage = MessageBuilder.createCustomMessage(remindContent, SessionTypeEnum.ChatRoom,notificationAttachment);
+        IMMessage customMessage = MessageBuilder.createCustomMessage(remindContent, SessionTypeEnum.ChatRoom, notificationAttachment);
 
-         Map<String, Object> data = new HashMap<>();
-         data.put("key1", "ext data");
-         data.put("key2", 2015);
-         customMessage.setRemoteExtension(data);
+        Map<String, Object> data = new HashMap<>();
+        data.put("key1", "ext data");
+        data.put("key2", 2015);
+        customMessage.setRemoteExtension(data);
 
-         String content= new Gson().toJson(customMessage);
-         AppLog.i("TAG","chatRoomStatusRemind:"+content);
-            messageListPanel.onMsgSend(customMessage);
-     }
+        String content = new Gson().toJson(customMessage);
+        AppLog.i("TAG", "chatRoomStatusRemind:" + content);
+        messageListPanel.onMsgSend(customMessage);
+    }
+
     protected void fetchData() {
         if (!isNormalEmpty) {
             // 拉取固定在线成员
@@ -775,18 +755,16 @@ AppLog.i("TAG","监听通知。。。。。");
         tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
             @Override
             public void showTouristInfo(ChatRoomMember member, boolean isMasterAccount) {
-                AppLog.i("TAG","isFirstClick:"+(isFirstClick==true?"true":"false"));
-                String s = new Gson().toJson(member);
-                AppLog.i("TAG","popuwindowInfo:"+s);
-                int userId1 = UserHelper.getUserId(LivePlayerBaseActivity.this);
-                if(userId1==-1){
+                AppLog.i("TAG", "isFirstClick:" + (isFirstClick == true ? "true" : "false"));
+                boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                if (!isLogin) {
                     showLoginViewDialog();
-                }else {
+                } else {
                     Map<String, Object> extension = member.getExtension();
                     inputPanel.hideInputMethod();
                     if (isFirstClick) {
                         isFirstClick = false;
-                        new Handler().postDelayed(new Runnable(){
+                        new Handler().postDelayed(new Runnable() {
                             public void run() {
                                 isFirstClick = true;
                             }
@@ -794,9 +772,13 @@ AppLog.i("TAG","监听通知。。。。。");
                         if (!isMasterAccount) {
                             if (extension != null) {
                                 userIdItem = (String) extension.get("userId");
-                            }else {
+                            } else {
                                 int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
-                                userIdItem=String.valueOf(userId);
+                                userIdItem = String.valueOf(userId);
+                            }
+                            if("-1".equals(userIdItem)){
+                                Toast.makeText(LivePlayerBaseActivity.this,"该用户为游客!",Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             contentLoader.getLiveUserInfo(userIdItem);
                         }
@@ -859,12 +841,12 @@ AppLog.i("TAG","监听通知。。。。。");
 
                     @Override
                     public void onFailed(int code) {
-                        LogUtil.d(TAG, "fetch room info failed:" + code);
+
                     }
 
                     @Override
                     public void onException(Throwable exception) {
-                        LogUtil.d(TAG, "fetch room info exception:" + exception);
+
                     }
                 });
             }
@@ -879,7 +861,7 @@ AppLog.i("TAG","监听通知。。。。。");
     public boolean sendMessage(IMMessage msg, String style) {
         if (msg != null) {
             ChatRoomMessage message = (ChatRoomMessage) msg;
-
+            String fromAccount = message.getFromAccount();
             Map<String, Object> ext = new HashMap<>();
             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
             if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
@@ -916,7 +898,6 @@ AppLog.i("TAG","监听通知。。。。。");
                 barrageView.init(new BarrageConfig());
                 if (content != null) {
                     String name = DemoCache.getUserInfo().getName();
-                    AppLog.i("TAG","主播發彈幕："+name);
                     barrageView.addTextBarrage("我" + ":" + content);
                 }
             } else {
@@ -928,26 +909,22 @@ AppLog.i("TAG","监听通知。。。。。");
     }
 
     public void showLoginViewDialog() {
-        EasyAlertDialogHelper.createOkCancelDiolag(LivePlayerBaseActivity.this, null, "没登录，快去登录吧",
-                "确定", getString(R.string.cancel), true,
-                new EasyAlertDialogHelper.OnDialogActionListener() {
-                    @Override
-                    public void doCancelAction() {
-                    }
-                    @Override
-                    public void doOkAction() {
-                        //TODO 去登录页面
-                        AuthPreferences.clearUserInfo();
-                        DemoCache.clear();
-                        NIMClient.getService(AuthService.class).logout();
-                        DemoCache.setLoginStatus(false);
-                        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-                        ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-                        AppLog.i("TAG","base去登錄頁面");
-                       // startActivity(new Intent(LivePlayerBaseActivity.this, LoginActivity.class));
-                        startActivityForResult(new Intent(LivePlayerBaseActivity.this, LoginActivity.class),LIVE_BASE_RESQUEST_CODE);
-                    }
-                }).show();
+        CustomChatDialog customDialog = new CustomChatDialog(this);
+        customDialog.setTitle("还没登录，快去登录吧!");
+        customDialog.setCancelable(false);
+        customDialog.setCancelBtn("取消",null);
+        customDialog.setSurceBtn("确定",new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                DemoCache.setLoginStatus(false);
+
+                ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+                AppLog.i("TAG", "base去登錄頁面");
+
+                startActivityForResult(new Intent(LivePlayerBaseActivity.this, LoginActivity.class), LIVE_BASE_RESQUEST_CODE);
+            }
+        });
+        customDialog.show();
     }
 
 
@@ -985,13 +962,13 @@ AppLog.i("TAG","监听通知。。。。。");
     @Override
     protected void onPause() {
         super.onPause();
-     //   isFirstClick = true;
+        //   isFirstClick = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
+        inputPanel.hideInputMethod();
         if (messageListPanel != null) {
             messageListPanel.onResume();
         }

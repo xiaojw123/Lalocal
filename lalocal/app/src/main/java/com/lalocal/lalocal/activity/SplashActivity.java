@@ -34,15 +34,10 @@ import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
-import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 
 /**
  * Created by android on 2016/7/14.
@@ -65,10 +60,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         timeTv.setOnClickListener(this);
         setLoaderCallBack(new MyCallBack());
         registerObservers(true);
-
-    //   loginIMService();
-
-
         if (Build.VERSION.SDK_INT>=23){
             requestPhonePermission();
         }else{
@@ -110,45 +101,15 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>(){
-
         @Override
         public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG","監聽自動登錄狀態："+statusCode);
+            AppLog.i("TAG","SplashActivity監聽自動登錄狀態："+statusCode);
+            if(statusCode==StatusCode.LOGINED){
+                DemoCache.setLoginStatus(true);
+            }
         }
     };
-    private void loginIMService() {
-        final String imccId = AuthPreferences.getUserAccount();
-        String imToken = AuthPreferences.getUserToken();
-        if (imccId != null || imToken != null) {
-            AppLog.i("TAG", "SplashActivity没有登录并走了这里1：" + "imccId:" + imccId + "   imToken:" + imToken);
-            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
-                @Override
-                public void onSuccess(Object o) {
-                    AppLog.i("TAG","splashactivity登錄成功");
-                    DemoCache.setAccount(imccId);
-                    DemoCache.getRegUserInfo();
-                    DemoCache.setLoginStatus(true);
-                    // 初始化消息提醒
-                    NIMClient.toggleNotification(UserPreferences.getNotificationToggle());
 
-                    // 初始化免打扰
-                    NIMClient.updateStatusBarNotificationConfig(UserPreferences.getStatusConfig());
-                }
-
-                @Override
-                public void onFailed(int i) {
-                    AppLog.i("TAG", "SplashActivity,手动登录失败" + i);
-                    DemoCache.setLoginStatus(false);
-                }
-
-                @Override
-                public void onException(Throwable throwable) {
-                    AppLog.i("TAG", "SplashActivity,手动登录失败2");
-                    DemoCache.setLoginStatus(false);
-                }
-            });
-        }
-    }
 
 
 

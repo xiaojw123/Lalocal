@@ -21,7 +21,6 @@ import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.netease.nimlib.sdk.AbortableFuture;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
@@ -175,40 +174,9 @@ public class LoginActivity extends BaseActivity {
                     setResult(LOGIN_OK, intent);
                 }
             }
-            loginIM(user);//登錄IM
 
+            finish();
         }
-
-
-    }
-
-    private void loginIM(final User user) {
-        DemoCache.clear();
-        DemoCache.setAccount(AuthPreferences.getUserAccount());
-        DemoCache.getRegUserInfo();
-        NIMClient.getService(AuthService.class).login(new LoginInfo(AuthPreferences.getUserAccount(), AuthPreferences.getUserToken())).setCallback(new RequestCallback() {
-            @Override
-            public void onSuccess(Object o) {
-                setResult(600);
-                DemoCache.setLoginStatus(true);
-                finish();
-              AppLog.i("TAG","LoginActivity成功 " );
-            }
-
-            @Override
-            public void onFailed(int i) {
-                DemoCache.setLoginStatus(false);
-                AppLog.i("TAG","LoginActivity失败 "+i );
-                finish();
-            }
-
-            @Override
-            public void onException(Throwable throwable) {
-                DemoCache.setLoginStatus(false);
-                AppLog.i("TAG","LoginActivity是失败 " );
-                finish();
-            }
-        });
 
     }
 

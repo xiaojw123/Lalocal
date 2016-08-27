@@ -22,10 +22,18 @@
     <dimen name="live_height_50dp">50dp</dimen>
     <dimen name="live_height_52dp">52dp</dimen>
     <dimen name="live_height_60dp">60dp</dimen>
+    <dimen name="live_height_80dp">80dp</dimen>
+    <dimen name="live_height_70dp">70dp</dimen>
     <dimen name="live_height_90dp">90dp</dimen>
+    <dimen name="live_height_100dp">100dp</dimen>
     <dimen name="live_height_119dp">119dp</dimen>
     <dimen name="live_height_125dp">125dp</dimen>
+    <dimen name="live_height_150dp">150dp</dimen>
+    <dimen name="live_height_220dp">220dp</dimen>
+    <dimen name="live_height_250dp">250dp</dimen>
+    <dimen name="live_height_320dp">320dp</dimen>
     <dimen name="live_height_345dp">345dp</dimen>
+    <dimen name="live_height_350dp">350dp</dimen>
     <dimen name="live_height_355dp">355dp</dimen>
     <dimen name="live_height_442dp">445dp</dimen>
 

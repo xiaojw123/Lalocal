@@ -100,6 +100,7 @@
                 android:paddingLeft="@dimen/live_padding_15dp"
                 android:drawableLeft="@drawable/peopleliving_location_darkic"
                 android:drawablePadding="@dimen/live_padding_2dp"
+                 android:visibility="gone"
                 android:textSize="@dimen/live_text_10sp"
                />
 

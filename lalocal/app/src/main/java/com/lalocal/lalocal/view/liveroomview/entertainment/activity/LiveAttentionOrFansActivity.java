@@ -134,11 +134,13 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 liveSearchLayoutFont.setVisibility(View.GONE);
                 liveSearchLayout.setVisibility(View.VISIBLE);
             case R.id.live_attention_search_et:
+                liveAttentionSearchEt.setCompoundDrawables(null,null,null,null);
                 liveAttentionSearchCancel.setVisibility(View.VISIBLE);
                 userAttentionTitle.setVisibility(View.GONE);
                 attentionOrFansAdapter.refresh(null);
                 isSearchFansOrAttention = true;
                 allSearchRows.clear();
+
                 liveAttentionSearchEt.addTextChangedListener(watcher);
                 liveAttentionSearchEt.setText("");
                 allRows.clear();

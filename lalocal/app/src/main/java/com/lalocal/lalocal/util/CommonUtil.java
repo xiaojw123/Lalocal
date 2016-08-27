@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 public class CommonUtil {
     private static double EARTH_RADIUS = 6378.137;
     private  static  final  int READ_PHONE_STATE_CODE=112;
+    public static  int RESULT_DIALOG=0;
     /**
      * 根据两个位置的经纬度，来计算两地的距离（单位为KM）
      * 参数为String类型

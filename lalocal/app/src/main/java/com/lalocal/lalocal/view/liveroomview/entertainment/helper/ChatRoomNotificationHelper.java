@@ -20,7 +20,7 @@ public class ChatRoomNotificationHelper {
         String text;
         switch (attachment.getType()) {
             case ChatRoomMemberIn:
-                text = buildText(targets, "进入直播间");
+                text = buildText("欢迎"+targets, "进入直播间");
                 break;
             case ChatRoomMemberExit:
                 text = buildText(targets, "离开了直播间");

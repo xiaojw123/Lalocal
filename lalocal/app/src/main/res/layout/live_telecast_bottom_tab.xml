@@ -44,7 +44,7 @@
         android:layout_toLeftOf="@id/live_telecast_share"
         android:layout_marginRight="@dimen/live_padding_20dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/peopleliving_setting_unsel" />
+        android:src="@drawable/flipoverthecamera_small_btn" />
 
 
     <ImageView

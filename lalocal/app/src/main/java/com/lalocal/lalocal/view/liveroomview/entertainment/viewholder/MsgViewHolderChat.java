@@ -44,6 +44,8 @@ public class MsgViewHolderChat extends TViewHolder {
             bodyText.setTextColor(Color.parseColor("#97d3e9"));
         }else if("给主播点了个赞".equals(content.trim())){
             bodyText.setTextColor(Color.parseColor("#97d3e9"));
+        }else{
+            bodyText.setTextColor(Color.WHITE);
         }
         MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BOTTOM);
         bodyText.setMovementMethod(LinkMovementMethod.getInstance());

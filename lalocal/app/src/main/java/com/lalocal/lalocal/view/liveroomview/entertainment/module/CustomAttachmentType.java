@@ -8,4 +8,7 @@ public interface CustomAttachmentType {
     int gift = 0; // 礼物
     int like = 1; // 点赞
     int barrage=2;//弹幕
+
+
+
 }

@@ -2,9 +2,9 @@ package com.lalocal.lalocal.view.liveroomview.permission.util;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.support.v4.app.Fragment;
 
 import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionGranted;

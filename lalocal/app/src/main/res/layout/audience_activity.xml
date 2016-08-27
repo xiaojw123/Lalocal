@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
        >
@@ -24,7 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_50dp"
-            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
             android:gravity="right">
             <ImageView
                 android:id="@+id/live_quit"
@@ -43,16 +43,17 @@
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_125dp"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="@dimen/live_height_80dp"
             ></com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView>
-    </FrameLayout>
-<FrameLayout
+    </RelativeLayout>
+<RelativeLayout
     android:id="@+id/live_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="right"
     android:layout_marginLeft="-65dp"
     >
+
     <LinearLayout
         android:id="@+id/live_telecast_model_layout"
         android:layout_width="match_parent"
@@ -129,19 +130,19 @@
 
         <com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout
             android:id="@+id/periscope"
-            android:layout_width="70dp"
-            android:layout_height="350dp"
+            android:layout_width="@dimen/live_height_70dp"
+            android:layout_height="@dimen/live_height_350dp"
             android:layout_above="@id/setting_bottom_layout"
-            android:layout_marginLeft="195dp"
+
             android:layout_alignParentBottom="true"
              />
         <com.lalocal.lalocal.view.liveroomview.entertainment.ui.MessageListViewEx
             android:id="@+id/messageListView"
             style="@style/list_view"
-            android:layout_width="320dp"
-            android:layout_height="150dp"
+            android:layout_width="@dimen/live_height_320dp"
+            android:layout_height="@dimen/live_height_150dp"
             android:layout_above="@id/messageActivityBottomLayout"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="@dimen/author_padding_10dp"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
             android:fadingEdge="none"
@@ -152,7 +153,7 @@
         <include
             android:id="@+id/gift_animation_view"
             layout="@layout/gift_layout"
-            android:layout_width="220dp"
+            android:layout_width="@dimen/live_height_220dp"
             android:layout_height="50dp"
             android:layout_above="@id/messageListView"
             android:layout_marginBottom="3dp" />
@@ -179,8 +180,8 @@
                 android:id="@+id/share_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginBottom="@dimen/author_padding_10dp"
+                android:layout_marginRight="@dimen/author_padding_10dp"
                 android:background="@drawable/share_icon_selector"
                 android:visibility="gone"/>
 
@@ -188,8 +189,8 @@
                 android:id="@+id/gift_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginBottom="@dimen/author_padding_10dp"
+                android:layout_marginRight="@dimen/author_padding_10dp"
                 android:background="@drawable/gift_icon_selector"
                 android:visibility="gone"/>
 
@@ -197,8 +198,8 @@
                 android:id="@+id/like_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginRight="15dp"
+                android:layout_marginBottom="@dimen/author_padding_10dp"
+                android:layout_marginRight="@dimen/author_padding_15dp"
                 android:background="@drawable/like_icon_selector"
                />
         </LinearLayout>
@@ -221,11 +222,11 @@
 
             <Button
                 android:id="@+id/send_gift_btn"
-                android:layout_width="60dp"
-                android:layout_height="35dp"
+                android:layout_width="@dimen/live_height_60dp"
+                android:layout_height="@dimen/live_height_35dp"
                 android:layout_gravity="right"
                 android:layout_marginBottom="7dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="@dimen/live_padding_10dp"
                 android:layout_marginTop="7dp"
                 android:background="@drawable/g_white_btn_selector"
                 android:text="赠送"
@@ -236,13 +237,13 @@
         <GridView
             android:id="@+id/gift_grid_view"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/live_height_100dp"
             android:layout_above="@id/send_layout"
             android:background="@color/gift_background_color"
             android:listSelector="@drawable/item_border_selected"
             android:numColumns="4" />
     </RelativeLayout>
-
-</FrameLayout>
+    <include layout="@layout/audience_over_layout"></include>
+</RelativeLayout>
 
 </com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout>

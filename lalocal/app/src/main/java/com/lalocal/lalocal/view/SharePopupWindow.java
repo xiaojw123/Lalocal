@@ -3,28 +3,24 @@ package com.lalocal.lalocal.view;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
+import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
-
-import net.robinx.lib.blur.utils.BlurUtils;
-import net.robinx.lib.blur.widget.BlurDrawable;
 /**
  * Created by lenovo on 2016/6/30.
  */
@@ -36,7 +32,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private SpecialShareVOBean shareVO;
     private TextView cancel;
     private static final int REQUEST_PERM = 151;
-    private RelativeLayout shareBlur;
+    private BlurImageView shareBlur;
     private View view;
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
@@ -45,21 +41,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
     public void showShareWindow() {
         view = LayoutInflater.from(context).inflate(R.layout.share_layout, null);
-        shareBlur = (RelativeLayout) view.findViewById(R.id.share_blur);
-
-        shareBlur.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                shareBlur.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                BlurDrawable blurDrawable = new BlurDrawable((Activity) context);
-                blurDrawable.setDrawOffset(shareBlur.getLeft(), shareBlur.getTop() + BlurUtils.getStatusBarHeight(context));
-                blurDrawable.setCornerRadius(10);
-                blurDrawable.setBlurRadius(25);
-                blurDrawable.setOverlayColor(Color.parseColor("#dcffffff"));
-                shareBlur.setBackgroundDrawable(blurDrawable);
-            }
-        });
-
+        shareBlur = (BlurImageView) view.findViewById(R.id.share_blur);
+        shareBlur.setBlurImageRes(R.drawable.citybg,11,20);
         shareFriends = (LinearLayout) view.findViewById(R.id.share_friends);
         shareWechat = (LinearLayout) view.findViewById(R.id.share_wechat);
         shareWeibo = (LinearLayout) view.findViewById(R.id.share_weibo);
@@ -74,8 +57,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         this.setFocusable(true);
         this.setAnimationStyle(R.style.AnimBottom);
         ColorDrawable dw = new ColorDrawable();
-
         this.setBackgroundDrawable(dw);
+
+
 
     }
 
@@ -84,19 +68,41 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         switch (v.getId()) {
             case R.id.share_friends:
                 if(shareVO!=null){
-                    shareFriends();
+                    boolean isInstallMm =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
+                    if(isInstallMm){
+                        shareFriends();
+                        Toast.makeText(context,"安装微信客户端",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context,"没有安装微信客户端",Toast.LENGTH_SHORT).show();
+                    }
+
+
                 }
 
                 break;
             case R.id.share_wechat:
                 if(shareVO!=null){
-                    shareWechat();
+                    boolean isInstallMm =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
+                    if(isInstallMm){
+                        shareWechat();
+                        Toast.makeText(context,"安装微信客户端",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(context,"没有安装微信客户端",Toast.LENGTH_SHORT).show();
+                    }
+
                 }
 
                 break;
             case R.id.share_weibo:
                 if(shareVO!=null){
-                    shareWeibo();
+                    boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(context, "com.sina.weibo");
+                    if(isInstallWeibo){
+                        shareWeibo();
+                        Toast.makeText(context,"安装微博客户端",Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(context,"没有安装微博客户端",Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 break;
             case R.id.cancel_share:

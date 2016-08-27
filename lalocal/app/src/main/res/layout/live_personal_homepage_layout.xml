@@ -31,11 +31,11 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/line_heheh"
             android:layout_marginLeft="155dp"
-            android:background="@drawable/home_me_verified_bg"
+            android:background="#999999"
+            android:paddingLeft="@dimen/live_padding_5dp"
+            android:paddingRight="@dimen/live_padding_5dp"
             android:layout_marginBottom="@dimen/live_padding_5dp"
             android:text="未验证"/>
-
-
     </RelativeLayout>
 
         <TextView
@@ -139,14 +139,30 @@
         android:textColor="#b3b3b3"
         android:text="更多展示,敬请期待"/>
 
-       <TextView
-           android:id="@+id/master_attention"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/ml_gray"></View>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/master_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关注"
+                android:layout_gravity="center"
 
-           android:layout_alignParentBottom="true"
-           android:layout_centerHorizontal="true"
-           android:paddingBottom="@dimen/author_padding_15dp"
-          />
+                />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </RelativeLayout>

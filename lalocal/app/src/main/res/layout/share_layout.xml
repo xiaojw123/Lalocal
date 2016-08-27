@@ -3,11 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <RelativeLayout
+    <com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView
         android:id="@+id/share_blur"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </RelativeLayout>
+        android:layout_height="match_parent"></com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

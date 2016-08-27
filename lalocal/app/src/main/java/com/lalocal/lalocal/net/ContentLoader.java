@@ -64,7 +64,12 @@ import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -1323,12 +1328,34 @@ public class ContentLoader {
             bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
             bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
             UserHelper.saveLoginInfo(context, bundle);
-
+            AuthPreferences.clearUserInfo();
             AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
             AuthPreferences.saveUserToken( user.getImUserInfo().getToken());
+
+            loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
         }
 
+        private void loginIMServer(final  String imccId, String imToken) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback(){
 
+                @Override
+                public void onSuccess(Object o) {
+                    DemoCache.setAccount(imccId);
+                    DemoCache.getRegUserInfo();
+                    DemoCache.setLoginStatus(true);
+                }
+
+                @Override
+                public void onFailed(int i) {
+                    DemoCache.setLoginStatus(false);
+                }
+
+                @Override
+                public void onException(Throwable throwable) {
+                    DemoCache.setLoginStatus(false);
+                }
+            });
+        }
 
         private void responseRegister(JSONObject jsonObject) {
             JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
@@ -1512,6 +1539,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
 
 
 

@@ -33,10 +33,11 @@
             android:layout_marginLeft="@dimen/author_padding_15dp"
             android:layout_marginRight="@dimen/author_padding_15dp"
             android:drawableLeft="@drawable/search_icon"
-            android:hint="搜索"
+            android:hint="请输入关键字"
             android:textSize="@dimen/text_size_14_sp"
             android:paddingLeft="@dimen/live_padding_10dp"
             android:paddingRight="@dimen/live_padding_5dp"
+
             />
         <TextView
             android:id="@+id/live_attention_search_cancel"

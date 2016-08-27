@@ -61,7 +61,7 @@ public class LiveMainListAdapter extends BaseAdapter {
             liveViewHodler.liveStatus= (TextView) convertView.findViewById(R.id.live_status);
             liveViewHodler.liveTheme= (TextView) convertView.findViewById(R.id.live_theme);
             liveViewHodler.liveOnlineCountTv= (TextView) convertView.findViewById(R.id.live_online_count_tv);
-            liveViewHodler.liveCompereLocation= (TextView) convertView.findViewById(R.id.live_compere_location);
+          //  liveViewHodler.liveCompereLocation= (TextView) convertView.findViewById(R.id.live_compere_location);
             liveViewHodler.livePeopleLayout= (LinearLayout) convertView.findViewById(R.id.live_people_layout);
             liveViewHodler.liveCompereHeadPortrait= (CircleImageView) convertView.findViewById(R.id.live_compere_head_portrait);
             liveViewHodler.liveCompereHeadTv= (TextView) convertView.findViewById(R.id.live_compere_head_tv);
@@ -77,6 +77,7 @@ public class LiveMainListAdapter extends BaseAdapter {
         liveViewHodler.liveCompereHeadTv.setText(user.getNickName());
         DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, user.getAvatar());
         DrawableUtils.displayRadiusImg(mContext,liveViewHodler.liveCoverIv,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+
         return convertView;
     }
 
@@ -84,7 +85,7 @@ public class LiveMainListAdapter extends BaseAdapter {
         TextView liveStatus;
         TextView liveTheme;
         TextView liveOnlineCountTv;
-        TextView liveCompereLocation;
+     //   TextView liveCompereLocation;
         LinearLayout livePeopleLayout;
         CircleImageView liveCompereHeadPortrait;
         TextView liveCompereHeadTv;

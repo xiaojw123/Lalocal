@@ -369,7 +369,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             bundle.putBoolean(KeyParams.IS_LOGIN, false);
             UserHelper.saveLoginInfo(getActivity(), bundle);
             AuthPreferences.clearUserInfo();
-
             DemoCache.clear();
             NIMClient.getService(AuthService.class).logout();
             DemoCache.setLoginStatus(false);

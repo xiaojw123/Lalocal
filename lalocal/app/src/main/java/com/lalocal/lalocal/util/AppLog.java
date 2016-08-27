@@ -72,18 +72,7 @@ public final class AppLog {
         }
     }
 
-    /**
-     * Send an {@link Log#INFO} log message.
-     *
-     * @param obj
-     */
-    public static void i(Object obj) {
-        if (Log.INFO > DEBUG_LEVEL) {
-            String tag = getClassName();
-            String msg = obj != null ? obj.toString() : "obj == null";
-            Log.i(tag, msg);
-        }
-    }
+
 
     /**
      * Send a {@link Log#WARN} log message.

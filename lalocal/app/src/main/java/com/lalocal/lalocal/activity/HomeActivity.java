@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;

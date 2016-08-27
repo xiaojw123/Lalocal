@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSONObject;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.base.util.StringUtil;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
@@ -57,13 +58,14 @@ import java.util.Map;
 
 /**
  * 底部文本编辑，表情，语音等模块
- * Created by hzxuwen on 2015/6/16.
+ *
  */
 public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallback {
 
     private static final String TAG = "MsgSendLayout";
 
     private static final int SHOW_LAYOUT_DELAY = 200;
+    public static final  String IS_SELSCTOR="isSelector";
 
     private Container container;
     private View view;
@@ -90,6 +92,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private boolean cancelled = false;
     private boolean touched = false; // 是否按着
     private boolean isKeyboardShowed = true; // 是否显示键盘
+    private Context mContext;
 
     // state
     private boolean actionPanelBottomLayoutHasSetup = false;
@@ -103,7 +106,9 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private ImageView barrageAndChat;
     private BarrageView barrageView;
 
-    public InputPanel(Container container, View view, List<BaseAction> actions, InputConfig inputConfig) {
+
+    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions, InputConfig inputConfig) {
+        this.mContext=mContext;
         this.container = container;
         this.view = view;
         this.actions = actions;
@@ -112,8 +117,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         init();
     }
 
-    public InputPanel(Container container, View view, List<BaseAction> actions) {
-        this(container, view, actions, new InputConfig());
+    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions) {
+        this(mContext,container, view, actions, new InputConfig());
     }
 
     public void onPause() {
@@ -127,7 +132,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         boolean respond = (emoticonPickerView != null && emoticonPickerView.getVisibility() == View.VISIBLE
                 || actionPanelBottomLayout != null && actionPanelBottomLayout.getVisibility() == View.VISIBLE);
         hideAllInputLayout(immediately);
-
         return respond;
     }
 
@@ -267,24 +271,35 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     /**
      * ************************* 键盘布局切换 *******************************
      */
-    int isCheckBarrage=2;
-    boolean isSelector=false;
+
+    boolean isSelector;
     private View.OnClickListener clickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             if (v == sendMessageButtonInInputBar) {
+                boolean loginStatus = DemoCache.getLoginStatus();
+                boolean loginChatRoomStatus = DemoCache.getLoginChatRoomStatus();
+                if(loginChatRoomStatus&&loginStatus){
+                    onTextMessageSendButtonPressed(messageEditText.getText().toString());
+                }else {
+                    Toast.makeText(mContext,"正在连接聊天系统，请稍后。。。。",Toast.LENGTH_SHORT).show();
+                }
 
-                onTextMessageSendButtonPressed(messageEditText.getText().toString());
             } else if (v == moreFuntionButtonInInputBar) {
                 toggleActionPanelLayout();
             } else if (v == emojiButtonInInputBar) {
                 toggleEmojiLayout();
             }else if(v.getId()== R.id.im_barrage_and_chat_iv){
-                isSelector = isCheckBarrage % 2 == 0 ? true : false;
-                barrageAndChat.setSelected(isSelector);
-                isCheckBarrage++;
-                AppLog.i("TAG","isSelector:"+ (isSelector==true?"开启": "关闭"));
+                isSelector = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
+                barrageAndChat.setSelected(!isSelector);
+                if(isSelector){
+                    SPCUtils.put(mContext,IS_SELSCTOR,false);
+                }else {
+                    SPCUtils.put(mContext,IS_SELSCTOR,true);
+                }
+
+                AppLog.i("TAG","isSelector:"+ (isSelector ==true?"开启": "关闭"));
 
             }
         }
@@ -325,7 +340,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
 
             textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
-            if(isSelector){
+            Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
+            if(selectorStatus){
                 if (container.proxy.sendMessage(textMessage,"1")) {
                     restoreText(true);
                 }
@@ -334,6 +350,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     restoreText(true);
                 }
             }
+            SPCUtils.put(mContext,IS_SELSCTOR,false);
+            hideInputMethod();
 
         }
 
@@ -403,9 +421,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     // 隐藏键盘布局
     public void hideInputMethod() {
         isKeyboardShowed = false;
-       if(isSelector){
-           isCheckBarrage++;
-       }
+        barrageAndChat.setSelected(false);
         uiHandler.removeCallbacks(showTextRunnable);
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(messageEditText.getWindowToken(), 0);
