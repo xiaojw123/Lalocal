@@ -2,14 +2,9 @@ package com.lalocal.lalocal.activity;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,7 +14,6 @@ import android.widget.Toast;
 
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
-import com.easemob.chat.EMChat;
 import com.easemob.chat.EMChatManager;
 import com.easemob.exceptions.EaseMobException;
 import com.lalocal.lalocal.R;
@@ -34,17 +28,21 @@ import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
+import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionGranted;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
+
+
 
 /**
  * Created by android on 2016/7/14.
  */
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
     private static final int UPDATE_TIME = 0x001;
-    private  static  final  int READ_PHONE_STATE_CODE=112;
     ImageView startImg;
     ImageView welImg;
     TextView timeTv;
@@ -60,46 +58,33 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         timeTv.setOnClickListener(this);
         setLoaderCallBack(new MyCallBack());
         registerObservers(true);
-        if (Build.VERSION.SDK_INT>=23){
-            requestPhonePermission();
-        }else{
-            mContentloader.versionUpdate(AppConfig.getVersionName(this));
-        }
+        requestUserPermission(Manifest.permission.READ_PHONE_STATE);
+    }
 
+    @OnMPermissionGranted(PERMISSION_STGAT_CODE)
+    public void onPermissionGranted() {
+        AppLog.print("onPermissionGranted___");
+        mContentloader.versionUpdate(AppConfig.getVersionName(this));
+    }
+
+    @OnMPermissionDenied(PERMISSION_STGAT_CODE)
+    public void onPermissionDenied() {
+        Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
 
     }
-    public   void requestPhonePermission(){
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.READ_PHONE_STATE},
-                    READ_PHONE_STATE_CODE);
-        }else{
-            mContentloader.versionUpdate(AppConfig.getVersionName(this));
-        }
 
-
-    }
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        AppLog.print("onRequestPermissionsResult____");
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        doNext(requestCode,grantResults);
-    }
-    private void doNext(int requestCode, int[] grantResults) {
-        if (requestCode == READ_PHONE_STATE_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                mContentloader.versionUpdate(AppConfig.getVersionName(this));
-            } else {
-                // Permission Denied
-                Toast.makeText(this,"权限被拒绝,请允许!",Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
 
     private void registerObservers(boolean register) {
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
+
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>(){
         @Override
         public void onEvent(StatusCode statusCode) {
@@ -109,8 +94,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             }
         }
     };
-
-
 
 
     @Override
@@ -153,29 +136,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    public void loginChatService() {
-        if (EMChat.getInstance().isLoggedIn()) {
-            new Thread(new Runnable() {
 
-                @Override
-                public void run() {
-                    try {
-                        //加载本地数据库中的消息到内存中
-                        EMChatManager.getInstance().loadAllConversations();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    startHomePage();
-                }
-            }).start();
-        } else {
-            //根据deviceId创建一个用户并登录环信服务器
-            createRandomAccountAndLoginChatServer();
-        }
-
-    }
-
-    private void createRandomAccountAndLoginChatServer() {
+    private void loginChatService() {
         // 自动生成账号
         final String randomAccount = CommonUtils.getRandomAccount(this);
         final String userPwd = Constant.DEFAULT_ACCOUNT_PWD;
@@ -184,6 +146,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void onSuccess() {
                 //登录环信服务器
+                AppLog.print("创建账号成功！！");
                 loginHuanxinServer(randomAccount, userPwd);
             }
 

@@ -22,9 +22,9 @@ public class CustomViewPager extends ViewPager {
 
     }
 
-    @SuppressWarnings("deprecation")
     public void init() {
-        setOnPageChangeListener(listener);
+//        setOnPageChangeListener(listener);
+        addOnPageChangeListener(listener);
     }
 
     ;

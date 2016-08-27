@@ -92,7 +92,7 @@
     <string name="order_number">订单编号</string>
     <string name="toal">合计:</string>
     <string name="payment">付款</string>
-    <string name="orderdetail">订单详情</string>
+    <string name="order_detail">订单详情</string>
     <string name="service">客服</string>
     <string name="travel_information">出行信息</string>
     <string name="packages_choose">套餐选择</string>
@@ -141,7 +141,7 @@
     <string name="Download_the_pictures_new">下载图片:</string>
     <string name="Failed_to_download_file">下载文件失败:</string>
 
-    <string name="adapter_no_content">没有任何内容</string>
+    <string name="adapter_no_content">没有您要的搜索结果，请更换搜索关键字</string>
     <string name="pay">支付</string>
     <string name="pay_amount">付款</string>
     <string name="pay_manner">支付方式</string>
@@ -208,6 +208,10 @@
     <string name="pay_immediately">立即支付</string>
     <string name="evaluate_immediately">立即评价</string>
     <string name="evaluate">评价</string>
+    <string name="shuttle_setup">接送设定</string>
+    <string name="remark">备注</string>
+    <string name="language">语言</string>
+    <string name="no_content">没有任何内容</string>
 
 
 </resources>

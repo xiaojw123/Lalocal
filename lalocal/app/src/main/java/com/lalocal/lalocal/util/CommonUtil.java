@@ -2,7 +2,10 @@ package com.lalocal.lalocal.util;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.style.TextAppearanceSpan;
 import android.view.Gravity;
 import android.widget.Toast;
 
@@ -20,7 +23,22 @@ import java.util.regex.Pattern;
 public class CommonUtil {
     private static double EARTH_RADIUS = 6378.137;
     private  static  final  int READ_PHONE_STATE_CODE=112;
+
     public static  int RESULT_DIALOG=0;
+
+
+    public static String removeCharAt(String s, int pos) {
+        return s.substring(0, pos) + s.substring(pos + 1);
+    }
+
+    //textview设置不同前景色
+    public static  SpannableString getSpannelStyle(Context context,String text,int appearance,int start ,int end){
+        SpannableString spannableStr=new SpannableString(text);
+        spannableStr.setSpan(new TextAppearanceSpan(context, appearance), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return  spannableStr;
+    }
+
+
     /**
      * 根据两个位置的经纬度，来计算两地的距离（单位为KM）
      * 参数为String类型
@@ -50,6 +68,9 @@ public class CommonUtil {
     public static String formartOrderPrice(double price) {
         NumberFormat nf = new DecimalFormat("¥ ###,###,###,###,###,###,###,###.##");
         return nf.format(price);
+    }
+    public static String fomartStartOrderPrice(double price){
+        return  formartOrderPrice(price)+" 起";
     }
 
     //验证邮箱格式

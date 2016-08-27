@@ -17,7 +17,6 @@ import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -34,7 +33,9 @@ public class AreaDetailAdapter extends BaseAdapter {
     public static final int PAGE_STRATEGY = 0x111;
     public static final int PAGE_PACKAGETOUR = 0x112;
     public static final int PAGE_FREEWARKER = 0x113;
+    public static final int PAGE_LOCAL=0x114;
     int pageType;
+    int collectionId=-1;
     Context context;
     List<SearchItem> items;
     LayoutInflater inflater;
@@ -46,6 +47,13 @@ public class AreaDetailAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
         res = context.getResources();
     }
+    public void setCollectionId(int collectionId){
+        this.collectionId=collectionId;
+    }
+    public int getCollectionId(){
+        return collectionId;
+    }
+
 
     public void updateItems(List<SearchItem> items) {
         this.items = items;
@@ -82,24 +90,19 @@ public class AreaDetailAdapter extends BaseAdapter {
             return null;
         }
         SearchItem item = items.get(position);
-        AppLog.print("item___size___" + items.size() + ", positoin___" + position);
         if (item != null) {
             if (item instanceof ProductItem) {
-                AppLog.print("加载商品item___");
                 convertView = getModuelProduct(convertView, parent, item);
                 convertView.setTag(R.id.areaDetialItem, item);
 
             } else if (item instanceof RouteItem) {
-                AppLog.print("加载路线item___");
                 convertView = getModuelRoute(convertView, parent, item);
                 convertView.setTag(R.id.areaDetialItem, item);
             } else {
-                AppLog.print("加载标题item___");
                 convertView = getModuelTitle(item);
             }
         } else {
             if (position == items.size() - 1) {
-                AppLog.print("加载不出item___");
                 convertView = inflater.inflate(R.layout.load_more_layout, null);
                 convertView.setFocusableInTouchMode(false);
                 convertView.setFocusable(false);
@@ -164,15 +167,15 @@ public class AreaDetailAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.area_detail_item_product, parent, false);
             holder.photo = (ImageView) convertView.findViewById(R.id.area_detail_item_product_img);
             holder.title = (TextView) convertView.findViewById(R.id.area_detail_item_product_title);
-            holder.price = (TextView) convertView.findViewById(R.id.area_detail_item_product_price);
+//            holder.price = (TextView) convertView.findViewById(R.id.area_detail_item_product_price);
             convertView.setTag(holder);
         } else {
             holder = (ProductHolder) convertView.getTag();
         }
-        double price = ((ProductItem) item).getPrice();
+//        double price = ((ProductItem) item).getPrice();
         DrawableUtils.displayImg(context, holder.photo, item.getPhoto());
         holder.title.setText(item.getTitle());
-        holder.price.setText(CommonUtil.formartOrderPrice(price));
+//        holder.price.setText(CommonUtil.formartOrderPrice(price));
         return convertView;
     }
 

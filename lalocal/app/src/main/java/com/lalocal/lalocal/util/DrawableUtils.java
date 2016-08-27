@@ -27,6 +27,7 @@ public class DrawableUtils {
         displayImg(context, img, url, 0, DRAWABLE_NULL);
     }
 
+
     public static void displayImg(Context context, ImageView img, String url, int drawable) {
         displayImg(context, img, url, 0, drawable);
     }

@@ -2,7 +2,6 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -117,6 +116,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     }
 
     private void initViewPager(List<RouteDetail.RouteDatesBean> routeDates) {
+        AppLog.print("initViewPager____");
         List<RecyclerView> views = new ArrayList<>();
         for (RouteDetail.RouteDatesBean bean : routeDates) {
             RecyclerView recyclerView = new RecyclerView(this);
@@ -131,7 +131,9 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             views.add(recyclerView);
         }
         routeDetailViewpagerRoute.setCallBack(pagerCallBack);
-        routeDetailViewpagerRoute.setAdapter(new RoutePagerAdpater(views));
+        RoutePagerAdpater pagerAdpater=  new RoutePagerAdpater(views);
+        routeDetailViewpagerRoute.setAdapter(pagerAdpater);
+        pagerAdpater.notifyDataSetChanged();
 
     }
 
@@ -154,10 +156,10 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
     @OnClick(R.id.day_item_detail_loc)
     public void planFromMap() {
-        Intent intent = new Intent("android.intent.action.VIEW",
-                Uri.parse("androidamap://viewMap?sourceApplication=乐可旅行&poiname=杭州未来科技城&lat=36.2&lon=116.1&dev=0"));
-        intent.setPackage("com.autonavi.minimap");
-        startActivity(intent);
+//        Intent intent = new Intent("android.intent.action.VIEW",
+//                Uri.parse("androidamap://viewMap?sourceApplication=乐可旅行&poiname=杭州未来科技城&lat=36.2&lon=116.1&dev=0"));
+//        intent.setPackage("com.autonavi.minimap");
+//        startActivity(intent);
 
     }
 
@@ -324,6 +326,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
 
     private void initLoader() {
+        AppLog.print("initLoader____");
         setLoaderCallBack(new RouteDetailCallBack());
         mContentloader.getRouteDetails(getDetailId());
     }
@@ -379,6 +382,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
 
     public void setSelectItem(ViewGroup viewGroup, int selectedId) {
+        AppLog.print("setSelectItem___start_");
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
             View view = viewGroup.getChildAt(i);
             if (view instanceof ViewGroup) {
@@ -410,6 +414,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                 }
             }
         }
+        AppLog.print("setSelectItem___end_");
 
     }
 
@@ -417,6 +422,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
         @Override
         public void onGetRouteDetail(RouteDetail routeDetail) {
+            AppLog.print("onGetRouteDetail______");
             mRouteDetail = routeDetail;
             praiseId = routeDetail.getPraiseId();
             praiseFlag = routeDetail.isPraiseFlag();
@@ -451,6 +457,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     }
 
     private void updateDateListView(RouteDetail routeDetai) {
+        AppLog.print("updateDateListView___");
         List<RouteDetail.ComboProduListBean> comboProdus = routeDetai.getComboProduList();
         List<RouteDetail.RouteDatesBean> routeDates = routeDetai.getRouteDates();
         List<Integer> dates = null;
@@ -537,6 +544,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
 
     private void updateMap(List<RouteDetail.RouteDatesBean.RouteItemsBean> routeItems) {
+        AppLog.print("updateMap_____start__");
         if (aMap == null) {
 
             mapView.onCreate(savedInstanceState);
@@ -570,7 +578,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             options.position(latLng);
             aMap.addMarker(options);
         }
-
+        AppLog.print("updateMap_____end__");
 
     }
 
@@ -642,6 +650,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
         public RoutePagerAdpater(List<RecyclerView> views) {
             mViews = views;
+            AppLog.print("RoutePagerAdpater___");
         }
 
         @Override
@@ -656,11 +665,13 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
+            AppLog.print("destroyItem____");
             container.removeView(mViews.get(position));
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
+            AppLog.print("instantiateItem____");
             RecyclerView view = mViews.get(position);
             container.addView(view);
             return view;

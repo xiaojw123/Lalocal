@@ -8,7 +8,7 @@
     <include
         layout="@layout/search_result_item"
         />
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/search_result_item_article_avatar"
         android:layout_width="@dimen/search_result_item_avatar_width"
         android:layout_height="@dimen/search_result_item_avatar_width"

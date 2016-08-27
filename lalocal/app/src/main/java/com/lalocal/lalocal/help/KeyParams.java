@@ -23,5 +23,7 @@ public interface KeyParams {
     public static final String ORDDER_DETFAIL="orderdetail";
     public static  final  String AMOUNT_PRICE="amountprice";
     public static final  String PRE_VIEW_PARAMS="previewparams";
+    public static  final  String ACTION_TYPE="actointype";
+    public static final  String ACTION_BOOK="actionbook";
 
 }

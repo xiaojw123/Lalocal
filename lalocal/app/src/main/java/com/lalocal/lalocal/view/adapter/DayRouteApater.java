@@ -50,7 +50,7 @@ public class DayRouteApater extends BaseRecyclerAdapter {
             if (!TextUtils.isEmpty(productId)) {
                 routeHolder.buyTag.setVisibility(View.VISIBLE);
             }
-            DrawableUtils.displayImg(context, routeHolder.photo, routeItem.getPhoto());
+            DrawableUtils.displayImg(context, routeHolder.photo, routeItem.getPhoto(),-1);
             routeHolder.title.setText(routeItem.getTitle());
             if (position < routeItems.size() - 1) {
                 double lat1 = routeItem.getLatitude();

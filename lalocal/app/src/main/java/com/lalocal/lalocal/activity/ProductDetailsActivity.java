@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
@@ -41,6 +43,7 @@ import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
 import com.lalocal.lalocal.view.SharePopupWindow;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -241,9 +244,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_details_reserve:
                 //TODO 预定
-                if (result == null) {
-                    return;
-                }
                 if (UserHelper.isLogined(this)) {
                     contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
                 } else {
@@ -305,12 +305,22 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     public class MyCallBack extends ICallBack {
 
         @Override
-        public void onGetUserProfile(LoginUser user) {
+        public void onGetUserProfile(final LoginUser user) {
             if (user != null) {
                 if (user.getStatus() == 0) {
                     preOrderProduct();
                 } else {
-                    CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", null);
+                    CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", new CustomDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            Intent intent = new Intent(ProductDetailsActivity.this, AccountEidt2Activity.class);
+                            intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
+                            intent.putExtra("emailtext", user.getEmail() + "(未验证)");
+                            intent.putExtra(KeyParams.USERID, user.getId());
+                            intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
 
@@ -340,7 +350,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     //显示轮播图
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoVOs.size(); i++) {
-                        if(i>7){
+                        if (i > 7) {
                             break;
                         }
                         RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
@@ -431,7 +441,30 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         }
 
         titleTv.setText(result.title);
-        productPrice.setText("¥ " + result.price);
+//        productPrice.setText("¥ " + result.price);
+        productPrice.setText(CommonUtil.formartOrderPrice(result.price));
+        List<SparseArray<String>> items=new ArrayList<>();
+        SparseArray<String> item1=new SparseArray<>();
+        SparseArray<String> item2=new SparseArray<>();
+        SparseArray<String> item3=new SparseArray<>();
+        SparseArray<String> item4=new SparseArray<>();
+        SparseArray<String> item5=new SparseArray<>();
+        item1.append(0,"出发时间");
+        item1.append(1,result.departureTime);
+        item2.append(0,"出发地点");
+        item2.append(1,result.departurePoint);
+        item3.append(0,"出发须知");
+        item3.append(1,result.departureRemark);
+        item4.append(0,"持续时间");
+        item4.append(1,result.duration);
+        item5.append(0,"返回信息");
+        item5.append(1,result.returnDetails);
+        items.add(item1);
+        items.add(item2);
+        items.add(item3);
+        items.add(item4);
+        items.add(item5);
+        serviceAddtionIntroduce(items);
         List<ProductDetailsBean> details = result.details;
         for (int i = 0; i < details.size(); i++) {
             if (i == 0) {
@@ -458,6 +491,37 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 purchaseNotes.addView(tv);
             }
         }
+    }
+
+    public void serviceAddtionIntroduce(List<SparseArray<String>>  items){
+        for (int i = 0; i < items.size(); i++) {
+            SparseArray<String> item=items.get(i);
+            TextView tv = new TextView(ProductDetailsActivity.this);
+            tv.setText("· " +item.get(0) + "");
+            tv.setTextColor(Color.parseColor("#ffaa2a"));
+            tv.setPadding(left, left, 0, left);
+            serviceLayout.addView(tv);
+            TextView tvContent = new TextView(ProductDetailsActivity.this);
+            tvContent.setText(item.get(1));
+            tvContent.setPadding(left, 0, 0, 0);
+                serviceLayout.addView(tvContent);
+            View nullView = new View(ProductDetailsActivity.this);
+            LinearLayout.LayoutParams nullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60);
+            serviceLayout.addView(nullView, nullParams);
+            if (i != items.size() - 1) {
+                View view = new View(ProductDetailsActivity.this);
+                view.setBackgroundColor(Color.parseColor("#aaaaaa"));
+                view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+                view.setBackgroundResource(R.drawable.imag_line);
+
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(mContext, 2));
+
+                params.leftMargin = DensityUtil.dip2px(mContext, 15);
+                params.rightMargin = DensityUtil.dip2px(mContext, 15);
+                serviceLayout.addView(view, params);
+            }
+        }
+
     }
 
     //服务介绍
@@ -529,9 +593,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LoginActivity.LOGIN_OK) {
-            contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
+        if (resultCode == LoginActivity.REGISTER_OK) {
+            String email = data.getStringExtra(LoginActivity.EMAIL);
+            String psw = data.getStringExtra(LoginActivity.PSW);
+            contentService.login(email, psw);
         }
 
     }
+
 }

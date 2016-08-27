@@ -74,7 +74,7 @@ public class PayCompleteActivity extends BaseActivity {
                 if (mOrderDetail != null) {
                     Intent csIntent = new Intent(this, ChatActivity.class);
                     csIntent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
-                    csIntent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhone());
+                    csIntent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
                     csIntent.putExtra(Constant.ITEM_PRICE, String.valueOf(mAcount));
                     startActivity(csIntent);
                 }
@@ -84,7 +84,6 @@ public class PayCompleteActivity extends BaseActivity {
                     Intent intent = new Intent(this, OrderActivity.class);
                     intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
                     startActivity(intent);
-                    finish();
                 }
                 break;
         }

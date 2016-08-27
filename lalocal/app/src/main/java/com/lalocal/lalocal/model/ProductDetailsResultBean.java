@@ -24,6 +24,22 @@ public class ProductDetailsResultBean {
     public String url;
     public SpecialShareVOBean shareVO;
     public Object appraiseVO;
+
+//    "departureTime": "8am",
+//            "departurePoint": "Your hotel in Seoul city",
+//            "departureRemark": "Hotel pickups commence prior to this time, you must contact the local service provider to verify your exact pickup time.Times are subject to change due to local traffic conditions.",
+//            "duration": "9 hours",
+//            "returnDetails": "Return to your hotel",
+//            "orderUrl": "https://dev.lalocal.cn/wechat/order_select?id=853",
+//            "videoUrl": null
+//
+    public String departureTime;
+    public String departurePoint;
+    public String departureRemark;
+    public String duration;
+    public String returnDetails;
+    public String orderUrl;
+    public String videoUrl;
     public List<ProductDetailsBean> details;
     public List<PhotosVosBean> photoVOs;
 }

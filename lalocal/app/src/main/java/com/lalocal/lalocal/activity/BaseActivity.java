@@ -10,6 +10,8 @@ import android.view.View;
 import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Unbinder;
@@ -23,6 +25,7 @@ import butterknife.Unbinder;
 public class BaseActivity extends AppCompatActivity {
     Unbinder unbinder;
     ContentLoader mContentloader;
+    public static  final int PERMISSION_STGAT_CODE=1123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,8 +37,6 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-
-
     public void setLoaderCallBack(ICallBack callBack) {
         if (mContentloader == null) {
             mContentloader = new ContentLoader(this);
@@ -44,12 +45,25 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+
+
+    public void requestUserPermission(String... permissions){
+        AppLog.print("requestUserPermission___");
+        MPermission.with(this)
+                .addRequestCode(PERMISSION_STGAT_CODE)
+                .permissions(permissions)
+                .request();
+    }
+
+
+
+
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         if (unbinder != null) {
             unbinder.unbind();
         }
+        super.onDestroy();
     }
 
     //TODO:bugtags online delete

@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -63,8 +64,8 @@ public class BookActivity extends BaseActivity {
                         result.confirm();
                     }
                 });
+                builder.setCancelable(false);
                 builder.show();
-                result.cancel();
                 return true;
             }
             return super.onJsAlert(view, url, message, result);
@@ -91,8 +92,8 @@ public class BookActivity extends BaseActivity {
 
                     }
                 });
+                builder.setCancelable(false);
                 builder.show();
-                result.cancel();
                 return true;
             }
             return super.onJsConfirm(view, url, message, result);
@@ -146,5 +147,9 @@ public class BookActivity extends BaseActivity {
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        AppLog.print("book onActivityResultresultCode___"+resultCode);
+             finish();
+    }
 }

@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleItem;
-import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RouteItem;
+import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -96,7 +96,9 @@ public class MoreAdpater extends BaseAdapter {
                     holder.title.setText(item.getTitle());
                     ArticleItem.AuthorVOBean bean = ((ArticleItem) item).getAuthorVO();
                     if (bean != null) {
-                        DrawableUtils.displayImg(mContext, holder.avatar, bean.getAuthorAvatar());
+                        if (holder.avatar != null) {
+                            DrawableUtils.displayImg(mContext, holder.avatar, bean.getAuthorAvatar());
+                        }
                         holder.author.setText(bean.getAuthorName());
                     }
                 }
@@ -115,8 +117,14 @@ public class MoreAdpater extends BaseAdapter {
                 if (item != null) {
                     AppLog.print("holder*****----****" + holder);
                     DrawableUtils.displayImg(mContext, holder.photo, item.getPhoto());
-                    holder.title.setText(item.getTitle());
-                    holder.price.setText(CommonUtil.formartOrderPrice(((ProductItem)item).getPrice()));
+                    if (holder.title != null) {
+                        holder.title.setText(item.getTitle());
+                    }
+                    if (holder.price != null) {
+                        String text=CommonUtil.fomartStartOrderPrice( ((ProductItem) item).getPrice());
+                        int len=text.length();
+                        holder.price.setText(CommonUtil.getSpannelStyle(mContext,text,R.style.SearchOrderPriceStyle,len-1,len));
+                    }
                 }
                 break;
             case MODUEL_TYPE_ROUTE:
@@ -144,7 +152,7 @@ public class MoreAdpater extends BaseAdapter {
 
         }
         AppLog.print("getview end contentview___" + convertView);
-        convertView.setTag(R.id.moreSearchItemId,item);
+        convertView.setTag(R.id.moreSearchItemId, item);
         return convertView;
     }
 

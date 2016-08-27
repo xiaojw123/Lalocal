@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
@@ -251,8 +252,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        public void onRequestFailed() {
-            super.onRequestFailed();
+        public void onRequestFailed(VolleyError volleyError) {
+            super.onRequestFailed(volleyError);
         }
 
     }

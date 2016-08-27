@@ -29,7 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PayActivity extends BaseActivity {
+public class PayActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
+    public static final int RESULT_BACK_PRODUCT = 0x11;
     public static final String ORDER_ID = "order_id";
     /**
      * 微信支付渠道
@@ -44,8 +45,6 @@ public class PayActivity extends BaseActivity {
      */
     private static final String CHANNEL_XINCHENG = "xc";
 
-    @BindView(R.id.pay_title_view)
-    CustomTitleView payTitleView;
     @BindView(R.id.pay_order_title)
     TextView payOrderTitle;
     @BindView(R.id.pay_order_info_item)
@@ -83,14 +82,19 @@ public class PayActivity extends BaseActivity {
     double mAccout;
     String mFormartPrice;
     int mOrderid;
+    String actionType;
+    @BindView(R.id.pay_title_view)
+    CustomTitleView payTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_layout);
         unbinder = ButterKnife.bind(this);
+        payTitleView.setOnBackClickListener(this);
         setLoaderCallBack(new PayCallBack());
         mOrderid = getIntent().getIntExtra(ORDER_ID, -1);
+        actionType = getIntent().getStringExtra(KeyParams.ACTION_TYPE);
         mContentloader.getOrderDetail(mOrderid);
         payMannerAlipayCb.setSelected(true);
     }
@@ -135,7 +139,7 @@ public class PayActivity extends BaseActivity {
                 PaymentRequest request = new PaymentRequest(mChannelStr, mOrderid, mAccout);
                 Gson gson = new Gson();
                 String json = gson.toJson(request);
-                AppLog.print("requestJson___"+json);
+                AppLog.print("requestJson___" + json);
                 mContentloader.payOrder(json);
                 break;
 
@@ -145,7 +149,8 @@ public class PayActivity extends BaseActivity {
     private void showOrderDetail() {
         Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra(KeyParams.ORDER_ID, mOrderid);
-        intent.putExtra(KeyParams.PRE_VIEW_PARAMS,true);
+        intent.putExtra(KeyParams.PRE_VIEW_PARAMS, true);
+//        startActivityForResult(intent,100);
         startActivity(intent);
     }
 
@@ -192,33 +197,61 @@ public class PayActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //支付页面返回处理
+        AppLog.print("PayActivity onActivityResult___reqCODE__" + requestCode+"___resultCode___"+resultCode);
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
-                String text="未支付";
-                switch (result){
+                AppLog.print("pay result___"+result);
+                String text = "未支付";
+                switch (result) {
                     case "success":
                         showCompletePay();
                         break;
                     case "cancel":
-                        text="支付取消";
+                        text = "支付取消";
                         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
                         break;
                     case "invalid":
-                        text="支付失效";
+                        text = "支付失效";
                         Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
                         break;
                 }
             }
+        } else if (requestCode == 101) {
+            AppLog.print("setResult___" + resultCode);
+            if (resultCode == RESULT_BACK_PRODUCT) {
+                setResult(RESULT_BACK_PRODUCT);
+                finish();
+            }
+
         }
     }
 
-    public void showCompletePay(){
-        Intent  intent=new Intent(this,PayCompleteActivity.class);
-        intent.putExtra(KeyParams.ORDDER_DETFAIL,mOrderDetail);
-        intent.putExtra(KeyParams.AMOUNT_PRICE,mAccout);
+    public void showCompletePay() {
+        Intent intent = new Intent(this, PayCompleteActivity.class);
+        intent.putExtra(KeyParams.ORDDER_DETFAIL, mOrderDetail);
+        intent.putExtra(KeyParams.AMOUNT_PRICE, mAccout);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public void onBackClick() {
+        backToOrderDetail();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backToOrderDetail();
+    }
+
+    private void backToOrderDetail() {
+        if (KeyParams.ACTION_BOOK.equals(actionType)) {
+            Intent intent = new Intent(this, OrderActivity.class);
+            intent.putExtra(KeyParams.ORDER_ID, mOrderid);
+            startActivityForResult(intent, 101);
+        }
     }
 
 
@@ -237,7 +270,7 @@ public class PayActivity extends BaseActivity {
     class PayCallBack extends ICallBack {
         @Override
         public void onGetPayResult(String result) {
-            AppLog.print("onGetPayResult result___"+result);
+            AppLog.print("onGetPayResult result___" + result);
             Pingpp.createPayment(PayActivity.this, result);
 
         }

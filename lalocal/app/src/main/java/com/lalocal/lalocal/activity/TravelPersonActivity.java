@@ -1,8 +1,10 @@
 package com.lalocal.lalocal.activity;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,13 +42,19 @@ public class TravelPersonActivity extends BaseActivity {
             TextView mobileNumbTv = (TextView) itemView.findViewById(R.id.travel_person_mobile_numb);
             TextView emailTv = (TextView) itemView.findViewById(R.id.travel_person_email);
             TextView sexTv = (TextView) itemView.findViewById(R.id.travel_person_sex);
+            FrameLayout phoneCotainer= (FrameLayout) itemView.findViewById(R.id.travelperson_phone_container);
+            FrameLayout emailCotainer= (FrameLayout) itemView.findViewById(R.id.travelperson_email_cotainer);
+            FrameLayout sexCotainer= (FrameLayout) itemView.findViewById(R.id.travelperson_sex_container);
             List<OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean> contacts = bean.getItemList();
             String enName = "";
             for (OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean contact : contacts) {
                 String value = contact.getValue();
                 switch (contact.getCode()) {
                     case "7": // isleader  1: true 0: false
+                        if (!TextUtils.isEmpty(value)){
+                            sexCotainer.setVisibility(View.VISIBLE);
                         sexTv.setText(value);
+                        }
                         break;
                     case "-1":
                         if ("1".equals(value)){
@@ -55,10 +63,16 @@ public class TravelPersonActivity extends BaseActivity {
                         }
                         break;
                     case "2":
+                        if (!TextUtils.isEmpty(value)){
+                            emailCotainer.setVisibility(View.VISIBLE);
                         emailTv.setText(value);
+                        }
                         break;
                     case "12":
+                        if (!TextUtils.isEmpty(value)){
+                            phoneCotainer.setVisibility(View.VISIBLE);
                         mobileNumbTv.setText(value);
+                        }
                         break;
                     case "0":
                         enName += value;

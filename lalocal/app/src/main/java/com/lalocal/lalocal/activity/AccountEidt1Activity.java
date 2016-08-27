@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.LoginUser;
@@ -26,6 +28,9 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
+import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
+import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionGranted;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -33,11 +38,13 @@ import java.io.File;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener, CustomTitleView.onBackBtnClickListener {
+    private static  final  String AUTHOR_FIALED="com.android.volley.AuthFailureError";
     public static final int UPDATE_ME_DATA = 301;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
     private static final int MODIFY_USER_PROFILE = 4;
+    private static final  int LOGIN_RQEUST_CODE=5;
     private File tempFile;
     CircleImageView personalheader_civ;
     RelativeLayout nickname_rlt;
@@ -209,6 +216,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -266,6 +274,9 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 nickaname_tv.setText(nickname);
             }
 
+        }else if (requestCode==LOGIN_RQEUST_CODE){
+            setResult(resultCode,data);
+            finish();
         }
 
     }
@@ -293,11 +304,29 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 searchPhotoBum();
                 break;
             case R.id.photograph_btn:
-                photoGraph();
+                requestUserPermission(Manifest.permission.CAMERA);
+
                 break;
 
         }
 
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        AppLog.print("onRequestPermissionsResult____");
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    @OnMPermissionGranted(PERMISSION_STGAT_CODE)
+    public void  onPermissionGranted(){
+        photoGraph();
+    }
+
+    @OnMPermissionDenied(PERMISSION_STGAT_CODE)
+    public void onPermissionDenied(){
+        Toast.makeText(this,"权限被拒绝，无法继续往下执行",Toast.LENGTH_SHORT).show();
 
     }
 
@@ -307,6 +336,14 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         @Override
         public void onGetUserProfile(LoginUser user) {
             updateUserProfileView(user);
+        }
+
+        @Override
+        public void onRequestFailed(VolleyError volleyError) {
+            if (AUTHOR_FIALED.equals(volleyError.toString())){
+               Intent intent=new Intent(AccountEidt1Activity.this,LoginActivity.class);
+                startActivityForResult(intent,LOGIN_RQEUST_CODE);
+            }
         }
     }
 

@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -226,6 +225,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_AREA_PRODUCTS);
             response.setType(type);
+            response.setCollectionId(collectionId);
         }
 
         AppLog.print("areadProudcts_____url=" + AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId));
@@ -742,6 +742,7 @@ public class ContentLoader {
         private String targetId;
         private String key;
         private int pageType;
+        private int collectionId;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
@@ -750,6 +751,10 @@ public class ContentLoader {
         public void setType(int type) {
             pageType = type;
         }
+        public void setCollectionId(int collectionId){
+            this.collectionId=collectionId;
+        }
+
 
         public void setSearchKey(String key) {
             this.key = key;
@@ -781,20 +786,15 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————" + volleyError + ", message__" + volleyError.getMessage() + ", LocalizedMessage__" + volleyError.getLocalizedMessage() + "__StackTrace_" + volleyError.getStackTrace());
-            callBack.onRequestFailed();
+            AppLog.print("volley error——————"+volleyError);
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-//            if ("com.android.volley.AuthFailureError".equals(volleyError.toString())){
-//                Intent intent=new Intent(context, LoginActivity.class);
-////                ((Activity)context).startActivityForResult(intent,100);
-//                ((Activity)context).startActivity(intent);
-//                ((Activity)context).finish();
-//
-//            }else{
-            CommonUtil.showToast(context, "网络请求异常", Toast.LENGTH_LONG);
+//            String errorMsg=volleyError.toString();
+//            if (ErrorMessage.TIME_OUT.equals(errorMsg)){
+//                Toast.makeText(context,"请求超时，请重试",Toast.LENGTH_SHORT).show();
 //            }
+            callBack.onRequestFailed(volleyError);
         }
 
         @Override
@@ -811,7 +811,7 @@ public class ContentLoader {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
-                    callBack.onRequestFailed();
+                    callBack.onResponseFailed();
                     if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
                         CustomDialog dialog = new CustomDialog(context);
                         dialog.setMessage(message);
@@ -870,6 +870,7 @@ public class ContentLoader {
                         break;
 
                     case RequestCode.GET_SEARCH_RESULT:
+                        AppLog.print("get_search_result__"+json);
                         responseGetSearchResult(jsonObj);
                         break;
 
@@ -1042,7 +1043,7 @@ public class ContentLoader {
                     items.add(item);
                 }
             }
-            callBack.onGetAreaItems(pageNumber, toalPages, items, pageType);
+            callBack.onGetAreaItems(pageNumber, toalPages, items, pageType,collectionId);
 
 
         }
@@ -1391,6 +1392,7 @@ public class ContentLoader {
 
         //产品详情
         private void responseProductDetails(String json) {
+            AppLog.print("productDetails  json____"+json);
 
             ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
             if (productDetailsDataResp != null) {

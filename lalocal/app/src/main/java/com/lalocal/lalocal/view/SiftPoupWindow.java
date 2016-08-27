@@ -50,6 +50,7 @@ public class SiftPoupWindow extends PopupWindow implements View.OnClickListener,
         loader.getDestinationCollections();
     }
 
+
     @Override
     public void onClick(View v) {
         dismiss();

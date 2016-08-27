@@ -61,7 +61,7 @@ public class SiftMenuAdpater extends BaseRecyclerAdapter {
         if (mItems != null && mItems.size() > 0) {
             final SiftModle item = mItems.get(position);
             if (item != null) {
-                DrawableUtils.displayImg(mContext, ((ViewHolder) holder).img, item.getPhoto());
+                DrawableUtils.displayImg(mContext, ((ViewHolder) holder).img, item.getPhoto(),R.drawable.mdd_loading_img);
                 ((ViewHolder) holder).title.setText(item.getName());
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

@@ -20,15 +20,16 @@
 
             />
 
-        <TextView
-            android:id="@+id/area_detail_item_product_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/area_detail_item_product_img"
-            android:layout_marginBottom="@dimen/dimen_size_8_dp"
-            android:layout_marginLeft="@dimen/dimen_size_15_dp"
-            android:textColor="@color/color_ffaa2a"
-            android:textSize="@dimen/text_size_16_sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/area_detail_item_product_price"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBottom="@+id/area_detail_item_product_img"-->
+            <!--android:layout_marginBottom="@dimen/dimen_size_8_dp"-->
+            <!--android:layout_marginLeft="@dimen/dimen_size_15_dp"-->
+            <!--android:textColor="@color/color_ffaa2a"-->
+            <!--android:textSize="@dimen/text_size_16_sp"-->
+            <!--/>-->
 
 
         <TextView
