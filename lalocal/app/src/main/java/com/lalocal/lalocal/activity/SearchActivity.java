@@ -234,7 +234,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         @Override
         public void onRequestFailed(VolleyError volleyError) {
             isRefresh = false;
-            Toast.makeText(SearchActivity.this,"网络异常",Toast.LENGTH_SHORT).show();
         }
 
         @Override

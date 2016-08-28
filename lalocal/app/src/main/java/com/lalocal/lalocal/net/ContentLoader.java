@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -102,31 +103,31 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
-    public void cancelOrder(int orderId){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.CANCEL_ORDER);
+    public void cancelOrder(int orderId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CANCEL_ORDER);
         }
-        AppLog.print("cancelOrderUrl___"+AppConfig.getCancelOrderUrl(orderId));
-        ContentRequest request=new ContentRequest(Request.Method.PUT,AppConfig.getCancelOrderUrl(orderId),response,response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context),UserHelper.getToken(context)));
-        requestQueue.add(request);
-    }
-    public void delOrder(int orderId){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.DEL_ORDER);
-        }
-        ContentRequest request=new ContentRequest(Request.Method.DELETE,AppConfig.getDelOrderUrl(orderId),response,response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context),UserHelper.getToken(context)));
+        AppLog.print("cancelOrderUrl___" + AppConfig.getCancelOrderUrl(orderId));
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getCancelOrderUrl(orderId), response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
+    public void delOrder(int orderId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.DEL_ORDER);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getDelOrderUrl(orderId), response, response);
+        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
 
 
     public void getWelcommenImgs() {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_WELCOME_IMGS);
         }
-        AppLog.print("startPage url_____"+AppConfig.getWelcommeImgs());
+        AppLog.print("startPage url_____" + AppConfig.getWelcommeImgs());
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getWelcommeImgs(), response, response);
         requestQueue.add(request);
     }
@@ -519,8 +520,9 @@ public class ContentLoader {
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
         requestQueue.add(request);
     }
+
     //上传在线人数
-    public void getUserOnLine(String onLineUsers,int onlinecount){
+    public void getUserOnLine(String onLineUsers, int onlinecount) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_ON_LINE_COUNT);
         }
@@ -641,7 +643,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        AppLog.print("获取产品详情———url———"+AppConfig.getProductDetailsUrl()+ targetId);
+        AppLog.print("获取产品详情———url———" + AppConfig.getProductDetailsUrl() + targetId);
         ContentRequest contentRequest = new ContentRequest(AppConfig.getProductDetailsUrl() + targetId, response, response);
         requestQueue.add(contentRequest);
     }
@@ -751,8 +753,9 @@ public class ContentLoader {
         public void setType(int type) {
             pageType = type;
         }
-        public void setCollectionId(int collectionId){
-            this.collectionId=collectionId;
+
+        public void setCollectionId(int collectionId) {
+            this.collectionId = collectionId;
         }
 
 
@@ -786,14 +789,11 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————"+volleyError);
+            AppLog.print("volley error——————" + volleyError);
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-//            String errorMsg=volleyError.toString();
-//            if (ErrorMessage.TIME_OUT.equals(errorMsg)){
-//                Toast.makeText(context,"请求超时，请重试",Toast.LENGTH_SHORT).show();
-//            }
+            Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
             callBack.onRequestFailed(volleyError);
         }
 
@@ -826,15 +826,15 @@ public class ContentLoader {
                 }
                 switch (resultCode) {
                     case RequestCode.CANCEL_ORDER:
-                        AppLog.print("CANCEL_ORDER___"+json);
+                        AppLog.print("CANCEL_ORDER___" + json);
                         callBack.onCancelSuccess();
                         break;
                     case RequestCode.DEL_ORDER:
-                        AppLog.print("DEL_ORDER___"+json);
+                        AppLog.print("DEL_ORDER___" + json);
                         callBack.onDelSuccess();
                         break;
                     case RequestCode.GET_WELCOME_IMGS:
-                        AppLog.print("res___"+json);
+                        AppLog.print("res___" + json);
                         responseGetWelcomeImgs(jsonObj);
                         break;
                     case RequestCode.GET_PAY_RESULT:
@@ -851,11 +851,11 @@ public class ContentLoader {
                         responseGetAreaDetailItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_ROUTE);
                         break;
                     case RequestCode.GET_HOT_ROUTES:
-                        AppLog.print("get hot routed___"+json);
+                        AppLog.print("get hot routed___" + json);
                         responseGetHotItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_ROUTE);
                         break;
                     case RequestCode.GET_HOT_PRODUCTS:
-                        AppLog.print("get hot products___"+json);
+                        AppLog.print("get hot products___" + json);
                         responseGetHotItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_PRODUCT);
                         break;
                     case RequestCode.GET_SEARCH_TAG:
@@ -872,7 +872,7 @@ public class ContentLoader {
                         break;
 
                     case RequestCode.GET_SEARCH_RESULT:
-                        AppLog.print("get_search_result__"+json);
+                        AppLog.print("get_search_result__" + json);
                         responseGetSearchResult(jsonObj);
                         break;
 
@@ -892,7 +892,7 @@ public class ContentLoader {
                         responseGetOrderDetail(jsonObj);
                         break;
                     case RequestCode.GET_MY_ORDER:
-                        AppLog.print("get my order____"+json);
+                        AppLog.print("get my order____" + json);
                         responseGetMyOrderItems(jsonObj);
                         break;
                     case RequestCode.GET_FAVORITE_ITEMS:
@@ -1006,9 +1006,9 @@ public class ContentLoader {
 
         private void responseGetWelcomeImgs(JSONObject jsonObj) {
             JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
-            Gson gson=new Gson();
-            AppLog.print("resutlJoj__"+resultJobj.toString());
-            WelcomeImg img=gson.fromJson(resultJobj.toString(),WelcomeImg.class);
+            Gson gson = new Gson();
+            AppLog.print("resutlJoj__" + resultJobj.toString());
+            WelcomeImg img = gson.fromJson(resultJobj.toString(), WelcomeImg.class);
             callBack.onGetWelcomeImgs(img);
         }
 
@@ -1045,7 +1045,7 @@ public class ContentLoader {
                     items.add(item);
                 }
             }
-            callBack.onGetAreaItems(pageNumber, toalPages, items, pageType,collectionId);
+            callBack.onGetAreaItems(pageNumber, toalPages, items, pageType, collectionId);
 
 
         }
@@ -1193,7 +1193,7 @@ public class ContentLoader {
 
         private void responseTourist(String json) {
 
-            AppLog.i("TAG","responseTourist:"+json);
+            AppLog.i("TAG", "responseTourist:" + json);
             callBack.onTouristInfo(json);
         }
 
@@ -1313,14 +1313,13 @@ public class ContentLoader {
         }
 
         private void responseLogin(JSONObject jsonObject) {
-            AppLog.i("TAG", "responseLogin" + jsonObject.toString());
             JSONObject resutJson = jsonObject.optJSONObject(ResultParams.REULST);
             User user = null;
             if (resutJson != null) {
                 Gson gson = new Gson();
                 user = gson.fromJson(resutJson.toString(), User.class);
             }
-            callBack.onLoginSucess(user);
+            AppLog.i("TAG", "responseLogin" + jsonObject.toString());
             Bundle bundle = new Bundle();
             bundle.putBoolean(KeyParams.IS_LOGIN, true);
             bundle.putString(KeyParams.EMAIL, email);
@@ -1333,13 +1332,13 @@ public class ContentLoader {
             UserHelper.saveLoginInfo(context, bundle);
             AuthPreferences.clearUserInfo();
             AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
-            AuthPreferences.saveUserToken( user.getImUserInfo().getToken());
-
+            AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
             loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+            callBack.onLoginSucess(user);
         }
 
-        private void loginIMServer(final  String imccId, String imToken) {
-            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback(){
+        private void loginIMServer(final String imccId, String imToken) {
+            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
 
                 @Override
                 public void onSuccess(Object o) {
@@ -1394,7 +1393,7 @@ public class ContentLoader {
 
         //产品详情
         private void responseProductDetails(String json) {
-            AppLog.print("productDetails  json____"+json);
+            AppLog.print("productDetails  json____" + json);
 
             ProductDetailsDataResp productDetailsDataResp = new Gson().fromJson(json, ProductDetailsDataResp.class);
             if (productDetailsDataResp != null) {
@@ -1420,7 +1419,7 @@ public class ContentLoader {
         //直播列表
         private void responseLiveList(String json) {
             LiveListDataResp liveListDataResp = new Gson().fromJson(json, LiveListDataResp.class);
-            if(liveListDataResp!=null){
+            if (liveListDataResp != null) {
                 callBack.onLiveList(liveListDataResp);
             }
 
@@ -1453,9 +1452,10 @@ public class ContentLoader {
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             callBack.onAlterLiveRoom(createLiveRoomDataResp);
         }
+
         //上传在线人数
         private void responseOnLinesCount(String json) {
-            AppLog.i("TAG","responseOnLinesCount："+json);
+            AppLog.i("TAG", "responseOnLinesCount：" + json);
         }
 
         //修改直播封面
@@ -1543,8 +1543,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
-
-
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -1653,7 +1651,7 @@ public class ContentLoader {
     }
 
     //上传在线人数
-    public  String getUserOnLines(String onLinesUser){
+    public String getUserOnLines(String onLinesUser) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("onlineUser ", onLinesUser);
@@ -1749,8 +1747,8 @@ public class ContentLoader {
         int GET_ROUTE_DETAILS = 126;
         int GET_PAY_RESULT = 127;
         int GET_WELCOME_IMGS = 128;
-        int CANCEL_ORDER=129;
-        int DEL_ORDER=130;
+        int CANCEL_ORDER = 129;
+        int DEL_ORDER = 130;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -1775,7 +1773,7 @@ public class ContentLoader {
         int LIVE_CANCEL_ATTENTION = 219;
         int LIVE_FANS_OR_ATTENTION = 220;
         int LIVE_SEARCH_USER = 221;
-        int LIVE_ON_LINE_COUNT=222;
+        int LIVE_ON_LINE_COUNT = 222;
 
     }
 

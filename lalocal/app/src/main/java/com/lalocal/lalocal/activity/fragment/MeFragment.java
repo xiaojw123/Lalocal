@@ -25,6 +25,7 @@ import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
+import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
@@ -184,6 +185,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        AppLog.print("onHiddenChanged____"+hidden);
         if (isImLogin) {
             //立即登录
             isImLogin = false;
@@ -200,6 +202,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         } else {
             //正常登录方式  刷新邮箱验证状态 刷新我的收藏状态(我的收藏没被选中时更新我的收藏适配器)
             if (!hidden) {
+                AppLog.print("onHiddenChanged__showFrament____");
                 if (UserHelper.isLogined(getActivity())) {
                     mUserid = UserHelper.getUserId(getActivity());
                     mToken = UserHelper.getToken(getActivity());
@@ -285,7 +288,6 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                     } else {
                         orderAdapter = emptoAdpater;
                         mListView.setAdapter(orderAdapter);
-
                     }
                     break;
                 case R.id.home_me_coupon_tab:
@@ -454,6 +456,12 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             mToken = null;
             couponAdapter = emptcAdpater;
             orderAdapter = emptoAdpater;
+            if (order_tab.isSelected()){
+                mListView.setAdapter(orderAdapter);
+            }
+            if (coupon_tab.isSelected()){
+                mListView.setAdapter(couponAdapter);
+            }
         }
         UserHelper.favorites.clear();
         lastFavorites.clear();
@@ -567,9 +575,9 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
                 isDownRefresh = false;
                 mListView.stopRefresh();
             }
-//            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())){
-//                signOut();
-//            }
+            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())){
+                signOut();
+            }
         }
 
 
