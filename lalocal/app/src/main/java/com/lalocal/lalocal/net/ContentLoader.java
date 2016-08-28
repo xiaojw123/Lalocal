@@ -21,6 +21,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.activity.RegisterActivity;
+import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.AreaItem;
@@ -793,8 +794,11 @@ public class ContentLoader {
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-            Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
-            callBack.onRequestFailed(volleyError);
+            if (!ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
+                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+            } else {
+                callBack.onRequestFailed(volleyError);
+            }
         }
 
         @Override
