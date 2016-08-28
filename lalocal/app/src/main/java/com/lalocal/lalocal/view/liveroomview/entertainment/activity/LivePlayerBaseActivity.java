@@ -195,6 +195,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private String barrageContent;
     private String fromNickBarrage;
     private NetworkInfo netInfo;
+    protected CustomLiveUserInfoDialog customLiveUserInfoDialog;
 
 
     protected abstract int getActivityLayout(); // activity布局文件
@@ -635,7 +636,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     };
 
     protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result, boolean isLiveOver) {
-        CustomLiveUserInfoDialog customLiveUserInfoDialog=new CustomLiveUserInfoDialog(LivePlayerBaseActivity.this,result);
+        customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LivePlayerBaseActivity.this,result);
         customLiveUserInfoDialog.setCancelable(false);
         customLiveUserInfoDialog.setCancelBtn(null);
         customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
