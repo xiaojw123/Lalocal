@@ -5,22 +5,15 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@drawable/popuwindow_bg"
     >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:background="@drawable/popuwindow_bg"
-       >
+
         <LinearLayout
             android:id="@+id/popu_bg"
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_355dp"
            android:background="@color/white"
             android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
@@ -147,24 +140,4 @@
                     android:textSize="@dimen/text_size_18_sp" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/master_info_back_home"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/live_height_50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/live_input_live_bg"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/audience_over_back_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/live_back"
-            android:textColor="@color/live_start_tv"
-            android:textSize="@dimen/text_size_16_sp" />
-    </LinearLayout>
 </LinearLayout>

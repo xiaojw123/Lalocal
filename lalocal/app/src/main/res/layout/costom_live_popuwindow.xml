@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_gravity="center"
+    android:gravity="center"
     android:layout_height="@dimen/live_height_355dp"
     android:paddingLeft="@dimen/live_padding_48dp"
     android:paddingRight="@dimen/live_padding_48dp">

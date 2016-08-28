@@ -22,7 +22,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -581,10 +580,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (livePlayer != null) {
             livePlayer.resetLive();
         }
+        contentLoader.cancelLiveRoom(userId);
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
-            contentLoader.getUserOnLine(userOnLineCountParameter, 0);//
-            contentLoader.cancelLiveRoom(userId);
             isStartLive = false;
             livePlayer.setOnQuitLiveListener(new LivePlayer.OnQuitLiveListener() {
                 @Override
@@ -794,7 +792,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         //  liveInputLoading.setVisibility(View.VISIBLE);
                         contentLoader.alterLive(roomName, userId, null, null, null, null);
                     }else {
-                        Toast.makeText(LiveActivity.this,"请重新创建！",Toast.LENGTH_SHORT).show();
+                      //  Toast.makeText(LiveActivity.this,"请重新创建！",Toast.LENGTH_SHORT).show();
                         finish();
                     }
                     break;
@@ -896,7 +894,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     // 显示礼物布局
     private void showGiftLayout() {
         inputPanel.collapse(true);// 收起软键盘
-        // giftLayout.setVisibility(View.VISIBLE);
+
         adapter.notifyDataSetChanged();
         if (adapter.getCount() == 0) {
             // 暂无礼物

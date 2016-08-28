@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -29,7 +30,6 @@ import com.lalocal.lalocal.view.liveroomview.entertainment.constant.GiftType;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.view.liveroomview.entertainment.module.GiftAttachment;
 import com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.view.liveroomview.entertainment.ui.LiveUserInfoPopuwindow;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
@@ -56,6 +56,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 观众端
@@ -114,6 +116,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private View audienceOver;
     private BlurImageView blurImageView;
     private PowerImageView loadingImag;
+    private LinearLayout backHome;
+    private LinearLayout masterInfoBack;
+    private int infoId;
 
 
     public static void start(Context context, String roomId, String url, String avatar, String nickName, String userId, SpecialShareVOBean shareVO, String type,String annoucement) {
@@ -280,10 +285,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         AppLog.i("TAG","直播间被关闭");
                         break;
                     case ChatRoomMemberExit:
-
                         String fromAccount = message.getFromAccount();
+                        AppLog.i("TAG","离开直播间："+fromAccount);
                         if(creatorAccount.equals(fromAccount)){
-                          //  showFinishLayout(true);
+
                             AppLog.i("TAG","主播离开了。。。。。。。。");
                         }
                         break;
@@ -470,9 +475,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         settingBtn.setVisibility(View.GONE);
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
         audienceOver = findViewById(R.id.audience_over);
+        backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 
-
+        backHome.setOnClickListener(buttonClickListener);
         keyboardLayout.setAlpha(0);
         keyboardLayout.setFocusable(false);
         keyboardLayout.setClickable(false);
@@ -600,6 +606,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         inputPanel.switchToTextLayout(true);
                     }
 
+                    break;
+                case R.id.master_info_back_home:
+                    finishLive();
+                    break;
+                case R.id.live_master_home:
+                    Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
+                    intent.putExtra("userId", String.valueOf(infoId));
+                    startActivity(intent);
                     break;
 
             }
@@ -737,18 +751,44 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
               public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
                   super.onLiveUserInfo(liveUserInfosDataResp);
                   LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
-                  liveUserInfoPopuwindow = new LiveUserInfoPopuwindow(AudienceActivity.this,result,true);
-                  liveUserInfoPopuwindow.showLiveUserInfoPopuwindow();
-                  liveUserInfoPopuwindow.showAtLocation(findViewById(R.id.live_drawer_layout),
-                          Gravity.CENTER, 0, 0);
+                 showMasterInfoLayout(result);
               }
           });
         }
         if(!liveEnd&&!isAudienceOver){
             isAudienceOver=true;
             audienceOver.setVisibility(View.GONE);
-            liveUserInfoPopuwindow.dismiss();
+
         }
+    }
+
+    private void showMasterInfoLayout(LiveUserInfoResultBean result) {
+        infoId = result.getId();
+        masterInfoCloseIv = (ImageView) audienceOver.findViewById(R.id.master_info_close_iv);
+        masterInfoCloseIv.setVisibility(View.GONE);
+        masterInfoHeadIv = (CircleImageView) audienceOver.findViewById(R.id.master_info_head_iv);
+        masterInfoNickTv = (TextView)audienceOver.findViewById(R.id.master_info_nick_tv);
+        masterInfoSignature = (TextView)audienceOver.findViewById(R.id.master_info_signature);
+        liveAttention = (TextView)audienceOver.findViewById(R.id.live_attention);
+        masterInfoBack = (LinearLayout)audienceOver.findViewById(R.id.master_info_back_home);
+        liveFans = (TextView)audienceOver.findViewById(R.id.live_fans);
+        liveContribute = (TextView)audienceOver.findViewById(R.id.live_contribute);
+        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home);
+        masterInfoCloseIv.setOnClickListener(buttonClickListener);
+        liveMasterHome.setOnClickListener(buttonClickListener);
+        String avatar = result.getAvatar();
+        String nickName = result.getNickName();
+        int fansNum = result.getFansNum();
+        int attentionNum = result.getAttentionNum();
+        String description = result.getDescription();
+        liveFans.setText(String.valueOf(fansNum));
+        liveAttention.setText(String.valueOf(attentionNum));
+        if (!TextUtils.isEmpty(description)) {
+            masterInfoSignature.setText(description);
+        }
+        DrawableUtils.displayImg(AudienceActivity.this, masterInfoHeadIv, avatar);
+        masterInfoNickTv.setText(nickName);
+        liveMasterHome.setOnClickListener(buttonClickListener);
     }
 
 
