@@ -22,23 +22,40 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:paddingTop="@dimen/live_padding_5dp"
-        android:visibility="gone">
-        <EditText
-            android:id="@+id/live_attention_search_et"
+       android:visibility="gone"
+       >
+        <RelativeLayout
+            android:layout_height="match_parent"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:background="@drawable/live_attenton_search_bg"
-            android:layout_marginLeft="@dimen/author_padding_15dp"
-            android:layout_marginRight="@dimen/author_padding_15dp"
-            android:drawableLeft="@drawable/search_icon"
-            android:hint="请输入关键字"
-            android:textSize="@dimen/text_size_14_sp"
-            android:paddingLeft="@dimen/live_padding_10dp"
-            android:paddingRight="@dimen/live_padding_5dp"
+            >
+            <EditText
+                android:id="@+id/live_attention_search_et"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="center|left"
+                android:background="@drawable/live_attenton_search_bg"
+                android:layout_marginLeft="@dimen/author_padding_15dp"
+                android:layout_marginRight="@dimen/author_padding_15dp"
+                android:drawableLeft="@drawable/search_icon"
+                android:textSize="@dimen/text_size_14_sp"
+                android:paddingLeft="@dimen/live_padding_10dp"
+                android:paddingRight="@dimen/live_padding_5dp"
 
-            />
+                />
+
+            <TextView
+                android:id="@+id/search_text_hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="请输入关键字"
+
+              />
+
+        </RelativeLayout>
+
+
         <TextView
             android:id="@+id/live_attention_search_cancel"
             android:layout_width="@dimen/live_height_50dp"
@@ -48,7 +65,7 @@
             android:text="取消"
             android:paddingRight="@dimen/live_padding_10dp"
             android:textSize="@dimen/text_size_16_sp"
-            android:visibility="gone"/>
+           />
     </LinearLayout>
 
         <LinearLayout
@@ -59,7 +76,9 @@
             android:background="@drawable/search_view_bg"
             android:layout_marginLeft="@dimen/author_padding_15dp"
             android:layout_marginRight="@dimen/author_padding_15dp"
-            android:gravity="center">
+            android:gravity="center"
+
+          >
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -14,6 +14,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.liveroomview.base.util.log.LogUtil;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMessageHandler;
+import com.netease.livestreamingFilter.filter.Filters;
 
 import java.util.List;
 import java.util.Timer;
@@ -44,6 +45,7 @@ public class LivePlayer implements lsMessageHandler {
     // 视频采集器
     private lsMediaCapture mLSMediaCapture; // 直播实例
     private lsMediaCapture.LSLiveStreamingParaCtx mLSLiveStreamingParaCtx;
+
 
     // 基本配置
     private String mliveStreamingURL; // 推流地址
@@ -205,10 +207,10 @@ public class LivePlayer implements lsMessageHandler {
             for (Camera.Size backSize : backCameraSupportSize) {
                 for (Camera.Size frontSize : frontCameraSupportSize) {
                    if(backSize.width==frontSize.width&&backSize.height==frontSize.height){
-                     /*  mVideoEncodeWidth=backSize.width;
-                       mVideoEncodeHeight=backSize.height;*/
-                       mVideoEncodeWidth=320;
-                       mVideoEncodeHeight=240;
+                       mVideoEncodeWidth=backSize.width;
+                       mVideoEncodeHeight=backSize.height;
+                     /*  mVideoEncodeWidth=320;
+                       mVideoEncodeHeight=240;*/
                        AppLog.i("TAG","摄像头分辨率："+"width:"+backSize.width+"  height:"+backSize.height);
                        break;
                    }
@@ -265,7 +267,6 @@ public class LivePlayer implements lsMessageHandler {
         mLSLiveStreamingParaCtx.eHaraWareEncType.hardWareEncEnable = false;
 
         //视频编码参数配置
-
         if(mVideoEncodeWidth>=1280){
             mLSLiveStreamingParaCtx.sLSVideoParaCtx.fps = 20;
             mLSLiveStreamingParaCtx.sLSVideoParaCtx.bitrate = 1500000;
@@ -306,6 +307,7 @@ public class LivePlayer implements lsMessageHandler {
         if (mLSMediaCapture != null) {
             //开始本地视频预览
             mLSMediaCapture.startVideoPreview(liveView, mLSLiveStreamingParaCtx.sLSVideoParaCtx.cameraPosition.cameraPosition);
+            mLSMediaCapture.setFilterType(Filters.FILTER_WHITEN);
             AppLog.i("TAG","开启本得视频预览了啊啊啊");
         }
     }

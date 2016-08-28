@@ -335,12 +335,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 String photo = result.photo;
                 praiseFlag = result.praiseFlag;
                 if (praiseFlag) {
-
                     btnLike.setChecked(true);
                 } else {
-
                     btnLike.setChecked(false);
-
                 }
                 //产品详情介绍
                 productDetail(result);
@@ -362,6 +359,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     detailsPhoto1.setVisibility(View.GONE);
 
                     for (int i = 0; i < photoList.size(); i++) {
+                        if(i>8){
+                            break;
+                        }
                         RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
                         recommendAdResultBean.photo = photoList.get(i);
                         list.add(recommendAdResultBean);

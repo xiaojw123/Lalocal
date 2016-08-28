@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -46,6 +47,8 @@ public class LiveHomePageActivity extends BaseActivity {
     TextView homepageMasterSignature;
     @BindView(R.id.personal_home_page)
     ImageView personalHomePage;
+
+
     @BindView(R.id.homepage_attention_count_tv)
     TextView homepageAttentionCountTv;
     @BindView(R.id.homepage_fans_count)
@@ -58,6 +61,8 @@ public class LiveHomePageActivity extends BaseActivity {
     LinearLayout homepageAttentionLayout;
     @BindView(R.id.homepage_fans_layout)
     LinearLayout homepageFansLayout;
+    @BindView(R.id.master_attention_layout)
+    LinearLayout masterAttentionLayout;
     private ContentLoader contentLoader;
     private String userId;
     private TextView popuCancel;
@@ -77,7 +82,7 @@ public class LiveHomePageActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention})
+    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention,R.id.personal_home_page})
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.homepage_attention_layout:
@@ -103,6 +108,11 @@ public class LiveHomePageActivity extends BaseActivity {
                     showAttentionPopuwindow(userId);
                 }
                 break;
+            case R.id.personal_home_page:
+              //  Toast.makeText(this,"点击了",Toast.LENGTH_SHORT).show();
+              //  homePageLayout.setVisibility(View.GONE);
+               // DrawableUtils.displayImg(LiveHomePageActivity.this, masterAvatarBig, result.getAvatar());
+                break;
         }
     }
 
@@ -111,6 +121,7 @@ public class LiveHomePageActivity extends BaseActivity {
         View inflate = View.inflate(this, R.layout.live_attention_popu_layout, null);
         popuCancel = (TextView) inflate.findViewById(R.id.live_attention_popu_cancel);
         popuConfirm = (TextView) inflate.findViewById(R.id.live_attention_popu_confirm);
+
         popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(inflate);
@@ -148,15 +159,24 @@ public class LiveHomePageActivity extends BaseActivity {
     }
     private int attentionNum;
     private int fansNum;
+    private LiveUserInfoResultBean result;
     public class MyCallBack extends ICallBack {
+
+
+
         @Override
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
-            LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
+            result = liveUserInfosDataResp.getResult();
             homepageMasterName.setText(result.getNickName());
             attentionNum = result.getAttentionNum();
-
             fansNum = result.getFansNum();
+            int id = UserHelper.getUserId(LiveHomePageActivity.this);
+            if(userId.equals(String.valueOf(id))){
+                masterAttentionLayout.setVisibility(View.GONE);
+            }else {
+                masterAttentionLayout.setVisibility(View.VISIBLE);
+            }
             String s = new Gson().toJson(liveUserInfosDataResp);
             AppLog.i("TAG", "liveUserInfosDataResp:" + s);
             homepageAttentionCountTv.setText(String.valueOf(attentionNum));
@@ -211,8 +231,6 @@ public class LiveHomePageActivity extends BaseActivity {
                 masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
                 fansNum = fansNum - 1;
                 homepageFansCount.setText(String.valueOf(fansNum));
-
-
             }
         }
     }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -44,7 +43,7 @@ public class LiveUserInfoPopuwindow extends PopupWindow implements View.OnClickL
         this.isLiveOver=isLiveOver;
     }
     public void showLiveUserInfoPopuwindow(){
-        masterInfoLayoutPw=LayoutInflater.from(context).inflate(R.layout.master_info_layout, null);
+
         masterInfoLayoutPw = View.inflate(context, R.layout.master_info_layout, null);
         masterInfoCloseIv = (ImageView) masterInfoLayoutPw.findViewById(R.id.master_info_close_iv);
         masterInfoHeadIv = (CircleImageView) masterInfoLayoutPw.findViewById(R.id.master_info_head_iv);

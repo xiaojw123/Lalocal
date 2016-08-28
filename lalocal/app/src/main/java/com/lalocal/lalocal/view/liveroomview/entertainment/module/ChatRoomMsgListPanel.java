@@ -97,7 +97,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
        View view= View.inflate(container.activity,R.layout.chat_head_items,null);
        TextView headInfos= (TextView) view.findViewById(R.id.chat_info_head);
 
-        headInfos.setText(content);
+        headInfos.setText("公告： "+content);
         messageListView.addHeaderView(view);
         messageListView.requestDisallowInterceptTouchEvent(true);
 
