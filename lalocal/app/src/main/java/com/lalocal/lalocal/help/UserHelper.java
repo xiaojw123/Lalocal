@@ -4,6 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.lalocal.lalocal.view.liveroomview.DemoCache;
+import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +26,17 @@ public class UserHelper {
             sp = context.getSharedPreferences("userparams", Context.MODE_PRIVATE);
         }
     }
+
+    public static void updateSignOutInfo(Context context){
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KeyParams.IS_LOGIN, false);
+        UserHelper.saveLoginInfo(context, bundle);
+        AuthPreferences.clearUserInfo();
+        DemoCache.clear();
+        NIMClient.getService(AuthService.class).logout();
+        DemoCache.setLoginStatus(false);
+    }
+
 
     public static void saveLoginInfo(Context context, Bundle bundle) {
         initSPref(context);

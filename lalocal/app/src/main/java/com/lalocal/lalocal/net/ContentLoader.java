@@ -851,9 +851,11 @@ public class ContentLoader {
                         responseGetAreaDetailItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_ROUTE);
                         break;
                     case RequestCode.GET_HOT_ROUTES:
+                        AppLog.print("get hot routed___"+json);
                         responseGetHotItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_ROUTE);
                         break;
                     case RequestCode.GET_HOT_PRODUCTS:
+                        AppLog.print("get hot products___"+json);
                         responseGetHotItems(jsonObj, AreaDetailAdapter.MODULE_TYPE_PRODUCT);
                         break;
                     case RequestCode.GET_SEARCH_TAG:

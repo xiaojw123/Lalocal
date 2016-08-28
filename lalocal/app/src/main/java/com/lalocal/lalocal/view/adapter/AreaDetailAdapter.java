@@ -84,6 +84,14 @@ public class AreaDetailAdapter extends BaseAdapter {
         return position;
     }
 
+//
+//    case 1:
+//            productReserve.setText("已售罄");
+//    case 2:
+//            productReserve.setText("已过期");
+//    case -1:
+//            productReserve.setText("已删除");
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (items == null || items.size() < 1) {
@@ -167,6 +175,7 @@ public class AreaDetailAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.area_detail_item_product, parent, false);
             holder.photo = (ImageView) convertView.findViewById(R.id.area_detail_item_product_img);
             holder.title = (TextView) convertView.findViewById(R.id.area_detail_item_product_title);
+            holder.status= (TextView) convertView.findViewById(R.id.area_detail_item_status_tv);
 //            holder.price = (TextView) convertView.findViewById(R.id.area_detail_item_product_price);
             convertView.setTag(holder);
         } else {
@@ -175,7 +184,24 @@ public class AreaDetailAdapter extends BaseAdapter {
 //        double price = ((ProductItem) item).getPrice();
         DrawableUtils.displayImg(context, holder.photo, item.getPhoto());
         holder.title.setText(item.getTitle());
-//        holder.price.setText(CommonUtil.formartOrderPrice(price));
+        int status=((ProductItem)item).getStatus();
+        switch (status){
+            case 1:
+                holder.status.setVisibility(View.VISIBLE);
+                holder.status.setText("已售罄");
+                break;
+            case 2:
+                holder.status.setVisibility(View.VISIBLE);
+                holder.status.setText("已过期");
+                break;
+            case -1:
+                holder.status.setVisibility(View.VISIBLE);
+                holder.status.setText("已删除");
+                break;
+            default:
+                holder.status.setVisibility(View.GONE);
+                break;
+        }
         return convertView;
     }
 
@@ -183,6 +209,7 @@ public class AreaDetailAdapter extends BaseAdapter {
         ImageView photo;
         TextView title;
         TextView price;
+        TextView status;
 
     }
 

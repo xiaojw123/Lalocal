@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -443,27 +444,42 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         titleTv.setText(result.title);
 //        productPrice.setText("¥ " + result.price);
         productPrice.setText(CommonUtil.formartOrderPrice(result.price));
-        List<SparseArray<String>> items=new ArrayList<>();
-        SparseArray<String> item1=new SparseArray<>();
-        SparseArray<String> item2=new SparseArray<>();
-        SparseArray<String> item3=new SparseArray<>();
-        SparseArray<String> item4=new SparseArray<>();
-        SparseArray<String> item5=new SparseArray<>();
-        item1.append(0,"出发时间");
-        item1.append(1,result.departureTime);
-        item2.append(0,"出发地点");
-        item2.append(1,result.departurePoint);
-        item3.append(0,"出发须知");
-        item3.append(1,result.departureRemark);
-        item4.append(0,"持续时间");
-        item4.append(1,result.duration);
-        item5.append(0,"返回信息");
-        item5.append(1,result.returnDetails);
-        items.add(item1);
-        items.add(item2);
-        items.add(item3);
-        items.add(item4);
-        items.add(item5);
+        List<SparseArray<String>> items = new ArrayList<>();
+        SparseArray<String> item1 = new SparseArray<>();
+        SparseArray<String> item2 = new SparseArray<>();
+        SparseArray<String> item3 = new SparseArray<>();
+        SparseArray<String> item4 = new SparseArray<>();
+        SparseArray<String> item5 = new SparseArray<>();
+        String departureTime = result.departureTime;
+        String departurePoint = result.departurePoint;
+        String departureRemark = result.departureRemark;
+        String duration = result.duration;
+        String returnDetails = result.returnDetails;
+        if (!TextUtils.isEmpty(departureTime)) {
+            item1.append(0, "出发时间");
+            item1.append(1, departureTime);
+            items.add(item1);
+        }
+        if (!TextUtils.isEmpty(departurePoint)) {
+            item2.append(0, "出发地点");
+            item2.append(1, departurePoint);
+            items.add(item2);
+        }
+        if (!TextUtils.isEmpty(departureRemark)) {
+            item3.append(0, "出发须知");
+            item3.append(1, departureRemark);
+            items.add(item3);
+        }
+        if (!TextUtils.isEmpty(duration)) {
+            item4.append(0, "持续时间");
+            item4.append(1, duration);
+            items.add(item4);
+        }
+        if (!TextUtils.isEmpty(returnDetails)) {
+            item5.append(0, "返回信息");
+            item5.append(1, returnDetails);
+            items.add(item5);
+        }
         serviceAddtionIntroduce(items);
         List<ProductDetailsBean> details = result.details;
         for (int i = 0; i < details.size(); i++) {
@@ -493,18 +509,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         }
     }
 
-    public void serviceAddtionIntroduce(List<SparseArray<String>>  items){
+    public void serviceAddtionIntroduce(List<SparseArray<String>> items) {
         for (int i = 0; i < items.size(); i++) {
-            SparseArray<String> item=items.get(i);
+            SparseArray<String> item = items.get(i);
             TextView tv = new TextView(ProductDetailsActivity.this);
-            tv.setText("· " +item.get(0) + "");
+            tv.setText("· " + item.get(0) + "");
             tv.setTextColor(Color.parseColor("#ffaa2a"));
             tv.setPadding(left, left, 0, left);
             serviceLayout.addView(tv);
             TextView tvContent = new TextView(ProductDetailsActivity.this);
             tvContent.setText(item.get(1));
             tvContent.setPadding(left, 0, 0, 0);
-                serviceLayout.addView(tvContent);
+            serviceLayout.addView(tvContent);
             View nullView = new View(ProductDetailsActivity.this);
             LinearLayout.LayoutParams nullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60);
             serviceLayout.addView(nullView, nullParams);

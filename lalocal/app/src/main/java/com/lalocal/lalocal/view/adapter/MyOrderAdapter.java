@@ -20,6 +20,8 @@ import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -34,15 +36,16 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
     Resources mRes;
     ContentLoader loader;
 
-    public MyOrderAdapter(Context context, List<OrderItem> items) {
+    public MyOrderAdapter(Context context, List<OrderItem> items,ContentLoader loader) {
         this.context = context;
         this.items = items;
+        this.loader=loader;
         mRes=context.getResources();
     }
-    public void setContentLoader(ContentLoader loader){
+
+    public void setLoader(ContentLoader loader){
         this.loader=loader;
     }
-
 
     public void updateListView(List<OrderItem> items) {
         this.items = items;
@@ -150,7 +153,7 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
                     holder.orderStatus.setTextColor(color);
                     holder.orderStatus.setText(orderSatus);
                     holder.orderName.setText(item.getName());
-                    holder.orderToalPrice.setText("¥ " + String.valueOf(item.getFee()));
+                    holder.orderToalPrice.setText(CommonUtil.formartOrderPrice(item.getFee()));
                     holder.payBtn.setTag(item.getId());
                     holder.cancleBtn.setTag(item.getId());
                     DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(),R.drawable.my_oder_img_drawable);
@@ -204,12 +207,14 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
                 builder.setNegativeButton("否", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        AppLog.print("否——————loader__"+loader);
                         dialog.dismiss();
                     }
                 });
                 builder.setPositiveButton("是", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        AppLog.print("是——————loader__"+loader);
                         dialog.dismiss();
                         if (loader!=null){
                         loader.cancelOrder(cancelOrderId);

@@ -19,6 +19,16 @@
             android:scaleType="centerCrop"
 
             />
+        <TextView
+            android:id="@+id/area_detail_item_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:padding="@dimen/dimen_size_5_dp"
+            android:background="@color/color_b3"
+            android:visibility="gone"
+            />
+
 
         <!--<TextView-->
             <!--android:id="@+id/area_detail_item_product_price"-->

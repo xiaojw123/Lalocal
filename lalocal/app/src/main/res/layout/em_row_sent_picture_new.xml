@@ -30,13 +30,10 @@
         <RelativeLayout
             android:id="@+id/rl_picture_add"
             android:background="@drawable/ease_chatto_bg_normal"
-            android:layout_width="230dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/margin_chat_activity"
             android:layout_toStartOf="@id/iv_userhead"
-            android:paddingStart="@dimen/dimen_size_15_dp"
-            android:paddingEnd="@dimen/dimen_size_15_dp"
-            android:paddingBottom="20dp"
             >
 
             <TextView
@@ -50,8 +47,8 @@
                 />
             <ImageView
                 android:id="@+id/iv_sendPicture_add"
-                android:layout_width="120dp"
-                android:layout_height="80dp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
                 android:scaleType="fitXY"
                 android:layout_below="@+id/tv_send_title"
                 android:src="@drawable/androidloading"
@@ -64,6 +61,7 @@
                 android:layout_below="@id/tv_send_title"
                 android:layout_marginTop="@dimen/dimen_size_5_dp"
                 android:paddingStart="@dimen/dimen_size_5_dp"
+                android:visibility="gone"
                 >
                 <TextView
                     android:id="@+id/tv_send_des"

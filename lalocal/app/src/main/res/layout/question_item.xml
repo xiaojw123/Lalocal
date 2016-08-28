@@ -34,8 +34,6 @@
             android:textColor="@color/color_d9"
             android:layout_marginTop="@dimen/dimen_size_5_dp"
             android:textSize="@dimen/text_size_13_sp"
-            android:lines="2"
-            android:ellipsize="end"
         />
 
     </LinearLayout>

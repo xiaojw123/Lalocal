@@ -92,6 +92,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     FrameLayout shuttle_up_container, remark_cotainer, language_cotainer;
     //接送地点
     private TextView shuttle_setup_tv, remark_tv, language_tv;
+    boolean isCancelOrder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,12 +158,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         mTravelPersonContainer.setOnClickListener(this);
         evalute_btn.setOnClickListener(this);
         more_function_img.setOnClickListener(this);
-        mTitleCotainer.setOnClickListener(this);
         if (isPreView) {
             mOrderPayContainer.setVisibility(View.GONE);
             more_function_img.setVisibility(View.GONE);
             order_title_ctv.setTitle(getResources().getString(R.string.order_info));
         } else {
+            mTitleCotainer.setOnClickListener(this);
             mOrderPayContainer.setVisibility(View.VISIBLE);
             mPreViewContainer.setVisibility(View.GONE);
             order_title_ctv.setTitle(getResources().getString(R.string.order_detail));
@@ -242,7 +244,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             popupWindow.setFocusable(true);
             popupWindow.setContentView(contentView);
         }
-        popupWindow.showAsDropDown(more_function_img, 0, -(int) getResources().getDimension(R.dimen.dimen_size_9_dp));
+        if (cancel_order_tv.getVisibility()==View.VISIBLE){
+            contentView.setPadding(0,((int)getResources().getDimension(R.dimen.dimen_size_15_dp)),0,((int)getResources().getDimension(R.dimen.dimen_size_15_dp)));
+        }else{
+            contentView.setPadding(0,((int)getResources().getDimension(R.dimen.dimen_size_10_dp)),0,((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
+        }
+        popupWindow.showAsDropDown(more_function_img, 0, -contentView.getPaddingTop());
     }
 
     @Override
@@ -260,14 +267,20 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         @Override
         public void onGetOrderDetail(OrderDetail detail) {
             mOrderDetail = detail;
+            if (isCancelOrder){
+                isCancelOrder=false;
+                updateModuleOrderInfo();
+            }else{
             updateView();
+            }
         }
 
         @Override
         public void onCancelSuccess() {
-            if (cancel_order_tv.getVisibility() != View.VISIBLE) {
+            if (cancel_order_tv.getVisibility() == View.VISIBLE) {
                 cancel_order_tv.setVisibility(View.GONE);
             }
+            isCancelOrder=true;
             mContentloader.getOrderDetail(getOrderId());
         }
     }
@@ -435,7 +448,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         View questionView = mInflater.inflate(R.layout.question_item, additional_info_llt, false);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) questionView.getLayoutParams();
         params.topMargin = (int) getResources().getDimension(R.dimen.dimen_size_8_dp);
-        params.leftMargin = (int) getResources().getDimension(R.dimen.dimen_size_36_dp);
+        params.leftMargin = (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
         params.rightMargin = (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
         return questionView;
 
@@ -597,12 +610,14 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) textView.getLayoutParams();
                             params.leftMargin = left;
                             params.height = height;
+                            params.rightMargin=height;
                         } else {
                             textView.setTextColor(getResources().getColor(R.color.color_b3));
                             travel_people_container.addView(textView);
                             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
                             params.leftMargin = left;
                             params.height = height;
+                            params.rightMargin=height;
                         }
 
                     }

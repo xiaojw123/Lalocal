@@ -18,7 +18,9 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -38,13 +40,12 @@ import java.io.File;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener, CustomTitleView.onBackBtnClickListener {
-    private static  final  String AUTHOR_FIALED="com.android.volley.AuthFailureError";
     public static final int UPDATE_ME_DATA = 301;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
     private static final int PHOTO_REQUEST_CUT = 3;
     private static final int MODIFY_USER_PROFILE = 4;
-    private static final  int LOGIN_RQEUST_CODE=5;
+    private static final int LOGIN_RQEUST_CODE = 5;
     private File tempFile;
     CircleImageView personalheader_civ;
     RelativeLayout nickname_rlt;
@@ -274,8 +275,8 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 nickaname_tv.setText(nickname);
             }
 
-        }else if (requestCode==LOGIN_RQEUST_CODE){
-            setResult(resultCode,data);
+        } else if (requestCode == LOGIN_RQEUST_CODE) {
+            setResult(resultCode, data);
             finish();
         }
 
@@ -312,6 +313,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
 
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         AppLog.print("onRequestPermissionsResult____");
@@ -320,13 +322,13 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     }
 
     @OnMPermissionGranted(PERMISSION_STGAT_CODE)
-    public void  onPermissionGranted(){
+    public void onPermissionGranted() {
         photoGraph();
     }
 
     @OnMPermissionDenied(PERMISSION_STGAT_CODE)
-    public void onPermissionDenied(){
-        Toast.makeText(this,"权限被拒绝，无法继续往下执行",Toast.LENGTH_SHORT).show();
+    public void onPermissionDenied() {
+        Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -340,12 +342,14 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
         @Override
         public void onRequestFailed(VolleyError volleyError) {
-            if (AUTHOR_FIALED.equals(volleyError.toString())){
-               Intent intent=new Intent(AccountEidt1Activity.this,LoginActivity.class);
-                startActivityForResult(intent,LOGIN_RQEUST_CODE);
+            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
+                UserHelper.updateSignOutInfo(AccountEidt1Activity.this);
+                Intent intent = new Intent(AccountEidt1Activity.this, LoginActivity.class);
+                startActivityForResult(intent, LOGIN_RQEUST_CODE);
             }
         }
     }
+
 
     private void updateUserProfileView(LoginUser user) {
         this.user = user;
@@ -360,7 +364,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 boysex_cb.setSelected(false);
             }
             if (!TextUtils.isEmpty(user.getPhone())) {
-                AppLog.print("updateUser___areacode___"+user.getAreaCode());
+                AppLog.print("updateUser___areacode___" + user.getAreaCode());
                 areacode_tv.setText(user.getAreaCode());
                 phone_tv.setText(user.getPhone());
             }

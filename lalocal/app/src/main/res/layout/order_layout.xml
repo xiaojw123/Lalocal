@@ -31,6 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@+id/orderdetail_title_ctv"
+        android:layout_above="@+id/order_immediately_evaluate_btn"
         android:scrollbars="none">
 
         <LinearLayout
@@ -104,7 +105,6 @@
                     android:layout_marginRight="@dimen/dimen_size_15_dp"
                     android:layout_toRightOf="@+id/order_packages_choose"
                     android:gravity="right|center_vertical"
-                    android:text="fafafafjlkj李发卡机了房间爱老费劲了啥方法就俺俩房间爱垃圾分类案发节流阀发送Safari发大发发"
                     />
 
 
@@ -122,6 +122,76 @@
                     android:layout_below="@+id/order_packages_intro"
                     />
             </RelativeLayout>
+            <LinearLayout
+                android:id="@+id/order_contacts_container"
+                style="@style/OrderCarditemContainerStyle"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/OrderCardItemIitleStyle"
+                    android:text="@string/contacts" />
+
+                <View style="@style/CommonD9LineTheme"
+
+                    />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp">
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/name" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_contact_name_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/mobile" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_contact_phone_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/email"
+                        />
+
+                    <TextView
+                        android:id="@+id/orderdetail_contact_email_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+            </LinearLayout>
 
             <!--补充信息-->
 
@@ -236,76 +306,7 @@
             </LinearLayout>
 
 
-            <LinearLayout
-                android:id="@+id/order_contacts_container"
-                style="@style/OrderCarditemContainerStyle"
-                android:orientation="vertical">
 
-                <TextView
-                    style="@style/OrderCardItemIitleStyle"
-                    android:text="@string/contacts" />
-
-                <View style="@style/CommonD9LineTheme"
-
-                    />
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_size_36_dp"
-                    android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp">
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/name" />
-
-                    <TextView
-                        android:id="@+id/orderdetail_contact_name_tv"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_size_36_dp"
-                    android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp"
-                    >
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/mobile" />
-
-                    <TextView
-                        android:id="@+id/orderdetail_contact_phone_tv"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_size_36_dp"
-                    android:paddingEnd="@dimen/dimen_size_15_dp"
-                    android:paddingStart="@dimen/dimen_size_15_dp"
-                    >
-
-                    <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/email"
-                        />
-
-                    <TextView
-                        android:id="@+id/orderdetail_contact_email_tv"
-                        style="@style/OrderCardItemTextStyle"
-                        android:layout_gravity="end"
-                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
-
-                </FrameLayout>
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/order_preview_container"
@@ -495,22 +496,25 @@
                     </FrameLayout>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/order_immediately_evaluate_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/order_immediately_evaluate_btn_height"
-                    android:layout_marginTop="@dimen/order_immediately_evaluate_btn_top"
-                    android:background="@color/color_ffaa2a"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_16_sp" />
-
 
         </LinearLayout>
         </LinearLayout>
 
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/order_immediately_evaluate_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/order_immediately_evaluate_btn_height"
+        android:background="@color/color_ffaa2a"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_16_sp"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        />
+
 
 
 

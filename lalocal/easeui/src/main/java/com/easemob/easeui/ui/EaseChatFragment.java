@@ -748,6 +748,8 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
         startActivityForResult(
                 new Intent(MediaStore.ACTION_IMAGE_CAPTURE).putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(cameraFile)),
                 REQUEST_CODE_CAMERA);
+//        intent.putExtra("outputX", 250);
+//        intent.putExtra("outputY", 250);
     }
 
     /**

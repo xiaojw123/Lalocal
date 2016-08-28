@@ -83,11 +83,19 @@ public class PayCompleteActivity extends BaseActivity {
                 if (mOrderDetail != null) {
                     Intent intent = new Intent(this, OrderActivity.class);
                     intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
-                    startActivity(intent);
+                    startActivityForResult(intent,100);
                 }
                 break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==100){
+            setResult(resultCode,data);
+            finish();
+        }
 
+    }
 }

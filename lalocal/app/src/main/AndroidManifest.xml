@@ -205,7 +205,9 @@
         <activity
             android:name=".activity.DestinationAreaActivity"
             android:hardwareAccelerated="false" />
-        <activity android:name=".activity.RouteDetailActivity" />
+        <activity android:name=".activity.RouteDetailActivity"
+             android:hardwareAccelerated="false"
+            />
 
         <!-- 设置环信应用的AppKey -->
         <meta-data

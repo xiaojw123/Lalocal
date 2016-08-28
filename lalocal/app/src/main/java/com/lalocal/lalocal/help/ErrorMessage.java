@@ -5,5 +5,6 @@ package com.lalocal.lalocal.help;
  */
 public interface ErrorMessage {
     public static final String TIME_OUT="com.android.volley.TimeoutError";
+    public static  final  String AUTHOR_FIALED="com.android.volley.AuthFailureError";
 
 }

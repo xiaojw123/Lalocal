@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -21,6 +20,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.pingplusplus.android.Pingpp;
 
 import java.util.List;
@@ -80,11 +80,11 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     @BindView(R.id.order_pays_llt)
     LinearLayout orderPaysLlt;
     double mAccout;
-    String mFormartPrice;
     int mOrderid;
     String actionType;
     @BindView(R.id.pay_title_view)
     CustomTitleView payTitleView;
+    boolean isPayConfirm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,24 +197,34 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //支付页面返回处理
-        AppLog.print("PayActivity onActivityResult___reqCODE__" + requestCode+"___resultCode___"+resultCode);
+        AppLog.print("PayActivity onActivityResult___reqCODE__" + requestCode + "___resultCode___" + resultCode);
         if (requestCode == Pingpp.REQUEST_CODE_PAYMENT) {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
-                AppLog.print("pay result___"+result);
+                AppLog.print("pay result___" + result);
                 String text = "未支付";
                 switch (result) {
                     case "success":
-                        showCompletePay();
+                        CommonUtil.showPromptDialog(this, "支付成功", new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                showCompletePay();
+                            }
+                        });
                         break;
-                    case "cancel":
-                        text = "支付取消";
-                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+                    default:
+                        //微信支付返回有问题，需二次确认
+                        isPayConfirm = true;
+                        mContentloader.getOrderDetail(mOrderid);
                         break;
-                    case "invalid":
-                        text = "支付失效";
-                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
-                        break;
+//                    case "cancel":
+//                        text = "支付取消";
+//                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case "invalid":
+//                        text = "支付失效";
+//                        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+//                        break;
                 }
             }
         } else if (requestCode == 101) {
@@ -231,9 +241,9 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
         Intent intent = new Intent(this, PayCompleteActivity.class);
         intent.putExtra(KeyParams.ORDDER_DETFAIL, mOrderDetail);
         intent.putExtra(KeyParams.AMOUNT_PRICE, mAccout);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent,101);
     }
+
 
     @Override
     public void onBackClick() {
@@ -277,7 +287,37 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
 
         @Override
         public void onGetOrderDetail(OrderDetail detail) {
-            updateView(detail);
+            if (isPayConfirm) {
+                isPayConfirm=false;
+                if (detail != null) {
+                    mOrderDetail = detail;
+                    AppLog.print("ordepay status____" + detail.getStatus());
+                    int status=detail.getStatus();
+                    switch (status){
+                        case 2:
+                        case 3:
+                        case 4:
+                        case 5:
+                        case 6:
+                            CommonUtil.showPromptDialog(PayActivity.this, "支付成功", new CustomDialog.CustomDialogListener() {
+                                @Override
+                                public void onDialogClickListener() {
+                                    showCompletePay();
+                                }
+                            });
+                            break;
+                        default:
+                            CommonUtil.showPromptDialog(PayActivity.this, "支付失败", new CustomDialog.CustomDialogListener() {
+                                @Override
+                                public void onDialogClickListener() {
+                                    backToOrderDetail();
+                                }
+                            });
+                            break;
+                    }}
+            } else {
+                updateView(detail);
+            }
 
         }
     }
