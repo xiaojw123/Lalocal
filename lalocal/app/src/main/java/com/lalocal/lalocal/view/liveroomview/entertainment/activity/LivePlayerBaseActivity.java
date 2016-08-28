@@ -1,8 +1,12 @@
 package com.lalocal.lalocal.view.liveroomview.entertainment.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
@@ -48,6 +52,7 @@ import com.lalocal.lalocal.view.liveroomview.entertainment.helper.GiftAnimation;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.SimpleCallback;
 import com.lalocal.lalocal.view.liveroomview.entertainment.module.ChatRoomMsgListPanel;
 import com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomLiveUserInfoDialog;
 import com.lalocal.lalocal.view.liveroomview.entertainment.ui.LiveUserInfoPopuwindow;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.session.Container;
@@ -189,6 +194,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected String creatorAccount;//聊天室创建者账号
     private String barrageContent;
     private String fromNickBarrage;
+    private NetworkInfo netInfo;
 
 
     protected abstract int getActivityLayout(); // activity布局文件
@@ -222,8 +228,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         parseIntent();
         findViews();
         initParam();
-
+        registerNetStatus();
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -264,6 +271,49 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
+
+    private void registerNetStatus() {
+
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(myNetReceiver, mFilter);
+    }
+
+    private BroadcastReceiver myNetReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+
+                ConnectivityManager mConnectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+                netInfo = mConnectivityManager.getActiveNetworkInfo();
+                if(netInfo != null && netInfo.isAvailable()) {
+
+                    /////////////网络连接
+                    String name = netInfo.getTypeName();
+
+                    NetworkInfo.State state = netInfo.getState();
+
+                        if(netInfo.getType()==ConnectivityManager.TYPE_WIFI){
+                            //wifi
+                         AppLog.i("TAG","监测网络类型：wifi");
+                            checkNetInfo("wifi");
+                        }else {
+                            checkNetInfo("rests");
+                            AppLog.i("TAG","监测网络类型：其他");
+                        }
+                    }
+
+                    }
+
+
+        }
+    };
+
+    protected abstract void checkNetInfo(String netType);
+
 
     /****************************
      * 布局初始化
@@ -379,7 +429,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 TouristInfoResp.ResultBean result = touristInfoResp.getResult();
                 final String accid = result.getAccid();
                 final String token = result.getToken();
-
                 if (accid != null || token != null) {
                     DemoCache.clear();
                     AuthPreferences.saveUserAccount(accid);
@@ -401,7 +450,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
             @Override
             public void onSuccess(Object o) {
-                AppLog.i("TAG", "NewsFragment,手动登录成功");
+                AppLog.i("TAG", "LivePlayer,手动登录成功");
                 DemoCache.setAccount(imccId);
                 DemoCache.getRegUserInfo();
                 DemoCache.setLoginStatus(true);
@@ -586,10 +635,23 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     };
 
     protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result, boolean isLiveOver) {
-        liveUserInfoPopuwindow = new LiveUserInfoPopuwindow(this,result,isLiveOver);
+        CustomLiveUserInfoDialog customLiveUserInfoDialog=new CustomLiveUserInfoDialog(LivePlayerBaseActivity.this,result);
+        customLiveUserInfoDialog.setCancelable(false);
+        customLiveUserInfoDialog.setCancelBtn(null);
+        customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+            @Override
+            public void onCustomLiveUserInfoDialogListener(String id) {
+                Intent intent = new Intent(LivePlayerBaseActivity.this, LiveHomePageActivity.class);
+                intent.putExtra("userId", String.valueOf(id));
+                startActivity(intent);
+            }
+        });
+        customLiveUserInfoDialog.show();
+
+    /*    liveUserInfoPopuwindow = new LiveUserInfoPopuwindow(this,result,isLiveOver);
         liveUserInfoPopuwindow.showLiveUserInfoPopuwindow();
         liveUserInfoPopuwindow.showAtLocation(this.findViewById(R.id.live_drawer_layout),
-                Gravity.CENTER, 0, 0);
+                Gravity.CENTER, 0, 0);*/
     }
 
     /**************************
@@ -607,7 +669,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected void enterRoom() {
         if (messageListPanel == null) {
             messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement);
-
         }
         EnterChatRoomData data = new EnterChatRoomData(roomId);
         data.setRoomId(roomId);
@@ -630,11 +691,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 enterroomgetnick = member1.getNick();
                 masterAvatar = member1.getAvatar();
                 creatorAccount = roomInfo.getCreator();
-
+                DemoCache.setLoginChatRoomStatus(true);
                 member1.setRoomId(roomInfo.getRoomId());
                 ChatRoomMemberCache.getInstance().saveMyMember(member1);
                 DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
-
                 masterName.setText(enterroomgetnick);
                 updateUI(enterroomgetnick);
                 DemoCache.setLoginChatRoomStatus(true);
@@ -649,7 +709,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(300);
+                            Thread.sleep(800);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -705,10 +765,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         memberCache.clear();
         isNormalEmpty = false;
     }
-
-
     private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<>();
-
     private void getMembers(final MemberQueryType memberQueryType, final long time, int limit) {
         ChatRoomMemberCache.getInstance().fetchRoomMembers(roomId, memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
             @Override
@@ -873,7 +930,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     .setCallback(new RequestCallback<Void>() {
                         @Override
                         public void onSuccess(Void param) {
-
                             AppLog.i("TAG", "消息发送成功");
                         }
 
@@ -893,6 +949,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     });
 
             fromNickBarrage = msg.getFromNick();
+           AppLog.i("TAG","检测用户id："+userId+"   messageId:"+msg.getSessionId());
             if ("1".equals(style)) {
                 String content = msg.getContent();
                 barrageView.init(new BarrageConfig());
@@ -910,17 +967,15 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     public void showLoginViewDialog() {
         CustomChatDialog customDialog = new CustomChatDialog(this);
-        customDialog.setTitle("还没登录，快去登录吧!");
+        customDialog.setContent("还没登录，快去登录吧!");
         customDialog.setCancelable(false);
         customDialog.setCancelBtn("取消",null);
         customDialog.setSurceBtn("确定",new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
                 DemoCache.setLoginStatus(false);
-
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
                 AppLog.i("TAG", "base去登錄頁面");
-
                 startActivityForResult(new Intent(LivePlayerBaseActivity.this, LoginActivity.class), LIVE_BASE_RESQUEST_CODE);
             }
         });
@@ -986,6 +1041,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
+        unregisterReceiver(myNetReceiver);
         if (timer != null) {
             timer.cancel();
             timer = null;

@@ -40,9 +40,10 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     EditText liveAttentionSearchEt;
     @BindView(R.id.live_attention_search_cancel)
     TextView liveAttentionSearchCancel;
+    @BindView(R.id.search_text_hint)
+    TextView searchTextHint;
     @BindView(R.id.live_attention_listview)
     XListView liveAttentionListview;
-
     @BindView(R.id.live_search_layout_to)
     LinearLayout liveSearchLayout;
     @BindView(R.id.live_search_layout_font)
@@ -74,6 +75,14 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getAttentionOrFansList(typeId);
+        AppLog.i("TAG","LiveAttentionOrFansActivity:onCreate");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppLog.i("TAG","LiveAttentionOrFansActivity:onResume");
+
 
     }
 
@@ -92,8 +101,12 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
 
         @Override
         public void afterTextChanged(Editable s) {
-
             String  searchName = liveAttentionSearchEt.getText().toString().trim();
+            if(searchName.length()>0){
+                searchTextHint.setVisibility(View.GONE);
+            }else{
+                searchTextHint.setVisibility(View.VISIBLE);
+            }
             AppLog.i("TAG","afterTextChanged走了:"+searchName);
             allRows.clear();
             for (LiveFansOrAttentionRowsBean liveFansOrAttentionRowsBean : allSearchRows) {
@@ -193,6 +206,11 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 if (isFirstLoadData) {
                     isFirstLoadData = false;
                     attentionOrFansAdapter = new AttentionOrFansAdapter(LiveAttentionOrFansActivity.this, rows);
+                    if(rows.size()>10){
+                        liveAttentionListview.mFooterView.show();
+                    }else {
+                        liveAttentionListview.mFooterView.hide();
+                    }
                     liveAttentionListview.setAdapter(attentionOrFansAdapter);
                     allRows.addAll(rows);
                 } else {
@@ -201,6 +219,11 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                         pages=2;
                     }
                     allRows.addAll(allRows.size(), rows);
+                    if(allRows.size()>10){
+                        liveAttentionListview.mFooterView.show();
+                    }else {
+                        liveAttentionListview.mFooterView.hide();
+                    }
                     attentionOrFansAdapter.refresh(allRows);
                 }
                 liveAttentionListview.stopRefresh();

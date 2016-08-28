@@ -33,7 +33,6 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.LiveMainListAdapter;
 import com.lalocal.lalocal.view.liveroomview.DemoCache;
 import com.lalocal.lalocal.view.liveroomview.entertainment.activity.AudienceActivity;
@@ -67,7 +66,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     public static final int RESQUEST_COD = 701;
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
 
-    private CustomTitleView liveTitleBack;
+
     private ContentLoader contentService;
     private ListView liveRecyclearView;
     private BlurImageView layoutBg;
@@ -79,6 +78,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     boolean closeRegister = true;
     private int roomId = 0;
     Handler handler=new Handler();
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,21 +96,17 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 contentService.liveList(10, 1);
             }
         },1000*60*5);
-
     }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.home_news_layout, container, false);
-        liveTitleBack = (CustomTitleView) view.findViewById(R.id.live_title_back_ctv);
         ImageView createLiveRoom = (ImageView) view.findViewById(R.id.live_create_room);
         layoutBg = (BlurImageView) view.findViewById(R.id.home_news_layout_bg);
         createLiveRoom.setOnClickListener(this);
-        liveTitleBack.setOnClickListener(this);
-        liveTitleBack.setTitle("世界直播间");
         liveRecyclearView = (ListView) view.findViewById(R.id.live_recy_list);
         View inflate = View.inflate(getActivity(), R.layout.listview_footerview,null);
+       liveRecyclearView.addHeaderView(inflate);
         liveRecyclearView.addFooterView(inflate);
         return view;
     }
@@ -118,7 +114,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        AppLog.i("TAG", "onActivityResult:" + "requestCode:" + requestCode + "resultCode:" + resultCode);
+
         if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
             if (data != null) {
                 isLogining = true;
@@ -128,8 +124,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 claerImLoginInfo();//清除im登錄信息
                 AppLog.i("TAG", "onActivityResult：走了登錄方法");
             }
-        }else if(requestCode==RESQUEST_COD&&resultCode==300){
-
         }
     }
     @Override
@@ -140,7 +134,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             isFirstLoad = true;
             allRows.clear();
             contentService.liveList(10, 1);
-            AppLog.i("TAG", "获取登录状态：" + (DemoCache.getLoginStatus() == true ? "登录" : "没有登录"));
+
 
         }
     }
@@ -161,7 +155,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
             } else if (statusCode.shouldReLogin()) {
 
-                AppLog.i("TAG", "NewsFragment:没有登录  roomId:" + roomId);
+
             }
         }
     };
@@ -170,6 +164,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.live_create_room:
+
                 if (Build.VERSION.SDK_INT>=23){
                     reminderUserPermission();//创建直播间，判断权限
                 }else {
@@ -220,6 +215,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
             super.onCreateLiveRoom(createLiveRoomDataResp);
             if (createLiveRoomDataResp.getReturnCode() == 0) {
+             //   liveLoading.setVisibility(View.GONE);
                 String mliveStreamingURL = createLiveRoomDataResp.getResult().getPushUrl();
                 String pullUrl = createLiveRoomDataResp.getResult().getPullUrl();
                 int roomId = createLiveRoomDataResp.getResult().getRoomId();
@@ -235,8 +231,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 int userId = createLiveRoomDataResp.getResult().getId();
                 int liveUserId = createLiveRoomDataResp.getResult().getUser().getId();
                 String avatar = createLiveRoomDataResp.getResult().getUser().getAvatar();
+                String createNickName = createLiveRoomDataResp.getResult().getUser().getNickName();
                 SpecialShareVOBean shareVO = createLiveRoomDataResp.getResult().getShareVO();
-               LiveActivity.start(getActivity(), String.valueOf(roomId), mliveStreamingURL, String.valueOf(userId), avatar, String.valueOf(liveUserId), shareVO, ann);
+               LiveActivity.start(getActivity(), String.valueOf(roomId), mliveStreamingURL, String.valueOf(userId), avatar, String.valueOf(liveUserId), shareVO, ann,createNickName);
 
             }
 
@@ -267,7 +264,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             liveRecyclearView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    LiveRowsBean liveRowsBean = allRows.get(position);
+                    AppLog.i("TAG","onItemClick："+position);
+                    LiveRowsBean liveRowsBean = allRows.get(position-1);
                     roomId = liveRowsBean.getRoomId();
                     String avatar = liveRowsBean.getUser().getAvatar();
                     String nickName = liveRowsBean.getUser().getNickName();
@@ -279,7 +277,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                     if (annoucement != null) {
                         ann = annoucement.toString();
                     } else {
-                        ann = "这是公告哈。。。";
+                        ann = "这是公告哈";
                     }
                     SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
                     AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann);
@@ -292,7 +290,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
                     int firstVisiblePosition = liveRecyclearView.getFirstVisiblePosition();
                     int lastVisiblePosition = liveRecyclearView.getLastVisiblePosition();
-
+                    AppLog.i("TAG","firstVisiblePosition："+firstVisiblePosition);
                     if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//静止时进行高斯背景模糊
 
                         if (allRows.size() > 0 && allRows.size() >= firstVisiblePosition) {
@@ -323,7 +321,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     private void prepareLive() {
         boolean isLogin = UserHelper.isLogined(getActivity());
         boolean loginStatus = DemoCache.getLoginStatus();
-
         if (isLogin&&loginStatus) {
             contentService.createLiveRoom();//直播接口
         } else if(isLogin&&!loginStatus){
@@ -335,7 +332,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
         }else {
             CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setTitle("没登录，快去登录吧!");
+            customDialog.setContent("没登录，快去登录吧!");
             customDialog.setCancelable(false);
             customDialog.setCancelable(false);
             customDialog.setCancelBtn("取消", null);
@@ -354,11 +351,10 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     private void loginIMServer(final String imccId,final String imToken) {
 
         NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback(){
-
             @Override
             public void onSuccess(Object o) {
                 prepareLive();
-                AppLog.i("TAG", "NewsFragment,手动登录成功" );
+
                 DemoCache.setAccount(imccId);
                 DemoCache.getRegUserInfo();
                 DemoCache.setLoginStatus(true);
@@ -366,13 +362,13 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailed(int i) {
-                AppLog.i("TAG", "NewsFragment,手动登录失败" + i);
+
                 DemoCache.setLoginStatus(false);
             }
 
             @Override
             public void onException(Throwable throwable) {
-                AppLog.i("TAG", "NewsFragment,手动登录失败2");
+
                 DemoCache.setLoginStatus(false);
             }
         });
@@ -381,7 +377,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
     private void claerImLoginInfo() {
         DemoCache.clear();
-        ;
         AuthPreferences.clearUserInfo();
         NIMClient.getService(AuthService.class).logout();
         DemoCache.setLoginStatus(false);
@@ -423,7 +418,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        AppLog.i("TAG","检查权限requestCode："+requestCode);
+
         doNext(requestCode, grantResults);
     }
 
@@ -431,7 +426,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         if (requestCode == MY_PERMISSIONS_REQUEST_READ_CONTACTS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 prepareLive();
-
             } else {
                 Toast.makeText(getActivity(), "没有视频权限，无法开启直播", Toast.LENGTH_SHORT).show();
             }
@@ -466,7 +460,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         if(CommonUtil.RESULT_DIALOG==2){
             CommonUtil.RESULT_DIALOG=0;
             final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setTitle("摄像头启动失败,请尝试在手机应用权限管理中打开权限");
+            customDialog.setContent("摄像头启动失败,请尝试在手机应用权限管理中打开权限");
             customDialog.setCancelable(false);
             customDialog.setOkBtn("确定", new CustomChatDialog.CustomDialogListener() {
                 @Override
@@ -478,7 +472,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         }else if(CommonUtil.RESULT_DIALOG==3){
             CommonUtil.RESULT_DIALOG=0;
             final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setTitle("音频权限开启失败,请尝试在手机应用权限管理中打开权限");
+            customDialog.setContent("音频权限开启失败,请尝试在手机应用权限管理中打开权限");
             customDialog.setCancelable(false);
             customDialog.setOkBtn("确定", new CustomChatDialog.CustomDialogListener() {
                 @Override

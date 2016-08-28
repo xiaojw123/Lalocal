@@ -29,6 +29,7 @@ import com.lalocal.lalocal.view.liveroomview.entertainment.constant.GiftType;
 import com.lalocal.lalocal.view.liveroomview.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.view.liveroomview.entertainment.module.GiftAttachment;
 import com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.view.liveroomview.entertainment.ui.LiveUserInfoPopuwindow;
 import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
 import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
@@ -191,10 +192,32 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
+    boolean isShowNetDialog=true;//监测网络的dialog显示标记
+    @Override
+    protected void checkNetInfo(String netType) {
+       if("rests".equals(netType)){
+           if(isShowNetDialog){
+               isShowNetDialog=false;
+               CustomChatDialog customChatDialog=new CustomChatDialog(AudienceActivity.this);
+               customChatDialog.setTitle("提示");
+               customChatDialog.setContent("当前网络为移动网络，是否继续观看直播？");
+               customChatDialog.setCancelable(false);
+               customChatDialog.setCancelBtn("继续观看",null);
+               customChatDialog.setSurceBtn( "结束直播",new CustomChatDialog.CustomDialogListener() {
+                   @Override
+                   public void onDialogClickListener() {
+                       NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                       clearChatRoom();
+                   }
+               });
+               customChatDialog.show();
+           }
+
+       }
+    }
 
 
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-
         @Override
         public void onEvent(StatusCode statusCode) {
            if(statusCode==StatusCode.LOGINED){
@@ -258,11 +281,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         break;
                     case ChatRoomMemberExit:
 
-                      /*  String fromAccount = message.getFromAccount();
+                        String fromAccount = message.getFromAccount();
                         if(creatorAccount.equals(fromAccount)){
-                            showFinishLayout(true);
-                            Toast.makeText(AudienceActivity.this,"主播离开了",Toast.LENGTH_SHORT).show();
-                        }*/
+                          //  showFinishLayout(true);
+                            AppLog.i("TAG","主播离开了。。。。。。。。");
+                        }
                         break;
                 }
             }
@@ -305,6 +328,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             videoPlayer.resetVideo();
 
         }
+        registerObservers(false);
         super.onDestroy();
     }
 
@@ -325,7 +349,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     // 离开聊天室
     private void logoutChatRoom() {
         CustomChatDialog customDialog = new CustomChatDialog(this);
-        customDialog.setTitle( getString(R.string.finish_confirm));
+        customDialog.setContent( getString(R.string.finish_confirm));
         customDialog.setCancelable(false);
         customDialog.setCancelBtn(getString(R.string.cancel),null);
         customDialog.setSurceBtn( getString(R.string.confirm),new CustomChatDialog.CustomDialogListener() {
@@ -364,6 +388,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     int bufferStrategy=-1;
     String mediaType;
+    boolean isFirstLink=true;//标记第一次重新连接，再次连接就显示主播休息了的界面
     private void initAudienceParam() {
         NEVideoView videoView = findView(R.id.video_view);
         LinearLayout videoLayout= (LinearLayout) findViewById(R.id.video_layout);
@@ -390,26 +415,33 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 loadingPageLayout.setVisibility(View.GONE);
-                CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
-                customDialog.setTitle("视频连接失败!");
-                customDialog.setCancelable(false);
-                customDialog.setCancelBtn("退出直播间", new CustomChatDialog.CustomDialogListener() {
-                    @Override
-                    public void onDialogClickListener() {
-                        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-                        clearChatRoom();
-                    }
-                });
-                customDialog.setSurceBtn( "重新连接",new CustomChatDialog.CustomDialogListener() {
-                    @Override
-                    public void onDialogClickListener() {
-                        if (videoPlayer != null) {
-                            videoPlayer.resetVideo();
+                if(isFirstLink&&!isShowNetDialog){
+                    isFirstClick=false;
+                    CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+                    customDialog.setContent("视频连接失败!");
+                    customDialog.setCancelable(false);
+                    customDialog.setCancelBtn("退出直播间", new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                            clearChatRoom();
                         }
-                        initAudienceParam();
-                    }
-                });
-                customDialog.show();
+                    });
+                    customDialog.setSurceBtn( "重新连接",new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            loadingPageLayout.setVisibility(View.VISIBLE);
+                            if (videoPlayer != null) {
+                                videoPlayer.resetVideo();
+                            }
+                            initAudienceParam();
+                        }
+                    });
+                    customDialog.show();
+                }else{
+                    showFinishLayout(true);
+                }
+
                 return false;
             }
         });
@@ -452,6 +484,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         inputChar.setOnClickListener(buttonClickListener);
         liveQuit.setOnClickListener(buttonClickListener);
 
+        //计算红心动画的显示位置
+        int[] locations = new int[2];
+        clickPraise.getLocationOnScreen(locations);
+        int x = locations[0];//获取组件当前位置的横坐标
+        int y = locations[1];
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
+        int i = DensityUtil.dip2px(AudienceActivity.this, 70);
+        AppLog.i("TAG","bbbbbbbbbbbbbbbbbclickPraise:"+x);
+        layoutParams.leftMargin=x-(i/4);
+        periscopeLayout.setLayoutParams(layoutParams);
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -592,14 +634,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     public void onBasicPermissionSuccess(){
         //    Toast.makeText(this, "授权成功", Toast.LENGTH_SHORT).show();
         initAudienceParam();
-
     }
 
     @OnMPermissionDenied(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionFailed(){
         //    Toast.makeText(this, "授权失败", Toast.LENGTH_SHORT).show();
         finish();
-
     }
 
     /************************* 点赞爱心 ********************************/
@@ -607,10 +647,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     // 发送点赞爱心
     public void sendLike() {
         if (!isFastClick()) {
-
             IMMessage likeMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播点了个赞");
             sendMessage(likeMessage,"2");
-
         }
     }
 
@@ -699,7 +737,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
               public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
                   super.onLiveUserInfo(liveUserInfosDataResp);
                   LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
-                  showMasterInfoPopuwindow(result,true);
+                  liveUserInfoPopuwindow = new LiveUserInfoPopuwindow(AudienceActivity.this,result,true);
+                  liveUserInfoPopuwindow.showLiveUserInfoPopuwindow();
+                  liveUserInfoPopuwindow.showAtLocation(findViewById(R.id.live_drawer_layout),
+                          Gravity.CENTER, 0, 0);
               }
           });
         }

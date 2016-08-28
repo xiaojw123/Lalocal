@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
 import com.umeng.socialize.ShareAction;
@@ -23,6 +22,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 /**
  * Created by lenovo on 2016/6/30.
+ * com.lalocal.lalocal.wxapi.WXEntryActivity
  */
 public class SharePopupWindow extends PopupWindow implements View.OnClickListener {
     private Context context;
@@ -71,7 +71,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                     boolean isInstallMm =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
                     if(isInstallMm){
                         shareFriends();
-                        Toast.makeText(context,"安装微信客户端",Toast.LENGTH_SHORT).show();
+
                     }else{
                         Toast.makeText(context,"没有安装微信客户端",Toast.LENGTH_SHORT).show();
                     }
@@ -85,7 +85,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                     boolean isInstallMm =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
                     if(isInstallMm){
                         shareWechat();
-                        Toast.makeText(context,"安装微信客户端",Toast.LENGTH_SHORT).show();
+
                     }else{
                         Toast.makeText(context,"没有安装微信客户端",Toast.LENGTH_SHORT).show();
                     }
@@ -98,7 +98,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                     boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(context, "com.sina.weibo");
                     if(isInstallWeibo){
                         shareWeibo();
-                        Toast.makeText(context,"安装微博客户端",Toast.LENGTH_SHORT).show();
+
                     }else {
                         Toast.makeText(context,"没有安装微博客户端",Toast.LENGTH_SHORT).show();
                     }
@@ -113,10 +113,10 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     }
 
     private void shareWechat() {
+
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.WEIXIN);
-        sp.setCallback(callBackListener);
-
+        sp.setCallback(new MyUMListener());
         if (shareVO.getBitmap() != null) {
             UMImage image = new UMImage((Activity) context, shareVO.getBitmap());
             sp.withMedia(image);
@@ -141,7 +141,6 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         ShareAction sp = new ShareAction((Activity) context);
         sp.setPlatform(SHARE_MEDIA.WEIXIN_CIRCLE);
         sp.setCallback(new MyUMListener());
-
         if (shareVO.getBitmap() != null) {
             UMImage image = new UMImage((Activity) context, shareVO.getBitmap());
             sp.withMedia(image);
@@ -205,25 +204,38 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         this.callBackListener = callBackListener;
     }
 
-
     class MyUMListener implements UMShareListener {
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
 
-            AppLog.i("TAG", "onResult" + share_media.toString());
+           if(share_media.equals(SHARE_MEDIA.SINA)){
+               Toast.makeText(context,"微博分享成功!",Toast.LENGTH_SHORT).show();
+           }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
+               Toast.makeText(context,"微信分享成功!",Toast.LENGTH_SHORT).show();
+           }else if(share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)){
+               Toast.makeText(context,"微信朋友圈分享成功!",Toast.LENGTH_SHORT).show();
+           }
 
         }
-
-
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            Toast.makeText(context, throwable.toString(), Toast.LENGTH_SHORT).show();
-            AppLog.i("TAG", "onError" + throwable.toString());
+            if(share_media.equals(SHARE_MEDIA.SINA)){
+                Toast.makeText(context,"微博分享失败!",Toast.LENGTH_SHORT).show();
+            }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
+                Toast.makeText(context,"微信分享失败!",Toast.LENGTH_SHORT).show();
+            }else if(share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)){
+                Toast.makeText(context,"微信朋友圈分享失败!",Toast.LENGTH_SHORT).show();
+            }
         }
-
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
-            AppLog.i("TAG", "onError" + share_media.toString());
+            if(share_media.equals(SHARE_MEDIA.SINA)){
+                Toast.makeText(context,"已取消微博分享!",Toast.LENGTH_SHORT).show();
+            }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
+                Toast.makeText(context,"已取消微信分享!",Toast.LENGTH_SHORT).show();
+            }else if(share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)){
+                Toast.makeText(context,"已取消微信朋友圈分享!",Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

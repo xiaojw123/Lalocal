@@ -20,10 +20,10 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
     CustomDialogListener sureBtnLisener, cancelBtnListener,okBtnListener;
     private TextView remindMetermine;
     private TextView remindCancel;
-    private TextView remindTitle;
-    String title, determine, cancel,okText;
+    private TextView remindContent;
     private TextView remindOk;
-
+    private TextView dialogTitle;
+    String title, determine, cancel,okText,content;
     public CustomChatDialog(Context context) {
         super(context, R.style.prompt_dialog);
         this.context = context;
@@ -44,8 +44,9 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
         LinearLayout continueLive = (LinearLayout) findViewById(R.id.remind_contiun_live);
         remindMetermine = (TextView) findViewById(R.id.remind_determine);
         remindCancel = (TextView) findViewById(R.id.remind_cancel);
-        remindTitle = (TextView) findViewById(R.id.remid_dialog_title);
+        remindContent = (TextView) findViewById(R.id.remind_dialog_content);
         remindOk = (TextView) findViewById(R.id.remind_ok);
+        dialogTitle = (TextView) findViewById(R.id.remind_dialog_title);
         LinearLayout chooseLayout= (LinearLayout) findViewById(R.id.choose_layout);
         LinearLayout  okLayout = (LinearLayout) findViewById(R.id.ok_layout);
 
@@ -58,21 +59,26 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
         if (!TextUtils.isEmpty(cancel)) {
             remindCancel.setText(cancel);
         }
-        if (!TextUtils.isEmpty(title)) {
-            remindTitle.setText(title);
+        if (!TextUtils.isEmpty(content)) {
+            remindContent.setText(content);
         }
         if(!TextUtils.isEmpty(okText)){
             remindOk.setText(okText);
             remindOk.setTextColor(Color.BLUE);
             chooseLayout.setVisibility(View.GONE);
             okLayout.setVisibility(View.VISIBLE);
+        }if(!TextUtils.isEmpty(title)){
+            dialogTitle.setVisibility(View.VISIBLE);
+            dialogTitle.setText(title);
         }
     }
 
-    public void setTitle(String text) {
-        title = text;
+    public void setTitle(String title) {
+        this.title = title;
     }
-
+    public void setContent(String content){
+       this.content=content;
+    }
     public void setOkBtn(String okText,CustomDialogListener listener){
         this.okText=okText;
         okBtnListener=listener;

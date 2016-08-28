@@ -46,7 +46,7 @@ public class XListView extends ListView implements OnScrollListener {
 	private boolean mPullRefreshing = false; // is refreashing.
 
 	// -- footer view
-	private XListViewFooter mFooterView;
+	public XListViewFooter mFooterView;
 	private boolean mEnablePullLoad;
 	private boolean mPullLoading;
 	private boolean mIsFooterReady = false;
@@ -382,5 +382,12 @@ public class XListView extends ListView implements OnScrollListener {
 		public void onRefresh();
 
 		public void onLoadMore();
+	}
+	ShowFooterViewListener  showFooterViewListener;
+	public void setShowFooterViewListener(ShowFooterViewListener  showFooterViewListener){
+		this.showFooterViewListener=showFooterViewListener;
+	}
+	public static interface  ShowFooterViewListener{
+		void onShowFooterViewListener();
 	}
 }

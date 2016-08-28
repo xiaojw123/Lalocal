@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    >
+
+    android:background="@android:color/white">
 
     <com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView
         android:id="@+id/home_news_layout_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/live_height_50dp" />
+        />
+
+  <!--  <LinearLayout
+        android:id="@+id/live_loading"
+        android:layout_width="120dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:background="@drawable/loading_anim_bg">
+        <com.lalocal.lalocal.view.xlistview.PowerImageView
+
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center"
+            android:src="@drawable/loading"
+            android:scaleType="centerCrop"
+            attr:auto_play="true"
+            />
+    </LinearLayout>-->
 
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <com.lalocal.lalocal.view.CustomTitleView
-        android:id="@+id/live_title_back_ctv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:lineVisible="false"
-        />
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -35,6 +49,7 @@
             android:divider="@null"
             android:overScrollMode="never"
             ></ListView>
+
 
     <ImageView
         android:id="@+id/live_create_room"

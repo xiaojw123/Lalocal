@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -25,7 +26,6 @@ public class AttentionOrFansAdapter extends BaseAdapter {
     public AttentionOrFansAdapter(Context context, List<LiveFansOrAttentionRowsBean> allRows) {
         this.allRows = allRows;
         this.mContext = context;
-
     }
 
     public void refresh(List<LiveFansOrAttentionRowsBean> allRows) {
@@ -63,6 +63,13 @@ public class AttentionOrFansAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         LiveFansOrAttentionRowsBean liveFansOrAttentionRowsBean = allRows.get(position);
+        int id = liveFansOrAttentionRowsBean.getId();
+        int userId = UserHelper.getUserId(mContext);
+        if(id==userId){
+            viewHolder.attentionAttention.setVisibility(View.INVISIBLE);
+        }else{
+            viewHolder.attentionAttention.setVisibility(View.VISIBLE);
+        }
         String description = liveFansOrAttentionRowsBean.getDescription();
         DrawableUtils.displayImg(mContext, viewHolder.attentionHead, liveFansOrAttentionRowsBean.getAvatar());
         viewHolder.attentionName.setText(liveFansOrAttentionRowsBean.getNickName());

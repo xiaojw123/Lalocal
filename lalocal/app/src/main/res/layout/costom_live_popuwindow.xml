@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:layout_height="@dimen/live_height_355dp"
+    android:paddingLeft="@dimen/live_padding_48dp"
+    android:paddingRight="@dimen/live_padding_48dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+           android:layout_weight="1"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            >
+            <ImageView
+                android:id="@+id/master_info_close_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingBottom="@dimen/author_padding_25dp"
+                android:paddingTop="20dp"
+                android:src="@drawable/btnbg_close" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/master_info_head_iv"
+                android:layout_width="@dimen/live_height_60dp"
+                android:layout_height="@dimen/live_height_60dp"
+                android:layout_gravity="center"
+                android:background="@color/white"
+                android:src="@drawable/androidloading" />
+            <TextView
+                android:id="@+id/master_info_nick_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/live_padding_5dp"
+                android:text="lalocal"
+                android:textColor="@color/live_info_1a1a1a"
+                android:textSize="@dimen/live_text_16sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/live_padding_5dp"
+                android:src="@drawable/playertag"
+                android:visibility="invisible" />
+
+            <TextView
+                android:id="@+id/master_info_signature"
+                android:layout_width="wrap_content"
+                android:layout_height="62dp"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:paddingLeft="@dimen/author_padding_25dp"
+                android:paddingRight="@dimen/author_padding_25dp"
+                android:paddingTop="@dimen/live_padding_20dp"
+                android:text="神秘人拒绝透露自己的个人简介！"
+                android:textColor="@color/color_b3b3b3"
+                android:textSize="@dimen/live_text_13sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/live_padding_20dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/live_master_attention" />
+                    <TextView
+                        android:id="@+id/live_attention"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/live_master_fans" />
+
+                    <TextView
+                        android:id="@+id/live_fans"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/live_master_contribute" />
+                    <TextView
+                        android:id="@+id/live_contribute"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:background="@color/color_ffaa2a"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/live_master_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/live_master_home"
+                android:textColor="#ffffff"
+                android:textSize="@dimen/text_size_18_sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
