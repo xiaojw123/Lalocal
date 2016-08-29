@@ -277,6 +277,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         if (!KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
             setResult(PayActivity.RESULT_BACK_PRODUCT);
         }
+//        else{
+//            Intent intent=new Intent();
+//            intent.setAction(MeFragment.ACTION_UPDATE_DATA);
+//            sendBroadcast(intent);
+//        }
 
     }
 

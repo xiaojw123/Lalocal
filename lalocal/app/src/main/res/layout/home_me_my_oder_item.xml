@@ -96,8 +96,7 @@
             android:layout_alignTop="@+id/my_order_toal"
             android:layout_toRightOf="@+id/my_order_toal"
             android:textColor="@color/color_ffaa2a"
-            android:textSize="@dimen/text_size_15_sp"
-            />
+            android:textSize="@dimen/text_size_15_sp" />
         <!--支付，取消-->
         <Button
             android:id="@+id/my_order_pay_btn"

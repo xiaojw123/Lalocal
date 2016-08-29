@@ -165,10 +165,10 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
                 holder.orderToalPrice.setText(CommonUtil.formartOrderPrice(item.getFee()));
                 holder.payBtn.setTag(item.getId());
                 holder.cancleBtn.setTag(item.getId());
-                DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(),R.drawable.my_oder_img_drawable);
-                convertView.setTag(R.id.orderDetailId, item);
+                DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(),(int)context.getResources().getDimension(R.dimen.dimen_size_2_dp),-1);
                 holder.payBtn.setOnClickListener(this);
                 holder.cancleBtn.setOnClickListener(this);
+                convertView.setTag(R.id.orderDetailId, item);
                 convertView.setOnClickListener(this);
             }
         }

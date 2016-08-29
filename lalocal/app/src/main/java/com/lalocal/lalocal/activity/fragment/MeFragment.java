@@ -56,6 +56,7 @@ import java.util.List;
  * note: isRefresh更新
  */
 public class MeFragment extends Fragment implements XListView.IXListViewListener {
+    public static final String ACTION_UPDATE_DATA = "action_update_data";
     private static final String PAGE_NAME = "MeFragment";
     public static final int UPDATE_MY_DATA = 0x12;
     public static final int UPDATE_MY_ORDER = 0x13;
@@ -86,7 +87,25 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     List<String> lastFavorites = new ArrayList<>();
     List<String> lastOrders = new ArrayList<>();
     List<String> lastCopons = new ArrayList<>();
+//    UpdateReciver updateReciver;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        IntentFilter filter = new IntentFilter(ACTION_UPDATE_DATA);
+//        if (updateReciver == null) {
+//            updateReciver = new UpdateReciver();
+//        }
+//        getActivity().registerReceiver(updateReciver, filter);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        if (updateReciver != null) {
+//            getActivity().unregisterReceiver(updateReciver);
+//        }
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -100,6 +119,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.me_fragment_layout, container, false);
         mListView = (XListView) view.findViewById(R.id.home_me_xlistview);
+//        mListView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadEnable(true);
         mListView.setXListViewListener(this);
@@ -155,7 +175,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
 
     private void initAdapter() {
         emptcAdpater = new MyCouponAdapter(getActivity(), null, this);
-        emptoAdpater = new MyOrderAdapter(getActivity(),this, null, null);
+        emptoAdpater = new MyOrderAdapter(getActivity(), this, null, null);
         emptfAdpater = new MyFavoriteAdapter(getActivity(), null);
         mListView.setAdapter(null);
     }
@@ -401,7 +421,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             }
             contentService.getMyFavorite(mUserid, mToken, defaultPageNumb, defaultPageSize);
         } else if (resultCode == UPDATE_MY_ORDER) {
-            AppLog.print("更新订单————————"+UPDATE_MY_ORDER);
+            AppLog.print("更新订单————————" + UPDATE_MY_ORDER);
             contentService.getMyOrder(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
         }
     }
@@ -708,7 +728,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     private void setOrderAdpater(List<OrderItem> items) {
         if (items.size() > 0) {
             if (orderAdapter == null) {
-                orderAdapter = new MyOrderAdapter(getActivity(),this,items, contentService);
+                orderAdapter = new MyOrderAdapter(getActivity(), this, items, contentService);
             } else {
                 orderAdapter.updateListView(items);
             }
@@ -754,6 +774,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         void onShowRecommendFragment();
 
     }
+
     private AdapterView.OnItemClickListener xlvItemClicklistener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -783,5 +804,13 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         }
     };
 
+//    class UpdateReciver extends BroadcastReceiver {
+//        @Override
+//        public void onReceive(Context context, Intent intent) {
+//            if (UserHelper.isLogined(getActivity())) {
+//                contentService.getMyOrder(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
+//            }
+//        }
+//    }
 
 }
