@@ -165,7 +165,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
     // 发送消息后，更新本地消息列表
     public void onMsgSend(IMMessage message) {
-        // add to listView and refresh
         saveMessage(message, false);
         List<IMMessage> addedListItems = new ArrayList<>(1);
         addedListItems.add(message);

@@ -113,7 +113,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private final static String USER_ID = "USER_ID";
     public static final String LIVE_USER_ID = "LIVE_USER_ID";
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
-    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 60 * 1000;
+    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 30 * 1000;
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private static final int LIMIT = 100;
     private Timer timer;
@@ -405,9 +405,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     AuthPreferences.saveUserAccount(accid);
                     AuthPreferences.saveUserToken(token);
                     loginIMServer(accid, token);
-
                 }
-
             }
         }
     }
@@ -464,7 +462,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case R.id.live_telecast_share:
                     if (shareVO != null) {
                         String s = new Gson().toJson(shareVO);
-
                         SharePopupWindow shareActivity = new SharePopupWindow(LivePlayerBaseActivity.this, shareVO);
                         shareActivity.showShareWindow();
                         shareActivity.showAtLocation(LivePlayerBaseActivity.this.findViewById(R.id.live_layout),
@@ -533,9 +530,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         break;
                     case "2"://点赞
 
-                        if ("点赞2".equals(message.getContent())) {
-                            return;
-                        }
                         periscopeLayout.addHeart();
                         messageListPanel.onIncomingMessage(messages);
                         break;

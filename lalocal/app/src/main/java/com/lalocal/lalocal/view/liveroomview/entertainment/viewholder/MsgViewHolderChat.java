@@ -39,7 +39,7 @@ public class MsgViewHolderChat extends TViewHolder {
         message = (ChatRoomMessage) item;
         setNameTextView();
         String content = message.getContent();
-        if("点赞".equals(content.trim())){
+        if("点赞2".equals(content.trim())){
             content="给主播点了个赞";
             bodyText.setTextColor(Color.parseColor("#97d3e9"));
         }else if("给主播点了个赞".equals(content.trim())){
@@ -55,8 +55,16 @@ public class MsgViewHolderChat extends TViewHolder {
         if (message.getMsgType() != MsgTypeEnum.notification) {
             // 聊天室中显示姓名
             if (message.getChatRoomMessageExtension() != null) {
-                nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
+                String senderNick = message.getChatRoomMessageExtension().getSenderNick();
+                String name = DemoCache.getUserInfo().getName();
+                if(senderNick!=null&&senderNick.equals(name)){
+                    nameText.setText("我");
+                }else{
+                    nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
+                }
+
             } else {
+
                 nameText.setText(DemoCache.getUserInfo() == null ? DemoCache.getAccount() : DemoCache.getUserInfo().getName());
                 AppLog.i("TAG","MsgViewHolderChat:getAccount:"+DemoCache.getAccount());
                 if(DemoCache.getUserInfo()!=null){

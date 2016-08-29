@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.view.liveroomview.entertainment.activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -86,17 +85,17 @@ public class LiveHomePageActivity extends BaseActivity {
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.homepage_attention_layout:
-                Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
+           /*     Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent.putExtra("liveType", "0");
                 intent.putExtra("userId", userId);
                 startActivity(intent);
-
+*/
                 break;
             case R.id.homepage_fans_layout:
-                Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
+          /*      Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
-                startActivity(intent1);
+                startActivity(intent1);*/
 
                 break;
 

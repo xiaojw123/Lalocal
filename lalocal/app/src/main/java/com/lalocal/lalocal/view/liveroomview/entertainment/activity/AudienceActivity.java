@@ -123,7 +123,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private CustomChatDialog dialogNet;
     private CustomChatDialog dialogConnect;
 
-
     public static void start(Context context, String roomId, String url, String avatar, String nickName, String userId, SpecialShareVOBean shareVO, String type,String annoucement) {
         Intent intent = new Intent();
         intent.setClass(context, AudienceActivity.class);
@@ -294,7 +293,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             if (message != null && message.getAttachment() instanceof ChatRoomNotificationAttachment) {
                 // 通知类消息
                 ChatRoomNotificationAttachment notificationAttachment = (ChatRoomNotificationAttachment) message.getAttachment();
-
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
                         String fromAccountIn = message.getFromAccount();
@@ -311,7 +309,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     case ChatRoomMemberExit:
                         String fromAccountExit = message.getFromAccount();
                         message.getSessionId();
-                        sendMessage(message, "0");
+                      //  sendMessage(message, "0");
                         AppLog.i("TAG","离开直播间："+fromAccountExit);
                         if(creatorAccount.equals(fromAccountExit)){
                            showFinishLayout(true,2);
@@ -685,7 +683,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private boolean isFastClick() {
         long currentTime = System.currentTimeMillis();
         long time = currentTime - lastClickTime;
-        if (time > 0 && time < 10000) {
+        if (time > 0 && time < 500) {
             return true;
         }
         lastClickTime = currentTime;
@@ -825,7 +823,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 liveSettingLayout.setVisibility(View.VISIBLE);
                 liveSettingLayout.setClickable(true);
             }
-
         }
     }
 

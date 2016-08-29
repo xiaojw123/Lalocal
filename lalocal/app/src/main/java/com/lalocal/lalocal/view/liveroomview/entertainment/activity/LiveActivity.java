@@ -1,5 +1,4 @@
 package com.lalocal.lalocal.view.liveroomview.entertainment.activity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -109,7 +106,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     private TextView noGiftText;
 
-
     private View liveSettingLayout;//直播间底部设置栏
     protected View viewById;
     private EditText liveRoomName;
@@ -149,7 +145,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private LinearLayout startLiveLayout1;
     private String isSecond;
 
-
+    boolean isShowPopuTo=false;
     @Override
     protected int getActivityLayout() {
         return R.layout.live_player_activity;
@@ -269,10 +265,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Toast.makeText(LiveActivity.this, "按了返回", Toast.LENGTH_SHORT).show();
-        if (livePlayer != null) {
-            livePlayer.tryStop();
-        }
+
+            if (livePlayer != null) {
+                livePlayer.tryStop();
+            }
         if (isStartLive) {
             logoutChatRoom();
         } else {
@@ -280,7 +276,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             clearChatRoom();
         }
     }
-
     private void gainIntent() {
         userId = getIntent().getStringExtra(USER_ID);
         createNickName = getIntent().getStringExtra(CREATE_NICK_NAME);
@@ -391,6 +386,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 livePlayer.setOnStartLiveListener(new LivePlayer.OnStartLiveListener() {//监听直播开始，开启截屏
                     @Override
                     public void getStartLiveStatus(boolean onStart) {
+                        isShowPopuTo=true;
                         sendLiveStatusMessgae(CustomRemoteExtensionStyle.START_LIVE_STYLE);
                         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(liveSettingLayout.getWindowToken(), 0);
@@ -492,25 +488,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         startLiveLayout1 = (LinearLayout) view.findViewById(R.id.start_live_layout);
 
         //分享
-        shareFriends = (ImageView) view.findViewById(R.id.live_create_share_friends);
-        shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
-        shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
-        shareFriends.setSelected(true);
-        isShareSelector = 0;
-        shareFriends.setOnClickListener(buttonClickListener);
-        shareWeibo.setOnClickListener(buttonClickListener);
-        shareWeixin.setOnClickListener(buttonClickListener);
-
-
-        startLiveLayout1.setOnClickListener(buttonClickListener);
-        //自动调用软键盘
-        liveRoomName = (EditText) view.findViewById(R.id.live_room_name);
-        textCount = (TextView) view.findViewById(R.id.live_text_title_count);
-        liveRoomName.setFocusable(true);
-        liveRoomName.setFocusableInTouchMode(true);
-        liveRoomName.requestFocus();
-        liveRoomName.addTextChangedListener(watcher);//edittext字数改变监听
-
+       // shareFriends = (ImageView) view.findViewById(R.id.live_create_share_friends);
+      //  shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
+     //   shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
+      //  shareFriends.setSelected(true);
+    //    isShareSelector = 0;
+     /*   shareFriends.setVisibility(View.GONE);
+        shareWeibo.setVisibility(View.GONE);
+        shareWeixin.setVisibility(View.GONE);*/
+      //  shareFriends.setOnClickListener(buttonClickListener);
+       // shareWeibo.setOnClickListener(buttonClickListener);
+       // shareWeixin.setOnClickListener(buttonClickListener);
         final Timer timer = new Timer();
         timer.schedule(new TimerTask() {
                            public void run() {
@@ -520,6 +508,34 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                            }
                        },
                 300);
+
+        createLivePw.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                if (!isShowPopuTo){
+                    if (livePlayer != null) {
+                        livePlayer.tryStop();
+                    }
+                    if (isStartLive) {
+                        if (livePlayer != null) {
+                            livePlayer.resetLive();
+                        }
+                    }
+                    contentLoader.cancelLiveRoom(userId);
+                    finish();
+                }
+            }
+        });
+        startLiveLayout1.setOnClickListener(buttonClickListener);
+        //自动调用软键盘
+        liveRoomName = (EditText) view.findViewById(R.id.live_room_name);
+        textCount = (TextView) view.findViewById(R.id.live_text_title_count);
+        liveRoomName.setFocusable(true);
+        liveRoomName.setFocusableInTouchMode(true);
+        liveRoomName.requestFocus();
+        liveRoomName.addTextChangedListener(watcher);//edittext字数改变监听
+
+
         createLivePw.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         createLivePw.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         createLivePw.setContentView(view);
@@ -776,14 +792,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     isClickStartLiveBtn = true;
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(startLiveScrollview.getWindowToken(), 0);
-                    if (isShareSelector == 0) {
+                  /*  if (isShareSelector == 0) {
                         liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                     } else if (isShareSelector == 1) {
                         liveShare(SHARE_MEDIA.SINA);
                     } else if (isShareSelector == 2) {
                         liveShare(SHARE_MEDIA.WEIXIN);
                     }
-
+*/
                     if (userId != null) {
                         contentLoader.alterLive(roomName, userId, null, null, null, null);
                     } else {
@@ -804,7 +820,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 case R.id.live_over_back_home:
                     finish();
                     break;
-                case R.id.live_create_share_friends:
+              /*  case R.id.live_create_share_friends:
 
                     if (isSelsector) {
                         isShareSelector = -1;
@@ -830,7 +846,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     shareWeibo.setSelected(false);
                     shareWeixin.setSelected(true);
                     isShareSelector = 2;
-                    break;
+                    break;*/
                 case R.id.live_over_share_friends:
                     overLiveShareFriends.setSelected(true);
                     overLiveShareWeibo.setSelected(false);
@@ -946,7 +962,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         disconnected = true;
     }
 
-    @Override
+  /*  @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -963,5 +979,5 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }else {
             return super.onKeyDown(keyCode, event);
         }
-    }
+    }*/
 }
