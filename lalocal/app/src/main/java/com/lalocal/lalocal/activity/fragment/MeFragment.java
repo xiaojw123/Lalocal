@@ -44,7 +44,6 @@ import com.lalocal.lalocal.view.CustomTabLayout;
 import com.lalocal.lalocal.view.adapter.MyCouponAdapter;
 import com.lalocal.lalocal.view.adapter.MyFavoriteAdapter;
 import com.lalocal.lalocal.view.adapter.MyOrderAdapter;
-import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveAttentionOrFansActivity;
 import com.lalocal.lalocal.view.xlistview.XListView;
 import com.umeng.analytics.MobclickAgent;
 
@@ -254,16 +253,16 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
             int id = v.getId();
             switch (id) {
                 case R.id.home_me_favorite_fans_tab:
-                    Intent fansIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
-                    fansIntent.putExtra("liveType", "1");
-                    fansIntent.putExtra("userId", String.valueOf(UserHelper.getUserId(getActivity())));
-                    startActivity(fansIntent);
+//                    Intent fansIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
+//                    fansIntent.putExtra("liveType", "1");
+//                    fansIntent.putExtra("userId", String.valueOf(UserHelper.getUserId(getActivity())));
+//                    startActivity(fansIntent);
                     break;
                 case R.id.home_me_favorite_follow_tab:
-                    Intent followIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
-                    followIntent.putExtra("liveType", "0");
-                    followIntent.putExtra("userId", String.valueOf(UserHelper.getUserId(getActivity())));
-                    startActivity(followIntent);
+//                    Intent followIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
+//                    followIntent.putExtra("liveType", "0");
+//                    followIntent.putExtra("userId", String.valueOf(UserHelper.getUserId(getActivity())));
+//                    startActivity(followIntent);
                     break;
                 case R.id.home_me_favorite_tab:
                     if (v.isSelected()) {
