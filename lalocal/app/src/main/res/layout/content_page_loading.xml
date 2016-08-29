@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:attr="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/white"
     android:id="@+id/content_page_loading"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <com.lalocal.lalocal.view.xlistview.PowerImageView
+    <com.cunoraz.gifview.library.GifView
         android:id="@+id/xlistview_header_anim"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_gravity="center"
-        android:src="@drawable/loading"
+        custom:gif="@drawable/loading"
         android:scaleType="centerCrop"
-        attr:auto_play="true"
         />
     <TextView
         android:layout_width="wrap_content"

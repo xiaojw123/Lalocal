@@ -468,11 +468,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_gravity="right|center_vertical"
-                            android:drawableRight="@drawable/arrow_right"
                             android:gravity="center_vertical"
-                            android:textColor="@color/color_ff6f6f"
+                            android:textColor="@color/color_b3"
                             android:textSize="@dimen/text_size_15_sp"
                            />
+                            <!--android:textColor="@color/color_ff6f6f"-->
+                            <!--android:drawableRight="@drawable/arrow_right"-->
                     </FrameLayout>
 
                     <FrameLayout

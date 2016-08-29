@@ -15,13 +15,16 @@ import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
+import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.view.CustomTitleView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PayCompleteActivity extends BaseActivity {
+public class PayCompleteActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
 
     @BindView(R.id.pay_complete_service)
     TextView customerService;
@@ -37,34 +40,69 @@ public class PayCompleteActivity extends BaseActivity {
     TextView contactEmailTv;
     @BindView(R.id.pay_complete_vieworder_btn)
     Button vieworderBtn;
+
     OrderDetail mOrderDetail;
-    double mAcount;
+    @BindView(R.id.pay_complete_ctv)
+    CustomTitleView payCompleteCtv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_complete_layout);
         unbinder = ButterKnife.bind(this);
-        Intent intent = getIntent();
-        mOrderDetail = intent.getParcelableExtra(KeyParams.ORDDER_DETFAIL);
-        mAcount = intent.getDoubleExtra(KeyParams.AMOUNT_PRICE, 0);
+        setLoaderCallBack(new PayCompeteCallBack());
+        int id = getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
+        mContentloader.getOrderDetail(id);
         updateView();
     }
 
+
+    @Override
+    public void onBackClick() {
+        backToOrderDetail();
+    }
+
+    class PayCompeteCallBack extends ICallBack {
+
+        @Override
+        public void onGetOrderDetail(OrderDetail detail) {
+            mOrderDetail = detail;
+            updateView();
+        }
+    }
+
+
     private void updateView() {
-        String formartPricee = CommonUtil.formartOrderPrice(mAcount);
-        if (!TextUtils.isEmpty(formartPricee)) {
-            SpannableString spannableStr = new SpannableString(formartPricee);
-            spannableStr.setSpan(new TextAppearanceSpan(this, R.style.PayCompletePriceStyle1), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            spannableStr.setSpan(new TextAppearanceSpan(this, R.style.PayCompletePriceStyle2), 1, formartPricee.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            orderFeeTv.setText(spannableStr);
-        }
+        payCompleteCtv.setOnBackClickListener(this);
         if (mOrderDetail != null) {
-            goodNameTv.setText(mOrderDetail.getName());
-            contactNameTv.setText(mOrderDetail.getUserName());
-            contactMobileTv.setText(mOrderDetail.getPhone());
-            contactEmailTv.setText(mOrderDetail.getEmail());
+            String formartPricee = CommonUtil.formartOrderPrice(mOrderDetail.getFee());
+            if (!TextUtils.isEmpty(formartPricee)) {
+                SpannableString spannableStr = new SpannableString(formartPricee);
+                spannableStr.setSpan(new TextAppearanceSpan(this, R.style.PayCompletePriceStyle1), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableStr.setSpan(new TextAppearanceSpan(this, R.style.PayCompletePriceStyle2), 1, formartPricee.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                orderFeeTv.setText(spannableStr);
+            }
+            if (mOrderDetail != null) {
+                goodNameTv.setText(mOrderDetail.getName());
+                contactNameTv.setText(mOrderDetail.getUserName());
+                contactMobileTv.setText(mOrderDetail.getPhone());
+                contactEmailTv.setText(mOrderDetail.getEmail());
+            }
         }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        backToOrderDetail();
+    }
+
+    private void backToOrderDetail() {
+        AppLog.print("backToOrderDetail_____order id__");
+        Intent intent = new Intent(this, OrderActivity.class);
+        intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
+        startActivityForResult(intent, 100);
     }
 
     @OnClick({R.id.pay_complete_service, R.id.pay_complete_vieworder_btn})
@@ -75,7 +113,7 @@ public class PayCompleteActivity extends BaseActivity {
                     Intent csIntent = new Intent(this, ChatActivity.class);
                     csIntent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
                     csIntent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
-                    csIntent.putExtra(Constant.ITEM_PRICE, String.valueOf(mAcount));
+                    csIntent.putExtra(Constant.ITEM_PRICE, String.valueOf(mOrderDetail.getFee()));
                     startActivity(csIntent);
                 }
                 break;
@@ -83,7 +121,7 @@ public class PayCompleteActivity extends BaseActivity {
                 if (mOrderDetail != null) {
                     Intent intent = new Intent(this, OrderActivity.class);
                     intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
-                    startActivityForResult(intent,100);
+                    startActivityForResult(intent, 100);
                 }
                 break;
         }
@@ -92,8 +130,9 @@ public class PayCompleteActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==100){
-            setResult(resultCode,data);
+        AppLog.print("onActivitiResult__" + resultCode);
+        if (requestCode == 100) {
+            setResult(resultCode, data);
             finish();
         }
 

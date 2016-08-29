@@ -2,7 +2,6 @@ package com.lalocal.lalocal.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -147,9 +146,9 @@ public class BookActivity extends BaseActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AppLog.print("book onActivityResultresultCode___"+resultCode);
-             finish();
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        AppLog.print("book onActivityResultresultCode___"+resultCode);
+//             finish();
+//    }
 }

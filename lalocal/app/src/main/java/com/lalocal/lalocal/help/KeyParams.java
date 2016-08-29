@@ -25,5 +25,6 @@ public interface KeyParams {
     public static final  String PRE_VIEW_PARAMS="previewparams";
     public static  final  String ACTION_TYPE="actointype";
     public static final  String ACTION_BOOK="actionbook";
+    public static final String ACTION_UPDATE_ORDER="updateorder";
 
 }

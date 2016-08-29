@@ -168,9 +168,11 @@ public class ContentLoader {
     }
 
     public void getSearchTag(String name) {
+        name = name.replaceAll(" ", "");
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_SEARCH_TAG);
         }
+        AppLog.print("searchTagUrl_____" + AppConfig.getSearchTagUrl(name));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSearchTagUrl(name), response, response);
         request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
@@ -205,10 +207,12 @@ public class ContentLoader {
     }
 
     public void getSearchResult(String name) {
+        name = name.replaceAll(" ", "");
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_SEARCH_RESULT);
             response.setSearchKey(name);
         }
+        AppLog.print("AppConfig.getSearchResultUrl(name)___" + AppConfig.getSearchResultUrl(name));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSearchResultUrl(name), response, response);
         request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
@@ -294,6 +298,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_MY_ORDER);
         }
+        AppLog.print("getOrderItemsUrl____"+AppConfig.getOrderItemsUrl()+"_____userid__"+userid+", token__"+token);
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderItemsUrl(), response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
         requestQueue.add(request);
@@ -794,11 +799,11 @@ public class ContentLoader {
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-            if (!ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
+            String errorMsg = volleyError.toString();
+            if (!ErrorMessage.AUTHOR_FIALED.equals(errorMsg) || !ErrorMessage.CLIENT_ERROR.equals(errorMsg)) {
                 Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
-            } else {
-                callBack.onRequestFailed(volleyError);
             }
+            callBack.onRequestFailed(volleyError);
         }
 
         @Override

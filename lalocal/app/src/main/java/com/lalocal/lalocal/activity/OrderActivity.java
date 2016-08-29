@@ -19,9 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
@@ -75,7 +75,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     private TextView contact_email_tv;
     /* 其他*/
     //总金额
-    private double mAccoutPrice;
+//    private double mAccoutPrice;
     //页面类型
     private boolean isPreView;
     private LinearLayout toalinfo_container;
@@ -100,6 +100,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_layout);
         ButterKnife.bind(this);
+        AppLog.print("OrderActivity___oncreateView____");
         initParams();
         initView();
         setLoaderCallBack(new CallBack());
@@ -174,6 +175,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     private int getOrderId() {
         return getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
     }
+    private String getActionType(){
+        return getIntent().getStringExtra(KeyParams.ACTION_TYPE);
+    }
+
 
 
     @Override
@@ -199,11 +204,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             case R.id.order_immediately_evaluate_btn:
                 String text = evalute_btn.getText().toString();
                 if (getResources().getString(R.string.pay_immediately).equals(text)) {
+                    if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
+                        setResult(MeFragment.UPDATE_MY_ORDER);
+                    }
                     Intent intent = new Intent(this, PayActivity.class);
                     intent.putExtra(PayActivity.ORDER_ID, mOrderDetail.getId());
                     startActivity(intent);
                 } else if (getResources().getString(R.string.evaluate_immediately).equals(text)) {
-                    Toast.makeText(this, "立即评价....", Toast.LENGTH_SHORT).show();
+                    //TODO:评价功能待开发
+
                 }
                 break;
             case R.id.order_more_img:
@@ -229,7 +238,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         if (mOrderDetail != null) {
             intent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
             intent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
-            intent.putExtra(Constant.ITEM_PRICE, String.valueOf(mAccoutPrice));
+            intent.putExtra(Constant.ITEM_PRICE, String.valueOf(mOrderDetail.getFee()));
         }
         startActivity(intent);
     }
@@ -254,14 +263,29 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onBackClick() {
-        setResult(PayActivity.RESULT_BACK_PRODUCT);
+    setBackResult();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        setResult(PayActivity.RESULT_BACK_PRODUCT);
+        setBackResult();
+
     }
+    public void setBackResult(){
+        AppLog.print("setBackResult___actionType___");
+        if (!KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
+            setResult(PayActivity.RESULT_BACK_PRODUCT);
+        }
+//        else{
+//            Intent intent=new Intent();
+//            intent.setAction(MeFragment.ACTION_UPDATE_DATA);
+//            sendBroadcast(intent);
+//        }
+
+    }
+
+
 
     class CallBack extends ICallBack {
         @Override
@@ -281,6 +305,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 cancel_order_tv.setVisibility(View.GONE);
             }
             isCancelOrder=true;
+            if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
+                setResult(MeFragment.UPDATE_MY_ORDER);
+            }
             mContentloader.getOrderDetail(getOrderId());
         }
     }
@@ -313,7 +340,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case 1://未支付
                 evalute_btn.setVisibility(View.VISIBLE);
+                evalute_btn.setEnabled(true);
                 evalute_btn.setText(getResources().getString(R.string.pay_immediately));
+                evalute_btn.setEnabled(true);
+                evalute_btn.setBackgroundColor(getResources().getColor(R.color.color_ffaa2a));
                 pay_time_container.setVisibility(View.GONE);
                 pay_channel_cotainer.setVisibility(View.GONE);
                 evaluteTimeCotainer.setVisibility(View.GONE);
@@ -325,20 +355,22 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 pay_channel_cotainer.setVisibility(View.VISIBLE);
                 evaluteTimeCotainer.setVisibility(View.GONE);
                 break;
-            case 3://已消费
+            case 3://已消费k
                 evalute_btn.setVisibility(View.VISIBLE);
+                evalute_btn.setEnabled(false);
+                evalute_btn.setText(getResources().getString(R.string.evaluate_immediately));
+                evalute_btn.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 pay_time_container.setVisibility(View.VISIBLE);
                 pay_channel_cotainer.setVisibility(View.VISIBLE);
                 evaluteTimeCotainer.setVisibility(View.GONE);
-                evalute_btn.setText(getResources().getString(R.string.evaluate_immediately));
                 break;
             case 4:
-                evalute_btn.setVisibility(View.VISIBLE);
+                evalute_btn.setVisibility(View.GONE);
                 pay_time_container.setVisibility(View.VISIBLE);
                 pay_channel_cotainer.setVisibility(View.VISIBLE);
                 evaluteTimeCotainer.setVisibility(View.VISIBLE);
                 break;
-//            /已评价/申请退款/退款中/已退款/退款失败
+//            /申请退款/退款中/已退款/退款失败
             default:
                 evalute_btn.setVisibility(View.GONE);
                 pay_time_container.setVisibility(View.GONE);
@@ -355,23 +387,23 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             // 支付方式 0：支付宝app支付 1：微信app支付 2：支付宝手机网页支付 3：微信公众号支付 4:信程支付 5：优惠券支付
             switch (mOrderDetail.getPayType()) {
                 case 0:
-                    pay_channel.setText("支付宝app支付");
+                    pay_channel.setText("支付宝");
                     break;
                 case 1:
-                    pay_channel.setText("微信app支付 ");
+                    pay_channel.setText("微信");
                     ;
                     break;
                 case 2:
-                    pay_channel.setText("支付宝手机网页支付");
+                    pay_channel.setText("支付宝手机网页");
                     break;
                 case 3:
-                    pay_channel.setText("微信公众号支付");
+                    pay_channel.setText("微信公众号");
                     break;
                 case 4:
-                    pay_channel.setText("信程支付");
+                    pay_channel.setText("信程");
                     break;
                 case 5:
-                    pay_channel.setText("优惠券支付");
+                    pay_channel.setText("优惠券");
                     break;
             }
         }
@@ -633,7 +665,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         if (couponValue > 0) {
             setCoupon(couponValue);
         }
-        double orderPayPrice = 0;
         for (OrderDetail.OrderPayListBean orderPay : orderPayList) {
             FrameLayout itemContainer = getItemContainer();
             pay_money_container.addView(itemContainer);
@@ -650,18 +681,11 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             value.setGravity(Gravity.CENTER_VERTICAL);
             value.setTextAppearance(this, R.style.OrderCardItemTextStyle);
             double toalPrice = orderPay.getUnit() * orderPay.getAmount();
-            orderPayPrice += toalPrice;
             value.setText(CommonUtil.formartOrderPrice(toalPrice));
             itemContainer.addView(name);
             itemContainer.addView(value);
         }
-        double paymoeny = orderPayPrice;
-        if (couponValue > 0) {
-            paymoeny -= couponValue;
-        }
-        mAccoutPrice = paymoeny;
-        paymoeny = Math.max(paymoeny, 0);
-        pay_money.setText(CommonUtil.formartOrderPrice(paymoeny));
+        pay_money.setText(CommonUtil.formartOrderPrice(mOrderDetail.getFee()));
 
     }
 
