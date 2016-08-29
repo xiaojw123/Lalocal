@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/live_height_50dp"
+    android:id="@+id/start_live_layout"
    android:layout_gravity="center"
     android:gravity="center"
     android:layout_alignParentBottom="true"

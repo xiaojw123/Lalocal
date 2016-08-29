@@ -25,7 +25,7 @@ public class CommonUtil {
     private  static  final  int READ_PHONE_STATE_CODE=112;
 
     public static  int RESULT_DIALOG=0;
-
+    public static int REMIND_BACK=0;
 
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);

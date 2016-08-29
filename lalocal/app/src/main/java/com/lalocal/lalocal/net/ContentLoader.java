@@ -1334,7 +1334,7 @@ public class ContentLoader {
             bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
             bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
             UserHelper.saveLoginInfo(context, bundle);
-            AuthPreferences.clearUserInfo();
+
             AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
             AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
             loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
@@ -1459,7 +1459,7 @@ public class ContentLoader {
 
         //上传在线人数
         private void responseOnLinesCount(String json) {
-            AppLog.i("TAG", "responseOnLinesCount：" + json);
+            AppLog.i("TAG", "responseOnLinesCount在在在在啊中间赞赞赞按赞赞安装安装安装安装按赞赞赞赞：" + json);
         }
 
         //修改直播封面

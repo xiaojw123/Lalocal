@@ -127,6 +127,7 @@
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
+                android:id="@+id/go_main_layout"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/live_height_50dp"
                 android:background="@color/color_ffaa2a"
