@@ -6,9 +6,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppConfig;
+
 /*
 * 关于我们页面*/
 public class AboutUsActivity extends BaseActivity implements View.OnClickListener {
@@ -60,7 +62,7 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
     private void sendEmail() {
         //TEST
         Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822") ; // 真机上使用这行
+        i.setType("message/rfc822"); // 真机上使用这行
         String subject = "邮件标题";
         String text = "邮件内容";
         i.putExtra(Intent.EXTRA_SUBJECT, subject);
@@ -82,10 +84,14 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
     }
 
     public void grade() {
-        Uri uri = Uri.parse("market://details?id=" + getPackageName());
-        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        try {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this,"未发现安装该应用的市场",Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

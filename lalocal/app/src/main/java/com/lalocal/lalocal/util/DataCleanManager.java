@@ -15,8 +15,8 @@ public class DataCleanManager {
         try {
 //            cacheSize = getFolderSize(context.getCacheDir());
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                AppLog.print("externalCacheDir___" + context.getExternalCacheDir());
 //                cacheSize += getFolderSize(context.getExternalCacheDir());
+//                cacheSize += getFolderSize(DrawableUtils.getCacheImgFile());
                 cacheSize += getFolderSize(DrawableUtils.getFileDir());
             }
         } catch (Exception e) {
@@ -29,6 +29,7 @@ public class DataCleanManager {
 //deleteDir(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 //       deleteDir(context.getExternalCacheDir());
+//            deleteDir(DrawableUtils.getCacheImgFile());
             deleteDir(DrawableUtils.getFileDir());
         }
     }

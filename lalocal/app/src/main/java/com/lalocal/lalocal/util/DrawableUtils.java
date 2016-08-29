@@ -5,6 +5,7 @@ import android.os.Environment;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
+import com.nostra13.universalimageloader.cache.disc.DiskCache;
 import com.nostra13.universalimageloader.cache.disc.impl.LimitedAgeDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -19,7 +20,7 @@ import java.util.concurrent.Executors;
 
 public class DrawableUtils {
     public static final int MAX_AGE = 24 * 3600 * 1000;
-        public static final  int MAX_SIZE=30*1024*1024;
+    public static final int MAX_SIZE = 30 * 1024 * 1024;
     private static final int DRAWABLE_NULL = R.drawable.androidloading;
     private static ImageLoader loader;
 
@@ -63,7 +64,7 @@ public class DrawableUtils {
         }
 
         File imgFile = loader.getDiskCache().get(url);
-          loader.displayImage(url, img, getImageOptions(radius, drawable));
+        loader.displayImage(url, img, getImageOptions(radius, drawable));
     }
 
     private static void init(Context context) {
@@ -106,5 +107,18 @@ public class DrawableUtils {
         }
         return file;
     }
+
+    public static File getCacheImgFile() {
+        if (loader != null) {
+            DiskCache diskCache = loader.getDiskCache();
+            if (diskCache != null) {
+                return diskCache.getDirectory();
+            }
+        }
+        return null;
+    }
+
+    ;
+
 
 }
