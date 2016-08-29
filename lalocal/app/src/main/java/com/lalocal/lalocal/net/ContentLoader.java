@@ -508,7 +508,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_ROOM);
         }
-        AppLog.i("TAG", "alterLive:修改直播");
+        AppLog.i("TAG", "alterLive:修改直播333333333");
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
@@ -520,7 +520,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_COVER);
         }
-        AppLog.i("TAG", "alterLive:修改直播");
+        AppLog.i("TAG", "alterLive:修改直播22222222222");
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
@@ -532,7 +532,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_ON_LINE_COUNT);
         }
-        AppLog.i("TAG", "alterLive:修改直播");
+        AppLog.i("TAG", "alterLive:修改直播11111111111111");
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserOnLine() + onLineUsers, response, response);
         request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
@@ -1477,6 +1477,7 @@ public class ContentLoader {
 
         //关闭直播间
         private void responseCancelLive(String json) {
+            AppLog.i("TAG","调用了关闭直播间的接口。。。。。。。。。。。。。。。。。。。。");
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }
@@ -1664,7 +1665,7 @@ public class ContentLoader {
     public String getUserOnLines(String onLinesUser) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("onlineUser ", onLinesUser);
+            jsonObject.put("onlineUser", onLinesUser);
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -400,12 +400,10 @@ public class LivePlayer implements lsMessageHandler {
 
     //截图
     boolean isFirstScreennShot = true;
-
     public void screenShot() {
         if (timer == null) {
             timer = new Timer();
         }
-
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -414,7 +412,7 @@ public class LivePlayer implements lsMessageHandler {
                 }
 
             }
-        }, 40 * 1000, 40 * 1000);
+        }, 40 * 1000, 10*60 * 1000);
         isFirstScreennShot = false;
     }
 
