@@ -5,8 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.webkit.JavascriptInterface;
 
-import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.activity.BookActivity;
+import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.util.AppLog;
 
@@ -28,7 +28,9 @@ public class JsModeul {
                 Intent intent=new Intent(mContext,PayActivity.class);
                 intent.putExtra(PayActivity.ORDER_ID,Integer.parseInt(message));
                 intent.putExtra(KeyParams.ACTION_TYPE,KeyParams.ACTION_BOOK);
-                ((Activity)mContext).startActivityForResult(intent,100);
+//                ((Activity)mContext).startActivityForResult(intent,100);
+                mContext.startActivity(intent);
+                ((Activity)mContext).finish();
                 break;
 
         }

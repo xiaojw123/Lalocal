@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.view.adapter;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.OrderActivity;
 import com.lalocal.lalocal.activity.PayActivity;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.net.ContentLoader;
@@ -30,16 +32,17 @@ import java.util.List;
  * Created by xiaojw on 2016/6/21.
  */
 public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
-    private  static  final  String BILLING="¥ %1$sx%2$s";
     Context context;
     List<OrderItem> items;
     Resources mRes;
     ContentLoader loader;
+    MeFragment fragment;
 
-    public MyOrderAdapter(Context context, List<OrderItem> items,ContentLoader loader) {
+    public MyOrderAdapter(Context context, MeFragment fragment, List<OrderItem> items, ContentLoader loader) {
         this.context = context;
         this.items = items;
         this.loader=loader;
+        this.fragment=fragment;
         mRes=context.getResources();
     }
 
@@ -74,8 +77,10 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
             convertView = inflater.inflate(R.layout.home_me_my_oder_nothing, null);
             parent.setEnabled(false);
         } else {
-            ViewHolder holder = new ViewHolder();
+            AppLog.print("getView____position___"+position);
+            ViewHolder holder =null;
             if (convertView == null) {
+                holder= new ViewHolder();
                 convertView = inflater.inflate(R.layout.home_me_my_oder_item, null);
                 parent.setEnabled(true);
                 holder.itemDetail = (LinearLayout) convertView.findViewById(R.id.my_order_item_detail);
@@ -87,89 +92,85 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
                 holder.orderToalPrice = (TextView) convertView.findViewById(R.id.my_order_toal_price);
                 holder.cancleBtn = (Button) convertView.findViewById(R.id.my_order_cancel_btn);
                 holder.payBtn = (Button) convertView.findViewById(R.id.my_order_pay_btn);
-
-                OrderItem item = items.get(position);
-                if (item != null) {
-                    holder.orderNum.setText(item.getOrderNumb());
-                    int status = item.getStatus();//: 0已取消/1已预订(未⽀付)/2已⽀付/3已消费/4已评价
-                    Resources res = context.getResources();
-                    int color = res.getColor(R.color.color_d9);
-                    String orderSatus = "";
-                    switch (status) {
-                        case 0:
-                            orderSatus = "已取消";
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 1:
-                            orderSatus = "待支付";
-                            color = res.getColor(R.color.color_ffaa2a);
-                            holder.payBtn.setActivated(true);
-                            holder.payBtn.setText(mRes.getString(R.string.pay_amount));
-                            holder.payBtn.setVisibility(View.VISIBLE);
-                            holder.cancleBtn.setVisibility(View.VISIBLE);
-                            break;
-                        case 2:
-                            orderSatus = "已支付";
-                            color = res.getColor(R.color.color_fac1a0);
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 3:
-                            orderSatus = "已出票";
-                            color = res.getColor(R.color.color_79c4d9);
-                            holder.payBtn.setSelected(true);
-                            holder.payBtn.setText(mRes.getString(R.string.evaluate));
-                            holder.payBtn.setVisibility(View.VISIBLE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 4:
-                            orderSatus = "已评价";
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 5:
-                            orderSatus="申请退款";
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 6:
-                            orderSatus="退款中";
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 7:
-                            orderSatus="已退款";
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-                        case 8:
-                            orderSatus="退款失败";
-                            holder.payBtn.setVisibility(View.GONE);
-                            holder.cancleBtn.setVisibility(View.GONE);
-                            break;
-
-                    }
-                    holder.orderStatus.setTextColor(color);
-                    holder.orderStatus.setText(orderSatus);
-                    holder.orderName.setText(item.getName());
-                    holder.orderToalPrice.setText(CommonUtil.formartOrderPrice(item.getFee()));
-                    holder.payBtn.setTag(item.getId());
-                    holder.cancleBtn.setTag(item.getId());
-                    DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(),R.drawable.my_oder_img_drawable);
-                    convertView.setTag(R.id.orderDetailId, item);
-                    holder.payBtn.setOnClickListener(this);
-                    holder.cancleBtn.setOnClickListener(this);
-                    convertView.setOnClickListener(this);
-                }
                 convertView.setTag(holder);
-
-
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
+            OrderItem item = items.get(position);
+            AppLog.print("getView____position___"+position+", numb__"+item.getOrderNumb());
+            if (item != null) {
+                holder.orderNum.setText(item.getOrderNumb());
+                int status = item.getStatus();//: 0已取消/1已预订(未⽀付)/2已⽀付/3已消费/4已评价
+                Resources res = context.getResources();
+                int color = res.getColor(R.color.color_d9);
+                String orderSatus = "";
+                switch (status) {
+                    case 0:
+                        orderSatus = "已取消";
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 1:
+                        orderSatus = "待支付";
+                        color = res.getColor(R.color.color_ffaa2a);
+                        holder.payBtn.setActivated(true);
+                        holder.payBtn.setText(mRes.getString(R.string.pay_amount));
+                        holder.payBtn.setVisibility(View.VISIBLE);
+                        holder.cancleBtn.setVisibility(View.VISIBLE);
+                        break;
+                    case 2:
+                        orderSatus = "已支付";
+                        color = res.getColor(R.color.color_fac1a0);
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        orderSatus = "已出票";
+                        color = res.getColor(R.color.color_79c4d9);
+                        holder.payBtn.setSelected(true);
+                        holder.payBtn.setText(mRes.getString(R.string.evaluate));
+                        holder.payBtn.setVisibility(View.VISIBLE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 4:
+                        orderSatus = "已评价";
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 5:
+                        orderSatus="申请退款";
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 6:
+                        orderSatus="退款中";
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 7:
+                        orderSatus="已退款";
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
+                    case 8:
+                        orderSatus="退款失败";
+                        holder.payBtn.setVisibility(View.GONE);
+                        holder.cancleBtn.setVisibility(View.GONE);
+                        break;
 
-
+                }
+                holder.orderStatus.setTextColor(color);
+                holder.orderStatus.setText(orderSatus);
+                holder.orderName.setText(item.getName());
+                holder.orderToalPrice.setText(CommonUtil.formartOrderPrice(item.getFee()));
+                holder.payBtn.setTag(item.getId());
+                holder.cancleBtn.setTag(item.getId());
+                DrawableUtils.displayImg(context, holder.orderPhoto, item.getPhoto(),R.drawable.my_oder_img_drawable);
+                convertView.setTag(R.id.orderDetailId, item);
+                holder.payBtn.setOnClickListener(this);
+                holder.cancleBtn.setOnClickListener(this);
+                convertView.setOnClickListener(this);
+            }
         }
         return convertView;
     }
@@ -181,13 +182,7 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
         int id = v.getId();
         switch (id) {
             case R.id.my_order_item_detail:
-                if (v.getTag(R.id.orderDetailId) != null) {
-                    OrderItem item = (OrderItem) v.getTag(R.id.orderDetailId);
-                    Intent intent = new Intent(context, OrderActivity.class);
-                    intent.putExtra(KeyParams.ORDER_ID, item.getId());
-                    intent.putExtra(KeyParams.STATUS, item.getStatus());
-                    context.startActivity(intent);
-                }
+                gotoOrderDetail(v);
                 break;
             case R.id.my_order_pay_btn:
                 String attr= ((Button) v).getText().toString();
@@ -195,7 +190,8 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
                 if (mRes.getString(R.string.pay_amount).equals(attr)){
                     Intent intent=new Intent(context,PayActivity.class);
                     intent.putExtra(PayActivity.ORDER_ID,orderId);
-                    context.startActivity(intent);
+                    intent.putExtra(KeyParams.ACTION_TYPE, KeyParams.ACTION_UPDATE_ORDER);
+                    ((Activity)context).startActivityForResult(intent,100);
                 }else if (mRes.getString(R.string.evaluate).equals(attr)){
 
                 }
@@ -225,13 +221,7 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
                 builder.show();
                 break;
             default:
-                if (v.getTag(R.id.orderDetailId) != null) {
-                    OrderItem item = (OrderItem) v.getTag(R.id.orderDetailId);
-                    Intent intent = new Intent(context, OrderActivity.class);
-                    intent.putExtra(KeyParams.ORDER_ID, item.getId());
-                    intent.putExtra(KeyParams.STATUS, item.getStatus());
-                    context.startActivity(intent);
-                }
+                gotoOrderDetail(v);
                 break;
 
         }
@@ -239,6 +229,16 @@ public class MyOrderAdapter extends BaseAdapter implements View.OnClickListener{
 
     }
 
+    private void gotoOrderDetail(View v) {
+        if (v.getTag(R.id.orderDetailId) != null) {
+            OrderItem item = (OrderItem) v.getTag(R.id.orderDetailId);
+            Intent intent = new Intent(context, OrderActivity.class);
+            intent.putExtra(KeyParams.ORDER_ID, item.getId());
+            intent.putExtra(KeyParams.STATUS, item.getStatus());
+            intent.putExtra(KeyParams.ACTION_TYPE, KeyParams.ACTION_UPDATE_ORDER);
+            fragment.startActivityForResult(intent,100);
+        }
+    }
 
 
     class ViewHolder {

@@ -100,6 +100,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     int dayItemLeft, firstDayLeft;
     @BindView(R.id.route_detail_day_point)
     ImageView dayPointImg;
+    @BindView(R.id.content_page_loading)
+    View loadingView;
     Bundle savedInstanceState;
     DayRouteItemAdpater mItemAdapter;
 
@@ -133,8 +135,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         routeDetailViewpagerRoute.setCallBack(pagerCallBack);
         RoutePagerAdpater pagerAdpater=  new RoutePagerAdpater(views);
         routeDetailViewpagerRoute.setAdapter(pagerAdpater);
-        pagerAdpater.notifyDataSetChanged();
-
     }
 
     @OnClick(R.id.route_detail_service)
@@ -423,6 +423,9 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         @Override
         public void onGetRouteDetail(RouteDetail routeDetail) {
             AppLog.print("onGetRouteDetail______");
+            if (loadingView.getVisibility()==View.VISIBLE){
+                loadingView.setVisibility(View.GONE);
+            }
             mRouteDetail = routeDetail;
             praiseId = routeDetail.getPraiseId();
             praiseFlag = routeDetail.isPraiseFlag();

@@ -273,10 +273,18 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     private void preOrderProduct() {
+        //TODO :reset
         Intent intent = new Intent();
         intent.setClass(this, BookActivity.class);
         intent.putExtra(BookActivity.BOOK_URL, AppConfig.getPreOrderProductUrl(this, result.id, UserHelper.getUserId(this), UserHelper.getToken(this)));
         startActivity(intent);
+        //TODO:test
+//        Intent intent=new Intent(this,com.lalocal.lalocal.test.TestActivity.class);
+//        startActivity(intent);
+
+
+
+
     }
 
     public void startOnlineService() {

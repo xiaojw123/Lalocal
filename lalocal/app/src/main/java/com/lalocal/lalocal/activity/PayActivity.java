@@ -12,8 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -79,7 +81,6 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     OrderDetail mOrderDetail;
     @BindView(R.id.order_pays_llt)
     LinearLayout orderPaysLlt;
-    double mAccout;
     int mOrderid;
     String actionType;
     @BindView(R.id.pay_title_view)
@@ -119,7 +120,6 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
             case R.id.pay_btn:
                 //TODO:支付流程
                 //微信
-                AppLog.print("支付金额：amount__" + mAccout);
                 if (payMannerWeixinCb.isSelected()) {
                     mChannelStr = CHANNEL_WECHAT;
                     AppLog.print("微信——————支付————");
@@ -136,11 +136,16 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                     AppLog.print("信诚——————支付————");
                     return;
                 }
-                PaymentRequest request = new PaymentRequest(mChannelStr, mOrderid, mAccout);
-                Gson gson = new Gson();
-                String json = gson.toJson(request);
-                AppLog.print("requestJson___" + json);
-                mContentloader.payOrder(json);
+                //TODO:test
+//                showCompletePay();
+                //TODO: payorder  reset
+                if (mOrderDetail != null) {
+                    PaymentRequest request = new PaymentRequest(mChannelStr, mOrderid, mOrderDetail.getFee());
+                    Gson gson = new Gson();
+                    String json = gson.toJson(request);
+                    AppLog.print("requestJson___" + json);
+                    mContentloader.payOrder(json);
+                }
                 break;
 
         }
@@ -238,10 +243,13 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     }
 
     public void showCompletePay() {
+        if (KeyParams.ACTION_UPDATE_ORDER.equals(actionType)) {
+            setResult(MeFragment.UPDATE_MY_ORDER);
+        }
         Intent intent = new Intent(this, PayCompleteActivity.class);
-        intent.putExtra(KeyParams.ORDDER_DETFAIL, mOrderDetail);
-        intent.putExtra(KeyParams.AMOUNT_PRICE, mAccout);
-        startActivityForResult(intent,101);
+        intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
+        startActivity(intent);
+        finish();
     }
 
 
@@ -255,6 +263,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
         super.onBackPressed();
         backToOrderDetail();
     }
+
 
     private void backToOrderDetail() {
         if (KeyParams.ACTION_BOOK.equals(actionType)) {
@@ -286,14 +295,23 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
         }
 
         @Override
+        public void onRequestFailed(VolleyError volleyError) {
+            int code = volleyError.networkResponse.statusCode;
+            if (code == 401) {
+                Intent intent = new Intent(PayActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }
+
+        @Override
         public void onGetOrderDetail(OrderDetail detail) {
             if (isPayConfirm) {
-                isPayConfirm=false;
+                isPayConfirm = false;
                 if (detail != null) {
                     mOrderDetail = detail;
                     AppLog.print("ordepay status____" + detail.getStatus());
-                    int status=detail.getStatus();
-                    switch (status){
+                    int status = detail.getStatus();
+                    switch (status) {
                         case 2:
                         case 3:
                         case 4:
@@ -314,7 +332,8 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                                 }
                             });
                             break;
-                    }}
+                    }
+                }
             } else {
                 updateView(detail);
             }
@@ -327,13 +346,10 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
             mOrderDetail = detail;
             payOrderTitle.setText(detail.getName());
             double couponValue = detail.getCouponValue();
-            double accout = -couponValue;
             List<OrderDetail.OrderPayListBean> payList = detail.getOrderPayList();
             LayoutInflater inflater = LayoutInflater.from(this);
             for (OrderDetail.OrderPayListBean orderpay : payList) {
-                double unit = orderpay.getUnit();
                 int num = orderpay.getAmount();
-                accout += unit * num;
                 RelativeLayout itemView = (RelativeLayout) inflater.inflate(R.layout.order_pays_item, orderPaysLlt, false);
                 TextView accoutTv = (TextView) itemView.findViewById(R.id.order_pay_accout);
                 TextView titleTv = (TextView) itemView.findViewById(R.id.order_pay_item_title);
@@ -350,9 +366,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 accoutTv.setText(CommonUtil.formartOrderPrice(couponValue));
                 orderPaysLlt.addView(couponView);
             }
-            accout = Math.max(0, accout);
-            mAccout = accout;
-            payMoneyAmount.setText(CommonUtil.formartOrderPrice(accout));
+            payMoneyAmount.setText(CommonUtil.formartOrderPrice(detail.getFee()));
         }
 
 
