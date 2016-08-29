@@ -119,6 +119,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private LinearLayout backHome;
     private LinearLayout masterInfoBack;
     private int infoId;
+    private LinearLayout goMasterHome;
+    private CustomChatDialog dialogNet;
+    private CustomChatDialog dialogConnect;
 
 
     public static void start(Context context, String roomId, String url, String avatar, String nickName, String userId, SpecialShareVOBean shareVO, String type,String annoucement) {
@@ -136,6 +139,23 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         intent.putExtras(mBundle);
         intent.putExtra(LIVE_USER_ID,userId);
         context.startActivity(intent);
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        int[] locations = new int[2];
+        if(clickPraise!=null&&periscopeLayout!=null){
+            clickPraise.getLocationOnScreen(locations);
+            int x = locations[0];//获取组件当前位置的横坐标
+            int y = locations[1];
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
+            int i = DensityUtil.dip2px(AudienceActivity.this, 70);
+            AppLog.i("TAG","bbbbbbbbbbbbbbbbbclickPraise:"+x);
+            layoutParams.leftMargin=x-(i/4);
+            periscopeLayout.setLayoutParams(layoutParams);
+        }
 
     }
 
@@ -173,9 +193,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void initView() {
         viewById = findViewById(R.id.live_layout);
         loadingPage = findViewById(R.id.live_loading_page);
-
         audienceOver.setVisibility(View.GONE);
-
         andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
         BlurImageView imageView= (BlurImageView) findViewById(R.id.loading_page_bg);
@@ -198,24 +216,36 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
     boolean isShowNetDialog=true;//监测网络的dialog显示标记
+    int reminder=-1;//0:网络切换，1：连接error ，2：主播离开
+    boolean isFirstCheckNet=true;//弹一次提示网络的dialog
+
     @Override
-    protected void checkNetInfo(String netType) {
+    protected void checkNetInfo(String netType,int reminder) {
+
        if("rests".equals(netType)){
-           if(isShowNetDialog){
-               isShowNetDialog=false;
-               CustomChatDialog customChatDialog=new CustomChatDialog(AudienceActivity.this);
-               customChatDialog.setTitle("提示");
-               customChatDialog.setContent("当前网络为移动网络，是否继续观看直播？");
-               customChatDialog.setCancelable(false);
-               customChatDialog.setCancelBtn("继续观看",null);
-               customChatDialog.setSurceBtn( "结束直播",new CustomChatDialog.CustomDialogListener() {
+           if(reminder==1){
+               dialogConnect.dismiss();
+           }
+           if(reminder==0&&isFirstCheckNet&&isAudienceOver){
+              isFirstCheckNet=false;
+               dialogNet = new CustomChatDialog(AudienceActivity.this);
+               dialogNet.setTitle("提示");
+               dialogNet.setContent("当前网络为移动网络，是否继续观看直播？");
+               dialogNet.setCancelable(false);
+               dialogNet.setCancelBtn("继续观看", new CustomChatDialog.CustomDialogListener() {
+                   @Override
+                   public void onDialogClickListener() {
+
+                   }
+               });
+               dialogNet.setSurceBtn( "结束直播",new CustomChatDialog.CustomDialogListener() {
                    @Override
                    public void onDialogClickListener() {
                        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                        clearChatRoom();
                    }
                });
-               customChatDialog.show();
+               dialogNet.show();
            }
 
        }
@@ -256,9 +286,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 }
             }
             if("100".equals(style)){
-                showFinishLayout(true);
+              //  showFinishLayout(true);
             }else if("101".equals(style)){
-                 showFinishLayout(false);
+              //   showFinishLayout(false);
                // Toast.makeText(AudienceActivity.this,"主播又进来了",Toast.LENGTH_SHORT).show();
             }
             if (message != null && message.getAttachment() instanceof ChatRoomNotificationAttachment) {
@@ -267,28 +297,24 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
-                        //发送进入直播间的通知
-                      /*  String fromAccount1 = message.getFromAccount();
-                        if(!masterFirstEnter&&creatorAccount.equals(fromAccount1)){
-                            showFinishLayout(false);
-                            Toast.makeText(AudienceActivity.this,"主播回来了",Toast.LENGTH_SHORT).show();
-                            masterFirstEnter=true;
+                        String fromAccountIn = message.getFromAccount();
+                        if(creatorAccount.equals(fromAccountIn)){
+                            showFinishLayout(false,2);
+                            AppLog.i("TAG","主播回来了。。。。。。。。");
                         }
-                        if(creatorAccount.equals(fromAccount1)&&masterFirstEnter){
-                            masterFirstEnter=false;
-                            Toast.makeText(AudienceActivity.this,"主播第一次进来了",Toast.LENGTH_SHORT).show();
-                        }*/
                         break;
                     case ChatRoomClose:
                         //直播间被关闭；
-                        showFinishLayout(true);
+                       showFinishLayout(true,2);
                         AppLog.i("TAG","直播间被关闭");
                         break;
                     case ChatRoomMemberExit:
-                        String fromAccount = message.getFromAccount();
-                        AppLog.i("TAG","离开直播间："+fromAccount);
-                        if(creatorAccount.equals(fromAccount)){
-
+                        String fromAccountExit = message.getFromAccount();
+                        message.getSessionId();
+                        sendMessage(message, "0");
+                        AppLog.i("TAG","离开直播间："+fromAccountExit);
+                        if(creatorAccount.equals(fromAccountExit)){
+                           showFinishLayout(true,2);
                             AppLog.i("TAG","主播离开了。。。。。。。。");
                         }
                         break;
@@ -342,14 +368,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         super.onBackPressed();
         finishLive();
     }
-
-
-
-
-
-
-
-
 
     // 离开聊天室
     private void logoutChatRoom() {
@@ -419,20 +437,24 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
+                if(reminder==0){
+                    dialogNet.dismiss();
+                }
+                if(isFirstLink&&isAudienceOver){
+               isFirstLink=false;
+                reminder=1;
                 loadingPageLayout.setVisibility(View.GONE);
-                if(isFirstLink&&!isShowNetDialog){
-                    isFirstClick=false;
-                    CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
-                    customDialog.setContent("视频连接失败!");
-                    customDialog.setCancelable(false);
-                    customDialog.setCancelBtn("退出直播间", new CustomChatDialog.CustomDialogListener() {
+                dialogConnect = new CustomChatDialog(AudienceActivity.this);
+                dialogConnect.setContent("视频连接失败!");
+                dialogConnect.setCancelable(false);
+                dialogConnect.setCancelBtn("退出直播间", new CustomChatDialog.CustomDialogListener() {
                         @Override
                         public void onDialogClickListener() {
                             NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                             clearChatRoom();
                         }
                     });
-                    customDialog.setSurceBtn( "重新连接",new CustomChatDialog.CustomDialogListener() {
+                dialogConnect.setSurceBtn( "重新连接",new CustomChatDialog.CustomDialogListener() {
                         @Override
                         public void onDialogClickListener() {
                             loadingPageLayout.setVisibility(View.VISIBLE);
@@ -442,11 +464,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                             initAudienceParam();
                         }
                     });
-                    customDialog.show();
-                }else{
-                    showFinishLayout(true);
+                dialogConnect.show();
+                }else {
+                    showFinishLayout(true,2);
                 }
-
                 return false;
             }
         });
@@ -458,6 +479,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         });
 
     }
+
     protected void findViews() {
         super.findViews();
         controlLayout = findView(R.id.control_layout);
@@ -491,15 +513,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveQuit.setOnClickListener(buttonClickListener);
 
         //计算红心动画的显示位置
-        int[] locations = new int[2];
-        clickPraise.getLocationOnScreen(locations);
-        int x = locations[0];//获取组件当前位置的横坐标
-        int y = locations[1];
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
-        int i = DensityUtil.dip2px(AudienceActivity.this, 70);
-        AppLog.i("TAG","bbbbbbbbbbbbbbbbbclickPraise:"+x);
-        layoutParams.leftMargin=x-(i/4);
-        periscopeLayout.setLayoutParams(layoutParams);
+
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -610,7 +624,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 case R.id.master_info_back_home:
                     finishLive();
                     break;
-                case R.id.live_master_home:
+                case R.id.go_master_home:
                     Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent.putExtra("userId", String.valueOf(infoId));
                     startActivity(intent);
@@ -722,12 +736,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onError() {
-        showFinishLayout(true);
+        showFinishLayout(true,2);
     }
     @Override
     public void onCompletion() {
         isStartLive = false;
-        showFinishLayout(true);
+      showFinishLayout(true,2);
     }
     @Override
     public void onPrepared() {
@@ -737,7 +751,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     // 显示和隐藏直播已结束布局
     boolean isAudienceOver=true;
-    protected void showFinishLayout(boolean liveEnd) {
+    protected void showFinishLayout(boolean liveEnd,int reminder) {
+
+        if(reminder==0){
+            dialogNet.dismiss();
+        }else if(reminder==1){
+            dialogConnect.dismiss();
+        }
         if(isAudienceOver&&liveEnd){
             isAudienceOver=false;
             audienceOver.setVisibility(View.VISIBLE);
@@ -765,7 +785,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void showMasterInfoLayout(LiveUserInfoResultBean result) {
         infoId = result.getId();
         masterInfoCloseIv = (ImageView) audienceOver.findViewById(R.id.master_info_close_iv);
-        masterInfoCloseIv.setVisibility(View.GONE);
+        masterInfoCloseIv.setVisibility(View.VISIBLE);
         masterInfoHeadIv = (CircleImageView) audienceOver.findViewById(R.id.master_info_head_iv);
         masterInfoNickTv = (TextView)audienceOver.findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)audienceOver.findViewById(R.id.master_info_signature);
@@ -773,9 +793,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         masterInfoBack = (LinearLayout)audienceOver.findViewById(R.id.master_info_back_home);
         liveFans = (TextView)audienceOver.findViewById(R.id.live_fans);
         liveContribute = (TextView)audienceOver.findViewById(R.id.live_contribute);
+        goMasterHome = (LinearLayout) audienceOver.findViewById(R.id.go_master_home);
         liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home);
         masterInfoCloseIv.setOnClickListener(buttonClickListener);
         liveMasterHome.setOnClickListener(buttonClickListener);
+        goMasterHome.setOnClickListener(buttonClickListener);
+        masterInfoBack.setOnClickListener(buttonClickListener);
         String avatar = result.getAvatar();
         String nickName = result.getNickName();
         int fansNum = result.getFansNum();

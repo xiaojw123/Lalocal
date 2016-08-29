@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -13,7 +14,6 @@ import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.xlistview.PowerImageView;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class LiveMainListAdapter extends BaseAdapter {
             liveViewHodler.livePeopleLayout= (LinearLayout) convertView.findViewById(R.id.live_people_layout);
             liveViewHodler.liveCompereHeadPortrait= (CircleImageView) convertView.findViewById(R.id.live_compere_head_portrait);
             liveViewHodler.liveCompereHeadTv= (TextView) convertView.findViewById(R.id.live_compere_head_tv);
-            liveViewHodler.liveCoverIv= (PowerImageView) convertView.findViewById(R.id.live_cover_iv);
+            liveViewHodler.liveCoverIv= (ImageView) convertView.findViewById(R.id.live_cover_iv);
             convertView.setTag(liveViewHodler);
         }else {
             liveViewHodler= (LiveViewHodler) convertView.getTag();
@@ -89,7 +89,7 @@ public class LiveMainListAdapter extends BaseAdapter {
         LinearLayout livePeopleLayout;
         CircleImageView liveCompereHeadPortrait;
         TextView liveCompereHeadTv;
-        PowerImageView liveCoverIv;
+        ImageView liveCoverIv;
 
     }
 }

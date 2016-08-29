@@ -33,6 +33,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private TextView liveContribute;
     private TextView liveMasterHome;
     CustomLiveUserInfoDialogListener sureDialogListener,cancelDialogListener;
+    private LinearLayout goMainLayout;
 
 
     public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result) {
@@ -49,6 +50,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
     public void showLiveUserInfoPopuwindow(){
         masterInfoCloseIv = (ImageView) findViewById(R.id.master_info_close_iv);
+        goMainLayout = (LinearLayout) findViewById(R.id.go_main_layout);
         masterInfoHeadIv = (CircleImageView) findViewById(R.id.master_info_head_iv);
         masterInfoNickTv = (TextView)findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)findViewById(R.id.master_info_signature);
@@ -58,6 +60,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         liveContribute = (TextView)findViewById(R.id.live_contribute);
         liveMasterHome = (TextView) findViewById(R.id.live_master_home);
         masterInfoCloseIv.setOnClickListener(this);
+        goMainLayout.setOnClickListener(this);
         String avatar = result.getAvatar();
         String nickName = result.getNickName();
         int fansNum = result.getFansNum();
@@ -70,7 +73,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         }
         DrawableUtils.displayImg(context, masterInfoHeadIv, avatar);
         masterInfoNickTv.setText(nickName);
-        liveMasterHome.setOnClickListener(this);
+      //  liveMasterHome.setOnClickListener(this);
     }
     public void setCancelBtn( CustomLiveUserInfoDialogListener listener) {
         cancelDialogListener = listener;
@@ -93,7 +96,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 }
                 dismiss();
                 break;
-            case R.id.live_master_home:
+            case  R.id.go_main_layout:
 
                 int id = result.getId();
                 if(sureDialogListener!=null){
@@ -101,6 +104,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 }
                 dismiss();
                 break;
+
         }
     }
 

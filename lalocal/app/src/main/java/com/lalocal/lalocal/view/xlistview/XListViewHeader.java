@@ -1,5 +1,6 @@
 
 package com.lalocal.lalocal.view.xlistview;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 
 
@@ -19,7 +22,7 @@ public class XListViewHeader extends LinearLayout {
 	private ImageView mArrowImageView;
 	private ProgressBar mProgressBar;
 	private TextView mHintTextView;
-	private PowerImageView piv;
+	private GifView piv;
 	private int mState = STATE_NORMAL;
 
 	private Animation mRotateUpAnim;
@@ -56,8 +59,7 @@ public class XListViewHeader extends LinearLayout {
 		mArrowImageView = (ImageView)findViewById(R.id.xlistview_header_arrow);
 		mHintTextView = (TextView)findViewById(R.id.xlistview_header_hint_textview);
 		mProgressBar = (ProgressBar)findViewById(R.id.xlistview_header_progressbar);
-		piv=(PowerImageView) findViewById(R.id.xlistview_header_anim);
-
+		piv=(GifView) findViewById(R.id.xlistview_header_anim);
 		mRotateUpAnim = new RotateAnimation(0.0f, -180.0f,
 				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
 				0.5f);
@@ -77,33 +79,33 @@ public class XListViewHeader extends LinearLayout {
 			mArrowImageView.clearAnimation();
 			mArrowImageView.setVisibility(View.GONE);
 			mProgressBar.setVisibility(View.GONE);
-			piv.setAutoPlay(true);
-			piv.setPlaying(true);
+		//	piv.setAutoPlay(true);
+		//	piv.setPlaying(true);
 		} else {	// 显示箭头图片
 			mArrowImageView.setVisibility(View.GONE);
 			mProgressBar.setVisibility(View.GONE);
-			piv.setPlaying(false);
-			piv.setAutoPlay(false);
+		//	piv.setPlaying(false);
+		//	piv.setAutoPlay(false);
 		}
 		
 		switch(state){
 		case STATE_NORMAL:
 			if (mState == STATE_READY) {
 				mArrowImageView.startAnimation(mRotateDownAnim);
-				piv.setAutoPlay(false);
-				piv.setPlaying(false);
+			//	piv.setAutoPlay(false);
+			//	piv.setPlaying(false);
 			}
 			if (mState == STATE_REFRESHING) {
 				mArrowImageView.clearAnimation();
-				piv.setAutoPlay(true);
-				piv.setPlaying(true);
+			//	piv.setAutoPlay(true);
+			//	piv.setPlaying(true);
 			}
 			mHintTextView.setText(R.string.xlistview_header_hint_normal);
 			mHintTextView.setVisibility(View.GONE);
 			break;
 		case STATE_READY:
-			piv.setAutoPlay(false);
-			piv.setPlaying(false);
+		//	piv.setAutoPlay(false);
+		//	piv.setPlaying(false);
 			if (mState != STATE_READY) {
 				mArrowImageView.clearAnimation();
 				mArrowImageView.startAnimation(mRotateUpAnim);
@@ -112,8 +114,8 @@ public class XListViewHeader extends LinearLayout {
 			}
 			break;
 		case STATE_REFRESHING:
-			piv.setAutoPlay(true);
-			piv.setPlaying(true);
+		//	piv.setAutoPlay(true);
+		//	piv.setPlaying(true);
 			mHintTextView.setText(R.string.xlistview_header_hint_loading);
 			mHintTextView.setVisibility(View.GONE);
 			break;

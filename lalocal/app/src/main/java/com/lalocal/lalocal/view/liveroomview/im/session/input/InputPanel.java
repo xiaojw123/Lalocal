@@ -283,7 +283,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 if(loginChatRoomStatus&&loginStatus){
                     onTextMessageSendButtonPressed(messageEditText.getText().toString());
                 }else {
-                    Toast.makeText(mContext,"正在连接聊天系统，请稍后。。。。",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"正在连接聊天系统，请稍后",Toast.LENGTH_SHORT).show();
                 }
 
             } else if (v == moreFuntionButtonInInputBar) {
@@ -426,7 +426,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(messageEditText.getWindowToken(), 0);
         messageEditText.clearFocus();
-        AppLog.i("TAG","隐藏软键盘inputpanel");
+
 
     }
 

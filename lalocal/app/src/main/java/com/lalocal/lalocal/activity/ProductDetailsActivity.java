@@ -356,7 +356,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                     //显示轮播图
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoVOs.size(); i++) {
-                        if (i > 7) {
+                        if (i > 6) {
                             break;
                         }
                         RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();

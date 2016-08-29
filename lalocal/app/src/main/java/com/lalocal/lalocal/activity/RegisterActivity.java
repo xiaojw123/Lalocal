@@ -15,10 +15,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
-import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.auth.AuthService;
 
 
 public class RegisterActivity extends BaseActivity implements View.OnClickListener {
@@ -124,10 +120,10 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         public void onResigterComplete(String email, String psw, int userid, String token) {
             loginEmail = email;
             loginPsw = psw;
-            NIMClient.getService(AuthService.class).logout();//退出登錄的遊客賬號,并清除信息
+          /*  NIMClient.getService(AuthService.class).logout();//退出登錄的遊客賬號,并清除信息
             DemoCache.setLoginStatus(false);
             DemoCache.clear();
-            AuthPreferences.clearUserInfo();
+            AuthPreferences.clearUserInfo();*/
             CommonUtil.showPromptDialog(RegisterActivity.this, getResources().getString(R.string.register_success_prompt), this);
         }
 

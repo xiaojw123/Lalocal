@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.xlistview.PowerImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.util.List;
@@ -106,7 +106,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         @BindView(R.id.live_compere_head_tv)
         TextView liveCompereHeadTv;
         @BindView(R.id.live_cover_iv)
-        PowerImageView liveCoverIv;
+        ImageView liveCoverIv;
 
         public LiveViewHodler(View itemView) {
             super(itemView);
