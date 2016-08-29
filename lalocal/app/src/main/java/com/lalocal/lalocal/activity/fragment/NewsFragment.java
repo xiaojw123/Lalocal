@@ -257,9 +257,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                     roomId = liveRowsBean.getRoomId();
                     String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                     String s = String.valueOf(roomId);
-
                     if(createRoom!=null&&createRoom.equals(s)){
                         CommonUtil.REMIND_BACK=1;
+                        SPCUtils.put(getActivity(),CREATE_ROOMID,"fdfdad");
                         prepareLive();
                         return;
                     }

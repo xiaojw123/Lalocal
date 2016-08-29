@@ -34,6 +34,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private static final int REQUEST_PERM = 151;
     private BlurImageView shareBlur;
     private View view;
+    private View cancelLayout;
+
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
         this.shareVO = shareVO;
@@ -46,11 +48,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         shareFriends = (LinearLayout) view.findViewById(R.id.share_friends);
         shareWechat = (LinearLayout) view.findViewById(R.id.share_wechat);
         shareWeibo = (LinearLayout) view.findViewById(R.id.share_weibo);
-        cancel = (TextView) view.findViewById(R.id.cancel_share);
+       // cancel = (TextView) view.findViewById(R.id.cancel_share);
+        cancelLayout = view.findViewById(R.id.cancel_layout);
         shareFriends.setOnClickListener(this);
         shareWechat.setOnClickListener(this);
         shareWeibo.setOnClickListener(this);
-        cancel.setOnClickListener(this);
+      //  cancel.setOnClickListener(this);
+        cancelLayout.setOnClickListener(this);
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setContentView(view);
@@ -102,10 +106,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                     }else {
                         Toast.makeText(context,"没有安装微博客户端",Toast.LENGTH_SHORT).show();
                     }
-
                 }
                 break;
-            case R.id.cancel_share:
+            case R.id.cancel_layout:
                 dismiss();
                 break;
         }

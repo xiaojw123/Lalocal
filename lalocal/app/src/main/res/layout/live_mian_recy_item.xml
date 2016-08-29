@@ -126,6 +126,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/live_text_10sp"
+                    android:ellipsize="end"
+                    android:maxLength="5"
                     android:text="lalocal"/>
             </LinearLayout>
         </RelativeLayout>

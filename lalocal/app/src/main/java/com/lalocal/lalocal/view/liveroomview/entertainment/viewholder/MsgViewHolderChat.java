@@ -39,6 +39,10 @@ public class MsgViewHolderChat extends TViewHolder {
         message = (ChatRoomMessage) item;
         setNameTextView();
         String content = message.getContent();
+        if("点赞".equals(content.trim())){
+            content="给主播点了个赞";
+            bodyText.setTextColor(Color.parseColor("#97d3e9"));
+        }
         if("点赞2".equals(content.trim())){
             content="给主播点了个赞";
             bodyText.setTextColor(Color.parseColor("#97d3e9"));

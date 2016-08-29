@@ -1,4 +1,5 @@
 package com.lalocal.lalocal.view.liveroomview.entertainment.activity;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -258,14 +259,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             livePlayer.resetLive();
         }
         giftList.clear();
-
         super.onDestroy();
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
             if (livePlayer != null) {
                 livePlayer.tryStop();
             }
@@ -366,6 +365,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     public void onStop() {
         super.onStop();
+
         AppLog.i("TAG", "LiveActivity:onStop");
     }
 
@@ -373,6 +373,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public boolean sendBarrageMessage(IMMessage msg) {
         return false;
     }
+    boolean isCloseLive=false;//结束直播状态
 
     public class MyCallBack extends ICallBack {
         @Override
@@ -406,17 +407,20 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         //上传在线人数
 
                         contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
+                      //  handler.postDelayed(runnable,5*1000);
                         if (timer == null) {
-                            timer = new Timer();
+                            timer = new Timer(true);
                         }
                         timer.schedule(new TimerTask() {
 
                             @Override
                             public void run() {
-                                AppLog.i("TAG", "上传在线人数：" + onlineCounts);
-                                contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
+                                if(!isCloseLive){
+                                    AppLog.i("TAG", "上传在线人数：" + onlineCounts);
+                                    contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
+                                }
                             }
-                        }, 1000, 300 * 1000);
+                        }, 1000, 5 * 1000);
                     }
 
                     @Override
@@ -426,14 +430,30 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             }
         }
+      /*  Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
 
+            @Override
+            public void run() {
+                // handler自带方法实现定时器
+                try {
+                    handler.postDelayed(this, 5*1000);
+                    AppLog.i("TAG", "上传在线人数：" + onlineCounts);
+                    contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
 
+                } catch (Exception e) {
+
+                    e.printStackTrace();
+                    System.out.println("exception...");
+                }
+            }
+        };
+*/
         @Override
         public void onCloseLive(CloseLiveBean closeLiveBean) {
             super.onCloseLive(closeLiveBean);
-
             if (closeLiveBean.getReturnCode() == 0) {
-                AppLog.i("TAG", "关闭直播LiveActivity kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+               isCloseLive=true;
             }
         }
 
@@ -477,6 +497,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
         }
     }
+
 
 
     private void showCreateLiveRoomPopuwindow() {
@@ -604,6 +625,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private void endLive() {
         if (livePlayer != null) {
             livePlayer.resetLive();
+        }
+        if(timer!=null){
+            timer.cancel();
         }
         contentLoader.cancelLiveRoom(userId);
         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
@@ -818,6 +842,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     finishLive();
                     break;
                 case R.id.live_over_back_home:
+
                     finish();
                     break;
               /*  case R.id.live_create_share_friends:
