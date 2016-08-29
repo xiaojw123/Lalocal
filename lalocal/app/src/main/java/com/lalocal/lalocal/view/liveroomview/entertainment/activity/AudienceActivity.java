@@ -143,6 +143,23 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        int[] locations = new int[2];
+        if(clickPraise!=null&&periscopeLayout!=null){
+            clickPraise.getLocationOnScreen(locations);
+            int x = locations[0];//获取组件当前位置的横坐标
+            int y = locations[1];
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
+            int i = DensityUtil.dip2px(AudienceActivity.this, 70);
+            AppLog.i("TAG","bbbbbbbbbbbbbbbbbclickPraise:"+x);
+            layoutParams.leftMargin=x-(i/4);
+            periscopeLayout.setLayoutParams(layoutParams);
+        }
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initAudienceParam();
@@ -176,9 +193,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void initView() {
         viewById = findViewById(R.id.live_layout);
         loadingPage = findViewById(R.id.live_loading_page);
-
         audienceOver.setVisibility(View.GONE);
-
         andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
         BlurImageView imageView= (BlurImageView) findViewById(R.id.loading_page_bg);
@@ -202,16 +217,27 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
     boolean isShowNetDialog=true;//监测网络的dialog显示标记
     int reminder=-1;//0:网络切换，1：连接error ，2：主播离开
+    boolean isFirstCheckNet=true;//弹一次提示网络的dialog
+
     @Override
     protected void checkNetInfo(String netType,int reminder) {
 
        if("rests".equals(netType)){
-           if(reminder==0){
+           if(reminder==1){
+               dialogConnect.dismiss();
+           }
+           if(reminder==0&&isFirstCheckNet&&isAudienceOver){
+              isFirstCheckNet=false;
                dialogNet = new CustomChatDialog(AudienceActivity.this);
                dialogNet.setTitle("提示");
                dialogNet.setContent("当前网络为移动网络，是否继续观看直播？");
                dialogNet.setCancelable(false);
-               dialogNet.setCancelBtn("继续观看",null);
+               dialogNet.setCancelBtn("继续观看", new CustomChatDialog.CustomDialogListener() {
+                   @Override
+                   public void onDialogClickListener() {
+
+                   }
+               });
                dialogNet.setSurceBtn( "结束直播",new CustomChatDialog.CustomDialogListener() {
                    @Override
                    public void onDialogClickListener() {
@@ -414,7 +440,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 if(reminder==0){
                     dialogNet.dismiss();
                 }
-                if(isFirstLink){
+                if(isFirstLink&&isAudienceOver){
                isFirstLink=false;
                 reminder=1;
                 loadingPageLayout.setVisibility(View.GONE);
@@ -453,6 +479,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         });
 
     }
+
     protected void findViews() {
         super.findViews();
         controlLayout = findView(R.id.control_layout);
@@ -486,15 +513,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveQuit.setOnClickListener(buttonClickListener);
 
         //计算红心动画的显示位置
-        int[] locations = new int[2];
-        clickPraise.getLocationOnScreen(locations);
-        int x = locations[0];//获取组件当前位置的横坐标
-        int y = locations[1];
-        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
-        int i = DensityUtil.dip2px(AudienceActivity.this, 70);
-        AppLog.i("TAG","bbbbbbbbbbbbbbbbbclickPraise:"+x);
-        layoutParams.leftMargin=x-(i/4);
-        periscopeLayout.setLayoutParams(layoutParams);
+
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
@@ -733,6 +752,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     // 显示和隐藏直播已结束布局
     boolean isAudienceOver=true;
     protected void showFinishLayout(boolean liveEnd,int reminder) {
+
+        if(reminder==0){
+            dialogNet.dismiss();
+        }else if(reminder==1){
+            dialogConnect.dismiss();
+        }
         if(isAudienceOver&&liveEnd){
             isAudienceOver=false;
             audienceOver.setVisibility(View.VISIBLE);

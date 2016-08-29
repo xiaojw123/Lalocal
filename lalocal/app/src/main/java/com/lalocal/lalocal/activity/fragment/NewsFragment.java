@@ -233,8 +233,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onLoginSucess(User user) {
             super.onLoginSucess(user);
-
-
         }
 
         @Override

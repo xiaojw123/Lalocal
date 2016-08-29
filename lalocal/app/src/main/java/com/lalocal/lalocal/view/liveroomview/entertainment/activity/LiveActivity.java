@@ -171,6 +171,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
         if (hasFocus && !isshowPopu && isCancelCreama&&CommonUtil.REMIND_BACK!=1) {
             isshowPopu = true;
+            AppLog.i("TAG","显示popuwindoufhdfdsfdhfdsfsdfdsfdfsf");
             showCreateLiveRoomPopuwindow();
         }
     }
@@ -179,6 +180,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
         if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {
+            AppLog.i("TAG","直播页面改变了啊发电恢复的");
             if (inputLiveRoom != null && inputLiveRoom.getVisibility() == View.VISIBLE) {
                 liveSettingLayout.setVisibility(View.GONE);
                 liveSettingLayout.setClickable(false);
@@ -237,7 +239,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onResume() {
         super.onResume();
         viewById.addOnLayoutChangeListener(this);
-
         AppLog.i("TAG", "LiveActivity:onResume");
         // 恢复直播
         if (livePlayer != null) {

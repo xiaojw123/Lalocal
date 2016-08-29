@@ -47,7 +47,7 @@ public class LoginActivity extends BaseActivity {
         isImLogin = intent.getBooleanExtra(KeyParams.IM_LOGIN, false);
         initContentService();
         initView();
-     //   claerImLoginInfo();//清除im登錄信息
+       claerImLoginInfo();//清除im登錄信息
 
     }
 

@@ -16,7 +16,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -311,9 +310,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         liveSettingLayout.setVisibility(View.GONE);
         container = new Container(this, roomId, SessionTypeEnum.ChatRoom, this);
         view = findViewById(getLayoutId());
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        boolean isOpen = imm.isActive();
-
         InputConfig inputConfig = new InputConfig();
         inputConfig.isTextAudioSwitchShow = false;
         inputConfig.isMoreFunctionShow = false;
@@ -408,7 +404,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     DemoCache.clear();
                     AuthPreferences.saveUserAccount(accid);
                     AuthPreferences.saveUserToken(token);
-
                     loginIMServer(accid, token);
 
                 }
@@ -461,7 +456,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             public void run() {
                                 isFirstClick = true;
                             }
-                        }, 150);
+                        }, 500);
                     }
                     userIdItem = userId;
                     break;
@@ -469,14 +464,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case R.id.live_telecast_share:
                     if (shareVO != null) {
                         String s = new Gson().toJson(shareVO);
-                        AppLog.i("TAG", "setOnItemClickListener:shareVO:" + s);
+
                         SharePopupWindow shareActivity = new SharePopupWindow(LivePlayerBaseActivity.this, shareVO);
                         shareActivity.showShareWindow();
                         shareActivity.showAtLocation(LivePlayerBaseActivity.this.findViewById(R.id.live_layout),
                                 Gravity.CENTER, 0, 0);
 
-                    } else {
-                        AppLog.i("TAG", "分享内容为空");
                     }
                     break;
                 case R.id.master_info_back_home:
@@ -534,7 +527,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             barrageView.init(new BarrageConfig());
                             if (content != null) {
                                 barrageView.addTextBarrage(senderNick + ":" + content);
-
                             }
                         }
 
@@ -558,11 +550,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case ChatRoomMemberIn:
                         //发送进入直播间的通知
                         sendMessage(message, "0");
-                        break;
-                    case ChatRoomMemberExit:
-                        //发送离开直播间的通知
-                      //   sendMessage(message, "0");
-
                         break;
                     case ChatRoomInfoUpdated:
                         sendMessage(message, "0");
@@ -677,7 +664,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void run() {
                         try {
-                            Thread.sleep(800);
+                            Thread.sleep(100);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -945,7 +932,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onDialogClickListener() {
                 DemoCache.setLoginStatus(false);
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-                AppLog.i("TAG", "base去登錄頁面");
+
                 startActivityForResult(new Intent(LivePlayerBaseActivity.this, LoginActivity.class), LIVE_BASE_RESQUEST_CODE);
             }
         });

@@ -1334,7 +1334,8 @@ public class ContentLoader {
             bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
             bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
             UserHelper.saveLoginInfo(context, bundle);
-
+            DemoCache.clear();
+            AuthPreferences.clearUserInfo();
             AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
             AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
             loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());

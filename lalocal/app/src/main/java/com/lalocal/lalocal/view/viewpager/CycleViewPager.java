@@ -2,38 +2,31 @@ package com.lalocal.lalocal.view.viewpager;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-
 import android.annotation.SuppressLint;
 import android.app.Fragment;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Message;
 import android.support.v4.view.PagerAdapter;
-
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.util.AppLog;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 实现可循环，可轮播的viewpager
@@ -134,7 +127,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 		for (int i = 0; i < indicators.length; i++) { 
 			View view = LayoutInflater.from(getActivity()).inflate(R.layout.view_cycle_viewpager_indicator, null);
 			indicators[i] = (ImageView) view.findViewById(R.id.image_indicator);
-			
+			indicators[i].setScaleType(ImageView.ScaleType.CENTER_CROP);
 			indicatorLayout.addView(view);
 		}
 
