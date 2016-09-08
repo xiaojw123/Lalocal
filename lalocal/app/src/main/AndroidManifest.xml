@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lalocal.lalocal">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -70,9 +71,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.HomeActivity"
-            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait" />
@@ -105,7 +104,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SpecialDetailsActivity"
-            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.BigPictureActivity"
@@ -124,14 +122,16 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.ArticleTestAct" />
-        <activity android:name=".activity.SplashActivity">
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".live.entertainment.activity.TestActivity"></activity>
+        <activity android:name=".live.entertainment.activity.TestActivity" />
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -143,7 +143,7 @@
             android:value="57885600e0f55a60d5000b3f" />
 
         <activity
-           android:name=".wxapi.WXEntryActivity"
+            android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -154,6 +154,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -197,19 +198,10 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".activity.SearchActivity"
-            android:hardwareAccelerated="false"
-            />
-        <activity android:name=".test.TestActivity">
-        </activity>
-        <activity
-            android:name=".activity.DestinationAreaActivity"
-
-            />
-            <!--android:hardwareAccelerated="false" -->
-        <activity android:name=".activity.RouteDetailActivity"
-             android:hardwareAccelerated="false"
-            />
+        <activity android:name=".activity.SearchActivity" />
+        <activity android:name=".test.TestActivity" />
+        <activity android:name=".activity.DestinationAreaActivity" />
+        <activity android:name=".activity.RouteDetailActivity" />
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
@@ -234,9 +226,7 @@
             android:name="com.easemob.easeui.ui.EaseShowNormalFileActivity"
             android:screenOrientation="portrait"
             android:theme="@style/horizontal_slide" />
-        <activity
-            android:name=".activity.BookActivity"
-            android:hardwareAccelerated="false" />
+        <activity android:name=".activity.BookActivity" />
         <activity android:name=".activity.PayActivity" />
 
         <!-- ping++ -->
@@ -263,10 +253,8 @@
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize|adjustPan"
-            android:screenOrientation="behind"/>
-
-
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|adjustPan" />
 
         <!-- 银联支付 sdk -->
         <activity
@@ -289,7 +277,7 @@
 
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="efc9614a32336704ec2577f2129929fb" />
+            android:value="4cbe3856032ad3755da23525e596405f" />
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -311,13 +299,14 @@
 
         <!-- 云信进程间通信receiver -->
         <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
-     <!--   android:windowSoftInputMode="stateHidden|adjustResize"-->
+        <!--   android:windowSoftInputMode="stateHidden|adjustResize"-->
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
             android:hardwareAccelerated="false"
 
-           />
-        <activity android:name=".live.entertainment.activity.LiveActivity"
+            />
+        <activity
+            android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false" />
 
 
@@ -326,7 +315,13 @@
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
             android:hardwareAccelerated="false"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
-        <activity android:name=".activity.PayCompleteActivity"></activity>
+        <activity android:name=".activity.PayCompleteActivity" />
+        <activity android:name=".activity.MyWalletActivity" />
+        <activity android:name=".activity.MyDiamondActivity" />
+        <activity android:name=".activity.MyTravelTicketActivity" />
+        <activity android:name=".activity.RechargeActivity" />
+        <activity android:name=".activity.ExchangeActivity" />
+        <activity android:name=".activity.ChargePayActivity"></activity>
     </application>
 
 </manifest>

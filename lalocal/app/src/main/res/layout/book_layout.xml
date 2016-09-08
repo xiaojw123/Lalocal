@@ -10,6 +10,6 @@
     android:layout_height="match_parent"
     />
     <include
-        layout="@layout/page_loading"
+        layout="@layout/page_base_loading"
         />
 </merge>

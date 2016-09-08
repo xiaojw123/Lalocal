@@ -1,5 +1,8 @@
 <resources>
 
+    <style name="SplashTheme" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/logo_splash</item>
+    </style>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
@@ -88,6 +91,11 @@
     <style name="CommonD9LineTheme">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/register_title_divde_line_height</item>
+        <item name="android:background">@color/color_d9</item>
+    </style>
+    <style name="CommonD9VertialLineTheme">
+        <item name="android:layout_width">@dimen/register_title_divde_line_height</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/color_d9</item>
     </style>
 
@@ -332,7 +340,7 @@
     <style name="WelcomeEntranceActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@drawable/splash_bg</item>
+        <item name="android:windowBackground">@drawable/logo_splash</item>
     </style>
 
     <style name="InputActivityTheme" parent="Theme.AppCompat.Light.DarkActionBar">

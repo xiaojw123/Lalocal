@@ -21,6 +21,7 @@ import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.EmptActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.MyWalletActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
@@ -64,7 +65,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     TextView username_tv, verified_tv;
     TextView favoriteNum_tv, orderNum_tv, couponNum_tv, fansNum_tv, followNum_tv;
     ImageView headImg;
-    CustomTabLayout favorite_tab, order_tab, coupon_tab, fans_tab, follow_tab;
+    CustomTabLayout favorite_tab, order_tab, coupon_tab, fans_tab, follow_tab,wallet_tab;
     ViewGroup lastSelectedView;
     ImageButton settingBtn;
     ContentLoader contentService;
@@ -149,6 +150,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         headImg = (ImageView) view.findViewById(R.id.home_me_headportrait_img);
         verified_tv = (TextView) view.findViewById(R.id.home_me_verified);
         username_tv = (TextView) view.findViewById(R.id.home_me_username);
+        wallet_tab= (CustomTabLayout) view.findViewById(R.id.home_me_wallet_tab);
         favorite_tab = (CustomTabLayout) view.findViewById(R.id.home_me_favorite_tab);
         order_tab = (CustomTabLayout) view.findViewById(R.id.home_me_order_tab);
         coupon_tab = (CustomTabLayout) view.findViewById(R.id.home_me_coupon_tab);
@@ -168,6 +170,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         coupon_tab.setOnClickListener(meFragmentClickListener);
         fans_tab.setOnClickListener(meFragmentClickListener);
         follow_tab.setOnClickListener(meFragmentClickListener);
+        wallet_tab.setOnClickListener(meFragmentClickListener);
         setSelectedTab(favorite_tab);
     }
 
@@ -252,6 +255,10 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         public void onClick(View v) {
             int id = v.getId();
             switch (id) {
+                case R.id.home_me_wallet_tab:
+                    Intent walletIntent=new Intent(getActivity(), MyWalletActivity.class);
+                    startActivity(walletIntent);
+                    break;
                 case R.id.home_me_favorite_fans_tab:
 //                    Intent fansIntent = new Intent(getActivity(), LiveAttentionOrFansActivity.class);
 //                    fansIntent.putExtra("liveType", "1");

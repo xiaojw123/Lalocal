@@ -43,7 +43,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.xlistview.PowerImageView;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -124,7 +123,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private String style;
     private View audienceOver;
     private BlurImageView blurImageView;
-    private PowerImageView loadingImag;
     private LinearLayout backHome;
     private LinearLayout masterInfoBack;
     private int infoId;

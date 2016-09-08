@@ -1,14 +1,15 @@
 apply plugin: 'com.android.library'
+def cfg = rootProject.ext.configuration
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.version_code
+        versionName cfg.version_name
     }
     buildTypes {
         release {

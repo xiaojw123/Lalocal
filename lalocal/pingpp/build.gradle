@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
-
+def cfg = rootProject.ext.configuration
 android {
-    compileSdkVersion 19
-    buildToolsVersion "23.0.2"
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 19
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
     }
 
     buildTypes {

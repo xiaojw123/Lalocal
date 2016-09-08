@@ -37,7 +37,7 @@ public final class AppLog {
     //close log
 //    public static final int DEBUG_LEVEL = 7;
     //open log
-    public static final int DEBUG_LEVEL = 0;
+    public static  int debug_level = 0;
 
     /**
      * 'System.out' switch.When it is true, you can see the 'System.out' log.
@@ -52,7 +52,7 @@ public final class AppLog {
      * @param obj
      */
     public static void v(Object obj) {
-        if (Log.VERBOSE > DEBUG_LEVEL) {
+        if (Log.VERBOSE > debug_level) {
             String tag = getClassName();
             String msg = obj != null ? obj.toString() : "obj == null";
             Log.v(tag, msg);
@@ -60,12 +60,12 @@ public final class AppLog {
     }
 
     /**
-     * Send a {@link #DEBUG_LEVEL} log message.
+     * Send a {@link #debug_level} log message.
      *
      * @param obj
      */
     public static void d(Object obj) {
-        if (Log.DEBUG > DEBUG_LEVEL) {
+        if (Log.DEBUG > debug_level) {
             String tag = getClassName();
             String msg = obj != null ? obj.toString() : "obj == null";
             Log.d(tag, msg);
@@ -80,7 +80,7 @@ public final class AppLog {
      * @param obj
      */
     public static void w(Object obj) {
-        if (Log.WARN > DEBUG_LEVEL) {
+        if (Log.WARN > debug_level) {
             String tag = getClassName();
             String msg = obj != null ? obj.toString() : "obj == null";
             Log.w(tag, msg);
@@ -93,7 +93,7 @@ public final class AppLog {
      * @param obj
      */
     public static void e(Object obj) {
-        if (Log.ERROR > DEBUG_LEVEL) {
+        if (Log.ERROR > debug_level) {
             String tag = getClassName();
             String msg = obj != null ? obj.toString() : "obj == null";
             Log.e(tag, msg);
@@ -110,7 +110,7 @@ public final class AppLog {
      * @param obj
      */
     public static void wtf(Object obj) {
-        if (Log.ASSERT > DEBUG_LEVEL) {
+        if (Log.ASSERT > debug_level) {
             String tag = getClassName();
             String msg = obj != null ? obj.toString() : "obj == null";
             Log.wtf(tag, msg);
@@ -125,20 +125,20 @@ public final class AppLog {
      * @param msg The message you would like logged.
      */
     public static void v(String tag, String msg) {
-        if (Log.VERBOSE > DEBUG_LEVEL) {
+        if (Log.VERBOSE > debug_level) {
             Log.v(tag, msg);
         }
     }
 
     /**
-     * Send a {@link #DEBUG_LEVEL} log message.
+     * Send a {@link #debug_level} log message.
      *
      * @param tag Used to identify the source of a log message. It usually
      *            identifies the class or activity where the log call occurs.
      * @param msg The message you would like logged.
      */
     public static void d(String tag, String msg) {
-        if (Log.DEBUG > DEBUG_LEVEL) {
+        if (Log.DEBUG > debug_level) {
             Log.d(tag, msg);
         }
     }
@@ -151,7 +151,7 @@ public final class AppLog {
      * @param msg The message you would like logged.
      */
     public static void i(String tag, String msg) {
-        if (Log.INFO > DEBUG_LEVEL) {
+        if (Log.INFO > debug_level) {
             Log.i(tag, msg);
         }
     }
@@ -164,7 +164,7 @@ public final class AppLog {
      * @param msg The message you would like logged.
      */
     public static void w(String tag, String msg) {
-        if (Log.WARN > DEBUG_LEVEL) {
+        if (Log.WARN > debug_level) {
             Log.w(tag, msg);
         }
     }
@@ -177,7 +177,7 @@ public final class AppLog {
      * @param msg The message you would like logged.
      */
     public static void e(String tag, String msg) {
-        if (Log.ERROR > DEBUG_LEVEL) {
+        if (Log.ERROR > debug_level) {
             Log.e(tag, msg);
         }
     }
@@ -193,7 +193,7 @@ public final class AppLog {
      * @param msg The message you would like logged.
      */
     public static void wtf(String tag, String msg) {
-        if (Log.ASSERT > DEBUG_LEVEL) {
+        if (Log.ASSERT > debug_level) {
             Log.wtf(tag, msg);
         }
     }
@@ -205,7 +205,7 @@ public final class AppLog {
      * @param s1
      */
     public static void print(String s, String s1) {
-        if (Log.VERBOSE > DEBUG_LEVEL) {
+        if (Log.VERBOSE > debug_level) {
             String tag = getClassName();
             String method = callMethodAndLine();
             Log.v(tag, method);
@@ -216,12 +216,12 @@ public final class AppLog {
     }
 
     /**
-     * Send a {@link #DEBUG_LEVEL} log message.
+     * Send a {@link #debug_level} log message.
      *
      * @param object The object to print.
      */
     public static void print(Object object) {
-        if (Log.DEBUG > DEBUG_LEVEL) {
+        if (Log.DEBUG > debug_level) {
 //            String tag = getClassName();
             String method = callMethodAndLine();
             String content = "";
@@ -242,7 +242,7 @@ public final class AppLog {
      * @param object The object to print.
      */
     public static void printError(Object object) {
-        if (Log.ERROR > DEBUG_LEVEL) {
+        if (Log.ERROR > debug_level) {
             String tag = getClassName();
             String method = callMethodAndLine();
             String content = "";
@@ -265,7 +265,7 @@ public final class AppLog {
      * @return
      */
     public static void printCallHierarchy() {
-        if (Log.VERBOSE > DEBUG_LEVEL) {
+        if (Log.VERBOSE > debug_level) {
             String tag = getClassName();
             String method = callMethodAndLine();
             String hierarchy = getCallHierarchy();
@@ -282,7 +282,7 @@ public final class AppLog {
      * @param object The object to print.
      */
     public static void printMyLog(Object object) {
-        if (Log.DEBUG > DEBUG_LEVEL) {
+        if (Log.DEBUG > debug_level) {
             String tag = "MYLOG";
             String method = callMethodAndLine();
             String content = "";

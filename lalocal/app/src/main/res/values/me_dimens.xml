@@ -163,6 +163,21 @@
     <dimen name="order_immediately_evaluate_btn_top">40dp</dimen>
     <dimen name="triangle_drawable_width">10dp</dimen>
     <dimen name="triangle_drawable_height">3dp</dimen>
+    <dimen name="my_wallet_item_height">125dp</dimen>
+    <dimen name="my_wallet_item_top">17.5dp</dimen>
+    <dimen name="my_diamond_layout_height1">88dp</dimen>
+    <dimen name="my_diamond_no_charge_text_top">170.5dp</dimen>
+    <dimen name="consume_record_item_height">56dp</dimen>
+    <dimen name="recharge_package_rlv_height">150dp</dimen>
+    <dimen name="exchage_content_height">120dp</dimen>
+    <dimen name="exchage_btn_bottom">270dp</dimen>
+    <dimen name="charge_pay_fee_tv_left">166dp</dimen>
+    <dimen name="charge_pay_fee_tv_height">42dp</dimen>
+    <dimen name="charge_pay_fee_tv_top">25dp</dimen>
+    <dimen name="charge_pay_state2_left">150dp</dimen>
+    <dimen name="charge_pay_state2_top">13dp</dimen>
+    <dimen name="charge_pay_state3_top">171dp</dimen>
+
 
 
 </resources>

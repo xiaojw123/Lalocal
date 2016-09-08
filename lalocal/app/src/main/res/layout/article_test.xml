@@ -3,47 +3,46 @@
     android:id="@+id/article_relayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-        <RelativeLayout
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
+            android:id="@+id/article_bg"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
+            android:layout_height="match_parent" />
 
-            <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
-                android:id="@+id/article_bg"
+        <WebView
+            android:id="@+id/webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></WebView>
+
+        <LinearLayout
+            android:id="@+id/article_back_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            android:alpha="0.7"
+            android:background="@drawable/back_bg"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/article_common_back_btn"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                />
-            <WebView
-                android:id="@+id/webview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-            </WebView>
-            <LinearLayout
-                android:id="@+id/article_back_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:background="@drawable/back_bg"
-                android:gravity="center"
-                android:alpha="0.7"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="15dp"
-                >
-                <ImageView
-                    android:id="@+id/article_common_back_btn"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:paddingLeft="11dp"
-                    android:paddingRight="11dp"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/common_btn_back_white_nor"/>
-            </LinearLayout>
-        </RelativeLayout>
+                android:layout_gravity="center"
+                android:paddingBottom="8dp"
+                android:paddingLeft="11dp"
+                android:paddingRight="11dp"
+                android:paddingTop="8dp"
+                android:src="@drawable/common_btn_back_white_nor" />
+        </LinearLayout>
+    </RelativeLayout>
 
 
-        <include layout="@layout/article_bottom_layout"></include>
+    <include layout="@layout/article_bottom_layout"></include>
 </LinearLayout>

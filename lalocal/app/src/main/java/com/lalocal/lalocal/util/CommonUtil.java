@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.util;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
@@ -14,6 +15,7 @@ import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,11 +23,26 @@ import java.util.regex.Pattern;
  * Created by xiaojw on 2016/6/6.
  */
 public class CommonUtil {
+    private static final String DEVICE_ANDROID ="android";
     private static double EARTH_RADIUS = 6378.137;
     private  static  final  int READ_PHONE_STATE_CODE=112;
 
     public static  int RESULT_DIALOG=0;
     public static int REMIND_BACK=0;
+
+    public static String getProcessName(Context cxt, int pid) {
+        ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> runningApps = am.getRunningAppProcesses();
+        if (runningApps == null) {
+            return null;
+        }
+        for (ActivityManager.RunningAppProcessInfo procInfo : runningApps) {
+            if (procInfo.pid == pid) {
+                return procInfo.processName;
+            }
+        }
+        return null;
+    }
 
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
@@ -65,6 +82,10 @@ public class CommonUtil {
         return d * Math.PI / 180.0;
     }
 
+    public static String formartNum(long price) {
+        NumberFormat nf = new DecimalFormat("###,###,###,###,###,###,###,###");
+        return nf.format(price);
+    }
     public static String formartOrderPrice(double price) {
         NumberFormat nf = new DecimalFormat("¥ ###,###,###,###,###,###,###,###.##");
         return nf.format(price);
@@ -107,6 +128,9 @@ public class CommonUtil {
 //        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
 //        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
 //        return deviceUuid.toString();
+    }
+    public static String getDevice(){
+        return DEVICE_ANDROID;
     }
 
 

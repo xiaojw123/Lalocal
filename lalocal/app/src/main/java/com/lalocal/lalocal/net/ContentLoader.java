@@ -48,15 +48,19 @@ import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductItem;
+import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
+import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
+import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.model.VersionInfo;
+import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
@@ -107,13 +111,84 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
+    //兑换乐钻
+    public void exchargeGold(long socre) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.EXCHARGE_GOLD);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.exchargeGoldUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        try {
+            JSONObject jobj = new JSONObject();
+            jobj.put("score", socre);
+            request.setBodyParams(jobj.toString());
+            requestQueue.add(request);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    //充值乐钻
+    public void chargeGold(String bodyJson) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHARGE_GOLD);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.chargeGoldUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        request.setBodyParams(bodyJson);
+        requestQueue.add(request);
+    }
+
+    public void getRechargeProducts() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_RECHARGE_PRODUCT);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getRechargeProducts(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+    //获取积分日志
+    public void getScoreLogs(int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SOCRE_LOGS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getScoreLogsUrl(10, pageNum), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+
+    //获取乐钻日志
+    public void getGoldLogs(int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_GOLD_LOGS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getGoldLogsUrl(10, pageNum), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+
+    public void getMyWallet() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MY_WALLET);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMyWalletUrl(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+
     public void cancelOrder(int orderId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CANCEL_ORDER);
         }
         AppLog.print("cancelOrderUrl___" + AppConfig.getCancelOrderUrl(orderId));
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getCancelOrderUrl(orderId), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -122,10 +197,18 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.DEL_ORDER);
         }
         ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getDelOrderUrl(orderId), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
+    //获取系统配置
+    public void getSystemConfigs() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SYSTM_CONFIG);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSystemConfigUrl(), response, response);
+        requestQueue.add(request);
+    }
 
     public void getWelcommenImgs() {
         if (callBack != null) {
@@ -144,7 +227,7 @@ public class ContentLoader {
         AppLog.print("支付url___" + AppConfig.getPayUrl());
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPayUrl(), response, response);
         request.setBodyParams(json);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -293,7 +376,7 @@ public class ContentLoader {
         }
 
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderItemsUrl() + "/" + id, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -301,9 +384,9 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_MY_ORDER);
         }
-        AppLog.print("getOrderItemsUrl____"+AppConfig.getOrderItemsUrl()+"_____userid__"+userid+", token__"+token);
+        AppLog.print("getOrderItemsUrl____" + AppConfig.getOrderItemsUrl() + "_____userid__" + userid + ", token__" + token);
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderItemsUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        request.setHeaderParams(getHeaderParams(userid, token));
         requestQueue.add(request);
 
     }
@@ -313,7 +396,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_MY_COUPON);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getCouponItemsUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        request.setHeaderParams(getHeaderParams(userid, token));
         requestQueue.add(request);
     }
 
@@ -323,7 +406,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getFavoriteItemsUrl() + "pageNumber=" + pageNumber + "&pageSize=" + pageSize, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        request.setHeaderParams(getHeaderParams(userid, token));
         requestQueue.add(request);
     }
 
@@ -333,7 +416,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUserProfileUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        request.setHeaderParams(getHeaderParams(userid, token));
         requestQueue.add(request);
     }
 
@@ -343,7 +426,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserProfileModifyUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        request.setHeaderParams(getHeaderParams(userid, token));
         request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
         requestQueue.add(request);
     }
@@ -364,7 +447,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getEmailBoundUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(userid, token));
+        request.setHeaderParams(getHeaderParams(userid, token));
         request.setBodyParams(getBoudEmailParams(email));
         requestQueue.add(request);
     }
@@ -429,7 +512,7 @@ public class ContentLoader {
         }
 
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPraisesUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        request.setHeaderParams(getHeaderParams(-1, null));
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
@@ -445,7 +528,7 @@ public class ContentLoader {
 
         ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.getParisesCancelUrl() + praiseId, response, response);
 
-        contentRequest.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
 
         requestQueue.add(contentRequest);
     }
@@ -458,7 +541,7 @@ public class ContentLoader {
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
         ContentRequest request = new ContentRequest(AppConfig.getRecommendUrl() + getParameter, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        request.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(request);
 
     }
@@ -470,7 +553,7 @@ public class ContentLoader {
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
         ContentRequest request = new ContentRequest(AppConfig.getLiveListUrl() + getParameter, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        request.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(request);
     }
 
@@ -480,7 +563,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_RECOMMEND_LIST);
         }
         ContentRequest request = new ContentRequest(AppConfig.getLiveRecommendListUrl(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        request.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(request);
     }
 
@@ -490,7 +573,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_DETAILS);
         }
         ContentRequest request = new ContentRequest(AppConfig.getLiveDetails() + skipId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -501,7 +584,7 @@ public class ContentLoader {
         }
         AppLog.i("TAG", "createLiveRoom:创建直播");
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCreateLiveRoom(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getCreateLiveRoom());
         requestQueue.add(request);
     }
@@ -513,7 +596,7 @@ public class ContentLoader {
         }
         AppLog.i("TAG", "alterLive:修改直播333333333");
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
         requestQueue.add(request);
     }
@@ -525,7 +608,7 @@ public class ContentLoader {
         }
         AppLog.i("TAG", "alterLive:修改直播22222222222");
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
         requestQueue.add(request);
     }
@@ -537,7 +620,7 @@ public class ContentLoader {
         }
         AppLog.i("TAG", "alterLive:修改直播11111111111111");
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserOnLine() + onLineUsers, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
         requestQueue.add(request);
     }
@@ -548,7 +631,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.CANCEL_LIVE_ROOM);
         }
         ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getCancelLive() + userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         //  request.setBodyParams(getCreateLiveRoom());
         requestQueue.add(request);
     }
@@ -559,7 +642,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_GIFT_STORE);
         }
         ContentRequest request = new ContentRequest(AppConfig.getGiftClassify(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
     //直播间管理员列表
@@ -568,7 +651,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_MANAGER_LIST);
         }
         ContentRequest request = new ContentRequest(AppConfig.getLiveManagerList()+channelId+"/admins", response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -579,7 +662,7 @@ public class ContentLoader {
         }
 
         ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.getCheckUserIdentity(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getUserIdentityStatus(userId,channelId));
         requestQueue.add(request);
 
@@ -590,7 +673,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_ACCREIDT_MANAGER);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.getAccreditManager(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getUserIdentityStatus(userId,channelId));
         requestQueue.add(request);
     }
@@ -601,7 +684,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_CANCEL_MANAGET_ACCREIDT);
         }
         ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getCancelManager()+userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
 
     }
@@ -611,7 +694,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.GET_TOURIST);
         }
         ContentRequest request = new ContentRequest(AppConfig.getTourist(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -621,7 +704,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.IMG_TOKEN);
         }
         ContentRequest request = new ContentRequest(AppConfig.getImgToken(), response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -631,7 +714,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_USER_INFO);
         }
         ContentRequest request = new ContentRequest(AppConfig.getLiveUserInfo() + userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -641,7 +724,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_ADD_ATTENTION);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getAddAttention() + userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
 
     }
@@ -652,7 +735,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_CANCEL_ATTENTION);
         }
         ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getAddAttention() + userId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -662,7 +745,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_FANS_OR_ATTENTION);
         }
         ContentRequest request = new ContentRequest(AppConfig.getAttentionOrFansList() + typeId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
 
     }
@@ -673,7 +756,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_SEARCH_USER);
         }
         ContentRequest request = new ContentRequest(AppConfig.getSearchUser() + nickName, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -694,7 +777,7 @@ public class ContentLoader {
 
 
         ContentRequest request = new ContentRequest(AppConfig.getSepcailDetailUrl() + rowId, response, response);
-        request.setHeaderParams(getHeaderParamsWithUserId(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -717,7 +800,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.VERSION_CODE);
         }
         ContentRequest contentRequest = new ContentRequest(AppConfig.VERSION_UPDATE + versionCode, response, response);
-        contentRequest.setHeaderParams(getHeaderParamsWithUserId(-1, null));
+        contentRequest.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(contentRequest);
     }
 
@@ -852,7 +935,7 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————" + volleyError);
+            AppLog.print("volley error——————" + volleyError + "__code__" + volleyError.networkResponse.statusCode);
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
@@ -891,6 +974,28 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.EXCHARGE_GOLD:
+                        AppLog.print("respose_excharge_gold__"+json);
+                        responseExchargeGold(jsonObj);
+                        break;
+                    case RequestCode.CHARGE_GOLD:
+                        responseChargeGold(jsonObj);
+                        break;
+
+                    case RequestCode.GET_RECHARGE_PRODUCT:
+                        responseGetRechargeProduct(jsonObj);
+                        break;
+                    case RequestCode.GET_SOCRE_LOGS:
+                        responseGetScoreLogs(jsonObj);
+                        break;
+                    case RequestCode.GET_GOLD_LOGS:
+                        responseGetScoreLogs(jsonObj);
+                        break;
+
+                    case RequestCode.GET_MY_WALLET:
+                        AppLog.print("get my wallet__" + json);
+                        responseGetMyWallet(jsonObj);
+                        break;
                     case RequestCode.CANCEL_ORDER:
                         AppLog.print("CANCEL_ORDER___" + json);
                         callBack.onCancelSuccess();
@@ -902,6 +1007,9 @@ public class ContentLoader {
                     case RequestCode.GET_WELCOME_IMGS:
                         AppLog.print("res___" + json);
                         responseGetWelcomeImgs(jsonObj);
+                        break;
+                    case RequestCode.GET_SYSTM_CONFIG:
+                        responseGetSystemConfig(jsonObj);
                         break;
                     case RequestCode.GET_PAY_RESULT:
                         JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
@@ -1083,6 +1191,54 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseExchargeGold(JSONObject jsonObj) {
+            callBack.onExchargeGoldSuccess();
+        }
+
+        private void responseChargeGold(JSONObject jsonObj) {
+            String result = jsonObj.optString(ResultParams.REULST);
+            callBack.onChargeGold(result);
+        }
+
+        private void responseGetRechargeProduct(JSONObject jsonObj) {
+            JSONArray resultJarray = jsonObj.optJSONArray(ResultParams.REULST);
+            Gson gson = new Gson();
+            List<RechargeItem> items = new ArrayList<>();
+            for (int i = 0; i < resultJarray.length(); i++) {
+                String itemJson = resultJarray.optString(i);
+                RechargeItem item = gson.fromJson(itemJson, RechargeItem.class);
+                items.add(item);
+            }
+            callBack.onGetRechargeProducts(items);
+        }
+
+        private void responseGetScoreLogs(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson = new Gson();
+            ConsumeRecord log = gson.fromJson(resultJobj.toString(), ConsumeRecord.class);
+            callBack.onGetScoreLog(log);
+        }
+
+
+        private void responseGetMyWallet(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            Gson gson = new Gson();
+            WalletContent content = gson.fromJson(resultJobj.toString(), WalletContent.class);
+            callBack.onGetMyWallet(content);
+        }
+
+        private void responseGetSystemConfig(JSONObject jsonObj) {
+            List<SysConfigItem> items = new ArrayList<>();
+            Gson gson = new Gson();
+            JSONArray resultJarray = jsonObj.optJSONArray(ResultParams.REULST);
+            for (int i = 0; i < resultJarray.length(); i++) {
+                JSONObject itemJobj = resultJarray.optJSONObject(i);
+                SysConfigItem item = gson.fromJson(itemJobj.toString(), SysConfigItem.class);
+                items.add(item);
+            }
+            callBack.onGetSysConfigs(items);
         }
 
         private void responseGetWelcomeImgs(JSONObject jsonObj) {
@@ -1548,7 +1704,7 @@ public class ContentLoader {
 
         //关闭直播间
         private void responseCancelLive(String json) {
-
+            AppLog.i("TAG", "调用了关闭直播间的接口。。。。。。。。。。。。。。。。。。。。");
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }
@@ -1820,7 +1976,7 @@ public class ContentLoader {
     }
 
 
-    public Map<String, String> getHeaderParamsWithUserId(int userid, String token) {
+    public Map<String, String> getHeaderParams(int userid, String token) {
         Map<String, String> map = getHeaderParams();
         if (userid != -1) {
             map.put("USER_ID", String.valueOf(userid));
@@ -1828,10 +1984,19 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
-        AppLog.i("TAG", "USER_ID=" + String.valueOf(userid) + "&TOKEN=" + token);
+        AppLog.print("__USER_ID=" + String.valueOf(userid) + "\n__TOKEN=" + token);
         return map;
 
     }
+
+    public Map<String, String> getLoginHeaderParams() {
+        Map<String, String> map = getHeaderParams();
+        map.put("USER_ID", String.valueOf(UserHelper.getUserId(context)));
+        map.put("TOKEN", UserHelper.getToken(context));
+        return map;
+
+    }
+
 
     interface ResultParams {
         String RESULT_CODE = "returnCode";
@@ -1872,6 +2037,13 @@ public class ContentLoader {
         int GET_WELCOME_IMGS = 128;
         int CANCEL_ORDER = 129;
         int DEL_ORDER = 130;
+        int GET_SYSTM_CONFIG = 131;
+        int GET_MY_WALLET = 132;
+        int GET_GOLD_LOGS = 133;
+        int GET_SOCRE_LOGS = 134;
+        int GET_RECHARGE_PRODUCT = 135;
+        int CHARGE_GOLD = 136;
+        int EXCHARGE_GOLD = 137;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

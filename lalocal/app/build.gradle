@@ -1,24 +1,26 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'android-apt'
+def cfg = rootProject.ext.configuration
+def libs = rootProject.ext.libraries
 repositories {
     maven { url 'https://maven.fabric.io/public' }
 }
 android {
     useLibrary 'org.apache.http.legacy'
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
-    sourceSets{
-        main(){
-            jniLibs.srcDirs=['libs']
+    compileSdkVersion cfg.compileVersion
+    buildToolsVersion cfg.buildToolsVersion
+    sourceSets {
+        main() {
+            jniLibs.srcDirs = ['libs']
         }
     }
     defaultConfig {
-        applicationId "com.lalocal.lalocal"
-        minSdkVersion 19
-        targetSdkVersion 23
-        versionCode 210
-        versionName "2.1.0"
+        applicationId cfg.package
+        minSdkVersion cfg.minSdk
+        targetSdkVersion cfg.targetSdk
+        versionCode cfg.version_code
+        versionName cfg.version_name
         multiDexEnabled true
     }
     dexOptions {
@@ -51,7 +53,7 @@ android {
 
     sourceSets {
         main {
-            jniLibs.srcDirs =['libs']
+            jniLibs.srcDirs = ['libs']
         }
     }
 }
@@ -59,9 +61,9 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile "com.android.support:appcompat-v7:${libs.support}"
     compile 'com.google.code.gson:gson:2.4'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile "com.android.support:recyclerview-v7:${libs.support}"
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.belerweb:pinyin4j:2.5.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
@@ -76,22 +78,18 @@ dependencies {
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.jakewharton:butterknife:8.3.0'
     apt 'com.jakewharton:butterknife-compiler:8.3.0'
-    compile 'com.android.support:cardview-v7:23.4.0'
+    compile "com.android.support:cardview-v7:${libs.support}"
     compile files('libs/AMap_2DMap_V2.9.0_20160525.jar')
     compile files('libs/easemobchat_2.3.0.jar')
-    compile 'com.android.support:support-v4:23.4.0'
+    compile "com.android.support:support-v4:${libs.support}"
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
+    compile project(path: ':gifviewlibrary')
 
 }
 
-dependencies {
 
-}
-
-//TODO:bugtags online delete
-apply plugin: 'com.bugtags.library.plugin'
 android {
     defaultConfig {
         ndk {
@@ -100,6 +98,8 @@ android {
 
     }
 }
+//TODO:bugtags online delete
+apply plugin: 'com.bugtags.library.plugin'
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
     appKey "fa970dd98b61298053b6a9cb88597605"  //这里是你的 appKey
@@ -112,7 +112,6 @@ bugtags {
 }
 dependencies {
     compile 'com.bugtags.library:bugtags-lib:latest.integration'
-    compile project(path: ':gifviewlibrary')
 }
 
 

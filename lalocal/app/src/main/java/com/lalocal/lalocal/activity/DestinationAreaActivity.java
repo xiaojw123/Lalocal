@@ -60,7 +60,7 @@ public class DestinationAreaActivity extends BaseActivity {
     LinearLayout desAreaMenunavContainer;
     @BindView(R.id.des_area_items_xlv)
     XListView desAreaItemsXlv;
-    @BindView(R.id.content_page_loading)
+    @BindView(R.id.page_base_loading)
     View loadingPage;
     int areaId;
     String areaTile = "%1$s地区";

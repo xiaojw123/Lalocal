@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.Manifest;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +21,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
+import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -35,18 +37,24 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
+import java.util.List;
 
 
 /**
  * Created by android on 2016/7/14.
  */
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
-    private static final int UPDATE_TIME = 0x001;
-    ImageView startImg;
+    private static final int MSG_UPDATE_TIME = 0x001;
+    private static final int MSG_DISPAY_IMG = 0x002;
+    private static final int MSG_LOGIN_HUANXIN = 0x003;
     ImageView welImg;
     TextView timeTv;
     int totalTime = 0;
+    SplashHandler mHandler;
+    int splashDuration = 2200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +62,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.welcome_layout);
         welImg = (ImageView) findViewById(R.id.wel_img);
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
-        startImg = (ImageView) findViewById(R.id.wel_start_img);
         timeTv.setOnClickListener(this);
         setLoaderCallBack(new MyCallBack());
         registerObservers(true);
@@ -85,11 +92,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
 
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>(){
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
         @Override
         public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG","SplashActivity監聽自動登錄狀態："+statusCode);
-            if(statusCode==StatusCode.LOGINED){
+            AppLog.i("TAG", "SplashActivity監聽自動登錄狀態：" + statusCode);
+            if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
             }
         }
@@ -98,8 +105,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        if (mHandler.hasMessages(UPDATE_TIME)) {
-            mHandler.removeMessages(UPDATE_TIME);
+        if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
+            mHandler.removeMessages(MSG_UPDATE_TIME);
         }
         loginChatService();
     }
@@ -111,6 +118,31 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             VersionResult result = versionInfo.getResult();
             String apiUrl = result.getApiUrl();
             AppConfig.setBaseUrl(apiUrl);
+            mContentloader.getSystemConfigs();
+        }
+
+        @Override
+        public void onGetSysConfigs(List<SysConfigItem> items) {
+            for (SysConfigItem item : items) {
+                int id = item.getId();
+                switch (id) {
+                    case 1://通告
+                    case 2://滚动速度
+                    case 4://分期支付开关
+                    case 5://分期支付提示语
+                    case 6://直播分享文案
+                    case 7://视频默认的清晰度
+                    case 8://h5下开关程开发
+                    case 9://直播违规警告
+                    case 10://直播违规报错
+                    case 11://首次充值奖励
+                        break;
+                    case 3://用户协议页面
+                        AppConfig.setUserRuleUrl(item.getEnumValue());
+                        break;
+                }
+
+            }
             mContentloader.getWelcommenImgs();
         }
 
@@ -118,13 +150,15 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         public void onGetWelcomeImgs(WelcomeImg welcomeImg) {
             AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
             String photo = welcomeImg.getPhoto();
+            mHandler = new SplashHandler();
             if (TextUtils.isEmpty(photo)) {
-                loginChatService();
+                mHandler.sendEmptyMessageDelayed(MSG_LOGIN_HUANXIN, splashDuration);
             } else {
-                DrawableUtils.displayImg(SplashActivity.this, welImg, welcomeImg.getPhoto());
                 totalTime = welcomeImg.getSecond();
-                startImg.setVisibility(View.GONE);
-                mHandler.sendEmptyMessage(UPDATE_TIME);
+                Message message = mHandler.obtainMessage();
+                message.what = MSG_DISPAY_IMG;
+                message.obj = photo;
+                mHandler.sendMessageDelayed(message, splashDuration);
             }
         }
     }
@@ -134,7 +168,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         startActivity(intent);
         finish();
     }
-
 
 
     private void loginChatService() {
@@ -226,29 +259,92 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    Handler mHandler = new Handler() {
+    class SplashHandler extends Handler implements ImageLoadingListener {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what == UPDATE_TIME) {
-                if (totalTime > 0) {
-                    if (timeTv.getVisibility() != View.VISIBLE) {
-                        timeTv.setVisibility(View.VISIBLE);
+            int code = msg.what;
+            switch (code) {
+                case MSG_UPDATE_TIME:
+                    if (totalTime > 0) {
+                        if (timeTv.getVisibility() != View.VISIBLE) {
+                            timeTv.setVisibility(View.VISIBLE);
+                        }
+                        timeTv.setText(Html.fromHtml("跳过" + totalTime));
+                        --totalTime;
+                        sendEmptyMessageDelayed(MSG_UPDATE_TIME, 1000);
+                    } else {
+                        if (hasMessages(MSG_UPDATE_TIME)) {
+                            removeMessages(MSG_UPDATE_TIME);
+                        }
+                        loginChatService();
                     }
-                    timeTv.setText(Html.fromHtml("跳过" + totalTime));
-                    --totalTime;
-                    sendEmptyMessageDelayed(UPDATE_TIME, 1000);
-                } else {
-                    if (hasMessages(UPDATE_TIME)) {
-                        removeMessages(UPDATE_TIME);
-                    }
+                    break;
+                case MSG_DISPAY_IMG:
+                    DrawableUtils.displayImg(SplashActivity.this, welImg, ((String) msg.obj),-1, this);
+                    break;
+                case MSG_LOGIN_HUANXIN:
                     loginChatService();
-                }
-
+                    break;
             }
+        }
 
+
+        @Override
+        public void onLoadingStarted(String imageUri, View view) {
+            AppLog.print("onLoadingStarted_____");
 
         }
-    };
+
+        @Override
+        public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+            AppLog.print("onLoadingFailed____");
+            loginChatService();
+
+        }
+
+        @Override
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            AppLog.print("onLoadingComplete____");
+            sendEmptyMessage(MSG_UPDATE_TIME);
+        }
+
+        @Override
+        public void onLoadingCancelled(String imageUri, View view) {
+            AppLog.print("onLoadingCancelled_____");
+            loginChatService();
+        }
+    }
+//
+//    Handler mHandler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            int code = msg.what;
+//            switch (code) {
+//                case MSG_UPDATE_TIME:
+//                    if (totalTime > 0) {
+//                        if (timeTv.getVisibility() != View.VISIBLE) {
+//                            timeTv.setVisibility(View.VISIBLE);
+//                        }
+//                        timeTv.setText(Html.fromHtml("跳过" + totalTime));
+//                        --totalTime;
+//                        sendEmptyMessageDelayed(MSG_UPDATE_TIME, 1000);
+//                    } else {
+//                        if (hasMessages(MSG_UPDATE_TIME)) {
+//                            removeMessages(MSG_UPDATE_TIME);
+//                        }
+//                        loginChatService();
+//                    }
+//                    break;
+//                case MSG_DISPAY_IMG:
+//                    DrawableUtils.displayImg(SplashActivity.this, welImg, ((String)msg.obj), this);
+//                    break;
+//
+//
+//            }
+//
+//
+//        }
+//    };
 
     @Override
     protected void onDestroy() {

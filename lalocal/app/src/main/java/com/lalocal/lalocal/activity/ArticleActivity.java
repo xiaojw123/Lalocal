@@ -214,11 +214,11 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 authorVO = articleDetailsRespResult.getAuthorVO();
                 String url = articleDetailsRespResult.getUrl();
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
-                String photo = articleDetailsResp.getResult().getPhoto();
+                String photo = articleDetailsRespResult.getPhoto();
                 if(photo!=null){
                     blurImageView.setBlurImageURL(photo);
-                    blurImageView.setScaleRatio(20);
                     blurImageView.setBlurRadius(1);
+                    blurImageView.setScaleRatio(20);
                 }
 
                 if (praiseFlag) {

@@ -6,14 +6,15 @@
     >
 
 
-    <ImageView
-        android:id="@+id/wel_start_img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:paddingBottom="30dp"
-        android:src="@drawable/startpage" />
+    <!--<ImageView-->
+        <!--android:id="@+id/wel_start_img"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:paddingBottom="30dp"-->
+        <!--android:src="@drawable/startpage" />-->
+
 
     <ImageView
         android:id="@+id/wel_img"
@@ -27,14 +28,14 @@
         android:id="@+id/wel_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:textColor="@color/white"
         android:background="@drawable/wel_time_tv_bg"
         android:paddingTop="@dimen/dimen_size_5_dp"
         android:paddingBottom="@dimen/dimen_size_5_dp"
         android:paddingStart="@dimen/dimen_size_10_dp"
         android:paddingEnd="@dimen/dimen_size_10_dp"
-        android:layout_marginEnd="@dimen/dimen_size_5_dp"
+        android:layout_marginRight="@dimen/dimen_size_5_dp"
         android:layout_marginTop="@dimen/dimen_size_5_dp"
         android:visibility="invisible"
         />

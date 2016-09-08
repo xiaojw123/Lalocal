@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_fa"
+    tools:context="com.lalocal.lalocal.activity.RechargeActivity">
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/recharge_titleview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/recharge" />
+
+    <TextView
+        android:id="@+id/recharge_state1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/recharge_titleview"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:drawablePadding="@dimen/dimen_size_10_dp"
+        android:drawableRight="@drawable/monetary"
+        android:text="@string/my_diamond"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_16_sp" />
+
+    <TextView
+        android:id="@+id/recharge_diamond_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/recharge_state1"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:layout_toRightOf="@+id/recharge_state1" />
+
+    <FrameLayout
+        android:id="@+id/recharge_state2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
+        android:layout_below="@+id/recharge_state1"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:background="@color/white"
+        android:paddingRight="@dimen/dimen_size_15_dp">
+
+        <TextView
+            android:id="@+id/recharge_doubt_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_14_sp" />
+
+    </FrameLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recharge_package_rlv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recharge_package_rlv_height"
+        android:layout_below="@+id/recharge_state2"
+        android:background="@color/white" />
+
+    <FrameLayout
+        android:id="@+id/rechage_ticket_exchage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
+        android:layout_below="@+id/recharge_package_rlv"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dimen_size_15_dp"
+        android:paddingRight="@dimen/dimen_size_15_dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@drawable/score"
+            android:drawablePadding="@dimen/dimen_size_5_dp"
+            android:text="@string/ticket_exchage_diamond"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/arrow_right" />
+    </FrameLayout>
+
+
+</RelativeLayout>

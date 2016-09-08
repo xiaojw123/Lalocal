@@ -24,17 +24,21 @@ import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
+import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.RouteDetail;
+import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
+import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.model.VersionInfo;
+import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
 
 import java.util.List;
@@ -43,6 +47,33 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+
+    public void onExchargeGoldSuccess(){
+
+
+    }
+
+
+    public void onChargeGold(String result){
+
+    }
+
+    public void onGetRechargeProducts(List<RechargeItem> items){
+
+    }
+
+    public void onGetScoreLog(ConsumeRecord log){
+
+    }
+
+
+    public void onGetMyWallet(WalletContent content){
+
+    }
+
+
+    public void onGetSysConfigs(List<SysConfigItem> items){}
+
 
     public void onCancelSuccess(){
 
@@ -210,6 +241,9 @@ public abstract class ICallBack {
     //获取游客账号登录聊天
     public void onTouristInfo(String json) {
     }
+   /* //搜索关注和粉丝
+    public void onSearchAttentionOrFans(LiveFansOrAttentionResp liveFansOrAttentionResp) {
+    }*/
     //直播礼物商城
     public void onGiftsStore(GiftDataResp giftDataResp) {
     }

@@ -37,11 +37,11 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     /**
      * 微信支付渠道
      */
-    private static final String CHANNEL_WECHAT = "wx";
+    public static final String CHANNEL_WECHAT = "wx";
     /**
      * 支付支付渠道
      */
-    private static final String CHANNEL_ALIPAY = "alipay";
+    public static final String CHANNEL_ALIPAY = "alipay";
     /**
      * 信诚分期付渠道
      */

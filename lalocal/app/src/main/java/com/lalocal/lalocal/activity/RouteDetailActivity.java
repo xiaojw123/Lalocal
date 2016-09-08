@@ -100,8 +100,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     int dayItemLeft, firstDayLeft;
     @BindView(R.id.route_detail_day_point)
     ImageView dayPointImg;
-    @BindView(R.id.content_page_loading)
-    View loadingView;
     Bundle savedInstanceState;
     DayRouteItemAdpater mItemAdapter;
 
@@ -110,6 +108,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_detail_layout);
+        showLoadingAnimation();
         unbinder = ButterKnife.bind(this);
         this.savedInstanceState = savedInstanceState;
         dayItemLeft = (int) getResources().getDimension(R.dimen.dimen_size_36_dp);
@@ -423,9 +422,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         @Override
         public void onGetRouteDetail(RouteDetail routeDetail) {
             AppLog.print("onGetRouteDetail______");
-            if (loadingView.getVisibility()==View.VISIBLE){
-                loadingView.setVisibility(View.GONE);
-            }
+            hidenLoadingAnimation();
             mRouteDetail = routeDetail;
             praiseId = routeDetail.getPraiseId();
             praiseFlag = routeDetail.isPraiseFlag();
@@ -547,7 +544,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
 
     private void updateMap(List<RouteDetail.RouteDatesBean.RouteItemsBean> routeItems) {
-        AppLog.print("updateMap_____start__");
         if (aMap == null) {
 
             mapView.onCreate(savedInstanceState);

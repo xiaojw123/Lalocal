@@ -14,6 +14,7 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -25,16 +26,23 @@ public class DrawableUtils {
     private static ImageLoader loader;
 
     public static void displayImg(Context context, ImageView img, String url) {
-        displayImg(context, img, url, 0, DRAWABLE_NULL);
+        displayImg(context, img, url, 0, DRAWABLE_NULL,null);
+    }
+    public static void displayImg(Context context, ImageView img, String url,int drawable,ImageLoadingListener listener) {
+        displayImg(context, img, url, 0, drawable,listener);
     }
 
 
     public static void displayImg(Context context, ImageView img, String url, int drawable) {
-        displayImg(context, img, url, 0, drawable);
+        displayImg(context, img, url, 0, drawable,null);
+    }
+
+    public static void displayImg(Context context, ImageView img, String url, int radius, int drawable){
+        displayImg(context, img, url, radius, drawable,null);
     }
 
 
-    public static void displayImg(Context context, ImageView img, String url, int radius, int drawable) {
+    public static void displayImg(Context context, ImageView img, String url, int radius, int drawable, ImageLoadingListener listener) {
         if (loader == null) {
             loader = ImageLoader.getInstance();
         }
@@ -45,14 +53,13 @@ public class DrawableUtils {
         File imgFile = loader.getDiskCache().get(url);
 
         if (imgFile == null || !imgFile.exists()) {
-            loader.displayImage(url, img, getImageOptions(radius, drawable));
+            loader.displayImage(url, img, getImageOptions(radius, drawable),listener);
 
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
-            loader.displayImage(fileUri, img);
+            loader.displayImage(fileUri, img,listener);
 
         }
-
     }
 
     public static void displayRadiusImg(Context context, ImageView img, String url, int radius, int drawable) {

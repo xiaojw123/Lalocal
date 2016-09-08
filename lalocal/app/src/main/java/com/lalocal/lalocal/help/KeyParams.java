@@ -26,5 +26,9 @@ public interface KeyParams {
     public static  final  String ACTION_TYPE="actointype";
     public static final  String ACTION_BOOK="actionbook";
     public static final String ACTION_UPDATE_ORDER="updateorder";
+    public static  final  String SOCRE_NUM="score_num";
+    public static final  String SCALE="scale";
+
+
 
 }

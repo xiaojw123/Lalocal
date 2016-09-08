@@ -59,7 +59,7 @@ import java.util.List;
 public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
         View.OnClickListener, CustomTitleView.onBackBtnClickListener {
 
-
+    private static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
 
@@ -93,6 +93,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private View titleLine;
     private LinearLayout serviceLL;
     private int statusHeight;
+    private View loadingView;
 
 
     @Override
@@ -106,6 +107,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     }
 
     private void initView() {
+        loadingView = findViewById(R.id.page_base_loading);
         backTitleView = (CustomTitleView) findViewById(R.id.product_title_back_ctv);
         detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
         titleTv = (TextView) findViewById(R.id.product_title_tv);
@@ -274,17 +276,20 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     private void preOrderProduct() {
         //TODO :reset
-        Intent intent = new Intent();
-        intent.setClass(this, BookActivity.class);
-        intent.putExtra(BookActivity.BOOK_URL, AppConfig.getPreOrderProductUrl(this, result.id, UserHelper.getUserId(this), UserHelper.getToken(this)));
-        startActivity(intent);
-        //TODO:test
-//        Intent intent=new Intent(this,com.lalocal.lalocal.test.TestActivity.class);
-//        startActivity(intent);
-
-
-
-
+        if (result != null) {
+            String orderUrl = result.orderUrl;
+            if (!TextUtils.isEmpty(orderUrl)) {
+                int userId = UserHelper.getUserId(this);
+                String token = UserHelper.getToken(this);
+                String device = CommonUtil.getDevice();
+                String devcieId = CommonUtil.getUUID(this);
+                String version = AppConfig.getVersionName(this);
+                Intent intent = new Intent();
+                intent.setClass(this, BookActivity.class);
+                intent.putExtra(BookActivity.BOOK_URL, String.format(BOOK_URL_FORMART, orderUrl, userId, token, version, device, devcieId));
+                startActivity(intent);
+            }
+        }
     }
 
     public void startOnlineService() {
@@ -337,6 +342,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
         @Override
         public void onProductDetails(ProductDetailsDataResp detailsDataResp) {
+            loadingView.setVisibility(View.GONE);
             if (detailsDataResp.returnCode == 0) {
                 result = detailsDataResp.result;
                 praiseId = result.praiseId;
