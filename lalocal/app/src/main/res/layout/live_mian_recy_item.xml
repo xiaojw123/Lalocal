@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/live_height_345dp"
                 android:src="@drawable/androidloading"
-                android:scaleType="centerCrop"
+
                 />
             <View
                 android:layout_width="match_parent"

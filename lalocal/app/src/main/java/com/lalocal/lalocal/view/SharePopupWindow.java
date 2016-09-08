@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
-import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;

@@ -131,7 +131,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.liveroomview.entertainment.activity.TestActivity" />
+        <activity android:name=".live.entertainment.activity.TestActivity" />
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -202,7 +202,6 @@
         <activity android:name=".test.TestActivity" />
         <activity android:name=".activity.DestinationAreaActivity" />
         <activity android:name=".activity.RouteDetailActivity" />
-
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
@@ -211,8 +210,6 @@
         <service android:name="com.easemob.chat.EMChatService" />
 
         <!-- 环信移动客服 -->
-
-
         <!-- 聊天页面 -->
         <activity
             android:name=".easemob.ui.ChatActivity"
@@ -302,12 +299,21 @@
 
         <!-- 云信进程间通信receiver -->
         <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
-        <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
-        <activity android:name=".view.liveroomview.entertainment.activity.AudienceActivity" />
-        <activity android:name=".view.liveroomview.entertainment.activity.LiveActivity" />
-        <activity android:name=".view.liveroomview.entertainment.activity.LiveHomePageActivity" />
+        <!--   android:windowSoftInputMode="stateHidden|adjustResize"-->
         <activity
-            android:name=".view.liveroomview.entertainment.activity.LiveAttentionOrFansActivity"
+            android:name=".live.entertainment.activity.AudienceActivity"
+            android:hardwareAccelerated="false"
+
+            />
+        <activity
+            android:name=".live.entertainment.activity.LiveActivity"
+            android:hardwareAccelerated="false" />
+
+
+        <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
+        <activity
+            android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
+            android:hardwareAccelerated="false"
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".activity.PayCompleteActivity" />
         <activity android:name=".activity.MyWalletActivity" />

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
 
@@ -49,6 +49,7 @@ public class UserHelper {
         editor.putString(KeyParams.AVATAR,bundle.getString(KeyParams.AVATAR));
         editor.putString(KeyParams.IM_TOKEN,bundle.getString(KeyParams.IM_TOKEN));
         editor.putString(KeyParams.IM_CCID,bundle.getString(KeyParams.IM_CCID));
+        editor.putString(KeyParams.NICKNAME,bundle.getString(KeyParams.NICKNAME));
         editor.commit();
     }
 
@@ -83,9 +84,12 @@ public class UserHelper {
     public static String getUserAvatar(Context context){
         initSPref(context);
         return sp.getString(KeyParams.AVATAR, null);
-
     }
 
+    public static String getUserName(Context context){
+        initSPref(context);
+        return sp.getString(KeyParams.NICKNAME, null);
+    }
     public static String getImccId(Context context){
         initSPref(context);
         return sp.getString(KeyParams.IM_CCID, null);

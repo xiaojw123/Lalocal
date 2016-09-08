@@ -8,23 +8,24 @@ import android.os.Process;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
 import com.easemob.chat.EMChat;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.HelpDeskPreferenceUtils;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.base.util.ScreenUtil;
+import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
+import com.lalocal.lalocal.live.base.util.sys.SystemUtil;
+import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.live.im.config.UserPreferences;
+import com.lalocal.lalocal.live.im.util.storage.StorageType;
+import com.lalocal.lalocal.live.im.util.storage.StorageUtil;
+import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.base.util.ScreenUtil;
-import com.lalocal.lalocal.view.liveroomview.base.util.crash.AppCrashHandler;
-import com.lalocal.lalocal.view.liveroomview.base.util.sys.SystemUtil;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
-import com.lalocal.lalocal.view.liveroomview.im.config.UserPreferences;
-import com.lalocal.lalocal.view.liveroomview.im.util.storage.StorageType;
-import com.lalocal.lalocal.view.liveroomview.im.util.storage.StorageUtil;
-import com.lalocal.lalocal.view.liveroomview.inject.FlavorDependent;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -103,10 +104,7 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
-
-
-//        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
-
+        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
         DemoCache.setContext(this);
         initAppForCoreProcess();
     }

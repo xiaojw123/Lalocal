@@ -3,11 +3,25 @@
     android:orientation="vertical"
     android:layout_width="@dimen/live_height_52dp"
     android:layout_height="@dimen/live_height_40dp">
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/tourist_item"
+    <RelativeLayout
         android:layout_width="@dimen/live_height_40dp"
-        android:layout_height="@dimen/live_height_40dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/androidloading"/>
+        android:layout_height="@dimen/live_height_40dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/tourist_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/androidloading"/>
+        <ImageView
+            android:id="@+id/live_item_manager_mark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            android:src="@drawable/livemanager_ic"/>
+    </RelativeLayout>
+
 
 </LinearLayout>

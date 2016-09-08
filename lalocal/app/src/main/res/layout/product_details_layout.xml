@@ -147,7 +147,7 @@
                 android:orientation="vertical"
                 android:background="@android:color/white"
                 >
-\
+
             </LinearLayout>
 
             <LinearLayout

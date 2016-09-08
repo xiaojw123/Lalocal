@@ -194,6 +194,27 @@ public class AppConfig {
         return baseUrl + "users?";
     }
 
+    //直播礼物商城http://dev.lalocal.cn:8080/api/c
+    public static final String getGiftClassify(){
+        return  baseUrl+"gifts";
+    }
+    //直播间管理员列表
+    public static final String getLiveManagerList(){
+        return  baseUrl+"channels/";
+    }
+    //查看用户是否为管理员
+    public static  final String getCheckUserIdentity(){
+        return  baseUrl+"channels/admins/check";
+    }
+    //设置管理员
+    public  static  final  String getAccreditManager(){
+        return baseUrl+"channels/admins";
+    }
+    //删除管理员
+    public  static  final  String getCancelManager(){
+        return baseUrl+"channels/admins/";
+    }
+
     //版本更新
     public static String VERSION_UPDATE = "http://api.lalocal.cn/api/system/version?version=";
     public static String IN_LAND_PHONE = "400-017-8056";

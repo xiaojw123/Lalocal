@@ -39,8 +39,8 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
-import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveHomePageActivity;
-import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.io.File;
@@ -102,6 +102,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         collectTv = (TextView) findViewById(R.id.article_collect_tv);
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         btnLike.setImageResource(R.drawable.index_article_btn_like);
+
+
 
         //点击事件
         backBtn.setOnClickListener(this);
@@ -205,6 +207,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         @Override
         public void onArticleResult(ArticleDetailsResp articleDetailsResp) {
             super.onArticleResult(articleDetailsResp);
+
             articleDetailsRespResult = articleDetailsResp.getResult();
             if (articleDetailsRespResult != null) {
                 praiseId = articleDetailsRespResult.getPraiseId();
@@ -330,9 +333,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onPageFinished (WebView view, String url){
                 super.onPageFinished(view, url);
-                if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
+            /*    if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
                     articleWebview.getSettings().setLoadsImagesAutomatically(true);
-                }
+                }*/
             }
         }
 
@@ -377,10 +380,10 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
         @Override
         public boolean onKeyDown(int keyCode, KeyEvent event) {
-            if ((keyCode == KeyEvent.KEYCODE_BACK) && articleWebview.canGoBack()) {
+         /*   if ((keyCode == KeyEvent.KEYCODE_BACK) && articleWebview.canGoBack()) {
                 articleWebview.goBack(); // goBack()表示返回WebView的上一页面
                 return true;
-            }
+            }*/
             return super.onKeyDown(keyCode, event);
         }
 

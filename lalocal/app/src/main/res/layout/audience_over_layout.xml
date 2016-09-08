@@ -4,7 +4,7 @@
     android:id="@+id/audience_over"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
         android:id="@+id/audience_over_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

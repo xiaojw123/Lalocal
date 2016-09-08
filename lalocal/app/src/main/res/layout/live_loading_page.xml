@@ -8,7 +8,7 @@
     android:gravity="center"
     android:layout_height="match_parent">
 
-    <com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
         android:id="@+id/loading_page_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -6,7 +6,7 @@
 
     android:background="@android:color/white">
 
-    <com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
         android:id="@+id/home_news_layout_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

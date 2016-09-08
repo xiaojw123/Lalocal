@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_dialog_audience_to_live_bottom_l"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone">
+
+    <TextView
+        android:id="@+id/custom_dialog_attention"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_ffaa2a"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_14_sp"
+        android:text="关注"/>
+    <TextView
+        android:id="@+id/live_master_home_audience"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:text="@string/live_master_home"
+        android:gravity="center"
+        android:textColor="#ffffff"
+        android:background="@color/color_ffaa2a"
+        android:textSize="@dimen/text_size_18_sp" />
+</LinearLayout>

@@ -35,15 +35,15 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.adapter.LiveMainListAdapter;
-import com.lalocal.lalocal.view.liveroomview.DemoCache;
-import com.lalocal.lalocal.view.liveroomview.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveActivity;
-import com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.view.liveroomview.im.config.AuthPreferences;
-import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
-import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
-import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionDenied;
-import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionGranted;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -222,6 +222,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 createAvatar = createLiveRoomDataResp.getResult().getUser().getAvatar();
                 createNickName = createLiveRoomDataResp.getResult().getUser().getNickName();
                 shareVOCreate = createLiveRoomDataResp.getResult().getShareVO();
+                AppLog.i("TAG","直播间id："+createRoomId);
                LiveActivity.start(getActivity(), String.valueOf(createRoomId), mliveStreamingURL, String.valueOf(userCreateId), createAvatar, String.valueOf(liveUserId), shareVOCreate, createAnn, createNickName,reminfBack );
 
             }
@@ -253,7 +254,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    LiveRowsBean liveRowsBean = allRows.get(position-1);
+                    LiveRowsBean liveRowsBean = rows.get(position-1);
                     roomId = liveRowsBean.getRoomId();
                     String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                     String s = String.valueOf(roomId);
@@ -270,6 +271,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                     String pullUrl = liveRowsBean.getPullUrl();
                     Object annoucement = liveRowsBean.getAnnoucement();
                     int userId = liveRowsBean.getUser().getId();
+                    int channelId = liveRowsBean.getId();
                     int type = liveRowsBean.getType();
                     String ann = null;
                     if (annoucement != null) {
@@ -278,7 +280,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         ann = "这是公告哈";
                     }
                     SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                    AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann);
+                    AppLog.i("TAG","观众端信息传递："+"avatar:"+avatar+"  nickName:"+nickName+"  userid:"+userId);
+                    AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann,String.valueOf(channelId));
                 }
 
             });

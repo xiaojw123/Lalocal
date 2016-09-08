@@ -26,4 +26,12 @@
         android:textColor="@color/color_chat_content"
         android:textSize="14sp"
        />
+
+    <ImageView
+        android:id="@+id/nim_message_item_iv"
+        android:layout_width="@dimen/dimen_size_15_dp"
+        android:layout_height="@dimen/dimen_size_15_dp"
+        android:layout_marginLeft="10dp"
+        android:visibility="gone"
+        />
 </LinearLayout>

@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -11,7 +10,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
@@ -53,7 +51,7 @@ public class ArticleTestAct extends BaseActivity {
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.setBackgroundColor(Color.parseColor("#000000"));
+      //  webView.setBackgroundColor(Color.parseColor("#000000"));
         webView.loadUrl("https://dev.lalocal.cn/wechat/app_article?id=" + articleDetailsBean.getTargetId());
         webView.setWebViewClient(new MyWebViewClient());
 

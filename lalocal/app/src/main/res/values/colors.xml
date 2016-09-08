@@ -76,6 +76,7 @@
     <color name="live_input_live_bg">#b2000000</color>
     <color name="live_start_tv">#ffaa2a</color>
     <color name="live_barraview">#73000000</color>
+    <color name="live_gift">#64000000</color>
 <!--umeng-->
     <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
     <color name="umeng_socialize_divider">#E6E6E6</color>
