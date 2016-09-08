@@ -29,7 +29,7 @@ public class BookActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.book_layout);
         mPreOrderWv = (WebView) findViewById(R.id.pre_order_wv);
-        loadPage = findViewById(R.id.loading_page);
+        loadPage = findViewById(R.id.page_base_loading);
         String url = getIntent().getStringExtra(BOOK_URL);
 
         AppLog.print("H5___URL__" + url);

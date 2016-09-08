@@ -212,6 +212,20 @@
     <string name="remark">备注</string>
     <string name="language">语言</string>
     <string name="no_content">没有任何内容</string>
+    <string name="my_wallet">我的钱包</string>
+    <string name="my_diamond">我的钻石</string>
+    <string name="my_travelticket">我的游票</string>
+    <string name="my_coupon">我的优惠券</string>
+    <string name="current">当前</string>
+    <string name="my_diamond_no_recharge">你还没有消费充值过呢</string>
+    <string name="recharge">充值</string>
+    <string name="consume_doubt">对消费有疑问？</string>
+    <string name="no_travel_ticket">没有游票</string>
+    <string name="recharge_diamond">兑换乐钻</string>
+    <string name="withdraw_cash">提现</string>
+    <string name="ticket_exchage_diamond">游票兑换乐钻</string>
+    <string name="recharge_doubt_customer">充值问题联系客服</string>
+    <string name="exchange">兑换</string>
 
 
 </resources>

@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
@@ -25,10 +26,22 @@ public class UserProtocolActivity extends BaseActivity {
         ws.setLoadWithOverviewMode(true);
         ws.setDisplayZoomControls(false);
         webView.setHorizontalScrollBarEnabled(false);
-        webView.loadUrl(AppConfig.USER_PROTOCOL_URL);
+        webView.loadUrl(AppConfig.getUserRuleUrl());
     }
 
     class MWebviewClient extends WebViewClient {
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+            showLoadingAnimation();
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            hidenLoadingAnimation();
+        }
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             view.loadUrl(url);

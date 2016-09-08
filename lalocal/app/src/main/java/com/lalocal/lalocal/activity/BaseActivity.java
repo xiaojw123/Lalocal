@@ -4,10 +4,12 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 
-import com.bugtags.library.Bugtags;
+import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -23,9 +25,10 @@ import butterknife.Unbinder;
 * */
 
 public class BaseActivity extends AppCompatActivity {
+    public static final int PERMISSION_STGAT_CODE = 1123;
     Unbinder unbinder;
     ContentLoader mContentloader;
-    public static  final int PERMISSION_STGAT_CODE=1123;
+    View mLoadingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,22 @@ public class BaseActivity extends AppCompatActivity {
 
 
     }
+   //页面全屏加载loading显示
+    public void showLoadingAnimation() {
+        if (mLoadingView == null) {
+            FrameLayout container = (FrameLayout) getWindow().getDecorView();
+            mLoadingView = LayoutInflater.from(this).inflate(R.layout.page_base_loading, container, false);
+            container.addView(mLoadingView);
+        }else{
+            mLoadingView.setVisibility(View.VISIBLE);
+        }
+    }
+    //页面全屏加载loading隐藏
+    public void hidenLoadingAnimation() {
+        if (mLoadingView != null) {
+            mLoadingView.setVisibility(View.GONE);
+        }
+    }
 
     public void setLoaderCallBack(ICallBack callBack) {
         if (mContentloader == null) {
@@ -45,17 +64,13 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
-
-    public void requestUserPermission(String... permissions){
+    public void requestUserPermission(String... permissions) {
         AppLog.print("requestUserPermission___");
         MPermission.with(this)
                 .addRequestCode(PERMISSION_STGAT_CODE)
                 .permissions(permissions)
                 .request();
     }
-
-
 
 
     @Override
@@ -71,7 +86,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //注：回调 1
-        Bugtags.onResume(this);
+//        Bugtags.onResume(this);
         MobclickAgent.onResume(this);
     }
 
@@ -80,7 +95,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //注：回调 2
-        Bugtags.onPause(this);
+//        Bugtags.onPause(this);
         MobclickAgent.onPause(this);
     }
 
@@ -88,7 +103,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         //注：回调 3
-        Bugtags.onDispatchTouchEvent(this, event);
+//        Bugtags.onDispatchTouchEvent(this, event);
         return super.dispatchTouchEvent(event);
     }
 

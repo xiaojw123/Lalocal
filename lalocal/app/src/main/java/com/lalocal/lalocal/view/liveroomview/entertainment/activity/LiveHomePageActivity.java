@@ -198,7 +198,7 @@ public class LiveHomePageActivity extends BaseActivity {
                     masterAttention.setTextColor(Color.BLACK);
                 }
             }else {
-              Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
+             // Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
             }
 
         }

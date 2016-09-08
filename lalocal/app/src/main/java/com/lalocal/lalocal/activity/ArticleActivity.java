@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -41,6 +40,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.view.liveroomview.im.ui.blur.BlurImageView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.io.File;
@@ -75,6 +75,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private Bitmap image;
     private int praiseNum;
     private int readNum;
+    private BlurImageView blurImageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         backBtn = (ImageView) findViewById(R.id.article_common_back_btn);
+        blurImageView = (BlurImageView) findViewById(R.id.article_bg);
         articleWebview = (WebView) findViewById(R.id.webview);
         btnLike = (ShineButton) findViewById(R.id.article_btn_like);
         btnComment = (ImageView) findViewById(R.id.article_btn_comment);
@@ -209,6 +211,13 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 authorVO = articleDetailsRespResult.getAuthorVO();
                 String url = articleDetailsRespResult.getUrl();
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
+                String photo = articleDetailsRespResult.getPhoto();
+                if(photo!=null){
+                    blurImageView.setBlurImageURL(photo);
+                    blurImageView.setBlurRadius(1);
+                    blurImageView.setScaleRatio(20);
+                }
+
                 if (praiseFlag) {
 
                     btnLike.setChecked(true);
@@ -276,7 +285,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        articleWebview.setBackgroundColor(Color.parseColor("#000000"));
+        articleWebview.setBackgroundColor(0);
         articleWebview.loadUrl(url);
         articleWebview.setWebViewClient(new MyWebViewClient());
 

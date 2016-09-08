@@ -108,10 +108,9 @@
 
 
     <include
-        layout="@layout/content_page_loading"
+        layout="@layout/page_base_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/destination_title_cotianer1"
-
         />
 </RelativeLayout>

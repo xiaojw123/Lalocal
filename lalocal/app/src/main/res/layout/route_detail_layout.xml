@@ -244,9 +244,5 @@
 
     </LinearLayout>
 
-    <include
-        layout="@layout/content_page_loading"
-        />
-
 
 </RelativeLayout>

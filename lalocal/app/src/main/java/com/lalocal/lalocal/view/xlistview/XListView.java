@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 
 
@@ -42,8 +43,10 @@ public class XListView extends ListView implements OnScrollListener {
 	private RelativeLayout mHeaderViewContent;
 	private TextView mHeaderTimeView;
 	private int mHeaderViewHeight; // header view's height
+	private GifView mGifView;
 	private boolean mEnablePullRefresh = true;
 	private boolean mPullRefreshing = false; // is refreashing.
+	private boolean mCanRefresh=true;
 
 	// -- footer view
 	public XListViewFooter mFooterView;
@@ -95,6 +98,7 @@ public class XListView extends ListView implements OnScrollListener {
 				.findViewById(R.id.xlistview_header_content);
 		mHeaderTimeView = (TextView) mHeaderView
 				.findViewById(R.id.xlistview_header_time);
+		mGifView= (GifView) mHeaderView.findViewById(R.id.xlistview_header_anim);
 		addHeaderView(mHeaderView);
 
 		// init footer view
@@ -131,9 +135,20 @@ public class XListView extends ListView implements OnScrollListener {
 		mEnablePullRefresh = enable;
 		if (!mEnablePullRefresh) { // disable, hide the content
 			mHeaderViewContent.setVisibility(View.INVISIBLE);
+
 		} else {
 			mHeaderViewContent.setVisibility(View.VISIBLE);
 		}
+	}
+
+	public void setRefreshEnable(boolean enable){
+		mCanRefresh=enable;
+		if (!enable){
+			mGifView.setVisibility(GONE);
+		}else{
+			mGifView.setVisibility(VISIBLE);
+		}
+
 	}
 
 	/**
@@ -321,7 +336,9 @@ public class XListView extends ListView implements OnScrollListener {
 			}
 			break;
 		}
-
+        if (ev.getAction()==MotionEvent.ACTION_DOWN&&!mCanRefresh){
+			return  true;
+		}
 		return super.onTouchEvent(ev);
 
 	}

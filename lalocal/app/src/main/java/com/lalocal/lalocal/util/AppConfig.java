@@ -8,21 +8,26 @@ import android.content.pm.PackageManager;
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
-    //用户协议-h5
-    public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
-    //预定商品-h5
-    public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
     private static String baseUrl = "http://api.lalocal.cn/api/";
 //   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+    private  static String sUserRuleUrl="http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs(){
         return baseUrl+"system/welcomeImgs";
     }
+    public static String getSystemConfigUrl(){
 
-    // private static String baseUrl = "http://api.lalocal.cn/api/";
-    // http://dev.lalocal.cn:8080/api/channels
-    //http://api.lalocal.cn/api/system/im/tourist
+        return  baseUrl+"system/configs";
+    }
+
+    public static void setUserRuleUrl(String userRuleUrl){
+        sUserRuleUrl=userRuleUrl;
+    }
+    public static String getUserRuleUrl(){
+        return  sUserRuleUrl;
+    }
+
     //登录接口
     public static String getLoginUrl() {
         return baseUrl + "users/login";
@@ -211,6 +216,17 @@ public class AppConfig {
         }
         return "0.0.0";
     }
+    public static String getPackageName(Context context){
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            return pi.packageName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return "com.lalocal.lalocal";
+
+    }
 
 
     public static String getRegisterUrl() {
@@ -288,12 +304,6 @@ public class AppConfig {
         return baseUrl + "routes/" + id;
     }
 
-    public static String getPreOrderProductUrl(Context context, int id, int userid, String token) {
-        String devcieId = CommonUtil.getUUID(context);
-        String version = AppConfig.getVersionName(context);
-        return String.format(preOrderUrl, id, userid, token, version, "android", devcieId);
-
-    }
 
     public static String getPayUrl() {
         return baseUrl + "pay/charges";
@@ -306,6 +316,37 @@ public class AppConfig {
     public static String getDelOrderUrl(int orderId){
         return  baseUrl+"orders/"+orderId;
     }
+
+    public static String getMyWalletUrl(){
+        return baseUrl+"users/purse";
+    }
+
+    //乐钻日志
+    public static String getGoldLogsUrl(int pageSize,int pageNum){
+        return baseUrl+"users/gold/logs?pageSize="+pageSize+"&pageNumber="+pageNum;
+    }
+    //积分日志
+    public static String getScoreLogsUrl(int pageSize,int pageNum){
+
+        return baseUrl+"users/score/logs?pageSize="+pageSize+"&pageNumber="+pageNum;
+    }
+
+    public static String getRechargeProducts(){
+        return  baseUrl+"iapPruducts";
+
+    }
+    //充值乐钻
+    public static String chargeGoldUrl(){
+
+        return baseUrl+"iaplogs/charges";
+    }
+
+   public static String exchargeGoldUrl(){
+
+       return  baseUrl+"users/score/exchange";
+   }
+
+
 
 
 

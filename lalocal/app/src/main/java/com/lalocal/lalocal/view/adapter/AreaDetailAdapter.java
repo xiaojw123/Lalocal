@@ -3,11 +3,11 @@ package com.lalocal.lalocal.view.adapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -100,7 +100,7 @@ public class AreaDetailAdapter extends BaseAdapter {
         SearchItem item = items.get(position);
         if (item != null) {
             if (item instanceof ProductItem) {
-                convertView = getModuelProduct(convertView, parent, item);
+                convertView = getModuelProduct(convertView, item);
                 convertView.setTag(R.id.areaDetialItem, item);
 
             } else if (item instanceof RouteItem) {
@@ -119,11 +119,10 @@ public class AreaDetailAdapter extends BaseAdapter {
         return convertView;
     }
 
-    @NonNull
     private View getModuelTitle(SearchItem item) {
         View convertView;
         TextView title = new TextView(context);
-        title.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        title.setLayoutParams(new AbsListView.LayoutParams(AbsListView.LayoutParams.WRAP_CONTENT, AbsListView.LayoutParams.WRAP_CONTENT));
         title.setPadding(0, 0, 0, (int) res.getDimension(R.dimen.dimen_size_8_dp));
         Drawable drawable = res.getDrawable(R.drawable.hot_sale_ic);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -136,7 +135,6 @@ public class AreaDetailAdapter extends BaseAdapter {
         return convertView;
     }
 
-    @NonNull
     private View getModuelRoute(View convertView, ViewGroup parent, SearchItem item) {
         if (convertView != null) {
             Object tag = convertView.getTag();
@@ -147,7 +145,7 @@ public class AreaDetailAdapter extends BaseAdapter {
         RouteHolder holder;
         if (convertView == null) {
             holder = new RouteHolder();
-            convertView = inflater.inflate(R.layout.area_detail_item_route, parent, false);
+            convertView = inflater.inflate(R.layout.area_detail_item_route, null);
             holder.photo = (ImageView) convertView.findViewById(R.id.area_detail_item_route_img);
             holder.title = (TextView) convertView.findViewById(R.id.area_detail_item_route_title);
             convertView.setTag(holder);
@@ -160,8 +158,7 @@ public class AreaDetailAdapter extends BaseAdapter {
         return convertView;
     }
 
-    @NonNull
-    private View getModuelProduct(View convertView, ViewGroup parent, SearchItem item) {
+    private View getModuelProduct(View convertView,SearchItem item) {
         if (convertView != null) {
             Object tag = convertView.getTag();
             if (tag == null || !(tag instanceof ProductHolder)) {
@@ -172,16 +169,14 @@ public class AreaDetailAdapter extends BaseAdapter {
         ProductHolder holder;
         if (convertView == null) {
             holder = new ProductHolder();
-            convertView = inflater.inflate(R.layout.area_detail_item_product, parent, false);
+            convertView = inflater.inflate(R.layout.area_detail_item_product, null);
             holder.photo = (ImageView) convertView.findViewById(R.id.area_detail_item_product_img);
             holder.title = (TextView) convertView.findViewById(R.id.area_detail_item_product_title);
             holder.status= (TextView) convertView.findViewById(R.id.area_detail_item_status_tv);
-//            holder.price = (TextView) convertView.findViewById(R.id.area_detail_item_product_price);
             convertView.setTag(holder);
         } else {
             holder = (ProductHolder) convertView.getTag();
         }
-//        double price = ((ProductItem) item).getPrice();
         DrawableUtils.displayImg(context, holder.photo, item.getPhoto());
         holder.title.setText(item.getTitle());
         int status=((ProductItem)item).getStatus();
