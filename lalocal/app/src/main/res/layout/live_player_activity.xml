@@ -1,5 +1,5 @@
 
-<com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout
+<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-        <com.lalocal.lalocal.view.liveroomview.thirdparty.live.LiveSurfaceView
+        <com.lalocal.lalocal.live.thirdparty.live.LiveSurfaceView
             android:id="@+id/live_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,12 +34,12 @@
                 android:visibility="invisible"
                 android:src="@drawable/peopleliving_quit" />
         </LinearLayout>
-        <com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView
+        <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_125dp"
             android:layout_marginTop="80dp"
-            ></com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView>
+            ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
         <ImageButton
             android:id="@+id/gift_btn"
             android:layout_width="wrap_content"
@@ -76,14 +76,14 @@
         android:orientation="vertical">
         <include layout="@layout/nim_message_activity_text_layout" />
 
-        <com.lalocal.lalocal.view.liveroomview.im.session.emoji.EmoticonPickerView
+        <com.lalocal.lalocal.live.im.session.emoji.EmoticonPickerView
             android:id="@+id/emoticon_picker_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone" />
     </LinearLayout>
 
-    <com.lalocal.lalocal.view.liveroomview.entertainment.ui.MessageListViewEx
+    <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
         android:id="@+id/messageListView"
         style="@style/list_view"
         android:layout_width="320dp"
@@ -100,18 +100,18 @@
     <include
         android:id="@+id/gift_animation_view"
         layout="@layout/gift_layout"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_above="@id/messageListView"
-        android:layout_marginBottom="3dp" />
+        android:layout_marginBottom="20dp" />
 
     <include
         android:id="@+id/gift_animation_view_up"
         layout="@layout/gift_layout"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
         android:layout_above="@id/gift_animation_view"
-        android:layout_marginBottom="3dp" />
+        android:layout_marginBottom="10dp" />
 
 
     <RelativeLayout
@@ -224,7 +224,7 @@
 
     </LinearLayout>
 
-    <com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout
+    <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
         android:id="@+id/periscope"
         android:layout_width="75dp"
         android:layout_height="350dp"
@@ -233,8 +233,11 @@
        android:layout_marginRight="143dp"
         android:layout_alignParentBottom="true"
 
-        ></com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout>
-
+        ></com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout>
+    <ImageView
+        android:id="@+id/gift_plane"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
-</com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout>
+</com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

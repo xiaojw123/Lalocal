@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -40,7 +39,8 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
-import com.lalocal.lalocal.view.liveroomview.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.io.File;
@@ -75,6 +75,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private Bitmap image;
     private int praiseNum;
     private int readNum;
+    private BlurImageView blurImageView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
     private void initView() {
         backBtn = (ImageView) findViewById(R.id.article_common_back_btn);
+        blurImageView = (BlurImageView) findViewById(R.id.article_bg);
         articleWebview = (WebView) findViewById(R.id.webview);
         btnLike = (ShineButton) findViewById(R.id.article_btn_like);
         btnComment = (ImageView) findViewById(R.id.article_btn_comment);
@@ -100,6 +102,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         collectTv = (TextView) findViewById(R.id.article_collect_tv);
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         btnLike.setImageResource(R.drawable.index_article_btn_like);
+
+
 
         //点击事件
         backBtn.setOnClickListener(this);
@@ -203,12 +207,20 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         @Override
         public void onArticleResult(ArticleDetailsResp articleDetailsResp) {
             super.onArticleResult(articleDetailsResp);
+
             articleDetailsRespResult = articleDetailsResp.getResult();
             if (articleDetailsRespResult != null) {
                 praiseId = articleDetailsRespResult.getPraiseId();
                 authorVO = articleDetailsRespResult.getAuthorVO();
                 String url = articleDetailsRespResult.getUrl();
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
+                String photo = articleDetailsResp.getResult().getPhoto();
+                if(photo!=null){
+                    blurImageView.setBlurImageURL(photo);
+                    blurImageView.setScaleRatio(20);
+                    blurImageView.setBlurRadius(1);
+                }
+
                 if (praiseFlag) {
 
                     btnLike.setChecked(true);
@@ -276,7 +288,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
         settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        articleWebview.setBackgroundColor(Color.parseColor("#000000"));
+        articleWebview.setBackgroundColor(0);
         articleWebview.loadUrl(url);
         articleWebview.setWebViewClient(new MyWebViewClient());
 
@@ -321,9 +333,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             @Override
             public void onPageFinished (WebView view, String url){
                 super.onPageFinished(view, url);
-                if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
+            /*    if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
                     articleWebview.getSettings().setLoadsImagesAutomatically(true);
-                }
+                }*/
             }
         }
 
@@ -368,10 +380,10 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
         @Override
         public boolean onKeyDown(int keyCode, KeyEvent event) {
-            if ((keyCode == KeyEvent.KEYCODE_BACK) && articleWebview.canGoBack()) {
+         /*   if ((keyCode == KeyEvent.KEYCODE_BACK) && articleWebview.canGoBack()) {
                 articleWebview.goBack(); // goBack()表示返回WebView的上一页面
                 return true;
-            }
+            }*/
             return super.onKeyDown(keyCode, event);
         }
 

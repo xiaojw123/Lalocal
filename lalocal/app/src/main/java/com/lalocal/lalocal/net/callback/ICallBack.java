@@ -2,6 +2,9 @@ package com.lalocal.lalocal.net.callback;
 
 
 import com.android.volley.VolleyError;
+import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
+import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.CloseLiveBean;
@@ -207,7 +210,14 @@ public abstract class ICallBack {
     //获取游客账号登录聊天
     public void onTouristInfo(String json) {
     }
-   /* //搜索关注和粉丝
-    public void onSearchAttentionOrFans(LiveFansOrAttentionResp liveFansOrAttentionResp) {
-    }*/
+    //直播礼物商城
+    public void onGiftsStore(GiftDataResp giftDataResp) {
+    }
+    //管理员
+    public  void onLiveManager(LiveManagerBean liveManagerBean){}
+    //查看是否为管理员
+    public  void onCheckManager(LiveManagerBean liveManagerBean){}
+    //管理员列表
+    public  void onManagerList(LiveManagerListResp liveManagerListResp){}
+
 }

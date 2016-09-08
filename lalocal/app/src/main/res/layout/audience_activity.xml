@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout
+<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
@@ -14,7 +14,7 @@
             android:id="@+id/video_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-          <com.lalocal.lalocal.view.liveroomview.thirdparty.video.NEVideoView
+          <com.lalocal.lalocal.live.thirdparty.video.NEVideoView
               android:id="@+id/video_view"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
@@ -39,12 +39,12 @@
         <include layout="@layout/live_loading_page"></include>
 
 
-        <com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView
+        <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_125dp"
             android:layout_marginTop="@dimen/live_height_80dp"
-            ></com.lalocal.lalocal.view.liveroomview.im.ui.barrage.BarrageView>
+            ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
     </RelativeLayout>
 <RelativeLayout
     android:id="@+id/live_layout"
@@ -128,7 +128,7 @@
                 <include layout="@layout/live_telecast_bottom_tab"></include>
             </LinearLayout>
 
-        <com.lalocal.lalocal.view.liveroomview.im.ui.periscope.PeriscopeLayout
+        <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
             android:id="@+id/periscope"
             android:layout_width="@dimen/live_height_70dp"
             android:layout_height="@dimen/live_height_350dp"
@@ -136,7 +136,7 @@
 
             android:layout_alignParentBottom="true"
              />
-        <com.lalocal.lalocal.view.liveroomview.entertainment.ui.MessageListViewEx
+        <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
             android:id="@+id/messageListView"
             style="@style/list_view"
             android:layout_width="@dimen/live_height_320dp"
@@ -146,25 +146,25 @@
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
             android:fadingEdge="none"
-            android:focusable="false"
+
             android:listSelector="@android:color/transparent"
             android:scrollbars="vertical" />
 
         <include
             android:id="@+id/gift_animation_view"
             layout="@layout/gift_layout"
-            android:layout_width="@dimen/live_height_220dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_above="@id/messageListView"
-            android:layout_marginBottom="3dp" />
+            android:layout_marginBottom="20dp" />
 
         <include
             android:id="@+id/gift_animation_view_up"
             layout="@layout/gift_layout"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
             android:layout_above="@id/gift_animation_view"
-            android:layout_marginBottom="3dp" />
+            android:layout_marginBottom="10dp" />
 
 
 
@@ -243,6 +243,10 @@
             android:numColumns="4" />
     </RelativeLayout>
     <include layout="@layout/audience_over_layout"></include>
+    <ImageView
+        android:id="@+id/gift_plane"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
 
-</com.lalocal.lalocal.view.liveroomview.entertainment.ui.CustomDrawerLayout>
+</com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

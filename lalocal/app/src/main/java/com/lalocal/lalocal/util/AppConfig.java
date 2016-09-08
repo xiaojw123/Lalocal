@@ -13,8 +13,8 @@ public class AppConfig {
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
-    private static String baseUrl = "http://api.lalocal.cn/api/";
-//   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+ //  private static String baseUrl = "http://api.lalocal.cn/api/";
+  private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
 
     public static String getWelcommeImgs(){
         return baseUrl+"system/welcomeImgs";
@@ -187,6 +187,27 @@ public class AppConfig {
     //搜索关注粉丝http://dev.lalocal.cn:8080/api/users?pageSize=10&pageNumber=1&nickName=%E6%9D%8E
     public static final String getSearchUser() {
         return baseUrl + "users?";
+    }
+
+    //直播礼物商城http://dev.lalocal.cn:8080/api/c
+    public static final String getGiftClassify(){
+        return  baseUrl+"gifts";
+    }
+    //直播间管理员列表
+    public static final String getLiveManagerList(){
+        return  baseUrl+"channels/";
+    }
+    //查看用户是否为管理员
+    public static  final String getCheckUserIdentity(){
+        return  baseUrl+"channels/admins/check";
+    }
+    //设置管理员
+    public  static  final  String getAccreditManager(){
+        return baseUrl+"channels/admins";
+    }
+    //删除管理员
+    public  static  final  String getCancelManager(){
+        return baseUrl+"channels/admins/";
     }
 
     //版本更新

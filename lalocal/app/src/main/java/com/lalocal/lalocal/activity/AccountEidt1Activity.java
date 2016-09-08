@@ -30,9 +30,9 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
-import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
-import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionDenied;
-import com.lalocal.lalocal.view.liveroomview.permission.annotation.OnMPermissionGranted;
+import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

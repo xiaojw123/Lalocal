@@ -11,7 +11,7 @@ import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.view.liveroomview.permission.MPermission;
+import com.lalocal.lalocal.live.permission.MPermission;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Unbinder;
