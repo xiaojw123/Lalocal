@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -58,12 +59,14 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private int attentionNum;
     private  boolean isManager;
     private  boolean isAudience;
+    private ImageView managerMark;
 
 
-    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result) {
+    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager) {
         super(context, R.style.prompt_dialog);
         this.context = context;
         this.result=result;
+        this.isManager=isManager;
     }
 
     public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager,boolean isAudience) {
@@ -72,6 +75,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         this.result=result;
         this.isManager=isManager;
         this.isAudience=isAudience;
+        AppLog.i("TAG","CustomLiveUserInfoDialog：查看是否为过那里远："+(isManager?"是":"否"));
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +94,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         masterInfoBack = (LinearLayout)findViewById(R.id.master_info_back_home);
         liveFans = (TextView)findViewById(R.id.live_fans);
         liveContribute = (TextView)findViewById(R.id.live_contribute);
-
+        managerMark = (ImageView) findViewById(R.id.live_manager_mark);
         bottomReport = (TextView)findViewById(R.id.custom_dialog_report);
         attentionStatus = (TextView)findViewById(R.id.custom_dialog_attention);
         masterInfoCloseIv = (ImageView)findViewById(R.id.custom_dialog_close_iv);
@@ -149,6 +153,12 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         DrawableUtils.displayImg(context, masterInfoHeadIv, avatar);
         masterInfoNickTv.setText(nickName);
         accountId = result.getId();
+        if(isManager){
+            managerMark.setVisibility(View.VISIBLE);
+        }else {
+            managerMark.setVisibility(View.GONE);
+        }
+
 
         Object statusa = result.getAttentionVO().getStatus();
         if (statusa!=null){
@@ -266,36 +276,36 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         switch (v.getId()){
             case R.id.custom_dialog_close_iv://关闭
                 if(cancelDialogListener!=null){
-                    cancelDialogListener.onCustomLiveUserInfoDialogListener(null,null);
+                    cancelDialogListener.onCustomLiveUserInfoDialogListener(null,null,null);
                 }
                 dismiss();
                 break;
             case R.id.custom_dialog_close_iv_1:
                 if(cancelDialogListener!=null){
-                    cancelDialogListener.onCustomLiveUserInfoDialogListener(null,null);
+                    cancelDialogListener.onCustomLiveUserInfoDialogListener(null,null,null);
                 }
                 dismiss();
                 break;
             case  R.id.live_master_home://主播端主页
 
                 if(sureDialogListener!=null){
-                   sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome);
+                   sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome,managerMark);
                 }
                 dismiss();
                 break;
             case R.id.live_master_home_audience:
                 if(sureDialogListener!=null){
-                    sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),homeAudience);
+                    sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),homeAudience,managerMark);
                 }
                 break;
             case R.id.custom_dialog_report_audience://观众端举报
                 if(reportListener!=null){
-                    reportListener.onCustomLiveUserInfoDialogListener(null,audienceReport);
+                    reportListener.onCustomLiveUserInfoDialogListener(null,audienceReport,managerMark);
                 }
                 break;
             case R.id.custom_dialog_report://主播端举报
                 if(reportListener!=null){
-                   reportListener.onCustomLiveUserInfoDialogListener(null,headerReport);
+                   reportListener.onCustomLiveUserInfoDialogListener(null,headerReport,managerMark);
                 }
                 break;
             case R.id.custom_dialog_attention://主播端关注
@@ -316,24 +326,24 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 break;
             case R.id.live_manager_ban://主播端禁言
                 if(banListener!=null){
-                    banListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveManagerBan);
+                    banListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveManagerBan,managerMark);
                 }
                 break;
             case R.id.live_manager_setting://设为管理员
                 if(settingManagerListener!=null){
 
-                    settingManagerListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveManagerSetting);
+                    settingManagerListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveManagerSetting,managerMark);
                 }
                 break;
             case R.id.audience_manager_report:
 
                 if(reportListener!=null){
-                    reportListener.onCustomLiveUserInfoDialogListener(null,audienceManagerReport);
+                    reportListener.onCustomLiveUserInfoDialogListener(null,audienceManagerReport,null);
                 }
                 break;
             case R.id.audience_manager_ban:
                 if(banListener!=null){
-                    banListener.onCustomLiveUserInfoDialogListener(null,audienceManagerban);
+                    banListener.onCustomLiveUserInfoDialogListener(null,audienceManagerban,null);
                 }
                 break;
             case R.id.audience_manager_attention:
@@ -346,8 +356,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
 
     public static interface CustomLiveUserInfoDialogListener {
-        void onCustomLiveUserInfoDialogListener(String id,TextView textView);
-
+        void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark);
     }
     public  static interface CustomLiveFansOrAttentionListener{
         void onCustomLiveFansOrAttentionListener(String id,TextView fansView,TextView attentionView,int fansCount,int attentionCount,TextView attentionStatus);

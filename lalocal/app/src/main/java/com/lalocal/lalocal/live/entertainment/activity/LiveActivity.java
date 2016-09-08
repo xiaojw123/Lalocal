@@ -666,7 +666,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     boolean adimnStatus=false;
     boolean isMuteds=false;
     int status=-1;
-
+    boolean isManager=false;
     @Override
     protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result, final boolean isMuted, final String meberAccount, int meberType,int id,int managerId) {
         isMuteds=isMuted;
@@ -683,11 +683,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }else{
             adimnStatus=false;
         }
-        CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LiveActivity.this, result);
+        if(managerId!=0){
+            isManager=true;
+        }else {
+            isManager=false;
+        }
+        CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LiveActivity.this, result,isManager);
         customLiveUserInfoDialog.setCancelable(false);
         customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
-            public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+            public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
             }
         });
@@ -695,7 +700,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
                     Intent intent = new Intent(LiveActivity.this, LiveHomePageActivity.class);
                     intent.putExtra("userId", String.valueOf(id));
                     startActivity(intent);
@@ -729,13 +734,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             });
             customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
                 }
             });
             customLiveUserInfoDialog.setBanBtn(isMuteds==true?"解除禁言":"禁言", new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView,ImageView managerMark) {
                     contentLoader.checkUserIdentity(channelId,String.valueOf(id));
                     contentLoader.setCallBack(new ICallBack() {
                         @Override
@@ -771,7 +776,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             });
             customLiveUserInfoDialog.setManagerBtn(adimnStatus==true?"取消管理员":"设为管理员", new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(final String id, final TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(final String id, final TextView textView, final ImageView managerMark) {
                     contentLoader.getLiveManagerList(channelId);
                     contentLoader.setCallBack(new ICallBack() {
                         @Override
@@ -789,12 +794,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                             textView.setText("取消管理员");
                                             textView.setAlpha(0.4f);
                                             adimnStatus=true;
+                                            managerMark.setVisibility(View.VISIBLE);
                                             contentLoader.liveAccreditManager(channelId,String.valueOf(id));
 
                                         }else {
                                             textView.setText("设为管理员");
                                             textView.setAlpha(1);
                                             adimnStatus=false;
+                                            managerMark.setVisibility(View.GONE);
                                             contentLoader.checkUserIdentity(channelId,String.valueOf(id));
                                         }
 

@@ -425,9 +425,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onCheckManager(LiveManagerBean liveManagerBean) {
             super.onCheckManager(liveManagerBean);
-            int result = liveManagerBean.getResult();
-
-            showMasterInfoPopuwindow(LivePlayerBaseActivity.this.result,isMuted,meberAccount,meberType,dialogId,result);
+            int results = liveManagerBean.getResult();
+            AppLog.i("TAG","查看是否为管理员："+result);
+            showMasterInfoPopuwindow(LivePlayerBaseActivity.this.result,isMuted,meberAccount,meberType,dialogId,results);
         }
 
         @Override
@@ -851,8 +851,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 isMuted = member.isMuted();
                 meberAccount = member.getAccount();
                 meberType = member.getMemberType().getValue();
-                String roomId = member.getRoomId();
-
                 boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
                 if (!isLogin) {
                     showLoginViewDialog();

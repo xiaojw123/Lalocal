@@ -53,6 +53,8 @@ public class TouristAdapter extends RecyclerView.Adapter {
         MemberType memberType = member.getMemberType();
         if(memberType==MemberType.ADMIN){
             liveViewHodler.managerMark.setVisibility(View.VISIBLE);
+        }else{
+            liveViewHodler.managerMark.setVisibility(View.GONE);
         }
         DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, member.getAvatar());
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {

@@ -709,7 +709,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if(isManager){
             customLiveUserInfoDialog.setBanBtn(isMuteds==true?"解除禁言":"禁言", new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView,ImageView managerMark) {
                     NIMClient.getService(ChatRoomService.class).markChatRoomMutedList(!isMuteds,new MemberOption(roomId,meberAccount)).setCallback(new RequestCallback<ChatRoomMember>() {
                         @Override
                         public void onSuccess(ChatRoomMember chatRoomMember) {
@@ -735,7 +735,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
-            public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+            public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
             }
         });
@@ -767,14 +767,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         });
         customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
-            public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+            public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
             }
         });
         if(CustomDialogStyle.CUSTOM_DIALOG_STYLE==1){
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
                     Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent.putExtra("userId", String.valueOf(id));
