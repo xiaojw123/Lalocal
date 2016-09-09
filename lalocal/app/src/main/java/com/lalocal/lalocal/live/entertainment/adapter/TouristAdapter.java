@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
@@ -56,11 +57,13 @@ public class TouristAdapter extends RecyclerView.Adapter {
         }else{
             liveViewHodler.managerMark.setVisibility(View.GONE);
         }
+
         DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, member.getAvatar());
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onTouristItemClickListener!=null){
+                    AppLog.i("TAG","游客列表position:"+position);
                     onTouristItemClickListener.showTouristInfo(member,false);
                 }
             }

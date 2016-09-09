@@ -277,7 +277,7 @@
 
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="4cbe3856032ad3755da23525e596405f" />
+            android:value="efc9614a32336704ec2577f2129929fb" />
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"

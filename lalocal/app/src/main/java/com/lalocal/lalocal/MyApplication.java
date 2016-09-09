@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
-import android.os.Process;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
@@ -25,7 +24,6 @@ import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -51,44 +49,14 @@ import io.fabric.sdk.android.Fabric;
  * 线上版本 友盟日志关闭
  */
 public class MyApplication extends Application {
-    //isDebug true开启日志 false关闭日志
-    private static boolean isDebug = true;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        String progressName = CommonUtil.getProcessName(this, Process.myPid());
-        AppLog.print("Application oncreate progressName___" + progressName + ", pckName__" + getPackageName());
-        if (progressName != null) {
-            boolean defaultProcess = progressName.equals(getPackageName());
-            if (defaultProcess) {
-                AppLog.print("main process__");
-                initAppForMainProcess();
-            } else if (progressName.contains(":core")) {
-                AppLog.print("core process__");
-            }
-        }
-
-
-    }
-
-    private void initAppForCoreProcess() {
-        NIMClient.init(this, getLoginInfo(), getOptions());
-//        if (inMainProcess()) {
-            // 注册自定义消息附件解析器
-            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
-            // init tools
-            StorageUtil.init(this, null);
-            ScreenUtil.init(this);
-            DemoCache.initImageLoaderKit();
-            initLog();
-            FlavorDependent.getInstance().onApplicationCreate();
-//        }
-    }
-
-    private void initAppForMainProcess() {
-        setLog(isDebug);
+        com.umeng.socialize.utils.Log.LOG = true;
+        Log.LOG=true;
+        PingppLog.DEBUG = true;
         Config.IsToastTip = true;
+        AppLog.print("MyApplication onCreate___");
         AppCrashHandler.getInstance(this);
         //360更新
         UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
@@ -104,20 +72,25 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
-        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
+
+        //   Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+
+          Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
+
         DemoCache.setContext(this);
-        initAppForCoreProcess();
-    }
-
-
-    private void setLog(boolean isDebug) {
-        Log.LOG = isDebug;
-        PingppLog.DEBUG = isDebug;
-        if (isDebug) {
-            AppLog.debug_level = 0;
-        } else {
-            AppLog.debug_level = 8;
+        NIMClient.init(this, getLoginInfo(), getOptions());
+        if (inMainProcess()) {
+            // 注册自定义消息附件解析器
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
+            // init tools
+            StorageUtil.init(this, null);
+            ScreenUtil.init(this);
+            DemoCache.initImageLoaderKit();
+            initLog();
+            FlavorDependent.getInstance().onApplicationCreate();
         }
+
+
     }
 
     @Override
@@ -174,9 +147,9 @@ public class MyApplication extends Application {
 
     private LoginInfo getLoginInfo() {
         String imccId = AuthPreferences.getUserAccount();
-        String imToken = AuthPreferences.getUserToken();
+        String imToken =AuthPreferences.getUserToken();
 
-        AppLog.i("TAG", "MyApplication：account:" + imccId + "token:" + imToken);
+        AppLog.i("TAG","MyApplication：account:"+imccId+"token:"+imToken);
         if (!TextUtils.isEmpty(imccId) && !TextUtils.isEmpty(imToken)) {
             DemoCache.setAccount(imccId.toLowerCase());
             return new LoginInfo(imccId, imToken);
@@ -201,15 +174,14 @@ public class MyApplication extends Application {
             AppLog.print("未找到数据库");
         }
 
-        Config.REDIRECT_URL = "http://sns.whalecloud.com/sina2/callback";
+        Config.REDIRECT_URL="http://sns.whalecloud.com/sina2/callback";
         PlatformConfig.setWeixin("wx6117251010e95624", "9154c280dd8a7a9a6b5f57d08dae2930");
         //微信 appid appsecret
-        PlatformConfig.setSinaWeibo("2849578775", "3b3bce66ae4671ae755fa11c2ba0ad5d");
+        PlatformConfig.setSinaWeibo("2849578775","3b3bce66ae4671ae755fa11c2ba0ad5d");
         //新浪微博 appkey appsecret
 
 
     }
-
     //fabric分析
     private void startFabric() {
         Fabric fabric = new Fabric.Builder(this)
@@ -218,7 +190,6 @@ public class MyApplication extends Application {
                 .build();
         Fabric.with(fabric);
     }
-
     //umeng分析
     public void startUmeng() {
         //友盟

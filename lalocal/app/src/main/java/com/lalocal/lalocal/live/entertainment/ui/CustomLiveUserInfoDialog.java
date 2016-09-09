@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -67,6 +66,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         this.context = context;
         this.result=result;
         this.isManager=isManager;
+
     }
 
     public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager,boolean isAudience) {
@@ -75,7 +75,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         this.result=result;
         this.isManager=isManager;
         this.isAudience=isAudience;
-        AppLog.i("TAG","CustomLiveUserInfoDialog：查看是否为过那里远："+(isManager?"是":"否"));
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,7 +159,6 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             managerMark.setVisibility(View.GONE);
         }
 
-
         Object statusa = result.getAttentionVO().getStatus();
         if (statusa!=null){
             double parseDouble = Double.parseDouble(String.valueOf(statusa));
@@ -207,6 +206,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             claseLayout.setVisibility(View.GONE);
             headerLayout.setVisibility(View.VISIBLE);
             liveBottomLayout.setVisibility(View.VISIBLE);
+
         }
         if(!TextUtils.isEmpty(managerSetting)){
             liveManagerSetting.setText(managerSetting);

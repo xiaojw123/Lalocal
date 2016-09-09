@@ -90,10 +90,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-
         contentService.liveRecommendList();
         requestBasicPermission(); // 申请APP基本权限
-        long startTime= System.currentTimeMillis();
+
 
     }
     @Nullable
@@ -164,8 +163,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     String createAnn = null;
     public class MyCallBack extends ICallBack {
 
-
-
         @Override
         public void onLiveList(LiveListDataResp liveListDataResp) {
             super.onLiveList(liveListDataResp);
@@ -215,14 +212,13 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 } else {
                     createAnn = "这是公告";
                 }
-                AppLog.i("TAG", "onCreateLiveRoom:" + "pullUrl:" + pullUrl);
+
                 //初始化直播间
                 userCreateId = createLiveRoomDataResp.getResult().getId();
                 liveUserId = createLiveRoomDataResp.getResult().getUser().getId();
                 createAvatar = createLiveRoomDataResp.getResult().getUser().getAvatar();
                 createNickName = createLiveRoomDataResp.getResult().getUser().getNickName();
                 shareVOCreate = createLiveRoomDataResp.getResult().getShareVO();
-                AppLog.i("TAG","直播间id："+createRoomId);
                LiveActivity.start(getActivity(), String.valueOf(createRoomId), mliveStreamingURL, String.valueOf(userCreateId), createAvatar, String.valueOf(liveUserId), shareVOCreate, createAnn, createNickName,reminfBack );
 
             }
@@ -264,8 +260,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         prepareLive();
                         return;
                     }
-
-
                     String avatar = liveRowsBean.getUser().getAvatar();
                     String nickName = liveRowsBean.getUser().getNickName();
                     String pullUrl = liveRowsBean.getPullUrl();
@@ -280,7 +274,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         ann = "这是公告哈";
                     }
                     SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                    AppLog.i("TAG","观众端信息传递："+"avatar:"+avatar+"  nickName:"+nickName+"  userid:"+userId);
                     AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann,String.valueOf(channelId));
                 }
 
@@ -350,7 +343,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loginIMServer(final String imccId,final String imToken) {
-
         NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback(){
             @Override
             public void onSuccess(Object o) {

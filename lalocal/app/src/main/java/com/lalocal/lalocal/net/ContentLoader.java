@@ -935,7 +935,7 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————" + volleyError + "__code__" + volleyError.networkResponse.statusCode);
+       //     AppLog.print("volley error——————" + volleyError + "__code__" + volleyError.networkResponse.statusCode);
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
@@ -1721,7 +1721,6 @@ public class ContentLoader {
         }
         //查看用户是否为管理员
         private void responseUserIdentity(String json) {
-            AppLog.i("TAG","查看用户是否为管理员:"+json);//{"returnCode":0,"message":"success","date":1473150714968,"result":59,"errorCode":null}
             LiveManagerBean liveManagerBean = new Gson().fromJson(json, LiveManagerBean.class);
             callBack.onCheckManager(liveManagerBean);
         }

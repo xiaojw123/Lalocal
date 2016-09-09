@@ -38,6 +38,7 @@ import com.lalocal.lalocal.live.entertainment.adapter.GiftAdapter;
 import com.lalocal.lalocal.live.entertainment.adapter.TouristAdapter;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.live.entertainment.constant.GiftType;
+import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomNotificationHelper;
 import com.lalocal.lalocal.live.entertainment.helper.GiftAnimations;
@@ -88,7 +89,6 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
-import com.netease.nimlib.sdk.chatroom.model.MemberOption;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -209,6 +209,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private int meberType;//聊天室成员类型
     private String channelId;
     private int dialogId;
+    private String disableSendMsgUserId;
+    List<String> banListAudience=new ArrayList<>();
+    List<String> banListLive=new ArrayList<>();
 
     protected abstract void checkNetInfo(String netType,int reminder);
 
@@ -222,7 +225,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected abstract void initParam(); // 初始化推流/拉流参数，具体在子类中实现
 
-    protected abstract void showMasterInfoPopuwindow(LiveUserInfoResultBean result,boolean isMuted,String meberAccount,int meberType,int id,int managerId);
+    protected abstract void showMasterInfoPopuwindow(LiveUserInfoResultBean result,boolean isMuted,String meberAccount,int id,int managerId);
 
     private static Map<MemberType, Integer> compMap = new HashMap<>();
 
@@ -413,27 +416,35 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             result = liveUserInfosDataResp.getResult();
             dialogId = result.getId();
             int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
+            AppLog.i("TAG","onLiveUserInfo:"+userId+"resultId:"+result.getId());
             boolean logined = UserHelper.isLogined(LivePlayerBaseActivity.this);
             if (!logined) {
                 showLoginViewDialog();
             } else {
                contentLoader.checkUserIdentity(channelId,String.valueOf(userId));
-
             }
         }
-
         @Override
         public void onCheckManager(LiveManagerBean liveManagerBean) {
             super.onCheckManager(liveManagerBean);
             int results = liveManagerBean.getResult();
-            AppLog.i("TAG","查看是否为管理员："+result);
-            showMasterInfoPopuwindow(LivePlayerBaseActivity.this.result,isMuted,meberAccount,meberType,dialogId,results);
+            AppLog.i("TAG","获取禁言列表："+results);
+            if(banListLive.size()>0){
+                for(String name:banListLive){
+                    if(name.equals(meberAccount)){
+                        isMuted=true;
+                    }else{
+                        isMuted=false;
+                    }
+                }
+            }else {
+                isMuted=false;
+            }
+            showMasterInfoPopuwindow(result,isMuted,meberAccount,dialogId,results);
         }
-
         @Override
         public void onLoginSucess(User user) {
             super.onLoginSucess(user);
-
         }
 
         @Override
@@ -465,7 +476,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
 
     protected void loginIMServer(final String imccId, String imToken) {
-
+        AppLog.i("TAG","获取云信账号："+"imccId:"+imccId+"imToken:"+imToken);
         NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
             @Override
             public void onSuccess(Object o) {
@@ -486,12 +497,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 AppLog.i("TAG", "NewsFragment,手动登录失败2");
                 DemoCache.setLoginStatus(false);
             }
+
         });
     }
 
     /***************************
      * 监听
      ****************************/
+
     View.OnClickListener clickListener = new View.OnClickListener() {
 
         @Override
@@ -534,6 +547,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onEvent(StatusCode statusCode) {
             AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
+
         }
     };
 
@@ -568,6 +582,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     if("code".equals(key)){
                         code = value.toString();
                     }
+                    if("disableSendMsgUserId".equals(key)){
+                        disableSendMsgUserId = value.toString();
+                    }
+
                 }
             }
 
@@ -577,7 +595,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                       
                         messageListPanel.onIncomingMessage(messages);
                         break;
-                    case "1"://弹幕
+                    case "1"://点赞
                         ChatRoomMessage barrageMessage = (ChatRoomMessage) message;
                         String senderNick = barrageMessage.getChatRoomMessageExtension().getSenderNick();
                         String content = barrageMessage.getContent();
@@ -587,12 +605,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                                 barrageView.addTextBarrage(senderNick + ":" + content);
                             }
                         }
-
                         break;
-                    case "2"://点赞
+                    case "2"://弹幕
 
                         periscopeLayout.addHeart();
                         messageListPanel.onIncomingMessage(messages);
+
                         break;
                     case "10":
                         if("003".equals(code)){
@@ -603,7 +621,27 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         }
 
                         break;
+                    case "6"://禁言
 
+                        banListAudience.add(disableSendMsgUserId);
+                        for(String name:banListAudience){
+                            AppLog.i("TAG","打印banlist："+name);
+                        }
+                        messageListPanel.onIncomingMessage(messages);
+                        break;
+                    case "7"://解除禁言
+
+                        AppLog.i("TAG","解除了禁言。。。。。。。。。。。。。。。。");
+                        if(banListAudience.size()>0){
+                            for(int i=0;i<banListAudience.size();i++){
+                                if(disableSendMsgUserId.equals(banListAudience.get(i))){
+                                    banListAudience.remove(i);
+                                    return;
+                                }
+                            }
+                        }
+                        messageListPanel.onIncomingMessage(messages);
+                        break;
                 }
             }
 
@@ -614,19 +652,21 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
                         //发送进入直播间的通知
-                        sendMessage(message, "0");
+                        sendMessage(message, MessageType.text);
                         break;
 
                     case ChatRoomMemberExit:
-                        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, message.getFromAccount());
-                        boolean muted = chatRoomMember.isMuted();
-                        if(muted){
-                            NIMClient.getService(ChatRoomService.class).markChatRoomMutedList(!muted,new MemberOption(roomId,message.getFromAccount()));
-
+                        //退出直播间，解除禁言
+                        if(banListLive.size()>0){
+                            for(int i=0;i<banListLive.size();i++){
+                                if(message.getFromAccount().equals(banListLive.get(i))){
+                                    banListLive.remove(i);
+                                }
+                            }
                         }
                         break;
                     case ChatRoomInfoUpdated:
-                        sendMessage(message, "0");
+                        sendMessage(message, MessageType.text);
                         break;
                     case ChatRoomClose:
 
@@ -634,11 +674,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case ChatRoomManagerAdd:
 
                         break;
-
-
                 }
             } else {
-
 
             }
         }
@@ -710,7 +747,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         data.setRoomId(roomId);
         Map<String, Object> map = new HashMap<>();
         int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
-
         map.put("userId", String.valueOf(userId));
         map.put("roomExt", String.valueOf(userId));
         data.setExtension(map);
@@ -724,6 +760,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 member1 = result.getMember();
                 enterroomgetnick = member1.getNick();
                 masterAvatar = member1.getAvatar();
+
                 creatorAccount = roomInfo.getCreator();
                 DemoCache.setLoginChatRoomStatus(true);
                 member1.setRoomId(roomInfo.getRoomId());
@@ -804,7 +841,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void onResult(boolean success, List<ChatRoomMember> result) {
                 if (success) {
-
                     addMembers(result);
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
@@ -847,10 +883,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
             @Override
             public void showTouristInfo(ChatRoomMember member, boolean isMasterAccount) {
-
-                isMuted = member.isMuted();
                 meberAccount = member.getAccount();
-                meberType = member.getMemberType().getValue();
                 boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
                 if (!isLogin) {
                     showLoginViewDialog();
@@ -949,31 +982,28 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
      ***************************/
 
     @Override
-    public boolean sendMessage(IMMessage msg, String style) {
+    public boolean sendMessage(IMMessage msg, int type) {
 
         if (msg != null) {
             fromNickBarrage = msg.getFromNick();
             ChatRoomMessage message = (ChatRoomMessage) msg;
-            String fromAccount = message.getFromAccount();
-            Map<String, Object> ext = new HashMap<>();
-            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
-            boolean muted = chatRoomMember.isMuted();
 
-            switch (style){
-                case "0":
-                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                        ext.put("style", style);
-                        message.setRemoteExtension(ext);
+            String fromAccount = message.getFromAccount();
+            if(banListAudience.size()>0){
+                AppLog.i("TAG","查看禁言消息账号"+banListAudience.get(0).toString()+"fromAccountfff:"+fromAccount+"   msg:"+msg.getFromAccount());
+                for(String account:banListAudience){
+                    if(account.equals(msg.getFromAccount())){
+                        Toast.makeText(LivePlayerBaseActivity.this,"你已被管理员禁言",Toast.LENGTH_SHORT).show();
+                        return  false;
                     }
+                }
+            }
+
+            switch (type){
+                case MessageType.text:
                         messageListPanel.onMsgSend(message);
                     break;
-                case "1":
-                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                        ext.put("style", style);
-                        message.setRemoteExtension(ext);
-                    }
+                case MessageType.barrage:
                     String content = msg.getContent();
                     barrageView.init(new BarrageConfig());
                     if (content != null) {
@@ -982,16 +1012,17 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     }
                     break;
 
-                case "2":
-                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                        ext.put("style", style);
-                        message.setRemoteExtension(ext);
-                    }
+                case MessageType.like:
                     messageListPanel.onMsgSend(message);
                     break;
 
-                case "10":
+                case MessageType.gift:
+                    messageListPanel.onMsgSend(message);
+                    break;
+                case MessageType.ban:
+                    messageListPanel.onMsgSend(message);
+                    break;
+                case MessageType.relieveBan:
                     messageListPanel.onMsgSend(message);
                     break;
             }

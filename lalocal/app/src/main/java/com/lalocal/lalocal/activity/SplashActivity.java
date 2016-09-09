@@ -99,6 +99,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
             }
+
         }
     };
 
