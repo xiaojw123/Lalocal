@@ -168,7 +168,7 @@
     <dimen name="my_diamond_layout_height1">88dp</dimen>
     <dimen name="my_diamond_no_charge_text_top">170.5dp</dimen>
     <dimen name="consume_record_item_height">56dp</dimen>
-    <dimen name="recharge_package_rlv_height">150dp</dimen>
+    <dimen name="recharge_package_rlv_height">165dp</dimen>
     <dimen name="exchage_content_height">120dp</dimen>
     <dimen name="exchage_btn_bottom">270dp</dimen>
     <dimen name="charge_pay_fee_tv_left">166dp</dimen>

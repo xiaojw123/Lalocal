@@ -1,9 +1,12 @@
 package com.lalocal.lalocal.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by xiaojw on 2016/9/2.
  */
-public class WalletContent {
+public class WalletContent implements Parcelable {
 
     /**
      * gold : 10
@@ -15,7 +18,7 @@ public class WalletContent {
      * firstMsg : 首次充值可获得额外40乐钻
      */
 
-    private long gold;
+    private double gold;
     private long score;
     private boolean signInFlag;
     private int couponNumb;
@@ -23,11 +26,11 @@ public class WalletContent {
     private int scale;
     private String firstMsg;
 
-    public long getGold() {
+    public double getGold() {
         return gold;
     }
 
-    public void setGold(long gold) {
+    public void setGold(double gold) {
         this.gold = gold;
     }
 
@@ -78,4 +81,45 @@ public class WalletContent {
     public void setFirstMsg(String firstMsg) {
         this.firstMsg = firstMsg;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeDouble(this.gold);
+        dest.writeLong(this.score);
+        dest.writeByte(this.signInFlag ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.couponNumb);
+        dest.writeInt(this.preExchangeGold);
+        dest.writeInt(this.scale);
+        dest.writeString(this.firstMsg);
+    }
+
+    public WalletContent() {
+    }
+
+    protected WalletContent(Parcel in) {
+        this.gold = in.readDouble();
+        this.score = in.readLong();
+        this.signInFlag = in.readByte() != 0;
+        this.couponNumb = in.readInt();
+        this.preExchangeGold = in.readInt();
+        this.scale = in.readInt();
+        this.firstMsg = in.readString();
+    }
+
+    public static final Parcelable.Creator<WalletContent> CREATOR = new Parcelable.Creator<WalletContent>() {
+        @Override
+        public WalletContent createFromParcel(Parcel source) {
+            return new WalletContent(source);
+        }
+
+        @Override
+        public WalletContent[] newArray(int size) {
+            return new WalletContent[size];
+        }
+    };
 }

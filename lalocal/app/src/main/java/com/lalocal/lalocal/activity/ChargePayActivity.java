@@ -11,10 +11,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.pingplusplus.android.Pingpp;
 
 import org.json.JSONException;
@@ -129,31 +131,24 @@ public class ChargePayActivity extends BaseActivity {
             if (resultCode == Activity.RESULT_OK) {
                 String result = data.getExtras().getString("pay_result");
                 AppLog.print("pay result___" + result);
-                String text = "未支付";
                 switch (result) {
                     case "success":
-                        text = "支付成功";
-//                        CommonUtil.showPromptDialog(this, "支付成功", new CustomDialog.CustomDialogListener() {
-//                            @Override
-//                            public void onDialogClickListener() {
-////                                setResult();
-//                                finish();
-//                            }
-//                        });
+                        CommonUtil.showPromptDialog(this, "支付成功", new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                setResult(KeyParams.RESULT_ChARGE_SUCCESS, null);
+                                finish();
+
+                            }
+                        });
                         break;
-//                    default:
-//                        //微信支付返回有问题，需二次确认
-//                        isPayConfirm = true;
-//                        mContentloader.getOrderDetail(mOrderid);
-//                        break;
                     case "cancel":
-                        text = "支付取消";
+                        Toast.makeText(this, "支付取消", Toast.LENGTH_SHORT).show();
                         break;
                     case "invalid":
-                        text = "支付失效";
+                        Toast.makeText(this, "支付失效", Toast.LENGTH_SHORT).show();
                         break;
                 }
-                Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
             }
         }
     }

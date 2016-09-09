@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/my_diamond_ctv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"

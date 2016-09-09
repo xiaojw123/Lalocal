@@ -49,4 +49,13 @@
     <dimen name="live_text_12sp">12sp</dimen>
     <dimen name="live_text_10sp">10sp</dimen>
     <dimen name="live_text_24sp">24sp</dimen>
+    <dimen name="erros_height">168dp</dimen>
+    <dimen name="erros_width">283dp</dimen>
+    <dimen name="live_search_edt_width">300dp</dimen>
+    <dimen name="live_search_edt_height">30dp</dimen>
+    <dimen name="live_search_adapter_item_height">190dp</dimen>
+    <dimen name="live_search_item_photo_width">150dp</dimen>
+    <dimen name="live_search_onlinUser_num_top">22dp</dimen>
+    <dimen name="live_search_item_useravatar_width">30dp</dimen>
+    <dimen name="live_search_item_usename_left">6dp</dimen>
 </resources>

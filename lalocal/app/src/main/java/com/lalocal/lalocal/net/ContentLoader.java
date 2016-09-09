@@ -41,6 +41,7 @@ import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
@@ -109,6 +110,15 @@ public class ContentLoader {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+
+    //直播搜索
+    public void searchLive(int pageNum, String nickName) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SEARCH_LIVE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.searchLiveUrl(10, pageNum, nickName), response, response);
+        requestQueue.add(request);
     }
 
     //兑换乐钻
@@ -637,7 +647,7 @@ public class ContentLoader {
     }
 
     //直播礼物商城
-    public  void liveGiftStore(){
+    public void liveGiftStore() {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_GIFT_STORE);
         }
@@ -645,49 +655,52 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //直播间管理员列表
-    public  void getLiveManagerList(String channelId){
+    public void getLiveManagerList(String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_MANAGER_LIST);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveManagerList()+channelId+"/admins", response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveManagerList() + channelId + "/admins", response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
     //查看⽤户是不是管理员
-    public void checkUserIdentity(String channelId,String userId){
+    public void checkUserIdentity(String channelId, String userId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_CHECK_USER_IDENTITY);
         }
 
-        ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.getCheckUserIdentity(), response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCheckUserIdentity(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getUserIdentityStatus(userId,channelId));
+        request.setBodyParams(getUserIdentityStatus(userId, channelId));
         requestQueue.add(request);
 
     }
+
     //设置管理员
-    public  void liveAccreditManager(String channelId,String userId){
+    public void liveAccreditManager(String channelId, String userId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_ACCREIDT_MANAGER);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.getAccreditManager(), response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getAccreditManager(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getUserIdentityStatus(userId,channelId));
+        request.setBodyParams(getUserIdentityStatus(userId, channelId));
         requestQueue.add(request);
     }
 
     //删除管理员
-    public void cancelManagerAccredit(String userId){
+    public void cancelManagerAccredit(String userId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_CANCEL_MANAGET_ACCREIDT);
         }
-        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getCancelManager()+userId, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getCancelManager() + userId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
 
     }
+
     //获取游客账号
     public void getTouristInfo() {
         if (callBack != null) {
@@ -791,7 +804,6 @@ public class ContentLoader {
         ContentRequest contentRequest = new ContentRequest(AppConfig.getProductDetailsUrl() + targetId, response, response);
         requestQueue.add(contentRequest);
     }
-
 
 
     //版本更新
@@ -935,7 +947,8 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————" + volleyError + "__code__" + volleyError.networkResponse.statusCode);
+            AppLog.print("volley error——————" + volleyError);
+//            + "__code__" + volleyError.networkResponse.statusCode
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
@@ -974,8 +987,13 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.SEARCH_LIVE:
+                        AppLog.print("result search JSON___"+json);
+                        responseSearchLive(jsonObj);
+                        break;
+
                     case RequestCode.EXCHARGE_GOLD:
-                        AppLog.print("respose_excharge_gold__"+json);
+                        AppLog.print("respose_excharge_gold__" + json);
                         responseExchargeGold(jsonObj);
                         break;
                     case RequestCode.CHARGE_GOLD:
@@ -1191,6 +1209,13 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseSearchLive(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            LiveSeachItem item = gson.fromJson(json, LiveSeachItem.class);
+            callBack.onSearchLive(item);
         }
 
         private void responseExchargeGold(JSONObject jsonObj) {
@@ -1564,7 +1589,7 @@ public class ContentLoader {
             bundle.putString(KeyParams.AVATAR, user.getAvatar());
             bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
             bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
-            bundle.putString(KeyParams.NICKNAME,user.getNickName());
+            bundle.putString(KeyParams.NICKNAME, user.getNickName());
             UserHelper.saveLoginInfo(context, bundle);
             DemoCache.clear();
             AuthPreferences.clearUserInfo();
@@ -1708,31 +1733,36 @@ public class ContentLoader {
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }
+
         //直播礼物商城
         private void responseLiveGiftsStore(String json) {
             GiftDataResp giftDataResp = new Gson().fromJson(json, GiftDataResp.class);
             callBack.onGiftsStore(giftDataResp);
         }
+
         //直播间管理员列表
         private void responseLiveManagerList(String json) {
             LiveManagerListResp liveManagerListResp = new Gson().fromJson(json, LiveManagerListResp.class);
             callBack.onManagerList(liveManagerListResp);
 
         }
+
         //查看用户是否为管理员
         private void responseUserIdentity(String json) {
-            AppLog.i("TAG","查看用户是否为管理员:"+json);//{"returnCode":0,"message":"success","date":1473150714968,"result":59,"errorCode":null}
+            AppLog.i("TAG", "查看用户是否为管理员:" + json);//{"returnCode":0,"message":"success","date":1473150714968,"result":59,"errorCode":null}
             LiveManagerBean liveManagerBean = new Gson().fromJson(json, LiveManagerBean.class);
             callBack.onCheckManager(liveManagerBean);
         }
+
         //设置管理员
         private void responseAccreditManager(String json) {
             LiveManagerBean liveManagerBean = new Gson().fromJson(json, LiveManagerBean.class);
             callBack.onLiveManager(liveManagerBean);
         }
+
         //取消管理员
         private void responseCancelManager(String json) {
-            AppLog.i("TAG","responseCancelManager:"+json);
+            AppLog.i("TAG", "responseCancelManager:" + json);
         }
 
         //上传图片token
@@ -1807,8 +1837,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
-
-
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -1915,13 +1943,14 @@ public class ContentLoader {
         }
         return jsonObject.toString();
     }
+
     //查看用户是否为管理员
-    public String getUserIdentityStatus(String userID,String channelId ){
-        AppLog.i("TAG","getUserIdentityStatus"+"userID:"+userID+"channelId:"+channelId);
+    public String getUserIdentityStatus(String userID, String channelId) {
+        AppLog.i("TAG", "getUserIdentityStatus" + "userID:" + userID + "channelId:" + channelId);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId",Integer.parseInt(userID));
-            jsonObject.put("channelId",Integer.parseInt(channelId));
+            jsonObject.put("userId", Integer.parseInt(userID));
+            jsonObject.put("channelId", Integer.parseInt(channelId));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2044,6 +2073,7 @@ public class ContentLoader {
         int GET_RECHARGE_PRODUCT = 135;
         int CHARGE_GOLD = 136;
         int EXCHARGE_GOLD = 137;
+        int SEARCH_LIVE = 138;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2069,11 +2099,11 @@ public class ContentLoader {
         int LIVE_FANS_OR_ATTENTION = 220;
         int LIVE_SEARCH_USER = 221;
         int LIVE_ON_LINE_COUNT = 222;
-        int LIVE_GIFT_STORE=223;
-        int LIVE_MANAGER_LIST=224;
-        int LIVE_CHECK_USER_IDENTITY=225;
-        int LIVE_ACCREIDT_MANAGER=226;
-        int LIVE_CANCEL_MANAGET_ACCREIDT=227;
+        int LIVE_GIFT_STORE = 223;
+        int LIVE_MANAGER_LIST = 224;
+        int LIVE_CHECK_USER_IDENTITY = 225;
+        int LIVE_ACCREIDT_MANAGER = 226;
+        int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
 
     }
 

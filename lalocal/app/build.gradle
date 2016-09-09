@@ -86,6 +86,7 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
     compile project(path: ':gifviewlibrary')
+    compile 'com.jcodecraeer:xrecyclerview:1.2.7'
 
 }
 

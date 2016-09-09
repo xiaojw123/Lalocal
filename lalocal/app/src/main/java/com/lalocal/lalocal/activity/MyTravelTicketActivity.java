@@ -10,7 +10,10 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.ConsumeRecord;
+import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.ConsumeRecordAdapter;
 import com.lalocal.lalocal.view.xlistview.XListView;
 
@@ -21,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyTravelTicketActivity extends BaseActivity {
+public class MyTravelTicketActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
     @BindView(R.id.my_ticket_titleview)
     FrameLayout myTicketTitleview;
     @BindView(R.id.my_score_num_tv)
@@ -36,17 +39,21 @@ public class MyTravelTicketActivity extends BaseActivity {
     Button myTicketWithdrawcashBtn;
     @BindView(R.id.my_ticket_no_score)
     TextView myTicketNoScore;
+    @BindView(R.id.my_travelticket_ctv)
+    CustomTitleView myTicketCtv;
     int pageNum = 1;
+    WalletContent mWalletContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_travel_ticket_layout);
         ButterKnife.bind(this);
-        String scoreNum = getScoreNum();
-        myScoreNumTv.setText(scoreNum);
-        long num = Long.parseLong(scoreNum);
-        if (num > 0) {
+        mWalletContent = getWalletContent();
+        long scoreNum = mWalletContent.getScore();
+        myScoreNumTv.setText(CommonUtil.formartNum(scoreNum));
+        myTicketCtv.setOnBackClickListener(this);
+        if (scoreNum > 0) {
             myTicketCosumeXlv.setVisibility(View.VISIBLE);
             myTicketCosumeXlv.setPullRefreshEnable(false);
             myTicketCosumeXlv.setRefreshEnable(false);
@@ -63,17 +70,19 @@ public class MyTravelTicketActivity extends BaseActivity {
     }
 
 
-    public String getScoreNum() {
-        return getIntent().getStringExtra(KeyParams.SOCRE_NUM);
+    public WalletContent getWalletContent() {
+        return getIntent().getParcelableExtra(KeyParams.WALLET_CONTENT);
+
     }
+
 
     @OnClick({R.id.my_ticket_exchargegold_btn, R.id.my_ticket_withdrawcash_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_ticket_exchargegold_btn://兑换乐钻
-                Intent exchargeIntent=getIntent();
-                exchargeIntent.setClass(this,ExchangeActivity.class);
-                startActivity(exchargeIntent);
+                Intent exchargeIntent = new Intent(this, ExchangeActivity.class);
+                exchargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
+                startActivityForResult(exchargeIntent, KeyParams.REQUEST_CODE);
                 break;
             case R.id.my_ticket_withdrawcash_btn://提现
                 // TODO: 2016/9/7 add 提现
@@ -92,9 +101,9 @@ public class MyTravelTicketActivity extends BaseActivity {
         public void onGetScoreLog(ConsumeRecord log) {
             pageNum = log.getPageSize();
             toalPages = log.getTotalPages();
-            if (toalPages>1){
+            if (toalPages > 1) {
                 myTicketCosumeXlv.setPullLoadEnable(true);
-            }else{
+            } else {
                 myTicketCosumeXlv.setPullLoadEnable(false);
             }
             if (isLoadMore) {
@@ -125,5 +134,40 @@ public class MyTravelTicketActivity extends BaseActivity {
                 mContentloader.getScoreLogs(pageNum);
             }
         }
+
+        @Override
+        public void onGetMyWallet(WalletContent content) {
+            mWalletContent = content;
+            myScoreNumTv.setText(CommonUtil.formartNum(content.getScore()));
+        }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == KeyParams.RESULT_EXCHARGE_SUCCESS) {
+            mContentloader.getMyWallet();
+            mContentloader.getScoreLogs(1);
+        }
+
+    }
+
+
+    @Override
+    public void onBackClick() {
+        setResultForUpdateWallet();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResultForUpdateWallet();
+
+    }
+
+    public void setResultForUpdateWallet() {
+        if (mWalletContent != getWalletContent()) {
+            setResult(KeyParams.RESULT_UPDATE_WALLET, null);
+        }
+    }
+
 }

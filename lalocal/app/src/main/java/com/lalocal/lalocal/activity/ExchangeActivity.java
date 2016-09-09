@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 
@@ -35,8 +36,9 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
-        scale = getScale();
-        exchageScoreNumTv.setText(getScoreNum());
+        WalletContent content=getWalletContent();
+        scale =content.getScale();
+        exchageScoreNumTv.setText(CommonUtil.formartNum(content.getScore()));
         exchageScoreEdit.addTextChangedListener(this);
         setLoaderCallBack(new ExchangeCallBack());
     }
@@ -51,13 +53,13 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
         }
     }
 
-    public String getScoreNum() {
-        return getIntent().getStringExtra(KeyParams.SOCRE_NUM);
+
+    public WalletContent getWalletContent() {
+        return getIntent().getParcelableExtra(KeyParams.WALLET_CONTENT);
+
     }
 
-    public int getScale() {
-        return getIntent().getIntExtra(KeyParams.SCALE, 0);
-    }
+
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -86,6 +88,8 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
         @Override
         public void onExchargeGoldSuccess() {
             Toast.makeText(ExchangeActivity.this, "兑换成功", Toast.LENGTH_SHORT).show();
+            setResult(KeyParams.RESULT_EXCHARGE_SUCCESS,null);
+            finish();
         }
     }
 }

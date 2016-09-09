@@ -30,10 +30,7 @@ public class MyWalletActivity extends BaseActivity {
     TextView myCouponNum;
     @BindView(R.id.my_coupon_llt)
     LinearLayout myCouponLlt;
-    String goldText,scoreText,couponText;
-    int scale;
-
-
+    WalletContent mWalletContent;
 
 
     @Override
@@ -51,17 +48,15 @@ public class MyWalletActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_diamond_llt:
-                Intent diamondIntent=new Intent(this,MyDiamondActivity.class);
-                diamondIntent.putExtra(MyDiamondActivity.GOLD_PARAM,goldText);
-                diamondIntent.putExtra(KeyParams.SOCRE_NUM,scoreText);
-                diamondIntent.putExtra(KeyParams.SCALE,scale);
-                startActivity(diamondIntent);
+                Intent diamondIntent = new Intent(this, MyDiamondActivity.class);
+                diamondIntent.putExtra(KeyParams.WALLET_CONTENT,mWalletContent);
+                startActivityForResult(diamondIntent,KeyParams.REQUEST_CODE);
                 break;
+
             case R.id.my_travelticket_llt:
-                Intent scoreIntent=new Intent(this,MyTravelTicketActivity.class);
-                scoreIntent.putExtra(KeyParams.SOCRE_NUM,scoreText);
-                scoreIntent.putExtra(KeyParams.SCALE,scale);
-                startActivity(scoreIntent);
+                Intent scoreIntent = new Intent(this, MyTravelTicketActivity.class);
+                scoreIntent.putExtra(KeyParams.WALLET_CONTENT,mWalletContent);
+                startActivityForResult(scoreIntent,KeyParams.REQUEST_CODE);
                 break;
             case R.id.my_coupon_llt:
                 break;
@@ -71,11 +66,11 @@ public class MyWalletActivity extends BaseActivity {
     class WalletCallBack extends ICallBack {
         @Override
         public void onGetMyWallet(WalletContent content) {
+            mWalletContent = content;
             if (content != null) {
-                scale=content.getScale();
-                goldText=CommonUtil.formartNum(content.getGold());
-                scoreText=CommonUtil.formartNum(content.getScore());
-                couponText=CommonUtil.formartNum(content.getCouponNumb());
+                String goldText = CommonUtil.formartNum(content.getGold());
+                String scoreText = CommonUtil.formartNum(content.getScore());
+                String couponText = CommonUtil.formartNum(content.getCouponNumb());
                 myDiamondNum.setText(goldText);
                 myTravelticketNum.setText(scoreText);
                 myCouponNum.setText(couponText);
@@ -83,6 +78,13 @@ public class MyWalletActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==KeyParams.RESULT_UPDATE_WALLET){
+            mContentloader.getMyWallet();
+        }
 
+    }
 }
 

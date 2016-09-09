@@ -15,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.LiveSearchActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
@@ -83,6 +85,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     private int userCreateId;
     private String createAvatar;
     private SpecialShareVOBean shareVOCreate;
+    private FrameLayout liveSeachFl;
 
 
     @Override
@@ -107,6 +110,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         View inflate = View.inflate(getActivity(), R.layout.listview_footerview,null);
         liveRecyclearView.addHeaderView(inflate);
         liveRecyclearView.addFooterView(inflate);
+        //TODO:直播搜索 add by xiaojw
+        liveSeachFl= (FrameLayout) view.findViewById(R.id.live_search_fl);
+        liveSeachFl.setOnClickListener(this);
         return view;
     }
 
@@ -156,6 +162,10 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 }else {
                             prepareLive();
                 }
+                break;
+            case R.id.live_search_fl:
+                Intent intent=new Intent(getActivity(), LiveSearchActivity.class);
+                startActivity(intent);
                 break;
         }
     }

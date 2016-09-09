@@ -86,7 +86,7 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
 //		if (imgSelectedIndex != Constant.INTENT_CODE_IMG_SELECTED_DEFAULT) {
 //			messageToIndex = Constant.MESSAGE_TO_AFTER_SALES;
 //		}
-        if (savedInstanceState == null) {
+        if (savedInstanceState == null&&!TextUtils.isEmpty(mTitle)&&!TextUtils.isEmpty(mPostUrl)) {
             sendPictureTxtMessage();
         }
         messageList.setShowUserNick(true);

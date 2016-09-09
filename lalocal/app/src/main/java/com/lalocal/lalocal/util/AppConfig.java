@@ -10,22 +10,24 @@ import android.content.pm.PackageManager;
 public class AppConfig {
 
     private static String baseUrl = "http://api.lalocal.cn/api/";
-//   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
-    private  static String sUserRuleUrl="http://h5.lalocal.cn/static/userRole.html";
+    //   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+    private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
-    public static String getWelcommeImgs(){
-        return baseUrl+"system/welcomeImgs";
-    }
-    public static String getSystemConfigUrl(){
-
-        return  baseUrl+"system/configs";
+    public static String getWelcommeImgs() {
+        return baseUrl + "system/welcomeImgs";
     }
 
-    public static void setUserRuleUrl(String userRuleUrl){
-        sUserRuleUrl=userRuleUrl;
+    public static String getSystemConfigUrl() {
+
+        return baseUrl + "system/configs";
     }
-    public static String getUserRuleUrl(){
-        return  sUserRuleUrl;
+
+    public static void setUserRuleUrl(String userRuleUrl) {
+        sUserRuleUrl = userRuleUrl;
+    }
+
+    public static String getUserRuleUrl() {
+        return sUserRuleUrl;
     }
 
     //登录接口
@@ -169,9 +171,10 @@ public class AppConfig {
     public static String getImgToken() {
         return baseUrl + "system/imgs/token";
     }
+
     //上传在线人数http://dev.lalocal.cn:8080/api/channels/2/onlineUsers
-    public  static String getUserOnLine(){
-        return baseUrl+"channels/";
+    public static String getUserOnLine() {
+        return baseUrl + "channels/";
     }
 
     //获取直播用户信息  http://dev.lalocal.cn:8080/api/users/userInfos/112
@@ -195,24 +198,28 @@ public class AppConfig {
     }
 
     //直播礼物商城http://dev.lalocal.cn:8080/api/c
-    public static final String getGiftClassify(){
-        return  baseUrl+"gifts";
+    public static final String getGiftClassify() {
+        return baseUrl + "gifts";
     }
+
     //直播间管理员列表
-    public static final String getLiveManagerList(){
-        return  baseUrl+"channels/";
+    public static final String getLiveManagerList() {
+        return baseUrl + "channels/";
     }
+
     //查看用户是否为管理员
-    public static  final String getCheckUserIdentity(){
-        return  baseUrl+"channels/admins/check";
+    public static final String getCheckUserIdentity() {
+        return baseUrl + "channels/admins/check";
     }
+
     //设置管理员
-    public  static  final  String getAccreditManager(){
-        return baseUrl+"channels/admins";
+    public static final String getAccreditManager() {
+        return baseUrl + "channels/admins";
     }
+
     //删除管理员
-    public  static  final  String getCancelManager(){
-        return baseUrl+"channels/admins/";
+    public static final String getCancelManager() {
+        return baseUrl + "channels/admins/";
     }
 
     //版本更新
@@ -224,7 +231,7 @@ public class AppConfig {
     //生产环境:http://api.lalocal.cn/api
     public static void setBaseUrl(String url) {
         AppLog.print("APP当前环境基准地址：" + url);
-        baseUrl = url+"/";
+        baseUrl = url + "/";
     }
 
     public static String getVersionName(Context context) {
@@ -237,7 +244,8 @@ public class AppConfig {
         }
         return "0.0.0";
     }
-    public static String getPackageName(Context context){
+
+    public static String getPackageName(Context context) {
         try {
             PackageManager pm = context.getPackageManager();
             PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
@@ -329,47 +337,52 @@ public class AppConfig {
     public static String getPayUrl() {
         return baseUrl + "pay/charges";
     }
+
     //取消订单
-    public static String getCancelOrderUrl(int orderId){
-        return  baseUrl+"orders/"+orderId+"/cancel";
-    }
-    //删除订单
-    public static String getDelOrderUrl(int orderId){
-        return  baseUrl+"orders/"+orderId;
+    public static String getCancelOrderUrl(int orderId) {
+        return baseUrl + "orders/" + orderId + "/cancel";
     }
 
-    public static String getMyWalletUrl(){
-        return baseUrl+"users/purse";
+    //删除订单
+    public static String getDelOrderUrl(int orderId) {
+        return baseUrl + "orders/" + orderId;
+    }
+
+    public static String getMyWalletUrl() {
+        return baseUrl + "users/purse";
     }
 
     //乐钻日志
-    public static String getGoldLogsUrl(int pageSize,int pageNum){
-        return baseUrl+"users/gold/logs?pageSize="+pageSize+"&pageNumber="+pageNum;
+    public static String getGoldLogsUrl(int pageSize, int pageNum) {
+        return baseUrl + "users/gold/logs?pageSize=" + pageSize + "&pageNumber=" + pageNum;
     }
+
     //积分日志
-    public static String getScoreLogsUrl(int pageSize,int pageNum){
+    public static String getScoreLogsUrl(int pageSize, int pageNum) {
 
-        return baseUrl+"users/score/logs?pageSize="+pageSize+"&pageNumber="+pageNum;
+        return baseUrl + "users/score/logs?pageSize=" + pageSize + "&pageNumber=" + pageNum;
     }
 
-    public static String getRechargeProducts(){
-        return  baseUrl+"iapPruducts";
+    public static String getRechargeProducts() {
+        return baseUrl + "iapPruducts";
 
     }
+
     //充值乐钻
-    public static String chargeGoldUrl(){
+    public static String chargeGoldUrl() {
 
-        return baseUrl+"iaplogs/charges";
+        return baseUrl + "iaplogs/charges";
     }
 
-   public static String exchargeGoldUrl(){
+    public static String exchargeGoldUrl() {
 
-       return  baseUrl+"users/score/exchange";
-   }
+        return baseUrl + "users/score/exchange";
+    }
 
-
-
-
+    //直播搜索
+    public static String searchLiveUrl(int pageSize, int pageNum, String nickName) {
+        return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + nickName;
+    }
 
 
 }

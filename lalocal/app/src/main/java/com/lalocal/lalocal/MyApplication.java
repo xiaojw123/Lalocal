@@ -59,22 +59,21 @@ public class MyApplication extends Application {
         super.onCreate();
         String progressName = CommonUtil.getProcessName(this, Process.myPid());
         AppLog.print("Application oncreate progressName___" + progressName + ", pckName__" + getPackageName());
-        if (progressName != null) {
-            boolean defaultProcess = progressName.equals(getPackageName());
-            if (defaultProcess) {
-                AppLog.print("main process__");
+//        if (progressName != null) {
+//            boolean defaultProcess = progressName.equals(getPackageName());
+//            if (defaultProcess) {
+//                AppLog.print("main process__");
                 initAppForMainProcess();
-            } else if (progressName.contains(":core")) {
-                AppLog.print("core process__");
-            }
-        }
-
-
+//            } else if (progressName.contains(":core")) {
+//                AppLog.print("core process__");
+//            }
+//        }
+        initAppForCoreProcess();
     }
 
     private void initAppForCoreProcess() {
         NIMClient.init(this, getLoginInfo(), getOptions());
-//        if (inMainProcess()) {
+        if (inMainProcess()) {
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
             // init tools
@@ -83,7 +82,7 @@ public class MyApplication extends Application {
             DemoCache.initImageLoaderKit();
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
-//        }
+        }
     }
 
     private void initAppForMainProcess() {
@@ -106,7 +105,6 @@ public class MyApplication extends Application {
         //TODO:bugtags online delete
         Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
         DemoCache.setContext(this);
-        initAppForCoreProcess();
     }
 
 

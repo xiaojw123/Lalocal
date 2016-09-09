@@ -2,6 +2,7 @@ package com.lalocal.lalocal.util;
 
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
@@ -26,23 +27,27 @@ public class DrawableUtils {
     private static ImageLoader loader;
 
     public static void displayImg(Context context, ImageView img, String url) {
-        displayImg(context, img, url, 0, DRAWABLE_NULL,null);
+        displayImg(context, img, url, 0, DRAWABLE_NULL, null);
     }
-    public static void displayImg(Context context, ImageView img, String url,int drawable,ImageLoadingListener listener) {
-        displayImg(context, img, url, 0, drawable,listener);
+
+    public static void displayImg(Context context, ImageView img, String url, int drawable, ImageLoadingListener listener) {
+        displayImg(context, img, url, 0, drawable, listener);
     }
 
 
     public static void displayImg(Context context, ImageView img, String url, int drawable) {
-        displayImg(context, img, url, 0, drawable,null);
+        displayImg(context, img, url, 0, drawable, null);
     }
 
-    public static void displayImg(Context context, ImageView img, String url, int radius, int drawable){
-        displayImg(context, img, url, radius, drawable,null);
+    public static void displayImg(Context context, ImageView img, String url, int radius, int drawable) {
+        displayImg(context, img, url, radius, drawable, null);
     }
 
 
     public static void displayImg(Context context, ImageView img, String url, int radius, int drawable, ImageLoadingListener listener) {
+        if (TextUtils.isEmpty(url)) {
+            return;
+        }
         if (loader == null) {
             loader = ImageLoader.getInstance();
         }
@@ -53,11 +58,11 @@ public class DrawableUtils {
         File imgFile = loader.getDiskCache().get(url);
 
         if (imgFile == null || !imgFile.exists()) {
-            loader.displayImage(url, img, getImageOptions(radius, drawable),listener);
+            loader.displayImage(url, img, getImageOptions(radius, drawable), listener);
 
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
-            loader.displayImage(fileUri, img,listener);
+            loader.displayImage(fileUri, img, listener);
 
         }
     }

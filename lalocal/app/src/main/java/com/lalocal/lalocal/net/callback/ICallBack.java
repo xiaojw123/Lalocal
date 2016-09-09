@@ -18,6 +18,7 @@ import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
@@ -47,6 +48,7 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+
 
     public void onExchargeGoldSuccess(){
 
@@ -253,5 +255,8 @@ public abstract class ICallBack {
     public  void onCheckManager(LiveManagerBean liveManagerBean){}
     //管理员列表
     public  void onManagerList(LiveManagerListResp liveManagerListResp){}
+
+    public void onSearchLive(LiveSeachItem item){
+    }
 
 }

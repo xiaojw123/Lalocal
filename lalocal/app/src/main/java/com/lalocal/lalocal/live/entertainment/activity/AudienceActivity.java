@@ -71,6 +71,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by hzxuwen on 2016/3/18.
  */
 public class AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlayerProxy ,View.OnLayoutChangeListener{
+    public static final  String LIVE_SEARCH_ITEM="live_search_item";
     private static final String TAG = AudienceActivity.class.getSimpleName();
     private final int BASIC_PERMISSION_REQUEST_CODE = 110;
     private final static String EXTRA_ROOM_ID = "ROOM_ID";

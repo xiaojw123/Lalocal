@@ -18,7 +18,7 @@ public class RechargeItem implements Parcelable {
 
     private int id;
     private String name;
-    private int fee;
+    private double fee;
     private int value;
 
     public int getId() {
@@ -37,11 +37,11 @@ public class RechargeItem implements Parcelable {
         this.name = name;
     }
 
-    public int getFee() {
+    public double getFee() {
         return fee;
     }
 
-    public void setFee(int fee) {
+    public void setFee(double fee) {
         this.fee = fee;
     }
 
@@ -62,7 +62,7 @@ public class RechargeItem implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.id);
         dest.writeString(this.name);
-        dest.writeInt(this.fee);
+        dest.writeDouble(this.fee);
         dest.writeInt(this.value);
     }
 
@@ -72,7 +72,7 @@ public class RechargeItem implements Parcelable {
     protected RechargeItem(Parcel in) {
         this.id = in.readInt();
         this.name = in.readString();
-        this.fee = in.readInt();
+        this.fee = in.readDouble();
         this.value = in.readInt();
     }
 

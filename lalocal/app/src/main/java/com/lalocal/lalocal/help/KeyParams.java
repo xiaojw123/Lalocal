@@ -28,6 +28,12 @@ public interface KeyParams {
     public static final String ACTION_UPDATE_ORDER="updateorder";
     public static  final  String SOCRE_NUM="score_num";
     public static final  String SCALE="scale";
+    public static  final  String WALLET_CONTENT="wallet_content";
+    // onActivityResult相关
+    public static  final int REQUEST_CODE=100;
+    public static  final  int RESULT_ChARGE_SUCCESS =200;
+    public static final  int RESULT_EXCHARGE_SUCCESS=201;
+    public static final  int RESULT_UPDATE_WALLET=203;
 
 
 

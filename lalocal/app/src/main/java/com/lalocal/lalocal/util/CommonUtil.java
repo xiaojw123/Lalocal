@@ -86,6 +86,10 @@ public class CommonUtil {
         NumberFormat nf = new DecimalFormat("###,###,###,###,###,###,###,###");
         return nf.format(price);
     }
+    public static String formartNum(double price) {
+        NumberFormat nf = new DecimalFormat("###,###,###,###,###,###,###,###.##");
+        return nf.format(price);
+    }
     public static String formartOrderPrice(double price) {
         NumberFormat nf = new DecimalFormat("¥ ###,###,###,###,###,###,###,###.##");
         return nf.format(price);
