@@ -26,6 +26,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
+import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.live.im.session.actions.BaseAction;
@@ -339,13 +340,26 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         }
         if (container.sessionType == SessionTypeEnum.ChatRoom) {
                 textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
+            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
+            Map<String, Object> ext = new HashMap<>();
+
                 Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 if(selectorStatus){
-                    if (container.proxy.sendMessage(textMessage,"1")) {
+                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                        ext.put("type", chatRoomMember.getMemberType().getValue());
+                        ext.put("style","1");
+                        textMessage.setRemoteExtension(ext);
+                    }
+                    if (container.proxy.sendMessage(textMessage, MessageType.barrage)) {
                         restoreText(true);
                     }
                 }else {
-                    if (container.proxy.sendMessage(textMessage,"0")) {
+                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                        ext.put("type", chatRoomMember.getMemberType().getValue());
+                        ext.put("style","0");
+                        textMessage.setRemoteExtension(ext);
+                    }
+                    if (container.proxy.sendMessage(textMessage,MessageType.text)) {
                         restoreText(true);
                     }
                 }
@@ -706,7 +720,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     @Override
     public void onRecordSuccess(File audioFile, long audioLength, RecordType recordType) {
         IMMessage audioMessage = MessageBuilder.createAudioMessage(container.account, container.sessionType, audioFile, audioLength);
-        container.proxy.sendMessage(audioMessage,"0");
+        container.proxy.sendMessage(audioMessage,MessageType.text);
     }
 
     @Override

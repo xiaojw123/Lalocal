@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +64,16 @@ public class LiveHomePageActivity extends BaseActivity {
     LinearLayout homepageFansLayout;
     @BindView(R.id.master_attention_layout)
     LinearLayout masterAttentionLayout;
+    @BindView(R.id.home_page_head_big)
+    ImageView homePageHeadBig;
+    @BindView(R.id.line_layout)
+    RelativeLayout lineLayout;
+    @BindView(R.id.ffdffhfd)
+    View ffdffhfd;
+    @BindView(R.id.home_page_layout)
+    RelativeLayout homePageLayout;
+    @BindView(R.id.live_attention_homepage)
+    RelativeLayout liveAttentionHomepage;
     private ContentLoader contentLoader;
     private String userId;
     private TextView popuCancel;
@@ -81,22 +93,20 @@ public class LiveHomePageActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention,R.id.personal_home_page})
+    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page})
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.homepage_attention_layout:
-           /*     Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
+                Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent.putExtra("liveType", "0");
                 intent.putExtra("userId", userId);
                 startActivity(intent);
-*/
                 break;
             case R.id.homepage_fans_layout:
-          /*      Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
+                Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
-                startActivity(intent1);*/
-
+                startActivity(intent1);
                 break;
 
             case R.id.master_attention:
@@ -108,9 +118,10 @@ public class LiveHomePageActivity extends BaseActivity {
                 }
                 break;
             case R.id.personal_home_page:
-              //  Toast.makeText(this,"点击了",Toast.LENGTH_SHORT).show();
-              //  homePageLayout.setVisibility(View.GONE);
-               // DrawableUtils.displayImg(LiveHomePageActivity.this, masterAvatarBig, result.getAvatar());
+
+                homePageLayout.setVisibility(View.GONE);
+                homePageHeadBig.setVisibility(View.VISIBLE);
+                DrawableUtils.displayImg(LiveHomePageActivity.this, homePageHeadBig, result.getAvatarOrigin());
                 break;
         }
     }
@@ -150,15 +161,17 @@ public class LiveHomePageActivity extends BaseActivity {
             }
         });
     }
-    public void backgroundAlpha(float bgAlpha)
-    {
+
+    public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha;
         getWindow().setAttributes(lp);
     }
+
     private int attentionNum;
     private int fansNum;
     private LiveUserInfoResultBean result;
+
     public class MyCallBack extends ICallBack {
 
         @Override
@@ -169,9 +182,9 @@ public class LiveHomePageActivity extends BaseActivity {
             attentionNum = result.getAttentionNum();
             fansNum = result.getFansNum();
             int id = UserHelper.getUserId(LiveHomePageActivity.this);
-            if(userId.equals(String.valueOf(id))){
+            if (userId.equals(String.valueOf(id))) {
                 masterAttentionLayout.setVisibility(View.GONE);
-            }else {
+            } else {
                 masterAttentionLayout.setVisibility(View.VISIBLE);
             }
             String s = new Gson().toJson(liveUserInfosDataResp);
@@ -184,7 +197,7 @@ public class LiveHomePageActivity extends BaseActivity {
             }
 
             Object statusa = result.getAttentionVO().getStatus();
-            if(statusa!=null){
+            if (statusa != null) {
                 double parseDouble = Double.parseDouble(String.valueOf(statusa));
                 int status = (int) parseDouble;
                 if (status == 0) {
@@ -195,8 +208,8 @@ public class LiveHomePageActivity extends BaseActivity {
                     masterAttention.setText("已关注");
                     masterAttention.setTextColor(Color.BLACK);
                 }
-            }else {
-             // Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
+            } else {
+                // Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -229,6 +242,15 @@ public class LiveHomePageActivity extends BaseActivity {
                 fansNum = fansNum - 1;
                 homepageFansCount.setText(String.valueOf(fansNum));
             }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(homePageHeadBig.getVisibility()==View.VISIBLE){
+            homePageHeadBig.setVisibility(View.GONE);
+            return;
         }
     }
 }

@@ -75,13 +75,12 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getAttentionOrFansList(typeId);
-        AppLog.i("TAG","LiveAttentionOrFansActivity:onCreate");
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        AppLog.i("TAG","LiveAttentionOrFansActivity:onResume");
 
 
     }
@@ -107,12 +106,11 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
             }else{
                 searchTextHint.setVisibility(View.VISIBLE);
             }
-            AppLog.i("TAG","afterTextChanged走了:"+searchName);
+
             allRows.clear();
             for (LiveFansOrAttentionRowsBean liveFansOrAttentionRowsBean : allSearchRows) {
                 String nickName = liveFansOrAttentionRowsBean.getNickName();
                 if (searchName.length()>0&&nickName.contains(searchName)) {
-                    AppLog.i("TAG","searchName"+searchName);
                     allRows.add(liveFansOrAttentionRowsBean);
                 }
             }
@@ -153,7 +151,6 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 attentionOrFansAdapter.refresh(null);
                 isSearchFansOrAttention = true;
                 allSearchRows.clear();
-
                 liveAttentionSearchEt.addTextChangedListener(watcher);
                 liveAttentionSearchEt.setText("");
                 allRows.clear();

@@ -72,7 +72,7 @@ public class GiftStorePopuWindow extends PopupWindow {
         recharge.setOnClickListener(new View.OnClickListener() {//充值按钮
             @Override
             public void onClick(View v) {
-
+                //TODO 直播充值
             }
         });
 

@@ -23,6 +23,7 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.live.entertainment.constant.GiftType;
+import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.module.GiftAttachment;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
@@ -46,7 +47,6 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
@@ -55,7 +55,6 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
-import com.netease.nimlib.sdk.chatroom.model.MemberOption;
 import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -83,10 +82,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     public static final String PLAYER_TYPE="PLAYER_TYPE";
     public static final String ANNOUCEMENT="ANNOUCEMENT";
     public static final String CHANNELID="CHANNELID";
-
-
     // view
-
     private ImageButton shareBtn;
     private ImageButton likeBtn;
 
@@ -300,7 +296,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
-                    AppLog.i("TAG", "key:" + key + "////value:" + value);
+
                     if ("style".equals(key)) {
                         style = value.toString();
                     }
@@ -630,7 +626,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
         }
     };
- //   Queue<ChatRoomMessage> cache=new LinkedList<>();
+
     boolean isFirstShowPlane=true;
     private void showGiftPage() {
         final GiftStorePopuWindow giftStorePopuWindow=new GiftStorePopuWindow(this,giftSresult);
@@ -641,23 +637,23 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             @Override
             public void sendGiftMessage(int itemPosition, int sendTotal) {
                 String code = giftSresult.get(itemPosition).getCode();
-
                 IMMessage giftMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了"+ ("001".equals(code)?"鲜花":("002".equals(code)?"行李箱":"飞机")));
                 ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
                 Map<String, Object> ext = new HashMap<>();
                 if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                    Map<String, Object> ext1 = new HashMap<>();
                     ext.put("type", chatRoomMember.getMemberType().getValue());
+                    ext1.put("headImage",UserHelper.getUserAvatar(AudienceActivity.this));
+                    ext1.put("giftImage",giftSresult.get(itemPosition).getPhoto());
+                    ext1.put("giftName",giftSresult.get(itemPosition).getName());
+                    ext1.put("giftCount",String.valueOf(sendTotal));
+                    ext1.put("userId",UserHelper.getUserId(AudienceActivity.this));
+                    ext1.put("code",giftSresult.get(itemPosition).getCode());
+                    ext1.put("userName",UserHelper.getUserName(AudienceActivity.this));
                     ext.put("style", "10");
-                    ext.put("headImage",UserHelper.getUserAvatar(AudienceActivity.this));
-                    ext.put("giftImage",giftSresult.get(itemPosition).getPhoto());
-                    ext.put("giftName",giftSresult.get(itemPosition).getName());
-                    ext.put("giftCount",String.valueOf(sendTotal));
-                    ext.put("userId",UserHelper.getUserId(AudienceActivity.this));
-                    ext.put("code",giftSresult.get(itemPosition).getCode());
-                    ext.put("userName",UserHelper.getUserName(AudienceActivity.this));
+                    ext.put("giftModel", ext1);
                     giftMessage.setRemoteExtension(ext);
                 }
-
                 if("003".equals(code)){
                     cache.add((ChatRoomMessage)giftMessage);
                     if(isFirstShowPlane){
@@ -668,7 +664,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 }else {
                     giftAnimation.showGiftAnimation((ChatRoomMessage)giftMessage);
                 }
-                sendMessage(giftMessage,"10");
+                sendMessage(giftMessage, MessageType.gift);
                 giftStorePopuWindow.dismiss();
             }
         });
@@ -681,7 +677,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     boolean isManager=false;
     boolean isMuteds=false;
 
-    protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result, boolean isMuted, final String meberAccount, int meberType, int id, int managerId) {
+    protected void showMasterInfoPopuwindow(LiveUserInfoResultBean result, boolean isMuted, final String meberAccount,int id, int managerId) {
         isMuteds=isMuted;
 
       if(managerId!=0){
@@ -690,8 +686,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
           isManager=false;
       }
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, UserHelper.getImccId(AudienceActivity.this));
-        int value = chatRoomMember.getMemberType().getValue();
-        if(value==2){
+        if(isManager){
             CustomDialogStyle.MY_MEBER_TYPE=2;
         }else {
             CustomDialogStyle.MY_MEBER_TYPE=-5;
@@ -708,33 +703,25 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if(isManager){
             customLiveUserInfoDialog.setBanBtn(isMuteds==true?"解除禁言":"禁言", new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView) {
-                    NIMClient.getService(ChatRoomService.class).markChatRoomMutedList(!isMuteds,new MemberOption(roomId,meberAccount)).setCallback(new RequestCallback<ChatRoomMember>() {
-                        @Override
-                        public void onSuccess(ChatRoomMember chatRoomMember) {
-                            CustomDialogStyle.IS_MUTED= chatRoomMember.isMuted();
-                            if(CustomDialogStyle.IS_MUTED){
-                                textView.setText("解除禁言");
-                                isMuteds=true;
-                            }else{
-                                textView.setText("禁言");
-                                isMuteds=false;
-                            }
-                        }
-                        @Override
-                        public void onFailed(int i) {
-                        }
-                        @Override
-                        public void onException(Throwable throwable) {
-                        }
-                    });
+                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView,ImageView managerMark) {
+                    if(isMuteds){
+                        IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(meberAccount, "被管理员解除了禁言");
+                        sendMessage(banMessage, MessageType.relieveBan);
+                        textView.setText("禁言");
+                        isMuteds=false;
+                    }else {
+                        IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(meberAccount, "被管理员禁言了");
+                        sendMessage(banMessage, MessageType.ban);
+                        textView.setText("解除禁言");
+                        isMuteds = true;
+                    }
                 }
             });
         }
 
         customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
-            public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+            public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
             }
         });
@@ -766,14 +753,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         });
         customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
-            public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+            public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
             }
         });
         if(CustomDialogStyle.CUSTOM_DIALOG_STYLE==1){
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
-                public void onCustomLiveUserInfoDialogListener(String id,TextView textView) {
+                public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
 
                     Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent.putExtra("userId", String.valueOf(id));
@@ -799,6 +786,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
     /**
      * 基本权限管理
+     *
+     *
      */
     private void requestBasicPermission() {
         MPermission.with(AudienceActivity.this)
@@ -821,7 +810,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @OnMPermissionDenied(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionFailed(){
-
         finish();
     }
 
@@ -831,7 +819,15 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     public void sendLike() {
         if (!isFastClick()) {
             IMMessage likeMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播点了个赞");
-            sendMessage(likeMessage,"2");
+            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
+            Map<String, Object> ext = new HashMap<>();
+            if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                ext.put("style","2");
+                ext.put("type", chatRoomMember.getMemberType().getValue());
+                likeMessage.setRemoteExtension(ext);
+            }
+
+            sendMessage(likeMessage,MessageType.like);
         }
     }
 
@@ -866,7 +862,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(roomId, attachment);
         // setMemberType(message,);
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
-
         giftAnimation.showGiftAnimation(message);
         giftPosition = -1; // 发送完毕，置空
     }

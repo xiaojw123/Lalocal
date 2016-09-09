@@ -4,7 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Environment;
-import android.os.Process;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
@@ -25,7 +24,6 @@ import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
@@ -51,27 +49,35 @@ import io.fabric.sdk.android.Fabric;
  * 线上版本 友盟日志关闭
  */
 public class MyApplication extends Application {
-    //isDebug true开启日志 false关闭日志
     private static boolean isDebug = true;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        String progressName = CommonUtil.getProcessName(this, Process.myPid());
-        AppLog.print("Application oncreate progressName___" + progressName + ", pckName__" + getPackageName());
-//        if (progressName != null) {
-//            boolean defaultProcess = progressName.equals(getPackageName());
-//            if (defaultProcess) {
-//                AppLog.print("main process__");
-                initAppForMainProcess();
-//            } else if (progressName.contains(":core")) {
-//                AppLog.print("core process__");
-//            }
-//        }
-        initAppForCoreProcess();
-    }
+        initLogManager();
+        Config.IsToastTip = true;
+        AppLog.print("MyApplication onCreate___");
+        AppCrashHandler.getInstance(this);
+        //360更新
+        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
+        EMChat.getInstance().init(this);
+        EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
+        startFabric();
+        startUmeng();
+        //数据库
+        intCountryDB();
+        //代码中设置环信IM的Appkey
+        String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
+        EMChat.getInstance().setAppkey(appkey);
+        // init demo helper
+        DemoHelper.getInstance().init(this);
+        //TODO:bugtags online delete
 
-    private void initAppForCoreProcess() {
+        //   Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
+
+        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
+
+        DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());
         if (inMainProcess()) {
             // 注册自定义消息附件解析器
@@ -83,38 +89,17 @@ public class MyApplication extends Application {
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
         }
+
+
     }
 
-    private void initAppForMainProcess() {
-        setLog(isDebug);
-        Config.IsToastTip = true;
-        AppCrashHandler.getInstance(this);
-        //360更新
-        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
-        EMChat.getInstance().init(this);
-        EMChat.getInstance().setDebugMode(true);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
-        startFabric();
-        startUmeng();
-        //数据库
-        intCountryDB();
-        //代码中设置环信IM的Appkey
-        String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
-        EMChat.getInstance().setAppkey(appkey);
-        // init demo helper
-        DemoHelper.getInstance().init(this);
-        //TODO:bugtags online delete
-        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
-        DemoCache.setContext(this);
-    }
-
-
-    private void setLog(boolean isDebug) {
+    private static void initLogManager() {
         Log.LOG = isDebug;
         PingppLog.DEBUG = isDebug;
-        if (isDebug) {
-            AppLog.debug_level = 0;
-        } else {
-            AppLog.debug_level = 8;
+        if (isDebug){
+            AppLog.debug_level=0;
+        }else{
+            AppLog.debug_level=8;
         }
     }
 

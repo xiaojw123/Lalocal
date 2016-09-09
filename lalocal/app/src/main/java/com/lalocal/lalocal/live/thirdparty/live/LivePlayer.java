@@ -763,10 +763,6 @@ public class LivePlayer implements lsMessageHandler {
         this.onCheckCameraListener=onCheckCameraListener;
     }
 
-
-
-
-
     private Activity getActivity() {
         return activityProxy.getActivity();
     }

@@ -3,6 +3,7 @@ package com.lalocal.lalocal.live.im.session.actions;
 import android.app.Activity;
 import android.content.Intent;
 
+import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
@@ -65,7 +66,7 @@ public abstract class BaseAction implements Serializable {
     }
 
     protected void sendMessage(IMMessage message) {
-        container.proxy.sendMessage(message,"0");
+        container.proxy.sendMessage(message, MessageType.text);
     }
 
     protected int makeRequestCode(int requestCode) {
