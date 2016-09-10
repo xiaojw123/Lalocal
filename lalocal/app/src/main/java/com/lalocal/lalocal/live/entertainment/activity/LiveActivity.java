@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -28,7 +29,6 @@ import com.lalocal.lalocal.live.entertainment.helper.GiftCache;
 import com.lalocal.lalocal.live.entertainment.model.Gift;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
-import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.module.CustomRemoteExtensionStyle;
 import com.lalocal.lalocal.live.entertainment.ui.CreateLiveRoomPopuwindow;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
@@ -66,7 +66,6 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -222,7 +221,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         //阀值设置为屏幕高度的1/3
         keyHeight = screenHeight / 3;
         gainIntent();
-        loadGift();
+
         setListener();
 
         if(CommonUtil.REMIND_BACK==1){
@@ -665,7 +664,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     int status=-1;
     boolean isManager=false;
     @Override
-    protected void showMasterInfoPopuwindow(final LiveUserInfoResultBean result1, final boolean isMuted, final String meberAccount, int id, int managerId) {
+    protected void showMasterInfoPopuwindow(final LiveUserInfoResultBean result1, final boolean isMuted, final String meberAccount, int id, int managerId, final List<LiveManagerListBean> managerList) {
         AppLog.i("TAG","LiveUserInfoResultBean："+result1.getId()+"managerId:"+managerId);
         isMuteds=isMuted;
         Object statusa = result1.getAttentionVO().getStatus();
@@ -675,7 +674,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             status = (int) parseDouble;
 
         }
-        CustomDialogStyle.CUSTOM_DIALOG_LIVE=1;
 
         if(managerId!=0){
             isManager=true;
@@ -690,8 +688,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             }
         });
-        if(CustomDialogStyle.CUSTOM_DIALOG_STYLE==1){
-
+        if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_ONESELF){
+          CustomDialogStyle.IDENTITY=CustomDialogStyle.IS_ONESELF;
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark) {
@@ -701,7 +699,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 }
 
             });
-        }else if(CustomDialogStyle.CUSTOM_DIALOG_STYLE==2){
+        }else {
+            CustomDialogStyle.IDENTITY=CustomDialogStyle.LIVEER_CHECK_ADMIN;
             customLiveUserInfoDialog.setAttention(status==0?"关注":"正在关注", new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
                 int fansCounts=-2;
                 @Override
@@ -791,56 +790,51 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             customLiveUserInfoDialog.setManagerBtn(isManager==true?"取消管理员":"设为管理员", new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
                 public void onCustomLiveUserInfoDialogListener(final String id, final TextView textView, final ImageView managerMark) {
-                    contentLoader.getLiveManagerList(channelId);
-                    contentLoader.setCallBack(new ICallBack() {
-                        @Override
-                        public void onManagerList(LiveManagerListResp liveManagerListResp) {
-                            super.onManagerList(liveManagerListResp);
-                            managerList = liveManagerListResp.getResult();
-                            if(managerList!=null&&managerList.size()>=3&&!isManager){
-                                Toast.makeText(LiveActivity.this,"设置失败，每个直播间最多设置3个管理员",Toast.LENGTH_SHORT).show();
-                            } else {
-                                if(!isManager){
-                                    contentLoader.liveAccreditManager(channelId,String.valueOf(id));
-                                    IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被主播授权为管理员");
-                                    ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
-                                    Map<String, Object> ext = new HashMap<>();
-                                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                        ext.put("style","8");
-                                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("adminSendMsgUserId",meberAccount);
-                                        ext.put("adminSendMsgNickName",result1.getNickName());
-                                        ext.put("adminSendMsgImUserId",meberAccount);
-                                        banMessage.setRemoteExtension(ext);
-                                    }
-                                    sendMessage(banMessage, MessageType.managerLive);
-                                    textView.setText("取消管理员");
-                                    textView.setAlpha(0.4f);
-                                    managerMark.setVisibility(View.VISIBLE);
-                                    isManager=true;
-                                }else{
-                                    contentLoader.checkUserIdentity(channelId,String.valueOf(id));
-                                    IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被主播取消管理员权限");
-                                    ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
-                                    Map<String, Object> ext = new HashMap<>();
-                                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                        ext.put("style","9");
-                                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("adminSendMsgUserId",meberAccount);
-                                        ext.put("adminSendMsgNickName",result1.getNickName());
-                                        ext.put("adminSendMsgImUserId",meberAccount);
-                                        banMessage.setRemoteExtension(ext);
-                                    }
-                                    sendMessage(banMessage, MessageType.cancel);
-                                    textView.setText("设为管理员");
-                                    textView.setAlpha(1);
-
-                                    managerMark.setVisibility(View.GONE);
-                                    isManager=false;
-                                }
+                    if(managerList !=null&& managerList.size()>=3&&!isManager){
+                        Toast.makeText(LiveActivity.this,"设置失败，每个直播间最多设置3个管理员",Toast.LENGTH_SHORT).show();
+                    } else {
+                        if(!isManager){
+                            contentLoader.liveAccreditManager(channelId,String.valueOf(id));
+                            IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被主播授权为管理员");
+                            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
+                            Map<String, Object> ext = new HashMap<>();
+                            if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                                ext.put("style","8");
+                                ext.put("type", chatRoomMember.getMemberType().getValue());
+                                ext.put("adminSendMsgUserId",meberAccount);
+                                ext.put("adminSendMsgNickName",result1.getNickName());
+                                ext.put("adminSendMsgImUserId",meberAccount);
+                                banMessage.setRemoteExtension(ext);
                             }
-                        }
+                            sendMessage(banMessage, MessageType.managerLive);
+                            textView.setText("取消管理员");
+                            textView.setAlpha(0.4f);
+                            managerMark.setVisibility(View.VISIBLE);
+                            isManager=true;
+                        }else{
+                            contentLoader.checkUserIdentity(channelId,String.valueOf(id));
+                            IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被主播取消管理员权限");
+                            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
+                            Map<String, Object> ext = new HashMap<>();
+                            if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                                ext.put("style","9");
+                                ext.put("type", chatRoomMember.getMemberType().getValue());
+                                ext.put("adminSendMsgUserId",meberAccount);
+                                ext.put("adminSendMsgNickName",result1.getNickName());
+                                ext.put("adminSendMsgImUserId",meberAccount);
+                                banMessage.setRemoteExtension(ext);
+                            }
+                            sendMessage(banMessage, MessageType.cancel);
+                            textView.setText("设为管理员");
+                            textView.setAlpha(1);
 
+                            managerMark.setVisibility(View.GONE);
+                            isManager=false;
+                        }
+                    }
+
+
+                    contentLoader.setCallBack(new ICallBack() {
                         @Override
                         public void onCheckManager(LiveManagerBean liveManagerBean) {
                             super.onCheckManager(liveManagerBean);
@@ -856,12 +850,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 }
             });
         }
-
+        customLiveUserInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                CustomDialogStyle.IDENTITY=CustomDialogStyle.LIVEER_CHECK_ADMIN;
+            }
+        });
 
 
         customLiveUserInfoDialog.show();
-        CustomDialogStyle.CUSTOM_DIALOG_STYLE=0;
-        CustomDialogStyle.CUSTOM_DIALOG_LIVE=0;
+
 
     }
 
@@ -893,29 +891,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-/*
-    // 初始化礼物布局
-    protected void findGiftLayout() {
-        super.findGiftLayout();
-        adapter = new GiftAdapter(giftList, this);
-        giftView.setAdapter(adapter);
-    }*/
 
 
-    // 取出缓存的礼物
-    private void loadGift() {
-        Map gifts = GiftCache.getInstance().getGift(roomId);
-        if (gifts == null) {
-            return;
-        }
-        Iterator<Map.Entry<Integer, Integer>> it = gifts.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry<Integer, Integer> entry = it.next();
-            int type = entry.getKey();
-            int count = entry.getValue();
-            giftList.add(new Gift(GiftType.typeOfValue(type), GiftConstant.titles[type], count, GiftConstant.images[type]));
-        }
-    }
 
     boolean isFirstFirendsClick=true;
     OnClickListener buttonClickListener = new OnClickListener() {

@@ -6,15 +6,12 @@ package com.lalocal.lalocal.live.entertainment.constant;
  */
 public class CustomDialogStyle {
 
-    //1:查看主播信息，2：用户查看游客，3：主播查看用户
-
-    public  static  int CUSTOM_DIALOG_STYLE=0;
-    public  static int CUSTOM_DIALOG_LIVE=0;
-    public  static  int CUSTOM_DIALOG_AUDIENCE=0;
-    public  static  String ACC_ACCOUNT="";
-    public static int MEBERTYPE=-5;
-    public  static boolean IS_MUTED=false;
-    public static int MY_MEBER_TYPE=-5;
-
+    public  static final int IS_LIVEER=1;//主播
+    public static final int IS__MANAGER=2;//管理员
+    public static final int IS_ONESELF=3;//我自己
+    public static final int MANAGER_IS_ME=4;//我是管理员
+    public  static final  int LIVEER_CHECK_ADMIN=5;//主播设置管理员
+    public  static  final  int ME_CHECK_OTHER=6;//我看别人
+    public static  int IDENTITY=0;
 
 }

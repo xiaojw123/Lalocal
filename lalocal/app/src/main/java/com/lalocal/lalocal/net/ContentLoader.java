@@ -1768,6 +1768,7 @@ public class ContentLoader {
 
         //查看用户是否为管理员
         private void responseUserIdentity(String json) {
+            AppLog.i("TAG","查看用户是否为管理员:"+json);
             LiveManagerBean liveManagerBean = new Gson().fromJson(json, LiveManagerBean.class);
             callBack.onCheckManager(liveManagerBean);
         }

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/custom_dialog_home_layout"
+    android:visibility="gone"
     >
     <TextView
         android:id="@+id/live_master_home"

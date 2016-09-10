@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -200,51 +201,33 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         if(!TextUtils.isEmpty(dialogAttention)){
             attentionStatus.setText(dialogAttention);
         }
-        if(!TextUtils.isEmpty(ban)&&!isAudience){
-            liveManagerBan.setText(ban);
-            homeLayoutBtn.setVisibility(View.GONE);
-            claseLayout.setVisibility(View.GONE);
-            headerLayout.setVisibility(View.VISIBLE);
-            liveBottomLayout.setVisibility(View.VISIBLE);
 
-        }
         if(!TextUtils.isEmpty(managerSetting)){
             liveManagerSetting.setText(managerSetting);
         }
-        if(!TextUtils.isEmpty(dialogAttention)&&TextUtils.isEmpty(ban)&&CustomDialogStyle.CUSTOM_DIALOG_LIVE==1){//判断直播端，主播信息
-            attentionStatus.setText(dialogAttention);
-            homeLayoutBtn.setVisibility(View.GONE);
+        AppLog.i("TAG","CustomLiveUserInfoDialog:"+CustomDialogStyle.IDENTITY);
+        if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_LIVEER){//主播
             headerLayout.setVisibility(View.VISIBLE);
-            audienceBottomLayout.setVisibility(View.VISIBLE);
-        }else if(!TextUtils.isEmpty(dialogAttention)&&CustomDialogStyle.CUSTOM_DIALOG_AUDIENCE==1&&CustomDialogStyle.CUSTOM_DIALOG_STYLE==2){
-            //判断用户端，用户信息
-            attentionStatus.setText(dialogAttention);
-            if(isManager){
-                audienceManagerban.setText(ban);
-                audienceManagerLayout.setVisibility(View.VISIBLE);
-                audienceBottomLayout.setVisibility(View.GONE);
-            }else {
-                audienceBottomLayout.setVisibility(View.VISIBLE);
-                audienceManagerLayout.setVisibility(View.GONE);
-            }
-            headerLayout.setVisibility(View.GONE);
-            claseLayout.setVisibility(View.VISIBLE);
-            homeLayoutBtn.setVisibility(View.GONE);
-            CustomDialogStyle.CUSTOM_DIALOG_STYLE=0;
-        }
-        if(TextUtils.isEmpty(managerSetting)&& CustomDialogStyle.CUSTOM_DIALOG_STYLE==1&&CustomDialogStyle.CUSTOM_DIALOG_LIVE==1){
-            //判断主播端，用户信息
-            homeLayoutBtn.setVisibility(View.VISIBLE);
-            headerLayout.setVisibility(View.GONE);
-            audienceToLiveToBottom.setVisibility(View.GONE);
-        }else if(TextUtils.isEmpty(managerSetting)&& CustomDialogStyle.CUSTOM_DIALOG_STYLE==1&&CustomDialogStyle.CUSTOM_DIALOG_AUDIENCE==1){
-            //用户端主播信息
-            homeLayoutBtn.setVisibility(View.GONE);
-            headerLayout.setVisibility(View.VISIBLE);
-            claseLayout.setVisibility(View.GONE);
             audienceToLiveToBottom.setVisibility(View.VISIBLE);
+            CustomDialogStyle.IDENTITY=-1;
+        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_ONESELF){//自己
+            homeLayoutBtn.setVisibility(View.VISIBLE);
+            claseLayout.setVisibility(View.VISIBLE);
+            CustomDialogStyle.IDENTITY=-1;
+        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.MANAGER_IS_ME){//我是管理员
+            claseLayout.setVisibility(View.VISIBLE);
+            audienceManagerLayout.setVisibility(View.VISIBLE);
+            CustomDialogStyle.IDENTITY=-1;
 
+        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.LIVEER_CHECK_ADMIN){//主播设置管理员
+            headerLayout.setVisibility(View.VISIBLE);
+            liveBottomLayout.setVisibility(View.VISIBLE);
+            CustomDialogStyle.IDENTITY=-1;
 
+        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.ME_CHECK_OTHER){//我看别人
+            claseLayout.setVisibility(View.VISIBLE);
+            audienceBottomLayout.setVisibility(View.VISIBLE);
+            CustomDialogStyle.IDENTITY=-1;
         }
 
     }
