@@ -73,6 +73,7 @@ public class GiftStorePopuWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 //TODO 直播充值
+
             }
         });
 
@@ -119,7 +120,7 @@ public class GiftStorePopuWindow extends PopupWindow {
                         break;
                     case 8:
                         sendCount.setText("");
-                        sendTotal=0;
+                        sendTotal=1;
                         sendCount.setVisibility(View.GONE);
                         clickCount=0;
                         break;
