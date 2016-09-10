@@ -592,7 +592,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CREATE_LIVE_ROOM);
         }
-        AppLog.i("TAG", "createLiveRoom:创建直播");
+
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCreateLiveRoom(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getCreateLiveRoom());
@@ -616,7 +616,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_COVER);
         }
-        AppLog.i("TAG", "alterLive:修改直播22222222222");
+
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
@@ -628,7 +628,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_ON_LINE_COUNT);
         }
-        AppLog.i("TAG", "alterLive:修改直播11111111111111");
+
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserOnLine() + onLineUsers, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
@@ -642,7 +642,7 @@ public class ContentLoader {
         }
         ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getCancelLive() + userId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        //  request.setBodyParams(getCreateLiveRoom());
+
         requestQueue.add(request);
     }
 
@@ -699,6 +699,17 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
 
+    }
+
+    //直播送礼物
+    public  void liveSendGifts(String channelId, String toId, String toNickName, String giftId, String amount){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_SEND_GIFTS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSendGifts(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getSendGiftsParams(channelId,toId,toNickName,giftId,amount));
+        requestQueue.add(request);
     }
 
     //获取游客账号
@@ -1203,6 +1214,9 @@ public class ContentLoader {
                     case RequestCode.LIVE_ACCREIDT_MANAGER:
                         responseAccreditManager(json);
                         break;
+                    case RequestCode.LIVE_SEND_GIFTS:
+                        responseSendGifts(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1247,6 +1261,7 @@ public class ContentLoader {
 
 
         private void responseGetMyWallet(JSONObject jsonObj) {
+            AppLog.i("TAG","responseGetMyWallet:"+jsonObj.toString());
             JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
             Gson gson = new Gson();
             WalletContent content = gson.fromJson(resultJobj.toString(), WalletContent.class);
@@ -1738,7 +1753,12 @@ public class ContentLoader {
             GiftDataResp giftDataResp = new Gson().fromJson(json, GiftDataResp.class);
             callBack.onGiftsStore(giftDataResp);
         }
+        //直播送礼物
+        private void responseSendGifts(String json) {
+            AppLog.i("TAG","直播送礼物："+json);
+         callBack.onSendGiftsBack(json);
 
+        }
         //直播间管理员列表
         private void responseLiveManagerList(String json) {
             LiveManagerListResp liveManagerListResp = new Gson().fromJson(json, LiveManagerListResp.class);
@@ -1835,6 +1855,8 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -1954,6 +1976,23 @@ public class ContentLoader {
             e.printStackTrace();
         }
         return jsonObject.toString();
+    }
+    //直播送礼物
+    public String getSendGiftsParams(String channelId,String toId,String toNickName,String giftId,String amount){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("channelId",channelId);
+            jsonObject.put("toId",toId);
+            jsonObject.put("toNickName",toNickName);
+            jsonObject.put("giftId",giftId);
+            jsonObject.put("amount",amount);
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+
     }
 
     //上传在线人数
@@ -2102,6 +2141,7 @@ public class ContentLoader {
         int LIVE_CHECK_USER_IDENTITY = 225;
         int LIVE_ACCREIDT_MANAGER = 226;
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
+        int LIVE_SEND_GIFTS=228;
 
     }
 

@@ -266,8 +266,6 @@ public class GiftAnimations {
      */
 
     private void updateView(final GiftBean message, ViewGroup root) {
-
-
         TextView audienceNameText = (TextView) root.findViewById(R.id.send_gift_username);
         ImageView sendGiftAvatar = (ImageView) root.findViewById(R.id.send_gift_avatar);
         TextView sendGiftName = (TextView) root.findViewById(R.id.send_gift_name);

@@ -13,7 +13,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,6 +24,15 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LiveSearchActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
@@ -37,15 +45,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.adapter.LiveMainListAdapter;
-import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
-import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.im.config.AuthPreferences;
-import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
-import com.lalocal.lalocal.live.permission.MPermission;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -289,7 +288,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
             });
 
-            liveRecyclearView.setOnScrollListener(new AbsListView.OnScrollListener() {
+          /*  liveRecyclearView.setOnScrollListener(new AbsListView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(AbsListView view, int scrollState) {
                     int firstVisiblePosition = liveRecyclearView.getFirstVisiblePosition();
@@ -298,7 +297,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                     if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//静止时进行高斯背景模糊
 
                         if (allRows.size() > 0 && allRows.size() >= firstVisiblePosition) {
-                            String photo = allRows.get(firstVisiblePosition).getPhoto();
+                            String photo = allRows.get(firstVisiblePosition-1).getPhoto();
                             layoutBg.setBlurImageURL(photo);
                             layoutBg.setBlurRadius(1);
                             layoutBg.setScaleRatio(20);
@@ -316,7 +315,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
                   int  lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
                 }
-            });
+            });*/
         }
     }
 

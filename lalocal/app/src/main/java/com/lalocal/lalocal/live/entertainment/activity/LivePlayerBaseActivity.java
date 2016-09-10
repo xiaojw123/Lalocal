@@ -421,7 +421,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             if (!logined) {
                 showLoginViewDialog();
             } else {
-               contentLoader.checkUserIdentity(channelId,String.valueOf(userId));
+               contentLoader.checkUserIdentity(channelId,String.valueOf(dialogId));
             }
         }
         @Override
@@ -903,6 +903,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                                 return;
                             }
                             contentLoader.getLiveUserInfo(userIdItem);
+                            AppLog.i("TAG","获取userId:"+userIdItem);
                             CustomDialogStyle.CUSTOM_DIALOG_STYLE=2;
                         }
 

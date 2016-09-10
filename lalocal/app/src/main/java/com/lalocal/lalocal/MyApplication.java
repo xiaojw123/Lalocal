@@ -89,8 +89,6 @@ public class MyApplication extends Application {
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
         }
-
-
     }
 
     private static void initLogManager() {

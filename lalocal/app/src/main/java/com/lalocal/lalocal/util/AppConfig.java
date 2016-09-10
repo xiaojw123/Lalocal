@@ -221,6 +221,14 @@ public class AppConfig {
     public static final String getCancelManager() {
         return baseUrl + "channels/admins/";
     }
+    //直播送礼物 http://dev.lalocal.cn:8080/api/gifts
+public static final String getSendGifts(){
+       return baseUrl+"gifts";
+    }
+
+    public static String getBaseUrl() {
+        return baseUrl;
+    }
 
     //版本更新
     public static String VERSION_UPDATE = "http://api.lalocal.cn/api/system/version?version=";

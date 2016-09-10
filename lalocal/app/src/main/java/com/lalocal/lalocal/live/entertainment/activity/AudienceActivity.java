@@ -22,10 +22,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
-import com.lalocal.lalocal.live.entertainment.constant.GiftType;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
-import com.lalocal.lalocal.live.entertainment.module.GiftAttachment;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
 import com.lalocal.lalocal.live.entertainment.ui.GiftStorePopuWindow;
@@ -40,6 +38,7 @@ import com.lalocal.lalocal.live.thirdparty.video.constant.VideoConstant;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -131,6 +130,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private String nickNameAudience;
     private AnimationDrawable rocketAnimation;
     protected String channelId;
+    private GiftStorePopuWindow giftStorePopuWindow;
 
     public static void start(Context context, String roomId, String url, String avatar,
                              String nickName, String userId, SpecialShareVOBean shareVO, String type,String annoucement,String channelId) {
@@ -581,7 +581,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     giftPosition = -1;
                     break;
                 case R.id.send_gift_btn:
-                    sendGift();
+                  //  sendGift();
                     break;
                 case R.id.live_telecast_like:
 
@@ -629,46 +629,86 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     boolean isFirstShowPlane=true;
     private void showGiftPage() {
-        final GiftStorePopuWindow giftStorePopuWindow=new GiftStorePopuWindow(this,giftSresult);
+        giftStorePopuWindow = new GiftStorePopuWindow(this,giftSresult);
         giftStorePopuWindow.showGiftStorePopuWindow();
         giftStorePopuWindow.showAtLocation(this.findViewById(R.id.live_layout),
                 Gravity.BOTTOM, 0, 0);
         giftStorePopuWindow.setOnSendClickListener(new GiftStorePopuWindow.OnSendClickListener() {
             @Override
-            public void sendGiftMessage(int itemPosition, int sendTotal) {
-                String code = giftSresult.get(itemPosition).getCode();
-                IMMessage giftMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了"+ ("001".equals(code)?"鲜花":("002".equals(code)?"行李箱":"飞机")));
-                ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
-                Map<String, Object> ext = new HashMap<>();
-                if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                    Map<String, Object> ext1 = new HashMap<>();
-                    ext.put("type", chatRoomMember.getMemberType().getValue());
-                    ext1.put("headImage",UserHelper.getUserAvatar(AudienceActivity.this));
-                    ext1.put("giftImage",giftSresult.get(itemPosition).getPhoto());
-                    ext1.put("giftName",giftSresult.get(itemPosition).getName());
-                    ext1.put("giftCount",String.valueOf(sendTotal));
-                    ext1.put("userId",UserHelper.getUserId(AudienceActivity.this));
-                    ext1.put("code",giftSresult.get(itemPosition).getCode());
-                    ext1.put("userName",UserHelper.getUserName(AudienceActivity.this));
-                    ext.put("style", "10");
-                    ext.put("giftModel", ext1);
-                    giftMessage.setRemoteExtension(ext);
-                }
-                if("003".equals(code)){
-                    cache.add((ChatRoomMessage)giftMessage);
-                    if(isFirstShowPlane){
-                        isFirstShowPlane=false;
-                        startPlaneAnimation();
-                    }
+            public void sendGiftMessage(final int itemPosition, final int sendTotal, final int payBalance) {
+                final String code = giftSresult.get(itemPosition).getCode();
+                contentLoader.getMyWallet();
+                contentLoader.setCallBack(new ICallBack() {
+                    @Override
+                    public void onGetMyWallet(WalletContent content) {
+                        super.onGetMyWallet(content);
+                        int gold = (int)content.getGold();
+                        if(payBalance>gold){
+                            CustomChatDialog  rechargeDialog = new CustomChatDialog(AudienceActivity.this);
+                            rechargeDialog.setTitle("提示");
+                            rechargeDialog.setContent("乐钻不足,请充值!");
+                            rechargeDialog.setCancelable(false);
+                            rechargeDialog.setCancelBtn("取消", null);
+                            rechargeDialog.setSurceBtn("充值", new CustomChatDialog.CustomDialogListener() {
+                                @Override
+                                public void onDialogClickListener() {
+                                    //TODO 去充值界面
+                                    Toast.makeText(AudienceActivity.this,"去充值界面!",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                            rechargeDialog.show();
+                        }else if(payBalance==0){
+                            Toast.makeText(AudienceActivity.this,"您还未选中礼物!",Toast.LENGTH_SHORT).show();
+                        }else {
+                            AppLog.i("TAG","送礼物信息："+"userId:"+userId+"nickName:"+nickname);
+                            contentLoader.liveSendGifts(channelId,userId,nickname,code,String.valueOf(sendTotal));
+                        }
+                        }
+                    @Override
+                    public void onSendGiftsBack(String result) {
+                        super.onSendGiftsBack(result);
+                        startSendGiftsAnimation(itemPosition,sendTotal,payBalance);
 
-                }else {
-                    giftAnimation.showGiftAnimation((ChatRoomMessage)giftMessage);
-                }
-                sendMessage(giftMessage, MessageType.gift);
-                giftStorePopuWindow.dismiss();
+                    }
+                });
             }
         });
 
+
+
+    }
+
+    private void startSendGiftsAnimation(int itemPosition, int sendTotal, int payBalance) {
+        final String code = giftSresult.get(itemPosition).getCode();
+        IMMessage giftMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了"+ ("001".equals(code)?"鲜花":("002".equals(code)?"行李箱":"飞机")));
+        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
+        Map<String, Object> ext = new HashMap<>();
+        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+            Map<String, Object> ext1 = new HashMap<>();
+            ext.put("type", chatRoomMember.getMemberType().getValue());
+            ext1.put("headImage",UserHelper.getUserAvatar(AudienceActivity.this));
+            ext1.put("giftImage",giftSresult.get(itemPosition).getPhoto());
+            ext1.put("giftName",giftSresult.get(itemPosition).getName());
+            ext1.put("giftCount",String.valueOf(sendTotal));
+            ext1.put("userId",UserHelper.getUserId(AudienceActivity.this));
+            ext1.put("code",giftSresult.get(itemPosition).getCode());
+            ext1.put("userName",UserHelper.getUserName(AudienceActivity.this));
+            ext.put("style", "10");
+            ext.put("giftModel", ext1);
+            giftMessage.setRemoteExtension(ext);
+        }
+        if("003".equals(code)){
+            cache.add((ChatRoomMessage)giftMessage);
+            if(isFirstShowPlane){
+                isFirstShowPlane=false;
+                startPlaneAnimation();
+            }
+
+        }else {
+            giftAnimation.showGiftAnimation((ChatRoomMessage)giftMessage);
+        }
+        sendMessage(giftMessage, MessageType.gift);
+        giftStorePopuWindow.dismiss();
 
 
     }
@@ -849,31 +889,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void showGiftLayout() {
         giftLayout.setVisibility(View.VISIBLE);
         inputPanel.collapse(true);
-    }
-
-    // 发送礼物
-    private void sendGift() {
-        if (giftPosition == -1) {
-            Toast.makeText(AudienceActivity.this, "请选择礼物", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        GiftAttachment attachment = new GiftAttachment(GiftType.typeOfValue(giftPosition), 1);
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(roomId, attachment);
-        // setMemberType(message,);
-        NIMClient.getService(ChatRoomService.class).sendMessage(message, false);
-        giftAnimation.showGiftAnimation(message);
-        giftPosition = -1; // 发送完毕，置空
-    }
-
-    private void setMemberType(ChatRoomMessage message, String type) {
-        Map<String, Object> ext = new HashMap<>();
-        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
-        if (chatRoomMember != null) {
-            // ext.put("type", type);
-            ext.put("type", chatRoomMember.getMemberType().getValue());
-            message.setRemoteExtension(ext);
-        }
     }
 
     @Override

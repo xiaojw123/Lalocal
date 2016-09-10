@@ -29,6 +29,7 @@ public class GiftStorePopuWindow extends PopupWindow {
     int itemPosition=0;
     TextView sendCount;
     private GiftGridViewAdpter giftGridViewAdpter;
+    private int payBalance=0;
 
     public  GiftStorePopuWindow(Context mContext,List<GiftDataResultBean> giftSresult){
         this.mContext=mContext;
@@ -48,7 +49,7 @@ public class GiftStorePopuWindow extends PopupWindow {
         final BannerPagerAdapter mBannerPagerAdapter = new BannerPagerAdapter(mContext, list);
         audienceGiftVp.setAdapter(mBannerPagerAdapter);
         mIndicatorView.setViewPager(audienceGiftVp);
-        TextView accountBalance= (TextView) giftView.findViewById(R.id.account_balance);
+        final TextView accountBalance= (TextView) giftView.findViewById(R.id.account_balance);
         TextView recharge= (TextView) giftView.findViewById(R.id.audience_top_up_recharge);
         recharge.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
         recharge.getPaint().setAntiAlias(true);
@@ -64,7 +65,7 @@ public class GiftStorePopuWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 if(onSendClickListener!=null){
-                    onSendClickListener.sendGiftMessage(itemPosition,sendTotal);
+                    onSendClickListener.sendGiftMessage(itemPosition,sendTotal,payBalance);
                 }
             }
         });
@@ -81,7 +82,7 @@ public class GiftStorePopuWindow extends PopupWindow {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView sendCount= (TextView) view.findViewById(R.id.gift_send_count);
-
+                GiftDataResultBean giftDataResultBean = giftSresult.get(position);
                 giftGridViewAdpter.setSelectedPosition(position);
                 giftGridViewAdpter.notifyDataSetChanged();
                 if(itemPosition!=position){
@@ -92,6 +93,7 @@ public class GiftStorePopuWindow extends PopupWindow {
                     case 1:
                         sendCount.setText("1");
                         sendTotal=1;
+
                         sendCount.setVisibility(View.VISIBLE);
                         break;
                     case 2:
@@ -120,13 +122,15 @@ public class GiftStorePopuWindow extends PopupWindow {
                         break;
                     case 8:
                         sendCount.setText("");
-                        sendTotal=1;
+                       sendTotal=0;
                         sendCount.setVisibility(View.GONE);
                         clickCount=0;
                         break;
 
                 }
 
+                payBalance = sendTotal * (giftDataResultBean.getGold());
+                accountBalance.setText(String.valueOf(payBalance));
                 clickCount++;
             }
         });
@@ -137,7 +141,7 @@ public class GiftStorePopuWindow extends PopupWindow {
     private OnSendClickListener onSendClickListener;
 
     public interface OnSendClickListener {
-        void sendGiftMessage(int itemPosition,int sendTotal);
+        void sendGiftMessage(int itemPosition,int sendTotal,int payBalance);
     }
 
     public void setOnSendClickListener(OnSendClickListener onSendClickListener) {
