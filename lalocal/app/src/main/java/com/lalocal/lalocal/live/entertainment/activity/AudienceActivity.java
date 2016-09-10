@@ -19,6 +19,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.RechargeActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
@@ -640,7 +642,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 contentLoader.getMyWallet();
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
-                    public void onGetMyWallet(WalletContent content) {
+                    public void onGetMyWallet(final WalletContent content) {
                         super.onGetMyWallet(content);
                         int gold = (int)content.getGold();
                         if(payBalance>gold){
@@ -652,8 +654,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                             rechargeDialog.setSurceBtn("充值", new CustomChatDialog.CustomDialogListener() {
                                 @Override
                                 public void onDialogClickListener() {
-                                    //TODO 去充值界面
-                                    Toast.makeText(AudienceActivity.this,"去充值界面!",Toast.LENGTH_SHORT).show();
+                                    Intent intent=new Intent(AudienceActivity.this, RechargeActivity.class);
+                                    intent.putExtra(KeyParams.WALLET_CONTENT,content);
+                                    startActivity(intent);
                                 }
                             });
                             rechargeDialog.show();
