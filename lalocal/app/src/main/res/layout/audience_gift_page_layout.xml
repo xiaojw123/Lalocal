@@ -44,7 +44,7 @@
             android:drawablePadding="@dimen/live_padding_5dp"
             android:gravity="center"
             android:paddingLeft="@dimen/live_padding_15dp"
-            android:text="23333333333"
+            android:text="0"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_15_sp" />
 

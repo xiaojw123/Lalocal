@@ -256,6 +256,9 @@ public abstract class ICallBack {
     //管理员列表
     public  void onManagerList(LiveManagerListResp liveManagerListResp){}
 
+    //送礼物
+    public void onSendGiftsBack(String result){}
+
     public void onSearchLive(LiveSeachItem item){
     }
 
