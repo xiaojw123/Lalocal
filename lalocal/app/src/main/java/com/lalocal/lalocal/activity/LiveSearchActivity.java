@@ -70,8 +70,10 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
             mPageNumb = 1;
             mContentloader.searchLive(mPageNumb, searchText);
         } else {
-            liveSearchNull.setVisibility(View.VISIBLE);
-            liveSearchXrlv.setVisibility(View.GONE);
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                liveSearchNull.setVisibility(View.VISIBLE);
+                liveSearchXrlv.setVisibility(View.GONE);
+            }
         }
         return false;
     }

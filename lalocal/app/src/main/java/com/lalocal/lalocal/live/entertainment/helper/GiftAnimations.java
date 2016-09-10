@@ -10,6 +10,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +22,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -42,80 +45,47 @@ public class GiftAnimations {
     private ViewGroup downView;
     private AnimatorSet upAnimatorSet;
     private AnimatorSet downAnimatorSet;
+    private AnimatorSet hidenUpAnimatorSet;
+    private AnimatorSet hidenDownAniamtorSet;
 
     private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
     TextView sendGiftTotal;
     int mFlowingValue = 1;
     int mGifCount;
+    int m;
+    Animation textAnimation;
+    Map<String, Integer> userGiftMap = new HashMap<>();
+
 
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if (msg.what == 110) {
-                rocketAnimation.stop();
-                giftPlane.setVisibility(View.GONE);
-
-            } else if (msg.what == MSG_UPDATE_VALUE) {
-//                sendGiftTotal.setText("x" + count);
-
-
-//                sendTotal = 1;
-//                sendTotal = 9;
-//                sendTotal = 10;
-//                sendTotal = 66;
-//                sendTotal = 99;
-//                sendTotal = 666;
-//                sendTotal = 999;
-
-
-                switch (mFlowingValue) {
-                    case 0:
-                        sendGifCout(1);
-                        sendGiftTotal.setText("x" + 0);
-                        break;
-
-                    case 1:
-                        sendGifCout(9);
-                        sendGiftTotal.setText("x" + 1);
-                        break;
-                    case 9:
-                        sendGifCout(10);
-                        sendGiftTotal.setText("x" + 9);
-                        break;
-                    case 10:
-                        sendGifCout(66);
-                        sendGiftTotal.setText("x" + 10);
-                        break;
-                    case 66:
-                        sendGifCout(99);
-                        sendGiftTotal.setText("x" + 66);
-                        break;
-                    case 99:
-                        sendGifCout(666);
-                        sendGiftTotal.setText("x" + 99);
-                        break;
-                    case 666:
-                        sendGifCout(999);
-                        sendGiftTotal.setText("x" + 666);
-                        break;
-                    case 999:
-                        sendGiftTotal.setText("x" + 999);
-                        break;
-
-                }
-
+            int code = msg.what;
+            switch (code) {
+                case 110:
+                    rocketAnimation.stop();
+                    giftPlane.setVisibility(View.GONE);
+                    break;
+                case MSG_UPDATE_VALUE:
+                    if (mFlowingValue % 10 == 0 && mFlowingValue <= (m - 10)
+                            && mFlowingValue >= 10) {
+                        mFlowingValue += 10;
+                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
+                    } else if (mFlowingValue == mGifCount) {
+                        hidenAnimation();
+                    } else {
+                        ++mFlowingValue;
+                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
+                    }
+                    sendGiftTotal.setText("x" + mFlowingValue);
+                    sendGiftTotal.startAnimation(textAnimation);
+                    break;
 
             }
         }
 
-        private void sendGifCout(int nextValue) {
-            if (mGifCount >= nextValue) {
-                mFlowingValue = nextValue;
-                sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
-            }
-        }
     };
 
     public GiftAnimations(ImageView giftPlane, ViewGroup downView, ViewGroup upView, Context mContext) {
@@ -123,8 +93,11 @@ public class GiftAnimations {
         this.upView = upView;
         this.downView = downView;
         this.giftPlane = giftPlane;
-        this.upAnimatorSet = buildAnimationSet(upView);
-        this.downAnimatorSet = buildAnimationSet(downView);
+        this.hidenUpAnimatorSet = buildAnimationSet(upView, false);
+        this.hidenDownAniamtorSet = buildAnimationSet(downView, false);
+        this.upAnimatorSet = buildAnimationSet(upView, true);
+        this.downAnimatorSet = buildAnimationSet(downView, true);
+        textAnimation = AnimationUtils.loadAnimation(mContext, R.anim.text_animation);
     }
 
     // 收到礼物，等待显示动画
@@ -176,6 +149,12 @@ public class GiftAnimations {
         }
     }
 
+    private void hidenAnimation() {
+            hidenDownAniamtorSet.start();
+            hidenUpAnimatorSet.start();
+    }
+
+
     private void checkAndStart() {
         if (!upFree && !downFree) {
             return;
@@ -187,6 +166,7 @@ public class GiftAnimations {
             startAnimation(upView, upAnimatorSet);
         }
     }
+
 
     // 开始礼物动画
     private void startAnimation(ViewGroup target, AnimatorSet set) {
@@ -229,19 +209,19 @@ public class GiftAnimations {
      * ********************* 属性动画 *********************
      */
 
-    private AnimatorSet buildAnimationSet(final ViewGroup target) {
-        ObjectAnimator show = buildShowAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
-        ObjectAnimator scaleY = buildScaleyAnimator(target, "scaleY", SHOW_HIDE_ANIMATOR_DURATION, 1.0f, 2.5f);
-        ObjectAnimator scaleX = buildScaleyAnimator(target, "scaleX", SHOW_HIDE_ANIMATOR_DURATION, 1.0f, 2.5f);
-        ObjectAnimator scaleY1 = buildScaleyAnimator(target, "scaleY", SHOW_HIDE_ANIMATOR_DURATION, 2.5f, 1.0f);
-        ObjectAnimator scalex1 = buildScaleyAnimator(target, "scaleX", SHOW_HIDE_ANIMATOR_DURATION, 2.5f, 1.0f);
-        ObjectAnimator hide = buildHideAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
-        hide.setStartDelay(ANIMATION_STAY_DURATION);
+    private AnimatorSet buildAnimationSet(final ViewGroup target, final boolean isShow) {
+
         final AnimatorSet set = new AnimatorSet();
         set.setTarget(target);
-        set.playTogether(scaleX, scaleY, show);
-        set.playTogether(scalex1, scaleY1, hide);
-//        set.playSequentially(scale, show, hide);
+        if (isShow) {
+            ObjectAnimator show = buildShowAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
+            set.play(show);
+        } else {
+            ObjectAnimator hide = buildHideAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
+            set.setStartDelay(LITTLE_DURATIN);
+            set.play(hide);
+        }
+//        set.playSequentially(show, hide);
         set.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -250,7 +230,9 @@ public class GiftAnimations {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                onAnimationCompleted(target);
+                if (isShow) {
+                    onAnimationCompleted(target);
+                }
             }
 
             @Override
@@ -268,24 +250,15 @@ public class GiftAnimations {
     }
 
 
-    private ObjectAnimator buildScaleyAnimator(final View target, String propertyName, long duration, float... values) {
-        ObjectAnimator scaleY = ObjectAnimator.ofFloat(target, propertyName, values)
-                .setDuration(duration);
-        scaleY.setInterpolator(new OvershootInterpolator());
-        return scaleY;
-    }
-
     private ObjectAnimator buildShowAnimator(final View target, long duration) {
-        ObjectAnimator translationX = ObjectAnimator.ofFloat(target, "translationX", -300.0F, 0.0F)
-                .setDuration(duration);
+        ObjectAnimator translationX = ObjectAnimator.ofFloat(target, "translationX", -300.0F, 0.0F).setDuration(duration);
         translationX.setInterpolator(new OvershootInterpolator());
 
         return translationX;
     }
 
     private ObjectAnimator buildHideAnimator(final View target, long duration) {
-        return ObjectAnimator.ofFloat(target, View.ALPHA, 1f, 0.0f)
-                .setDuration(duration);
+        return ObjectAnimator.ofFloat(target, View.ALPHA, 1f, 0.0f).setDuration(duration);
     }
 
     /**
@@ -302,13 +275,17 @@ public class GiftAnimations {
         sendGiftTotal = (TextView) root.findViewById(R.id.send_gift_total);
         audienceNameText.setText(message.getUserName());
         sendGiftName.setText(message.getGiftName());
-        mFlowingValue=0;
         mGifCount = message.getGiftCount();
-        AppLog.print("updateView____gifCount__" + mGifCount);
-        if (handler.hasMessages(MSG_UPDATE_VALUE)) {
-            handler.removeMessages(MSG_UPDATE_VALUE);
+        String userName = message.getUserName();
+        if (!userGiftMap.containsKey(userName)) {
+            mFlowingValue = 0;
+        } else {
+            int lastGifCout = userGiftMap.get(userName);
+            mFlowingValue = lastGifCout;
+            mGifCount += lastGifCout;
         }
-        handler.sendEmptyMessage(MSG_UPDATE_VALUE);
+        userGiftMap.put(userName, mGifCount);
+        updateGitToal();
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         switch (message.getCode()) {
             case "001":
@@ -324,6 +301,16 @@ public class GiftAnimations {
         }
         rocketAnimation = (AnimationDrawable) sendGiftImg.getBackground();
         rocketAnimation.start();
+    }
+
+    private void updateGitToal() {
+        int n = mGifCount / 10; // 2
+        m = n * 10; // 20
+        AppLog.print("updateView____gifCount__" + mGifCount);
+        if (handler.hasMessages(MSG_UPDATE_VALUE)) {
+            handler.removeMessages(MSG_UPDATE_VALUE);
+        }
+        handler.sendEmptyMessage(MSG_UPDATE_VALUE);
     }
 
 
