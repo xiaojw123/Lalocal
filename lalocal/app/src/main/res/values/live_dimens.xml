@@ -18,6 +18,7 @@
 
     <dimen name="live_height_30dp">30dp</dimen>
     <dimen name="live_height_35dp">35dp</dimen>
+    <dimen name="live_height_36dp">36dp</dimen>
     <dimen name="live_height_40dp">40dp</dimen>
     <dimen name="live_height_44dp">44dp</dimen>
     <dimen name="live_height_50dp">50dp</dimen>

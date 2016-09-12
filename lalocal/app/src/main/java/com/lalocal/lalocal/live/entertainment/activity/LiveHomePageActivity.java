@@ -121,7 +121,13 @@ public class LiveHomePageActivity extends BaseActivity {
 
                 homePageLayout.setVisibility(View.GONE);
                 homePageHeadBig.setVisibility(View.VISIBLE);
-                DrawableUtils.displayImg(LiveHomePageActivity.this, homePageHeadBig, result.getAvatarOrigin());
+                liveAttentionHomepage.setBackgroundColor(Color.BLACK);
+                if(result.getAvatarOrigin()==null){
+                    DrawableUtils.displayImg(LiveHomePageActivity.this, homePageHeadBig, result.getAvatar());
+                }else{
+                    DrawableUtils.displayImg(LiveHomePageActivity.this, homePageHeadBig, result.getAvatarOrigin());
+                }
+
                 break;
         }
     }
@@ -247,10 +253,14 @@ public class LiveHomePageActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if(homePageHeadBig.getVisibility()==View.VISIBLE){
             homePageHeadBig.setVisibility(View.GONE);
-            return;
+            liveAttentionHomepage.setBackgroundColor(Color.WHITE);
+            homePageLayout.setVisibility(View.VISIBLE);
+
+        }else{
+            finish();
         }
+
     }
 }

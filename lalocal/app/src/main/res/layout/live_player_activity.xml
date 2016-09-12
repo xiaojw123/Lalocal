@@ -113,38 +113,6 @@
         android:layout_above="@id/gift_animation_view"
         android:layout_marginBottom="10dp" />
 
-
-    <RelativeLayout
-        android:id="@+id/gift_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <GridView
-            android:id="@+id/gift_grid_view"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/gift_background_color"
-            android:listSelector="@drawable/item_border_selected"
-            android:numColumns="4" />
-
-        <TextView
-            android:id="@+id/no_gift_tip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:drawablePadding="10dp"
-            android:drawableTop="@drawable/icon_no_gift"
-            android:text="@string/no_gift"
-            android:textColor="@color/white"
-            android:visibility="gone"
-            android:textSize="12sp" />
-    </RelativeLayout>
-
-
     <RelativeLayout
         android:id="@+id/BackBtn"
         android:layout_width="50dp"
@@ -211,9 +179,50 @@
                 android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
+        <RelativeLayout
+            android:id="@+id/audience_score_layout"
+            android:layout_width="87dp"
+            android:layout_height="22dp"
+            android:layout_below="@+id/live_telecast_model_layout"
+            android:layout_marginTop="@dimen/live_padding_10dp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:visibility="gone"
+            android:background="@drawable/live_emcee_info_shape"
+            >
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/score"/>
+            <TextView
+                android:id="@+id/audience_score_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@android:color/white"
+                android:maxLength="6"
+                android:ellipsize="end"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:paddingRight="@dimen/live_padding_5dp"
+                android:layout_centerInParent="true"
+                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/live_padding_5dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/circlenext_ic"
+                />
 
 
+        </RelativeLayout>
     </RelativeLayout>
+
+
+
     <LinearLayout
         android:id="@+id/setting_bottom_layout"
         android:layout_width="match_parent"
@@ -234,8 +243,9 @@
         android:layout_alignParentBottom="true"
 
         ></com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout>
+
     <ImageView
-        android:id="@+id/gift_plane"
+        android:id="@+id/gift_plane_up"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

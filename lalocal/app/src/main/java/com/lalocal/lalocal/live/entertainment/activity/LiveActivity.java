@@ -53,6 +53,7 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.MemberOption;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
@@ -106,7 +107,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private LiveSurfaceView liveView;
     private View backBtn;
 
-    private TextView noGiftText;
+
 
     private View liveSettingLayout;//直播间底部设置栏
     protected View viewById;
@@ -290,13 +291,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         modelLayout = (LinearLayout) findViewById(R.id.live_telecast_model_layout);
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
         switchBtn = (ImageView) findViewById(R.id.live_telecast_setting);
-        noGiftText = findView(R.id.no_gift_tip);
-        controlLayout = findView(R.id.control_layout);
+
+
         liveSettingLayout = findViewById(R.id.setting_bottom_layout);
         liveQuit = (ImageView) findViewById(R.id.live_quit);
         onlineCount = (TextView) findViewById(R.id.live_online_count);
         backBtn.setVisibility(View.GONE);
-        noGiftText.setVisibility(View.GONE);
+
         modelLayout.setVisibility(View.GONE);
         keyboardLayout.setAlpha(0);
         keyboardLayout.setClickable(false);
@@ -396,6 +397,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         enterRoom();
                         registerObservers(true);
                         modelLayout.setVisibility(View.VISIBLE);
+                        scoreLayout.setVisibility(View.VISIBLE);
                         liveSettingLayout.setVisibility(View.VISIBLE);
                         liveSettingLayout.setClickable(true);
                         livePlayer.screenShot();
@@ -479,8 +481,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.onLiveManager(liveManagerBean);
         }
     }
-
-
 
 
     private void showCreateLiveRoomPopuwindow() {
@@ -665,7 +665,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     boolean isManager=false;
     @Override
     protected void showMasterInfoPopuwindow(final LiveUserInfoResultBean result1, final boolean isMuted, final String meberAccount, int id, int managerId, final List<LiveManagerListBean> managerList) {
-        AppLog.i("TAG","LiveUserInfoResultBean："+result1.getId()+"managerId:"+managerId);
+
         isMuteds=isMuted;
         Object statusa = result1.getAttentionVO().getStatus();
 
@@ -680,7 +680,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }else {
             isManager=false;
         }
-        CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LiveActivity.this,result1,isManager);
+        CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LiveActivity.this,result1,isManager,isMuted);
         customLiveUserInfoDialog.setCancelable(false);
         customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
@@ -763,6 +763,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     }
                                     sendMessage(banMessage, MessageType.relieveBan);
                                     textView.setText("禁言");
+                                    textView.setAlpha(1f);
                                     isMuteds=false;
                                 }else{
                                     IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被管理员禁言了");
@@ -779,6 +780,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     sendMessage(banMessage, MessageType.ban);
 
                                     textView.setText("解除禁言");
+                                    textView.setAlpha(0.4f);
                                     isMuteds=true;
                                 }
                             }
@@ -795,6 +797,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     } else {
                         if(!isManager){
                             contentLoader.liveAccreditManager(channelId,String.valueOf(id));
+                            NIMClient.getService(ChatRoomService.class).markChatRoomManager(true,new MemberOption(roomId,meberAccount));
                             IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被主播授权为管理员");
                             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
                             Map<String, Object> ext = new HashMap<>();
@@ -813,6 +816,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             isManager=true;
                         }else{
                             contentLoader.checkUserIdentity(channelId,String.valueOf(id));
+
+                            NIMClient.getService(ChatRoomService.class).markChatRoomManager(false,new MemberOption(roomId,meberAccount));
                             IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被主播取消管理员权限");
                             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
                             Map<String, Object> ext = new HashMap<>();
@@ -1001,18 +1006,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-    // 显示礼物布局
-    private void showGiftLayout() {
-        inputPanel.collapse(true);// 收起软键盘
 
-        adapter.notifyDataSetChanged();
-        if (adapter.getCount() == 0) {
-            // 暂无礼物
-            noGiftText.setVisibility(View.VISIBLE);
-        } else {
-            noGiftText.setVisibility(View.GONE);
-        }
-    }
 
     protected void updateGiftList(GiftType type) {
         if (!updateGiftCount(type)) {

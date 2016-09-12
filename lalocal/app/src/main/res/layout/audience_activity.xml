@@ -46,6 +46,7 @@
             android:layout_marginTop="@dimen/live_height_80dp"
             ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
     </RelativeLayout>
+
 <RelativeLayout
     android:id="@+id/live_layout"
     android:layout_width="match_parent"
@@ -106,10 +107,49 @@
             android:paddingLeft="@dimen/live_padding_20dp"
             android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/audience_score_layout"
+        android:layout_width="87dp"
+        android:layout_height="22dp"
+        android:layout_below="@+id/live_telecast_model_layout"
+        android:layout_marginTop="@dimen/live_padding_10dp"
+        android:layout_marginLeft="@dimen/live_padding_10dp"
+        android:background="@drawable/live_emcee_info_shape"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:paddingLeft="@dimen/live_padding_5dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/score"/>
+        <TextView
+            android:id="@+id/audience_score_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:maxLength="6"
+            android:ellipsize="end"
+            android:paddingLeft="@dimen/live_padding_5dp"
+            android:paddingRight="@dimen/live_padding_5dp"
+           android:layout_centerInParent="true"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/live_padding_5dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/circlenext_ic"
+            />
+
+
+    </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
         <LinearLayout
             android:id="@+id/messageActivityBottomLayout"
             android:layout_width="match_parent"
@@ -133,7 +173,6 @@
             android:layout_width="@dimen/live_height_70dp"
             android:layout_height="@dimen/live_height_350dp"
             android:layout_above="@id/setting_bottom_layout"
-
             android:layout_alignParentBottom="true"
              />
         <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
@@ -166,87 +205,18 @@
             android:layout_above="@id/gift_animation_view"
             android:layout_marginBottom="10dp" />
 
-
-
-        <LinearLayout
-            android:id="@+id/control_layout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/messageActivityBottomLayout"
-            android:layout_alignParentRight="true"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/share_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/author_padding_10dp"
-                android:layout_marginRight="@dimen/author_padding_10dp"
-                android:background="@drawable/share_icon_selector"
-                android:visibility="gone"/>
-
-            <ImageButton
-                android:id="@+id/gift_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/author_padding_10dp"
-                android:layout_marginRight="@dimen/author_padding_10dp"
-                android:background="@drawable/gift_icon_selector"
-                android:visibility="gone"/>
-
-            <ImageButton
-                android:id="@+id/like_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/author_padding_10dp"
-                android:layout_marginRight="@dimen/author_padding_15dp"
-                android:background="@drawable/like_icon_selector"
-               />
-        </LinearLayout>
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/gift_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:visibility="gone">
-        <LinearLayout
-            android:id="@+id/send_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/gift_background_color"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/send_gift_btn"
-                android:layout_width="@dimen/live_height_60dp"
-                android:layout_height="@dimen/live_height_35dp"
-                android:layout_gravity="right"
-                android:layout_marginBottom="7dp"
-                android:layout_marginRight="@dimen/live_padding_10dp"
-                android:layout_marginTop="7dp"
-                android:background="@drawable/g_white_btn_selector"
-                android:text="赠送"
-                android:textColor="@color/color_black_333333"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <GridView
-            android:id="@+id/gift_grid_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_100dp"
-            android:layout_above="@id/send_layout"
-            android:background="@color/gift_background_color"
-            android:listSelector="@drawable/item_border_selected"
-            android:numColumns="4" />
-    </RelativeLayout>
     <include layout="@layout/audience_over_layout"></include>
+
+
+
     <ImageView
-        android:id="@+id/gift_plane"
+        android:id="@+id/gift_plane_up"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+
 </RelativeLayout>
 
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

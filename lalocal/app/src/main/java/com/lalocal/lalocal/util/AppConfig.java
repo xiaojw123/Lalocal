@@ -9,8 +9,8 @@ import android.content.pm.PackageManager;
  */
 public class AppConfig {
 
-    private static String baseUrl = "http://api.lalocal.cn/api/";
-    //   private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+   // private static String baseUrl = "http://api.lalocal.cn/api/";
+    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {
@@ -221,9 +221,14 @@ public class AppConfig {
     public static final String getCancelManager() {
         return baseUrl + "channels/admins/";
     }
+
     //直播送礼物 http://dev.lalocal.cn:8080/api/gifts
-public static final String getSendGifts(){
-       return baseUrl+"gifts";
+    public static final String getSendGifts() {
+        return baseUrl + "gifts";
+    }
+    //礼物排行榜http://dev.lalocal.cn:8080/api/
+    public static final String getGiftRanks(){
+        return  baseUrl+"channels/";
     }
 
     public static String getBaseUrl() {

@@ -25,6 +25,7 @@ import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
@@ -711,6 +712,15 @@ public class ContentLoader {
         request.setBodyParams(getSendGiftsParams(channelId,toId,toNickName,giftId,amount));
         requestQueue.add(request);
     }
+    //礼物排行榜
+    public void liveGiftRanks(String channelId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_GIFT_RANKS);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getGiftRanks() + channelId + "/ranks", response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
 
     //获取游客账号
     public void getTouristInfo() {
@@ -1216,6 +1226,9 @@ public class ContentLoader {
                         break;
                     case RequestCode.LIVE_SEND_GIFTS:
                         responseSendGifts(json);
+                        break;
+                    case RequestCode.LIVE_GIFT_RANKS:
+                        responseGiftRanks(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -1755,10 +1768,15 @@ public class ContentLoader {
         }
         //直播送礼物
         private void responseSendGifts(String json) {
-            AppLog.i("TAG","直播送礼物："+json);
-         callBack.onSendGiftsBack(json);
+            callBack.onSendGiftsBack(json);
 
         }
+        //礼物排行榜
+        private void responseGiftRanks(String json) {
+            LiveGiftRanksResp liveGiftRanksResp = new Gson().fromJson(json, LiveGiftRanksResp.class);
+            callBack.onGiftRanks(liveGiftRanksResp);
+        }
+
         //直播间管理员列表
         private void responseLiveManagerList(String json) {
             LiveManagerListResp liveManagerListResp = new Gson().fromJson(json, LiveManagerListResp.class);
@@ -1856,7 +1874,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
-
 
 
 
@@ -2143,6 +2160,7 @@ public class ContentLoader {
         int LIVE_ACCREIDT_MANAGER = 226;
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS=228;
+        int LIVE_GIFT_RANKS=229;
 
     }
 

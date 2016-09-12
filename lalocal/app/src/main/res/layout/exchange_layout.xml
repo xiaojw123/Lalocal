@@ -100,7 +100,7 @@
                 android:textCursorDrawable="@drawable/cursor_color_orange"
                 android:textSize="@dimen/text_size_32_sp"
                 android:maxLength="16"
-                android:paddingRight="@dimen/dimen_size_2_dp"
+                android:paddingRight="@dimen/dimen_size_10_dp"
                 />
 
             <TextView

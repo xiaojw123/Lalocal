@@ -3,6 +3,7 @@ package com.lalocal.lalocal.net.callback;
 
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
@@ -261,5 +262,7 @@ public abstract class ICallBack {
 
     public void onSearchLive(LiveSeachItem item){
     }
-
+    //礼物排行榜
+    public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
+    }
 }

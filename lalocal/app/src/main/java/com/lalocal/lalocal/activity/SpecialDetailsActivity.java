@@ -160,8 +160,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.special_details_share_iv:
                 if (shareVO != null) {
-                    String s = new Gson().toJson(shareVO);
-                    AppLog.i("TAG","shareVO:"+s);
+
                     SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
                     shareActivity.showShareWindow();
                     shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),

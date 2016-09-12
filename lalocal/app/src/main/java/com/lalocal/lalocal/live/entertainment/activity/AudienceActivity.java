@@ -11,20 +11,23 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.RechargeActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
+import com.lalocal.lalocal.live.entertainment.model.SendGiftResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
 import com.lalocal.lalocal.live.entertainment.ui.GiftStorePopuWindow;
@@ -84,8 +87,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
     public static final String CHANNELID = "CHANNELID";
     // view
-    private ImageButton shareBtn;
-    private ImageButton likeBtn;
+
+
 
     private Button sendGiftBtn;
 
@@ -134,6 +137,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     protected String channelId;
     private GiftStorePopuWindow giftStorePopuWindow;
     private ContentLoader contentLoader1;
+
 
     public static void start(Context context, String roomId, String url, String avatar,
                              String nickName, String userId, SpecialShareVOBean shareVO, String type, String annoucement, String channelId) {
@@ -507,14 +511,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     protected void findViews() {
         super.findViews();
-        controlLayout = findView(R.id.control_layout);
         liveQuit = (ImageView) findViewById(R.id.live_quit);
-        shareBtn = findView(R.id.share_btn);
-        shareBtn.setVisibility(View.GONE);
-        likeBtn = findView(R.id.like_btn);
         clickPraise = (ImageView) findViewById(R.id.live_telecast_like);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
-        likeBtn.setVisibility(View.GONE);
+
         liveSettingLayout = findViewById(R.id.setting_bottom_layout);
         liveSettingLayout.setVisibility(View.VISIBLE);
         liveSettingLayout.setClickable(true);
@@ -532,15 +532,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         keyboardLayout.setFocusable(false);
         keyboardLayout.setClickable(false);
         liveGiftImg.setOnClickListener(buttonClickListener);
-        shareBtn.setOnClickListener(buttonClickListener);
-        giftBtn.setOnClickListener(buttonClickListener);
-        likeBtn.setOnClickListener(buttonClickListener);
+
+
+
         clickPraise.setOnClickListener(buttonClickListener);
         quit.setOnClickListener(buttonClickListener);
         inputChar.setOnClickListener(buttonClickListener);
         liveQuit.setOnClickListener(buttonClickListener);
-
-        //计算红心动画的显示位置
 
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -578,21 +576,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.share_btn:
-                    break;
+
                 case R.id.gift_btn:
                     showGiftLayout();
                     break;
-                case R.id.like_btn:
 
-                    break;
-                case R.id.gift_layout:
-                    giftLayout.setVisibility(View.GONE);
-                    giftPosition = -1;
-                    break;
-                case R.id.send_gift_btn:
-                    //  sendGift();
-                    break;
                 case R.id.live_telecast_like:
 
                     boolean logined = UserHelper.isLogined(AudienceActivity.this);
@@ -631,8 +619,15 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     startActivity(intent);
                     break;
                 case R.id.live_gift_img:
-                    showGiftPage();
+                    boolean loginedq = UserHelper.isLogined(AudienceActivity.this);
+                    if (!loginedq) {
+                        showLoginViewDialog();
+                    }else {
+                        showGiftPage();
+                    }
+
                     break;
+
             }
         }
     };
@@ -648,10 +643,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             @Override
             public void sendGiftMessage(final int itemPosition, final int sendTotal, final int payBalance) {
                 final String code = giftSresult.get(itemPosition).getCode();
-                contentLoader.getMyWallet();
+                startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
+             //   contentLoader.getMyWallet();
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
-                    public void onGetMyWallet(WalletContent content) {
+                    public void onGetMyWallet(final WalletContent content) {
                         super.onGetMyWallet(content);
                         int gold = (int) content.getGold();
                         if (payBalance > gold) {
@@ -664,7 +660,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                                 @Override
                                 public void onDialogClickListener() {
                                     //TODO 去充值界面
-                                    Toast.makeText(AudienceActivity.this, "去充值界面!", Toast.LENGTH_SHORT).show();
+                                    Intent intent=new Intent(AudienceActivity.this, RechargeActivity.class);
+                                    intent.putExtra(KeyParams.WALLET_CONTENT,content);
+                                    startActivity(intent);
+
                                 }
                             });
                             rechargeDialog.show();
@@ -679,7 +678,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     @Override
                     public void onSendGiftsBack(String result) {
                         super.onSendGiftsBack(result);
-                        startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
+                        AppLog.i("TAG","发送礼物返回数据："+result);
+                        SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
+                        if(sendGiftResp.getReturnCode()==0){
+                        //    startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
+                        }else{
+                            Toast.makeText(AudienceActivity.this,"赠送失败",Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 });
@@ -691,6 +696,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     private void startSendGiftsAnimation(int itemPosition, int sendTotal, int payBalance) {
         final String code = giftSresult.get(itemPosition).getCode();
+        AppLog.i("TAG","startSendGiftsAnimation:"+code);
         IMMessage giftMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了" + ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : "飞机")));
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         Map<String, Object> ext = new HashMap<>();
@@ -709,12 +715,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             giftMessage.setRemoteExtension(ext);
         }
         if ("003".equals(code)) {
-            cache.add((ChatRoomMessage) giftMessage);
-            if (isFirstShowPlane) {
-                isFirstShowPlane = false;
-                startPlaneAnimation();
-            }
-
+            giftPlaneAnimation.showPlaneAnimation((ChatRoomMessage) giftMessage);
         } else {
             giftAnimation.showGiftAnimation((ChatRoomMessage) giftMessage);
         }
@@ -729,7 +730,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     boolean isMuteds = false;
 
     protected void showMasterInfoPopuwindow(final LiveUserInfoResultBean result, boolean isMuted, final String meberAccount, int id, int managerId, List<LiveManagerListBean> managerList) {
-        AppLog.i("TAG","showMasterInfoPopuwindow:获取身份："+CustomDialogStyle.IDENTITY);
+
         isMuteds = isMuted;
         if (managerId != 0) {
             isManager = true;
@@ -737,7 +738,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         } else {
             isManager = false;
         }
-        final CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(AudienceActivity.this, result, isManager, true);
+        final CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(AudienceActivity.this, result, isManager, isMuted);
         customLiveUserInfoDialog.setCancelable(false);
 
         Object statusa = result.getAttentionVO().getStatus();
@@ -760,7 +761,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         } else {
             if(managerList!=null&&managerList.size()>0){
             for (LiveManagerListBean bean:managerList){
-                AppLog.i("TAG","管理员id："+bean.getId()+"我的id："+UserHelper.getUserId(AudienceActivity.this));
+
                 if (bean.getId()==UserHelper.getUserId(AudienceActivity.this)){
                     customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                         @Override
@@ -774,26 +775,27 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         @Override
                         public void onCustomLiveUserInfoDialogListener(String id, final TextView textView, ImageView managerMark) {
                             if (isMuteds) {
-                                IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(meberAccount, "被管理员解除了禁言");
-                                ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
+
+                                IMMessage banMessage= ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被管理员解除了禁言");
+                                ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,meberAccount);
                                 Map<String, Object> ext = new HashMap<>();
                                 if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                    ext.put("style", "7");
+                                    ext.put("style","7");
                                     ext.put("type", chatRoomMember.getMemberType().getValue());
-                                    ext.put("disableSendMsgUserId", meberAccount);
-                                    ext.put("disableSendMsgNickName", result.getNickName());
+                                    ext.put("disableSendMsgUserId",meberAccount);
+                                    ext.put("disableSendMsgNickName",result.getNickName());
                                     banMessage.setRemoteExtension(ext);
                                 }
-                                if (banListLive.size() > 0) {
-                                    for (int i = 0; i < banListLive.size(); i++) {
-                                        if (meberAccount.equals(banListLive.get(i))) {
+                                if(banListLive.size()>0){
+                                    for(int i=0;i<banListLive.size();i++){
+                                        if(meberAccount.equals(banListLive.get(i))){
                                             banListLive.remove(i);
                                         }
                                     }
                                 }
                                 sendMessage(banMessage, MessageType.relieveBan);
                                 textView.setText("禁言");
-                                isMuteds = false;
+                                isMuteds=false;
                             } else {
                                 IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "被管理员禁言了");
                                 ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);

@@ -13,6 +13,16 @@ public class LiveUserInfoResultBean {
     private int fansNum;
     private int attentionNum;
 
+    public String getAccId() {
+        return accId;
+    }
+
+    public void setAccId(String accId) {
+        this.accId = accId;
+    }
+
+    private String accId;
+
 
     private AttentionVOBean attentionVO;
     private String avatarOrigin;

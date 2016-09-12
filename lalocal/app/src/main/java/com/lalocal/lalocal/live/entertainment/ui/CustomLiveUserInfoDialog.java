@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,8 +36,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private TextView liveMasterHome;
     CustomLiveUserInfoDialogListener sureDialogListener,cancelDialogListener,reportListener,settingManagerListener,banListener;
     CustomLiveFansOrAttentionListener attentionListener;
-    private FrameLayout goMainLayout;
-    private FrameLayout headerLayout;
+
     private TextView headerReport;
     private TextView bottomReport;
     private TextView liveManagerBan;
@@ -60,24 +57,18 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private  boolean isManager;
     private  boolean isAudience;
     private ImageView managerMark;
+    private boolean isMuted;
 
 
-    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager) {
+    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager,boolean isMuted) {
         super(context, R.style.prompt_dialog);
         this.context = context;
         this.result=result;
         this.isManager=isManager;
+        this.isMuted=isMuted;
 
     }
 
-    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager,boolean isAudience) {
-        super(context, R.style.prompt_dialog);
-        this.context = context;
-        this.result=result;
-        this.isManager=isManager;
-        this.isAudience=isAudience;
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,8 +77,8 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
 
     public void showLiveUserInfoPopuwindow(){
-        headerLayout = (FrameLayout) findViewById(R.id.custom_info_header_layout);
-        goMainLayout = (FrameLayout) findViewById(R.id.go_main_layout);
+    //    FrameLayout headerLayout = (FrameLayout) findViewById(R.id.custom_info_header_layout);
+     //   FrameLayout  goMainLayout = (FrameLayout) findViewById(R.id.go_main_layout);
         masterInfoHeadIv = (CircleImageView) findViewById(R.id.master_info_head_iv);
         masterInfoNickTv = (TextView)findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)findViewById(R.id.master_info_signature);
@@ -143,6 +134,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         audienceManagerReport.setOnClickListener(this);
         audienceManagerban.setOnClickListener(this);
         audienceManagerAttention.setOnClickListener(this);
+        masterInfoHeadIv.setOnClickListener(this);
 
         String avatar = result.getAvatar();
         String nickName= result.getNickName();
@@ -160,53 +152,27 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             managerMark.setVisibility(View.GONE);
         }
 
-        Object statusa = result.getAttentionVO().getStatus();
-        if (statusa!=null){
-            double parseDouble = Double.parseDouble(String.valueOf(statusa));
-            int status = (int) parseDouble;
-            if(status==1){
-                attentionStatus.setText("正在关注");
-                dialogLiveAttention.setText("正在关注");
-                audienceAttention.setText("正在关注");
-                audienceManagerAttention.setText("正在关注");
-                audienceManagerAttention.setAlpha(0.4f);
-                audienceAttention.setAlpha(0.4f);
-                attentionStatus.setAlpha(0.4f);
-                dialogLiveAttention.setAlpha(0.4f);
-            }else if(status==2){
-                attentionStatus.setText("相互关注");
-                dialogLiveAttention.setText("相互关注");
-                audienceAttention.setText("相互关注");
-                audienceManagerAttention.setText("相互关注");
-                audienceManagerAttention.setAlpha(0.4f);
-                audienceAttention.setAlpha(0.4f);
-                attentionStatus.setAlpha(0.4f);
-                dialogLiveAttention.setAlpha(0.4f);
 
-            }else{
-                attentionStatus.setText("关注");
-                dialogLiveAttention.setText("关注");
-                audienceAttention.setText("关注");
-                audienceManagerAttention.setText("关注");
-                audienceManagerAttention.setAlpha(1f);
-                audienceAttention.setAlpha(1);
-                attentionStatus.setAlpha(1);
-                dialogLiveAttention.setAlpha(1);
-            }
-        }
         if (!TextUtils.isEmpty(description)) {
             masterInfoSignature.setText(description);
         }
 
-        if(!TextUtils.isEmpty(dialogAttention)){
-            attentionStatus.setText(dialogAttention);
-        }
 
         if(!TextUtils.isEmpty(managerSetting)){
-            liveManagerSetting.setText(managerSetting);
+            if(isManager){
+                liveManagerSetting.setText("取消管理员");
+                liveManagerSetting.setAlpha(0.4f);
+            }else{
+                liveManagerSetting.setText("设为管理员");
+                liveManagerSetting.setAlpha(1);
+            }
+
         }
-        AppLog.i("TAG","CustomLiveUserInfoDialog:"+CustomDialogStyle.IDENTITY);
+
+
+
         if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_LIVEER){//主播
+            setAttentionStatus(attentionStatus);
             headerLayout.setVisibility(View.VISIBLE);
             audienceToLiveToBottom.setVisibility(View.VISIBLE);
             CustomDialogStyle.IDENTITY=-1;
@@ -215,22 +181,67 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             claseLayout.setVisibility(View.VISIBLE);
             CustomDialogStyle.IDENTITY=-1;
         }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.MANAGER_IS_ME){//我是管理员
+            if(!TextUtils.isEmpty(ban)){
+                if(isMuted){
+                    audienceManagerban.setText("解除禁言");
+                    audienceManagerban.setAlpha(0.4f);
+                }else{
+                    audienceManagerban.setText("禁言");
+                    audienceManagerban.setAlpha(1);
+                }
+
+            }
+            setAttentionStatus(audienceManagerAttention);
             claseLayout.setVisibility(View.VISIBLE);
             audienceManagerLayout.setVisibility(View.VISIBLE);
             CustomDialogStyle.IDENTITY=-1;
 
         }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.LIVEER_CHECK_ADMIN){//主播设置管理员
+            if(!TextUtils.isEmpty(ban)){
+
+                if(isMuted){
+                    liveManagerBan.setText("解除禁言");
+                    liveManagerBan.setAlpha(0.4f);
+                }else{
+                    liveManagerBan.setText("禁言");
+                    liveManagerBan.setAlpha(1);
+                }
+
+            }
+            setAttentionStatus(dialogLiveAttention);
             headerLayout.setVisibility(View.VISIBLE);
             liveBottomLayout.setVisibility(View.VISIBLE);
             CustomDialogStyle.IDENTITY=-1;
 
         }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.ME_CHECK_OTHER){//我看别人
+            setAttentionStatus(audienceAttention);
             claseLayout.setVisibility(View.VISIBLE);
             audienceBottomLayout.setVisibility(View.VISIBLE);
             CustomDialogStyle.IDENTITY=-1;
         }
 
     }
+
+    private void setAttentionStatus(TextView attentionStatus) {
+        Object statusa = result.getAttentionVO().getStatus();
+        if (statusa!=null){
+            double parseDouble = Double.parseDouble(String.valueOf(statusa));
+            int status = (int) parseDouble;
+            if(status==1){
+                attentionStatus.setText("正在关注");
+                attentionStatus.setAlpha(0.4f);
+
+            }else if(status==2){
+                attentionStatus.setText("相互关注");
+                attentionStatus.setAlpha(0.4f);
+            }else{
+                attentionStatus.setText("关注");
+                attentionStatus.setAlpha(1);
+            }
+        }
+
+    }
+
     public void setCancelBtn( CustomLiveUserInfoDialogListener listener) {
         cancelDialogListener = listener;
     }
@@ -276,6 +287,12 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 }
                 dismiss();
                 break;
+            case R.id.master_info_head_iv:
+                if(sureDialogListener!=null){
+                    sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome,managerMark);
+                }
+                dismiss();
+                break;
             case R.id.live_master_home_audience:
                 if(sureDialogListener!=null){
                     sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),homeAudience,managerMark);
@@ -293,7 +310,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 break;
             case R.id.custom_dialog_attention://主播端关注
                 if(attentionListener!=null){
-                  //  attentionListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),attentionStatus);
+
                     attentionListener.onCustomLiveFansOrAttentionListener(String.valueOf(accountId),liveFans,liveAttention,fansNum,attentionNum,attentionStatus);
                 }
                 break;

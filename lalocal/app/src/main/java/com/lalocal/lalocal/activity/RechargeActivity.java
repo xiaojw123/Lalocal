@@ -51,21 +51,29 @@ public class RechargeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recharge_layout);
         unbinder = ButterKnife.bind(this);
+        setLoaderCallBack(new RechargeCallBack());
         rechargeDoubtTv.setText(Html.fromHtml("<u>" + rechargeDoubtText + "</u>"));
         WalletContent content = getWallConent();
+        if (content != null) {
+            updateView(content);
+        }else{
+            mContentloader.getMyWallet();
+        }
+        rechargePackageRlv.setLayoutManager(new LinearLayoutManager(this));
+        rechargePackageRlv.addItemDecoration(new LinearItemDecoration());
+        mContentloader.getRechargeProducts();
+    }
+
+    private void updateView(WalletContent content) {
         String firstMsg = content.getFirstMsg();
         if (!TextUtils.isEmpty(firstMsg)) {
             fistMsgTv.setText(firstMsg);
         }
         rechargeDiamondNum.setText(CommonUtil.formartNum(content.getGold()));
-        rechargePackageRlv.setLayoutManager(new LinearLayoutManager(this));
-        rechargePackageRlv.addItemDecoration(new LinearItemDecoration());
-        setLoaderCallBack(new RechargeCallBack());
-        mContentloader.getRechargeProducts();
     }
 
 
-    @OnClick({R.id.rechage_ticket_exchage,R.id.recharge_doubt_tv})
+    @OnClick({R.id.rechage_ticket_exchage, R.id.recharge_doubt_tv})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rechage_ticket_exchage:
@@ -74,7 +82,7 @@ public class RechargeActivity extends BaseActivity {
                 startActivity(intent);
                 break;
             case R.id.recharge_doubt_tv:
-                Intent  doubtIntent=new Intent(this, ChatActivity.class);
+                Intent doubtIntent = new Intent(this, ChatActivity.class);
                 startActivity(doubtIntent);
                 break;
 
@@ -84,6 +92,10 @@ public class RechargeActivity extends BaseActivity {
 
 
     class RechargeCallBack extends ICallBack implements OnItemClickListener {
+        @Override
+        public void onGetMyWallet(WalletContent content) {
+            updateView(content);
+        }
 
         @Override
         public void onGetRechargeProducts(List<RechargeItem> items) {
