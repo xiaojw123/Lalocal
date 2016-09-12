@@ -1,9 +1,12 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -19,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExchangeActivity extends BaseActivity implements TextWatcher {
+public class ExchangeActivity extends BaseActivity implements TextWatcher{
 
     @BindView(R.id.exchage_score_num_tv)
     TextView exchageScoreNumTv;
@@ -29,6 +32,8 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
     EditText exchageScoreEdit;
     @BindView(R.id.exchage_btn)
     Button exchageBtn;
+    @BindView(R.id.excharge_score_unit)
+    TextView unitTv;
     int scale;
 
     @Override
@@ -36,29 +41,38 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
-        WalletContent content=getWalletContent();
-        scale =content.getScale();
+        showSoftKey();
+        WalletContent content = getWalletContent();
+        scale = content.getScale();
         exchageScoreNumTv.setText(CommonUtil.formartNum(content.getScore()));
         exchageScoreEdit.addTextChangedListener(this);
         setLoaderCallBack(new ExchangeCallBack());
     }
 
-    @OnClick(R.id.exchage_btn)
-    public void onClick() {
-        String socreText = exchageScoreEdit.getText().toString();
-        if (!TextUtils.isEmpty(socreText)) {
-            long socre = Long.parseLong(socreText);
-            socre *= 100;
-            mContentloader.exchargeGold(socre);
+    @OnClick({R.id.exchage_btn, R.id.excharge_score_unit})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.exchage_btn:
+                String socreText = exchageScoreEdit.getText().toString();
+                if (!TextUtils.isEmpty(socreText)) {
+                    long socre = Long.parseLong(socreText);
+                    socre *= 100;
+                    mContentloader.exchargeGold(socre);
+                }
+                break;
+            case R.id.excharge_score_unit:
+                showSoftKey();
+                break;
         }
+
     }
+
 
 
     public WalletContent getWalletContent() {
         return getIntent().getParcelableExtra(KeyParams.WALLET_CONTENT);
 
     }
-
 
 
     @Override
@@ -84,12 +98,37 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
 
     }
 
+
     class ExchangeCallBack extends ICallBack {
         @Override
         public void onExchargeGoldSuccess() {
             Toast.makeText(ExchangeActivity.this, "兑换成功", Toast.LENGTH_SHORT).show();
-            setResult(KeyParams.RESULT_EXCHARGE_SUCCESS,null);
+            setResult(KeyParams.RESULT_EXCHARGE_SUCCESS, null);
             finish();
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        hidenSoftKey();
+    }
+
+    private void hidenSoftKey() {
+        InputMethodManager imm = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm.isActive()) {
+            imm.hideSoftInputFromWindow(exchageScoreEdit.getApplicationWindowToken(),
+                    0);
+        }
+    }
+    private void showSoftKey() {
+        exchageScoreEdit.setCursorVisible(true);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(
+                exchageScoreEdit, InputMethodManager.RESULT_SHOWN);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+
 }

@@ -21,12 +21,13 @@
             android:layout_height="@dimen/live_search_edt_height"
             android:background="@drawable/live_search_bg"
             android:paddingLeft="@dimen/dimen_size_10_dp"
-            android:drawableLeft="@drawable/searchbar_searchicon"
-            android:drawablePadding="@dimen/dimen_size_8_dp"
             android:singleLine="true"
             android:textSize="@dimen/text_size_15_sp"
+            android:hint=" 请输入关键字"
             android:imeOptions="actionSearch"
             android:textColor="@color/color_1a"
+            android:textCursorDrawable="@drawable/cursor_color_orange"
+            android:textColorHint="@color/color_b3"
             android:paddingRight="@dimen/dimen_size_2_dp"
             />
         <TextView

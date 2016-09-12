@@ -227,6 +227,7 @@
     <string name="recharge_doubt_customer">充值问题联系客服</string>
     <string name="exchange">兑换</string>
     <string name="no_live">没有搜索到相关直播</string>
+    <string name="start_live">开始直播</string>
 
 
 </resources>

@@ -7,9 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -50,8 +52,15 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
             LiveSeachItem.RowsBean item = mItems.get(position);
             if (item != null) {
                 LiveSearchViewHolder itemHolder = (LiveSearchViewHolder) holder;
-                if (position == mItems.size() - 1) {
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LiveSearchViewHolder) holder).lin1.getLayoutParams();
+                if (position > 0) {
+                    params.leftMargin = ScreenUtil.screenWidth * 18 / 37;
+                    ((LiveSearchViewHolder) holder).lin2.setVisibility(View.INVISIBLE);
+                } else if (position == mItems.size() - 1) {
                     ((LiveSearchViewHolder) holder).lin2.setVisibility(View.VISIBLE);
+                } else {
+                    params.leftMargin = 0;
+                    ((LiveSearchViewHolder) holder).lin2.setVisibility(View.INVISIBLE);
                 }
                 DrawableUtils.displayImg(mContext, itemHolder.photoImg, item.getPhoto());
                 String title = item.getTitle();

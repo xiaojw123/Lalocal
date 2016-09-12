@@ -1,7 +1,10 @@
 package com.lalocal.lalocal.util;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
@@ -22,9 +25,16 @@ import java.util.concurrent.Executors;
 
 public class DrawableUtils {
     public static final int MAX_AGE = 24 * 3600 * 1000;
-    public static final int MAX_SIZE = 30 * 1024 * 1024;
+    public static final int DISK_MAX_SIZE = 50 * 1024 * 1024;
+    public static final int MEMORY_MAX_SIZE = 5 * 1024 * 1024;
     private static final int DRAWABLE_NULL = R.drawable.androidloading;
     private static ImageLoader loader;
+    //改变drwable颜色
+    public static Drawable tintDrawable(Drawable drawable, ColorStateList colors) {
+        Drawable wrappedDrawable = DrawableCompat.wrap(drawable);
+        DrawableCompat.setTintList(wrappedDrawable, colors);
+        return wrappedDrawable;
+    }
 
     public static void displayImg(Context context, ImageView img, String url) {
         displayImg(context, img, url, 0, DRAWABLE_NULL, null);
@@ -52,7 +62,7 @@ public class DrawableUtils {
             loader = ImageLoader.getInstance();
         }
         if (!loader.isInited()) {
-            init(context);
+            init(context,img);
         }
 
         File imgFile = loader.getDiskCache().get(url);
@@ -72,23 +82,25 @@ public class DrawableUtils {
             loader = ImageLoader.getInstance();
         }
         if (!loader.isInited()) {
-            init(context);
+            init(context,img);
         }
 
         File imgFile = loader.getDiskCache().get(url);
         loader.displayImage(url, img, getImageOptions(radius, drawable));
     }
 
-    private static void init(Context context) {
+    private static void init(Context context,ImageView img) {
         ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(context);
         builder.diskCache(new LimitedAgeDiskCache(getFileDir(), MAX_AGE));
         builder.diskCacheFileNameGenerator(new Md5FileNameGenerator());
         builder.threadPoolSize(3);
-        builder.diskCacheSize(MAX_SIZE);
+        builder.diskCacheSize(DISK_MAX_SIZE);
+        builder.memoryCacheSize(MEMORY_MAX_SIZE);
         builder.tasksProcessingOrder(QueueProcessingType.FIFO);
         builder.taskExecutor(Executors.newCachedThreadPool());
         builder.threadPriority(Thread.MAX_PRIORITY);
-
+        builder.diskCacheExtraOptions(img.getWidth(),img.getHeight(),null);
+        builder.memoryCacheExtraOptions(img.getWidth(),img.getHeight());
         builder.writeDebugLogs();
         loader.init(builder.build());
     }
@@ -129,6 +141,7 @@ public class DrawableUtils {
         }
         return null;
     }
+
 
     ;
 

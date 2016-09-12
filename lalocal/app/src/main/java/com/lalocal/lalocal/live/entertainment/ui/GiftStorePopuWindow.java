@@ -14,7 +14,9 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResultBean;
 
 import java.util.ArrayList;
@@ -76,9 +78,11 @@ public class GiftStorePopuWindow extends PopupWindow {
         recharge.setOnClickListener(new View.OnClickListener() {//充值按钮
             @Override
             public void onClick(View v) {
-                //TODO 直播充值
-                Intent intent = new Intent(mContext, RechargeActivity.class);
-                mContext.startActivity(intent);
+                if (UserHelper.isLogined(mContext)) {
+                    charge();
+                }else{
+                    login();
+                }
             }
         });
 
@@ -139,6 +143,16 @@ public class GiftStorePopuWindow extends PopupWindow {
             }
         });
 
+    }
+
+    private void login() {
+        Intent intent=new Intent(mContext, LoginActivity.class);
+        mContext.startActivity(intent);
+    }
+
+    private void charge() {
+        Intent intent = new Intent(mContext, RechargeActivity.class);
+        mContext.startActivity(intent);
     }
 
 

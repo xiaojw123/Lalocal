@@ -9,7 +9,11 @@
 
     <View
         android:id="@+id/live_search_lin1"
-        style="@style/CommonD9LineTheme" />
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_ee"
+        />
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -94,7 +98,10 @@
 
     <View
         android:id="@+id/live_search_lin2"
-        style="@style/CommonD9LineTheme"
-        android:visibility="gone" />
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_ee"
+        android:visibility="invisible"
+   />
 
 </LinearLayout>
