@@ -44,7 +44,7 @@ public class RechargeActivity extends BaseActivity {
     TextView fistMsgTv;
     @BindString(R.string.recharge_doubt_customer)
     String rechargeDoubtText;
-
+    WalletContent content;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,7 @@ public class RechargeActivity extends BaseActivity {
         unbinder = ButterKnife.bind(this);
         setLoaderCallBack(new RechargeCallBack());
         rechargeDoubtTv.setText(Html.fromHtml("<u>" + rechargeDoubtText + "</u>"));
-        WalletContent content = getWallConent();
+        content = getWallConent();
         if (content != null) {
             updateView(content);
         }else{
@@ -65,6 +65,7 @@ public class RechargeActivity extends BaseActivity {
     }
 
     private void updateView(WalletContent content) {
+        this.content=content;
         String firstMsg = content.getFirstMsg();
         if (!TextUtils.isEmpty(firstMsg)) {
             fistMsgTv.setText(firstMsg);
@@ -77,8 +78,8 @@ public class RechargeActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rechage_ticket_exchage:
-                Intent intent = getIntent();
-                intent.setClass(this, ExchangeActivity.class);
+                Intent intent =new Intent(this, ExchangeActivity.class);
+                intent.putExtra(KeyParams.WALLET_CONTENT,content);
                 startActivity(intent);
                 break;
             case R.id.recharge_doubt_tv:

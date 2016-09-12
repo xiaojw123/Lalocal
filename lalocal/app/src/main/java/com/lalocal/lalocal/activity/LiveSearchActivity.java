@@ -1,9 +1,10 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -19,12 +20,15 @@ import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.LiveSearchAdapter;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindColor;
+import butterknife.BindDimen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -39,6 +43,11 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     XRecyclerView liveSearchXrlv;
     @BindView(R.id.live_search_null)
     TextView liveSearchNull;
+    @BindColor(R.color.color_b3)
+    int searchIconColor;
+    @BindDimen(R.dimen.dimen_size_8_dp)
+    int drawablePadding;
+
     int mPageNumb;
     String mLastSearhText;
 
@@ -48,11 +57,22 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_search_layout);
         unbinder = ButterKnife.bind(this);
+        liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
+        liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
         liveSearchXrlv.setPullRefreshEnabled(false);
         setLoaderCallBack(new LiveSearchCallBack());
 
     }
+
+    @NonNull
+    private Drawable getColorDrawable(int color) {
+        Drawable drawable = getResources().getDrawable(R.drawable.searchbar_searchicon);
+        Drawable colorDrawable = DrawableUtils.tintDrawable(drawable, ColorStateList.valueOf(color));
+        colorDrawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        return colorDrawable;
+    }
+
 
     @OnClick(R.id.live_search_cancel_tv)
     public void onClick() {
@@ -100,7 +120,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
             if (mPageNumb <= 1) {
                 mAllRows.clear();
             } else {
-                mHandler.sendEmptyMessageDelayed(MSG_LOAD_COMPLETE, DELAY_DURATION);
+                liveSearchXrlv.loadMoreComplete();
             }
             AppLog.print("row size___" + item.getRows().size());
             mAllRows.addAll(item.getRows());
@@ -151,20 +171,6 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         }
     }
 
-    Handler mHandler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            int code = msg.what;
-            switch (code) {
-                case MSG_LOAD_COMPLETE:
-                    liveSearchXrlv.loadMoreComplete();
-                    break;
-            }
-
-        }
-    };
-    private static final int MSG_LOAD_COMPLETE = 0x10;
-    private int DELAY_DURATION = 2500;
 
 
 }

@@ -26,20 +26,15 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+
         <LinearLayout
             android:id="@+id/home_tab_recommend"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                >
             <ImageView
                 android:id="@+id/home_tab_recoommend_img"
                 android:layout_width="@dimen/home_tab_img_width"
@@ -51,9 +46,7 @@
                 android:id="@+id/home_tab_title_recommend"
                 style="@style/HomeTabTextTheme"
                 android:text="@string/recommend"
-                android:visibility="gone"
                 />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -61,14 +54,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                >
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
             <ImageView
                 android:id="@+id/home_tab_destination_img"
                 android:layout_width="@dimen/home_tab_img_width"
@@ -80,11 +68,7 @@
                 android:id="@+id/home_tab_title_destination"
                 style="@style/HomeTabTextTheme"
                 android:text="@string/destination"
-                android:visibility="gone"
                 />
-            </LinearLayout>
-
-
 
         </LinearLayout>
 
@@ -92,15 +76,10 @@
             android:id="@+id/home_tab_liveplay"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_weight="1"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                >
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
 
             <ImageView
                 android:id="@+id/home_tab_liveplay_img"
@@ -113,10 +92,7 @@
                 android:id="@+id/home_tab_title_liveplay"
                 style="@style/HomeTabTextTheme"
                 android:text="@string/liveplay"
-                android:visibility="gone"
                 />
-            </LinearLayout>
-
 
         </LinearLayout>
 
@@ -125,14 +101,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                >
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
 
             <ImageView
                 android:id="@+id/home_tab_me_img"
@@ -145,11 +116,7 @@
                 android:id="@+id/home_tab_title_me"
                 style="@style/HomeTabTextTheme"
                 android:text="@string/me"
-                android:visibility="gone"
                 />
-            </LinearLayout>
-
-
         </LinearLayout>
 
 

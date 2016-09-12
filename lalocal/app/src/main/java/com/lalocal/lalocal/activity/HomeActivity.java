@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
@@ -20,7 +19,6 @@ import com.qihoo.updatesdk.lib.UpdateHelper;
 
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
     LinearLayout home_recommend_tab, home_destination_tab, home_news_tab, home_me_tab;
-    TextView title_recommed, title_destination, title_liveplay, title_me;
     LinearLayout home_tab_container;
     ViewGroup lastSelectedTab;
     FragmentManager fm;
@@ -36,10 +34,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     }
 
     private void initView() {
-        title_recommed = (TextView) findViewById(R.id.home_tab_title_recommend);
-        title_liveplay = (TextView) findViewById(R.id.home_tab_title_liveplay);
-        title_destination = (TextView) findViewById(R.id.home_tab_title_destination);
-        title_me = (TextView) findViewById(R.id.home_tab_title_me);
         home_tab_container = (LinearLayout) findViewById(R.id.home_tab_containner);
         home_recommend_tab = (LinearLayout) findViewById(R.id.home_tab_recommend);
         home_destination_tab = (LinearLayout) findViewById(R.id.home_tab_destination);
@@ -69,10 +63,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         setSelectedTab(container);
         switch (container.getId()) {
             case R.id.home_tab_recommend:
-                title_recommed.setVisibility(View.VISIBLE);
-                title_destination.setVisibility(View.GONE);
-                title_liveplay.setVisibility(View.GONE);
-                title_me.setVisibility(View.GONE);
                 AppLog.print("recommend__"+recommendFragment);
                 if (recommendFragment == null) {
                     AppLog.print("___add");
@@ -84,10 +74,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_destination:
-                title_recommed.setVisibility(View.GONE);
-                title_destination.setVisibility(View.VISIBLE);
-                title_liveplay.setVisibility(View.GONE);
-                title_me.setVisibility(View.GONE);
                 if (distinationFragment == null) {
                     distinationFragment = new DestinationFragment();
                     ft.add(R.id.home_fragment_container, distinationFragment);
@@ -96,10 +82,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_liveplay:
-                title_recommed.setVisibility(View.GONE);
-                title_destination.setVisibility(View.GONE);
-                title_liveplay.setVisibility(View.VISIBLE);
-                title_me.setVisibility(View.GONE);
                 if (newsFragment == null) {
                     newsFragment = new NewsFragment();
                     ft.add(R.id.home_fragment_container, newsFragment);
@@ -108,10 +90,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_me:
-                title_recommed.setVisibility(View.GONE);
-                title_destination.setVisibility(View.GONE);
-                title_liveplay.setVisibility(View.GONE);
-                title_me.setVisibility(View.VISIBLE);
                 if (meFragment == null) {
                     meFragment = new MeFragment();
                     ft.add(R.id.home_fragment_container, meFragment);
