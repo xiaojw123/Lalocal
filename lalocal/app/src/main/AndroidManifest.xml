@@ -318,7 +318,8 @@
         <activity android:name=".activity.RechargeActivity" />
         <activity android:name=".activity.ExchangeActivity" />
         <activity android:name=".activity.ChargePayActivity" />
-        <activity android:name=".activity.LiveSearchActivity"></activity>
+        <activity android:name=".activity.LiveSearchActivity" />
+        <activity android:name=".activity.MyCouponActivity"></activity>
     </application>
 
 </manifest>

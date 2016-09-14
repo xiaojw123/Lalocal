@@ -142,7 +142,7 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_16_sp"
         android:text="@string/view_order"
-        android:background="@drawable/account_edit2_changeemail_btn_bg"
+        android:background="@drawable/orange_corner_btn_bg"
         />
 
 

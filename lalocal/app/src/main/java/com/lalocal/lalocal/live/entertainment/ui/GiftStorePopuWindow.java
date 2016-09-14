@@ -97,11 +97,11 @@ public class GiftStorePopuWindow extends PopupWindow {
                     clickCount = 1;
                 }
                 itemPosition = position;
+                clickCount=clickCount>=6?1:clickCount;
                 switch (clickCount) {
                     case 1:
                         sendCount.setText("1");
                         sendTotal = 1;
-
                         sendCount.setVisibility(View.VISIBLE);
                         break;
                     case 2:
@@ -109,34 +109,18 @@ public class GiftStorePopuWindow extends PopupWindow {
                         sendCount.setText("9");
                         break;
                     case 3:
-                        sendTotal = 10;
-                        sendCount.setText("10");
-                        break;
-                    case 4:
-                        sendTotal = 66;
-                        sendCount.setText("66");
-                        break;
-                    case 5:
                         sendTotal = 99;
                         sendCount.setText("99");
                         break;
-                    case 6:
-                        sendTotal = 666;
-                        sendCount.setText("666");
+                    case 4:
+                        sendTotal = 520;
+                        sendCount.setText("520");
                         break;
-                    case 7:
+                    case 5:
                         sendTotal = 999;
                         sendCount.setText("999");
                         break;
-                    case 8:
-                        sendCount.setText("");
-                        sendTotal = 0;
-                        sendCount.setVisibility(View.GONE);
-                        clickCount = 0;
-                        break;
-
                 }
-
                 payBalance = sendTotal * (giftDataResultBean.getGold());
                 accountBalance.setText(String.valueOf(payBalance));
                 clickCount++;

@@ -34,7 +34,9 @@ public interface KeyParams {
     public static  final  int RESULT_ChARGE_SUCCESS =200;
     public static final  int RESULT_EXCHARGE_SUCCESS=201;
     public static final  int RESULT_UPDATE_WALLET=203;
-
+    //页面类型
+    public static final String PAGE_TYPE="page_type";
+    public static final int PAGE_TYPE_WALLET=0x11;
 
 
 }

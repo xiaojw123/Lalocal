@@ -216,6 +216,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <RelativeLayout
+        android:id="@+id/audient_gift_plane_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/audient_gift_plane_bg_height"
+        android:background="@drawable/giftmassagebg"
+        android:layout_marginTop="120dp"
+        android:visibility="gone"
+        >
+        <View
+            android:layout_width="@dimen/dimen_size_10_dp"
+            android:layout_height="match_parent"
+            android:background="#90ffffff"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_size_30_dp"
+            android:text="一位不愿透露姓名的网友  与主播飞机旅行"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_16_sp" />
+    </RelativeLayout>
+
 
 </RelativeLayout>
 

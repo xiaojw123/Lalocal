@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.webkit.JavascriptInterface;
 
 import com.lalocal.lalocal.activity.BookActivity;
+import com.lalocal.lalocal.activity.MyCouponActivity;
 import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.util.AppLog;
@@ -40,8 +41,19 @@ public class JsModeul {
     @JavascriptInterface
     public void postMessage(String callback) {
         AppLog.print("postMessage___callback__"+callback);
+        switch (callback){
+            case BookActivity.PAGET_TO_COUPON:
+                gotoMyCoupon();
+                break;
+
+        }
 
 
+    }
+
+    private void gotoMyCoupon() {
+        Intent intent=new Intent(mContext, MyCouponActivity.class);
+        mContext.startActivity(intent);
     }
 
 }

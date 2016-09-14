@@ -32,7 +32,7 @@
         android:layout_marginLeft="@dimen/dimen_size_12_dp"
         android:layout_marginRight="@dimen/dimen_size_12_dp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"
-        android:background="@drawable/account_edit2_changeemail_btn_bg"
+        android:background="@drawable/orange_corner_btn_bg"
         android:text="@string/send_email_vercode"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_18_sp" />

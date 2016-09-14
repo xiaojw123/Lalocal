@@ -22,7 +22,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
@@ -34,11 +33,14 @@ import java.util.Queue;
 public class GiftAnimations {
     private final int LITTLE_DURATIN = 200;
     private final int MSG_UPDATE_VALUE = 0x10;
+    private final int MSG_UPDATE_VALUE1 = 0x11;
+    private final int MSG_UPDATE_VALUE2 = 0x12;
     private final int SHOW_HIDE_ANIMATOR_DURATION = 1000;
     private final int ANIMATION_STAY_DURATION = 2000;
     private Context mContext;
     private boolean upFree = true;
     private boolean downFree = true;
+    private boolean isUping,isDowning;
 
     private ImageView giftPlane;
     private ViewGroup upView;
@@ -50,58 +52,54 @@ public class GiftAnimations {
 
     private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
-    TextView sendGiftTotal;
-    int mFlowingValue = 1;
-    int mGifCount;
-    int m;
     Animation textAnimation;
-    Map<String, Integer> userGiftMap = new HashMap<>();
 
 
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            int code = msg.what;
-            switch (code) {
-                case 110:
-                    rocketAnimation.stop();
-                    giftPlane.setVisibility(View.GONE);
-                    break;
-                case MSG_UPDATE_VALUE:
-                    if (mFlowingValue % 10 == 0 && mFlowingValue <= (m - 10)
-                            && mFlowingValue >= 10) {
-                        mFlowingValue += 10;
-                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
-                    } else if (mFlowingValue == mGifCount) {
-                        hidenAnimation();
-                    } else {
-                        ++mFlowingValue;
-                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
-                    }
-                    sendGiftTotal.setText("x" + mFlowingValue);
-                    sendGiftTotal.startAnimation(textAnimation);
-                    break;
-
-            }
-        }
-
-    };
+//    Handler handler = new Handler() {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            super.handleMessage(msg);
+//            int code = msg.what;
+//            switch (code) {
+//                case 110:
+//                    rocketAnimation.stop();
+//                    giftPlane.setVisibility(View.GONE);
+//                    break;
+//                case MSG_UPDATE_VALUE:
+//                    if (mGifCount > 99 && mFlowingValue % 10 == 0 && mFlowingValue <= (m - 10)
+//                            && mFlowingValue >= 10) {
+//                        mFlowingValue += 10;
+//                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
+//                    } else if (mFlowingValue == mGifCount) {
+//                        hidenAnimation();
+//                    } else {
+//                        ++mFlowingValue;
+//                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
+//                    }
+//                    sendGiftTotal.setText("x" + mFlowingValue);
+//                    sendGiftTotal.startAnimation(textAnimation);
+//                    break;
+//
+//
+//            }
+//        }
+//
+//    };
 
     public GiftAnimations(ImageView giftPlane, ViewGroup downView, ViewGroup upView, Context mContext) {
         this.mContext = mContext;
         this.upView = upView;
         this.downView = downView;
         this.giftPlane = giftPlane;
-        this.hidenUpAnimatorSet = buildAnimationSet(upView, false);
-        this.hidenDownAniamtorSet = buildAnimationSet(downView, false);
-        this.upAnimatorSet = buildAnimationSet(upView, true);
-        this.downAnimatorSet = buildAnimationSet(downView, true);
+        this.hidenUpAnimatorSet = buildHidenAnimationSet(upView);
+        this.hidenDownAniamtorSet = buildHidenAnimationSet(downView);
+        this.upAnimatorSet = buildAnimationSet(upView);
+        this.downAnimatorSet = buildAnimationSet(downView);
         textAnimation = AnimationUtils.loadAnimation(mContext, R.anim.text_animation);
     }
 
     // 收到礼物，等待显示动画
-    public void  showGiftAnimation(final ChatRoomMessage message) {
+    public void showGiftAnimation(final ChatRoomMessage message) {
         GiftBean giftBean = new GiftBean();
         giftBean.setFromAccount(message.getFromAccount());
         Map<String, Object> remoteExtension = message.getRemoteExtension();
@@ -137,6 +135,9 @@ public class GiftAnimations {
                             case "userName":
                                 giftBean.setUserName(value.toString());
                                 break;
+                            case "userId":
+                                giftBean.setUserId(value.toString());
+                                break;
                         }
                     }
                 }
@@ -149,17 +150,26 @@ public class GiftAnimations {
         }
     }
 
-    private void hidenAnimation() {
+    private void checkAndStartForHiden() {
+        AppLog.print("checkAndStartForHiden___upFree__" + upFree + ", downFree__" + downFree);
+        if (!upFree && !downFree) {
+            return;
+        }
+        if (downFree) {
             hidenDownAniamtorSet.start();
+//            downFree = false;
+        } else {
+//            upFree = false;
             hidenUpAnimatorSet.start();
+        }
     }
 
 
     private void checkAndStart() {
+        AppLog.print("checkAndStart____upfree_" + upFree + ", downFree" + downFree);
         if (!upFree && !downFree) {
             return;
         }
-
         if (downFree) {
             startAnimation(downView, downAnimatorSet);
         } else {
@@ -171,13 +181,13 @@ public class GiftAnimations {
     // 开始礼物动画
     private void startAnimation(ViewGroup target, AnimatorSet set) {
         GiftBean message = cache.poll();
+        AppLog.print("startAnimation message___" + message);
         if (message == null) {
             return;
         }
 
         // 更新状态
         onAnimationStart(target);
-
         // 更新礼物视图
         updateView(message, target);
 
@@ -209,19 +219,12 @@ public class GiftAnimations {
      * ********************* 属性动画 *********************
      */
 
-    private AnimatorSet buildAnimationSet(final ViewGroup target, final boolean isShow) {
-
+    private AnimatorSet buildHidenAnimationSet(final ViewGroup target) {
         final AnimatorSet set = new AnimatorSet();
         set.setTarget(target);
-        if (isShow) {
-            ObjectAnimator show = buildShowAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
-            set.play(show);
-        } else {
-            ObjectAnimator hide = buildHideAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
-            set.setStartDelay(LITTLE_DURATIN);
-            set.play(hide);
-        }
-//        set.playSequentially(show, hide);
+        ObjectAnimator hide = buildHideAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
+        set.setStartDelay(LITTLE_DURATIN);
+        set.play(hide);
         set.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
@@ -230,9 +233,7 @@ public class GiftAnimations {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                if (isShow) {
-                    onAnimationCompleted(target);
-                }
+                checkAndStartForHiden();
             }
 
             @Override
@@ -245,6 +246,39 @@ public class GiftAnimations {
 
             }
         });
+        return set;
+    }
+
+
+    private AnimatorSet buildAnimationSet(final ViewGroup target) {
+        final AnimatorSet set = new AnimatorSet();
+        set.setTarget(target);
+        ObjectAnimator show = buildShowAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
+        set.play(show);
+//        set.playSequentially(show, hide);
+//        set.addListener(new Animator.AnimatorListener() {
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationEnd(Animator animation) {
+////                if (!isShow) {
+////                    onAnimationCompleted(target, isShow);
+////                }
+//            }
+//
+//            @Override
+//            public void onAnimationCancel(Animator animation) {
+//
+//            }
+//
+//            @Override
+//            public void onAnimationRepeat(Animator animation) {
+//
+//            }
+//        });
 
         return set;
     }
@@ -270,20 +304,14 @@ public class GiftAnimations {
         ImageView sendGiftAvatar = (ImageView) root.findViewById(R.id.send_gift_avatar);
         TextView sendGiftName = (TextView) root.findViewById(R.id.send_gift_name);
         ImageView sendGiftImg = (ImageView) root.findViewById(R.id.send_gift_img);
-        sendGiftTotal = (TextView) root.findViewById(R.id.send_gift_total);
+        TextView sendGiftTotal = (TextView) root.findViewById(R.id.send_gift_total);
         audienceNameText.setText(message.getUserName());
         sendGiftName.setText(message.getGiftName());
-        mGifCount = message.getGiftCount();
-        String userName = message.getUserName();
-        if (!userGiftMap.containsKey(userName)) {
-            mFlowingValue = 0;
-        } else {
-            int lastGifCout = userGiftMap.get(userName);
-            mFlowingValue = lastGifCout;
-            mGifCount += lastGifCout;
-        }
-        userGiftMap.put(userName, mGifCount);
-        updateGitToal();
+        int count = message.getGiftCount();
+        int n = count / 10; // 2
+        int m = n * 10; // 20
+        GiftHandler handler = new GiftHandler(m, count, 0, sendGiftTotal);
+        handler.sendEmptyMessage(MSG_UPDATE_VALUE);
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         switch (message.getCode()) {
             case "001":
@@ -301,15 +329,51 @@ public class GiftAnimations {
         rocketAnimation.start();
     }
 
-    private void updateGitToal() {
-        int n = mGifCount / 10; // 2
-        m = n * 10; // 20
-        AppLog.print("updateView____gifCount__" + mGifCount);
-        if (handler.hasMessages(MSG_UPDATE_VALUE)) {
-            handler.removeMessages(MSG_UPDATE_VALUE);
+
+    class GiftHandler extends Handler {
+        int mGifCount;
+        int mFlowingValue;
+        TextView mSendGiftTotal;
+        int m;
+
+        public GiftHandler(int m, int giftCout, int followValue, TextView sendGiftTotal) {
+            this.m = m;
+            mGifCount = giftCout;
+            mFlowingValue = followValue;
+            mSendGiftTotal = sendGiftTotal;
         }
-        handler.sendEmptyMessage(MSG_UPDATE_VALUE);
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_UPDATE_VALUE:
+                    if (mGifCount > 99 && mFlowingValue % 10 == 0 && mFlowingValue <= (m - 10)
+                            && mFlowingValue >= 10) {
+                        mFlowingValue += 10;
+                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
+                    } else if (mFlowingValue == mGifCount) {
+                        checkAndStartForHiden();
+                    } else {
+                        ++mFlowingValue;
+                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
+                    }
+                    mSendGiftTotal.setText("x" + mFlowingValue);
+                    mSendGiftTotal.startAnimation(textAnimation);
+                    break;
+
+            }
+        }
     }
 
+    public void animtion(){
+        //boolean  isDownAnimtion=true  isUpAniamtion=true
+        //
+        // isDown --->isDown=false  startDownAnimtion --->  endAnimtion  isDown=true
+
+
+
+
+
+    }
 
 }

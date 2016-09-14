@@ -10,6 +10,7 @@ import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
+import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.ImgTokenBean;
@@ -265,4 +266,9 @@ public abstract class ICallBack {
     //礼物排行榜
     public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
     }
+    public void onGetExchargeResult(CouponItem couponItem){
+    }
+
+
+
 }
