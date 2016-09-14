@@ -101,7 +101,6 @@ public class GiftStorePopuWindow extends PopupWindow {
                     case 1:
                         sendCount.setText("1");
                         sendTotal = 1;
-
                         sendCount.setVisibility(View.VISIBLE);
                         break;
                     case 2:

@@ -711,7 +711,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         } else {
                             giftAnimation.showGiftAnimation((ChatRoomMessage) message);
                         }
-                        AppLog.i("TAG","查看礼物code:"+code);
+                        messageListPanel.onIncomingMessage(messages);
+
                         break;
                     case "6"://禁言
 

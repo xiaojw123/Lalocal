@@ -602,7 +602,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     boolean logineds = UserHelper.isLogined(AudienceActivity.this);
                     if (!logineds) {
                         showLoginViewDialog();
-                    } else {
+                    } else{
                         keyboardLayout.setAlpha(1.0f);
                         keyboardLayout.setClickable(true);
                         liveSettingLayout.setVisibility(View.GONE);
@@ -622,6 +622,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     boolean loginedq = UserHelper.isLogined(AudienceActivity.this);
                     if (!loginedq) {
                         showLoginViewDialog();
+                    }else if(!DemoCache.getLoginChatRoomStatus()) {
+                       Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
                     }else {
                         showGiftPage();
                     }
@@ -644,7 +646,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             public void sendGiftMessage(final int itemPosition, final int sendTotal, final int payBalance) {
                 final String code = giftSresult.get(itemPosition).getCode();
                 startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
-             //   contentLoader.getMyWallet();
+           //    contentLoader.getMyWallet();
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
                     public void onGetMyWallet(final WalletContent content) {
@@ -670,7 +672,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         } else if (payBalance == 0) {
                             Toast.makeText(AudienceActivity.this, "您还未选中礼物!", Toast.LENGTH_SHORT).show();
                         } else {
-                            AppLog.i("TAG", "送礼物信息：" + "userId:" + userId + "nickName:" + nickname);
                             contentLoader.liveSendGifts(channelId, userId, nickname, code, String.valueOf(sendTotal));
                         }
                     }
@@ -678,10 +679,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     @Override
                     public void onSendGiftsBack(String result) {
                         super.onSendGiftsBack(result);
-                        AppLog.i("TAG","发送礼物返回数据："+result);
+
                         SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
                         if(sendGiftResp.getReturnCode()==0){
-                        //    startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
+                            startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
                         }else{
                             Toast.makeText(AudienceActivity.this,"赠送失败",Toast.LENGTH_SHORT).show();
                         }
@@ -696,7 +697,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     private void startSendGiftsAnimation(int itemPosition, int sendTotal, int payBalance) {
         final String code = giftSresult.get(itemPosition).getCode();
-        AppLog.i("TAG","startSendGiftsAnimation:"+code);
+
         IMMessage giftMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了" + ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : "飞机")));
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         Map<String, Object> ext = new HashMap<>();
