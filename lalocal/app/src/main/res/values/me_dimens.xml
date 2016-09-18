@@ -177,6 +177,7 @@
     <dimen name="charge_pay_state2_left">150dp</dimen>
     <dimen name="charge_pay_state2_top">13dp</dimen>
     <dimen name="charge_pay_state3_top">171dp</dimen>
+    <dimen name="my_coupon_exchage_btn_hegiht">44dp</dimen>
 
 
 

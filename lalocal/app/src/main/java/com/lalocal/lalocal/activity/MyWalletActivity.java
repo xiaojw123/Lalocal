@@ -59,6 +59,10 @@ public class MyWalletActivity extends BaseActivity {
                 startActivityForResult(scoreIntent,KeyParams.REQUEST_CODE);
                 break;
             case R.id.my_coupon_llt:
+                Intent couponIntent=new Intent(this,MyCouponActivity.class);
+                couponIntent.putExtra(KeyParams.ACTION_TYPE,KeyParams.PAGE_TYPE_WALLET);
+                couponIntent.putExtra(KeyParams.WALLET_CONTENT,mWalletContent);
+                startActivityForResult(couponIntent,KeyParams.REQUEST_CODE);
                 break;
         }
     }

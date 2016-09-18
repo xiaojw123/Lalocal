@@ -24,15 +24,19 @@ import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
+import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.CloseLiveBean;
+import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
+import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.ImgTokenBean;
@@ -55,7 +59,6 @@ import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
-import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
@@ -74,8 +77,6 @@ import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
-import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -112,6 +113,23 @@ public class ContentLoader {
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
     }
+
+    public void exchargeCopon(String code) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.EXCHARGE_COUPON);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.exchargeCouponUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        JSONObject bodyJson = new JSONObject();
+        try {
+            bodyJson.put("code", code);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        request.setBodyParams(bodyJson.toString());
+        requestQueue.add(request);
+    }
+
 
     //直播搜索
     public void searchLive(int pageNum, String nickName) {
@@ -703,17 +721,18 @@ public class ContentLoader {
     }
 
     //直播送礼物
-    public  void liveSendGifts(String channelId, String toId, String toNickName, String giftId, String amount){
+    public void liveSendGifts(String channelId, String toId, String toNickName, String giftId, String amount) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_SEND_GIFTS);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSendGifts(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getSendGiftsParams(channelId,toId,toNickName,giftId,amount));
+        request.setBodyParams(getSendGiftsParams(channelId, toId, toNickName, giftId, amount));
         requestQueue.add(request);
     }
+
     //礼物排行榜
-    public void liveGiftRanks(String channelId){
+    public void liveGiftRanks(String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_GIFT_RANKS);
         }
@@ -1007,8 +1026,12 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.EXCHARGE_COUPON:
+                        responseExchargeCoupon(jsonObj);
+                        break;
+
                     case RequestCode.SEARCH_LIVE:
-                        AppLog.print("result search JSON___"+json);
+                        AppLog.print("result search JSON___" + json);
                         responseSearchLive(jsonObj);
                         break;
 
@@ -1237,6 +1260,13 @@ public class ContentLoader {
 
         }
 
+        private void responseExchargeCoupon(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            CouponItem item = gson.fromJson(json, CouponItem.class);
+            callBack.onGetExchargeResult(item);
+        }
+
         private void responseSearchLive(JSONObject jsonObj) {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
@@ -1274,7 +1304,7 @@ public class ContentLoader {
 
 
         private void responseGetMyWallet(JSONObject jsonObj) {
-            AppLog.i("TAG","responseGetMyWallet:"+jsonObj.toString());
+            AppLog.i("TAG", "responseGetMyWallet:" + jsonObj.toString());
             JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
             Gson gson = new Gson();
             WalletContent content = gson.fromJson(resultJobj.toString(), WalletContent.class);
@@ -1766,11 +1796,13 @@ public class ContentLoader {
             GiftDataResp giftDataResp = new Gson().fromJson(json, GiftDataResp.class);
             callBack.onGiftsStore(giftDataResp);
         }
+
         //直播送礼物
         private void responseSendGifts(String json) {
             callBack.onSendGiftsBack(json);
 
         }
+
         //礼物排行榜
         private void responseGiftRanks(String json) {
             LiveGiftRanksResp liveGiftRanksResp = new Gson().fromJson(json, LiveGiftRanksResp.class);
@@ -1786,7 +1818,7 @@ public class ContentLoader {
 
         //查看用户是否为管理员
         private void responseUserIdentity(String json) {
-            AppLog.i("TAG","查看用户是否为管理员:"+json);
+            AppLog.i("TAG", "查看用户是否为管理员:" + json);
             LiveManagerBean liveManagerBean = new Gson().fromJson(json, LiveManagerBean.class);
             callBack.onCheckManager(liveManagerBean);
         }
@@ -1874,7 +1906,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
-
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -1995,15 +2026,16 @@ public class ContentLoader {
         }
         return jsonObject.toString();
     }
+
     //直播送礼物
-    public String getSendGiftsParams(String channelId,String toId,String toNickName,String giftId,String amount){
+    public String getSendGiftsParams(String channelId, String toId, String toNickName, String giftId, String amount) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("channelId",channelId);
-            jsonObject.put("toId",toId);
-            jsonObject.put("toNickName",toNickName);
-            jsonObject.put("giftId",giftId);
-            jsonObject.put("amount",amount);
+            jsonObject.put("channelId", channelId);
+            jsonObject.put("toId", toId);
+            jsonObject.put("toNickName", toNickName);
+            jsonObject.put("giftId", giftId);
+            jsonObject.put("amount", amount);
 
 
         } catch (JSONException e) {
@@ -2129,6 +2161,7 @@ public class ContentLoader {
         int CHARGE_GOLD = 136;
         int EXCHARGE_GOLD = 137;
         int SEARCH_LIVE = 138;
+        int EXCHARGE_COUPON = 139;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2159,8 +2192,8 @@ public class ContentLoader {
         int LIVE_CHECK_USER_IDENTITY = 225;
         int LIVE_ACCREIDT_MANAGER = 226;
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
-        int LIVE_SEND_GIFTS=228;
-        int LIVE_GIFT_RANKS=229;
+        int LIVE_SEND_GIFTS = 228;
+        int LIVE_GIFT_RANKS = 229;
 
     }
 

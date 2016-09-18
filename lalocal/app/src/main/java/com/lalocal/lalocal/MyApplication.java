@@ -16,6 +16,7 @@ import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
 import com.lalocal.lalocal.live.base.util.sys.SystemUtil;
+import com.lalocal.lalocal.live.entertainment.agora.openlive.WorkerThread;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.im.config.UserPreferences;
 import com.lalocal.lalocal.live.im.util.storage.StorageType;
@@ -50,7 +51,7 @@ import io.fabric.sdk.android.Fabric;
  */
 public class MyApplication extends Application {
     private static boolean isDebug = true;
-
+    private WorkerThread mWorkerThread;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -207,6 +208,30 @@ public class MyApplication extends Application {
         //设置是否对日志信息进行加密, 默认false(不加密)
         MobclickAgent.enableEncrypt(false);//6.0.0版本及以后
         MobclickAgent.setDebugMode(true);
+    }
+
+
+    //声网
+    public synchronized void initWorkerThread() {
+        if (mWorkerThread == null) {
+            mWorkerThread = new WorkerThread(getApplicationContext());
+            mWorkerThread.start();
+
+            mWorkerThread.waitForReady();
+        }
+    }
+    public synchronized WorkerThread getWorkerThread() {
+        return mWorkerThread;
+    }
+
+    public synchronized void deInitWorkerThread() {
+        mWorkerThread.exit();
+        try {
+            mWorkerThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        mWorkerThread = null;
     }
 
 

@@ -396,6 +396,11 @@ public class AppConfig {
     public static String searchLiveUrl(int pageSize, int pageNum, String nickName) {
         return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + nickName;
     }
+    //兑换优惠券
+    public static String exchargeCouponUrl(){
+      return  baseUrl+"codes";
+    }
+
 
 
 }

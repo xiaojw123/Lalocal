@@ -86,7 +86,7 @@
     <string name="information">资讯</string>
     <string name="no_oder">没有订单</string>
     <string name="convert">我有兑换码</string>
-    <string name="coupon_convert_rule">所有特价商品不可使用优惠券</string>
+    <string name="coupon_convert_rule">所有特价商品不可使用旅行基金</string>
     <string name="convert_coupon">兑换</string>
     <string name="input_favorable_code">请输入优惠码</string>
     <string name="order_number">订单编号</string>

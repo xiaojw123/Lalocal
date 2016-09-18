@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/my_coupon_convert_btn_height"
             android:layout_marginTop="@dimen/dimen_size_10_dp"
-            android:background="@drawable/account_edit2_changeemail_btn_bg"
+            android:background="@drawable/orange_corner_btn_bg"
             android:text="@string/convert_coupon"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16_sp" />

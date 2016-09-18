@@ -41,6 +41,8 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
     TextView myTicketNoScore;
     @BindView(R.id.my_travelticket_ctv)
     CustomTitleView myTicketCtv;
+
+
     int pageNum = 1;
     WalletContent mWalletContent;
 

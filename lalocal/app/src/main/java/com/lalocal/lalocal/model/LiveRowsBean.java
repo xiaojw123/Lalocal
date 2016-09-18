@@ -3,7 +3,7 @@ package com.lalocal.lalocal.model;
 /**
  * Created by android on 2016/7/19.
  */
-public  class LiveRowsBean implements Comparable<LiveRowsBean>{
+public class LiveRowsBean implements Comparable<LiveRowsBean> {
     private int id;
     private String title;
     private String photo;
@@ -13,6 +13,9 @@ public  class LiveRowsBean implements Comparable<LiveRowsBean>{
     private int type;
     private int style;
     private String cid;
+    private String cname;
+
+
     private String pushUrl;
     private String pullUrl;
     private String hlsPullUrl;
@@ -149,9 +152,16 @@ public  class LiveRowsBean implements Comparable<LiveRowsBean>{
         this.createrAccId = createrAccId;
     }
 
+    public String getCname() {
+        return cname;
+    }
+
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
 
     @Override
     public int compareTo(LiveRowsBean another) {
-        return another.getOnlineUser()-this.getOnlineUser();
+        return another.getOnlineUser() - this.getOnlineUser();
     }
 }

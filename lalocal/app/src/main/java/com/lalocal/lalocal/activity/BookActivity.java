@@ -20,6 +20,7 @@ public class BookActivity extends BaseActivity {
     public static final String BOOK_URL = "pre_order_url";
     public static final String PAGE_BACK_PRODUCT_DETAIL = "backProdutionDetail";
     public static final String PAGE_TO_PAY = "orderIdCallBack";
+    public static final String PAGET_TO_COUPON="couponCallBack";
     WebView mPreOrderWv;
     View loadPage;
 

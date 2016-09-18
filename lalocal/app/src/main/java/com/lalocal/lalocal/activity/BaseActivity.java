@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 
 import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -106,6 +107,10 @@ public class BaseActivity extends AppCompatActivity {
         //注：回调 3
         Bugtags.onDispatchTouchEvent(this, event);
         return super.dispatchTouchEvent(event);
+    }
+
+    public int getPageType(){
+        return  getIntent().getIntExtra(KeyParams.PAGE_TYPE,0);
     }
 
     /**

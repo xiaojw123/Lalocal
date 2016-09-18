@@ -34,5 +34,9 @@
     <declare-styleable name="CustomTheme">
         <attr name="gifViewStyle" format="reference" />
     </declare-styleable>
+    <declare-styleable name="CustomTextView">
+        <attr name="drawable_width" format="dimension"/>
+        <attr name="drawable_height" format="dimension"/>
+    </declare-styleable>
 
 </resources>

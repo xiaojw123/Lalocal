@@ -4,7 +4,10 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
+import com.lalocal.lalocal.live.im.session.BarrageViewBean;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -46,7 +50,8 @@ public class BarrageView extends RelativeLayout {
     private int lineHeight;
 
     // 字幕管理
-    private Queue<String> textCache = new LinkedList<>();
+    private Queue<BarrageViewBean> textCache = new LinkedList<>();
+    private BarrageViewBean poll;
 
     public BarrageView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -75,10 +80,20 @@ public class BarrageView extends RelativeLayout {
         log("barrage init, lineHeight=" + lineHeight + ", lineCount=" + lineCount);
     }
 
-    public void addTextBarrage(String text) {
+    public void addTextBarrage(BarrageViewBean text) {
         textCache.add(text);
-
         checkAndRunTextBarrage();
+    }
+
+    private SpannableStringBuilder textviewSetContent(String text) {
+        String[] textContent = text.split(":");
+        String nameText = textContent[0];
+        String contentText = textContent[1];
+        int length = nameText.length();
+        SpannableStringBuilder style=new SpannableStringBuilder(text);
+        style.setSpan(new ForegroundColorSpan(Color.parseColor("#97d3e9")), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        style.setSpan(new ForegroundColorSpan(Color.WHITE), length+1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return  style;
     }
 
     private void checkAndRunTextBarrage() {
@@ -103,24 +118,26 @@ public class BarrageView extends RelativeLayout {
         }
 
         // create text view
+        poll = textCache.poll();
         if (textView == null) {
-            textView = buildTextView(textCache.poll(), availableLine);
+            textView = buildTextView(poll, availableLine);
+
         } else {
-            textView = reuseTextView(textView, textCache.poll(), availableLine);
+            textView = reuseTextView(textView, poll, availableLine);
         }
 
         // run
-        buildTranslationAnimator(textView, availableLine).start();
+        buildTranslationAnimator(textView, availableLine,poll).start();
     }
 
-    private TextView buildTextView(String text, int line) {
-        if (TextUtils.isEmpty(text)) {
+    private TextView buildTextView(final BarrageViewBean text, int line) {
+        if (TextUtils.isEmpty(text.getContent())) {
             return null;
         }
-
+        SpannableStringBuilder spannableStringBuilder = textviewSetContent(text.getContent());
         // text content
         TextView textView = new TextView(getContext());
-        textView.setText(text);
+        textView.setText(spannableStringBuilder);
         textView.setSingleLine();
 
         // text size
@@ -134,7 +151,7 @@ public class BarrageView extends RelativeLayout {
         } else {
             textColor = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
         }*/
-        textView.setTextColor(Color.parseColor("#97d3e9"));
+     //   textView.setTextColor(Color.parseColor("#97d3e9"));
         textView.setBackgroundResource(R.drawable.barrage_view_textview_bg);
         textView.setPadding(5,5,5,5);
 
@@ -152,12 +169,11 @@ public class BarrageView extends RelativeLayout {
         return textView;
     }
 
-    private TextView reuseTextView(TextView textView, String text, int line) {
-        textView.setText(text);
+    private TextView reuseTextView(TextView textView,final BarrageViewBean text, int line) {
+        textView.setText(textviewSetContent(text.getContent()));
         LayoutParams params = (LayoutParams) textView.getLayoutParams();
         params.topMargin = line * lineHeight;
         textView.setLayoutParams(params);
-
         // re add view to container
         addView(textView);
 
@@ -183,7 +199,10 @@ public class BarrageView extends RelativeLayout {
         return line;
     }
 
-    private ObjectAnimator buildTranslationAnimator(final TextView target, final int line) {
+    private ObjectAnimator buildTranslationAnimator(final TextView target, final int line,final BarrageViewBean text) {
+
+
+
         final int duration = config.getDuration() + random.nextInt() % 500;
         final int textLength = (int) target.getPaint().measureText(target.getText().toString());
         final int freeLineDuration = (int) ((textLength + 50.0f) / (1.0f * getWidth() / duration));
@@ -217,6 +236,16 @@ public class BarrageView extends RelativeLayout {
 
             }
         });
+        target.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onBarrageClickListener!=null){
+                    onBarrageClickListener.getUserId(text.getUserId());
+                }
+            }
+        });
+
+
         return animator;
     }
 
@@ -253,5 +282,15 @@ public class BarrageView extends RelativeLayout {
         if (OUTPUT_LOG) {
             Log.i(TAG, message);
         }
+    }
+
+    private OnBarrageClickListener onBarrageClickListener;
+
+    public interface OnBarrageClickListener {
+       void getUserId(String userId);
+    }
+
+    public void setOnBarrageClickListener( OnBarrageClickListener onBarrageClickListener) {
+        this.onBarrageClickListener = onBarrageClickListener;
     }
 }

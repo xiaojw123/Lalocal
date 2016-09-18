@@ -1,12 +1,10 @@
 package com.lalocal.lalocal.activity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -17,12 +15,13 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.KeyboardUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ExchangeActivity extends BaseActivity implements TextWatcher{
+public class ExchangeActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.exchage_score_num_tv)
     TextView exchageScoreNumTv;
@@ -41,7 +40,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
-        showSoftKey();
+        KeyboardUtil.showSoftKey(exchageScoreEdit);
         WalletContent content = getWalletContent();
         scale = content.getScale();
         exchageScoreNumTv.setText(CommonUtil.formartNum(content.getScore()));
@@ -61,12 +60,11 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher{
                 }
                 break;
             case R.id.excharge_score_unit:
-                showSoftKey();
+                KeyboardUtil.showSoftKey(exchageScoreEdit);
                 break;
         }
 
     }
-
 
 
     public WalletContent getWalletContent() {
@@ -111,23 +109,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher{
     @Override
     protected void onPause() {
         super.onPause();
-        hidenSoftKey();
-    }
-
-    private void hidenSoftKey() {
-        InputMethodManager imm = (InputMethodManager)
-                getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm.isActive()) {
-            imm.hideSoftInputFromWindow(exchageScoreEdit.getApplicationWindowToken(),
-                    0);
-        }
-    }
-    private void showSoftKey() {
-        exchageScoreEdit.setCursorVisible(true);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(
-                exchageScoreEdit, InputMethodManager.RESULT_SHOWN);
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        KeyboardUtil.hidenSoftKey(exchageScoreEdit);
     }
 
 

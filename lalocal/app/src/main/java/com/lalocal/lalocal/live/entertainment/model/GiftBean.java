@@ -10,6 +10,16 @@ public class GiftBean {
     private String giftName;
     private int giftCount;
     private  String userName;
+    private String userId;
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getUserId() {
+
+        return userId;
+    }
 
     public String getFromAccount() {
         return fromAccount;
