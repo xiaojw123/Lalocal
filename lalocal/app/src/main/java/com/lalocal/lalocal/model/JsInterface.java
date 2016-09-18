@@ -14,9 +14,9 @@ import com.lalocal.lalocal.util.AppLog;
 /**
  * Created by xiaojw on 2016/8/8.
  */
-public class JsModeul {
+public class JsInterface {
     Context mContext;
-    public JsModeul(Context context){
+    public JsInterface(Context context){
         mContext=context;
     }
 
@@ -51,9 +51,12 @@ public class JsModeul {
 
     }
 
+
+
+
     private void gotoMyCoupon() {
         Intent intent=new Intent(mContext, MyCouponActivity.class);
-        mContext.startActivity(intent);
+        ((Activity)mContext).startActivityForResult(intent,KeyParams.REQUEST_CODE);
     }
 
 }

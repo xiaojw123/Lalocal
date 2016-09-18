@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -13,14 +14,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.JsModeul;
+import com.lalocal.lalocal.model.JsInterface;
 import com.lalocal.lalocal.util.AppLog;
 
 public class BookActivity extends BaseActivity {
     public static final String BOOK_URL = "pre_order_url";
     public static final String PAGE_BACK_PRODUCT_DETAIL = "backProdutionDetail";
     public static final String PAGE_TO_PAY = "orderIdCallBack";
-    public static final String PAGET_TO_COUPON="couponCallBack";
+    public static final String PAGET_TO_COUPON = "couponCallBack";
+    public static final int RESULT_COUPON_SELECTED = 0x12;
     WebView mPreOrderWv;
     View loadPage;
 
@@ -36,7 +38,7 @@ public class BookActivity extends BaseActivity {
         AppLog.print("H5___URL__" + url);
         mPreOrderWv.setWebChromeClient(new PreWebChromeClient());
         mPreOrderWv.setWebViewClient(new PreWebClient());
-        mPreOrderWv.addJavascriptInterface(new JsModeul(this), "webkit");
+        mPreOrderWv.addJavascriptInterface(new JsInterface(this), "webkit");
         WebSettings ws = mPreOrderWv.getSettings();
         ws.setCacheMode(WebSettings.LOAD_NO_CACHE);
         ws.setJavaScriptEnabled(true);
@@ -147,9 +149,19 @@ public class BookActivity extends BaseActivity {
 
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        AppLog.print("book onActivityResultresultCode___"+resultCode);
-//             finish();
-//    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_COUPON_SELECTED) {
+            String params="";
+            if (data!=null){
+                params=data.getStringExtra("selectedCoupons");
+            }else{
+                params="[]";
+            }
+            String js = String.format("javascript:backOrderWeb(%1$s)", params);
+            mPreOrderWv.loadUrl(js);
+        } else if (resultCode == PayActivity.RESULT_BACK_PRODUCT) {
+            finish();
+        }
+    }
 }

@@ -13,8 +13,7 @@
         android:id="@+id/my_coupon_ctv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
-       />
+        android:background="@color/white" />
 
     <Button
         android:id="@+id/my_coupon_exchage_btn"
@@ -44,49 +43,45 @@
         android:id="@+id/my_coupon_rlv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/my_coupon_use_container"
         android:layout_below="@+id/my_coupon_text"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
         android:layout_marginRight="@dimen/dimen_size_15_dp"
-        android:layout_marginTop="@dimen/dimen_size_30_dp"
-        android:layout_above="@+id/my_coupon_use_container"
+        android:layout_marginTop="@dimen/dimen_size_10_dp"
         />
 
 
+    <FrameLayout
+        android:id="@+id/my_coupon_use_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/my_coupon_exchage_btn_hegiht"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dimen_size_5_dp"
+        android:paddingLeft="@dimen/dimen_size_15_dp"
+        android:paddingRight="@dimen/dimen_size_15_dp"
+        android:paddingTop="@dimen/dimen_size_5_dp"
+        android:visibility="gone">
 
-<FrameLayout
-    android:id="@+id/my_coupon_use_container"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/my_coupon_exchage_btn_hegiht"
-    android:layout_alignParentBottom="true"
-    android:background="@color/white"
-    android:paddingLeft="@dimen/dimen_size_15_dp"
-    android:paddingRight="@dimen/dimen_size_15_dp"
-    android:paddingTop="@dimen/dimen_size_5_dp"
-    android:paddingBottom="@dimen/dimen_size_5_dp"
-    android:visibility="gone"
-    >
+        <TextView
+            android:id="@+id/my_coupon_reduction_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="没有优惠券"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_16_sp" />
 
-    <TextView
-        android:id="@+id/my_coupon_reduction_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/color_1a"
-        android:text="没有优惠群"
-        android:textSize="@dimen/text_size_16_sp"
-        android:layout_gravity="center_vertical"
-        />
+        <Button
+            android:id="@+id/my_coupon_use_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:background="@drawable/orange_corner_btn_bg"
+            android:text="不使用"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_16_sp" />
 
-    <Button
-        android:id="@+id/my_coupon_use_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:text="不使用"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_16_sp"
-        android:layout_gravity="right"
-        android:background="@drawable/orange_corner_btn_bg"
-        />
-
-</FrameLayout>
+    </FrameLayout>
 
 </RelativeLayout>

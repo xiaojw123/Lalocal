@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
@@ -25,6 +27,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.MyCouponRecyclerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +55,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     FrameLayout myCouponUseContainer;
     PopupWindow window;
     int pageType;
+    MyCouponRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +75,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
         myCouponCtv.setOnBackClickListener(this);
     }
 
-    @OnClick(R.id.my_coupon_exchage_btn)
+    @OnClick({R.id.my_coupon_exchage_btn, R.id.my_coupon_use_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_coupon_exchage_btn:
@@ -88,6 +92,28 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                 }
                 window.showAsDropDown(myCouponCtv);
+                break;
+            case R.id.my_coupon_use_btn:
+                String text = myCouponUseBtn.getText().toString();
+                Intent intent = null;
+                if ("使用".equals(text)) {
+                    if (adapter != null) {
+                        List<View> selectedViews = adapter.getSelectedCouponViews();
+                        if (selectedViews.size() > 0) {
+                            List<Coupon> coupons = new ArrayList<>();
+                            for (View itemView : selectedViews) {
+                                Coupon coupon = (Coupon) itemView.getTag();
+                                coupons.add(coupon);
+                            }
+                            Gson gson = new Gson();
+                            String json = gson.toJson(coupons);
+                            intent = new Intent();
+                            intent.putExtra("selectedCoupons", json);
+                        }
+                    }
+                }
+                setResult(BookActivity.RESULT_COUPON_SELECTED, intent);
+                finish();
                 break;
         }
     }
@@ -113,11 +139,16 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     class MyCouponCallBack extends ICallBack {
         @Override
         public void onGetCounponItem(List<Coupon> items) {
-            MyCouponRecyclerAdapter adapter = new MyCouponRecyclerAdapter(items);
-            adapter.setUseGroup(myCouponReductionTv,myCouponUseBtn);
+            adapter = new MyCouponRecyclerAdapter(items);
+            adapter.setUseGroup(myCouponReductionTv, myCouponUseBtn);
             myCouponRlv.setLayoutManager(new LinearLayoutManager(MyCouponActivity.this));
+            if (pageType == KeyParams.PAGE_TYPE_WALLET) {
+                adapter.setItemClickEnale(false);
+            } else {
+                adapter.setItemClickEnale(true);
+            }
             myCouponRlv.setAdapter(adapter);
-            AppLog.print("reclcerview childcout___"+myCouponRlv.getChildCount());
+            AppLog.print("reclcerview childcout___" + myCouponRlv.getChildCount());
         }
 
         @Override
@@ -139,6 +170,8 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
 //        KeyboardUtil.hidenSoftKey(couponInputEdt);
         if (pageType == KeyParams.PAGE_TYPE_WALLET) {
             setResult(KeyParams.RESULT_UPDATE_WALLET);
+        }else{
+            setResult(BookActivity.RESULT_COUPON_SELECTED,null);
         }
 
     }
@@ -147,7 +180,6 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
         return getIntent().getParcelableExtra(KeyParams.WALLET_CONTENT);
 
     }
-
 
 
 }

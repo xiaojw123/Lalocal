@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.helper;
 
 
-import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -100,6 +99,7 @@ public class GiftAnimations {
 
     // 收到礼物，等待显示动画
     public void showGiftAnimation(final ChatRoomMessage message) {
+        AppLog.print("showGiftAnimation start___");
         GiftBean giftBean = new GiftBean();
         giftBean.setFromAccount(message.getFromAccount());
         Map<String, Object> remoteExtension = message.getRemoteExtension();
@@ -144,22 +144,18 @@ public class GiftAnimations {
 
             }
 
+        AppLog.print("showGiftAnimation cache___");
 
             cache.add(giftBean);
             checkAndStart();
         }
     }
 
-    private void checkAndStartForHiden() {
+    private void checkAndStartForHiden(ViewGroup targetView) {
         AppLog.print("checkAndStartForHiden___upFree__" + upFree + ", downFree__" + downFree);
-        if (!upFree && !downFree) {
-            return;
-        }
-        if (downFree) {
+        if (targetView==downView) {
             hidenDownAniamtorSet.start();
-//            downFree = false;
         } else {
-//            upFree = false;
             hidenUpAnimatorSet.start();
         }
     }
@@ -225,27 +221,6 @@ public class GiftAnimations {
         ObjectAnimator hide = buildHideAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
         set.setStartDelay(LITTLE_DURATIN);
         set.play(hide);
-        set.addListener(new Animator.AnimatorListener() {
-            @Override
-            public void onAnimationStart(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                checkAndStartForHiden();
-            }
-
-            @Override
-            public void onAnimationCancel(Animator animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animator animation) {
-
-            }
-        });
         return set;
     }
 
@@ -311,6 +286,7 @@ public class GiftAnimations {
         int n = count / 10; // 2
         int m = n * 10; // 20
         GiftHandler handler = new GiftHandler(m, count, 0, sendGiftTotal);
+        handler.setTargeView(root);
         handler.sendEmptyMessage(MSG_UPDATE_VALUE);
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         switch (message.getCode()) {
@@ -335,12 +311,16 @@ public class GiftAnimations {
         int mFlowingValue;
         TextView mSendGiftTotal;
         int m;
+        ViewGroup mTargeView;
 
         public GiftHandler(int m, int giftCout, int followValue, TextView sendGiftTotal) {
             this.m = m;
             mGifCount = giftCout;
             mFlowingValue = followValue;
             mSendGiftTotal = sendGiftTotal;
+        }
+        public void setTargeView(ViewGroup targeView){
+            mTargeView=targeView;
         }
 
         @Override
@@ -352,7 +332,7 @@ public class GiftAnimations {
                         mFlowingValue += 10;
                         sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
                     } else if (mFlowingValue == mGifCount) {
-                        checkAndStartForHiden();
+                        checkAndStartForHiden(mTargeView);
                     } else {
                         ++mFlowingValue;
                         sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);

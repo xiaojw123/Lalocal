@@ -14,8 +14,8 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.Coupon;
-import com.lalocal.lalocal.util.AppLog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,12 +30,18 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
     Handler mHandler;
     TextView mReductionTv;
     Button mUseBtn;
-    int couponValue;
+    List<View> lastSelectView = new ArrayList<>();
+    boolean isClickEnalbe;
 
 
     public MyCouponRecyclerAdapter(List<Coupon> items) {
         mItems = items;
     }
+
+    public void setItemClickEnale(boolean isClickEnalbe) {
+        this.isClickEnalbe = isClickEnalbe;
+    }
+
 
     public void setHandler(Handler handler) {
         mHandler = handler;
@@ -45,6 +51,9 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
     public void setUseGroup(TextView reductionTv, Button useBtn) {
         mReductionTv = reductionTv;
         mUseBtn = useBtn;
+    }
+    public List<View> getSelectedCouponViews(){
+        return  lastSelectView;
     }
 
 
@@ -64,6 +73,12 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
             if (item != null) {
                 final MyCouponHolder couponHolder = (MyCouponHolder) holder;
                 Resources res = mContext.getResources();
+                RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) couponHolder.itemView.getLayoutParams();
+                if (position == 0) {
+                    params.topMargin = (int) res.getDimension(R.dimen.dimen_size_20_dp);
+                } else if (position == mItems.size() - 1) {
+                    params.bottomMargin = (int) res.getDimension(R.dimen.dimen_size_10_dp);
+                }
                 if (item.getType() == 1) {
                     couponHolder.itemView.setBackgroundDrawable(res.getDrawable(R.drawable.my_coupon_card_bg1));
                     couponHolder.myCouponContainer.setActivated(false);
@@ -89,37 +104,55 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
                 couponHolder.time_tv.setText("有效期至：" + item.getExpiredDateStr().replace("_", "."));
                 couponHolder.itemView.setFocusable(true);
                 couponHolder.itemView.setTag(item);
-                couponHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        AppLog.print("itemView____onclick________v isSelected_" + v.isSelected());
-                        if (item.getType() == 1) {
+                if (isClickEnalbe) {
+
+                    couponHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
                             if (v.isSelected()) {
                                 v.setSelected(false);
-                                couponValue -= item.getDiscount();
+
+                                if (lastSelectView.contains(v)) {
+                                    lastSelectView.remove(v);
+                                }
                             } else {
                                 v.setSelected(true);
-                                couponValue += item.getDiscount();
-                            }
-                            if (couponValue < 0) {
-                                couponValue = 0;
-                            }
-                            if (couponValue == 0) {
-                                mReductionTv.setText("没有减免");
-                                mUseBtn.setText("不使用");
-                            } else {
-                                mReductionTv.setText("减免: " + couponValue);
-                                mUseBtn.setText("使用");
-                            }
 
-                        }else{
-                            couponValue=0;
-
+                                if (!lastSelectView.contains(v)) {
+                                    lastSelectView.add(v);
+                                }
+                            }
+                            updateCouponView(v);
                         }
-                    }
-                });
+                    });
+                }
             }
         }
+
+    }
+
+    private void updateCouponView(View currentView) {
+        if (lastSelectView.size() > 0) {
+            Coupon item = (Coupon) currentView.getTag();
+            if (item.getType() != 1) {
+                for (View lastView : lastSelectView) {
+                    if (lastView != currentView) {
+                        lastView.setSelected(false);
+                    }
+                }
+            }
+            int couponValue = 0;
+            for (View lastView : lastSelectView) {
+                Coupon couponItem = (Coupon) lastView.getTag();
+                couponValue += couponItem.getDiscount();
+            }
+            mReductionTv.setText("减免：" + couponValue);
+            mUseBtn.setText("使用");
+        } else {
+            mReductionTv.setText("没有优惠券");
+            mUseBtn.setText("不使用");
+        }
+
 
     }
 
