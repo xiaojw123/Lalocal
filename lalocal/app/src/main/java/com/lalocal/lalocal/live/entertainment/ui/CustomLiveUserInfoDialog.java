@@ -1,5 +1,4 @@
 package com.lalocal.lalocal.live.entertainment.ui;
-
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -77,8 +76,8 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
 
     public void showLiveUserInfoPopuwindow(){
-    //    FrameLayout headerLayout = (FrameLayout) findViewById(R.id.custom_info_header_layout);
-     //   FrameLayout  goMainLayout = (FrameLayout) findViewById(R.id.go_main_layout);
+        //    FrameLayout headerLayout = (FrameLayout) findViewById(R.id.custom_info_header_layout);
+        //   FrameLayout  goMainLayout = (FrameLayout) findViewById(R.id.go_main_layout);
         masterInfoHeadIv = (CircleImageView) findViewById(R.id.master_info_head_iv);
         masterInfoNickTv = (TextView)findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)findViewById(R.id.master_info_signature);
@@ -94,11 +93,11 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         headerReport = (TextView)findViewById(R.id.custom_dialog_report);
         liveManagerBan = (TextView)findViewById(R.id.live_manager_ban);
         liveManagerSetting = (TextView)findViewById(R.id.live_manager_setting);
-        attentionStatus = (TextView)findViewById(R.id.custom_dialog_attention);
+
         headerReport = (TextView)findViewById(R.id.custom_dialog_report);
         liveManagerBan = (TextView)findViewById(R.id.live_manager_ban);
         liveManagerSetting = (TextView)findViewById(R.id.live_manager_setting);
-        attentionStatus = (TextView)findViewById(R.id.custom_dialog_attention);
+
         liveMasterHome= (TextView) findViewById(R.id.live_master_home);
         audienceReport = (TextView) findViewById(R.id.custom_dialog_report_audience);
         audienceAttention = (TextView) findViewById(R.id.custom_dialog_attention_audience);
@@ -288,7 +287,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             case  R.id.live_master_home://主播端主页
 
                 if(sureDialogListener!=null){
-                   sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome,managerMark);
+                    sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome,managerMark);
                 }
                 dismiss();
                 break;
@@ -310,7 +309,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 break;
             case R.id.custom_dialog_report://主播端举报
                 if(reportListener!=null){
-                   reportListener.onCustomLiveUserInfoDialogListener(null,headerReport,managerMark);
+                    reportListener.onCustomLiveUserInfoDialogListener(null,headerReport,managerMark);
                 }
                 break;
             case R.id.custom_dialog_attention://主播端关注
@@ -356,7 +355,6 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                     attentionListener.onCustomLiveFansOrAttentionListener(String.valueOf(accountId),liveFans,liveAttention,fansNum,attentionNum,audienceManagerAttention);
                 }
                 break;
-
         }
     }
 

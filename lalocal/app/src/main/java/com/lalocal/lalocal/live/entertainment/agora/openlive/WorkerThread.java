@@ -281,31 +281,19 @@ public class WorkerThread extends Thread {
      */
     public final void exit() {
         if (Thread.currentThread() != this) {
-
             mWorkerHandler.sendEmptyMessage(ACTION_WORKER_THREAD_QUIT);
             return;
         }
-
         mReady = false;
-
-        // TODO should remove all pending(read) messages
-
         mVideoEnhancer = null;
-
-
-
-        // exit thread looper
         Looper.myLooper().quit();
         mWorkerHandler.release();
-
     }
 
     public WorkerThread(Context context) {
         this.mContext = context;
-
         this.mEngineConfig = new EngineConfig();
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
-      //  this.mEngineConfig.mUid = pref.getInt(ConstantApp.PrefManager.PREF_PROPERTY_UID, 0);
         this.mEngineConfig.mUid= UserHelper.getUserId(context);
         this.mEngineEventHandler = new MyEngineEventHandler(mContext, this.mEngineConfig);
     }

@@ -25,7 +25,7 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
     private TextView dialogTitle;
     String title, determine, cancel,okText,content;
     public CustomChatDialog(Context context) {
-        super(context, R.style.prompt_dialog);
+        super(context, R.style.live_dialog);
         this.context = context;
     }
 

@@ -125,7 +125,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public static final String LIVE_USER_ID = "LIVE_USER_ID";
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
     public static final String CHANNELID = "CHANNELID";
-    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 15000;
+    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 10000;
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
@@ -141,7 +141,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected DrawerLayout drawerLayout;
     private View view;
     private ImageView inputText;
-    private TextView onlineCountText; // 在线人数view
+    protected TextView onlineCountText; // 在线人数view
 
     protected TextView masterName;
     protected CircleImageView maseterHead;
@@ -527,7 +527,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftsRankPopuWindow.setOnSendClickListener(new GiftsRankPopuWindow.OnGiftRanksListener() {
             @Override
             public void closeRankPopuBtn() {
-                //   drawerLayout.openDrawer(Gravity.RIGHT);
 
             }
 
@@ -658,7 +657,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
-                    AppLog.i("TAG", "key:" + key + "////value:" + value);
+
                     if ("barrag".equals(key)) {
                         barrageContent = value.toString();
                     }
@@ -716,7 +715,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
                             @Override
                             public void getUserId(String userId) {
-                                Toast.makeText(LivePlayerBaseActivity.this, "弹幕点击了" + userId, Toast.LENGTH_SHORT).show();
+                           //     Toast.makeText(LivePlayerBaseActivity.this, "弹幕点击了" + userId, Toast.LENGTH_SHORT).show();
                             }
                         });
                         break;
@@ -767,6 +766,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         break;
 
                     case "12":
+                        //更新在綫人數
                         onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
                         break;
 
@@ -1074,7 +1074,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-                        onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
+                    //    onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
                         clearCache();
                         fetchData();
                         int onlineUserCount = param.getOnlineUserCount();
@@ -1201,13 +1201,13 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         @Override
                         public void onFailed(int code) {
 
-                            Toast.makeText(DemoCache.getContext(), "消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(DemoCache.getContext(), "消息发送失败：code:" + code, Toast.LENGTH_SHORT).show();
 
                         }
 
                         @Override
                         public void onException(Throwable exception) {
-                            Toast.makeText(DemoCache.getContext(), "消息发送失败！", Toast.LENGTH_SHORT).show();
+                        //    Toast.makeText(DemoCache.getContext(), "消息发送失败！", Toast.LENGTH_SHORT).show();
                         }
                     });
 

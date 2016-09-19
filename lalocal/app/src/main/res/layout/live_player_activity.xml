@@ -246,7 +246,7 @@
 
         <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
             android:id="@+id/periscope"
-            android:layout_width="75dp"
+            android:layout_width="@dimen/live_height_70dp"
             android:layout_height="350dp"
             android:layout_above="@id/setting_bottom_layout"
             android:layout_alignParentBottom="true"

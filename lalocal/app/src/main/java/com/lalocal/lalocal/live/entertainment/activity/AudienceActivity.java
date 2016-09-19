@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -211,7 +212,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void deInitUIandEvent() {
         doLeaveChannel();
-        AppLog.i("TAG","用户端走了:deInitUIandEvent");
+
         event().removeEventHandler(this);
     }
 
@@ -516,14 +517,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             videoView.setLayoutParams(lp);
             videoPlayer.openVideo();
             errorListener();
-        } else {
+        }/* else if("0".equals(playType)){
 
-         /*   bufferStrategy = 0;
+            bufferStrategy = 0;
             mediaType = "livestream";
             videoView.setBufferStrategy(bufferStrategy);
             videoPlayer = new VideoPlayer(AudienceActivity.this, videoView, null, url,
-                    bufferStrategy, this, VideoConstant.VIDEO_SCALING_MODE_FILL_SCALE, mediaType);*/
-        }
+                    bufferStrategy, this, VideoConstant.VIDEO_SCALING_MODE_FILL_SCALE, mediaType);
+        }*/
 
 
 
@@ -697,8 +698,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     }else if(!DemoCache.getLoginChatRoomStatus()) {
                        Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
                     } else {
+                        contentLoader.getMyWallet();
+                        contentLoader.setCallBack(new ICallBack(){
+                            @Override
+                            public void onGetMyWallet(WalletContent content) {
+                                super.onGetMyWallet(content);
+                                int gold =(int)content.getGold();
+                                showGiftPage(gold);
+                            }
+                        } );
 
-                        showGiftPage();
                     }
 
                     break;
@@ -709,19 +718,17 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     boolean isFirstShowPlane = true;
 
-    private void showGiftPage() {
+    private void showGiftPage(int gold) {
+        liveSettingLayout.setVisibility(View.GONE);
         giftStorePopuWindow = new GiftStorePopuWindow(this, giftSresult);
-        giftStorePopuWindow.showGiftStorePopuWindow();
+        giftStorePopuWindow.showGiftStorePopuWindow(gold);
         giftStorePopuWindow.showAtLocation(this.findViewById(R.id.live_layout),
                 Gravity.BOTTOM, 0, 0);
         giftStorePopuWindow.setOnSendClickListener(new GiftStorePopuWindow.OnSendClickListener() {
             @Override
             public void sendGiftMessage(final int itemPosition, final int sendTotal, final int payBalance) {
                 final String code = giftSresult.get(itemPosition).getCode();
-                startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
-
-                //  contentLoader.getMyWallet();
-
+                contentLoader.getMyWallet();
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
                     public void onGetMyWallet(final WalletContent content) {
@@ -771,12 +778,19 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         });
 
 
+        giftStorePopuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                liveSettingLayout.setVisibility(View.VISIBLE);
+            }
+        });
+
     }
 
     private void startSendGiftsAnimation(int itemPosition, int sendTotal, int payBalance) {
         final String code = giftSresult.get(itemPosition).getCode();
         AppLog.i("TAG", "startSendGiftsAnimation:" + code);
-        IMMessage giftMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了" + ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : "飞机")));
+        IMMessage giftMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "给主播送了" + ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : ("003".equals(code)?"飞机":"神秘礼物"))));
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         Map<String, Object> ext = new HashMap<>();
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
@@ -849,6 +863,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     startActivity(intent);
                 }
             });
+
+
         } else {
             if (managerList != null && managerList.size() > 0) {
                 for (LiveManagerListBean bean : managerList) {
@@ -916,33 +932,34 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             } else {
                 CustomDialogStyle.IDENTITY = CustomDialogStyle.ME_CHECK_OTHER;
             }
-            customLiveUserInfoDialog.setAttention(status == 0 ? "关注" : "正在关注", new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
-                int fansCounts = -2;
 
-                @Override
-                public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
-
-                    if (fansCounts == -2) {
-                        fansCounts = fansCount;
-                    }
-                    if (status == 0) {
-                        attentionStatus.setText("正在关注");
-                        attentionStatus.setAlpha(0.4f);
-                        ++fansCounts;
-                        fansView.setText(String.valueOf(fansCounts));
-                        contentLoader.getAddAttention(id);
-                        status = 1;
-                    } else {
-                        attentionStatus.setText("关注");
-                        attentionStatus.setAlpha(1);
-                        --fansCounts;
-                        fansView.setText(String.valueOf(fansCounts));
-                        contentLoader.getCancelAttention(id);
-                        status = 0;
-                    }
-                }
-            });
         }
+        customLiveUserInfoDialog.setAttention(status == 0 ? "关注" : "正在关注", new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
+            int fansCounts = -2;
+
+            @Override
+            public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
+
+                if (fansCounts == -2) {
+                    fansCounts = fansCount;
+                }
+                if (status == 0) {
+                    attentionStatus.setText("正在关注");
+                    attentionStatus.setAlpha(0.4f);
+                    ++fansCounts;
+                    fansView.setText(String.valueOf(fansCounts));
+                    contentLoader.getAddAttention(id);
+                    status = 1;
+                } else {
+                    attentionStatus.setText("关注");
+                    attentionStatus.setAlpha(1);
+                    --fansCounts;
+                    fansView.setText(String.valueOf(fansCounts));
+                    contentLoader.getCancelAttention(id);
+                    status = 0;
+                }
+            }
+        });
         customLiveUserInfoDialog.show();
     }
 

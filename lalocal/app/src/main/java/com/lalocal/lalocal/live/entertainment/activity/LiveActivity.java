@@ -135,7 +135,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private ImageView clickPraise;//点赞
 
 
-
     private LinearLayout modelLayout;//用户信息layout
     private LinearLayout keyboardLayout;//自定义键盘输入
 
@@ -205,9 +204,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             palyerLayout.addView(surfaceView);
             rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN , 0));//VideoCanvas:本地代码显示属性
             surfaceView.setZOrderOnTop(true);
-
             surfaceView.setZOrderMediaOverlay(true);
-            worker().preview(true, surfaceView, 0);
+            worker().preview(true, surfaceView, config().mUid);
         }
 
     }
@@ -235,7 +233,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         worker().leaveChannel(config().mChannel);
         if (isBroadcaster()) {
             AppLog.i("TAG","停止视频预览。。。。");
-            worker().preview(false, null, 0);
+            worker().preview(false, null, config().mUid);
         }
     }
 
@@ -466,7 +464,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
                 contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
-
+                onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
                 if (timer == null) {
                     timer = new Timer(true);
                 }
@@ -476,10 +474,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     public void run() {
                         if (!isCloseLive) {
                             AppLog.i("TAG", "上传在线人数：" + onlineCounts);
+
                             contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                         }
                     }
-                }, 1000, 5 * 1000);
+                }, 1000, 2 * 1000);
             }
         });
 
@@ -678,6 +677,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (timer != null) {
             timer.cancel();
         }
+        deInitUIandEvent();
         contentLoader.cancelLiveRoom(channelId);
         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
         IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
@@ -693,9 +693,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
         sendMessage(likeMessage, MessageType.leaveLive);
-
-
-
 
 
         if (isClickStartLiveBtn) {

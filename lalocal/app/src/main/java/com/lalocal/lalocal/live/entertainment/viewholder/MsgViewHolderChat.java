@@ -42,6 +42,7 @@ public class MsgViewHolderChat extends TViewHolder {
     @Override
     protected void refresh(Object item) {
         String creatorAccount=null;
+        String styles=null;
         message = (ChatRoomMessage) item;
         Map<String, Object> remoteExtension = message.getRemoteExtension();
         if (remoteExtension != null) {
@@ -53,10 +54,14 @@ public class MsgViewHolderChat extends TViewHolder {
                 if("creatorAccount".equals(key)){
                     creatorAccount = value.toString();
                 }
+                if("style".equals(key)){
+                  styles = value.toString();
+                }
             }
         }
         setNameTextView(creatorAccount);
         String content = message.getContent();
+
         if("点赞".equals(content.trim())){
             content="给主播点了个赞";
             bodyText.setTextColor(Color.parseColor("#97d3e9"));

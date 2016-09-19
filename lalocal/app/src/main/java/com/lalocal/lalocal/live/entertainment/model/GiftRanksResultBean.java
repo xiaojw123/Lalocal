@@ -8,24 +8,24 @@ import java.util.List;
  * Created by android on 2016/9/11.
  */
 public class GiftRanksResultBean {
-        private Object myTotalRank;
-        private Object mycurrentRank;
+        private TotalRanksBean myTotalRank;
+        private TotalRanksBean mycurrentRank;
         private SpecialShareVOBean shareVO;
         private List<TotalRanksBean> totalRanks;
         private List<TotalRanksBean> currentRanks;
-        public Object getMyTotalRank() {
+        public TotalRanksBean getMyTotalRank() {
             return myTotalRank;
         }
 
-        public void setMyTotalRank(Object myTotalRank) {
+        public void setMyTotalRank(TotalRanksBean myTotalRank) {
             this.myTotalRank = myTotalRank;
         }
 
-        public Object getMycurrentRank() {
+        public TotalRanksBean getMycurrentRank() {
             return mycurrentRank;
         }
 
-        public void setMycurrentRank(Object mycurrentRank) {
+        public void setMycurrentRank(TotalRanksBean mycurrentRank) {
             this.mycurrentRank = mycurrentRank;
         }
 
