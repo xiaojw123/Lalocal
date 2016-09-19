@@ -356,6 +356,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         scoreTv = (TextView) findViewById(R.id.audience_score_tv);
         giftPlaneUp = (ImageView) findViewById(R.id.gift_plane_up);
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
+        anchorHeadImg=(ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
         //     giftPlaneDown = (ImageView) findViewById(R.id.gift_plane_down);
         //    planeLayout = (RelativeLayout) findViewById(R.id.gift_plane_layout);
@@ -1261,7 +1262,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         //  giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp,giftPlaneBg, this);
 
         giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
-        giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp, giftPlaneBg, this);
+        giftPlaneAnimation = new GiftPlaneAnimation(anchorHeadImg,userHeadImg,giftPlaneUp, giftPlaneBg, this,avatar);
 
     }
 

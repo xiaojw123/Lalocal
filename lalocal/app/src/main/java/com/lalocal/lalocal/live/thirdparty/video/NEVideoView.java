@@ -307,7 +307,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
             }
             mMediaPlayer.setDisplay(mSurfaceHolder);
             mMediaPlayer.setScreenOnWhilePlaying(true);
-            mMediaPlayer.prepareAsync(mContext);
+             mMediaPlayer.prepareAsync(mContext);
             mCurrState = PREPARING;
             attachMediaController();
         } catch (IOException ex) {
