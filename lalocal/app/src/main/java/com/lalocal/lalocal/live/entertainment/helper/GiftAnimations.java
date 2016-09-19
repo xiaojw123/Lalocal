@@ -1,6 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.helper;
 
-
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -16,14 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
 
 /**
@@ -32,15 +31,10 @@ import java.util.Queue;
 public class GiftAnimations {
     private final int LITTLE_DURATIN = 200;
     private final int MSG_UPDATE_VALUE = 0x10;
-    private final int MSG_UPDATE_VALUE1 = 0x11;
-    private final int MSG_UPDATE_VALUE2 = 0x12;
     private final int SHOW_HIDE_ANIMATOR_DURATION = 1000;
-    private final int ANIMATION_STAY_DURATION = 2000;
     private Context mContext;
     private boolean upFree = true;
     private boolean downFree = true;
-    private boolean isUping,isDowning;
-
     private ImageView giftPlane;
     private ViewGroup upView;
     private ViewGroup downView;
@@ -52,38 +46,9 @@ public class GiftAnimations {
     private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
     Animation textAnimation;
+    GiftHandler roseHandler, bootHandler, planeHandler;
+    GiftHandler upHandler, dowHandler;
 
-
-//    Handler handler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            super.handleMessage(msg);
-//            int code = msg.what;
-//            switch (code) {
-//                case 110:
-//                    rocketAnimation.stop();
-//                    giftPlane.setVisibility(View.GONE);
-//                    break;
-//                case MSG_UPDATE_VALUE:
-//                    if (mGifCount > 99 && mFlowingValue % 10 == 0 && mFlowingValue <= (m - 10)
-//                            && mFlowingValue >= 10) {
-//                        mFlowingValue += 10;
-//                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
-//                    } else if (mFlowingValue == mGifCount) {
-//                        hidenAnimation();
-//                    } else {
-//                        ++mFlowingValue;
-//                        sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
-//                    }
-//                    sendGiftTotal.setText("x" + mFlowingValue);
-//                    sendGiftTotal.startAnimation(textAnimation);
-//                    break;
-//
-//
-//            }
-//        }
-//
-//    };
 
     public GiftAnimations(ImageView giftPlane, ViewGroup downView, ViewGroup upView, Context mContext) {
         this.mContext = mContext;
@@ -99,63 +64,18 @@ public class GiftAnimations {
 
     // 收到礼物，等待显示动画
     public void showGiftAnimation(final ChatRoomMessage message) {
-        AppLog.print("showGiftAnimation start___");
-        GiftBean giftBean = new GiftBean();
-        giftBean.setFromAccount(message.getFromAccount());
-        Map<String, Object> remoteExtension = message.getRemoteExtension();
-        if (remoteExtension != null) {
-            Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<String, Object> next1 = iterator.next();
-                String key1 = next1.getKey();
-                Object value1 = next1.getValue();
-                if (key1.equals("giftModel")) {
-                    Map<String, Object> map = (Map<String, Object>) value1;
-                    Iterator<Map.Entry<String, Object>> mapItem = map.entrySet().iterator();
-                    while (mapItem.hasNext()) {
-                        Map.Entry<String, Object> next = mapItem.next();
-                        String key = next.getKey();
-                        Object value = next.getValue();
-                        switch (key) {
-                            case "headImage":
-                                giftBean.setHeadImage(value.toString());
-                                break;
-                            case "giftImage":
-                                giftBean.setGiftImage(value.toString());
-                                break;
-                            case "giftName":
-                                giftBean.setGiftName(value.toString());
-                                break;
-                            case "giftCount":
-                                giftBean.setGiftCount(Integer.parseInt(value.toString()));
-                                break;
-                            case "code":
-                                giftBean.setCode(value.toString());
-                                break;
-                            case "userName":
-                                giftBean.setUserName(value.toString());
-                                break;
-                            case "userId":
-                                giftBean.setUserId(value.toString());
-                                break;
-                        }
-                    }
-                }
-
-            }
-
-        AppLog.print("showGiftAnimation cache___");
-
-            cache.add(giftBean);
-            checkAndStart();
-        }
+        GiftBean giftBean = MessageToGiftBean.getMessageToGiftBean(message);
+        cache.add(giftBean);
+        checkAndStart();
     }
 
-    private void checkAndStartForHiden(ViewGroup targetView) {
+    private void checkAndStartForHiden(ViewGroup targetView, GiftHandler handler) {
         AppLog.print("checkAndStartForHiden___upFree__" + upFree + ", downFree__" + downFree);
-        if (targetView==downView) {
+        if (targetView == downView) {
+            dowHandler = handler;
             hidenDownAniamtorSet.start();
         } else {
+            upHandler = handler;
             hidenUpAnimatorSet.start();
         }
     }
@@ -163,20 +83,53 @@ public class GiftAnimations {
 
     private void checkAndStart() {
         AppLog.print("checkAndStart____upfree_" + upFree + ", downFree" + downFree);
+        GiftBean message = cache.poll();
+        AppLog.print("startAnimation message___" + message);
+        if (message == null) {
+            return;
+        }
+        String code = message.getCode();
+        int giftCout = message.getGiftCount();
+        switch (code) {
+            case "001":
+                AppLog.print("001 gitHandler___" + roseHandler);
+                if (continueGiftAnim(roseHandler, giftCout)) return;
+                break;
+            case "002":
+                AppLog.print("002 gitHandler___" + bootHandler);
+                if (continueGiftAnim(bootHandler, giftCout)) return;
+                break;
+            case "003":
+                AppLog.print("003 gitHandler___" + roseHandler);
+                if (continueGiftAnim(planeHandler, giftCout)) return;
+                break;
+        }
+        AppLog.print("isRuning false start___1__upFree:" + upFree + ",downFree" + downFree);
         if (!upFree && !downFree) {
             return;
         }
+        AppLog.print("isRuning false start___2");
+
         if (downFree) {
-            startAnimation(downView, downAnimatorSet);
+            startAnimation(downView, downAnimatorSet, message);
         } else {
-            startAnimation(upView, upAnimatorSet);
+            startAnimation(upView, upAnimatorSet, message);
         }
+    }
+
+    private boolean continueGiftAnim(GiftHandler handler, int giftCout) {
+        if (handler != null && handler.isRuning()) {
+            AppLog.print("continueAnim isRuning___");
+            handler.addGiftCout(giftCout);
+            return true;
+        }
+        return false;
     }
 
 
     // 开始礼物动画
-    private void startAnimation(ViewGroup target, AnimatorSet set) {
-        GiftBean message = cache.poll();
+    private void startAnimation(ViewGroup target, AnimatorSet set, GiftBean message) {
+//        GiftBean message = cache.poll();
         AppLog.print("startAnimation message___" + message);
         if (message == null) {
             return;
@@ -218,9 +171,41 @@ public class GiftAnimations {
     private AnimatorSet buildHidenAnimationSet(final ViewGroup target) {
         final AnimatorSet set = new AnimatorSet();
         set.setTarget(target);
-        ObjectAnimator hide = buildHideAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
+        ObjectAnimator hide = buildHideAnimator(target, 1);
         set.setStartDelay(LITTLE_DURATIN);
         set.play(hide);
+        set.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (target == upView) {
+                    upFree = true;
+                    if (upHandler.isRuning()) {
+                        upHandler.setRuning(false);
+                    }
+
+                } else if (target == downView) {
+                    downFree = true;
+                    if (dowHandler.isRuning()) {
+                        dowHandler.setRuning(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
         return set;
     }
 
@@ -230,31 +215,6 @@ public class GiftAnimations {
         set.setTarget(target);
         ObjectAnimator show = buildShowAnimator(target, SHOW_HIDE_ANIMATOR_DURATION);
         set.play(show);
-//        set.playSequentially(show, hide);
-//        set.addListener(new Animator.AnimatorListener() {
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animator animation) {
-////                if (!isShow) {
-////                    onAnimationCompleted(target, isShow);
-////                }
-//            }
-//
-//            @Override
-//            public void onAnimationCancel(Animator animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animator animation) {
-//
-//            }
-//        });
-
         return set;
     }
 
@@ -285,24 +245,36 @@ public class GiftAnimations {
         int count = message.getGiftCount();
         int n = count / 10; // 2
         int m = n * 10; // 20
-        GiftHandler handler = new GiftHandler(m, count, 0, sendGiftTotal);
-        handler.setTargeView(root);
-        handler.sendEmptyMessage(MSG_UPDATE_VALUE);
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         switch (message.getCode()) {
             case "001":
                 sendGiftImg.setBackgroundResource(R.drawable.rose_rocket);
+                roseHandler = new GiftHandler(sendGiftTotal);
+                sendGiftMessage(roseHandler, root, sendGiftTotal, count, m);
                 break;
             case "002":
+                bootHandler = new GiftHandler(sendGiftTotal);
                 sendGiftImg.setBackgroundResource(R.drawable.boot_rocket);
+                sendGiftMessage(bootHandler, root, sendGiftTotal, count, m);
                 break;
             case "003":
+                planeHandler = new GiftHandler(sendGiftTotal);
                 sendGiftImg.setBackgroundResource(R.drawable.plane_rocket);
+                sendGiftMessage(planeHandler, root, sendGiftTotal, count, m);
                 return;
 
         }
         rocketAnimation = (AnimationDrawable) sendGiftImg.getBackground();
         rocketAnimation.start();
+    }
+
+    private void sendGiftMessage(GiftHandler handler, ViewGroup root, TextView sendGiftTotal, int count, int m) {
+        AppLog.print("send gift message___");
+        handler.setRefNum(m);
+        handler.setGiftCout(count);
+        handler.setFolowValue(0);
+        handler.setTargeView(root);
+        handler.sendEmptyMessage(MSG_UPDATE_VALUE);
     }
 
 
@@ -312,27 +284,61 @@ public class GiftAnimations {
         TextView mSendGiftTotal;
         int m;
         ViewGroup mTargeView;
+        private boolean isRuning;
 
-        public GiftHandler(int m, int giftCout, int followValue, TextView sendGiftTotal) {
-            this.m = m;
-            mGifCount = giftCout;
-            mFlowingValue = followValue;
+        public GiftHandler(TextView sendGiftTotal) {
             mSendGiftTotal = sendGiftTotal;
         }
-        public void setTargeView(ViewGroup targeView){
-            mTargeView=targeView;
+
+        public void setRefNum(int m) {
+            this.m = m;
+        }
+
+        public void setGiftCout(int giftCout) {
+            mGifCount = giftCout;
+
+        }
+
+
+        public void setFolowValue(int followValue) {
+            mFlowingValue = followValue;
+        }
+
+
+        public void setTargeView(ViewGroup targeView) {
+            mTargeView = targeView;
+        }
+
+        public void addGiftCout(int attachValue) {
+            mGifCount += attachValue;
+            if (hasMessages(MSG_UPDATE_VALUE)) {
+                removeMessages(MSG_UPDATE_VALUE);
+            }
+            sendEmptyMessage(MSG_UPDATE_VALUE);
+        }
+
+        public boolean isRuning() {
+            return isRuning;
+        }
+
+        public void setRuning(boolean isRuning) {
+            this.isRuning = isRuning;
+
         }
 
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_UPDATE_VALUE:
+                    if (!isRuning) {
+                        isRuning = true;
+                    }
                     if (mGifCount > 99 && mFlowingValue % 10 == 0 && mFlowingValue <= (m - 10)
                             && mFlowingValue >= 10) {
                         mFlowingValue += 10;
                         sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
                     } else if (mFlowingValue == mGifCount) {
-                        checkAndStartForHiden(mTargeView);
+                        checkAndStartForHiden(mTargeView, this);
                     } else {
                         ++mFlowingValue;
                         sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
@@ -345,15 +351,5 @@ public class GiftAnimations {
         }
     }
 
-    public void animtion(){
-        //boolean  isDownAnimtion=true  isUpAniamtion=true
-        //
-        // isDown --->isDown=false  startDownAnimtion --->  endAnimtion  isDown=true
-
-
-
-
-
-    }
 
 }

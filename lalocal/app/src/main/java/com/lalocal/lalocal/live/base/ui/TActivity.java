@@ -9,10 +9,17 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.live.base.util.ReflectionUtil;
-import com.lalocal.lalocal.live.base.util.log.LogUtil;
+import com.lalocal.lalocal.live.entertainment.agora.openlive.EngineConfig;
+import com.lalocal.lalocal.live.entertainment.agora.openlive.MyEngineEventHandler;
+import com.lalocal.lalocal.live.entertainment.agora.openlive.WorkerThread;
+
+import io.agora.rtc.RtcEngine;
 
 
 public abstract class TActivity extends AppCompatActivity {
@@ -24,16 +31,44 @@ public abstract class TActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final View layout = findViewById(Window.ID_ANDROID_CONTENT);
+        ((MyApplication) getApplication()).initWorkerThread();
+        ViewTreeObserver vto = layout.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onGlobalLayout() {
+                layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                initUIandEvent();
+            }
+        });
 
-        LogUtil.ui("activity: " + getClass().getSimpleName() + " onCreate()");
     }
+
+    protected abstract void initUIandEvent();
+    protected abstract void deInitUIandEvent();
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-        LogUtil.ui("activity: " + getClass().getSimpleName() + " onDestroy()");
+        deInitUIandEvent();
         destroyed = true;
+    }
+
+    protected RtcEngine rtcEngine() {
+        return ((MyApplication) getApplication()).getWorkerThread().getRtcEngine();
+    }
+
+    protected final WorkerThread worker() {
+        return ((MyApplication) getApplication()).getWorkerThread();
+    }
+
+    protected final EngineConfig config() {
+        return ((MyApplication) getApplication()).getWorkerThread().getEngineConfig();
+    }
+
+    protected final MyEngineEventHandler event() {
+        return ((MyApplication) getApplication()).getWorkerThread().eventHandler();
     }
 
     @Override

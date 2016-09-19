@@ -4,6 +4,7 @@ apply plugin: 'android-apt'
 def cfg = rootProject.ext.configuration
 def libs = rootProject.ext.libraries
 repositories {
+
     maven { url 'https://maven.fabric.io/public' }
 }
 android {
@@ -94,7 +95,7 @@ dependencies {
 android {
     defaultConfig {
         ndk {
-            abiFilters 'armeabi'// 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64', 'mips', 'mips64'
+            abiFilters 'armeabi', 'armeabi-v7a', 'x86'//, 'arm64-v8a', 'x86_64', 'mips', 'mips64'
         }
 
     }
@@ -115,7 +116,14 @@ dependencies {
     compile 'com.bugtags.library:bugtags-lib:latest.integration'
 }
 
-
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+dependencies {
+    compile(name:'videoprp', ext:'aar')
+}
 
 
 

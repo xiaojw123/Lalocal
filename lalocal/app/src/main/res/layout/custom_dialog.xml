@@ -5,8 +5,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/dialog_card_margin"
-    app:cardElevation="@dimen/dimen_size_5_dp"
-    app:cardCornerRadius="@dimen/dimen_size_3_dp"
     app:cardBackgroundColor="@color/white">
 
 

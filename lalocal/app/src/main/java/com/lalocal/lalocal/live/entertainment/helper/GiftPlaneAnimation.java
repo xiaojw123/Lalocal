@@ -13,7 +13,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
+import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
 import java.util.LinkedList;
@@ -27,13 +29,12 @@ public class GiftPlaneAnimation {
     private RelativeLayout giftPlaneBg;
     private View gfitPlaneIndex;
     private TextView giftPlaneText;
-
     private Context mContext;
-
-    private Queue<ChatRoomMessage> cache = new LinkedList<>();
+    private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
     private Animation messageBgAnimation;
     private Animation messageSliderAnimtion;
+    private boolean isStartAnim=true;
 
 
     public GiftPlaneAnimation(ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext) {
@@ -45,24 +46,35 @@ public class GiftPlaneAnimation {
     }
 
     public void showPlaneAnimation(ChatRoomMessage message) {
-        cache.add(message);
-        startAnimation(giftPlaneUp);
+        GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
+        cache.add(messageToGiftBean);
+        startAnimation(giftPlaneUp,giftPlaneBg);
     }
 
-    private void startAnimation(ImageView target) {
-        ChatRoomMessage message = cache.poll();
-        if (message == null) {
-            return;
+    private void startAnimation(ImageView target,RelativeLayout giftPlanceBg) {
+
+        if(isStartAnim){
+            isStartAnim=false;
+            GiftBean giftBean = cache.poll();
+            if (giftBean == null) {
+                isStartAnim=true;
+                return;
+            }
+
+            updateView(giftBean, target,giftPlanceBg);
         }
-        updateView(message, target);
+
 
 
     }
 
-    private void updateView(final ChatRoomMessage message, final ImageView target) {
+    private void updateView(final  GiftBean giftBean, final ImageView target,final RelativeLayout giftPlanceBg) {
         target.setVisibility(View.VISIBLE);
         target.setBackgroundResource(R.drawable.plane_rocket);
         giftPlaneBg.setVisibility(View.VISIBLE);
+        String s = giftBean.getUserName() + "  与主播同乘飞机旅行";
+        TextView sendName= (TextView) giftPlanceBg.findViewById(R.id.audience_gift_send_plane);
+        sendName.setText(s);
         giftPlaneBg.startAnimation(getTranslateAnim());
         rocketAnimation = (AnimationDrawable) target.getBackground();
         rocketAnimation.start();
@@ -112,9 +124,11 @@ public class GiftPlaneAnimation {
             super.handleMessage(msg);
             if (msg.what == 1 || msg.what == 2) {
                 rocketAnimation.stop();
+                isStartAnim=true;
                 if (msg.what == 1) {
                     giftPlaneUp.setVisibility(View.GONE);
                     giftPlaneBg.setVisibility(View.GONE);
+                    startAnimation(giftPlaneUp,giftPlaneBg);
 
                 }
             }

@@ -94,6 +94,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private boolean touched = false; // 是否按着
     private boolean isKeyboardShowed = true; // 是否显示键盘
     private Context mContext;
+    private String creatorAccount;
+    private  int userId;
 
     // state
     private boolean actionPanelBottomLayoutHasSetup = false;
@@ -108,18 +110,20 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private BarrageView barrageView;
 
 
-    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions, InputConfig inputConfig) {
+    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId) {
         this.mContext=mContext;
         this.container = container;
         this.view = view;
         this.actions = actions;
         this.uiHandler = new Handler();
         this.inputConfig = inputConfig;
+        this.creatorAccount=creatorAccount;
+        this.userId=userId;
         init();
     }
 
-    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions) {
-        this(mContext,container, view, actions, new InputConfig());
+    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId) {
+        this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId);
     }
 
     public void onPause() {
@@ -348,6 +352,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","1");
+                        ext.put("creatorAccount",creatorAccount);
+                        ext.put("userId",userId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage, MessageType.barrage)) {
@@ -357,6 +363,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","0");
+                        ext.put("creatorAccount",creatorAccount);
+                        ext.put("userId",userId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage,MessageType.text)) {

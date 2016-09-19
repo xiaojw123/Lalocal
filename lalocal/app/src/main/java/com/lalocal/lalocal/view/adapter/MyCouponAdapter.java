@@ -85,7 +85,7 @@ public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener
                 return null;
             }
             ViewHolder holder = null;
-            if (convertView == null) {
+//            if (convertView == null) {
                 holder = new ViewHolder();
                 convertView = inflater.inflate(R.layout.home_me_my_coupon_item, null);
                 Resources res = context.getResources();
@@ -135,9 +135,10 @@ public class MyCouponAdapter extends BaseAdapter implements View.OnClickListener
                     convertView.setTag(holder);
                 }
 
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
+//            }
+// else {
+//                holder = (ViewHolder) convertView.getTag();
+//            }
 
 
         }
