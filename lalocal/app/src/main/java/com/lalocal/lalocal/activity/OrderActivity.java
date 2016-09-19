@@ -175,10 +175,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     private int getOrderId() {
         return getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
     }
-    private String getActionType(){
+
+    private String getActionType() {
         return getIntent().getStringExtra(KeyParams.ACTION_TYPE);
     }
-
 
 
     @Override
@@ -204,7 +204,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             case R.id.order_immediately_evaluate_btn:
                 String text = evalute_btn.getText().toString();
                 if (getResources().getString(R.string.pay_immediately).equals(text)) {
-                    if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
+                    if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
                         setResult(MeFragment.UPDATE_MY_ORDER);
                     }
                     Intent intent = new Intent(this, PayActivity.class);
@@ -253,17 +253,17 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             popupWindow.setFocusable(true);
             popupWindow.setContentView(contentView);
         }
-        if (cancel_order_tv.getVisibility()==View.VISIBLE){
-            contentView.setPadding(0,((int)getResources().getDimension(R.dimen.dimen_size_15_dp)),0,((int)getResources().getDimension(R.dimen.dimen_size_15_dp)));
-        }else{
-            contentView.setPadding(0,((int)getResources().getDimension(R.dimen.dimen_size_10_dp)),0,((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
+        if (cancel_order_tv.getVisibility() == View.VISIBLE) {
+            contentView.setPadding(0, ((int) getResources().getDimension(R.dimen.dimen_size_15_dp)), 0, ((int) getResources().getDimension(R.dimen.dimen_size_15_dp)));
+        } else {
+            contentView.setPadding(0, ((int) getResources().getDimension(R.dimen.dimen_size_10_dp)), 0, ((int) getResources().getDimension(R.dimen.dimen_size_10_dp)));
         }
         popupWindow.showAsDropDown(more_function_img, 0, -contentView.getPaddingTop());
     }
 
     @Override
     public void onBackClick() {
-    setBackResult();
+        setBackResult();
     }
 
     @Override
@@ -272,30 +272,29 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         setBackResult();
 
     }
-    public void setBackResult(){
+
+    public void setBackResult() {
         AppLog.print("setBackResult___actionType___");
-        if (!KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
+        if (!KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
             setResult(PayActivity.RESULT_BACK_PRODUCT);
+        } else {
+            Intent intent = new Intent();
+            intent.setAction(MeFragment.ACTION_UPDATE_DATA);
+            sendBroadcast(intent);
         }
-//        else{
-//            Intent intent=new Intent();
-//            intent.setAction(MeFragment.ACTION_UPDATE_DATA);
-//            sendBroadcast(intent);
-//        }
 
     }
-
 
 
     class CallBack extends ICallBack {
         @Override
         public void onGetOrderDetail(OrderDetail detail) {
             mOrderDetail = detail;
-            if (isCancelOrder){
-                isCancelOrder=false;
+            if (isCancelOrder) {
+                isCancelOrder = false;
                 updateModuleOrderInfo();
-            }else{
-            updateView();
+            } else {
+                updateView();
             }
         }
 
@@ -304,8 +303,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             if (cancel_order_tv.getVisibility() == View.VISIBLE) {
                 cancel_order_tv.setVisibility(View.GONE);
             }
-            isCancelOrder=true;
-            if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())){
+            isCancelOrder = true;
+            if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
                 setResult(MeFragment.UPDATE_MY_ORDER);
             }
             mContentloader.getOrderDetail(getOrderId());
@@ -642,14 +641,14 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) textView.getLayoutParams();
                             params.leftMargin = left;
                             params.height = height;
-                            params.rightMargin=height;
+                            params.rightMargin = height;
                         } else {
                             textView.setTextColor(getResources().getColor(R.color.color_b3));
                             travel_people_container.addView(textView);
                             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) textView.getLayoutParams();
                             params.leftMargin = left;
                             params.height = height;
-                            params.rightMargin=height;
+                            params.rightMargin = height;
                         }
 
                     }

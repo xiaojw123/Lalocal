@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -239,6 +240,28 @@
                 android:textSize="@dimen/text_size_16_sp" />
         </RelativeLayout>
 
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+            <!--android:id="@+id/audience_anchor_headportrait"-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--app:civ_border_color="@color/white"-->
+            <!--app:civ_border_width="@dimen/dimen_size_2_dp"-->
+            <!--android:src="@drawable/test_img"-->
+            <!--android:layout_marginTop="220dp"-->
+            <!--android:layout_marginLeft="120dp"-->
+            <!--/>-->
+
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+            <!--android:layout_width="40dp"-->
+            <!--android:layout_height="40dp"-->
+            <!--app:civ_border_color="@color/white"-->
+            <!--app:civ_border_width="@dimen/dimen_size_2_dp"-->
+            <!--android:src="@drawable/test_img"-->
+            <!--android:layout_toRightOf="@+id/audience_anchor_headportrait"-->
+            <!--android:layout_marginLeft="-5dp"-->
+            <!--android:layout_alignTop="@+id/audience_anchor_headportrait"-->
+            <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
+            <!--/>-->
 
     </RelativeLayout>
 

@@ -29,7 +29,7 @@ import java.util.Queue;
  * Created by android on 2016/9/7.
  */
 public class GiftAnimations {
-    private final int LITTLE_DURATIN = 200;
+    private final int LITTLE_DURATIN = 400;
     private final int MSG_UPDATE_VALUE = 0x10;
     private final int SHOW_HIDE_ANIMATOR_DURATION = 1000;
     private Context mContext;
@@ -45,7 +45,6 @@ public class GiftAnimations {
 
     private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
-    Animation textAnimation;
     GiftHandler roseHandler, bootHandler, planeHandler;
     GiftHandler upHandler, dowHandler;
 
@@ -59,7 +58,6 @@ public class GiftAnimations {
         this.hidenDownAniamtorSet = buildHidenAnimationSet(downView);
         this.upAnimatorSet = buildAnimationSet(upView);
         this.downAnimatorSet = buildAnimationSet(downView);
-        textAnimation = AnimationUtils.loadAnimation(mContext, R.anim.text_animation);
     }
 
     // 收到礼物，等待显示动画
@@ -172,7 +170,7 @@ public class GiftAnimations {
         final AnimatorSet set = new AnimatorSet();
         set.setTarget(target);
         ObjectAnimator hide = buildHideAnimator(target, 1);
-        set.setStartDelay(LITTLE_DURATIN);
+        set.setStartDelay(1200);
         set.play(hide);
         set.addListener(new Animator.AnimatorListener() {
             @Override
@@ -344,6 +342,7 @@ public class GiftAnimations {
                         sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
                     }
                     mSendGiftTotal.setText("x" + mFlowingValue);
+                    Animation textAnimation = AnimationUtils.loadAnimation(mContext, R.anim.text_animation);
                     mSendGiftTotal.startAnimation(textAnimation);
                     break;
 
