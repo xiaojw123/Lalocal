@@ -16,6 +16,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
 import java.util.LinkedList;
@@ -35,14 +36,19 @@ public class GiftPlaneAnimation {
     private Animation messageBgAnimation;
     private Animation messageSliderAnimtion;
     private boolean isStartAnim=true;
+    ImageView mAnchorHeadImg,mUserHeadImg;
 
 
-    public GiftPlaneAnimation(ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext) {
+
+    public GiftPlaneAnimation(ImageView anchorHeadImg,ImageView userHeadImg,ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext,String avatar) {
+        mAnchorHeadImg=anchorHeadImg;
+        mUserHeadImg=userHeadImg;
         this.giftPlaneUp = giftPlaneUp;
         this.mContext = mContext;
         this.giftPlaneBg = giftPlanceBg;
         gfitPlaneIndex = giftPlanceBg.getChildAt(0);
         giftPlaneText = (TextView) giftPlanceBg.getChildAt(1);
+        DrawableUtils.displayImg(mContext,mAnchorHeadImg,avatar);
     }
 
     public void showPlaneAnimation(ChatRoomMessage message) {
@@ -70,6 +76,9 @@ public class GiftPlaneAnimation {
     }
 
     private void updateView(final  GiftBean giftBean, final ImageView target,final RelativeLayout giftPlanceBg) {
+        mAnchorHeadImg.setVisibility(View.VISIBLE);
+        mUserHeadImg.setVisibility(View.VISIBLE);
+        DrawableUtils.displayImg(mContext,mUserHeadImg,giftBean.getHeadImage());
         target.setVisibility(View.VISIBLE);
         target.setBackgroundResource(R.drawable.plane_rocket);
         giftPlaneBg.setVisibility(View.VISIBLE);
@@ -129,6 +138,8 @@ public class GiftPlaneAnimation {
                 if (msg.what == 1) {
                     giftPlaneUp.setVisibility(View.GONE);
                     giftPlaneBg.setVisibility(View.GONE);
+                    mAnchorHeadImg.setVisibility(View.GONE);
+                    mUserHeadImg.setVisibility(View.GONE);
                     startAnimation(giftPlaneUp,giftPlaneBg);
 
                 }
