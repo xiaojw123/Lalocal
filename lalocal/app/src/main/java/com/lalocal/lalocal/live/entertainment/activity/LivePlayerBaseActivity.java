@@ -38,7 +38,7 @@ import com.lalocal.lalocal.live.entertainment.constant.GiftType;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomNotificationHelper;
-import com.lalocal.lalocal.live.entertainment.helper.GiftAnimation;
+import com.lalocal.lalocal.live.entertainment.helper.GiftAnimations;
 import com.lalocal.lalocal.live.entertainment.helper.GiftPlaneAnimation;
 import com.lalocal.lalocal.live.entertainment.helper.SimpleCallback;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
@@ -116,7 +116,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 直播端和观众端的基类
  */
-public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy ,AGEventHandler {
+public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler {
     private static final String TAG = LivePlayerBaseActivity.class.getSimpleName();
     private final static String EXTRA_ROOM_ID = "ROOM_ID";
     private final static String EXTRA_URL = "EXTRA_URL";
@@ -170,7 +170,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     // data
     protected GiftAdapter adapter;
-    protected GiftAnimation giftAnimation; // 礼物动画
+    protected GiftAnimations giftAnimation; // 礼物动画
     private AbortableFuture<EnterChatRoomResultData> enterRequest;
 
     private NetworkInfo netInfo;
@@ -354,7 +354,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         scoreLayout = (RelativeLayout) findViewById(R.id.audience_score_layout);
         scoreTv = (TextView) findViewById(R.id.audience_score_tv);
         giftPlaneUp = (ImageView) findViewById(R.id.gift_plane_up);
-        giftPlaneBg=(RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
+        giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         //     giftPlaneDown = (ImageView) findViewById(R.id.gift_plane_down);
         //    planeLayout = (RelativeLayout) findViewById(R.id.gift_plane_layout);
         // 礼物列表
@@ -527,6 +527,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftsRankPopuWindow.setOnSendClickListener(new GiftsRankPopuWindow.OnGiftRanksListener() {
             @Override
             public void closeRankPopuBtn() {
+                //   drawerLayout.openDrawer(Gravity.RIGHT);
 
             }
 
@@ -664,7 +665,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     if ("style".equals(key)) {
                         styles = value.toString();
                     }
-                    if("userId".equals(key)){
+                    if ("userId".equals(key)) {
                         messageUserId = value.toString();
                     }
                     if ("disableSendMsgUserId".equals(key)) {
@@ -674,9 +675,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         onlineNum = value.toString();
                     }
                     if ("giftModel".equals(key)) {
-
-                        if(value!=null&&!"null".equals(value.toString())){
-
+                        String text = value.toString();
+                        if (text != null && !"null".equals(text)) {
                             Map<String, Object> map = (Map<String, Object>) value;
                             Iterator<Map.Entry<String, Object>> mapItem = map.entrySet().iterator();
                             while (mapItem.hasNext()) {
@@ -705,7 +705,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         if (senderNick != null) {
                             barrageView.init(new BarrageConfig());
                             if (content != null) {
-                                BarrageViewBean barrageBean=new BarrageViewBean();
+                                BarrageViewBean barrageBean = new BarrageViewBean();
                                 String s = senderNick + ":" + content;
                                 barrageBean.setUserId(messageUserId);
                                 barrageBean.setContent(s);
@@ -716,7 +716,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
                             @Override
                             public void getUserId(String userId) {
-                                Toast.makeText(LivePlayerBaseActivity.this,"弹幕点击了"+userId,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LivePlayerBaseActivity.this, "弹幕点击了" + userId, Toast.LENGTH_SHORT).show();
                             }
                         });
                         break;
@@ -867,7 +867,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void onSuccess(EnterChatRoomResultData result) {
                 onLoginDone();
-
                 roomInfo = result.getRoomInfo();
                 member1 = result.getMember();
                 enterroomgetnick = member1.getNick();
@@ -916,9 +915,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         fetchData();
     }
 
-    protected  void initInputPanel(String creatorAccount){
+    protected void initInputPanel(String creatorAccount) {
         if (inputPanel == null) {
-            inputPanel = new InputPanel(LivePlayerBaseActivity.this, container, view, getActionList(), inputConfig,creatorAccount,UserHelper.getUserId(LivePlayerBaseActivity.this));
+            inputPanel = new InputPanel(LivePlayerBaseActivity.this, container, view, getActionList(), inputConfig, creatorAccount, UserHelper.getUserId(LivePlayerBaseActivity.this));
         } else {
             inputPanel.reload(container, inputConfig);
         }
@@ -1104,6 +1103,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     @Override
     public boolean sendMessage(IMMessage msg, int type) {
+
         String messageUserId=null;
         String fromAccount=null;
        ChatRoomMessage message= (ChatRoomMessage)msg;
@@ -1146,16 +1146,16 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             Map.Entry<String, Object> next = iterator.next();
                             String key = next.getKey();
                             Object value = next.getValue();
-                            if("userId".equals(key)){
+                            if ("userId".equals(key)) {
                                 messageUserId = value.toString();
                             }
                         }
-                        }
+                    }
 
 
                     barrageView.init(new BarrageConfig());
                     if (content != null) {
-                        BarrageViewBean barrageViewBean=new BarrageViewBean();
+                        BarrageViewBean barrageViewBean = new BarrageViewBean();
                         String s = "我" + ":" + content;
                         barrageViewBean.setUserId(messageUserId);
                         barrageViewBean.setContent(s);
@@ -1165,7 +1165,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
                         @Override
                         public void getUserId(String userId) {
-                            Toast.makeText(LivePlayerBaseActivity.this,"弹幕点击了"+userId,Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LivePlayerBaseActivity.this, "弹幕点击了" + userId, Toast.LENGTH_SHORT).show();
                         }
                     });
                     break;
@@ -1183,7 +1183,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case MessageType.relieveBan:
                     messageListPanel.onMsgSend(message);
                     break;
-                case  MessageType.cancel:
+                case MessageType.cancel:
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.managerLive:
@@ -1253,9 +1253,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
         giftAnimationViewDown = findView(R.id.gift_animation_view);
         giftAnimationViewUp = findView(R.id.gift_animation_view_up);
+
       //  giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
-        giftAnimation=  new GiftAnimation(giftAnimationViewDown, giftAnimationViewUp, this);
-        giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp,giftPlaneBg, this);
+     //   giftAnimation=  new GiftAnimation(giftAnimationViewDown, giftAnimationViewUp, this);
+      //  giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp,giftPlaneBg, this);
+
+        giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
+        giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp, giftPlaneBg, this);
+
     }
 
     // 更新礼物列表，由子类定义
@@ -1282,7 +1287,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onResume() {
         super.onResume();
-        if(inputPanel!=null){
+        if (inputPanel != null) {
             inputPanel.hideInputMethod();
         }
 
@@ -1293,7 +1298,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     @Override
     public void onBackPressed() {
-
 
 
         if (inputPanel != null && inputPanel.collapse(true)) {

@@ -17,12 +17,12 @@ public class Coupon {
      */
 
     private int id;
-    private String name;
-    private String expiredDateStr;
+    private String name="";
+    private String expiredDateStr="";
     private double discount;
     private int status;
-    private String statusName;
-    private String minFee;
+    private String statusName="";
+    private String minFee="";
     private int type;//优惠券类型,0普通优惠券 1作者优惠券
 
     public int getId() {
