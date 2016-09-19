@@ -46,7 +46,9 @@ public class GiftAnimations {
 
     private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
-    GiftHandler roseHandler, bootHandler, planeHandler;
+
+    Animation textAnimation;
+    GiftHandler roseHandler, bootHandler, planeHandler,defaultHandler;
     GiftHandler upHandler, dowHandler;
 
 
@@ -103,6 +105,9 @@ public class GiftAnimations {
             case "003":
                 AppLog.print("003 gitHandler___" + roseHandler);
                 if (continueGiftAnim(planeHandler, message)) return;
+                break;
+            default:
+                if (continueGiftAnim(defaultHandler, message)) return;
                 break;
         }
 
@@ -266,7 +271,10 @@ public class GiftAnimations {
                 planeHandler = new GiftHandler(sendGiftTotal);
                 sendGiftMessage(planeHandler, root, count, m, userId);
                 return;
-
+            default:
+                defaultHandler = new GiftHandler(sendGiftTotal);
+                sendGiftMessage(defaultHandler, root,count, m,userId);
+              return;
         }
         rocketAnimation = (AnimationDrawable) sendGiftImg.getBackground();
         rocketAnimation.start();

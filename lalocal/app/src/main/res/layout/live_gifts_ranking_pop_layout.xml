@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#cc000000">
@@ -10,7 +9,7 @@
         android:orientation="vertical">
     <ImageView
         android:id="@+id/live_gift_ranking_close_iv"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/author_padding_25dp"
@@ -19,6 +18,7 @@
 
 
     <LinearLayout
+        android:id="@+id/pop_title_layout"
         android:paddingTop="@dimen/live_padding_15dp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/live_height_40dp"
@@ -39,14 +39,9 @@
                 android:textColor="@color/color_ffaa2a"
                 android:textSize="@dimen/live_text_16sp"
                 android:paddingBottom="@dimen/live_padding_5dp"
-                android:text="本直播间贡献榜"
+                android:text="本场贡献榜"
                 />
-            <View
-               android:id="@+id/live_gifts_left_line"
-                android:layout_width="100dp"
-                android:layout_height="1dp"
-                android:background="@color/color_ffaa2a"
-                ></View>
+
 
         </LinearLayout>
         <LinearLayout
@@ -62,34 +57,25 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/live_text_16sp"
                 android:paddingBottom="@dimen/live_padding_5dp"
-                android:text="世界贡献榜"
+                android:text="累计贡献榜"
                 android:textColor="@android:color/white"/>
-            <View
-                android:id="@+id/live_gifts_right_line"
-                android:layout_width="100dp"
-                android:layout_height="1dp"
-                android:paddingTop="@dimen/live_padding_10dp"
-                android:visibility="gone"
-                android:background="@color/color_ffaa2a"
-                ></View>
+
         </LinearLayout>
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@android:color/black"></View>
-
+     <!--   android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"-->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
+
             >
             <ListView
                 android:id="@+id/live_gift_ranking_listview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ></ListView>
+></ListView>
 
             <TextView
                 android:id="@+id/live_no_gift_ranking"
@@ -100,7 +86,9 @@
                 android:layout_centerInParent="true"
                 android:textColor="@android:color/white"
                 android:textSize="@dimen/text_size_16_sp"
-                android:text="暂时没有收到礼物!"/>
+                android:singleLine="false"
+                android:gravity="center"
+                android:text="主播现在还没有收到礼物\n你可以成为第一个送主播礼物的人"/>
         </RelativeLayout>
 
 

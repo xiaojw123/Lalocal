@@ -135,7 +135,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private ImageView clickPraise;//点赞
 
 
-
     private LinearLayout modelLayout;//用户信息layout
     private LinearLayout keyboardLayout;//自定义键盘输入
 
@@ -205,9 +204,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             palyerLayout.addView(surfaceView);
             rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN , 0));//VideoCanvas:本地代码显示属性
             surfaceView.setZOrderOnTop(true);
-
             surfaceView.setZOrderMediaOverlay(true);
-            worker().preview(true, surfaceView, 0);
+            worker().preview(true, surfaceView, config().mUid);
         }
 
     }
@@ -235,7 +233,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         worker().leaveChannel(config().mChannel);
         if (isBroadcaster()) {
             AppLog.i("TAG","停止视频预览。。。。");
-            worker().preview(false, null, 0);
+            worker().preview(false, null, config().mUid);
         }
     }
 
@@ -476,10 +474,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     public void run() {
                         if (!isCloseLive) {
                             AppLog.i("TAG", "上传在线人数：" + onlineCounts);
+
                             contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                         }
                     }
-                }, 1000, 5 * 1000);
+                }, 1000, 2 * 1000);
             }
         });
 
@@ -665,6 +664,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customDialog.setCancelBtn("结束直播", new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
+                sendLiveStatusMessgae("11");
                 endLive();
                 //结束直播的时间
                 endTime = System.currentTimeMillis();
@@ -678,9 +678,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (timer != null) {
             timer.cancel();
         }
+        deInitUIandEvent();
         contentLoader.cancelLiveRoom(channelId);
-        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-        IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
+
+      /*  IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         Map<String, Object> ext = new HashMap<>();
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
@@ -688,20 +689,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("creatorAccount",creatorAccount);
             ext.put("userId",userId);
-
             likeMessage.setRemoteExtension(ext);
+            AppLog.i("TAG","发送结束直播的消息");
         }
 
-        sendMessage(likeMessage, MessageType.leaveLive);
-
-
-
-
-
+      //  sendMessage(likeMessage, MessageType.leaveLive);
+       // NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);*/
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
             isStartLive = false;
-
             drawerLayout.closeDrawer(Gravity.RIGHT);
             SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");//初始化Formatter的转换格式。
             formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));

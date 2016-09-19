@@ -68,6 +68,7 @@
             android:paddingTop="@dimen/live_padding_10dp"
             android:singleLine="true"
             android:ellipsize="end"
+
             android:text="我美我直播，你行你也上"
             android:textSize="@dimen/live_text_15sp" />
         <RelativeLayout

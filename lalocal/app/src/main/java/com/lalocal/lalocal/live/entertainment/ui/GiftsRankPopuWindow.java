@@ -18,7 +18,6 @@ import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppLog;
 
 import java.util.List;
 
@@ -28,10 +27,10 @@ import java.util.List;
 public class GiftsRankPopuWindow extends PopupWindow {
     private Context mContext;
     private TextView thisRoomTv;
-    private View leftLine;
+
     private LinearLayout allRoomRank;
     private TextView allRoomTv;
-    private View rightLine;
+
     private ListView rankListView;
     private TextView shareBtn;
     private LiveGiftRanksResp liveGiftRanksResp;
@@ -48,10 +47,9 @@ public class GiftsRankPopuWindow extends PopupWindow {
         ImageView closePopu= (ImageView) view.findViewById(R.id.live_gift_ranking_close_iv);
         LinearLayout thisRoomRank= (LinearLayout) view.findViewById(R.id.live_gifts_this_room_ranking);
         thisRoomTv = (TextView) view.findViewById(R.id.live_gifts_this_room_ranking_tv);
-        leftLine = view.findViewById(R.id.live_gifts_left_line);
+
         allRoomRank = (LinearLayout) view.findViewById(R.id.live_gifts_all_room_ranking);
         allRoomTv = (TextView) view.findViewById(R.id.live_gifts_all_room_ranking_tv);
-        rightLine = view.findViewById(R.id.live_gifts_right_line);
         noGift = (TextView) view.findViewById(R.id.live_no_gift_ranking);
 
         rankListView = (ListView) view.findViewById(R.id.live_gift_ranking_listview);
@@ -66,7 +64,6 @@ public class GiftsRankPopuWindow extends PopupWindow {
         shareBtn.setOnClickListener(buttonClickListener);
 
 
-
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setContentView(view);
@@ -75,9 +72,13 @@ public class GiftsRankPopuWindow extends PopupWindow {
         ColorDrawable dw = new ColorDrawable();
         this.setBackgroundDrawable(dw);
         currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
-      //  giftRankingStatus(currentRanks);
-        rankListView.setAdapter(new GiftRankViewAdapter(mContext, currentRanks));
-        rankListView.setOnItemClickListener(onItemClickListener);
+        TotalRanksBean mycurrentRank = liveGiftRanksResp.getResult().getMycurrentRank();
+
+        if(mycurrentRank!=null&&mycurrentRank.getRank()>10){
+         //   currentRanks.add(mycurrentRank);
+        }
+        giftRankingStatus(currentRanks);
+
     }
 
     View.OnClickListener buttonClickListener = new View.OnClickListener() {
@@ -92,24 +93,19 @@ public class GiftsRankPopuWindow extends PopupWindow {
                     break;
                 case R.id.live_gifts_this_room_ranking:
                     thisRoomTv.setTextColor(Color.parseColor("#ffaa2a"));
-                    leftLine.setVisibility(View.VISIBLE);
                     allRoomTv.setTextColor(Color.WHITE);
-                    rightLine.setVisibility(View.GONE);
                     currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
-                    rankListView.setAdapter(new GiftRankViewAdapter(mContext,currentRanks));
-                    rankListView.setOnItemClickListener(onItemClickListener);
-                //    giftRankingStatus(currentRanks);
+                    giftRankingStatus(currentRanks);
                     break;
                 case R.id.live_gifts_all_room_ranking:
                     allRoomTv.setTextColor(Color.parseColor("#ffaa2a"));
-                    rightLine.setVisibility(View.VISIBLE);
                     thisRoomTv.setTextColor(Color.WHITE);
-                    leftLine.setVisibility(View.GONE);
                     currentRanks = liveGiftRanksResp.getResult().getTotalRanks();
-                 //   giftRankingStatus(currentRanks);
-                    rankListView.setAdapter(new GiftRankViewAdapter(mContext,currentRanks));
-                    rankListView.setOnItemClickListener(onItemClickListener);
-
+                    TotalRanksBean myTotalRank = liveGiftRanksResp.getResult().getMyTotalRank();
+                    if(myTotalRank!=null&&myTotalRank.getRank()>=10){
+                      //  currentRanks.add(myTotalRank);
+                    }
+                    giftRankingStatus(currentRanks);
                     break;
                 case R.id.live_gift_ranking_share:
                     SpecialShareVOBean shareVO = liveGiftRanksResp.getResult().getShareVO();
@@ -122,13 +118,15 @@ public class GiftsRankPopuWindow extends PopupWindow {
     };
 
     private  void giftRankingStatus(List<TotalRanksBean> currentRanks){
-        AppLog.i("TAG","礼物榜单："+currentRanks.size());
+
         if(currentRanks.size()==0){
             noGift.setVisibility(View.VISIBLE);
             rankListView.setVisibility(View.GONE);
         }else {
             noGift.setVisibility(View.GONE);
             rankListView.setVisibility(View.VISIBLE);
+            rankListView.setAdapter(new GiftRankViewAdapter(mContext,currentRanks));
+            rankListView.setOnItemClickListener(onItemClickListener);
         }
     }
 
@@ -151,7 +149,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
             TotalRanksBean totalRanksBean = currentRanks.get(position);
             RankUserBean rankUser = totalRanksBean.getUser();
             if(onGiftRanksListener!=null){
-                onGiftRanksListener.ranListItemClick(rankUser);
+           //     onGiftRanksListener.ranListItemClick(rankUser);
             }
         }
     };

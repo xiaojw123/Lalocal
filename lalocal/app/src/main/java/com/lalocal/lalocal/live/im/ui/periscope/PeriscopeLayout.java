@@ -81,18 +81,23 @@ public class PeriscopeLayout extends RelativeLayout {
     private void init() {
 
         //初始化显示的图片
-        drawables = new Drawable[3];
-        Drawable red = getResources().getDrawable(R.drawable.peopleliving_like);
-        Drawable yellow = getResources().getDrawable(R.drawable.peopleliving_like);
-        Drawable blue = getResources().getDrawable(R.drawable.peopleliving_like);
-
-        drawables[0] = red;
-        drawables[1] = yellow;
-        drawables[2] = blue;
+        drawables = new Drawable[6];
+        Drawable redpraise = getResources().getDrawable(R.drawable.redpraise);
+        Drawable yellowpraise = getResources().getDrawable(R.drawable.yellowpraise);
+        Drawable greenpraise = getResources().getDrawable(R.drawable.greenpraise);
+        Drawable yellowhurt = getResources().getDrawable(R.drawable.yellowhurt);
+        Drawable redhurt = getResources().getDrawable(R.drawable.redhurt);
+        Drawable greenhurt = getResources().getDrawable(R.drawable.greenhurt);
+        drawables[0] = redpraise;
+        drawables[1] = yellowpraise;
+        drawables[2] = greenpraise;
+        drawables[3] = yellowhurt;
+        drawables[4] = redhurt;
+        drawables[5] = greenhurt;
         //获取图的宽高 用于后面的计算
         //注意 我这里3张图片的大小都是一样的,所以我只取了一个
-        dHeight = red.getIntrinsicHeight();
-        dWidth = red.getIntrinsicWidth();
+        dHeight = redpraise.getIntrinsicHeight();
+        dWidth = redpraise.getIntrinsicWidth();
 
         //底部 并且 水平居中
         lp = new LayoutParams(dWidth, dHeight);
@@ -125,7 +130,7 @@ public class PeriscopeLayout extends RelativeLayout {
 
         ImageView imageView = new ImageView(getContext());
         //随机选一个
-        imageView.setImageDrawable(drawables[random.nextInt(3)]);
+        imageView.setImageDrawable(drawables[random.nextInt(6)]);
         imageView.setLayoutParams(lp);
 
         addView(imageView);
@@ -133,7 +138,6 @@ public class PeriscopeLayout extends RelativeLayout {
         Animator set = getAnimator(imageView);
         set.addListener(new AnimEndListener(imageView));
         set.start();
-
     }
 
     private Animator getAnimator(View target) {
@@ -147,7 +151,6 @@ public class PeriscopeLayout extends RelativeLayout {
         finalSet.setTarget(target);
         return finalSet;
     }
-
     private AnimatorSet getEnterAnimator(final View target) {
         ObjectAnimator alpha = ObjectAnimator.ofFloat(target, View.ALPHA, 0.2f, 1f);
         ObjectAnimator scaleX = ObjectAnimator.ofFloat(target, View.SCALE_X, 0.2f, 1f);

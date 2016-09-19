@@ -40,7 +40,7 @@ public class GiftStorePopuWindow extends PopupWindow {
         this.giftSresult = giftSresult;
     }
 
-    public void showGiftStorePopuWindow() {
+    public void showGiftStorePopuWindow(int gold) {
         View giftView = View.inflate(mContext, R.layout.audience_gift_page_layout, null);
         ViewPager audienceGiftVp = (ViewPager) giftView.findViewById(R.id.audience_gift_vp);
         IndicatorView mIndicatorView = (IndicatorView) giftView.findViewById(R.id.idv_banner);
@@ -65,6 +65,7 @@ public class GiftStorePopuWindow extends PopupWindow {
         this.setAnimationStyle(R.style.AnimBottom);
         ColorDrawable dw = new ColorDrawable();
         this.setBackgroundDrawable(dw);
+        accountBalance.setText(String.valueOf(gold));
 
         giftSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,7 +80,7 @@ public class GiftStorePopuWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 if (UserHelper.isLogined(mContext)) {
-                    charge();
+                  //  charge();跳转充值页面
                 }else{
                     login();
                 }
@@ -122,7 +123,7 @@ public class GiftStorePopuWindow extends PopupWindow {
                         break;
                 }
                 payBalance = sendTotal * (giftDataResultBean.getGold());
-                accountBalance.setText(String.valueOf(payBalance));
+
                 clickCount++;
             }
         });
