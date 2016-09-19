@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -29,7 +30,7 @@ import java.util.Queue;
  * Created by android on 2016/9/7.
  */
 public class GiftAnimations {
-    private final int LITTLE_DURATIN = 200;
+    private final int LITTLE_DURATIN = 500;
     private final int MSG_UPDATE_VALUE = 0x10;
     private final int SHOW_HIDE_ANIMATOR_DURATION = 1000;
     private Context mContext;
@@ -45,6 +46,7 @@ public class GiftAnimations {
 
     private Queue<GiftBean> cache = new LinkedList<>();
     private AnimationDrawable rocketAnimation;
+
     Animation textAnimation;
     GiftHandler roseHandler, bootHandler, planeHandler,defaultHandler;
     GiftHandler upHandler, dowHandler;
@@ -59,7 +61,6 @@ public class GiftAnimations {
         this.hidenDownAniamtorSet = buildHidenAnimationSet(downView);
         this.upAnimatorSet = buildAnimationSet(upView);
         this.downAnimatorSet = buildAnimationSet(downView);
-        textAnimation = AnimationUtils.loadAnimation(mContext, R.anim.text_animation);
     }
 
     // 收到礼物，等待显示动画
@@ -89,22 +90,21 @@ public class GiftAnimations {
             return;
         }
         String code = message.getCode();
-        int giftCout = message.getGiftCount();
         switch (code) {
             case "001":
                 AppLog.print("001 gitHandler___" + roseHandler);
-                if (continueGiftAnim(roseHandler, giftCout)) return;
+                if (continueGiftAnim(roseHandler, message)) return;
                 break;
             case "002":
                 AppLog.print("002 gitHandler___" + bootHandler);
-                if (continueGiftAnim(bootHandler, giftCout)) return;
+                if (continueGiftAnim(bootHandler, message)) return;
                 break;
             case "003":
                 AppLog.print("003 gitHandler___" + roseHandler);
-                if (continueGiftAnim(planeHandler, giftCout)) return;
+                if (continueGiftAnim(planeHandler, message)) return;
                 break;
             default:
-                if (continueGiftAnim(defaultHandler, giftCout)) return;
+                if (continueGiftAnim(defaultHandler, message)) return;
                 break;
         }
         AppLog.print("isRuning false start___1__upFree:" + upFree + ",downFree" + downFree);
@@ -120,11 +120,15 @@ public class GiftAnimations {
         }
     }
 
-    private boolean continueGiftAnim(GiftHandler handler, int giftCout) {
+    private boolean continueGiftAnim(GiftHandler handler, GiftBean giftBean) {
+
         if (handler != null && handler.isRuning()) {
             AppLog.print("continueAnim isRuning___");
-            handler.addGiftCout(giftCout);
-            return true;
+            String userid = handler.getUserId();
+            if (!TextUtils.isEmpty(userid) && userid.equals(giftBean.getUserId())) {
+                handler.addGiftCout(giftBean.getGiftCount());
+                return true;
+            }
         }
         return false;
     }
@@ -175,7 +179,7 @@ public class GiftAnimations {
         final AnimatorSet set = new AnimatorSet();
         set.setTarget(target);
         ObjectAnimator hide = buildHideAnimator(target, 1);
-        set.setStartDelay(LITTLE_DURATIN);
+        set.setStartDelay(1200);
         set.play(hide);
         set.addListener(new Animator.AnimatorListener() {
             @Override
@@ -248,35 +252,36 @@ public class GiftAnimations {
         int count = message.getGiftCount();
         int n = count / 10; // 2
         int m = n * 10; // 20
+        String userId=message.getUserId();
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         switch (message.getCode()) {
             case "001":
                 sendGiftImg.setBackgroundResource(R.drawable.rose_rocket);
                 roseHandler = new GiftHandler(sendGiftTotal);
-                sendGiftMessage(roseHandler, root, sendGiftTotal, count, m);
+                sendGiftMessage(roseHandler, root, count, m,userId);
                 break;
             case "002":
-                bootHandler = new GiftHandler(sendGiftTotal);
                 sendGiftImg.setBackgroundResource(R.drawable.boot_rocket);
-                sendGiftMessage(bootHandler, root, sendGiftTotal, count, m);
+                bootHandler = new GiftHandler(sendGiftTotal);
+                sendGiftMessage(bootHandler, root, count, m,userId);
                 break;
             case "003":
-                planeHandler = new GiftHandler(sendGiftTotal);
                 sendGiftImg.setBackgroundResource(R.drawable.plane_rocket);
-                sendGiftMessage(planeHandler, root, sendGiftTotal, count, m);
+                planeHandler = new GiftHandler(sendGiftTotal);
+                sendGiftMessage(planeHandler, root, count, m,userId);
                 return;
             default:
                 defaultHandler = new GiftHandler(sendGiftTotal);
-                sendGiftMessage(defaultHandler, root, sendGiftTotal, count, m);
+                sendGiftMessage(defaultHandler, root,count, m,userId);
               return;
-
         }
         rocketAnimation = (AnimationDrawable) sendGiftImg.getBackground();
         rocketAnimation.start();
     }
 
-    private void sendGiftMessage(GiftHandler handler, ViewGroup root, TextView sendGiftTotal, int count, int m) {
+    private void sendGiftMessage(GiftHandler handler, ViewGroup root, int count, int m,String userid) {
         AppLog.print("send gift message___");
+        handler.setUserId(userid);
         handler.setRefNum(m);
         handler.setGiftCout(count);
         handler.setFolowValue(0);
@@ -292,6 +297,7 @@ public class GiftAnimations {
         int m;
         ViewGroup mTargeView;
         private boolean isRuning;
+        private String mUserId;
 
         public GiftHandler(TextView sendGiftTotal) {
             mSendGiftTotal = sendGiftTotal;
@@ -304,6 +310,14 @@ public class GiftAnimations {
         public void setGiftCout(int giftCout) {
             mGifCount = giftCout;
 
+        }
+
+        public void setUserId(String userId) {
+            mUserId = userId;
+        }
+
+        public String getUserId() {
+            return mUserId;
         }
 
 
@@ -351,6 +365,7 @@ public class GiftAnimations {
                         sendEmptyMessageDelayed(MSG_UPDATE_VALUE, LITTLE_DURATIN);
                     }
                     mSendGiftTotal.setText("x" + mFlowingValue);
+                    Animation textAnimation = AnimationUtils.loadAnimation(mContext, R.anim.text_animation);
                     mSendGiftTotal.startAnimation(textAnimation);
                     break;
 

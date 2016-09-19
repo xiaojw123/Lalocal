@@ -464,7 +464,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
                 contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
-                onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
+
                 if (timer == null) {
                     timer = new Timer(true);
                 }
@@ -664,6 +664,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customDialog.setCancelBtn("结束直播", new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
+                sendLiveStatusMessgae("11");
                 endLive();
                 //结束直播的时间
                 endTime = System.currentTimeMillis();
@@ -679,8 +680,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
         deInitUIandEvent();
         contentLoader.cancelLiveRoom(channelId);
-        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-        IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
+
+      /*  IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         Map<String, Object> ext = new HashMap<>();
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
@@ -688,17 +689,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("creatorAccount",creatorAccount);
             ext.put("userId",userId);
-
             likeMessage.setRemoteExtension(ext);
+            AppLog.i("TAG","发送结束直播的消息");
         }
 
-        sendMessage(likeMessage, MessageType.leaveLive);
-
-
+      //  sendMessage(likeMessage, MessageType.leaveLive);
+       // NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);*/
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
             isStartLive = false;
-
             drawerLayout.closeDrawer(Gravity.RIGHT);
             SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");//初始化Formatter的转换格式。
             formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));

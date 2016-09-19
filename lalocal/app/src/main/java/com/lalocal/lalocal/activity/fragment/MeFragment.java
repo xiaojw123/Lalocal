@@ -2,7 +2,10 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -88,24 +91,24 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
     List<String> lastFavorites = new ArrayList<>();
     List<String> lastOrders = new ArrayList<>();
     List<String> lastCopons = new ArrayList<>();
-//    UpdateReciver updateReciver;
+    UpdateReciver updateReciver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        IntentFilter filter = new IntentFilter(ACTION_UPDATE_DATA);
-//        if (updateReciver == null) {
-//            updateReciver = new UpdateReciver();
-//        }
-//        getActivity().registerReceiver(updateReciver, filter);
+        IntentFilter filter = new IntentFilter(ACTION_UPDATE_DATA);
+        if (updateReciver == null) {
+            updateReciver = new UpdateReciver();
+        }
+        getActivity().registerReceiver(updateReciver, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        if (updateReciver != null) {
-//            getActivity().unregisterReceiver(updateReciver);
-//        }
+        if (updateReciver != null) {
+            getActivity().unregisterReceiver(updateReciver);
+        }
     }
 
     @Override
@@ -811,13 +814,13 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         }
     };
 
-//    class UpdateReciver extends BroadcastReceiver {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            if (UserHelper.isLogined(getActivity())) {
-//                contentService.getMyOrder(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
-//            }
-//        }
-//    }
+    class UpdateReciver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (UserHelper.isLogined(getActivity())) {
+                contentService.getMyOrder(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
+            }
+        }
+    }
 
 }

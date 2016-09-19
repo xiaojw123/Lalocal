@@ -18,7 +18,6 @@ import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppLog;
 
 import java.util.List;
 
@@ -76,7 +75,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
         TotalRanksBean mycurrentRank = liveGiftRanksResp.getResult().getMycurrentRank();
 
         if(mycurrentRank!=null&&mycurrentRank.getRank()>10){
-            currentRanks.add(mycurrentRank);
+         //   currentRanks.add(mycurrentRank);
         }
         giftRankingStatus(currentRanks);
 
@@ -103,8 +102,8 @@ public class GiftsRankPopuWindow extends PopupWindow {
                     thisRoomTv.setTextColor(Color.WHITE);
                     currentRanks = liveGiftRanksResp.getResult().getTotalRanks();
                     TotalRanksBean myTotalRank = liveGiftRanksResp.getResult().getMyTotalRank();
-                    if(myTotalRank!=null&&myTotalRank.getRank()>10){
-                        currentRanks.add(myTotalRank);
+                    if(myTotalRank!=null&&myTotalRank.getRank()>=10){
+                      //  currentRanks.add(myTotalRank);
                     }
                     giftRankingStatus(currentRanks);
                     break;
@@ -119,7 +118,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
     };
 
     private  void giftRankingStatus(List<TotalRanksBean> currentRanks){
-        AppLog.i("TAG","礼物榜单："+currentRanks.size());
+
         if(currentRanks.size()==0){
             noGift.setVisibility(View.VISIBLE);
             rankListView.setVisibility(View.GONE);
@@ -150,7 +149,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
             TotalRanksBean totalRanksBean = currentRanks.get(position);
             RankUserBean rankUser = totalRanksBean.getUser();
             if(onGiftRanksListener!=null){
-                onGiftRanksListener.ranListItemClick(rankUser);
+           //     onGiftRanksListener.ranListItemClick(rankUser);
             }
         }
     };

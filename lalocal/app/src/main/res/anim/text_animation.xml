@@ -9,8 +9,6 @@
         android:pivotY="50%"
         android:toXScale="1.0"
         android:toYScale="1.0"
-        android:interpolator="@android:anim/accelerate_interpolator"
-        />
-    <translate
+        android:interpolator="@android:anim/linear_interpolator"
         />
 </set>

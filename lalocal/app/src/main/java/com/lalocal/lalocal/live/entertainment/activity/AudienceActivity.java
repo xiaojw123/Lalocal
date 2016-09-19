@@ -370,6 +370,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
 
             if("11".equals(style)){
+                AppLog.i("TAG","用户端接受到主播结束的消息");
                 showFinishLayout(true, 2);
             }
 

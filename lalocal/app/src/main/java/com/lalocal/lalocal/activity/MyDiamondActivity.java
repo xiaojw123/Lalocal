@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
@@ -94,6 +95,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
         public void onGetScoreLog(ConsumeRecord log) {
             pageNum = log.getPageSize();
             toalPages = log.getTotalPages();
+            AppLog.print("onGetScoreLog toalPages___"+toalPages);
             if (toalPages > 1) {
                 myDiamondCosumeXlv.setPullLoadEnable(true);
                 myDiamondCosumeXlv.setXListViewListener(this);
@@ -102,6 +104,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
             }
             if (isLoadMore) {
                 isLoadMore = false;
+                myDiamondCosumeXlv.stopLoadMore();
             } else {
                 mRows.clear();
             }
@@ -135,6 +138,9 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
                 isLoadMore = true;
                 ++pageNum;
                 mContentloader.getGoldLogs(pageNum);
+            }else{
+                Toast.makeText(MyDiamondActivity.this,"没有更多",Toast.LENGTH_SHORT).show();
+                myDiamondCosumeXlv.stopLoadMore();
             }
 
 

@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
+    android:background="@android:color/black"
    >
 
     <RelativeLayout
@@ -24,8 +25,8 @@
 
         <ImageView
             android:id="@+id/gift_photo_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/live_height_80dp"
+            android:layout_height="@dimen/live_height_80dp"
             android:layout_centerInParent="true"
             android:src="@drawable/androidloading" />
 
@@ -39,6 +40,7 @@
             android:drawableLeft="@drawable/monetary"
             android:drawablePadding="@dimen/live_padding_5dp"
             android:text="0"
+            android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/live_text_12sp" />
 

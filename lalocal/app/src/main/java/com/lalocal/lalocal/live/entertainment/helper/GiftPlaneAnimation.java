@@ -46,6 +46,7 @@ public class GiftPlaneAnimation {
     }
 
     public void showPlaneAnimation(ChatRoomMessage message) {
+
         GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
         cache.add(messageToGiftBean);
         startAnimation(giftPlaneUp,giftPlaneBg);
