@@ -721,7 +721,7 @@ public class ContentLoader {
     }
 
     //直播送礼物
-    public void liveSendGifts(String channelId, String toId, String toNickName, String giftId, String amount) {
+    public void liveSendGifts(String channelId, String toId, String toNickName, int giftId, String amount) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_SEND_GIFTS);
         }
@@ -2030,7 +2030,7 @@ public class ContentLoader {
     }
 
     //直播送礼物
-    public String getSendGiftsParams(String channelId, String toId, String toNickName, String giftId, String amount) {
+    public String getSendGiftsParams(String channelId, String toId, String toNickName, int giftId, String amount) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("channelId", channelId);

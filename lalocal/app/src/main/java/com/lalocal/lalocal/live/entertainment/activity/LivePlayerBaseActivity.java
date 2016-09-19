@@ -770,7 +770,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     case "12":
                         //更新在綫人數
-                        onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
+                        AppLog.i("TAG","获取主播上传的人数:"+onlineNum);
+                       onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
                         break;
                     case "11":
                         AppLog.i("TAG","接受主播离开的消息");
@@ -1060,7 +1061,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected void updateUI(String nick) {
         masterName.setText(nick);
-        //   onlineCountText.setText(String.format("%s人", String.valueOf(roomInfo.getOnlineUserCount())));
+        //  onlineCountText.setText(String.format("%s人", String.valueOf(roomInfo.getOnlineUserCount())));
         fetchOnlineCount();
     }
 
@@ -1080,7 +1081,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-                        onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
+
                         clearCache();
                         fetchData();
                         int onlineUserCount = param.getOnlineUserCount();

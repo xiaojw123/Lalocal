@@ -9,8 +9,8 @@ import android.content.pm.PackageManager;
  */
 public class AppConfig {
 
-   // private static String baseUrl = "http://api.lalocal.cn/api/";
-    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+   private static String baseUrl = "http://api.lalocal.cn/api/";
+   // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {

@@ -698,7 +698,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                     }else if(!DemoCache.getLoginChatRoomStatus()) {
                        Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
-                    } else {
+                    } else if(!"1".equals(playType)) {
                         contentLoader.getMyWallet();
                         contentLoader.setCallBack(new ICallBack(){
                             @Override
@@ -728,7 +728,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         giftStorePopuWindow.setOnSendClickListener(new GiftStorePopuWindow.OnSendClickListener() {
             @Override
             public void sendGiftMessage(final int itemPosition, final int sendTotal, final int payBalance) {
-                final String code = giftSresult.get(itemPosition).getCode();
+
+                final  int id = giftSresult.get(itemPosition).getId();
                 contentLoader.getMyWallet();
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
@@ -755,7 +756,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         } else if (payBalance == 0) {
                             Toast.makeText(AudienceActivity.this, "您还未选中礼物!", Toast.LENGTH_SHORT).show();
                         } else {
-                            contentLoader.liveSendGifts(channelId, userId, nickname, code, String.valueOf(sendTotal));
+                            contentLoader.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
                         }
                     }
 

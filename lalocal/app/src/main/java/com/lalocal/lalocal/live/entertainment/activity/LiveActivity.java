@@ -322,6 +322,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void onDestroy() {
         AppLog.i("TAG","直播端走了onDestroy");
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
         giftList.clear();
         super.onDestroy();
     }
@@ -474,7 +475,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     public void run() {
                         if (!isCloseLive) {
                             AppLog.i("TAG", "上传在线人数：" + onlineCounts);
-
                             contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                         }
                     }
@@ -482,12 +482,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         });
 
-
     }
 
     @Override
     public void onUserOffline(int uid, int reason) {
-
     }
 
     @Override
@@ -498,7 +496,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     public void onConnectionInterrupted() {
         AppLog.i("TAG","直播連接中斷连接中断回调");
-
     }
 
     @Override
@@ -534,6 +531,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onOnLinesCount(String json) {
             super.onOnLinesCount(json);
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
+            AppLog.i("TAG","获取在线人数"+onLineUser.getResult());
+            onlineCountText.setText(String.format("%s人", String.valueOf(onLineUser.getResult())));
             if(onLineUser.getReturnCode()==0){
                 IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "上传在线人数");
                 ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
@@ -546,11 +545,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     ext.put("onlineNum",onLineUser.getResult());
                     likeMessage.setRemoteExtension(ext);
                 }
-
                 sendMessage(likeMessage, MessageType.onlineNum);
             }
         }
-
         @Override
         public void onAlterLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {//修改直播间
             super.onAlterLiveRoom(createLiveRoomDataResp);
@@ -678,8 +675,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (timer != null) {
             timer.cancel();
         }
-        deInitUIandEvent();
-        contentLoader.cancelLiveRoom(channelId);
 
         IMMessage likeMessage1 = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播了哈哈哈哈哈哈");
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
@@ -689,14 +684,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("creatorAccount",creatorAccount);
             ext.put("userId",userId);
-
             likeMessage1.setRemoteExtension(ext);
             AppLog.i("TAG","发送结束直播的消息");
         }
-
         sendMessage(likeMessage1, MessageType.leaveLive);
-        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-      //  NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+        deInitUIandEvent();
+        contentLoader.cancelLiveRoom(channelId);
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
             isStartLive = false;
