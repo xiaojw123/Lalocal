@@ -205,6 +205,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected List<GiftDataResultBean> giftSresult;
     protected ImageView giftPlaneUp;
     protected RelativeLayout giftPlaneBg;
+    protected ImageView userHeadImg, anchorHeadImg;
     private String code;
     private AnimationDrawable rocketAnimation;
     private LiveUserInfoResultBean result;
@@ -355,6 +356,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         scoreTv = (TextView) findViewById(R.id.audience_score_tv);
         giftPlaneUp = (ImageView) findViewById(R.id.gift_plane_up);
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
+        userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
         //     giftPlaneDown = (ImageView) findViewById(R.id.gift_plane_down);
         //    planeLayout = (RelativeLayout) findViewById(R.id.gift_plane_layout);
         // 礼物列表
@@ -502,7 +504,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
             if (liveGiftRanksResp.getReturnCode() == 0) {
-                AppLog.i("TAG","榜单CallBack:");
+                AppLog.i("TAG", "榜单CallBack:");
                 List<TotalRanksBean> currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                 if (currentRanks != null && currentRanks.size() > 0) {
                     for (int i = 0; i < currentRanks.size(); i++) {
@@ -671,7 +673,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     if ("disableSendMsgUserId".equals(key)) {
                         disableSendMsgUserId = value.toString();
                     }
-                    if("onlineNum".equals(key)){
+                    if ("onlineNum".equals(key)) {
                         onlineNum = value.toString();
                     }
                     if ("giftModel".equals(key)) {
@@ -1054,7 +1056,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected void updateUI(String nick) {
         masterName.setText(nick);
-     //   onlineCountText.setText(String.format("%s人", String.valueOf(roomInfo.getOnlineUserCount())));
+        //   onlineCountText.setText(String.format("%s人", String.valueOf(roomInfo.getOnlineUserCount())));
         fetchOnlineCount();
     }
 
@@ -1104,9 +1106,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     public boolean sendMessage(IMMessage msg, int type) {
 
-        String messageUserId=null;
-        String fromAccount=null;
-       ChatRoomMessage message= (ChatRoomMessage)msg;
+        String messageUserId = null;
+        String fromAccount = null;
+        ChatRoomMessage message = (ChatRoomMessage) msg;
         if (msg != null) {
             fromNickBarrage = msg.getFromNick();
             Map<String, Object> remoteExtension1 = msg.getRemoteExtension();
@@ -1116,9 +1118,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
-                    if("disableSendMsgUserId".equals(key)){
-                        fromAccount =value.toString();
-                        AppLog.i("TAG","fromAccount:"+fromAccount);
+                    if ("disableSendMsgUserId".equals(key)) {
+                        fromAccount = value.toString();
+                        AppLog.i("TAG", "fromAccount:" + fromAccount);
                     }
                 }
             }
@@ -1254,9 +1256,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftAnimationViewDown = findView(R.id.gift_animation_view);
         giftAnimationViewUp = findView(R.id.gift_animation_view_up);
 
-      //  giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
-     //   giftAnimation=  new GiftAnimation(giftAnimationViewDown, giftAnimationViewUp, this);
-      //  giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp,giftPlaneBg, this);
+        //  giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
+        //   giftAnimation=  new GiftAnimation(giftAnimationViewDown, giftAnimationViewUp, this);
+        //  giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp,giftPlaneBg, this);
 
         giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
         giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp, giftPlaneBg, this);
@@ -1325,7 +1327,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     @Override
     public void shouldCollapseInputPanel() {
-        if(inputPanel!=null){
+        if (inputPanel != null) {
             inputPanel.collapse(false);
         }
 
