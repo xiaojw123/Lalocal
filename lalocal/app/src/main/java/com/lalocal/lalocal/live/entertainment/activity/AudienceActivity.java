@@ -235,7 +235,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if (prefIndex > ConstantApp.VIDEO_PROFILES.length - 1) {
             prefIndex = ConstantApp.DEFAULT_PROFILE_IDX;
         }
-        int vProfile = ConstantApp.VIDEO_PROFILES[prefIndex];
+     //   int vProfile = ConstantApp.VIDEO_PROFILES[prefIndex];
+        int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
         worker().configEngine(cRole, vProfile);
 
     }
@@ -361,11 +362,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
-
                     if ("style".equals(key)) {
                         style = value.toString();
                     }
                 }
+            }
+
+            if("11".equals(style)){
+                showFinishLayout(true, 2);
             }
 
             if (message != null && message.getAttachment() instanceof ChatRoomNotificationAttachment) {
@@ -583,7 +587,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveQuit = (ImageView) findViewById(R.id.live_quit);
         clickPraise = (ImageView) findViewById(R.id.live_telecast_like);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
-
         liveSettingLayout = findViewById(R.id.setting_bottom_layout);
         liveSettingLayout.setVisibility(View.VISIBLE);
         liveSettingLayout.setClickable(true);
@@ -717,7 +720,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 final String code = giftSresult.get(itemPosition).getCode();
                 startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
 
-//                   contentLoader.getMyWallet();
+                //  contentLoader.getMyWallet();
 
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
@@ -827,6 +830,15 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         }
 
+        customLiveUserInfoDialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+            @Override
+            public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
+                intent.putExtra("userId", String.valueOf(id));
+                startActivity(intent);
+            }
+        });
+
         if (CustomDialogStyle.IDENTITY == CustomDialogStyle.IS_ONESELF || CustomDialogStyle.IDENTITY == CustomDialogStyle.IS_LIVEER) {
 
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
@@ -854,14 +866,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                             @Override
                             public void onCustomLiveUserInfoDialogListener(String id, final TextView textView, ImageView managerMark) {
                                 if (isMuteds) {
-
                                     IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "解除了"+result.getNickName()+"的禁言");
                                     ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
                                     Map<String, Object> ext = new HashMap<>();
                                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                                         ext.put("style", "7");
                                         ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("disableSendMsgUserId", meberAccount);
+                                        ext.put("disableSendMsgUserId", result.getId());
                                         ext.put("disableSendMsgNickName", result.getNickName());
                                         ext.put("userId",userId);
                                         banMessage.setRemoteExtension(ext);
@@ -879,11 +890,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                                 } else {
                                     IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "禁言了"+result.getNickName());
                                     ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
+                                    AppLog.i("TAG","result.getId():"+result.getId()+"meberAccount:"+meberAccount);
                                     Map<String, Object> ext = new HashMap<>();
                                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                                         ext.put("style", "6");
                                         ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("disableSendMsgUserId", meberAccount);
+                                        ext.put("disableSendMsgUserId", result.getId());
                                         ext.put("disableSendMsgNickName", result.getNickName());
                                         ext.put("creatorAccount",creatorAccount);
                                         ext.put("userId",userId);
@@ -1137,7 +1149,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
     private void doRenderRemoteUi(final int uid) {
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -1153,6 +1164,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置远端视频属性
                 }
                 loadingPage.setVisibility(View.GONE);
+                if(audienceOver!=null){
+                    isAudienceOver = true;
+                    audienceOver.setVisibility(View.GONE);
+                }
             }
         });
     }

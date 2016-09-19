@@ -80,11 +80,30 @@
         android:layout_height="0.5dp"
         android:background="@android:color/black"></View>
 
-    <ListView
-        android:id="@+id/live_gift_ranking_listview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"></ListView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+            <ListView
+                android:id="@+id/live_gift_ranking_listview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                ></ListView>
+
+            <TextView
+                android:id="@+id/live_no_gift_ranking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/live_height_50dp"
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/text_size_16_sp"
+                android:text="暂时没有收到礼物!"/>
+        </RelativeLayout>
+
+
 
     </LinearLayout>
     <TextView

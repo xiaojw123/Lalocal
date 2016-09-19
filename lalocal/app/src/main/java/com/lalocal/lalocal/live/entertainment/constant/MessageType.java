@@ -15,4 +15,6 @@ public interface MessageType {
     int managerLive=8;//设置管理员
     int cancel=9;//取消
     int gift=10;//礼物
+    int leaveLive=11;//退出直播
+    int onlineNum=12;//人数
 }

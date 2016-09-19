@@ -64,7 +64,7 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
         }
         if(!TextUtils.isEmpty(okText)){
             remindOk.setText(okText);
-            remindOk.setTextColor(Color.BLUE);
+            remindOk.setTextColor(Color.parseColor("#ffaa2a"));
             chooseLayout.setVisibility(View.GONE);
             okLayout.setVisibility(View.VISIBLE);
         }if(!TextUtils.isEmpty(title)){

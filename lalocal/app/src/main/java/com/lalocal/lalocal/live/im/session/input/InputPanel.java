@@ -354,6 +354,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("style","1");
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId",userId);
+                        ext.put("disableSendMsgUserId",userId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage, MessageType.barrage)) {
@@ -365,6 +366,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("style","0");
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId",userId);
+                        ext.put("disableSendMsgUserId",userId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage,MessageType.text)) {

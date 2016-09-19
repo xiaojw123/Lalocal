@@ -302,10 +302,12 @@
         <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+           />
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"

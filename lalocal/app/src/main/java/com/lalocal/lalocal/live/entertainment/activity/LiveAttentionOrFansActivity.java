@@ -258,10 +258,10 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                     searchResultNull.setVisibility(View.VISIBLE);
                     liveAttentionListview.setVisibility(View.GONE);
                     if ("0".equals(liveType)) {
-                        searchResultNull.setText("您还没有关注任何人!");
+                        searchResultNull.setText("暂时没有关注任何人!");
 
                     } else {
-                        searchResultNull.setText("您暂时还没有粉丝哦!");
+                        searchResultNull.setText("暂时没有粉丝哦!");
                     }
                     liveAttentionSearchEt.setEnabled(false);
 
