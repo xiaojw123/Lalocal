@@ -58,6 +58,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingTop="@dimen/live_padding_5dp"
+                    android:maxLength="10"
+                    android:ellipsize="end"
                     android:text="lalocal"
                     android:textColor="@color/live_info_1a1a1a"
                     android:textSize="@dimen/live_text_16sp" />

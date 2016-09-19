@@ -1774,7 +1774,8 @@ public class ContentLoader {
 
         //上传在线人数
         private void responseOnLinesCount(String json) {
-
+            AppLog.i("TAG","上传在线人数"+json);
+            callBack.onOnLinesCount(json);
         }
 
         //修改直播封面
@@ -1786,7 +1787,7 @@ public class ContentLoader {
 
         //关闭直播间
         private void responseCancelLive(String json) {
-            AppLog.i("TAG", "调用了关闭直播间的接口。。。。。。。。。。。。。。。。。。。。");
+
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }
@@ -1805,6 +1806,7 @@ public class ContentLoader {
 
         //礼物排行榜
         private void responseGiftRanks(String json) {
+
             LiveGiftRanksResp liveGiftRanksResp = new Gson().fromJson(json, LiveGiftRanksResp.class);
             callBack.onGiftRanks(liveGiftRanksResp);
         }

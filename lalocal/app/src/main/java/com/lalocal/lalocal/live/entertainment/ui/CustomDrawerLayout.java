@@ -42,6 +42,7 @@ public class CustomDrawerLayout extends DrawerLayout {
                     break;
 
                 case MotionEvent.ACTION_MOVE:
+
                     int i = DensityUtil.dip2px(getContext(), 52);
                     if(y<i){
                         return false;

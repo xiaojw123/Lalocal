@@ -316,7 +316,7 @@ public class CycleViewPager extends Fragment implements OnPageChangeListener {
 						int targetType = infos.get(currentPosition - 1).targetType;
 						int targetId = infos.get(currentPosition - 1).targetId;
 						if(targetType==-1){
-							//Toast.makeText(getActivity(),url,Toast.LENGTH_SHORT).show();
+
 							String url = infos.get(currentPosition - 1).url;
 							AppLog.i("TAG","mImageCycleViewListener:"+url);
 							Intent intent = new Intent(getActivity(), CarouselFigureActivity.class);

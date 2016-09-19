@@ -30,6 +30,8 @@
             android:textColor="#97d3e9"
             android:textSize="@dimen/live_text_12sp"
             android:paddingLeft="@dimen/live_padding_10dp"
+            android:maxLength="10"
+            android:ellipsize="end"
             android:gravity="center"
             android:text="lalocal"/>
         <TextView

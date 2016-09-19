@@ -76,7 +76,7 @@ public class MyApplication extends Application {
 
         //   Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
 
-        Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
+        Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
 
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());

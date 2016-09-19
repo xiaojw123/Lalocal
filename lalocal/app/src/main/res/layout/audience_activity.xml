@@ -8,16 +8,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="bottom">
-
+        android:layout_alignParentBottom="true">
         <RelativeLayout
-            android:id="@+id/player_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="bottom">
+        android:id="@+id/player_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
 
-        </RelativeLayout>
-
+        >
+    </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_50dp"
@@ -195,6 +193,7 @@
                 layout="@layout/gift_layout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
+
                 android:layout_above="@id/messageListView"
                 android:layout_marginBottom="20dp" />
 

@@ -2,18 +2,17 @@
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
+        android:layout_alignParentBottom="true"
         >
 
         <RelativeLayout
             android:id="@+id/player_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="bottom"
             android:layout_alignParentBottom="true"
             >
 
@@ -61,6 +60,7 @@
 
             <include layout="@layout/live_over_layout"></include>
         </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -81,8 +81,7 @@
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical">
 
-                <include layout="@layout/nim_message_activity_text_layout" />
-
+                    <include layout="@layout/nim_message_activity_text_layout" />
                 <com.lalocal.lalocal.live.im.session.emoji.EmoticonPickerView
                     android:id="@+id/emoticon_picker_view"
                     android:layout_width="wrap_content"
@@ -238,7 +237,7 @@
         <LinearLayout
             android:id="@+id/setting_bottom_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/live_height_50dp"
             android:layout_alignParentBottom="true">
 
             <include layout="@layout/live_telecast_bottom_tab"></include>
@@ -284,6 +283,5 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_16_sp" />
         </RelativeLayout>
-
     </RelativeLayout>
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

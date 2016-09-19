@@ -34,7 +34,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private TextView liveFans;
     private TextView liveContribute;
     private TextView liveMasterHome;
-    CustomLiveUserInfoDialogListener sureDialogListener,cancelDialogListener,reportListener,settingManagerListener,banListener;
+    CustomLiveUserInfoDialogListener sureDialogListener,cancelDialogListener,reportListener,settingManagerListener,banListener,userHomeListener;
     CustomLiveFansOrAttentionListener attentionListener;
 
     private TextView headerReport;
@@ -220,6 +220,8 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             CustomDialogStyle.IDENTITY=-1;
         }
 
+        setCanceledOnTouchOutside(true);
+
     }
 
     private void setAttentionStatus(TextView attentionStatus) {
@@ -242,6 +244,9 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
 
     }
 
+    public  void setUserHomeBtn(CustomLiveUserInfoDialogListener listener){
+        userHomeListener = listener;
+    }
     public void setCancelBtn( CustomLiveUserInfoDialogListener listener) {
         cancelDialogListener = listener;
     }
@@ -288,8 +293,8 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
                 dismiss();
                 break;
             case R.id.master_info_head_iv:
-                if(sureDialogListener!=null){
-                    sureDialogListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome,managerMark);
+                if(userHomeListener!=null){
+                    userHomeListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),liveMasterHome,managerMark);
                 }
                 dismiss();
                 break;

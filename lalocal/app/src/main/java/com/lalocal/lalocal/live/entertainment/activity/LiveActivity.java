@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -36,6 +35,7 @@ import com.lalocal.lalocal.live.entertainment.helper.GiftCache;
 import com.lalocal.lalocal.live.entertainment.model.Gift;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
+import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.module.CustomRemoteExtensionStyle;
 import com.lalocal.lalocal.live.entertainment.ui.CreateLiveRoomPopuwindow;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
@@ -53,6 +53,7 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
@@ -194,10 +195,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         doConfigEngine(cRole);
         if (isBroadcaster(cRole)) {
           SurfaceView  surfaceView= RtcEngine.CreateRendererView(getApplicationContext());
-           RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-           layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-            surfaceView.setLayoutParams(layoutParams);
-          //  palyerLayout.setLayoutParams(layoutParams);
+            RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
+           lp.height= DensityUtil.getWindowHeight(this);
+            lp.width=DensityUtil.getWindowWidth(this);
+           surfaceView.setMinimumHeight(DensityUtil.getWindowHeight(this));
+            surfaceView.setMinimumWidth(DensityUtil.getWindowWidth(this));
+            surfaceView.setLayoutParams(lp);
+            AppLog.i("TAG","获取高度："+DensityUtil.getWindowHeight(this)+"   宽度:"+DensityUtil.getWindowWidth(this));
             palyerLayout.addView(surfaceView);
             rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN , 0));//VideoCanvas:本地代码显示属性
             surfaceView.setZOrderOnTop(true);
@@ -214,9 +218,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (prefIndex > ConstantApp.VIDEO_PROFILES.length - 1) {
             prefIndex = ConstantApp.DEFAULT_PROFILE_IDX;
         }
-        int vProfile = ConstantApp.VIDEO_PROFILES[prefIndex];
-        //  int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
-        worker().configEngine(cRole, vProfile);
+       // int vProfile = ConstantApp.VIDEO_PROFILES[prefIndex];
+          int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
+         worker().configEngine(cRole, vProfile);
     }
 
     @Override
@@ -503,8 +507,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         AppLog.i("TAG","直播連接中斷连接丟失");
     }
 
-    /*   CommonUtil.RESULT_DIALOG = 2;//摄像头权限
-   CommonUtil.RESULT_DIALOG = 3;//音频权限*/
     @Override
     public void onError(int err) {
         AppLog.i("TAG","直播发生错误:"+err);
@@ -527,8 +529,29 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     }
 
-
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onOnLinesCount(String json) {
+            super.onOnLinesCount(json);
+            OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
+            if(onLineUser.getReturnCode()==0){
+                IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "上传在线人数");
+                ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
+                Map<String, Object> ext = new HashMap<>();
+                if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                    ext.put("style", "12");
+                    ext.put("type", chatRoomMember.getMemberType().getValue());
+                    ext.put("creatorAccount",creatorAccount);
+                    ext.put("userId",userId);
+                    ext.put("onlineNum",onLineUser.getResult());
+                    likeMessage.setRemoteExtension(ext);
+                }
+
+                sendMessage(likeMessage, MessageType.onlineNum);
+            }
+        }
+
         @Override
         public void onAlterLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {//修改直播间
             super.onAlterLiveRoom(createLiveRoomDataResp);
@@ -657,6 +680,24 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
         contentLoader.cancelLiveRoom(channelId);
         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+        IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
+        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
+        Map<String, Object> ext = new HashMap<>();
+        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+            ext.put("style", "11");
+            ext.put("type", chatRoomMember.getMemberType().getValue());
+            ext.put("creatorAccount",creatorAccount);
+            ext.put("userId",userId);
+
+            likeMessage.setRemoteExtension(ext);
+        }
+
+        sendMessage(likeMessage, MessageType.leaveLive);
+
+
+
+
+
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
             isStartLive = false;
@@ -727,6 +768,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             }
         });
+
+        customLiveUserInfoDialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+            @Override
+            public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                Intent intent = new Intent(LiveActivity.this, LiveHomePageActivity.class);
+                intent.putExtra("userId", String.valueOf(id));
+                startActivity(intent);
+            }
+        });
         if (CustomDialogStyle.IDENTITY == CustomDialogStyle.IS_ONESELF) {
             CustomDialogStyle.IDENTITY = CustomDialogStyle.IS_ONESELF;
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
@@ -790,7 +840,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                                         ext.put("style", "7");
                                         ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("disableSendMsgUserId", meberAccount);
+                                        ext.put("disableSendMsgUserId", result1.getId());
                                         ext.put("disableSendMsgNickName", result1.getNickName());
                                         ext.put("creatorAccount",creatorAccount);
                                         ext.put("userId",userId);
@@ -814,7 +864,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                                         ext.put("style", "6");
                                         ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("disableSendMsgUserId", meberAccount);
+                                        ext.put("disableSendMsgUserId", result1.getId());
                                         ext.put("disableSendMsgNickName", result1.getNickName());
                                         ext.put("creatorAccount",creatorAccount);
                                         ext.put("userId",userId);
@@ -837,7 +887,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 @Override
                 public void onCustomLiveUserInfoDialogListener(final String id, final TextView textView, final ImageView managerMark) {
                     if (managerList != null && managerList.size() >= 3 && !isManager) {
-                        Toast.makeText(LiveActivity.this, "设置失败，每个直播间最多设置3个管理员", Toast.LENGTH_SHORT).show();
+                      final  CustomChatDialog customDialog = new CustomChatDialog(getActivity());
+                        customDialog.setContent("最多设置3个管理员");
+                        customDialog.setCancelable(false);
+                        customDialog.setOkBtn("确定", new CustomChatDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                customDialog.dismiss();
+                            }
+                        });
+                        customDialog.show();
+
                     } else {
                         if (!isManager) {
                             contentLoader.liveAccreditManager(channelId, String.valueOf(id));
@@ -861,31 +921,39 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             managerMark.setVisibility(View.VISIBLE);
                             isManager = true;
                         } else {
-                            contentLoader.checkUserIdentity(channelId, String.valueOf(id));
+                            CustomChatDialog customDialog = new CustomChatDialog(getActivity());
+                            customDialog.setContent("确定要撤销他的管理员权限？");
+                            customDialog.setCancelable(false);
+                            customDialog.setCancelBtn("确定", new CustomChatDialog.CustomDialogListener() {
+                                @Override
+                                public void onDialogClickListener() {
+                                    contentLoader.checkUserIdentity(channelId, String.valueOf(id));
+                                    NIMClient.getService(ChatRoomService.class).markChatRoomManager(false, new MemberOption(roomId, meberAccount));
+                                    IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "取消了"+result1.getNickName()+"的管理员权限");
+                                    ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
+                                    Map<String, Object> ext = new HashMap<>();
+                                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
+                                        ext.put("style", "9");
+                                        ext.put("type", chatRoomMember.getMemberType().getValue());
+                                        ext.put("adminSendMsgUserId", meberAccount);
+                                        ext.put("adminSendMsgNickName", result1.getNickName());
+                                        ext.put("adminSendMsgImUserId", meberAccount);
+                                        ext.put("creatorAccount",creatorAccount);
+                                        ext.put("userId",userId);
+                                        banMessage.setRemoteExtension(ext);
+                                    }
+                                    sendMessage(banMessage, MessageType.cancel);
+                                    textView.setText("设为管理员");
+                                    textView.setAlpha(1);
 
-                            NIMClient.getService(ChatRoomService.class).markChatRoomManager(false, new MemberOption(roomId, meberAccount));
-                            IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "取消了"+result1.getNickName()+"的管理员权限");
-                            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
-                            Map<String, Object> ext = new HashMap<>();
-                            if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                ext.put("style", "9");
-                                ext.put("type", chatRoomMember.getMemberType().getValue());
-                                ext.put("adminSendMsgUserId", meberAccount);
-                                ext.put("adminSendMsgNickName", result1.getNickName());
-                                ext.put("adminSendMsgImUserId", meberAccount);
-                                ext.put("creatorAccount",creatorAccount);
-                                ext.put("userId",userId);
-                                banMessage.setRemoteExtension(ext);
-                            }
-                            sendMessage(banMessage, MessageType.cancel);
-                            textView.setText("设为管理员");
-                            textView.setAlpha(1);
-
-                            managerMark.setVisibility(View.GONE);
-                            isManager = false;
+                                    managerMark.setVisibility(View.GONE);
+                                    isManager = false;
+                                }
+                            });
+                            customDialog.setSurceBtn("暂不取消", null);
+                            customDialog.show();
                         }
                     }
-
 
                     contentLoader.setCallBack(new ICallBack() {
                         @Override

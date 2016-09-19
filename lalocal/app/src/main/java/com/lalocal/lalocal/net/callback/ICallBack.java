@@ -269,6 +269,7 @@ public abstract class ICallBack {
     public void onGetExchargeResult(CouponItem couponItem){
     }
 
-
-
+    //在线人数
+    public void onOnLinesCount(String json) {
+    }
 }

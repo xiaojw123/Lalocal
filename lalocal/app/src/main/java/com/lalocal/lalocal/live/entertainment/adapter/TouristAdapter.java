@@ -63,7 +63,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 if(onTouristItemClickListener!=null){
-                    AppLog.i("TAG","游客列表position:"+position);
+                    AppLog.i("TAG","游客列表position:"+position+"    member:"+member.getAccount());
                     onTouristItemClickListener.showTouristInfo(member,false);
                 }
             }
