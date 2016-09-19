@@ -1195,6 +1195,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.leaveLive:
+                    AppLog.i("TAG","基类接受离开消息");
                     messageListPanel.onMsgSend(message);
                     break;
             }

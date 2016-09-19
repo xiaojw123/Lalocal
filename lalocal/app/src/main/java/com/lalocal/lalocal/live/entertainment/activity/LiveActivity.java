@@ -664,7 +664,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customDialog.setCancelBtn("结束直播", new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
-                sendLiveStatusMessgae("11");
+             //   sendLiveStatusMessgae("11");
                 endLive();
                 //结束直播的时间
                 endTime = System.currentTimeMillis();
@@ -681,7 +681,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         deInitUIandEvent();
         contentLoader.cancelLiveRoom(channelId);
 
-      /*  IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播");
+        IMMessage likeMessage1 = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播了哈哈哈哈哈哈");
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
         Map<String, Object> ext = new HashMap<>();
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
@@ -689,13 +689,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("creatorAccount",creatorAccount);
             ext.put("userId",userId);
-            likeMessage.setRemoteExtension(ext);
+
+            likeMessage1.setRemoteExtension(ext);
             AppLog.i("TAG","发送结束直播的消息");
         }
 
-      //  sendMessage(likeMessage, MessageType.leaveLive);
-       // NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);*/
+        sendMessage(likeMessage1, MessageType.leaveLive);
         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+      //  NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
             isStartLive = false;
