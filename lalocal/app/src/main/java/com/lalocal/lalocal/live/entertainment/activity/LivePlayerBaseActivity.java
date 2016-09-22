@@ -34,7 +34,6 @@ import com.lalocal.lalocal.live.entertainment.adapter.GiftAdapter;
 import com.lalocal.lalocal.live.entertainment.adapter.TouristAdapter;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.AGEventHandler;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
-import com.lalocal.lalocal.live.entertainment.constant.GiftType;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomNotificationHelper;
@@ -116,7 +115,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 直播端和观众端的基类
  */
-public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler {
+public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler{
     private static final String TAG = LivePlayerBaseActivity.class.getSimpleName();
     private final static String EXTRA_ROOM_ID = "ROOM_ID";
     private final static String EXTRA_URL = "EXTRA_URL";
@@ -129,6 +128,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
+    public static final String NIM_CHAT_MESSAGE_INFO="nimlivesenfmessage";
     private Timer timer;
     // 聊天室信息
     protected String roomId;
@@ -192,7 +192,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected String masterAvatar;
     protected String creatorAccount;//聊天室创建者账号
     private String barrageContent;
-    private String fromNickBarrage;
+
 
     private boolean isFirstLoadding = true;
     boolean isFirstClick = true;//防止快速点击，出现两个popuwindow
@@ -277,8 +277,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         findViews();
         initParam();
         registerNetStatus();
+     //   registerBoradcastReceiver();//聊天室item点击接受
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -317,6 +317,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(myNetReceiver, mFilter);
+
+
     }
 
     private BroadcastReceiver myNetReceiver = new BroadcastReceiver() {
@@ -633,6 +635,13 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onEvent(StatusCode statusCode) {
             AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
+            if(statusCode!=StatusCode.LOGINED){
+
+                DemoCache.setLoginStatus(false);
+
+            }else if(statusCode==StatusCode.LOGINED){
+                enterRoom();
+            }
 
         }
     };
@@ -832,6 +841,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
                 AppLog.i("TAG", "聊天室已经登录");
                 onOnlineStatusChanged(true);
+              //  DemoCache.setLoginChatRoomStatus(true);
             } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
                 AppLog.i("TAG", "聊天室wontAutoLogin");
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
@@ -855,73 +865,89 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
 
+
+
     // 进入聊天室
     protected void enterRoom() {
         if (messageListPanel == null) {
-            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement);
+            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, LivePlayerBaseActivity.this);
         }
 
-        EnterChatRoomData data = new EnterChatRoomData(roomId);
-        data.setRoomId(roomId);
-        Map<String, Object> map = new HashMap<>();
-        int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
-        map.put("userId", String.valueOf(userId));
-        map.put("roomExt", String.valueOf(userId));
-        data.setExtension(map);
-        data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
-        enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
-        enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
+        messageListPanel.setOnChatRoomMessageItemClickListener(new ChatRoomMsgListPanel.OnChatRoomMessageItemClickListener() {
             @Override
-            public void onSuccess(EnterChatRoomResultData result) {
-                onLoginDone();
-                roomInfo = result.getRoomInfo();
-                member1 = result.getMember();
-                enterroomgetnick = member1.getNick();
-                masterAvatar = member1.getAvatar();
-                creatorAccount = roomInfo.getCreator();
-                DemoCache.setLoginChatRoomStatus(true);
-                member1.setRoomId(roomInfo.getRoomId());
-                ChatRoomMemberCache.getInstance().saveMyMember(member1);
-                DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
-                masterName.setText(enterroomgetnick);
-                updateUI(enterroomgetnick);
-                DemoCache.setLoginChatRoomStatus(true);
-                chatRoomStatusRemind("登陆聊天室成功...");
+            public void onMessageListItem(String userId) {
+                if (!"-1".equals(userId)) {
+                    contentLoader.getLiveUserInfo(userId);
+                    contentLoader.setCallBack(myCallBack);
+                } else {
+                    Toast.makeText(LivePlayerBaseActivity.this, "该用户为游客!", Toast.LENGTH_SHORT).show();
+                }
 
-                initInputPanel(creatorAccount);
 
-            }
-
-            @Override
-            public void onFailed(int code) {
-                AppLog.i("TAG", "登录聊天室失败：" + code);
-                DemoCache.setLoginChatRoomStatus(false);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(100);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        enterRoom();
-                    }
-                });
-                onLoginDone();
-            }
-
-            @Override
-            public void onException(Throwable exception) {
-                DemoCache.setLoginChatRoomStatus(false);
-                onLoginDone();
-
-                finish();
             }
         });
-        //查询在线成员列表
-        fetchData();
-    }
 
+        if (DemoCache.getLoginStatus()) {
+            EnterChatRoomData data = new EnterChatRoomData(roomId);
+            data.setRoomId(roomId);
+            Map<String, Object> map = new HashMap<>();
+            int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
+            map.put("userId", String.valueOf(userId));
+            map.put("roomExt", String.valueOf(userId));
+            data.setExtension(map);
+            data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
+            enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
+            enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
+                @Override
+                public void onSuccess(EnterChatRoomResultData result) {
+                    onLoginDone();
+                    roomInfo = result.getRoomInfo();
+                    member1 = result.getMember();
+                    enterroomgetnick = member1.getNick();
+                    masterAvatar = member1.getAvatar();
+                    creatorAccount = roomInfo.getCreator();
+                    DemoCache.setLoginChatRoomStatus(true);
+                    member1.setRoomId(roomInfo.getRoomId());
+                    ChatRoomMemberCache.getInstance().saveMyMember(member1);
+                    DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
+                    masterName.setText(enterroomgetnick);
+                    updateUI(enterroomgetnick);
+                    DemoCache.setLoginChatRoomStatus(true);
+                    chatRoomStatusRemind("登陆聊天室成功...");
+                    initInputPanel(creatorAccount);
+
+                }
+
+                @Override
+                public void onFailed(int code) {
+                    AppLog.i("TAG", "登录聊天室失败：" + code);
+                    DemoCache.setLoginChatRoomStatus(false);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            enterRoom();
+                        }
+                    });
+                    onLoginDone();
+                }
+
+                @Override
+                public void onException(Throwable exception) {
+                    DemoCache.setLoginChatRoomStatus(false);
+                    onLoginDone();
+
+                    finish();
+                }
+            });
+            //查询在线成员列表
+            fetchData();
+        }
+    }
     protected void initInputPanel(String creatorAccount) {
         if (inputPanel == null) {
             inputPanel = new InputPanel(LivePlayerBaseActivity.this, container, view, getActionList(), inputConfig, creatorAccount, UserHelper.getUserId(LivePlayerBaseActivity.this));
@@ -1115,7 +1141,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         String fromAccount = null;
         ChatRoomMessage message = (ChatRoomMessage) msg;
         if (msg != null) {
-            fromNickBarrage = msg.getFromNick();
+
             Map<String, Object> remoteExtension1 = msg.getRemoteExtension();
             if (remoteExtension1 != null) {
                 Iterator<Map.Entry<String, Object>> iterator = remoteExtension1.entrySet().iterator();
@@ -1249,7 +1275,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
         @Override
         public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
-            Toast.makeText(LivePlayerBaseActivity.this, "被踢出聊天室，原因:" + chatRoomKickOutEvent.getReason(), Toast.LENGTH_SHORT).show();
+        //    Toast.makeText(LivePlayerBaseActivity.this, "被踢出聊天室，原因:" + chatRoomKickOutEvent.getReason(), Toast.LENGTH_SHORT).show();
             clearChatRoom();
         }
     };
@@ -1265,20 +1291,34 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftAnimationViewDown = findView(R.id.gift_animation_view);
         giftAnimationViewUp = findView(R.id.gift_animation_view_up);
 
-        //  giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
-        //   giftAnimation=  new GiftAnimation(giftAnimationViewDown, giftAnimationViewUp, this);
-        //  giftPlaneAnimation = new GiftPlaneAnimation(giftPlaneUp,giftPlaneBg, this);
-
         giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
         giftPlaneAnimation = new GiftPlaneAnimation(anchorHeadImg,userHeadImg,giftPlaneUp, giftPlaneBg, this,avatar);
 
     }
 
-    // 更新礼物列表，由子类定义
-    protected void updateGiftList(GiftType type) {
 
+  /*  protected  void registerBoradcastReceiver(){
+        IntentFilter myIntentFilter = new IntentFilter();
+        myIntentFilter.addAction(NIM_CHAT_MESSAGE_INFO);
+        //注册广播
+        registerReceiver(mBroadcastReceiver, myIntentFilter);
     }
 
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver(){
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals(NIM_CHAT_MESSAGE_INFO)){
+                String msg = intent.getStringExtra("msg");
+                if(contentLoader!=null&&msg!=null){
+                    AppLog.i("TAGS","点返回键粉红色的粉红色的:"+msg+"  userId:"+userId);
+                    contentLoader.getLiveUserInfo(msg);
+                    contentLoader.setCallBack(myCallBack);
+                }
+            }
+        }
+
+    };*/
 
     private void claerImLoginInfo() {
         DemoCache.clear();
@@ -1317,11 +1357,15 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
 
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
         unregisterReceiver(myNetReceiver);
+    //    unregisterReceiver(mBroadcastReceiver);
         if (timer != null) {
             timer.cancel();
             timer = null;

@@ -139,7 +139,11 @@ public class MyEngineEventHandler {
         }
         //重新加入频道的回调
         public void onRejoinChannelSuccess(String channel, int uid, int elapsed) {
-
+          /*  Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onJoinChannelSuccess(channel, uid, elapsed);
+            }*/
         }
 
         @Override

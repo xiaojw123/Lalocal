@@ -67,12 +67,8 @@ public class GiftPlaneAnimation {
                 isStartAnim=true;
                 return;
             }
-
             updateView(giftBean, target,giftPlanceBg);
         }
-
-
-
     }
 
     private void updateView(final  GiftBean giftBean, final ImageView target,final RelativeLayout giftPlanceBg) {

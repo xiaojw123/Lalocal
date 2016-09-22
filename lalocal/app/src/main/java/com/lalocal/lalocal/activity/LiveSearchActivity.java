@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.activity;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -21,7 +20,9 @@ import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.adapter.LiveSearchAdapter;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
@@ -169,11 +170,39 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
 
         }
 
+        public static final String CREATE_ROOMID = "createRoomId";
+
         @Override
         public void onItemClickListener(View view, int position) {
-            Intent intent = new Intent(LiveSearchActivity.this, AudienceActivity.class);
-            intent.putExtra(AudienceActivity.LIVE_SEARCH_ITEM, (LiveSeachItem.RowsBean) view.getTag());
-            startActivity(intent);
+            LiveSeachItem.RowsBean liveRowsBean = (LiveSeachItem.RowsBean) view.getTag();
+            if (liveRowsBean != null) {
+                String roomId = String.valueOf(liveRowsBean.getRoomId());
+                String createRoom = SPCUtils.getString(LiveSearchActivity.this, CREATE_ROOMID);
+                String s = String.valueOf(roomId);
+                if (createRoom != null && createRoom.equals(s)) {
+                    CommonUtil.REMIND_BACK = 1;
+                    SPCUtils.put(LiveSearchActivity.this, CREATE_ROOMID, "fdfdad");
+                    // prepareLive();
+                    return;
+                }
+                String avatar = liveRowsBean.getUser().getAvatar();
+                String nickName = liveRowsBean.getUser().getNickName();
+                String pullUrl = liveRowsBean.getPullUrl();
+                Object annoucement = liveRowsBean.getAnnoucement();
+                String cname = liveRowsBean.getCname();
+                String liveStatus = String.valueOf(liveRowsBean.getStatus());
+                int userId = liveRowsBean.getUser().getId();
+                int channelId = liveRowsBean.getId();
+                int type = liveRowsBean.getType();
+                String ann = null;
+                if (annoucement != null) {
+                    ann = annoucement.toString();
+                } else {
+                    ann = "这是公告哈";
+                }
+                AudienceActivity.start(LiveSearchActivity.this, String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), null, String.valueOf(type), ann, String.valueOf(channelId), cname, liveStatus);
+            }
+
         }
     }
 

@@ -30,7 +30,7 @@ import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.live.im.session.actions.BaseAction;
-import com.lalocal.lalocal.live.im.session.emoji.EmoticonPickerView;
+
 import com.lalocal.lalocal.live.im.session.emoji.IEmoticonSelectedListener;
 import com.lalocal.lalocal.live.im.session.emoji.MoonUtil;
 import com.lalocal.lalocal.live.im.ui.barrage.BarrageView;
@@ -85,7 +85,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     protected View messageInputBar;
 
     // 表情
-    protected EmoticonPickerView emoticonPickerView;  // 贴图表情控件
+
 
     // 语音
     protected AudioRecorder audioMessageHelper;
@@ -134,8 +134,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     }
     // 收起键盘
     public boolean collapse(boolean immediately) {
-        boolean respond = (emoticonPickerView != null && emoticonPickerView.getVisibility() == View.VISIBLE
-                || actionPanelBottomLayout != null && actionPanelBottomLayout.getVisibility() == View.VISIBLE);
+        boolean respond = (actionPanelBottomLayout != null && actionPanelBottomLayout.getVisibility() == View.VISIBLE);
         hideAllInputLayout(immediately);
         return respond;
     }
@@ -172,7 +171,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         sendMessageButtonInInputBar = view.findViewById(R.id.buttonSendMessage);
         messageEditText = (EditText) view.findViewById(R.id.editTextMessage);
         // 表情
-        emoticonPickerView = (EmoticonPickerView) view.findViewById(R.id.emoticon_picker_view);
+
 
         // 显示录音按钮
         // 文本录音按钮切换布局
@@ -293,9 +292,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
             } else if (v == moreFuntionButtonInInputBar) {
                 toggleActionPanelLayout();
-            } else if (v == emojiButtonInInputBar) {
-                toggleEmojiLayout();
-            }else if(v.getId()== R.id.im_barrage_and_chat_iv){
+            } else if(v.getId()== R.id.im_barrage_and_chat_iv){
                 isSelector = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 barrageAndChat.setSelected(!isSelector);
                 if(isSelector){
@@ -322,7 +319,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
     // 点击edittext，切换键盘和更多布局
     public void switchToTextLayout(boolean needShowInput) {
-        hideEmojiLayout();
+
         hideActionPanelLayout();
         messageEditText.setVisibility(View.VISIBLE);
         messageInputBar.setVisibility(View.VISIBLE);
@@ -402,7 +399,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void switchToAudioLayout() {
         messageEditText.setVisibility(View.GONE);
         hideInputMethod();
-        hideEmojiLayout();
+
         hideActionPanelLayout();
 
 
@@ -418,22 +415,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         }
     }
 
-    // 点击表情，切换到表情布局
-    public void toggleEmojiLayout() {
-        if (emoticonPickerView == null || emoticonPickerView.getVisibility() == View.GONE) {
-            showEmojiLayout();
-        } else {
-            hideEmojiLayout();
-        }
-    }
-
-    // 隐藏表情布局
-    private void hideEmojiLayout() {
-        uiHandler.removeCallbacks(showEmojiRunnable);
-        if (emoticonPickerView != null) {
-            emoticonPickerView.setVisibility(View.GONE);
-        }
-    }
 
     // 隐藏更多布局
     private void hideActionPanelLayout() {
@@ -471,8 +452,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
         messageEditText.requestFocus();
         uiHandler.postDelayed(showEmojiRunnable, 200);
-        emoticonPickerView.setVisibility(View.VISIBLE);
-        emoticonPickerView.show(this);
+
+
     }
 
     // 初始化更多布局
@@ -503,7 +484,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     // 显示更多布局
     private void showActionPanelLayout() {
         addActionPanelLayout();
-        hideEmojiLayout();
+
         hideInputMethod();
 
         uiHandler.postDelayed(showMoreFuncRunnable, SHOW_LAYOUT_DELAY);
@@ -523,7 +504,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private Runnable showEmojiRunnable = new Runnable() {
         @Override
         public void run() {
-            emoticonPickerView.setVisibility(View.VISIBLE);
+
         }
     };
 
@@ -601,7 +582,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 public void run() {
                     hideInputMethod();
                     hideActionPanelLayout();
-                    hideEmojiLayout();
+
                 }
             };
         }

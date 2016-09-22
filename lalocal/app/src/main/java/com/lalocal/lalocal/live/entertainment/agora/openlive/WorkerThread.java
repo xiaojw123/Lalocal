@@ -176,7 +176,6 @@ public class WorkerThread extends Thread {
 
     public final void leaveChannel(String channel) {
         if (Thread.currentThread() != this) {
-
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_LEAVE_CHANNEL;
             envelop.obj = channel;

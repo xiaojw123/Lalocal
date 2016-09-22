@@ -1,10 +1,10 @@
 package com.lalocal.lalocal.live.entertainment.module;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -20,7 +20,6 @@ import com.lalocal.lalocal.live.im.ui.dialog.EasyAlertDialog;
 import com.lalocal.lalocal.live.im.ui.dialog.EasyAlertDialogHelper;
 import com.lalocal.lalocal.live.im.ui.listview.AutoRefreshListView;
 import com.lalocal.lalocal.live.im.ui.listview.ListViewUtil;
-import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -47,7 +46,7 @@ import java.util.List;
  */
 public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private static final int MESSAGE_CAPACITY = 500;
-
+    public static final String NIM_CHAT_MESSAGE_INFO="nimlivesenfmessage";
     // container
     private Container container;
     private View rootView;
@@ -58,10 +57,12 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private LinkedList<IMMessage> items;
     private MsgAdapter adapter;
     private String content;
-    public ChatRoomMsgListPanel(Container container, View rootView,String content) {
+    private   Context context;
+    public ChatRoomMsgListPanel(Container container, View rootView, String content, Context context) {
         this.container = container;
         this.rootView = rootView;
         this.content=content;
+        this.context=context;
         init();
     }
 
@@ -117,13 +118,22 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
                 container.proxy.shouldCollapseInputPanel();
             }
         });
-        messageListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                AppLog.i("TAG","聊天item被点击了都分开发货方对方");
-            }
-        });
     }
+
+
+
+
+
+    private OnChatRoomMessageItemClickListener onChatRoomMessageItemClickListener;
+
+    public interface OnChatRoomMessageItemClickListener {
+       void onMessageListItem(String userId);
+    }
+
+    public void setOnChatRoomMessageItemClickListener(OnChatRoomMessageItemClickListener onChatRoomMessageItemClickListener) {
+        this.onChatRoomMessageItemClickListener = onChatRoomMessageItemClickListener;
+    }
+
 
     // 刷新消息列表
     public void refreshMessageList() {
@@ -224,7 +234,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
     @Override
     public boolean enabled(int position) {
-        return false;
+        return true;
     }
 
 
@@ -396,7 +406,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
                 Object tag = ListViewUtil.getViewHolderByIndex(messageListView, index);
                 if (tag instanceof MsgViewHolderBase) {
                     MsgViewHolderBase viewHolder = (MsgViewHolderBase) tag;
-                    viewHolder.onItemClick();
+
                     viewHolder.refreshCurrentItem();
                 }
             }
@@ -440,8 +450,21 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
             }
         }
 
+
+        @Override
+        public void itemClickListener(IMMessage itemMessage) {
+        //    Toast.makeText(context,"itemMessage"+itemMessage.getFromAccount(),Toast.LENGTH_SHORT).show();
+
+         /*   Intent intent = new Intent();
+            intent.setAction(NIM_CHAT_MESSAGE_INFO);
+            intent.putExtra("msg", itemMessage.getFromAccount());
+            context.sendBroadcast(intent);*/
+
+        }
+
         @Override
         public boolean onViewHolderLongClick(View clickView, View viewHolderView, IMMessage item) {
+
             return true;
         }
 

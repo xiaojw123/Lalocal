@@ -21,12 +21,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SecretTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
@@ -82,6 +84,12 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		if(!share){
 			pictureShare.setVisibility(View.GONE);
 			masking.setVisibility(View.GONE);
+		}
+		if(bean.isUserAvatar()){
+			RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+			lp.height= DensityUtil.dip2px(this,300);
+			lp.addRule(RelativeLayout.CENTER_IN_PARENT);
+			bigLayout.setLayoutParams(lp);
 		}
 
 		DrawableUtils.displayImg(this, photoIv, bean.getImgUrl());

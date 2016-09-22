@@ -19,7 +19,9 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.activity.BigPictureActivity;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -64,14 +66,12 @@ public class LiveHomePageActivity extends BaseActivity {
     LinearLayout homepageFansLayout;
     @BindView(R.id.master_attention_layout)
     LinearLayout masterAttentionLayout;
-    @BindView(R.id.home_page_head_big)
-    ImageView homePageHeadBig;
+
     @BindView(R.id.line_layout)
     RelativeLayout lineLayout;
     @BindView(R.id.ffdffhfd)
     View ffdffhfd;
-    @BindView(R.id.home_page_layout)
-    RelativeLayout homePageLayout;
+
     @BindView(R.id.live_attention_homepage)
     RelativeLayout liveAttentionHomepage;
     private ContentLoader contentLoader;
@@ -118,15 +118,17 @@ public class LiveHomePageActivity extends BaseActivity {
                 }
                 break;
             case R.id.personal_home_page:
-
-                homePageLayout.setVisibility(View.GONE);
-                homePageHeadBig.setVisibility(View.VISIBLE);
-                liveAttentionHomepage.setBackgroundColor(Color.BLACK);
+                BigPictureBean bean=new BigPictureBean();
+              bean.setUserAvatar(true);
+                String avatarOrigin = result.getAvatarOrigin();
                 if(result.getAvatarOrigin()==null){
-                    DrawableUtils.displayImg(LiveHomePageActivity.this, homePageHeadBig, result.getAvatar());
-                }else{
-                    DrawableUtils.displayImg(LiveHomePageActivity.this, homePageHeadBig, result.getAvatarOrigin());
+                    avatarOrigin= result.getAvatar();
                 }
+                bean.setImgUrl(avatarOrigin);
+                Intent intent2 = new Intent(this, BigPictureActivity.class);
+                intent2.putExtra("bigbean", bean);
+                startActivity(intent2);
+                overridePendingTransition(R.anim.head_in, R.anim.head_out);
 
                 break;
         }
@@ -251,16 +253,7 @@ public class LiveHomePageActivity extends BaseActivity {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if(homePageHeadBig.getVisibility()==View.VISIBLE){
-            homePageHeadBig.setVisibility(View.GONE);
-            liveAttentionHomepage.setBackgroundColor(Color.WHITE);
-            homePageLayout.setVisibility(View.VISIBLE);
 
-        }else{
-            finish();
-        }
 
-    }
+
 }

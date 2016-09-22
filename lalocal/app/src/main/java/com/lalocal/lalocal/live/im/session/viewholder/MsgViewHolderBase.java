@@ -54,12 +54,12 @@ public abstract class MsgViewHolderBase extends TViewHolder {
 
     // 内容区域点击事件响应处理。
     public void onItemClick() {
-
+     //   Toast.makeText(context,"点击了item",Toast.LENGTH_SHORT).show();
     }
 
     // 内容区域长按事件响应处理。该接口的优先级比adapter中有长按事件的处理监听高，当该接口返回为true时，adapter的长按事件监听不会被调用到。
     protected boolean onItemLongClick() {
-        return false;
+        return true;
     }
 
     // 返回该消息是不是居中显示
@@ -197,7 +197,6 @@ public abstract class MsgViewHolderBase extends TViewHolder {
         // 重发/重收按钮响应事件
         if (getAdapter().getEventListener() != null) {
             alertButton.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     getAdapter().getEventListener().onFailedBtnClick(message);
@@ -210,7 +209,8 @@ public abstract class MsgViewHolderBase extends TViewHolder {
         contentContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onItemClick();
+              //  onItemClick();
+                getAdapter().getEventListener().itemClickListener(message);
             }
         });
 

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Livestreaming">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../app/libs/Livestreaming.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

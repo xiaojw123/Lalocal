@@ -42,6 +42,7 @@
         android:layout_below="@id/message_item_time"
         android:layout_toLeftOf="@id/message_item_portrait_right"
         android:layout_toRightOf="@id/message_item_portrait_left"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
@@ -82,7 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:gravity="bottom"
+
             android:orientation="horizontal">
 
             <ProgressBar

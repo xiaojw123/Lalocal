@@ -6,11 +6,11 @@ package com.lalocal.lalocal.model;
 public class CloseLiveBean {
 
 
-
     private int returnCode;
     private String message;
     private long date;
-    private Object result;
+
+    private ResultBean result;
     private Object errorCode;
 
     public int getReturnCode() {
@@ -37,11 +37,11 @@ public class CloseLiveBean {
         this.date = date;
     }
 
-    public Object getResult() {
+    public ResultBean getResult() {
         return result;
     }
 
-    public void setResult(Object result) {
+    public void setResult(ResultBean result) {
         this.result = result;
     }
 
@@ -51,5 +51,16 @@ public class CloseLiveBean {
 
     public void setErrorCode(Object errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public static class ResultBean {
+        private int score;
+        public int getScore() {
+            return score;
+        }
+
+        public void setScore(int score) {
+            this.score = score;
+        }
     }
 }
