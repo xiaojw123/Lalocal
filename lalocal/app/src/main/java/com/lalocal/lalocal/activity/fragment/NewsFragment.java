@@ -260,8 +260,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         }
 
         @Override
-        public void onRequestFailed(VolleyError volleyError) {
-            super.onRequestFailed(volleyError);
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
         }
 
     }

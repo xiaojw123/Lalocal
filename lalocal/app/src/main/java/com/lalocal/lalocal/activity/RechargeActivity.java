@@ -42,21 +42,24 @@ public class RechargeActivity extends BaseActivity {
     FrameLayout rechageTicketExchage;
     @BindView(R.id.recharge_package_firstmsg)
     TextView fistMsgTv;
+    @BindView(R.id.recharge_doubt_container)
+    FrameLayout rechargeDoubtContainer;
     @BindString(R.string.recharge_doubt_customer)
     String rechargeDoubtText;
-    WalletContent content;
+    WalletContent mWalletCont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recharge_layout);
         unbinder = ButterKnife.bind(this);
+        showLoadingAnimation();
         setLoaderCallBack(new RechargeCallBack());
         rechargeDoubtTv.setText(Html.fromHtml("<u>" + rechargeDoubtText + "</u>"));
-        content = getWallConent();
-        if (content != null) {
-            updateView(content);
-        }else{
+        mWalletCont = getWallConent();
+        if (mWalletCont != null) {
+            updateView();
+        } else {
             mContentloader.getMyWallet();
         }
         rechargePackageRlv.setLayoutManager(new LinearLayoutManager(this));
@@ -64,25 +67,26 @@ public class RechargeActivity extends BaseActivity {
         mContentloader.getRechargeProducts();
     }
 
-    private void updateView(WalletContent content) {
-        this.content=content;
-        String firstMsg = content.getFirstMsg();
-        if (!TextUtils.isEmpty(firstMsg)) {
-            fistMsgTv.setText(firstMsg);
+    private void updateView() {
+        if (mWalletCont != null) {
+            String firstMsg = mWalletCont.getFirstMsg();
+            if (!TextUtils.isEmpty(firstMsg)) {
+                fistMsgTv.setText(firstMsg);
+            }
+            rechargeDiamondNum.setText(CommonUtil.formartNum(mWalletCont.getGold()));
         }
-        rechargeDiamondNum.setText(CommonUtil.formartNum(content.getGold()));
     }
 
 
-    @OnClick({R.id.rechage_ticket_exchage, R.id.recharge_doubt_tv})
+    @OnClick({R.id.rechage_ticket_exchage, R.id.recharge_doubt_container})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rechage_ticket_exchage:
-                Intent intent =new Intent(this, ExchangeActivity.class);
-                intent.putExtra(KeyParams.WALLET_CONTENT,content);
-                startActivity(intent);
+                Intent intent = new Intent(this, ExchangeActivity.class);
+                intent.putExtra(KeyParams.WALLET_CONTENT, mWalletCont);
+                startActivityForResult(intent,KeyParams.REQUEST_CODE);
                 break;
-            case R.id.recharge_doubt_tv:
+            case R.id.recharge_doubt_container:
                 Intent doubtIntent = new Intent(this, ChatActivity.class);
                 startActivity(doubtIntent);
                 break;
@@ -95,11 +99,14 @@ public class RechargeActivity extends BaseActivity {
     class RechargeCallBack extends ICallBack implements OnItemClickListener {
         @Override
         public void onGetMyWallet(WalletContent content) {
-            updateView(content);
+            hidenLoadingAnimation();
+            mWalletCont = content;
+            updateView();
         }
 
         @Override
         public void onGetRechargeProducts(List<RechargeItem> items) {
+            hidenLoadingAnimation();
             RechargeListAdapter adapter = new RechargeListAdapter(items);
             adapter.setOnItemClickListener(this);
             rechargePackageRlv.setAdapter(adapter);
@@ -124,11 +131,14 @@ public class RechargeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("RechargeAct____onActivityResult resultcode__" + resultCode);
-        if (resultCode == KeyParams.RESULT_ChARGE_SUCCESS) {
-            setResult(resultCode, data);
-            finish();
-        }
+        switch (resultCode) {
+            case KeyParams.RESULT_ChARGE_SUCCESS:
+            case KeyParams.RESULT_EXCHARGE_SUCCESS:
+                setResult(resultCode, data);
+                finish();
+                break;
 
+        }
 
     }
 }

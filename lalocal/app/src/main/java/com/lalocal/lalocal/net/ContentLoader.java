@@ -995,7 +995,7 @@ public class ContentLoader {
             if (!ErrorMessage.AUTHOR_FIALED.equals(errorMsg) || !ErrorMessage.CLIENT_ERROR.equals(errorMsg)) {
                 Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
             }
-            callBack.onRequestFailed(volleyError);
+            callBack.onError(volleyError);
         }
 
         @Override

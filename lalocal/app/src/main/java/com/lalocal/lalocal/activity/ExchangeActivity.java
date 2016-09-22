@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.WalletContent;
@@ -21,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lalocal.lalocal.R.id.exchage_btn;
+
 public class ExchangeActivity extends BaseActivity implements TextWatcher {
 
     @BindView(R.id.exchage_score_num_tv)
@@ -29,33 +32,45 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
     TextView exchageGoldNumTv;
     @BindView(R.id.exchage_score_edit)
     EditText exchageScoreEdit;
-    @BindView(R.id.exchage_btn)
+    @BindView(exchage_btn)
     Button exchageBtn;
     @BindView(R.id.excharge_score_unit)
     TextView unitTv;
     int scale;
+    WalletContent mWalletCont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
-        KeyboardUtil.showSoftKey(exchageScoreEdit);
-        WalletContent content = getWalletContent();
-        scale = content.getScale();
-        exchageScoreNumTv.setText(CommonUtil.formartNum(content.getScore()));
-        exchageScoreEdit.addTextChangedListener(this);
         setLoaderCallBack(new ExchangeCallBack());
+        KeyboardUtil.showSoftKey(exchageScoreEdit);
+        mWalletCont = getWalletContent();
+        if (mWalletCont != null) {
+            updateView();
+        } else {
+            mContentloader.getMyWallet();
+        }
     }
 
-    @OnClick({R.id.exchage_btn, R.id.excharge_score_unit})
+    private void updateView() {
+        if (mWalletCont != null) {
+            scale = mWalletCont.getScale();
+            exchageScoreNumTv.setText(CommonUtil.formartNum(mWalletCont.getScore()));
+            exchageScoreEdit.addTextChangedListener(this);
+        }
+    }
+
+    @OnClick({exchage_btn, R.id.excharge_score_unit})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.exchage_btn:
+            case exchage_btn:
                 String socreText = exchageScoreEdit.getText().toString();
                 if (!TextUtils.isEmpty(socreText)) {
                     long socre = Long.parseLong(socreText);
                     socre *= 100;
+                    exchageBtn.setEnabled(false);
                     mContentloader.exchargeGold(socre);
                 }
                 break;
@@ -100,9 +115,26 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher {
     class ExchangeCallBack extends ICallBack {
         @Override
         public void onExchargeGoldSuccess() {
+            exchageBtn.setEnabled(true);
             Toast.makeText(ExchangeActivity.this, "兑换成功", Toast.LENGTH_SHORT).show();
             setResult(KeyParams.RESULT_EXCHARGE_SUCCESS, null);
             finish();
+        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            exchageBtn.setEnabled(true);
+        }
+
+        @Override
+        public void onResponseFailed() {
+            exchageBtn.setEnabled(true);
+        }
+
+        @Override
+        public void onGetMyWallet(WalletContent content) {
+            mWalletCont = content;
+            updateView();
         }
     }
 

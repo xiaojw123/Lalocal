@@ -1,9 +1,12 @@
 package com.lalocal.lalocal.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
@@ -21,18 +24,19 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.model.WelcomeImg;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.permission.MPermission;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.StatusCode;
@@ -50,11 +54,13 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     private static final int MSG_UPDATE_TIME = 0x001;
     private static final int MSG_DISPAY_IMG = 0x002;
     private static final int MSG_LOGIN_HUANXIN = 0x003;
+    public static final int MSG_ENTER_APP = 0x004;
     ImageView welImg;
     TextView timeTv;
     int totalTime = 0;
     SplashHandler mHandler;
     int splashDuration = 2200;
+    VersionResult result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +69,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         welImg = (ImageView) findViewById(R.id.wel_img);
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
         timeTv.setOnClickListener(this);
-        setLoaderCallBack(new MyCallBack());
         registerObservers(true);
         requestUserPermission(Manifest.permission.READ_PHONE_STATE);
     }
@@ -71,7 +76,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @OnMPermissionGranted(PERMISSION_STGAT_CODE)
     public void onPermissionGranted() {
         AppLog.print("onPermissionGranted___");
-        mContentloader.versionUpdate(AppConfig.getVersionName(this));
+        ICallBack callBack = new MyCallBack();
+        setLoaderCallBack(callBack);
+        mContentloader.versionUpdate(AppConfig.getVersionName(SplashActivity.this));
     }
 
     @OnMPermissionDenied(PERMISSION_STGAT_CODE)
@@ -116,10 +123,22 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onVersionResult(VersionInfo versionInfo) {
-            VersionResult result = versionInfo.getResult();
-            String apiUrl = result.getApiUrl();
-            AppConfig.setBaseUrl(apiUrl);
-            mContentloader.getSystemConfigs();
+            result = versionInfo.getResult();
+            if (result != null) {
+                boolean flag = result.isForceFlag();
+                boolean checkUpdate = result.isCheckUpdate();
+                String downLoadUrl = result.getDownloadUrl();
+                mHandler = new SplashHandler();
+                if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
+                    if (flag) {
+                        update(downLoadUrl);
+                    } else {
+                        showUpdateDialog(downLoadUrl);
+                    }
+                } else {
+                    mHandler.sendEmptyMessage(MSG_ENTER_APP);
+                }
+            }
         }
 
         @Override
@@ -151,7 +170,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         public void onGetWelcomeImgs(WelcomeImg welcomeImg) {
             AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
             String photo = welcomeImg.getPhoto();
-            mHandler = new SplashHandler();
             if (TextUtils.isEmpty(photo)) {
                 mHandler.sendEmptyMessageDelayed(MSG_LOGIN_HUANXIN, splashDuration);
             } else {
@@ -163,6 +181,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             }
         }
     }
+
 
     private void startHomePage() {
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
@@ -260,7 +279,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    class SplashHandler extends Handler implements ImageLoadingListener {
+    public class SplashHandler extends Handler implements ImageLoadingListener {
         @Override
         public void handleMessage(Message msg) {
             int code = msg.what;
@@ -281,11 +300,17 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                     }
                     break;
                 case MSG_DISPAY_IMG:
-                    DrawableUtils.displayImg(SplashActivity.this, welImg, ((String) msg.obj),-1, this);
+                    DrawableUtils.displayImg(SplashActivity.this, welImg, ((String) msg.obj), -1, this);
                     break;
                 case MSG_LOGIN_HUANXIN:
                     loginChatService();
                     break;
+                case MSG_ENTER_APP:
+                    String apiUrl = result.getApiUrl();
+                    AppConfig.setBaseUrl(apiUrl);
+                    mContentloader.getSystemConfigs();
+                    break;
+
             }
         }
 
@@ -315,41 +340,47 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             loginChatService();
         }
     }
-//
-//    Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            int code = msg.what;
-//            switch (code) {
-//                case MSG_UPDATE_TIME:
-//                    if (totalTime > 0) {
-//                        if (timeTv.getVisibility() != View.VISIBLE) {
-//                            timeTv.setVisibility(View.VISIBLE);
-//                        }
-//                        timeTv.setText(Html.fromHtml("跳过" + totalTime));
-//                        --totalTime;
-//                        sendEmptyMessageDelayed(MSG_UPDATE_TIME, 1000);
-//                    } else {
-//                        if (hasMessages(MSG_UPDATE_TIME)) {
-//                            removeMessages(MSG_UPDATE_TIME);
-//                        }
-//                        loginChatService();
-//                    }
-//                    break;
-//                case MSG_DISPAY_IMG:
-//                    DrawableUtils.displayImg(SplashActivity.this, welImg, ((String)msg.obj), this);
-//                    break;
-//
-//
-//            }
-//
-//
-//        }
-//    };
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
     }
+
+    private void showUpdateDialog(final String dowloadUrl) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(android.R.drawable.ic_dialog_info);
+        builder.setTitle("请更新至最新版本");
+        builder.setCancelable(false);
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (Environment.getExternalStorageState().equals(
+                        Environment.MEDIA_MOUNTED)) {
+                    update(dowloadUrl);
+                } else {
+                    Toast.makeText(SplashActivity.this, "无可用存储空间",
+                            Toast.LENGTH_SHORT).show();
+                    mHandler.sendEmptyMessage(MSG_ENTER_APP);
+                }
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                mHandler.sendEmptyMessage(MSG_ENTER_APP);
+            }
+
+        });
+        builder.create().show();
+    }
+
+    private void update(String downLoadUrl) {
+        UpdateTask task = new UpdateTask(this, mHandler);
+        task.execute(downLoadUrl);
+    }
+
 }

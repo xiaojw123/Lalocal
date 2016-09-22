@@ -50,6 +50,10 @@ import java.util.List;
  * Created by xiaojw on 2016/6/1.
  */
 public abstract class ICallBack {
+    public void onEMLoginSucess(){
+
+    }
+
 
 
     public void onExchargeGoldSuccess(){
@@ -183,7 +187,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onRequestFailed(VolleyError volleyError) {
+    public void onError(VolleyError volleyError) {
 
 
     }

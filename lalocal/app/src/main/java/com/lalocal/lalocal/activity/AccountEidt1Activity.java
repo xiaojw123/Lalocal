@@ -341,7 +341,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         }
 
         @Override
-        public void onRequestFailed(VolleyError volleyError) {
+        public void onError(VolleyError volleyError) {
             if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
                 UserHelper.updateSignOutInfo(AccountEidt1Activity.this);
                 Intent intent = new Intent(AccountEidt1Activity.this, LoginActivity.class);

@@ -7,7 +7,6 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
-import android.view.Gravity;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
@@ -23,12 +22,12 @@ import java.util.regex.Pattern;
  * Created by xiaojw on 2016/6/6.
  */
 public class CommonUtil {
-    private static final String DEVICE_ANDROID ="android";
+    private static final String DEVICE_ANDROID = "android";
     private static double EARTH_RADIUS = 6378.137;
-    private  static  final  int READ_PHONE_STATE_CODE=112;
+    private static final int READ_PHONE_STATE_CODE = 112;
 
-    public static  int RESULT_DIALOG=0;
-    public static int REMIND_BACK=0;
+    public static int RESULT_DIALOG = 0;
+    public static int REMIND_BACK = 0;
 
     public static String getProcessName(Context cxt, int pid) {
         ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
@@ -49,16 +48,17 @@ public class CommonUtil {
     }
 
     //textview设置不同前景色
-    public static  SpannableString getSpannelStyle(Context context,String text,int appearance,int start ,int end){
-        SpannableString spannableStr=new SpannableString(text);
+    public static SpannableString getSpannelStyle(Context context, String text, int appearance, int start, int end) {
+        SpannableString spannableStr = new SpannableString(text);
         spannableStr.setSpan(new TextAppearanceSpan(context, appearance), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return  spannableStr;
+        return spannableStr;
     }
 
 
     /**
      * 根据两个位置的经纬度，来计算两地的距离（单位为KM）
      * 参数为String类型
+     *
      * @param lng1 loc1经度
      * @param lat1 loc1纬度
      * @param lng2 loc2经度
@@ -74,7 +74,7 @@ public class CommonUtil {
                 + Math.cos(radLat1) * Math.cos(radLat2)
                 * Math.pow(Math.sin(mdifference / 2), 2)));
         distance = distance * EARTH_RADIUS;
-        distance =(double) (Math.round(distance * 10))/ 10;
+        distance = (double) (Math.round(distance * 10)) / 10;
         return String.valueOf(distance);
     }
 
@@ -86,16 +86,19 @@ public class CommonUtil {
         NumberFormat nf = new DecimalFormat("###,###,###,###,###,###,###,###");
         return nf.format(price);
     }
+
     public static String formartNum(double price) {
         NumberFormat nf = new DecimalFormat("###,###,###,###,###,###,###,###.##");
         return nf.format(price);
     }
+
     public static String formartOrderPrice(double price) {
         NumberFormat nf = new DecimalFormat("¥ ###,###,###,###,###,###,###,###.##");
         return nf.format(price);
     }
-    public static String fomartStartOrderPrice(double price){
-        return  formartOrderPrice(price)+" 起";
+
+    public static String fomartStartOrderPrice(double price) {
+        return formartOrderPrice(price) + " 起";
     }
 
     //验证邮箱格式
@@ -133,7 +136,8 @@ public class CommonUtil {
 //        UUID deviceUuid = new UUID(androidId.hashCode(), ((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
 //        return deviceUuid.toString();
     }
-    public static String getDevice(){
+
+    public static String getDevice() {
         return DEVICE_ANDROID;
     }
 
@@ -148,22 +152,20 @@ public class CommonUtil {
     }
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener) {
+
         CustomDialog dialog = new CustomDialog(context);
         dialog.setCancelable(false);
         dialog.setTitle(context.getResources().getString(R.string.prompt));
-        dialog.setMessage(message);
         dialog.setNeturalBtn(context.getResources().getString(R.string.sure), listener);
+        dialog.setMessage(message);
         dialog.show();
     }
 
+
     public static void showToast(Context context, String message, int duration) {
         Toast toast = Toast.makeText(context, message, duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
-
-
-
 
 
 }

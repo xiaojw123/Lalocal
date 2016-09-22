@@ -232,7 +232,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         List<SearchItem> toalItems = new ArrayList<>();
 
         @Override
-        public void onRequestFailed(VolleyError volleyError) {
+        public void onError(VolleyError volleyError) {
             isRefresh = false;
         }
 

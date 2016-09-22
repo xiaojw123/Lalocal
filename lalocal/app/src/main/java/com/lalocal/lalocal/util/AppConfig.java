@@ -9,8 +9,8 @@ import android.content.pm.PackageManager;
  */
 public class AppConfig {
 
-   private static String baseUrl = "http://api.lalocal.cn/api/";
-   // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+    private static String baseUrl = "http://api.lalocal.cn/api/";
+    // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {
@@ -226,9 +226,10 @@ public class AppConfig {
     public static final String getSendGifts() {
         return baseUrl + "gifts";
     }
+
     //礼物排行榜http://dev.lalocal.cn:8080/api/
-    public static final String getGiftRanks(){
-        return  baseUrl+"channels/";
+    public static final String getGiftRanks() {
+        return baseUrl + "channels/";
     }
 
     public static String getBaseUrl() {
@@ -257,6 +258,18 @@ public class AppConfig {
         }
         return "0.0.0";
     }
+
+    public static int getVersionCode(Context context) {
+        try {
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), PackageManager.GET_CONFIGURATIONS);
+            return pi.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return  0;
+    }
+
 
     public static String getPackageName(Context context) {
         try {
@@ -396,11 +409,11 @@ public class AppConfig {
     public static String searchLiveUrl(int pageSize, int pageNum, String nickName) {
         return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + nickName;
     }
-    //兑换优惠券
-    public static String exchargeCouponUrl(){
-      return  baseUrl+"codes";
-    }
 
+    //兑换优惠券
+    public static String exchargeCouponUrl() {
+        return baseUrl + "codes";
+    }
 
 
 }

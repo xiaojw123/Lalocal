@@ -62,15 +62,13 @@
 
     </FrameLayout>
 
-    <com.lalocal.lalocal.view.xlistview.XListView
-        android:id="@+id/my_ticket_cosume_xlv"
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/my_ticket_cosume_xrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/my_ticket_cur_fl"
         android:layout_above="@+id/my_ticket_exchargegold_stat1"
-        android:layout_marginBottom="@dimen/dimen_size_10_dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
+        android:visibility="gone"
      />
 
 
@@ -108,10 +106,11 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/color_ffaa2a"
+            android:background="@color/color_30b3"
             android:text="@string/withdraw_cash"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16_sp" />
+            <!--android:background="@color/color_ffaa2a"-->
 
     </LinearLayout>
 

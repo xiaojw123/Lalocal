@@ -224,7 +224,7 @@ public class DestinationAreaActivity extends BaseActivity {
         }
 
         @Override
-        public void onRequestFailed(VolleyError error) {
+        public void onError(VolleyError error) {
             hidenLoadingView();
             showEmptView();
             isLoadMore = false;

@@ -606,7 +606,7 @@ public class MeFragment extends Fragment implements XListView.IXListViewListener
         }
 
         @Override
-        public void onRequestFailed(VolleyError volleyError) {
+        public void onError(VolleyError volleyError) {
             isRefresh = false;
             if (isDownRefresh) {
                 isDownRefresh = false;

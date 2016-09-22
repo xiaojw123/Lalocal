@@ -41,19 +41,21 @@ public class BaseActivity extends AppCompatActivity {
 
 
     }
-   //页面全屏加载loading显示
+
+    //页面全屏加载loading显示
     public void showLoadingAnimation() {
         if (mLoadingView == null) {
             FrameLayout container = (FrameLayout) getWindow().getDecorView();
             mLoadingView = LayoutInflater.from(this).inflate(R.layout.page_base_loading, container, false);
             container.addView(mLoadingView);
-        }else{
+        } else {
             mLoadingView.setVisibility(View.VISIBLE);
         }
     }
+
     //页面全屏加载loading隐藏
     public void hidenLoadingAnimation() {
-        if (mLoadingView != null) {
+        if (mLoadingView != null&&mLoadingView.getVisibility()==View.VISIBLE) {
             mLoadingView.setVisibility(View.GONE);
         }
     }
@@ -109,8 +111,8 @@ public class BaseActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(event);
     }
 
-    public int getPageType(){
-        return  getIntent().getIntExtra(KeyParams.PAGE_TYPE,0);
+    public int getPageType() {
+        return getIntent().getIntExtra(KeyParams.PAGE_TYPE, 0);
     }
 
     /**

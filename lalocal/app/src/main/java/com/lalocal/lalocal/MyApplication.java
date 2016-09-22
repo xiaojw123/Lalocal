@@ -2,7 +2,6 @@ package com.lalocal.lalocal;
 
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
@@ -31,7 +30,6 @@ import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.pingplusplus.android.PingppLog;
-import com.qihoo.updatesdk.lib.UpdateHelper;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
@@ -59,8 +57,6 @@ public class MyApplication extends Application {
         Config.IsToastTip = true;
         AppLog.print("MyApplication onCreate___");
         AppCrashHandler.getInstance(this);
-        //360更新
-        UpdateHelper.getInstance().init(getApplicationContext(), Color.parseColor("#0A93DB"));
         EMChat.getInstance().init(this);
         EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         startFabric();
@@ -73,8 +69,6 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
-
-        //   Bugtags.start("f0e34b0e2c605ee7f54158da0c3c08c9", this, Bugtags.BTGInvocationEventBubble);
 
         Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
 

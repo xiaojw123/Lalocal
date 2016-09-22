@@ -35,7 +35,7 @@
         android:layout_toRightOf="@+id/recharge_state1" />
 
     <FrameLayout
-        android:id="@+id/recharge_state2"
+        android:id="@+id/recharge_doubt_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_size_50_dp"
         android:layout_below="@+id/recharge_state1"
@@ -66,7 +66,7 @@
         android:id="@+id/recharge_package_rlv"
         android:layout_width="match_parent"
         android:layout_height="@dimen/recharge_package_rlv_height"
-        android:layout_below="@+id/recharge_state2"
+        android:layout_below="@+id/recharge_doubt_container"
       />
 
 

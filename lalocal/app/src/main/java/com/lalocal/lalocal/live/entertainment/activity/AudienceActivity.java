@@ -731,6 +731,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                 final  int id = giftSresult.get(itemPosition).getId();
                 contentLoader.getMyWallet();
+//                startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
                     public void onGetMyWallet(final WalletContent content) {

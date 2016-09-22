@@ -2,12 +2,15 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.Html;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
@@ -18,7 +21,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.ConsumeRecordAdapter;
-import com.lalocal.lalocal.view.xlistview.XListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +31,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MyDiamondActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
-    public static final String GOLD_PARAM = "gold";
     @BindView(R.id.my_diamond_recharge_tv)
     TextView myDiamondRechargeTv;
     @BindView(R.id.my_diamond_num_tv)
     TextView myDiamondNumTv;
-    @BindView(R.id.my_diamond_cosume_xlv)
-    XListView myDiamondCosumeXlv;
+    @BindView(R.id.my_diamond_cosume_xrv)
+    XRecyclerView myDiamondCosumeXrv;
     @BindView(R.id.consume_doubt_tv)
     TextView consumeDoubtTv;
     @BindString(R.string.consume_doubt)
@@ -44,6 +45,9 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
     TextView myDiamondNoRecharge;
     @BindView(R.id.my_diamond_ctv)
     CustomTitleView myDiamondCtv;
+    @BindView(R.id.consume_doubt_container)
+    FrameLayout consumeDoubtContainer;
+
     WalletContent mWalletContent;
 
     @Override
@@ -51,17 +55,26 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_diamond_layout);
         unbinder = ButterKnife.bind(this);
+        showLoadingAnimation();
+        setLoaderCallBack(new DiamondCallBack());
         mWalletContent = getWallConent();
+        if (mWalletContent != null) {
+            updateView();
+        } else {
+            mContentloader.getMyWallet();
+        }
+    }
+
+    private void updateView() {
         double goldNum = mWalletContent.getGold();
         myDiamondNumTv.setText(CommonUtil.formartNum(goldNum));
         consumeDoubtTv.setText(Html.fromHtml("<u>" + consumeDoubt + "</u>"));
         myDiamondCtv.setOnBackClickListener(this);
-        DiamondCallBack callBack = new DiamondCallBack();
-        setLoaderCallBack(callBack);
         if (goldNum > 0) {
-            myDiamondCosumeXlv.setVisibility(View.VISIBLE);
-            myDiamondCosumeXlv.setPullRefreshEnable(false);
-            myDiamondCosumeXlv.setRefreshEnable(false);
+            myDiamondCosumeXrv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
+            myDiamondCosumeXrv.setLayoutManager(new LinearLayoutManager(this));
+            myDiamondCosumeXrv.setVisibility(View.VISIBLE);
+            myDiamondCosumeXrv.setPullRefreshEnabled(false);
             mContentloader.getGoldLogs(1);
         } else {
             myDiamondNoRecharge.setVisibility(View.VISIBLE);
@@ -69,7 +82,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
     }
 
 
-    @OnClick({R.id.my_diamond_recharge_tv, R.id.consume_doubt_tv})
+    @OnClick({R.id.my_diamond_recharge_tv, R.id.consume_doubt_container})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_diamond_recharge_tv:
@@ -77,7 +90,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
                 rechargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(rechargeIntent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.consume_doubt_tv:
+            case R.id.consume_doubt_container:
                 Intent doubtIntent = new Intent(this, ChatActivity.class);
                 startActivity(doubtIntent);
                 break;
@@ -85,7 +98,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
     }
 
 
-    class DiamondCallBack extends ICallBack implements XListView.IXListViewListener {
+    class DiamondCallBack extends ICallBack implements XRecyclerView.LoadingListener {
         ConsumeRecordAdapter adapter;
         int pageNum, toalPages;
         boolean isLoadMore;
@@ -93,38 +106,46 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
 
         @Override
         public void onGetScoreLog(ConsumeRecord log) {
-            pageNum = log.getPageSize();
+            hidenLoadingAnimation();
+            pageNum = log.getPageNumber();
             toalPages = log.getTotalPages();
-            AppLog.print("onGetScoreLog toalPages___"+toalPages);
             if (toalPages > 1) {
-                myDiamondCosumeXlv.setPullLoadEnable(true);
-                myDiamondCosumeXlv.setXListViewListener(this);
+                myDiamondCosumeXrv.setLoadingMoreEnabled(true);
+                myDiamondCosumeXrv.setLoadingListener(this);
             } else {
-                myDiamondCosumeXlv.setPullLoadEnable(false);
+                myDiamondCosumeXrv.setLoadingMoreEnabled(false);
             }
             if (isLoadMore) {
                 isLoadMore = false;
-                myDiamondCosumeXlv.stopLoadMore();
+                myDiamondCosumeXrv.loadMoreComplete();
             } else {
                 mRows.clear();
             }
             mRows.addAll(log.getRows());
             if (adapter == null) {
                 adapter = new ConsumeRecordAdapter(mRows);
-                myDiamondCosumeXlv.setAdapter(adapter);
+                myDiamondCosumeXrv.setAdapter(adapter);
             } else {
                 adapter.updateItems(mRows);
             }
         }
 
         @Override
-        public void onRequestFailed(VolleyError volleyError) {
+        public void onError(VolleyError volleyError) {
             isLoadMore = false;
         }
 
         @Override
         public void onResponseFailed() {
             isLoadMore = false;
+        }
+
+
+        @Override
+        public void onGetMyWallet(WalletContent content) {
+            hidenLoadingAnimation();
+            mWalletContent = content;
+            updateView();
         }
 
         @Override
@@ -138,28 +159,25 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
                 isLoadMore = true;
                 ++pageNum;
                 mContentloader.getGoldLogs(pageNum);
-            }else{
-                Toast.makeText(MyDiamondActivity.this,"没有更多",Toast.LENGTH_SHORT).show();
-                myDiamondCosumeXlv.stopLoadMore();
+            } else {
+                myDiamondCosumeXrv.loadMoreComplete();
             }
 
-
-        }
-
-        @Override
-        public void onGetMyWallet(WalletContent content) {
-            mWalletContent = content;
-            myDiamondNumTv.setText(CommonUtil.formartNum(content.getGold()));
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("MyDiamondActivtiy onActivityResult___resultcode__" + resultCode);
-        if (resultCode == KeyParams.RESULT_ChARGE_SUCCESS) {
-            mContentloader.getMyWallet();
-            mContentloader.getGoldLogs(1);
+        switch (resultCode) {
+            case KeyParams.RESULT_ChARGE_SUCCESS:
+            case KeyParams.RESULT_EXCHARGE_SUCCESS:
+                mContentloader.getMyWallet();
+                mContentloader.getGoldLogs(1);
+                break;
+
         }
+
 
     }
 
@@ -177,6 +195,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
         super.onBackPressed();
         setUpdateWalletResult();
     }
+
     //更新我的钱包
     public void setUpdateWalletResult() {
         if (mWalletContent != getWallConent()) {
