@@ -3,60 +3,67 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_fa"
-    android:gravity="center_horizontal"
->
+    android:gravity="center_horizontal">
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/live_search_xrlv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/live_search_edt_container" />
+
+    <TextView
+        android:id="@+id/live_search_null"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/live_search_edt_container"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dimen_size_36_dp"
+        android:text="@string/no_live"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_15_sp"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/live_search_edt_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dimen_size_10_dp"
-        android:paddingBottom="@dimen/dimen_size_10_dp"
-        android:layout_centerHorizontal="true"
-        android:gravity="center_vertical"
+        android:layout_alignParentTop="true"
         android:background="@color/white"
-        >
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/dimen_size_10_dp"
+        android:paddingTop="@dimen/dimen_size_10_dp">
+        <!--android:layout_centerHorizontal="true"-->
+        <ImageView
+            android:id="@+id/live_back_img"
+            android:layout_width="@dimen/common_back_btn_width"
+            android:layout_height="match_parent"
+            android:paddingLeft="@dimen/common_back_btn_left_padding"
+            android:paddingRight="@dimen/common_back_btn_left_padding"
+            android:src="@drawable/common_back_btn_bg" />
+
         <com.lalocal.lalocal.view.ClearEditText
             android:id="@+id/live_search_edt"
             android:layout_width="@dimen/live_search_edt_width"
             android:layout_height="@dimen/live_search_edt_height"
             android:background="@drawable/live_search_bg"
-            android:paddingLeft="@dimen/dimen_size_10_dp"
-            android:singleLine="true"
-            android:textSize="@dimen/text_size_15_sp"
             android:hint=" 请输入关键字"
             android:imeOptions="actionSearch"
-            android:textColor="@color/color_1a"
-            android:textCursorDrawable="@drawable/cursor_color_orange"
-            android:textColorHint="@color/color_b3"
+            android:paddingLeft="@dimen/dimen_size_10_dp"
             android:paddingRight="@dimen/dimen_size_2_dp"
-            />
+            android:singleLine="true"
+            android:textColor="@color/color_1a"
+            android:textColorHint="@color/color_b3"
+            android:textCursorDrawable="@drawable/cursor_color_orange"
+            android:textSize="@dimen/text_size_15_sp" />
+
         <TextView
             android:id="@+id/live_search_cancel_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dimen_size_15_dp"
             android:text="@string/cancel"
-            android:textSize="@dimen/text_size_15_sp"
             android:textColor="@color/color_b3"
-            />
+            android:textSize="@dimen/text_size_15_sp" />
     </LinearLayout>
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/live_search_xrlv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/live_search_edt_container"
-        />
-    <TextView
-        android:id="@+id/live_search_null"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_live"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dimen_size_36_dp"
-        android:layout_below="@+id/live_search_edt_container"
-        android:textSize="@dimen/text_size_15_sp"
-        android:textColor="@color/color_b3"
-        android:visibility="gone"
-        />
 
 </RelativeLayout>

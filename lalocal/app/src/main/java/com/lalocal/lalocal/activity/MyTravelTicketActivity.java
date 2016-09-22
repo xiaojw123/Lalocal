@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -36,10 +35,8 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
     FrameLayout myTicketCurFl;
     @BindView(R.id.my_ticket_cosume_xrv)
     XRecyclerView myTicketCosumeXrv;
-    @BindView(R.id.my_ticket_exchargegold_btn)
-    Button myTicketRechargegoldBtn;
-    @BindView(R.id.my_ticket_withdrawcash_btn)
-    Button myTicketWithdrawcashBtn;
+    @BindView(R.id.my_ticket_exchargegold_tv)
+    TextView myTicketRechargegoldTv;
     @BindView(R.id.my_ticket_no_score)
     TextView myTicketNoScore;
     @BindView(R.id.my_travelticket_ctv)
@@ -59,7 +56,7 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
         mWalletContent = getWalletContent();
         if (mWalletContent != null) {
             updateView();
-        }else{
+        } else {
             mContentloader.getMyWallet();
         }
     }
@@ -86,18 +83,11 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
     }
 
 
-    @OnClick({R.id.my_ticket_exchargegold_btn, R.id.my_ticket_withdrawcash_btn})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.my_ticket_exchargegold_btn://兑换乐钻
-                Intent exchargeIntent = new Intent(this, ExchangeActivity.class);
-                exchargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
-                startActivityForResult(exchargeIntent, KeyParams.REQUEST_CODE);
-                break;
-            case R.id.my_ticket_withdrawcash_btn://提现
-                // TODO: 2016/9/7 add 提现
-                break;
-        }
+    @OnClick(R.id.my_ticket_exchargegold_tv)
+    public void onClick() {
+        Intent exchargeIntent = new Intent(this, ExchangeActivity.class);
+        exchargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
+        startActivityForResult(exchargeIntent, KeyParams.REQUEST_CODE);
     }
 
 

@@ -15,10 +15,16 @@
         android:background="@color/white">
 
         <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/exchange_title_ctv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title_name="@string/exchange" />
-        <!--//TODO:add 客服-->
+        <com.lalocal.lalocal.view.CustomerServiceView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dimen_size_15_dp"
+            />
     </FrameLayout>
 
     <TextView

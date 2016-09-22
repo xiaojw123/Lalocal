@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/color_90_black"
-
-    android:orientation="vertical">
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,6 @@
             android:layout_height="@dimen/my_coupon_exchage_btn_hegiht"
             android:background="@drawable/register_edit_bg"
             android:hint=" 请输入优惠码"
-            android:inputType="number"
             android:textColor="@color/color_b3"
             android:textColorHint="@color/color_b3"
             android:textSize="@dimen/text_size_16_sp" />
@@ -35,4 +34,10 @@
             android:textSize="@dimen/text_size_16_sp" />
     </LinearLayout>
 
-</FrameLayout>
+    <View
+        android:id="@+id/pop_blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+</LinearLayout>
