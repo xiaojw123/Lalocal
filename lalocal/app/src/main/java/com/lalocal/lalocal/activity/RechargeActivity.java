@@ -18,6 +18,7 @@ import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.RechargeListAdapter;
 import com.lalocal.lalocal.view.decoration.LinearItemDecoration;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
@@ -29,7 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RechargeActivity extends BaseActivity {
+public class RechargeActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
     public static final int RESULT_CODE_UPDATE_COTENT = 0x12;
 
     @BindView(R.id.recharge_diamond_num)
@@ -44,6 +45,8 @@ public class RechargeActivity extends BaseActivity {
     TextView fistMsgTv;
     @BindView(R.id.recharge_doubt_container)
     FrameLayout rechargeDoubtContainer;
+    @BindView(R.id.recharge_titleview)
+    CustomTitleView rechargeCtv;
     @BindString(R.string.recharge_doubt_customer)
     String rechargeDoubtText;
     WalletContent mWalletCont;
@@ -55,6 +58,7 @@ public class RechargeActivity extends BaseActivity {
         unbinder = ButterKnife.bind(this);
         showLoadingAnimation();
         setLoaderCallBack(new RechargeCallBack());
+        rechargeCtv.setOnBackClickListener(this);
         rechargeDoubtTv.setText(Html.fromHtml("<u>" + rechargeDoubtText + "</u>"));
         mWalletCont = getWallConent();
         if (mWalletCont != null) {
@@ -84,7 +88,7 @@ public class RechargeActivity extends BaseActivity {
             case R.id.rechage_ticket_exchage:
                 Intent intent = new Intent(this, ExchangeActivity.class);
                 intent.putExtra(KeyParams.WALLET_CONTENT, mWalletCont);
-                startActivityForResult(intent,KeyParams.REQUEST_CODE);
+                startActivityForResult(intent, KeyParams.REQUEST_CODE);
                 break;
             case R.id.recharge_doubt_container:
                 Intent doubtIntent = new Intent(this, ChatActivity.class);
@@ -131,14 +135,25 @@ public class RechargeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("RechargeAct____onActivityResult resultcode__" + resultCode);
+        setResult(resultCode, data);
         switch (resultCode) {
-            case KeyParams.RESULT_ChARGE_SUCCESS:
             case KeyParams.RESULT_EXCHARGE_SUCCESS:
-                setResult(resultCode, data);
-                finish();
+            case KeyParams.RESULT_ChARGE_SUCCESS:
+                mContentloader.getMyWallet();
                 break;
 
         }
 
+    }
+
+    @Override
+    public void onBackClick() {
+        setResult(KeyParams.RESULT_EXCHARGE_SUCCESS);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        setResult(KeyParams.RESULT_EXCHARGE_SUCCESS);
     }
 }

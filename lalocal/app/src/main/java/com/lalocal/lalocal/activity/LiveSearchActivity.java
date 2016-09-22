@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -46,6 +47,8 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     XRecyclerView liveSearchXrlv;
     @BindView(R.id.live_search_null)
     TextView liveSearchNull;
+    @BindView(R.id.live_back_img)
+    ImageView backImg;
     @BindColor(R.color.color_b3)
     int searchIconColor;
     @BindDimen(R.dimen.dimen_size_8_dp)
@@ -78,7 +81,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     }
 
 
-    @OnClick(R.id.live_search_cancel_tv)
+    @OnClick({R.id.live_search_cancel_tv,R.id.live_back_img})
     public void onClick() {
         finish();
     }

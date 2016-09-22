@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,8 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     @BindView(R.id.my_coupon_rlv)
     RecyclerView myCouponRlv;
     EditText couponInputEdt;
+    View spaceView;
+
     @BindView(R.id.my_coupon_ctv)
     CustomTitleView myCouponCtv;
     @BindView(R.id.my_coupon_container)
@@ -82,15 +85,17 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                 if (window == null) {
                     View popContentView = LayoutInflater.from(this).inflate(R.layout.pop_coupon_excharge, couponContainer, false);
                     couponInputEdt = (EditText) popContentView.findViewById(R.id.pop_coupon_edt);
+                    spaceView = popContentView.findViewById(R.id.pop_blank_view);
                     Button exchargeBtn = (Button) popContentView.findViewById(R.id.pop_coupon_excharge_btn);
                     couponInputEdt.setOnClickListener(exhargeBtnClickListener);
+                    spaceView.setOnClickListener(exhargeBtnClickListener);
                     exchargeBtn.setOnClickListener(exhargeBtnClickListener);
                     window = new PopupWindow(popContentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                    window.setOutsideTouchable(true);
-                    window.setFocusable(true);
                     window.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                    window.setFocusable(true);
                 }
+                couponInputEdt.setText("");
                 window.showAsDropDown(myCouponCtv);
                 break;
             case R.id.my_coupon_use_btn:
@@ -108,7 +113,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                             Gson gson = new Gson();
                             String json = gson.toJson(coupons);
                             intent = new Intent();
-                            AppLog.print("myCoupon____json___"+json);
+                            AppLog.print("myCoupon____json___" + json);
                             intent.putExtra("selectedCoupons", json);
                         }
                     }
@@ -126,7 +131,18 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
             int id = v.getId();
             if (id == R.id.pop_coupon_excharge_btn) {
                 String text = couponInputEdt.getText().toString();
-                mContentloader.exchargeCopon(text);
+                if (!TextUtils.isEmpty(text)) {
+                    mContentloader.exchargeCopon(text);
+                } else {
+                    CommonUtil.showPromptDialog(MyCouponActivity.this, "优惠码不能为空",null);
+                }
+            } else if (id == R.id.pop_blank_view) {
+                AppLog.print("blankView__");
+                if (window != null && window.isShowing()) {
+                    AppLog.print("window dimisss__");
+                    window.dismiss();
+                }
+
             }
         }
     };

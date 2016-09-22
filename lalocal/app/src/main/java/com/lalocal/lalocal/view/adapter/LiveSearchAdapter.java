@@ -53,6 +53,13 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
             LiveRowsBean item = mItems.get(position);
             if (item != null) {
                 LiveSearchViewHolder itemHolder = (LiveSearchViewHolder) holder;
+                if (item.getStatus() == 1) {
+                    itemHolder.meetingTagLayout.setVisibility(View.VISIBLE);
+                } else {
+                    if (itemHolder.meetingTagLayout.getVisibility() == View.VISIBLE) {
+                        itemHolder.meetingTagLayout.setVisibility(View.INVISIBLE);
+                    }
+                }
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LiveSearchViewHolder) holder).lin1.getLayoutParams();
                 if (position > 0) {
                     params.leftMargin = ScreenUtil.screenWidth * 18 / 37;
@@ -129,6 +136,8 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
         View lin1;
         @BindView(R.id.live_search_lin2)
         View lin2;
+        @BindView(R.id.live_search_item_meeting_tag)
+        LinearLayout meetingTagLayout;
 
 
         public LiveSearchViewHolder(View itemView) {
