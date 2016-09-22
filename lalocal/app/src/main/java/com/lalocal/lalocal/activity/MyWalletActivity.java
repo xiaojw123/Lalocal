@@ -37,6 +37,7 @@ public class MyWalletActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_wallet_layout);
+        showLoadingAnimation();
         unbinder = ButterKnife.bind(this);
         setLoaderCallBack(new WalletCallBack());
         mContentloader.getMyWallet();
@@ -70,6 +71,7 @@ public class MyWalletActivity extends BaseActivity {
     class WalletCallBack extends ICallBack {
         @Override
         public void onGetMyWallet(WalletContent content) {
+            hidenLoadingAnimation();
             mWalletContent = content;
             if (content != null) {
                 String goldText = CommonUtil.formartNum(content.getGold());
@@ -80,6 +82,7 @@ public class MyWalletActivity extends BaseActivity {
                 myCouponNum.setText(couponText);
             }
         }
+
     }
 
     @Override

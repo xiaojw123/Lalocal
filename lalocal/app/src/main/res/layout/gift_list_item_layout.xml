@@ -4,13 +4,12 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@android:color/black"
+    android:id="@+id/gift_item_bg"
    >
 
     <RelativeLayout
         android:layout_width="@dimen/live_height_125dp"
         android:layout_height="@dimen/live_height_125dp">
-
         <TextView
             android:id="@+id/gift_send_count"
             android:layout_width="wrap_content"

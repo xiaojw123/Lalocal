@@ -20,8 +20,6 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <!-- 高德地图 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!-- 360更新 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- 环信 -->
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -40,6 +38,7 @@
     <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -166,18 +165,6 @@
 
         <service
             android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false" />
-
-        <!-- 360更新 -->
-        <activity
-            android:name="com.qihoo.updatesdk.lib.UpdateTipDialogActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <service
-            android:name="com.qihoo.appstore.updatelib.CheckUpdateService"
             android:exported="false" />
 
         <activity android:name=".activity.TravelPersonActivity" />
@@ -324,7 +311,7 @@
         <activity android:name=".activity.ChargePayActivity" />
         <activity android:name=".activity.LiveSearchActivity" />
         <activity android:name=".activity.MyCouponActivity"></activity>
-        <activity android:name=".live.entertainment.activity.UserAttentionOrFansActivity"></activity>
+
     </application>
 
 </manifest>

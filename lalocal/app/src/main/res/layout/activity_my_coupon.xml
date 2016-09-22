@@ -48,7 +48,21 @@
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
         android:layout_marginRight="@dimen/dimen_size_15_dp"
         android:layout_marginTop="@dimen/dimen_size_10_dp"
-        />
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/my_coupon_friendlyreminder_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_coupon_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:drawablePadding="@dimen/dimen_size_20_dp"
+        android:drawableTop="@drawable/startpage"
+        android:gravity="center_horizontal"
+        android:text="如果你想得到我们的优惠码，请点击上边的按钮"
+        android:textColor="@color/color_b3"
+        android:visibility="gone" />
 
 
     <FrameLayout

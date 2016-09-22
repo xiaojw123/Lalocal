@@ -63,7 +63,6 @@ public class GiftsRankPopuWindow extends PopupWindow {
         allRoomRank.setOnClickListener(buttonClickListener);
         shareBtn.setOnClickListener(buttonClickListener);
 
-
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setContentView(view);
@@ -78,7 +77,6 @@ public class GiftsRankPopuWindow extends PopupWindow {
          //   currentRanks.add(mycurrentRank);
         }
         giftRankingStatus(currentRanks);
-
     }
 
     View.OnClickListener buttonClickListener = new View.OnClickListener() {
@@ -129,8 +127,6 @@ public class GiftsRankPopuWindow extends PopupWindow {
             rankListView.setOnItemClickListener(onItemClickListener);
         }
     }
-
-
 
     private OnGiftRanksListener onGiftRanksListener;
 

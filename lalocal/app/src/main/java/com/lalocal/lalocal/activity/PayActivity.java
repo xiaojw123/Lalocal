@@ -295,7 +295,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
         }
 
         @Override
-        public void onRequestFailed(VolleyError volleyError) {
+        public void onError(VolleyError volleyError) {
             int code = volleyError.networkResponse.statusCode;
             if (code == 401) {
                 Intent intent = new Intent(PayActivity.this, LoginActivity.class);

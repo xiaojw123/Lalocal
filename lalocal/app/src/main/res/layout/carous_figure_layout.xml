@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_actionbar_height">
         <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/carous_figure_ctv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <TextView

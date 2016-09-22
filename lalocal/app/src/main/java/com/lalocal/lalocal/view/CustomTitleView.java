@@ -22,6 +22,7 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
     onBackBtnClickListener listener;
     Context context;
     TextView title_tv;
+    boolean isFinishEanble = true;
 
     public CustomTitleView(Context context) {
         this(context, null);
@@ -40,7 +41,7 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_title_layout, this);
         ImageView backImg = (ImageView) findViewById(R.id.titleview_back_img);
-         title_tv = (TextView) findViewById(R.id.titleview_title_tv);
+        title_tv = (TextView) findViewById(R.id.titleview_title_tv);
         View line = findViewById(R.id.titleview_line);
         if (!lineVisible) {
             line.setVisibility(GONE);
@@ -49,11 +50,16 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         backImg.setOnClickListener(this);
     }
 
+    public void setFisishEanble(boolean isFinishEanble) {
+        this.isFinishEanble = isFinishEanble;
+    }
+
     public void setOnBackClickListener(onBackBtnClickListener listener) {
         this.listener = listener;
 
     }
-    public void setTitle(String titleName){
+
+    public void setTitle(String titleName) {
         title_tv.setText(titleName);
     }
 
@@ -63,8 +69,10 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
             if (listener != null) {
                 listener.onBackClick();
             }
-            Activity a = (Activity) context;
-            a.finish();
+            if (isFinishEanble) {
+                Activity a = (Activity) context;
+                a.finish();
+            }
         } catch (Exception e) {
 
         }

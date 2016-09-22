@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -63,9 +64,11 @@ public class GiftGridViewAdpter extends BaseAdapter {
         if(selectedPosition!=position){
             holder.giftSendCount.setText("");
             holder.giftSendCount.setVisibility(View.GONE);
+            holder.giftItemBg.setBackgroundResource(0);
         }else {
 
             holder.giftSendCount.setVisibility(View.VISIBLE);
+            holder.giftItemBg.setBackgroundResource(R.drawable.gift_sel);
         }
         return convertView;
     }
@@ -79,7 +82,8 @@ public class GiftGridViewAdpter extends BaseAdapter {
         ImageView giftPhotoIv;
         @BindView(R.id.gift_price_tv)
         TextView giftPriceTv;
-
+        @BindView(R.id.gift_item_bg)
+        LinearLayout giftItemBg;
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
 

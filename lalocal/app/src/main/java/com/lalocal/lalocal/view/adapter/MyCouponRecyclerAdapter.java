@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.Coupon;
+import com.lalocal.lalocal.util.CommonUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,11 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
 
     public MyCouponRecyclerAdapter(List<Coupon> items) {
         mItems = items;
+    }
+    public void updateItems(List<Coupon> items){
+        mItems=items;
+        notifyDataSetChanged();
+
     }
 
     public void setItemClickEnale(boolean isClickEnalbe) {
@@ -100,7 +106,7 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
                 } else if (item.getStatus() == 2) {
                     couponHolder.cornerImg.setBackgroundDrawable(res.getDrawable(R.drawable.losttime_mark_icon));
                 }
-                couponHolder.discount_tv.setText(String.valueOf((int) item.getDiscount()));
+                couponHolder.discount_tv.setText(CommonUtil.formartOrderPrice(item.getDiscount()));
                 couponHolder.time_tv.setText("有效期至：" + item.getExpiredDateStr().replace("_", "."));
                 couponHolder.itemView.setFocusable(true);
                 couponHolder.itemView.setTag(item);

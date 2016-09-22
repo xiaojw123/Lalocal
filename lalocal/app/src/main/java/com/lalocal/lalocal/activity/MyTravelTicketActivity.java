@@ -2,11 +2,15 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.ConsumeRecord;
@@ -15,7 +19,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.ConsumeRecordAdapter;
-import com.lalocal.lalocal.view.xlistview.XListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +34,8 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
     TextView myScoreNumTv;
     @BindView(R.id.my_ticket_cur_fl)
     FrameLayout myTicketCurFl;
-    @BindView(R.id.my_ticket_cosume_xlv)
-    XListView myTicketCosumeXlv;
+    @BindView(R.id.my_ticket_cosume_xrv)
+    XRecyclerView myTicketCosumeXrv;
     @BindView(R.id.my_ticket_exchargegold_btn)
     Button myTicketRechargegoldBtn;
     @BindView(R.id.my_ticket_withdrawcash_btn)
@@ -51,22 +54,27 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_travel_ticket_layout);
         ButterKnife.bind(this);
+        showLoadingAnimation();
+        setLoaderCallBack(new MyScoreCallBack());
         mWalletContent = getWalletContent();
+        if (mWalletContent != null) {
+            updateView();
+        }else{
+            mContentloader.getMyWallet();
+        }
+    }
+
+    private void updateView() {
         long scoreNum = mWalletContent.getScore();
         myScoreNumTv.setText(CommonUtil.formartNum(scoreNum));
         myTicketCtv.setOnBackClickListener(this);
         if (scoreNum > 0) {
-            myTicketCosumeXlv.setVisibility(View.VISIBLE);
-            myTicketCosumeXlv.setPullRefreshEnable(false);
-            myTicketCosumeXlv.setRefreshEnable(false);
+            myTicketCosumeXrv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
+            myTicketCosumeXrv.setLayoutManager(new LinearLayoutManager(this));
+            myTicketCosumeXrv.setVisibility(View.VISIBLE);
+            myTicketCosumeXrv.setPullRefreshEnabled(false);
         } else {
             myTicketNoScore.setVisibility(View.VISIBLE);
-        }
-
-        MyScoreCallBack callBack = new MyScoreCallBack();
-        setLoaderCallBack(callBack);
-        if (myTicketCosumeXlv.getVisibility() == View.VISIBLE) {
-            myTicketCosumeXlv.setXListViewListener(callBack);
         }
         mContentloader.getScoreLogs(pageNum);
     }
@@ -93,7 +101,7 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
     }
 
 
-    class MyScoreCallBack extends ICallBack implements XListView.IXListViewListener {
+    class MyScoreCallBack extends ICallBack implements XRecyclerView.LoadingListener {
         int toalPages;
         boolean isLoadMore;
         List<ConsumeRecord.RowsBean> mRows = new ArrayList<>();
@@ -101,26 +109,36 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
 
         @Override
         public void onGetScoreLog(ConsumeRecord log) {
-            pageNum = log.getPageSize();
+            hidenLoadingAnimation();
+            pageNum = log.getPageNumber();
             toalPages = log.getTotalPages();
             if (toalPages > 1) {
-                myTicketCosumeXlv.setPullLoadEnable(true);
+                myTicketCosumeXrv.setLoadingMoreEnabled(true);
+                myTicketCosumeXrv.setLoadingListener(this);
             } else {
-                myTicketCosumeXlv.setPullLoadEnable(false);
+                myTicketCosumeXrv.setLoadingMoreEnabled(false);
             }
             if (isLoadMore) {
-                isLoadMore = false;
+                loadMoreComplete();
             } else {
                 mRows.clear();
             }
             mRows.addAll(log.getRows());
             if (adapter == null) {
                 adapter = new ConsumeRecordAdapter(mRows);
-                myTicketCosumeXlv.setAdapter(adapter);
+                myTicketCosumeXrv.setAdapter(adapter);
             } else {
                 adapter.updateItems(mRows);
             }
 
+        }
+
+
+        @Override
+        public void onGetMyWallet(WalletContent content) {
+            hidenLoadingAnimation();
+            mWalletContent = content;
+            updateView();
         }
 
         @Override
@@ -129,18 +147,32 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
         }
 
         @Override
+        public void onResponseFailed() {
+            super.onResponseFailed();
+            loadMoreComplete();
+        }
+
+        private void loadMoreComplete() {
+            isLoadMore = false;
+            myTicketCosumeXrv.loadMoreComplete();
+        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+            loadMoreComplete();
+        }
+
+        @Override
         public void onLoadMore() {
             if (pageNum < toalPages) {
                 isLoadMore = true;
                 ++pageNum;
                 mContentloader.getScoreLogs(pageNum);
+            } else {
+                myTicketCosumeXrv.loadMoreComplete();
             }
-        }
 
-        @Override
-        public void onGetMyWallet(WalletContent content) {
-            mWalletContent = content;
-            myScoreNumTv.setText(CommonUtil.formartNum(content.getScore()));
         }
     }
 

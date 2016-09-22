@@ -64,17 +64,14 @@
         </LinearLayout>
 
     </FrameLayout>
-    <com.lalocal.lalocal.view.xlistview.XListView
-        android:id="@+id/my_diamond_cosume_xlv"
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/my_diamond_cosume_xrv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/my_diamond_cur_fl"
         android:layout_above="@+id/consume_doubt_container"
-        android:layout_marginBottom="@dimen/dimen_size_10_dp"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="0dp"
-        android:scrollbars="none"
         />
+
     <TextView
         android:id="@+id/my_diamond_no_recharge"
         android:layout_width="wrap_content"

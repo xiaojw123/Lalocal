@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -125,7 +126,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public static final String LIVE_USER_ID = "LIVE_USER_ID";
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
     public static final String CHANNELID = "CHANNELID";
-    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 10000;
+    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 5000;
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
@@ -347,6 +348,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     /****************************
      * 布局初始化
      **************************/
+    private boolean mIsRefreshing=false;
     protected void findViews() {
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
         barrageView = (BarrageView) findViewById(R.id.barrageView_test);
@@ -363,8 +365,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg=(ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
-        //     giftPlaneDown = (ImageView) findViewById(R.id.gift_plane_down);
-        //    planeLayout = (RelativeLayout) findViewById(R.id.gift_plane_layout);
+
         // 礼物列表
         findGiftLayout();
         // 点赞的爱心布局
@@ -384,6 +385,22 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 shouldCollapseInputPanel();
             }
         });
+        if (messageListPanel == null) {
+            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, LivePlayerBaseActivity.this);
+        }
+
+        touristList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mIsRefreshing) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
+
 
 
         scoreLayout.setOnClickListener(clickListener);
@@ -535,7 +552,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftsRankPopuWindow.setOnSendClickListener(new GiftsRankPopuWindow.OnGiftRanksListener() {
             @Override
             public void closeRankPopuBtn() {
-
             }
 
             @Override
@@ -872,11 +888,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     // 进入聊天室
     protected void enterRoom() {
-        if (messageListPanel == null) {
-            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, LivePlayerBaseActivity.this);
-        }
 
-        messageListPanel.setOnChatRoomMessageItemClickListener(new ChatRoomMsgListPanel.OnChatRoomMessageItemClickListener() {
+
+      /*  messageListPanel.setOnChatRoomMessageItemClickListener(new ChatRoomMsgListPanel.OnChatRoomMessageItemClickListener() {
             @Override
             public void onMessageListItem(String userId) {
                 if (!"-1".equals(userId)) {
@@ -888,7 +902,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
 
             }
-        });
+        });*/
 
         if (DemoCache.getLoginStatus()) {
             EnterChatRoomData data = new EnterChatRoomData(roomId);

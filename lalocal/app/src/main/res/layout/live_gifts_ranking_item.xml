@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/live_gift_rank_item_layout"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="66dp"
    >
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -17,7 +17,7 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/live_height_66dp"
         android:layout_toRightOf="@+id/live_gifts_ranking_head"
         android:paddingLeft="@dimen/live_padding_10dp"
         android:layout_centerVertical="true"

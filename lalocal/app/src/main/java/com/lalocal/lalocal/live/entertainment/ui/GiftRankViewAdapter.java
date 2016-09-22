@@ -7,13 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.util.DrawableUtils;
-
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -39,12 +36,10 @@ public class GiftRankViewAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return null;
     }
-
     @Override
     public long getItemId(int position) {
         return 0;
     }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
@@ -66,7 +61,7 @@ public class GiftRankViewAdapter extends BaseAdapter {
             holder.liveGiftsRankingNum.setTextColor(Color.parseColor("#ffaa2a"));
         }
         if(totalRanksBean.getRank()==1){
-            holder.liveGiftRankItemLayout.setBackgroundResource(R.drawable.stbg);
+           holder.liveGiftRankItemLayout.setBackgroundResource(R.drawable.stbg);
             holder.liveGiftsRankingName.setTextColor(Color.RED);
         }else {
             holder.liveGiftsRankingName.setTextColor(Color.WHITE);
@@ -85,7 +80,6 @@ public class GiftRankViewAdapter extends BaseAdapter {
         TextView liveGiftsRankingNum;
         @BindView(R.id.live_gift_rank_item_layout)
         RelativeLayout liveGiftRankItemLayout;
-
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }

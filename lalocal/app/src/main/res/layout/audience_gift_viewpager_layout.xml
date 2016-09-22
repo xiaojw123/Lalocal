@@ -3,12 +3,13 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.lalocal.lalocal.live.entertainment.ui.GiftGridView
+    <GridView
         android:id="@+id/audience_gift_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:horizontalSpacing="0.5dp"
         android:verticalSpacing="0.5dp"
-        android:numColumns="3"></com.lalocal.lalocal.live.entertainment.ui.GiftGridView>
+        android:numColumns="3"
+        ></GridView>
 
 </LinearLayout>

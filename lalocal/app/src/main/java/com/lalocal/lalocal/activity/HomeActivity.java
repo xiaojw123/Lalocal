@@ -15,7 +15,6 @@ import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendFragment;
 import com.lalocal.lalocal.util.AppLog;
-import com.qihoo.updatesdk.lib.UpdateHelper;
 
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
     LinearLayout home_recommend_tab, home_destination_tab, home_news_tab, home_me_tab;
@@ -30,7 +29,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
         initView();
-        UpdateHelper.getInstance().autoUpdate("com.lalocal.lalocal");
     }
 
     private void initView() {

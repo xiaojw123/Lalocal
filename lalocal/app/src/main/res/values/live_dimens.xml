@@ -24,6 +24,7 @@
     <dimen name="live_height_50dp">50dp</dimen>
     <dimen name="live_height_52dp">52dp</dimen>
     <dimen name="live_height_60dp">60dp</dimen>
+    <dimen name="live_height_66dp">66dp</dimen>
     <dimen name="live_height_80dp">80dp</dimen>
     <dimen name="live_height_81dp">81dp</dimen>
     <dimen name="live_height_70dp">70dp</dimen>

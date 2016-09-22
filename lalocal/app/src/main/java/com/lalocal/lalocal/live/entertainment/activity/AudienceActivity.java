@@ -184,16 +184,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if("0".equals(liveStatus)){
+            showFinishLayout(true,2);
+        }
         initAudienceParam();
         parseIntent();
         initView();
         registerObservers(true);
         loginIm();
         initData();
-        if("0".equals(liveStatus)){
-            showFinishLayout(true,2);
 
-        }
     }
 
 
@@ -224,7 +224,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void doLeaveChannel() {
         worker().leaveChannel(config().mChannel);
         if (isBroadcaster()) {
-            worker().preview(false, null, config().mUid);
+            worker().preview(false, null, 0);
         }
     }
 
@@ -442,7 +442,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         // 释放资源
         if (videoPlayer != null) {
             videoPlayer.resetVideo();
-
         }
         deInitUIandEvent();
         registerObservers(false);
@@ -734,6 +733,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                 final  int id = giftSresult.get(itemPosition).getId();
                 contentLoader.getMyWallet();
+//                startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
                 contentLoader.setCallBack(new ICallBack() {
                     @Override
                     public void onGetMyWallet(final WalletContent content) {
@@ -1220,7 +1220,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onError(int err) {
-        Toast.makeText(AudienceActivity.this,"用户端视频播放错误码:"+err,Toast.LENGTH_SHORT).show();
+        AppLog.i("TAG","用户端视频播放错误码:"+err);
+
     }
 
     @Override
@@ -1230,6 +1231,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onLeaveChannel(IRtcEngineEventHandler.RtcStats stats) {
-            AppLog.i("TAG","用户离开直播间回调:"+stats.toString());
+        AppLog.i("TAG","用户离开直播间回调:"+stats.toString());
+
     }
 }

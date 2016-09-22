@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
@@ -21,9 +22,9 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
-import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.MyCouponRecyclerAdapter;
 
@@ -36,8 +37,6 @@ import butterknife.OnClick;
 
 public class MyCouponActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
     private static final String MY_COUPON_FORMART = "我的优惠券(%1$s)";
-    public static final int MSG_UPDATE_USE = 0x11;
-
     @BindView(R.id.my_coupon_exchage_btn)
     Button myCouponExchageBtn;
     @BindView(R.id.my_coupon_rlv)
@@ -53,6 +52,8 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     Button myCouponUseBtn;
     @BindView(R.id.my_coupon_use_container)
     FrameLayout myCouponUseContainer;
+    @BindView(R.id.my_coupon_friendlyreminder_tv)
+    TextView myCouponReminderTv;
     PopupWindow window;
     int pageType;
     MyCouponRecyclerAdapter adapter;
@@ -64,8 +65,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
         ButterKnife.bind(this);
         pageType = getPageType();
         if (pageType == KeyParams.PAGE_TYPE_WALLET) {
-            WalletContent content = getWalletContent();
-            myCouponCtv.setTitle(String.format(MY_COUPON_FORMART, content.getCouponNumb()));
+            myCouponCtv.setTitle("我的优惠券");
         } else {
             myCouponCtv.setTitle("优惠券");
             myCouponUseContainer.setVisibility(View.VISIBLE);
@@ -108,6 +108,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                             Gson gson = new Gson();
                             String json = gson.toJson(coupons);
                             intent = new Intent();
+                            AppLog.print("myCoupon____json___"+json);
                             intent.putExtra("selectedCoupons", json);
                         }
                     }
@@ -139,16 +140,45 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     class MyCouponCallBack extends ICallBack {
         @Override
         public void onGetCounponItem(List<Coupon> items) {
-            adapter = new MyCouponRecyclerAdapter(items);
-            adapter.setUseGroup(myCouponReductionTv, myCouponUseBtn);
-            myCouponRlv.setLayoutManager(new LinearLayoutManager(MyCouponActivity.this));
             if (pageType == KeyParams.PAGE_TYPE_WALLET) {
-                adapter.setItemClickEnale(false);
-            } else {
-                adapter.setItemClickEnale(true);
+                myCouponCtv.setTitle(String.format(MY_COUPON_FORMART, items.size()));
             }
-            myCouponRlv.setAdapter(adapter);
-            AppLog.print("reclcerview childcout___" + myCouponRlv.getChildCount());
+            if (items.size() > 0) {
+                showCouponItems();
+                if (adapter == null) {
+                    adapter = new MyCouponRecyclerAdapter(items);
+                    adapter.setUseGroup(myCouponReductionTv, myCouponUseBtn);
+                    myCouponRlv.setLayoutManager(new LinearLayoutManager(MyCouponActivity.this));
+                    if (pageType == KeyParams.PAGE_TYPE_WALLET) {
+                        adapter.setItemClickEnale(false);
+                    } else {
+                        adapter.setItemClickEnale(true);
+                    }
+                    myCouponRlv.setAdapter(adapter);
+                } else {
+                    adapter.updateItems(items);
+                }
+            } else {
+                showActionTip();
+            }
+        }
+
+        private void showActionTip() {
+            if (myCouponReminderTv.getVisibility() != View.VISIBLE) {
+                myCouponReminderTv.setVisibility(View.VISIBLE);
+            }
+            if (myCouponRlv.getVisibility() == View.VISIBLE) {
+                myCouponRlv.setVisibility(View.GONE);
+            }
+        }
+
+        private void showCouponItems() {
+            if (myCouponRlv.getVisibility() != View.VISIBLE) {
+                myCouponRlv.setVisibility(View.VISIBLE);
+            }
+            if (myCouponReminderTv.getVisibility() == View.VISIBLE) {
+                myCouponReminderTv.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -156,6 +186,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
             if (window != null && window.isShowing()) {
                 window.dismiss();
             }
+            CommonUtil.showToast(MyCouponActivity.this, "兑换成功", Toast.LENGTH_SHORT);
             mContentloader.getMyCoupon(UserHelper.getUserId(MyCouponActivity.this), UserHelper.getToken(MyCouponActivity.this));
         }
     }
@@ -167,17 +198,11 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     }
 
     public void setBackResult() {
-//        KeyboardUtil.hidenSoftKey(couponInputEdt);
         if (pageType == KeyParams.PAGE_TYPE_WALLET) {
             setResult(KeyParams.RESULT_UPDATE_WALLET);
-        }else{
-            setResult(BookActivity.RESULT_COUPON_SELECTED,null);
+        } else {
+            setResult(BookActivity.RESULT_COUPON_SELECTED, null);
         }
-
-    }
-
-    public WalletContent getWalletContent() {
-        return getIntent().getParcelableExtra(KeyParams.WALLET_CONTENT);
 
     }
 

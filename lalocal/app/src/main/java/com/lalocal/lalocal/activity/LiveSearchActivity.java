@@ -11,8 +11,9 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
@@ -62,6 +63,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
         liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
+        liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.setPullRefreshEnabled(false);
         setLoaderCallBack(new LiveSearchCallBack());
 
@@ -101,7 +103,6 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     }
 
     class LiveSearchCallBack extends ICallBack implements XRecyclerView.LoadingListener, OnItemClickListener {
-        boolean isNoMore = true;
         int toalPages;
         LiveSearchAdapter adapter;
         List<LiveRowsBean> mAllRows = new ArrayList<>();
@@ -149,6 +150,16 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         }
 
         @Override
+        public void onResponseFailed() {
+            super.onResponseFailed();
+        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+        }
+
+        @Override
         public void onLoadMore() {
             AppLog.print("onLoadMore______");
             if (mPageNumb < toalPages) {
@@ -156,18 +167,15 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
                 mContentloader.searchLive(mPageNumb, mLastSearhText);
             } else {
                 liveSearchXrlv.loadMoreComplete();
-                if (isNoMore) {
-                    isNoMore = false;
-                    Toast.makeText(LiveSearchActivity.this, "没有更多了", Toast.LENGTH_SHORT).show();
-                }
-
             }
 
         }
+
         public static final String CREATE_ROOMID = "createRoomId";
+
         @Override
         public void onItemClickListener(View view, int position) {
-            LiveRowsBean liveRowsBean = mAllRows.get(position);
+            LiveRowsBean liveRowsBean = (LiveRowsBean) view.getTag();
             String roomId =String.valueOf( liveRowsBean.getRoomId());
             String createRoom = SPCUtils.getString(LiveSearchActivity.this, CREATE_ROOMID);
             String s = String.valueOf(roomId);
@@ -184,10 +192,8 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
                 ann = "这是公告哈";
             }
             AudienceActivity.start(LiveSearchActivity.this,liveRowsBean,ann);
-
         }
     }
-
 
 
 }

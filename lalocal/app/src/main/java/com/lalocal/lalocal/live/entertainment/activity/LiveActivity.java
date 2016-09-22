@@ -206,7 +206,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
            lp.gravity=Gravity.BOTTOM;
 
-            rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT , 0));//VideoCanvas:本地代码显示属性
+            rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN , 0));//VideoCanvas:本地代码显示属性
           //  surfaceView.setZOrderOnTop(true);
             //surfaceView.setZOrderMediaOverlay(true);
             worker().preview(true, surfaceView, config().mUid);
@@ -238,7 +238,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         worker().leaveChannel(config().mChannel);
         if (isBroadcaster()) {
             AppLog.i("TAG","停止视频预览。。。。");
-            worker().preview(false, null, config().mUid);
+            worker().preview(false, null,0);
         }
     }
 
@@ -483,7 +483,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     public void run() {
                         if (!isCloseLive) {
                             AppLog.i("TAG", "上传在线人数：" + onlineCounts);
-                            contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
+                            if(onlineCounts>0){
+                                contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
+                            }
+
                         }
                     }
                 }, 1000, 2 * 1000);
@@ -724,9 +727,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             @Override
             public void onDialogClickListener() {
              //   sendLiveStatusMessgae("11");
-                endLive();
                 //结束直播的时间
                 endTime = System.currentTimeMillis();
+                endLive();
+
             }
         });
         customDialog.setSurceBtn("继续直播", null);
