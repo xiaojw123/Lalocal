@@ -12,7 +12,8 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
-import com.lalocal.lalocal.model.LiveSeachItem;
+import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -26,14 +27,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class LiveSearchAdapter extends BaseRecyclerAdapter {
 
-    List<LiveSeachItem.RowsBean> mItems;
+    List<LiveRowsBean> mItems;
     Context mContext;
 
-    public LiveSearchAdapter(List<LiveSeachItem.RowsBean> items) {
+    public LiveSearchAdapter(List<LiveRowsBean> items) {
         mItems = items;
     }
 
-    public void updatItems(List<LiveSeachItem.RowsBean> items) {
+    public void updatItems(List<LiveRowsBean> items) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -49,7 +50,7 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (mItems != null && mItems.size() > 0) {
-            LiveSeachItem.RowsBean item = mItems.get(position);
+            LiveRowsBean item = mItems.get(position);
             if (item != null) {
                 LiveSearchViewHolder itemHolder = (LiveSearchViewHolder) holder;
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LiveSearchViewHolder) holder).lin1.getLayoutParams();
@@ -78,7 +79,7 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
                 } else {
                     itemHolder.locTv.setVisibility(View.INVISIBLE);
                 }
-                LiveSeachItem.RowsBean.UserBean userBean = item.getUser();
+                LiveUserBean userBean = item.getUser();
                 if (userBean != null) {
                     DrawableUtils.displayImg(mContext, itemHolder.avatarImg, userBean.getAvatar(), -1);
                     String nickName = userBean.getNickName();

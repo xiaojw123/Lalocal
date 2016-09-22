@@ -227,27 +227,16 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
             super.onCreateLiveRoom(createLiveRoomDataResp);
             if (createLiveRoomDataResp.getReturnCode() == 0) {
-
-                mliveStreamingURL = createLiveRoomDataResp.getResult().getPushUrl();
-                pullUrl = createLiveRoomDataResp.getResult().getPullUrl();
-                createRoomId = createLiveRoomDataResp.getResult().getRoomId();
+                LiveRowsBean result = createLiveRoomDataResp.getResult();
                 SPCUtils.put(getActivity(), CREATE_ROOMID, String.valueOf(createRoomId));
                 Object annoucement = createLiveRoomDataResp.getResult().getAnnoucement();
-                String cname = createLiveRoomDataResp.getResult().getCname();
                 if (annoucement != null) {
                     createAnn = annoucement.toString();
                 } else {
                     createAnn = "这是公告";
                 }
-
                 //初始化直播间
-                userCreateId = createLiveRoomDataResp.getResult().getId();
-                liveUserId = createLiveRoomDataResp.getResult().getUser().getId();
-                createAvatar = createLiveRoomDataResp.getResult().getUser().getAvatar();
-                createNickName = createLiveRoomDataResp.getResult().getUser().getNickName();
-                shareVOCreate = createLiveRoomDataResp.getResult().getShareVO();
-                LiveActivity.start(getActivity(), String.valueOf(createRoomId), mliveStreamingURL, String.valueOf(userCreateId), createAvatar, String.valueOf(liveUserId), shareVOCreate, createAnn, createNickName, reminfBack,cname);
-
+                LiveActivity.start(getActivity(),result,createAnn,reminfBack);
             }
 
 
@@ -277,27 +266,17 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             liveRecyclearView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                     LiveRowsBean liveRowsBean = rows.get(position - 1);
-                    String  status = String.valueOf(liveRowsBean.getStatus());
                     roomId = liveRowsBean.getRoomId();
                     String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                     String s = String.valueOf(roomId);
                     if (createRoom != null && createRoom.equals(s)) {
-
                         CommonUtil.REMIND_BACK = 1;
                         SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
                         prepareLive();
                         return;
                     }
-                    String avatar = liveRowsBean.getUser().getAvatar();
-                    String nickName = liveRowsBean.getUser().getNickName();
-                    String pullUrl = liveRowsBean.getPullUrl();
                     Object annoucement = liveRowsBean.getAnnoucement();
-                    String cname = liveRowsBean.getCname();
-                    int userId = liveRowsBean.getUser().getId();
-                    int channelId = liveRowsBean.getId();
-                    int type = liveRowsBean.getType();
                     String ann = null;
                     if (annoucement != null) {
                         ann = annoucement.toString();
@@ -305,7 +284,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         ann = "这是公告哈";
                     }
                     SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                    AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann, String.valueOf(channelId),cname,status);
+                    AudienceActivity.start(getActivity(),liveRowsBean,ann);
                 }
 
             });

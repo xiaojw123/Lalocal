@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -103,7 +104,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         boolean isNoMore = true;
         int toalPages;
         LiveSearchAdapter adapter;
-        List<LiveSeachItem.RowsBean> mAllRows = new ArrayList<>();
+        List<LiveRowsBean> mAllRows = new ArrayList<>();
 
         @Override
         public void onSearchLive(LiveSeachItem item) {
@@ -166,39 +167,24 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         public static final String CREATE_ROOMID = "createRoomId";
         @Override
         public void onItemClickListener(View view, int position) {
-            LiveSeachItem.RowsBean liveRowsBean = mAllRows.get(position);
-
-           String roomId =String.valueOf( liveRowsBean.getRoomId());
+            LiveRowsBean liveRowsBean = mAllRows.get(position);
+            String roomId =String.valueOf( liveRowsBean.getRoomId());
             String createRoom = SPCUtils.getString(LiveSearchActivity.this, CREATE_ROOMID);
             String s = String.valueOf(roomId);
             if (createRoom != null && createRoom.equals(s)) {
                 CommonUtil.REMIND_BACK = 1;
                 SPCUtils.put(LiveSearchActivity.this, CREATE_ROOMID, "fdfdad");
-               // prepareLive();
                 return;
             }
-            String avatar = liveRowsBean.getUser().getAvatar();
-            String nickName = liveRowsBean.getUser().getNickName();
-            String pullUrl = liveRowsBean.getPullUrl();
             Object annoucement = liveRowsBean.getAnnoucement();
-            String cname = liveRowsBean.getCname();
-            String liveStatus = String.valueOf(liveRowsBean.getStatus());
-            int userId = liveRowsBean.getUser().getId();
-            int channelId = liveRowsBean.getId();
-            int type = liveRowsBean.getType();
             String ann = null;
             if (annoucement != null) {
                 ann = annoucement.toString();
             } else {
                 ann = "这是公告哈";
             }
-          //  LiveSeachItem.RowsBean.ShareVOBean shareVO = liveRowsBean.getShareVO();
-            AudienceActivity.start(LiveSearchActivity.this, String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), null, String.valueOf(type), ann, String.valueOf(channelId),cname,liveStatus);
+            AudienceActivity.start(LiveSearchActivity.this,liveRowsBean,ann);
 
-
-         /*   Intent intent = new Intent(LiveSearchActivity.this, AudienceActivity.class);
-            intent.putExtra(AudienceActivity.LIVE_SEARCH_ITEM, (LiveSeachItem.RowsBean) view.getTag());
-            startActivity(intent);*/
         }
     }
 

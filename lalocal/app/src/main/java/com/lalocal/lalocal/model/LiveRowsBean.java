@@ -1,9 +1,12 @@
 package com.lalocal.lalocal.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by android on 2016/7/19.
  */
-public class LiveRowsBean implements Comparable<LiveRowsBean> {
+public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     private int id;
     private String title;
     private String photo;
@@ -14,8 +17,6 @@ public class LiveRowsBean implements Comparable<LiveRowsBean> {
     private int style;
     private String cid;
     private String cname;
-
-
     private String pushUrl;
     private String pullUrl;
     private String hlsPullUrl;
@@ -23,6 +24,35 @@ public class LiveRowsBean implements Comparable<LiveRowsBean> {
     private SpecialShareVOBean shareVO;
     private int roomId;
     private String createrAccId;
+    private String address;
+    private int number;
+    private boolean challengeStatus;
+
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+    public boolean isChallengeStatus() {
+        return challengeStatus;
+    }
+
+    public void setChallengeStatus(boolean challengeStatus) {
+        this.challengeStatus = challengeStatus;
+    }
+
 
     public int getId() {
         return id;
@@ -164,4 +194,71 @@ public class LiveRowsBean implements Comparable<LiveRowsBean> {
     public int compareTo(LiveRowsBean another) {
         return another.getOnlineUser() - this.getOnlineUser();
     }
+
+    public LiveRowsBean() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.title);
+        dest.writeString(this.photo);
+        dest.writeParcelable(this.user, flags);
+        dest.writeInt(this.onlineUser);
+        dest.writeInt(this.status);
+        dest.writeInt(this.type);
+        dest.writeInt(this.style);
+        dest.writeString(this.cid);
+        dest.writeString(this.cname);
+        dest.writeString(this.pushUrl);
+        dest.writeString(this.pullUrl);
+        dest.writeString(this.hlsPullUrl);
+
+        dest.writeParcelable(this.shareVO, flags);
+        dest.writeInt(this.roomId);
+        dest.writeString(this.createrAccId);
+        dest.writeString(this.address);
+        dest.writeInt(this.number);
+        dest.writeByte(this.challengeStatus ? (byte) 1 : (byte) 0);
+    }
+
+    protected LiveRowsBean(Parcel in) {
+        this.id = in.readInt();
+        this.title = in.readString();
+        this.photo = in.readString();
+        this.user = in.readParcelable(LiveUserBean.class.getClassLoader());
+        this.onlineUser = in.readInt();
+        this.status = in.readInt();
+        this.type = in.readInt();
+        this.style = in.readInt();
+        this.cid = in.readString();
+        this.cname = in.readString();
+        this.pushUrl = in.readString();
+        this.pullUrl = in.readString();
+        this.hlsPullUrl = in.readString();
+
+        this.shareVO = in.readParcelable(SpecialShareVOBean.class.getClassLoader());
+        this.roomId = in.readInt();
+        this.createrAccId = in.readString();
+        this.address = in.readString();
+        this.number = in.readInt();
+        this.challengeStatus = in.readByte() != 0;
+    }
+
+    public static final Creator<LiveRowsBean> CREATOR = new Creator<LiveRowsBean>() {
+        @Override
+        public LiveRowsBean createFromParcel(Parcel source) {
+            return new LiveRowsBean(source);
+        }
+
+        @Override
+        public LiveRowsBean[] newArray(int size) {
+            return new LiveRowsBean[size];
+        }
+    };
 }

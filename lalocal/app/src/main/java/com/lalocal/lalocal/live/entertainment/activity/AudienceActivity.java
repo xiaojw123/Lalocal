@@ -45,7 +45,7 @@ import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.live.thirdparty.video.NEVideoView;
 import com.lalocal.lalocal.live.thirdparty.video.VideoPlayer;
 import com.lalocal.lalocal.live.thirdparty.video.constant.VideoConstant;
-import com.lalocal.lalocal.model.LiveSeachItem;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
@@ -148,32 +148,22 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private ContentLoader contentLoader1;
     private NEVideoView videoView;
     private String cname;
-    private LiveSeachItem liveSeachItem;
-    private LiveSeachItem.RowsBean rowsBean;
     private String liveStatus;
+    protected LiveRowsBean liveRowsBean;
 
 
-    public static void start(Context context, String roomId, String url, String avatar,
-                             String nickName, String userId, SpecialShareVOBean shareVO, String type, String annoucement, String channelId,String cname,String status) {
+    public static void start(Context context,LiveRowsBean liveRowsBean,String annoucement){
         Intent intent = new Intent();
-        intent.setClass(context, AudienceActivity.class);
-        intent.putExtra(EXTRA_ROOM_ID, roomId);
-        intent.putExtra(EXTRA_URL, url);
-        intent.putExtra(AVATAR_AUDIENCE, avatar);
-        intent.putExtra(NICK_NAME_AUDIENCE, nickName);
-        intent.putExtra(ANNOUCEMENT, annoucement);
-        intent.putExtra(CHANNELID, channelId);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(PLAYER_TYPE, type);
-        intent.putExtra(CNAME,cname);
         Bundle mBundle = new Bundle();
-        mBundle.putParcelable("shareVO", shareVO);
+        mBundle.putParcelable("LiveRowsBean", liveRowsBean);
         intent.putExtras(mBundle);
-        intent.putExtra(LIVE_USER_ID, userId);
-        intent.putExtra(STATUS,status);
+        intent.setClass(context, AudienceActivity.class);
+        intent.putExtra(ANNOUCEMENT, annoucement);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(intent);
-
     }
+
+
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -263,17 +253,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     protected void parseIntent() {
         super.parseIntent();
-        nickname = getIntent().getStringExtra(NICK_NAME_AUDIENCE);
-        avatar = getIntent().getStringExtra(AVATAR_AUDIENCE);
-        playType = getIntent().getStringExtra(PLAYER_TYPE);
+        liveRowsBean = getIntent().getParcelableExtra("LiveRowsBean");
+        nickname= liveRowsBean.getUser().getNickName();
+        avatar= liveRowsBean.getUser().getAvatar();
+        playType=String.valueOf(liveRowsBean.getType());
         annoucement = getIntent().getStringExtra(ANNOUCEMENT);
-        nickNameAudience = getIntent().getStringExtra(NICK_NAME_AUDIENCE);
-        shareVO = getIntent().getParcelableExtra("shareVO");
-        channelId = getIntent().getStringExtra(CHANNELID);
-        cname = getIntent().getStringExtra(CNAME);
-        liveStatus = getIntent().getStringExtra(STATUS);
-
-
+        nickNameAudience= liveRowsBean.getUser().getNickName();
+        channelId=String.valueOf(liveRowsBean.getId());
+        cname= liveRowsBean.getCname();
+        liveStatus=String.valueOf(liveRowsBean.getStatus());
+         shareVO = liveRowsBean.getShareVO();
     }
 
 
@@ -1094,7 +1083,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             if(inputPanel!=null){
                 inputPanel.collapse(true);
             }
-
+            if(giftStorePopuWindow!=null){
+                giftStorePopuWindow.dismiss();
+            }
             contentLoader.getLiveUserInfo(userId);
             contentLoader.setCallBack(new ICallBack() {
                 @Override

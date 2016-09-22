@@ -194,9 +194,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
      //   startLive();
 
-
-
-
     }
 
     private void startLive() {
@@ -204,8 +201,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         int cRole = Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
         doConfigEngine(cRole);
         if (isBroadcaster(cRole)) {
-          //  SurfaceView surfaceView= (SurfaceView) findViewById(R.id.player_surface);
             SurfaceView surfaceView= RtcEngine.CreateRendererView(getApplicationContext());
+
             LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
            lp.gravity=Gravity.BOTTOM;
 
@@ -213,7 +210,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
           //  surfaceView.setZOrderOnTop(true);
             //surfaceView.setZOrderMediaOverlay(true);
             worker().preview(true, surfaceView, config().mUid);
-            palyerLayout.addView(surfaceView,lp);
+           palyerLayout.addView(surfaceView,lp);
         }
         worker().joinChannel(cname, config().mUid);
     }
@@ -275,28 +272,20 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-    public static void start(Context context, String roomId, String url,
-                             String channelId, String avatag, String liveUserId,
-                             SpecialShareVOBean shareVO, String annoucement, String createNickName,
-                             String isSecond, String cname) {
+    public  static  void start(Context context,LiveRowsBean result,String ann,String isSecond){
         Intent intent = new Intent();
-        intent.setClass(context, LiveActivity.class);
-        intent.putExtra(EXTRA_ROOM_ID, roomId);
-        intent.putExtra(EXTRA_URL, url);
-        intent.putExtra(CHANNELID, channelId);
-        intent.putExtra(AVATAR, avatag);
-        intent.putExtra(ANNOUCEMENT, annoucement);
-        intent.putExtra(IS_SECOND, isSecond);
-        intent.putExtra(CREATE_NICK_NAME, createNickName);
         Bundle mBundle = new Bundle();
-        mBundle.putParcelable("shareVO", shareVO);
+        mBundle.putParcelable("LiveRowsBean", result);
         intent.putExtras(mBundle);
+        intent.setClass(context, LiveActivity.class);
+        intent.putExtra(ANNOUCEMENT, ann);
+        intent.putExtra(IS_SECOND, isSecond);
         intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        intent.putExtra(LIVE_USER_ID, liveUserId);
-        intent.putExtra(CNAME, cname);
         context.startActivity(intent);
 
+
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -346,14 +335,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     private void gainIntent() {
-        channelId = getIntent().getStringExtra(CHANNELID);
-        createNickName = getIntent().getStringExtra(CREATE_NICK_NAME);
-        shareVO = getIntent().getParcelableExtra("shareVO");
-        String s = new Gson().toJson(shareVO);
+       LiveRowsBean  liveRowsBean = getIntent().getParcelableExtra("LiveRowsBean");
+        createNickName = liveRowsBean.getUser().getNickName();
+        avatar = liveRowsBean.getUser().getAvatar();
+        roomId=String.valueOf(liveRowsBean.getRoomId());
         annoucement = getIntent().getStringExtra(ANNOUCEMENT);
+        channelId = String.valueOf(liveRowsBean.getId());
+        cname = liveRowsBean.getCname();
+        shareVO = liveRowsBean.getShareVO();
         isSecond = getIntent().getStringExtra(IS_SECOND);
-        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
-        cname = getIntent().getStringExtra(CNAME);
+
     }
 
     protected void findViews() {

@@ -62,6 +62,7 @@ import com.lalocal.lalocal.live.im.ui.barrage.BarrageConfig;
 import com.lalocal.lalocal.live.im.ui.barrage.BarrageView;
 import com.lalocal.lalocal.live.im.ui.dialog.DialogMaker;
 import com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
@@ -295,13 +296,15 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
 
     void parseIntent() {
-        roomId = getIntent().getStringExtra(EXTRA_ROOM_ID);
-        url = getIntent().getStringExtra(EXTRA_URL);
-        avatarIntetn = getIntent().getStringExtra(AVATAR);
-        userId = getIntent().getStringExtra(LIVE_USER_ID);
-        shareVO = getIntent().getParcelableExtra("shareVO");
+        LiveRowsBean liveRowsBean=getIntent().getParcelableExtra("LiveRowsBean");
+
+        roomId=String.valueOf(liveRowsBean.getRoomId());
+        url=liveRowsBean.getPullUrl();
+        userId=String.valueOf(liveRowsBean.getUser().getId());
+        avatarIntetn=  liveRowsBean.getUser().getAvatar();
         annoucement = getIntent().getStringExtra(ANNOUCEMENT);
-        channelId = getIntent().getStringExtra(CHANNELID);
+        shareVO=liveRowsBean.getShareVO();
+        channelId=String.valueOf(liveRowsBean.getId());
 
     }
 
