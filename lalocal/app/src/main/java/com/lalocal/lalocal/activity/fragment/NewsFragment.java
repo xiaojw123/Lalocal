@@ -279,6 +279,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                     LiveRowsBean liveRowsBean = rows.get(position - 1);
+                    String  status = String.valueOf(liveRowsBean.getStatus());
                     roomId = liveRowsBean.getRoomId();
                     String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                     String s = String.valueOf(roomId);
@@ -304,39 +305,12 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         ann = "这是公告哈";
                     }
                     SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                    AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann, String.valueOf(channelId),cname);
+                    AudienceActivity.start(getActivity(), String.valueOf(roomId), pullUrl, avatar, nickName, String.valueOf(userId), shareVO, String.valueOf(type), ann, String.valueOf(channelId),cname,status);
                 }
 
             });
 
-          /*  liveRecyclearView.setOnScrollListener(new AbsListView.OnScrollListener() {
-                @Override
-                public void onScrollStateChanged(AbsListView view, int scrollState) {
-                    int firstVisiblePosition = liveRecyclearView.getFirstVisiblePosition();
-                    int lastVisiblePosition = liveRecyclearView.getLastVisiblePosition();
-                    AppLog.i("TAG","firstVisiblePosition："+firstVisiblePosition);
-                    if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//静止时进行高斯背景模糊
 
-                        if (allRows.size() > 0 && allRows.size() >= firstVisiblePosition) {
-                            String photo = allRows.get(firstVisiblePosition-1).getPhoto();
-                            layoutBg.setBlurImageURL(photo);
-                            layoutBg.setBlurRadius(1);
-                            layoutBg.setScaleRatio(20);
-
-                        }
-                        if (lastVisiblePosition==allRows.size()-1&&lastVisiblePosition>=pageSize){
-                            contentService.liveList(10, pageCount);
-                        }
-
-                    }
-
-                }
-
-                @Override
-                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-                  int  lastVisibleIndex = firstVisibleItem + visibleItemCount - 1;
-                }
-            });*/
         }
     }
 

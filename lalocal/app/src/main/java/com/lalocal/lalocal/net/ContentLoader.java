@@ -1787,7 +1787,7 @@ public class ContentLoader {
 
         //关闭直播间
         private void responseCancelLive(String json) {
-
+            AppLog.i("TAG","关闭直播:"+json);
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }

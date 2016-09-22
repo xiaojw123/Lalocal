@@ -15,6 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -34,6 +36,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
     private ScrollView startLiveScrollview;
     private LinearLayout startLiveLayout1;
     private String roomName;//直播室名字
+    private BlurImageView roomBg;
 
     public CreateLiveRoomPopuwindow(Context mContext){
         this.mContext=mContext;
@@ -47,6 +50,16 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         shareFriends = (ImageView) view.findViewById(R.id.live_create_share_friends);
         shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
         shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
+        roomBg = (BlurImageView) view.findViewById(R.id.live_create_room_bg);
+        String userAvatar = UserHelper.getUserAvatar(mContext);
+        if(userAvatar!=null){
+            roomBg.setBlurImageURL(userAvatar);
+        }
+
+        roomBg.setScaleRatio(20);
+        roomBg.setBlurRadius(1);
+
+
         shareFriends.setSelected(true);
         isShareSelector = 0;
         shareFriends.setOnClickListener(buttonClickListener);

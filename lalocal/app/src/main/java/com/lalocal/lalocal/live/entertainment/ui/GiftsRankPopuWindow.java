@@ -73,7 +73,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
         this.setBackgroundDrawable(dw);
         currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
         TotalRanksBean mycurrentRank = liveGiftRanksResp.getResult().getMycurrentRank();
-
+      //  AppLog.i("TAG","本次直播我的贡献:"+mycurrentRank.getUser());
         if(mycurrentRank!=null&&mycurrentRank.getRank()>10){
          //   currentRanks.add(mycurrentRank);
         }
@@ -100,7 +100,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
                 case R.id.live_gifts_all_room_ranking:
                     allRoomTv.setTextColor(Color.parseColor("#ffaa2a"));
                     thisRoomTv.setTextColor(Color.WHITE);
-                    currentRanks = liveGiftRanksResp.getResult().getTotalRanks();
+                    currentRanks = liveGiftRanksResp.getResult ().getTotalRanks();
                     TotalRanksBean myTotalRank = liveGiftRanksResp.getResult().getMyTotalRank();
                     if(myTotalRank!=null&&myTotalRank.getRank()>=10){
                       //  currentRanks.add(myTotalRank);
@@ -149,7 +149,7 @@ public class GiftsRankPopuWindow extends PopupWindow {
             TotalRanksBean totalRanksBean = currentRanks.get(position);
             RankUserBean rankUser = totalRanksBean.getUser();
             if(onGiftRanksListener!=null){
-           //     onGiftRanksListener.ranListItemClick(rankUser);
+                onGiftRanksListener.ranListItemClick(rankUser);
             }
         }
     };

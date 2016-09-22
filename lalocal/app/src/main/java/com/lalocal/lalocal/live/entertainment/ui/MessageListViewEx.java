@@ -47,4 +47,5 @@ public class MessageListViewEx extends MessageListView {
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
 }

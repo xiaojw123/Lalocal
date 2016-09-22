@@ -51,7 +51,7 @@ public abstract class TActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        deInitUIandEvent();
+    //    deInitUIandEvent();
         destroyed = true;
     }
 

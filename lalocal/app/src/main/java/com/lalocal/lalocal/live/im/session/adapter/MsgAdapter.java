@@ -26,6 +26,9 @@ public class MsgAdapter extends TAdapter<IMMessage> {
         progresses = new HashMap<>();
     }
 
+
+
+
     public void setEventListener(ViewHolderEventListener eventListener) {
         this.eventListener = eventListener;
     }
@@ -183,6 +186,8 @@ public class MsgAdapter extends TAdapter<IMMessage> {
 
         // 发送失败或者多媒体文件下载失败指示按钮点击响应处理
         void onFailedBtnClick(IMMessage resendMessage);
+
+        void itemClickListener(IMMessage itemMessage);
 
 
     }

@@ -1,12 +1,15 @@
 <com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-        android:layout_alignParentBottom="true"
+
         >
 
         <RelativeLayout
@@ -14,7 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            >
+            android:fillViewport="true">
+
 
         </RelativeLayout>
 
@@ -70,9 +74,11 @@
         android:layout_gravity="right"
         android:layout_marginLeft="-65dp">
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
             <LinearLayout
                 android:id="@+id/messageActivityBottomLayout"
@@ -81,12 +87,8 @@
                 android:layout_alignParentBottom="true"
                 android:orientation="vertical">
 
-                    <include layout="@layout/nim_message_activity_text_layout" />
-                <com.lalocal.lalocal.live.im.session.emoji.EmoticonPickerView
-                    android:id="@+id/emoticon_picker_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:visibility="gone" />
+                <include layout="@layout/nim_message_activity_text_layout" />
+
             </LinearLayout>
 
             <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
@@ -282,6 +284,29 @@
                 android:text="一位不愿透露姓名的网友  与主播飞机旅行"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_16_sp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/audience_anchor_headportrait"
+                android:layout_width="@dimen/audience_anchor_headportrait_width"
+                android:layout_height="@dimen/audience_anchor_headportrait_width"
+                android:layout_marginLeft="108dp"
+                android:layout_marginTop="225dp"
+                android:visibility="gone"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/dimen_size_2_dp" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/audience_user_headportrait"
+                android:layout_width="@dimen/audience_anchor_headportrait_width"
+                android:layout_height="@dimen/audience_anchor_headportrait_width"
+                android:layout_alignTop="@+id/audience_anchor_headportrait"
+                android:layout_marginLeft="-8dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@+id/audience_anchor_headportrait"
+                android:visibility="gone"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/dimen_size_2_dp" />
         </RelativeLayout>
+
     </RelativeLayout>
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

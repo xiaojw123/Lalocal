@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
@@ -13,8 +14,7 @@
         android:id="@+id/player_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-            android:layout_centerInParent="true"
+
         >
     </RelativeLayout>
         <LinearLayout
@@ -49,6 +49,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:layout_marginLeft="-65dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <LinearLayout
             android:id="@+id/live_telecast_model_layout"
@@ -263,7 +267,7 @@
             android:layout_marginTop="4dp"
             android:visibility="gone"
             />
-
+        </RelativeLayout>
     </RelativeLayout>
 
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

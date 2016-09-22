@@ -597,57 +597,5 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         return super.onKeyDown(keyCode, event);
     }
 
-   /* //分享
-    private void showShare(SpecialShareVOBean shareVO) {
-        shareActivity = new SharePopupWindow(mContext, shareVO);
-        shareActivity.setPlatformActionListener(this);
-        shareActivity.showShareWindow();
-        shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
-                Gravity.CENTER, 0, 0);
 
-    }
-
-    @Override
-    public boolean handleMessage(Message msg) {
-        int what = msg.what;
-        if (what == 1) {
-            Toast.makeText(this, "分享失败", Toast.LENGTH_SHORT).show();
-        }
-        if (shareActivity != null) {
-            shareActivity.dismiss();
-        }
-        return false;
-    }
-
-    @Override
-    public void onComplete(Platform platform, int action, HashMap<String, Object> hashMap) {
-        Message msg = new Message();
-        msg.arg1 = 1;
-        msg.arg2 = action;
-        msg.obj = platform;
-        UIHandler.sendMessage(msg, this);
-    }
-
-    @Override
-    public void onError(Platform platform, int i, Throwable throwable) {
-        Message msg = new Message();
-        msg.what = 1;
-        UIHandler.sendMessage(msg, this);
-        AppLog.i("TAG",throwable.toString());
-    }
-
-    @Override
-    public void onCancel(Platform platform, int i) {
-        Message msg = new Message();
-        msg.what = 0;
-        UIHandler.sendMessage(msg, this);
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ShareSDK.stopSDK(this);
-
-    }*/
 }

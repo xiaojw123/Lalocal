@@ -254,7 +254,8 @@ public class GiftAnimations {
         int n = count / 10; // 2
         int m = n * 10; // 20
         String userId = message.getUserId();
-       sendGiftImg.setImageResource(0);
+        sendGiftImg.setImageResource(0);
+
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         switch (message.getCode()) {
             case "001":
@@ -274,6 +275,7 @@ public class GiftAnimations {
                 return;
             default:
                 defaultHandler = new GiftHandler(sendGiftTotal);
+                sendGiftImg.setBackgroundResource(0);
                 DrawableUtils.displayImg(mContext, sendGiftImg, message.getGiftImage());
                 sendGiftMessage(defaultHandler, root,count, m,userId);
               return;

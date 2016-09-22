@@ -9,8 +9,6 @@ import java.util.List;
  * Created by xiaojw on 2016/9/9.
  */
 public class LiveSeachItem implements Parcelable {
-
-
     private int pageNumber;
     private int totalPages;
     private int pageSize;
@@ -77,6 +75,16 @@ public class LiveSeachItem implements Parcelable {
         private int type;
         private int style;
         private String cid;
+        private String cname;
+
+        public String getCname() {
+            return cname;
+        }
+
+        public void setCname(String cname) {
+            this.cname = cname;
+        }
+
         private String pushUrl;
         private String pullUrl;
         private String hlsPullUrl;
@@ -429,6 +437,9 @@ public class LiveSeachItem implements Parcelable {
             };
         }
 
+        public RowsBean() {
+        }
+
         @Override
         public int describeContents() {
             return 0;
@@ -445,19 +456,16 @@ public class LiveSeachItem implements Parcelable {
             dest.writeInt(this.type);
             dest.writeInt(this.style);
             dest.writeString(this.cid);
+            dest.writeString(this.cname);
             dest.writeString(this.pushUrl);
             dest.writeString(this.pullUrl);
             dest.writeString(this.hlsPullUrl);
-//            dest.writeParcelable(this.annoucement, flags);
             dest.writeParcelable(this.shareVO, flags);
             dest.writeInt(this.roomId);
             dest.writeString(this.createrAccId);
             dest.writeString(this.address);
             dest.writeInt(this.number);
             dest.writeByte(this.challengeStatus ? (byte) 1 : (byte) 0);
-        }
-
-        public RowsBean() {
         }
 
         protected RowsBean(Parcel in) {
@@ -470,10 +478,11 @@ public class LiveSeachItem implements Parcelable {
             this.type = in.readInt();
             this.style = in.readInt();
             this.cid = in.readString();
+            this.cname = in.readString();
             this.pushUrl = in.readString();
             this.pullUrl = in.readString();
             this.hlsPullUrl = in.readString();
-//            this.annoucement = in.readParcelable(Object.class.getClassLoader());
+         //   this.annoucement = in.readParcelable(Object.class.getClassLoader());
             this.shareVO = in.readParcelable(ShareVOBean.class.getClassLoader());
             this.roomId = in.readInt();
             this.createrAccId = in.readString();
@@ -482,7 +491,7 @@ public class LiveSeachItem implements Parcelable {
             this.challengeStatus = in.readByte() != 0;
         }
 
-        public static final Parcelable.Creator<RowsBean> CREATOR = new Parcelable.Creator<RowsBean>() {
+        public static final Creator<RowsBean> CREATOR = new Creator<RowsBean>() {
             @Override
             public RowsBean createFromParcel(Parcel source) {
                 return new RowsBean(source);

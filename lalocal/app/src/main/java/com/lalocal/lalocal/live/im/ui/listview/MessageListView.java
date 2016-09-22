@@ -45,7 +45,6 @@ public class MessageListView extends AutoRefreshListView {
 
 	private void init(Context context) {
 		setRecyclerListener(recyclerListener);
-
 		gestureDetector = new GestureDetector(context, new GestureListener());
 	}
 

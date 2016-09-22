@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
@@ -18,23 +20,21 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.ConstantApp;
 import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
-import com.lalocal.lalocal.live.entertainment.constant.GiftConstant;
-import com.lalocal.lalocal.live.entertainment.constant.GiftType;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
-import com.lalocal.lalocal.live.entertainment.helper.GiftCache;
-import com.lalocal.lalocal.live.entertainment.model.Gift;
+import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
+import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.module.CustomRemoteExtensionStyle;
 import com.lalocal.lalocal.live.entertainment.ui.CreateLiveRoomPopuwindow;
@@ -53,8 +53,10 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
@@ -67,7 +69,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -140,7 +141,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     private ViewGroup liveFinishLayout;
     // data
-    private List<Gift> giftList = new ArrayList<>(); // 礼物列表数据
+
     private ContentLoader contentLoader;
     private SpecialShareVOBean shareVO;
     private UploadManager uploadManager;
@@ -155,6 +156,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private String cname;
     private long startTime;
     private long endTime;
+    private TextView overMoney;
 
 
     private boolean isBroadcaster(int cRole) {
@@ -190,24 +192,30 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             contentLoader.alterLive(createNickName, channelId, null, null, null, null);
             CommonUtil.REMIND_BACK = -1;
         }
+     //   startLive();
+
+
+
+
+    }
+
+    private void startLive() {
+
         int cRole = Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
         doConfigEngine(cRole);
         if (isBroadcaster(cRole)) {
-          SurfaceView  surfaceView= RtcEngine.CreateRendererView(getApplicationContext());
-            RelativeLayout.LayoutParams lp=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.MATCH_PARENT);
-           lp.height= DensityUtil.getWindowHeight(this);
-            lp.width=DensityUtil.getWindowWidth(this);
-           surfaceView.setMinimumHeight(DensityUtil.getWindowHeight(this));
-            surfaceView.setMinimumWidth(DensityUtil.getWindowWidth(this));
-            surfaceView.setLayoutParams(lp);
-            AppLog.i("TAG","获取高度："+DensityUtil.getWindowHeight(this)+"   宽度:"+DensityUtil.getWindowWidth(this));
-            palyerLayout.addView(surfaceView);
-            rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN , 0));//VideoCanvas:本地代码显示属性
-            surfaceView.setZOrderOnTop(true);
-            surfaceView.setZOrderMediaOverlay(true);
-            worker().preview(true, surfaceView, config().mUid);
-        }
+          //  SurfaceView surfaceView= (SurfaceView) findViewById(R.id.player_surface);
+            SurfaceView surfaceView= RtcEngine.CreateRendererView(getApplicationContext());
+            LinearLayout.LayoutParams lp=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+           lp.gravity=Gravity.BOTTOM;
 
+            rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_FIT , 0));//VideoCanvas:本地代码显示属性
+          //  surfaceView.setZOrderOnTop(true);
+            //surfaceView.setZOrderMediaOverlay(true);
+            worker().preview(true, surfaceView, config().mUid);
+            palyerLayout.addView(surfaceView,lp);
+        }
+        worker().joinChannel(cname, config().mUid);
     }
 
     private void doConfigEngine(int cRole) {
@@ -221,7 +229,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
          worker().configEngine(cRole, vProfile);
     }
 
-    @Override
+   boolean isLeaveChannel=true;
     protected void deInitUIandEvent() {
         doLeaveChannel();
         event().removeEventHandler(this);
@@ -252,7 +260,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     //判断软键盘显示与隐藏
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {
+        AppLog.i("TAG","bottom:"+bottom+"  oldBottom:"+oldBottom);//bottom:939  oldBottom:1740显示
+        if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
             if (inputLiveRoom != null && inputLiveRoom.getVisibility() == View.VISIBLE) {
                 liveSettingLayout.setVisibility(View.GONE);
                 liveSettingLayout.setClickable(false);
@@ -323,7 +332,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onDestroy() {
         AppLog.i("TAG","直播端走了onDestroy");
         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-        giftList.clear();
+
+        if(isLeaveChannel){
+            deInitUIandEvent();
+        }
         super.onDestroy();
     }
 
@@ -374,6 +386,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
         //结束直播
         liveOverBack = (TextView) findViewById(R.id.live_over_back_home);
+        overMoney = (TextView) findViewById(R.id.live_over_money);
         liveOverBack.setOnClickListener(buttonClickListener);
         overLiveShareFriends = (ImageView) findViewById(R.id.live_over_share_friends);
         overLiveShareWeibo = (ImageView) findViewById(R.id.live_over_share_weibo);
@@ -438,7 +451,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-
+        AppLog.i("TAG","直播端接受到一帧视频");
     }
 
     @Override
@@ -456,7 +469,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 if (createLiveRoomPopuwindow != null) {
                     createLiveRoomPopuwindow.dismiss();
                 }
-                enterRoom();
+
+
                 registerObservers(true);
                 modelLayout.setVisibility(View.VISIBLE);
                 scoreLayout.setVisibility(View.VISIBLE);
@@ -464,8 +478,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 liveSettingLayout.setClickable(true);
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
+              /*  if(contentLoader!=null){
+                    contentLoader=new ContentLoader(LiveActivity.this);
+                }
                 contentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
-
+*/
                 if (timer == null) {
                     timer = new Timer(true);
                 }
@@ -483,6 +500,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         });
 
     }
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
 
     @Override
     public void onUserOffline(int uid, int reason) {
@@ -495,11 +518,60 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @Override
     public void onConnectionInterrupted() {
+
+
+        againLoginIm();
+
+
+    }
+
+    private void againLoginIm() {
         AppLog.i("TAG","直播連接中斷连接中断回调");
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+        String userToken = AuthPreferences.getUserToken();
+        final String userAccount = AuthPreferences.getUserAccount();
+        NIMClient.getService(AuthService.class).login(new LoginInfo(userAccount, userToken)).setCallback(new RequestCallback() {
+            @Override
+            public void onSuccess(Object o) {
+                AppLog.i("TAG","LiveActivity,直播中断重登账号成功");
+                DemoCache.setAccount(userAccount);
+                DemoCache.getRegUserInfo();
+                DemoCache.setLoginStatus(true);
+
+            }
+
+            @Override
+            public void onFailed(int i) {
+
+
+                  handler.postDelayed(new Runnable() {
+                      @Override
+                      public void run() {
+                          againLoginIm();
+                      }
+                  },1000);
+                AppLog.i("TAG","LiveActivity,直播中断重登账号失败"+i);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                AppLog.i("TAG","LiveActivity,直播中断重登账号失败");
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        againLoginIm();
+                    }
+                },1000);
+            }
+        });
+
+
+
     }
 
     @Override
     public void onConnectionLost() {
+        againLoginIm();
         AppLog.i("TAG","直播連接中斷连接丟失");
     }
 
@@ -534,18 +606,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             AppLog.i("TAG","获取在线人数"+onLineUser.getResult());
             onlineCountText.setText(String.format("%s人", String.valueOf(onLineUser.getResult())));
             if(onLineUser.getReturnCode()==0){
-                IMMessage likeMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "上传在线人数");
-                ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
-                Map<String, Object> ext = new HashMap<>();
-                if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                    ext.put("style", "12");
-                    ext.put("type", chatRoomMember.getMemberType().getValue());
-                    ext.put("creatorAccount",creatorAccount);
-                    ext.put("userId",userId);
-                    ext.put("onlineNum",onLineUser.getResult());
-                    likeMessage.setRemoteExtension(ext);
-                }
-                sendMessage(likeMessage, MessageType.onlineNum);
+                LiveMessage liveMessage=new LiveMessage();
+                liveMessage.setStyle("12");
+                liveMessage.setCreatorAccount(creatorAccount);
+                liveMessage.setUserId(userId);
+                liveMessage.setOnlineNum(String.valueOf(onLineUser.getResult()));
+                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "上传在线人数", roomId, AuthPreferences.getUserAccount(), liveMessage);
+
+                sendMessage(imMessage, MessageType.onlineNum);
             }
         }
         @Override
@@ -554,7 +622,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (createLiveRoomDataResp.getReturnCode() == 0) {
                 avatar = createLiveRoomDataResp.getResult().getUser().getAvatar();
                 LiveRowsBean result = createLiveRoomDataResp.getResult();
-                worker().joinChannel(cname, config().mUid);
+
+               startLive();
+
                 CommonUtil.REMIND_BACK=0;
             }
         }
@@ -564,7 +634,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.onCloseLive(closeLiveBean);
             if (closeLiveBean.getReturnCode() == 0) {
                 isCloseLive = true;
-                AppLog.i("TAG","直播持续时间:。。。。。。。。。");
+
+                overMoney.setText(String.valueOf(closeLiveBean.getResult().getScore()));
 
             }
         }
@@ -671,32 +742,33 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customDialog.show();
     }
 
+
+
     private void endLive() {
         if (timer != null) {
             timer.cancel();
         }
 
-        IMMessage likeMessage1 = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "结束直播了哈哈哈哈哈哈");
-        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, AuthPreferences.getUserAccount());
-        Map<String, Object> ext = new HashMap<>();
-        if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-            ext.put("style", "11");
-            ext.put("type", chatRoomMember.getMemberType().getValue());
-            ext.put("creatorAccount",creatorAccount);
-            ext.put("userId",userId);
-            likeMessage1.setRemoteExtension(ext);
-            AppLog.i("TAG","发送结束直播的消息");
+        LiveMessage liveMessage=new LiveMessage();
+        liveMessage.setStyle("11");
+        liveMessage.setCreatorAccount(creatorAccount);
+        liveMessage.setUserId(userId);
+        IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播了哈哈哈哈哈哈", roomId, AuthPreferences.getUserAccount(), liveMessage);
+        sendMessage(imMessage, MessageType.leaveLive);
+        if(isLeaveChannel){
+            deInitUIandEvent();
+            isLeaveChannel=false;
         }
-        sendMessage(likeMessage1, MessageType.leaveLive);
-        deInitUIandEvent();
+
         contentLoader.cancelLiveRoom(channelId);
         if (isClickStartLiveBtn) {
             inputPanel.collapse(true);// 收起软键盘
             isStartLive = false;
             drawerLayout.closeDrawer(Gravity.RIGHT);
-            SimpleDateFormat formatter = new SimpleDateFormat("mm:ss");//初始化Formatter的转换格式。
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
             formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
             String hms = formatter.format(endTime-startTime);
+            AppLog.i("TAG","结束时间："+hms+"    "+(endTime-startTime));
             overTime.setText(hms);
             aucienceCount.setText(String.valueOf(maxOnLineCount));
             liveFinishLayout.setVisibility(View.VISIBLE);
@@ -825,18 +897,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                 Toast.makeText(LiveActivity.this, "对方为管理员!", Toast.LENGTH_SHORT).show();
                             } else {
                                 if (isMuteds) {
-                                    IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "解除了"+result1.getNickName()+"的禁言");
-                                    ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
-                                    Map<String, Object> ext = new HashMap<>();
-                                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                        ext.put("style", "7");
-                                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("disableSendMsgUserId", result1.getId());
-                                        ext.put("disableSendMsgNickName", result1.getNickName());
-                                        ext.put("creatorAccount",creatorAccount);
-                                        ext.put("userId",userId);
-                                        banMessage.setRemoteExtension(ext);
-                                    }
+                                    String messageContent="解除了"+result1.getNickName()+"的禁言";
+                                    LiveMessage liveMessage=new LiveMessage();
+                                    liveMessage.setStyle("7");
+                                    liveMessage.setDisableSendMsgNickName(result1.getNickName());
+                                    liveMessage.setDisableSendMsgUserId(String.valueOf(result1.getId()));
+                                    liveMessage.setUserId(userId);
+                                    liveMessage.setCreatorAccount(creatorAccount);
+                                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
+
                                     if (banListLive.size() > 0) {
                                         for (int i = 0; i < banListLive.size(); i++) {
                                             if (meberAccount.equals(banListLive.get(i))) {
@@ -844,25 +913,22 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                             }
                                         }
                                     }
-                                    sendMessage(banMessage, MessageType.relieveBan);
+                                    sendMessage(imMessage, MessageType.relieveBan);
                                     textView.setText("禁言");
                                     textView.setAlpha(1f);
                                     isMuteds = false;
                                 } else {
-                                    IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "禁言了"+result1.getNickName());
-                                    ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
-                                    Map<String, Object> ext = new HashMap<>();
-                                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                        ext.put("style", "6");
-                                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("disableSendMsgUserId", result1.getId());
-                                        ext.put("disableSendMsgNickName", result1.getNickName());
-                                        ext.put("creatorAccount",creatorAccount);
-                                        ext.put("userId",userId);
-                                        banMessage.setRemoteExtension(ext);
-                                    }
+
+                                    String messageContent="禁言了"+result1.getNickName();
+                                    LiveMessage liveMessage=new LiveMessage();
+                                    liveMessage.setStyle("6");
+                                    liveMessage.setDisableSendMsgNickName(result1.getNickName());
+                                    liveMessage.setDisableSendMsgUserId(String.valueOf(result1.getId()));
+                                    liveMessage.setUserId(userId);
+                                    liveMessage.setCreatorAccount(creatorAccount);
+                                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
                                     banListLive.add(meberAccount);
-                                    sendMessage(banMessage, MessageType.ban);
+                                    sendMessage(imMessage, MessageType.ban);
 
                                     textView.setText("解除禁言");
                                     textView.setAlpha(0.4f);
@@ -893,20 +959,19 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         if (!isManager) {
                             contentLoader.liveAccreditManager(channelId, String.valueOf(id));
                             NIMClient.getService(ChatRoomService.class).markChatRoomManager(true, new MemberOption(roomId, meberAccount));
-                            IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "授权"+result1.getNickName()+"为管理员");
-                            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
-                            Map<String, Object> ext = new HashMap<>();
-                            if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                ext.put("style", "8");
-                                ext.put("type", chatRoomMember.getMemberType().getValue());
-                                ext.put("adminSendMsgUserId", meberAccount);
-                                ext.put("adminSendMsgNickName", result1.getNickName());
-                                ext.put("adminSendMsgImUserId", meberAccount);
-                                ext.put("creatorAccount",creatorAccount);
-                                ext.put("userId",userId);
-                                banMessage.setRemoteExtension(ext);
-                            }
-                            sendMessage(banMessage, MessageType.managerLive);
+
+
+                            String messageContent="授权"+result1.getNickName()+"为管理员";
+                            LiveMessage liveMessage=new LiveMessage();
+                            liveMessage.setStyle("8");
+                             liveMessage.setAdminSendMsgImUserId(meberAccount);
+                            liveMessage.setAdminSendMsgNickName(result1.getNickName());
+                             liveMessage.setAdminSendMsgUserId(meberAccount);
+                            liveMessage.setUserId(userId);
+                            liveMessage.setCreatorAccount(creatorAccount);
+                            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
+
+                            sendMessage(imMessage, MessageType.managerLive);
                             textView.setText("取消管理员");
                             textView.setAlpha(0.4f);
                             managerMark.setVisibility(View.VISIBLE);
@@ -920,20 +985,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                 public void onDialogClickListener() {
                                     contentLoader.checkUserIdentity(channelId, String.valueOf(id));
                                     NIMClient.getService(ChatRoomService.class).markChatRoomManager(false, new MemberOption(roomId, meberAccount));
-                                    IMMessage banMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, "取消了"+result1.getNickName()+"的管理员权限");
-                                    ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId, meberAccount);
-                                    Map<String, Object> ext = new HashMap<>();
-                                    if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
-                                        ext.put("style", "9");
-                                        ext.put("type", chatRoomMember.getMemberType().getValue());
-                                        ext.put("adminSendMsgUserId", meberAccount);
-                                        ext.put("adminSendMsgNickName", result1.getNickName());
-                                        ext.put("adminSendMsgImUserId", meberAccount);
-                                        ext.put("creatorAccount",creatorAccount);
-                                        ext.put("userId",userId);
-                                        banMessage.setRemoteExtension(ext);
-                                    }
-                                    sendMessage(banMessage, MessageType.cancel);
+
+                                    String messageContent= "取消了"+result1.getNickName()+"的管理员权限";
+                                    LiveMessage liveMessage=new LiveMessage();
+                                    liveMessage.setStyle("9");
+                                    liveMessage.setAdminSendMsgImUserId(meberAccount);
+                                    liveMessage.setAdminSendMsgNickName(result1.getNickName());
+                                    liveMessage.setAdminSendMsgUserId(meberAccount);
+                                    liveMessage.setUserId(userId);
+                                    liveMessage.setCreatorAccount(creatorAccount);
+                                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
+                                    sendMessage(imMessage, MessageType.cancel);
                                     textView.setText("设为管理员");
                                     textView.setAlpha(1);
 
@@ -977,10 +1039,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     boolean isFirstAudio = true;
+/*
 
     protected void enterRoom() {
         super.enterRoom();
     }
+*/
 
     protected void registerObservers(boolean register) {
         super.registerObservers(register);
@@ -1103,24 +1167,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-
-    protected void updateGiftList(GiftType type) {
-        if (!updateGiftCount(type)) {
-            giftList.add(new Gift(type, GiftConstant.titles[type.getValue()], 1, GiftConstant.images[type.getValue()]));
-        }
-        GiftCache.getInstance().saveGift(roomId, type.getValue());
-    }
-
-    // 更新收到礼物的数量
-    private boolean updateGiftCount(GiftType type) {
-        for (Gift gift : giftList) {
-            if (type == gift.getGiftType()) {
-                gift.setCount(gift.getCount() + 1);
-                return true;
-            }
-        }
-        return false;
-    }
 
     /**
      * ********************************** 断网重连处理 **********************************
