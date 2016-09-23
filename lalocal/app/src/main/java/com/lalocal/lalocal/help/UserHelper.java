@@ -57,24 +57,28 @@ public class UserHelper {
         initSPref(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KeyParams.PASSWORD, psw);
+        editor.commit();
     }
 
     public static void updateNickName(Context context, String nickName) {
         initSPref(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KeyParams.NICKNAME, nickName);
+        editor.commit();
     }
 
     public static void updateAvatar(Context context, String avatar) {
         initSPref(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KeyParams.AVATAR, avatar);
+        editor.commit();
     }
 
     public static void updateEmail(Context context, String email) {
         initSPref(context);
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(KeyParams.EMAIL, email);
+        editor.commit();
     }
 
 
