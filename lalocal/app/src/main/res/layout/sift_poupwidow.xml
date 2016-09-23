@@ -4,6 +4,10 @@
     android:layout_height="match_parent"
     android:background="@color/black_70"
    >
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
+        android:id="@+id/sifit_pop_bg_biv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
     <Button
         android:id="@+id/sifit_menu_close_btn"
@@ -21,6 +25,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/sift_menu_rlv_top"
         />
+
 
 
 </FrameLayout>

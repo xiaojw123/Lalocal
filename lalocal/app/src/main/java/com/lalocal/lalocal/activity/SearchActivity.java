@@ -72,6 +72,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     boolean isResultSearch;
     @BindView(R.id.search_back_img)
     ImageView searchBackImg;
+    SearchCallBack searchCallBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,8 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
 
     private void initLoader() {
         loader = new ContentLoader(this);
-        loader.setCallBack(new SearchCallBack());
+        searchCallBack = new SearchCallBack();
+        loader.setCallBack(searchCallBack);
         loader.getSearhHot();
 
     }
@@ -192,7 +194,12 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 seachKeyHint.setVisibility(View.INVISIBLE);
             }
             if (!isResultSearch) {
-                loader.getSearchTag(s.toString());
+                String text = s.toString().trim();
+                if (text.length() == 0) {
+                    searchCallBack.onGetSearchTag(null);
+                } else {
+                    loader.getSearchTag(s.toString());
+                }
             } else {
                 Editable editable = searchKeyCet.getEditableText();
                 int len = 0;
@@ -317,7 +324,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
 
         @Override
         public void onGetSearchTag(List<String> keys) {
-            AppLog.print("onGetSearchTag___tags__" + keys.size());
             if (tagAdapter == null) {
                 tagAdapter = new SearchTagAdapter(SearchActivity.this, keys);
                 LinearLayoutManager lm = new LinearLayoutManager(SearchActivity.this);

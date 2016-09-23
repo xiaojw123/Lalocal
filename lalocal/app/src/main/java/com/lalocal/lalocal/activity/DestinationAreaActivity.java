@@ -1,6 +1,8 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -12,6 +14,7 @@ import android.widget.FrameLayout;
 import android.widget.HeaderViewListAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -62,6 +65,8 @@ public class DestinationAreaActivity extends BaseActivity {
     XListView desAreaItemsXlv;
     @BindView(R.id.page_base_loading)
     View loadingPage;
+    @BindView(R.id.destion_area_container)
+    RelativeLayout destionAreaContainer;
     int areaId;
     String areaTile = "%1$s地区";
     ContentLoader loader;
@@ -454,11 +459,18 @@ public class DestinationAreaActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.des_areanav_menu_lacoalplay:
                 setSeletedMenu(desAreanavMenuLacoalplay);
-                View contentView = LayoutInflater.from(this).inflate(R.layout.sift_poupwidow, null);
-                poupWindow = new SiftPoupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                poupWindow.setSiftItemClickListener(siftItemClickListener);
+                if (poupWindow == null) {
+                    View contentView = LayoutInflater.from(this).inflate(R.layout.sift_poupwidow, null);
+                    poupWindow = new SiftPoupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+                    poupWindow.setSiftItemClickListener(siftItemClickListener);
+                    poupWindow.setOutsideTouchable(true);
+                }
+                HeaderViewListAdapter headerViewListAdapter = (HeaderViewListAdapter) desAreaItemsXlv.getAdapter();
+                AreaDetailAdapter adapter = (AreaDetailAdapter) headerViewListAdapter.getWrappedAdapter();
+                if (adapter != null) {
+                    poupWindow.setBlurImgUrl(adapter.getBlurImgUrl());
+                }
                 poupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
-                poupWindow.setOutsideTouchable(true);
                 break;
 
             case R.id.des_areanav_menu_hot:
@@ -504,6 +516,18 @@ public class DestinationAreaActivity extends BaseActivity {
                 break;
         }
     }
+
+    public Drawable getLayoutDrawabe(View view) {
+//        view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+//                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+//        int width = size*40;
+//
+//        view.layout(0, 0, width, view.getMeasuredHeight());  //根据字符串的长度显示view的宽度
+        view.buildDrawingCache();
+        Bitmap bitmap = view.getDrawingCache();
+        return new BitmapDrawable(bitmap);
+    }
+
 
     @OnClick(R.id.search_view)
     public void search() {

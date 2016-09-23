@@ -39,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LiveSearchActivity extends BaseActivity implements TextView.OnEditorActionListener{
+public class LiveSearchActivity extends BaseActivity implements TextView.OnEditorActionListener {
 
     @BindView(R.id.live_search_edt)
     EditText liveSearchEdt;
@@ -65,19 +65,20 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_search_layout);
         unbinder = ButterKnife.bind(this);
+        backImg.setImageDrawable(getColorDrawable(searchIconColor,R.drawable.common_back_btn_bg));
         liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
-        liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor), null, null, null);
+        liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor,R.drawable.searchbar_searchicon), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
         liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.setPullRefreshEnabled(false);
-            liveSearchXrlv.addOnScrollListener(new LiveSearchScorllListener());
+        liveSearchXrlv.addOnScrollListener(new LiveSearchScorllListener());
         setLoaderCallBack(new LiveSearchCallBack());
 
     }
 
     @NonNull
-    private Drawable getColorDrawable(int color) {
-        Drawable drawable = getResources().getDrawable(R.drawable.searchbar_searchicon);
+    private Drawable getColorDrawable(int color,int id) {
+        Drawable drawable = getResources().getDrawable(id);
         Drawable colorDrawable = DrawableUtils.tintDrawable(drawable, ColorStateList.valueOf(color));
         colorDrawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         return colorDrawable;
@@ -107,7 +108,6 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         }
         return false;
     }
-
 
 
     class LiveSearchCallBack extends ICallBack implements XRecyclerView.LoadingListener, OnItemClickListener {
@@ -203,23 +203,22 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         }
     }
 
-    class LiveSearchScorllListener extends  RecyclerView.OnScrollListener{
+    class LiveSearchScorllListener extends RecyclerView.OnScrollListener {
         @Override
         public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
             super.onScrolled(recyclerView, dx, dy);
-            AppLog.print(String.format("recyclerScollListenr     onScrolled  dx=%1$d,  dy=%2d",dx,dy));
+            AppLog.print(String.format("recyclerScollListenr     onScrolled  dx=%1$d,  dy=%2d", dx, dy));
         }
 
         @Override
         public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
             super.onScrollStateChanged(recyclerView, newState);
-            AppLog.print(String.format("recyclerScollListenr  onScrollStateChanged  newSate="+newState));
-            if (newState==RecyclerView.SCROLL_STATE_DRAGGING){
+            AppLog.print(String.format("recyclerScollListenr  onScrollStateChanged  newSate=" + newState));
+            if (newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                 KeyboardUtil.hidenSoftKey(liveSearchEdt);
             }
         }
     }
-
 
 
 }

@@ -45,20 +45,24 @@ public class ConsumeRecordAdapter extends BaseRecyclerAdapter {
         if (mRows != null && mRows.size() > 0) {
             if (position == 0) {
                 itemHolder.lin1.setVisibility(View.VISIBLE);
-                if (itemHolder.lin2.getVisibility() == View.VISIBLE) {
-                    itemHolder.lin2.setVisibility(View.INVISIBLE);
+                if (position == mRows.size() - 1) {
+                    itemHolder.lin2.setVisibility(View.VISIBLE);
+                    itemHolder.lin3.setVisibility(View.INVISIBLE);
+                } else {
+                    if (itemHolder.lin2.getVisibility() == View.VISIBLE) {
+                        itemHolder.lin2.setVisibility(View.INVISIBLE);
+                    }
+                    itemHolder.lin3.setVisibility(View.VISIBLE);
+                }
+            } else if (position == mRows.size() - 1) {
+                itemHolder.lin2.setVisibility(View.VISIBLE);
+                if (itemHolder.lin1.getVisibility() == View.VISIBLE) {
+                    itemHolder.lin1.setVisibility(View.INVISIBLE);
                 }
                 if (itemHolder.lin3.getVisibility() == View.VISIBLE) {
                     itemHolder.lin3.setVisibility(View.INVISIBLE);
                 }
 
-
-            } else if (position == mRows.size() - 1) {
-                itemHolder.lin3.setVisibility(View.VISIBLE);
-                itemHolder.lin2.setVisibility(View.VISIBLE);
-                if (itemHolder.lin1.getVisibility() == View.VISIBLE) {
-                    itemHolder.lin1.setVisibility(View.INVISIBLE);
-                }
             } else {
                 itemHolder.lin3.setVisibility(View.VISIBLE);
                 if (itemHolder.lin1.getVisibility() == View.VISIBLE) {
@@ -68,6 +72,8 @@ public class ConsumeRecordAdapter extends BaseRecyclerAdapter {
                     itemHolder.lin2.setVisibility(View.INVISIBLE);
                 }
             }
+
+
             ConsumeRecord.RowsBean rowsBean = mRows.get(position);
             itemHolder.channel_tv.setText(rowsBean.getChannel());
             itemHolder.date_tv.setText(rowsBean.getDate());

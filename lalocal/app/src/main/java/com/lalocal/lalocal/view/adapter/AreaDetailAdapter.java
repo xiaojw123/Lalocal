@@ -40,6 +40,8 @@ public class AreaDetailAdapter extends BaseAdapter {
     List<SearchItem> items;
     LayoutInflater inflater;
     Resources res;
+    String mBlurImgUrl;
+
 
     public AreaDetailAdapter(Context context, List<SearchItem> items) {
         this.context = context;
@@ -54,6 +56,9 @@ public class AreaDetailAdapter extends BaseAdapter {
         return collectionId;
     }
 
+    public String getBlurImgUrl(){
+        return  mBlurImgUrl;
+    }
 
     public void updateItems(List<SearchItem> items) {
         this.items = items;
@@ -99,6 +104,7 @@ public class AreaDetailAdapter extends BaseAdapter {
         }
         SearchItem item = items.get(position);
         if (item != null) {
+            mBlurImgUrl=item.getPhoto();
             if (item instanceof ProductItem) {
                 convertView = getModuelProduct(convertView, item);
                 convertView.setTag(R.id.areaDetialItem, item);
