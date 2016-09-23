@@ -60,7 +60,7 @@
             android:textColor="@color/color_ffaa2a"
             android:textSize="@dimen/text_size_15" />
 
-        <Button
+        <TextView
             android:id="@+id/audience_gift_send"
             android:layout_width="@dimen/live_height_81dp"
             android:layout_height="match_parent"

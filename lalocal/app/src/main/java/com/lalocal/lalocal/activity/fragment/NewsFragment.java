@@ -193,9 +193,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             super.onLiveList(liveListDataResp);
             List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
             if (rows.size() > 0 && isFirstLoad) {
-//                layoutBg.setBlurImageURL(rows.get(0).getPhoto());
-//                layoutBg.setBlurRadius(1);
-//                layoutBg.setScaleRatio(20);
                 allRows.addAll(0, rows);
                 Collections.sort(allRows);//排序
                 initRecyclerView(allRows);//获取正在直播列表
@@ -228,6 +225,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             super.onCreateLiveRoom(createLiveRoomDataResp);
             if (createLiveRoomDataResp.getReturnCode() == 0) {
                 LiveRowsBean result = createLiveRoomDataResp.getResult();
+                createRoomId= result.getRoomId();
                 SPCUtils.put(getActivity(), CREATE_ROOMID, String.valueOf(createRoomId));
                 Object annoucement = createLiveRoomDataResp.getResult().getAnnoucement();
                 if (annoucement != null) {
@@ -266,6 +264,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             liveRecyclearView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if(position<1){
+                        return;
+                    }
                     LiveRowsBean liveRowsBean = rows.get(position - 1);
                     roomId = liveRowsBean.getRoomId();
                     String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
@@ -309,11 +310,11 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
         } else {
             CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setContent("没登录，快去登录吧!");
+            customDialog.setContent(getString(R.string.live_login_hint));
             customDialog.setCancelable(false);
             customDialog.setCancelable(false);
-            customDialog.setCancelBtn("取消", null);
-            customDialog.setSurceBtn("确定", new CustomChatDialog.CustomDialogListener() {
+            customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+            customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
                 @Override
                 public void onDialogClickListener() {
 

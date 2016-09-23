@@ -231,6 +231,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected ImageView liveGiftImg;
     private InputConfig inputConfig;
     private MyCallBack myCallBack;
+    protected GiftsRankPopuWindow giftsRankPopuWindow;
 
     protected abstract void checkNetInfo(String netType, int reminder);
 
@@ -338,7 +339,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
                         checkNetInfo("wifi", 0);
                     } else {
-                        checkNetInfo("rests", 0);
+                        if(CustomDialogStyle.NET_CHECK==0){
+                            checkNetInfo("rests", 0);
+                        }
+
+
                     }
                 }
             }
@@ -365,6 +370,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg=(ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
+
+
+
+        String userAvatar = UserHelper.getUserAvatar(this);
+        AppLog.i("TAG","主播名字："+UserHelper.getUserName(this)+"主播头像:"+userAvatar);
 
         // 礼物列表
         findGiftLayout();
@@ -544,7 +554,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     //显示礼物排行榜
     private void showGiftRanksPopuWindow(LiveGiftRanksResp liveGiftRanksResp) {
-        GiftsRankPopuWindow giftsRankPopuWindow = new GiftsRankPopuWindow(LivePlayerBaseActivity.this, liveGiftRanksResp);
+        giftsRankPopuWindow = new GiftsRankPopuWindow(LivePlayerBaseActivity.this, liveGiftRanksResp);
         giftsRankPopuWindow.showGiftsRankPopuWindow();
         giftsRankPopuWindow.showAtLocation(this.findViewById(R.id.live_drawer_layout),
                 Gravity.CENTER, 0, 0);
@@ -642,9 +652,17 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     finish();
                     break;
                 case R.id.audience_score_layout:
+                    boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                    if(logineds){
+                        contentLoader.liveGiftRanks(channelId);
+                        contentLoader.setCallBack(myCallBack);
+                    }else {
+                        showLoginViewDialog();
+                    }
 
-                    contentLoader.liveGiftRanks(channelId);
-                    contentLoader.setCallBack(myCallBack);
+                    break;
+                case R.id.live_telecast_input_text:
+
                     break;
 
             }
@@ -655,10 +673,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onEvent(StatusCode statusCode) {
             AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
             if(statusCode!=StatusCode.LOGINED){
-
                 DemoCache.setLoginStatus(false);
-
             }else if(statusCode==StatusCode.LOGINED){
+                DemoCache.setLoginStatus(true);
                 enterRoom();
             }
 
@@ -799,7 +816,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case "12":
                         //更新在綫人數
                         AppLog.i("TAG","获取主播上传的人数:"+onlineNum);
-                       onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
+                        if(onlineNum!=null&&onlineNum.length()>0){
+                            onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
+                        }
+
                         break;
                     case "11":
                         AppLog.i("TAG","接受主播离开的消息");
@@ -820,13 +840,13 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     case ChatRoomMemberExit:
                         //退出直播间，解除禁言
-                        if (banListLive.size() > 0) {
+                       /* if (banListLive.size() > 0) {
                             for (int i = 0; i < banListLive.size(); i++) {
                                 if (message.getFromAccount().equals(banListLive.get(i))) {
                                     banListLive.remove(i);
                                 }
                             }
-                        }
+                        }*/
                         break;
                     case ChatRoomInfoUpdated:
                         sendMessage(message, MessageType.text);
@@ -889,21 +909,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     // 进入聊天室
     protected void enterRoom() {
 
-
-      /*  messageListPanel.setOnChatRoomMessageItemClickListener(new ChatRoomMsgListPanel.OnChatRoomMessageItemClickListener() {
-            @Override
-            public void onMessageListItem(String userId) {
-                if (!"-1".equals(userId)) {
-                    contentLoader.getLiveUserInfo(userId);
-                    contentLoader.setCallBack(myCallBack);
-                } else {
-                    Toast.makeText(LivePlayerBaseActivity.this, "该用户为游客!", Toast.LENGTH_SHORT).show();
-                }
-
-
-            }
-        });*/
-
         if (DemoCache.getLoginStatus()) {
             EnterChatRoomData data = new EnterChatRoomData(roomId);
             data.setRoomId(roomId);
@@ -913,6 +918,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             map.put("roomExt", String.valueOf(userId));
             data.setExtension(map);
             data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
+            data.setNick(UserHelper.getUserName(LivePlayerBaseActivity.this));
             enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
             enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
                 @Override
@@ -927,8 +933,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     member1.setRoomId(roomInfo.getRoomId());
                     ChatRoomMemberCache.getInstance().saveMyMember(member1);
                     DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
-                    masterName.setText(enterroomgetnick);
-                    updateUI(enterroomgetnick);
+                  /*  if(UserHelper.getUserName(LivePlayerBaseActivity.this)!=null){
+                        masterName.setText(UserHelper.getUserName(LivePlayerBaseActivity.this));
+                    }else{
+                        masterName.setText(enterroomgetnick);
+                    }*/
+                    updateUI();
                     DemoCache.setLoginChatRoomStatus(true);
                     chatRoomStatusRemind("登陆聊天室成功...");
                     initInputPanel(creatorAccount);
@@ -1055,6 +1065,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void showTouristInfo(ChatRoomMember member, boolean isMasterAccount) {
 
                 boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
+
+
                 if (!isLogin) {
                     showLoginViewDialog();
                 } else {
@@ -1068,10 +1080,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
                             userIdItem = String.valueOf(userId);
                         }
-                        if ("-1".equals(userIdItem)) {
+                        if ("-1".equals(userIdItem)||userIdItem==null||userIdItem.length()==0) {
                             Toast.makeText(LivePlayerBaseActivity.this, "该用户为游客!", Toast.LENGTH_SHORT).show();
                             return;
                         }
+
+                        AppLog.i("TAG","游客列表点击事件："+userIdItem+"   userIdItem"+userIdItem.length());
                         contentLoader.getLiveUserInfo(userIdItem);
                         contentLoader.setCallBack(myCallBack);
                     }
@@ -1102,8 +1116,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         DialogMaker.dismissProgressDialog();
     }
 
-    protected void updateUI(String nick) {
-        masterName.setText(nick);
+    protected void updateUI() {
+
         //  onlineCountText.setText(String.format("%s人", String.valueOf(roomInfo.getOnlineUserCount())));
         fetchOnlineCount();
     }
@@ -1119,12 +1133,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-
                 NIMClient.getService(ChatRoomService.class).fetchRoomInfo(roomId).setCallback(new RequestCallback<ChatRoomInfo>() {
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-
                         clearCache();
                         fetchData();
                         int onlineUserCount = param.getOnlineUserCount();
@@ -1132,7 +1144,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             maxOnLineCount = onlineUserCount;
                         }
                     }
-
                     @Override
                     public void onFailed(int code) {
 
@@ -1273,10 +1284,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     public void showLoginViewDialog() {
         CustomChatDialog customDialog = new CustomChatDialog(this);
-        customDialog.setContent("还没登录，快去登录吧!");
+        customDialog.setContent(getString(R.string.live_login_hint));
         customDialog.setCancelable(false);
-        customDialog.setCancelBtn("取消", null);
-        customDialog.setSurceBtn("确定", new CustomChatDialog.CustomDialogListener() {
+        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
                 DemoCache.setLoginStatus(false);

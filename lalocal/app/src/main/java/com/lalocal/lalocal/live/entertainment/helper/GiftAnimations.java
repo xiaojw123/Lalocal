@@ -228,7 +228,7 @@ public class GiftAnimations {
         ImageView sendGiftImg = (ImageView) root.findViewById(R.id.send_gift_img);
         TextView sendGiftTotal = (TextView) root.findViewById(R.id.send_gift_total);
         audienceNameText.setText(message.getUserName());
-        sendGiftName.setText(message.getGiftName());
+        sendGiftName.setText("送了一个"+message.getGiftName());
         int count = message.getGiftCount();
         int n = count / 10; // 2
         int m = n * 10; // 20

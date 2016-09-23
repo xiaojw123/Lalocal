@@ -570,7 +570,7 @@ public class ContentLoader {
         }
         String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
         ContentRequest request = new ContentRequest(AppConfig.getRecommendUrl() + getParameter, response, response);
-        request.setHeaderParams(getHeaderParams(-1, null));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
 
     }
@@ -592,7 +592,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LIVE_RECOMMEND_LIST);
         }
         ContentRequest request = new ContentRequest(AppConfig.getLiveRecommendListUrl(), response, response);
-        request.setHeaderParams(getHeaderParams(-1, null));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -611,7 +611,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CREATE_LIVE_ROOM);
         }
-
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCreateLiveRoom(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getCreateLiveRoom());
@@ -623,7 +622,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_ROOM);
         }
-        AppLog.i("TAG", "alterLive:修改直播333333333");
+
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
@@ -1746,6 +1745,7 @@ public class ContentLoader {
 
         //推荐直播列表
         private void responseLiveRecommendList(String json) {
+            AppLog.i("TAG","推荐直播列表:"+json);
             LiveRecommendListDataResp liveRecommendListDataResp = new Gson().fromJson(json, LiveRecommendListDataResp.class);
             callBack.onLiveRecommendList(liveRecommendListDataResp);
         }

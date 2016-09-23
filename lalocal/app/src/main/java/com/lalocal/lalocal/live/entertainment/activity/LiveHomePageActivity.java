@@ -79,6 +79,7 @@ public class LiveHomePageActivity extends BaseActivity {
     private TextView popuCancel;
     private TextView popuConfirm;
     private PopupWindow popupWindow;
+    private String back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,7 @@ public class LiveHomePageActivity extends BaseActivity {
         setContentView(R.layout.live_personal_homepage_layout);
         ButterKnife.bind(this);
         userId = getIntent().getStringExtra("userId");
+        back = getIntent().getStringExtra("back");
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(userId);
@@ -93,7 +95,7 @@ public class LiveHomePageActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page})
+    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page,R.id.master_attention_layout})
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.homepage_attention_layout:
@@ -101,25 +103,23 @@ public class LiveHomePageActivity extends BaseActivity {
                 intent.putExtra("liveType", "0");
                 intent.putExtra("userId", userId);
                 startActivity(intent);
+                if(back!=null){
+                    finish();
+                }
                 break;
             case R.id.homepage_fans_layout:
                 Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
                 startActivity(intent1);
-                break;
-
-            case R.id.master_attention:
-                String text = (String) masterAttention.getText();
-                if ("关注".equals(text)) {
-                    contentLoader.getAddAttention(userId);
-                } else {
-                    showAttentionPopuwindow(userId);
+                if(back!=null){
+                    finish();
                 }
                 break;
+
             case R.id.personal_home_page:
                 BigPictureBean bean=new BigPictureBean();
-              bean.setUserAvatar(true);
+                 bean.setUserAvatar(true);
                 String avatarOrigin = result.getAvatarOrigin();
                 if(result.getAvatarOrigin()==null){
                     avatarOrigin= result.getAvatar();
@@ -131,6 +131,14 @@ public class LiveHomePageActivity extends BaseActivity {
                 overridePendingTransition(R.anim.head_in, R.anim.head_out);
 
                 break;
+            case R.id.master_attention_layout:
+                String text = (String) masterAttention.getText();
+                if ("关注".equals(text)) {
+                    contentLoader.getAddAttention(userId);
+                } else {
+                    showAttentionPopuwindow(userId);
+                }
+                break;
         }
     }
 
@@ -139,7 +147,6 @@ public class LiveHomePageActivity extends BaseActivity {
         View inflate = View.inflate(this, R.layout.live_attention_popu_layout, null);
         popuCancel = (TextView) inflate.findViewById(R.id.live_attention_popu_cancel);
         popuConfirm = (TextView) inflate.findViewById(R.id.live_attention_popu_confirm);
-
         popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setContentView(inflate);
@@ -179,7 +186,6 @@ public class LiveHomePageActivity extends BaseActivity {
     private int attentionNum;
     private int fansNum;
     private LiveUserInfoResultBean result;
-
     public class MyCallBack extends ICallBack {
 
         @Override

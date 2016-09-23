@@ -169,7 +169,9 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 int id1 = liveFansOrAttentionRowsBean.getId();
                 AppLog.i("TAG", "id:" + id1);
                 intent.putExtra("userId", id1 + "");
+                intent.putExtra("back","2");
                 startActivity(intent);
+                finish();
 
 
             }

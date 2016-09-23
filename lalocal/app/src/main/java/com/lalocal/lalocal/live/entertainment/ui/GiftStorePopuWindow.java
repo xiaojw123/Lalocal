@@ -8,10 +8,10 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -44,7 +44,7 @@ public class GiftStorePopuWindow extends PopupWindow {
         View giftView = View.inflate(mContext, R.layout.audience_gift_page_layout, null);
         ViewPager audienceGiftVp = (ViewPager) giftView.findViewById(R.id.audience_gift_vp);
         IndicatorView mIndicatorView = (IndicatorView) giftView.findViewById(R.id.idv_banner);
-        Button giftSend = (Button) giftView.findViewById(R.id.audience_gift_send);
+        TextView giftSend = (TextView) giftView.findViewById(R.id.audience_gift_send);
         List<GridView> list = new ArrayList<>();
         View inflate = View.inflate(mContext, R.layout.audience_gift_viewpager_layout, null);
         GridView giftGridView = (GridView) inflate.findViewById(R.id.audience_gift_list);
@@ -89,7 +89,10 @@ public class GiftStorePopuWindow extends PopupWindow {
         giftSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (onSendClickListener != null) {
+                if(payBalance==0){
+                    Toast.makeText(mContext,"您还未选中礼物!",Toast.LENGTH_SHORT).show();
+                }
+                if (onSendClickListener != null&&payBalance!=0) {
                     onSendClickListener.sendGiftMessage(itemPosition, sendTotal, payBalance);
                 }
             }

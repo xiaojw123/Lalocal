@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:textColor="@color/color_chat_name"
+        android:textColor="#97d3e9"
         android:textSize="14sp"
-
+        android:singleLine="false"
        />
 
     <TextView
@@ -22,13 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
-
-        android:includeFontPadding="false"
-        android:lineSpacingExtra="3dip"
+        android:singleLine="false"
         android:maxWidth="@dimen/max_text_bubble_width"
         android:textColor="@color/color_chat_content"
         android:textSize="14sp"
-        android:text="dfadsasdfsdf"
+
        />
 
     <ImageView

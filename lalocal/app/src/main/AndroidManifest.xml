@@ -297,10 +297,14 @@
             android:hardwareAccelerated="false"
 
            />
-        <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
+        <activity android:name=".live.entertainment.activity.LiveHomePageActivity"
+            >
+
+        </activity>
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
             android:hardwareAccelerated="false"
+
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".activity.PayCompleteActivity" />
         <activity android:name=".activity.MyWalletActivity" />

@@ -167,18 +167,19 @@
                             android:id="@+id/live_emcee_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:maxEms="4"
-                            android:singleLine="true"
-                            android:text="lalocal"
+                            android:drawableLeft="@drawable/onlivelight"
+                            android:drawableRight="@drawable/onlive"
                             android:textColor="@android:color/white"
+                            android:drawablePadding="@dimen/live_padding_5dp"
                             android:textSize="@dimen/live_text_12sp" />
 
                         <TextView
                             android:id="@+id/live_online_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/manypeople_light"
                             android:text="0"
+                            android:drawablePadding="@dimen/live_padding_5dp"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/live_text_12sp" />
                     </LinearLayout>
@@ -231,11 +232,8 @@
                     android:paddingRight="@dimen/live_padding_5dp"
                     android:src="@drawable/circlenext_ic" />
 
-
             </RelativeLayout>
         </RelativeLayout>
-
-
         <LinearLayout
             android:id="@+id/setting_bottom_layout"
             android:layout_width="match_parent"
