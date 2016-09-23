@@ -464,6 +464,7 @@ public class ContentLoader {
     public void resetPasword(String email, String vercode, String newpsw) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RESET_PASSWORD);
+            response.setPassWord(newpsw);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getPasswordResetUrl(), response, response);
         request.setBodyParams(getResetPswParams(email, vercode, newpsw));
@@ -945,6 +946,10 @@ public class ContentLoader {
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
+        }
+        public void setPassWord(String psw){
+            this.psw=psw;
+
         }
 
         public void setType(int type) {
@@ -1616,7 +1621,7 @@ public class ContentLoader {
 
 
         private void responseResetPassword() {
-            callBack.onResetPasswordComplete();
+            callBack.onResetPasswordComplete(psw);
         }
 
         private void responseSendVerCode() {

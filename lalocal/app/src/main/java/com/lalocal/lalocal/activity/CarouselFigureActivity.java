@@ -16,6 +16,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.SharePopupWindow;
@@ -36,6 +37,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     private RecommendAdResultBean recommendAdResultBean;
     private SpecialShareVOBean shareVO;
     private CustomTitleView carousFigureCtv;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +129,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
                                 startActivity(intent);
                             } else {
                                 Intent intent = new Intent(CarouselFigureActivity.this, LoginActivity.class);
-                                startActivity(intent);
+                                startActivityForResult(intent,KeyParams.REQUEST_CODE);
                             }
                             return true;
                         }
@@ -145,5 +147,22 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
             return super.shouldOverrideUrlLoading(view, url);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == LoginActivity.REGISTER_OK) {
+            String email = data.getStringExtra(LoginActivity.EMAIL);
+            String psw = data.getStringExtra(LoginActivity.PSW);
+            setLoaderCallBack(new CarouseCallback());
+            mContentloader.login(email, psw);
+        }
+
+    }
+
+    class CarouseCallback extends ICallBack {
+
+
+    }
+
 
 }
