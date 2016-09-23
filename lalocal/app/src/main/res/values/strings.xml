@@ -230,5 +230,10 @@
     <string name="no_live">没有搜索到相关直播</string>
     <string name="start_live">开始直播</string>
 
+    <!--直播-->
+    <string name="live_login_hint">您还没有登录,请登录!</string>
+    <string name="live_login_imm">马上登录</string>
+    <string name="live_canncel">取消</string>
+    <string name="lvie_sure">确定</string>
 
 </resources>

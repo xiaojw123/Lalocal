@@ -14,4 +14,10 @@ public class CustomDialogStyle {
     public  static  final  int ME_CHECK_OTHER=6;//我看别人
     public static  int IDENTITY=0;
 
+    //网络类型检测
+    public static  int NET_CHECK=0;
+
+    //直播清晰度
+    public static  int LIVE_DEFINITION=0;
+
 }

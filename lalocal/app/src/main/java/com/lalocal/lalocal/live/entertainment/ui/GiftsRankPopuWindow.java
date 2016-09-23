@@ -14,6 +14,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
@@ -72,9 +73,14 @@ public class GiftsRankPopuWindow extends PopupWindow {
         this.setBackgroundDrawable(dw);
         currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
         TotalRanksBean mycurrentRank = liveGiftRanksResp.getResult().getMycurrentRank();
-      //  AppLog.i("TAG","本次直播我的贡献:"+mycurrentRank.getUser());
+
         if(mycurrentRank!=null&&mycurrentRank.getRank()>10){
-         //   currentRanks.add(mycurrentRank);
+
+            RankUserBean rankUserBean=new RankUserBean();
+            rankUserBean.setAvatar(UserHelper.getUserAvatar(mContext));
+            rankUserBean.setNickName(UserHelper.getUserName(mContext));
+            mycurrentRank.setUser(rankUserBean);
+            currentRanks.add(mycurrentRank);
         }
         giftRankingStatus(currentRanks);
     }
@@ -101,7 +107,11 @@ public class GiftsRankPopuWindow extends PopupWindow {
                     currentRanks = liveGiftRanksResp.getResult ().getTotalRanks();
                     TotalRanksBean myTotalRank = liveGiftRanksResp.getResult().getMyTotalRank();
                     if(myTotalRank!=null&&myTotalRank.getRank()>=10){
-                      //  currentRanks.add(myTotalRank);
+                        RankUserBean rankUserBean=new RankUserBean();
+                        rankUserBean.setAvatar(UserHelper.getUserAvatar(mContext));
+                        rankUserBean.setNickName(UserHelper.getUserName(mContext));
+                        myTotalRank.setUser(rankUserBean);
+                        currentRanks.add(myTotalRank);
                     }
                     giftRankingStatus(currentRanks);
                     break;

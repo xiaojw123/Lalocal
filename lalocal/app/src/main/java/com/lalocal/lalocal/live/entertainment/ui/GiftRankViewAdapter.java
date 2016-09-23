@@ -64,6 +64,7 @@ public class GiftRankViewAdapter extends BaseAdapter {
            holder.liveGiftRankItemLayout.setBackgroundResource(R.drawable.stbg);
             holder.liveGiftsRankingName.setTextColor(Color.RED);
         }else {
+            holder.liveGiftRankItemLayout.setBackgroundResource(0);
             holder.liveGiftsRankingName.setTextColor(Color.WHITE);
         }
         return convertView;

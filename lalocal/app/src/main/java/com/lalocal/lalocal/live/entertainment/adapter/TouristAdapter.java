@@ -57,8 +57,13 @@ public class TouristAdapter extends RecyclerView.Adapter {
         }else{
             liveViewHodler.managerMark.setVisibility(View.GONE);
         }
+        AppLog.i("TAG","游客头像连接:"+member.getAvatar());
+        if(member.getAvatar()==null||member.getAvatar().length()==0){
+           liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
+        }else{
+            DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, member.getAvatar());
+        }
 
-        DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, member.getAvatar());
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

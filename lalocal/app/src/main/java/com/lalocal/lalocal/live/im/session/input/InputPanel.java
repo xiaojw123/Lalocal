@@ -30,7 +30,6 @@ import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.live.im.session.actions.BaseAction;
-
 import com.lalocal.lalocal.live.im.session.emoji.IEmoticonSelectedListener;
 import com.lalocal.lalocal.live.im.session.emoji.MoonUtil;
 import com.lalocal.lalocal.live.im.ui.barrage.BarrageView;

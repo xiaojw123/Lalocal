@@ -150,6 +150,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private String cname;
     private String liveStatus;
     protected LiveRowsBean liveRowsBean;
+    private int myGold;
 
 
     public static void start(Context context,LiveRowsBean liveRowsBean,String annoucement){
@@ -229,8 +230,18 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
     private void doConfigEngine(int cRole) {
-
         int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
+        switch (CustomDialogStyle.LIVE_DEFINITION) {
+            case 1:
+                vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
+                break;
+            case 2:
+                vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
+                break;
+            case 3:
+                break;
+        }
+
         worker().configEngine(cRole, vProfile);
 
     }
@@ -273,10 +284,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         audienceOver.setVisibility(View.GONE);
         andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
-        BlurImageView imageView = (BlurImageView) findViewById(R.id.loading_page_bg);
-        imageView.setBlurImageURL(avatar);
-        imageView.setBlurRadius(1);
-        imageView.setScaleRatio(20);
+
 
         //获取屏幕高度
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
@@ -285,10 +293,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
 
     }
-
-  /*  protected void enterRoom() {
-        super.enterRoom();
-    }*/
 
     protected void registerObservers(boolean register) {
         super.registerObservers(register);
@@ -308,6 +312,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 dialogConnect.dismiss();
             }
             if (reminder == 0 && isFirstCheckNet && isAudienceOver) {
+                CustomDialogStyle.NET_CHECK=1;
                 isFirstCheckNet = false;
                 dialogNet = new CustomChatDialog(AudienceActivity.this);
                 dialogNet.setTitle("提示");
@@ -316,12 +321,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 dialogNet.setCancelBtn("继续观看", new CustomChatDialog.CustomDialogListener() {
                     @Override
                     public void onDialogClickListener() {
-
+                        CustomDialogStyle.NET_CHECK=0;
                     }
                 });
                 dialogNet.setSurceBtn("结束直播", new CustomChatDialog.CustomDialogListener() {
                     @Override
                     public void onDialogClickListener() {
+                        CustomDialogStyle.NET_CHECK=0;
                         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                         clearChatRoom();
                     }
@@ -640,12 +646,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
 
-    protected void updateUI(String nick) {
-        super.updateUI(nick);
-        DrawableUtils.displayImg(this, maseterHead, avatar);
-        masterName.setText(nickname);
-    }
-
+    boolean isFirstClickSendGiftBtn=true;
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
 
         @Override
@@ -701,15 +702,22 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     }else if(!DemoCache.getLoginChatRoomStatus()) {
                        Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
                     } else if(!"1".equals(playType)) {
-                        contentLoader.getMyWallet();
-                        contentLoader.setCallBack(new ICallBack(){
-                            @Override
-                            public void onGetMyWallet(WalletContent content) {
-                                super.onGetMyWallet(content);
-                                int gold =(int)content.getGold();
-                                showGiftPage(gold);
-                            }
-                        } );
+
+                        if(isFirstClickSendGiftBtn){
+                            isFirstClickSendGiftBtn=false;
+                            contentLoader.getMyWallet();
+                            contentLoader.setCallBack(new ICallBack(){
+                                @Override
+                                public void onGetMyWallet(WalletContent content) {
+                                    super.onGetMyWallet(content);
+                                    myGold = (int)content.getGold();
+                                    showGiftPage(myGold);
+                                }
+                            } );
+                        }else {
+                            showGiftPage(myGold);
+                        }
+
 
                     }
 
@@ -749,17 +757,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                             rechargeDialog.setSurceBtn("充值", new CustomChatDialog.CustomDialogListener() {
                                 @Override
                                 public void onDialogClickListener() {
-                                    //TODO 去充值界面
                                     Intent intent = new Intent(AudienceActivity.this, RechargeActivity.class);
                                     intent.putExtra(KeyParams.WALLET_CONTENT, content);
                                     startActivity(intent);
-
                                 }
                             });
                             rechargeDialog.show();
-                        } else if (payBalance == 0) {
-                            Toast.makeText(AudienceActivity.this, "您还未选中礼物!", Toast.LENGTH_SHORT).show();
-                        } else {
+                        }  else {
                             contentLoader.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
                         }
                     }
@@ -768,10 +772,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     public void onSendGiftsBack(String result) {
                         super.onSendGiftsBack(result);
 
-                        AppLog.i("TAG", "发送礼物返回数据：" + result);
+
                         SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
                         if (sendGiftResp.getReturnCode() == 0) {
                             startSendGiftsAnimation(itemPosition, sendTotal, payBalance);
+                            myGold=myGold-payBalance;
                         } else {
                             Toast.makeText(AudienceActivity.this, "赠送失败", Toast.LENGTH_SHORT).show();
 
@@ -819,7 +824,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         }
         sendMessage(giftMessage, MessageType.gift);
         giftStorePopuWindow.dismiss();
-
 
     }
 
@@ -1020,7 +1024,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private boolean isFastClick() {
         long currentTime = System.currentTimeMillis();
         long time = currentTime - lastClickTime;
-        if (time > 0 && time < 500) {
+        if (time > 0 && time < 2000) {
             return true;
         }
         lastClickTime = currentTime;
@@ -1086,6 +1090,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             if(giftStorePopuWindow!=null){
                 giftStorePopuWindow.dismiss();
             }
+            if(giftsRankPopuWindow!=null){
+                giftsRankPopuWindow.dismiss();
+            }
             contentLoader.getLiveUserInfo(userId);
             contentLoader.setCallBack(new ICallBack() {
                 @Override
@@ -1141,11 +1148,19 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
         AppLog.i("TAG","bottom:"+bottom+"  oldBottom:"+oldBottom);//bottom:939  oldBottom:1740
-        if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {
-        } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {
+        if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {//显示
+            if(liveSettingLayout!=null&&keyboardLayout!=null){
+                keyboardLayout.setAlpha(1);
+                keyboardLayout.setClickable(true);
+                keyboardLayout.setVisibility(View.VISIBLE);
+                liveSettingLayout.setVisibility(View.INVISIBLE);
+                liveSettingLayout.setClickable(false);
+            }
+        } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
             if (keyboardLayout != null) {
                 keyboardLayout.setAlpha(0);
                 keyboardLayout.setClickable(false);
+                keyboardLayout.setVisibility(View.INVISIBLE);
                 liveSettingLayout.setVisibility(View.VISIBLE);
                 liveSettingLayout.setClickable(true);
             }
@@ -1171,15 +1186,21 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             public void run() {
 
                 SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
+                int childCount = palyerLayout.getChildCount();
+                if(childCount>0){
+                    palyerLayout.removeAllViews();
+                }
                 palyerLayout.addView(surfaceV);
                 surfaceV.setZOrderOnTop(true);
                 surfaceV.setZOrderMediaOverlay(true);
                 Log.i("TAG","远端视频接收解码回调："+config().mUid+"   uid:"+uid);
-                if (config().mUid == uid) {
-                    rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置本地视频属性
+                rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置远端视频属性
+
+              /*  if (config().mUid == uid) {
+                        rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置本地视频属性
                 } else {
                     rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置远端视频属性
-                }
+                }*/
                 loadingPage.setVisibility(View.GONE);
                 if(audienceOver!=null){
                     isAudienceOver = true;
@@ -1214,7 +1235,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     public void onConnectionLost() {
         AppLog.i("TAG","視頻連接中斷连接丟失");
-        showFinishLayout(true,2);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showFinishLayout(true,2);
+            }
+        });
+
 
     }
 

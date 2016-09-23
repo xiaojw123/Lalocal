@@ -1,7 +1,10 @@
 package com.lalocal.lalocal.live.entertainment.viewholder;
 
 import android.graphics.Color;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.ImageView;
@@ -50,12 +53,14 @@ public class MsgViewHolderChat extends TViewHolder {
 
     @Override
     protected void refresh(Object item) {
-
+        String itemContent=null;
         String creatorAccount=null;
         String styles=null;
         String disableSendMsgNickName=null;
         String adminSendMsgNickName=null;
+        String giftCount=null;
         String content=null;
+        String giftName=null;
         message = (ChatRoomMessage) item;
         fromAccount = message.getFromAccount();
         Map<String, Object> remoteExtension = message.getRemoteExtension();
@@ -69,7 +74,7 @@ public class MsgViewHolderChat extends TViewHolder {
                     creatorAccount = value.toString();
                 }
                 if("style".equals(key)){
-                  styles = value.toString();
+                    styles = value.toString();
                 }
                 if("disableSendMsgNickName".equals(key)){
                     disableSendMsgNickName=value.toString();
@@ -89,6 +94,13 @@ public class MsgViewHolderChat extends TViewHolder {
                             if ("code".equals(key1)) {
                                 code = value1.toString();
                             }
+                            if("giftCount".equals(key1)){
+                                giftCount= value1.toString();
+                            }
+                            if("giftName".equals(key1)){
+                                giftName = value1.toString();
+                            }
+
                         }
                     }
                 }
@@ -128,8 +140,7 @@ public class MsgViewHolderChat extends TViewHolder {
                 break;
             case "10":
                 GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
-                // ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : ("003".equals(code)?"飞机":"神秘礼物")));
-                content="给主播送了";
+                content="给主播送了"+giftCount+"个"+giftName;
                 bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 itenImage.setVisibility(View.VISIBLE);
                 DrawableUtils.displayImg(context,itenImage,messageToGiftBean.getGiftImage());
@@ -143,7 +154,16 @@ public class MsgViewHolderChat extends TViewHolder {
         bodyText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
-
+    private SpannableStringBuilder textviewSetContent(String text) {
+        String[] textContent = text.split(":");
+        String nameText = textContent[0];
+        String contentText = textContent[1];
+        int length = nameText.length();
+        SpannableStringBuilder style=new SpannableStringBuilder(text);
+        style.setSpan(new ForegroundColorSpan(Color.parseColor("#97d3e9")), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        style.setSpan(new ForegroundColorSpan(Color.WHITE), length+1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return  style;
+    }
 
     public void setNameTextView(String creatorAccount) {
         if (message.getMsgType() != MsgTypeEnum.notification) {
@@ -180,6 +200,6 @@ public class MsgViewHolderChat extends TViewHolder {
                 }
 
             }
-      }
+        }
     }
 }
