@@ -164,7 +164,7 @@ public abstract class ICallBack {
     }
 
 
-    public void onResetPasswordComplete() {
+    public void onResetPasswordComplete(String  password) {
 
     }
 

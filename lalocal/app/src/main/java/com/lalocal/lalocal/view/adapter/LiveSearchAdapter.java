@@ -14,6 +14,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -49,6 +50,7 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        AppLog.print("LiveSearchAdapter   onBindViewHolder___updateIng__");
         if (mItems != null && mItems.size() > 0) {
             LiveRowsBean item = mItems.get(position);
             if (item != null) {
@@ -61,7 +63,7 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
                     }
                 }
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LiveSearchViewHolder) holder).lin1.getLayoutParams();
-                if (position > 0) {
+                if (position > 0 && position < mItems.size() - 1) {
                     params.leftMargin = ScreenUtil.screenWidth * 18 / 37;
                     ((LiveSearchViewHolder) holder).lin2.setVisibility(View.INVISIBLE);
                 } else if (position == mItems.size() - 1) {

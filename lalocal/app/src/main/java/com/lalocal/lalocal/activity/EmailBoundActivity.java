@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -54,6 +55,7 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_change), null);
                 return;
             }
+            UserHelper.updateEmail(this,email);
             contentService.boundEmail(email, getUserId(), getToken());
         }
 

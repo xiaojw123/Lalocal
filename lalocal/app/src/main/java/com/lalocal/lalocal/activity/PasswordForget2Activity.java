@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -72,7 +73,8 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
 
     class CallBack extends ICallBack {
         @Override
-        public void onResetPasswordComplete() {
+        public void onResetPasswordComplete(String psw) {
+            UserHelper.updatePassword(PasswordForget2Activity.this,psw);
             CommonUtil.showToast(PasswordForget2Activity.this, "密码修改成功!", Toast.LENGTH_LONG);
             setResult(RESULT_OK, null);
             finish();

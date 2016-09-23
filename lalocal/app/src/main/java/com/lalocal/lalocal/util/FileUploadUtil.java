@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -105,6 +106,7 @@ public class FileUploadUtil {
                     JSONObject resultJson = jsonObj.optJSONObject("result");
                     String avatar = resultJson.optString("avatar", null);
                     intent.putExtra(KeyParams.AVATAR, avatar);
+                    UserHelper.updateAvatar(context,avatar);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -3,6 +3,7 @@ package com.lalocal.lalocal.live;
 import android.content.Context;
 
 import com.lalocal.lalocal.live.im.session.image.ImageLoaderKit;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
@@ -74,6 +75,6 @@ public class DemoCache {
     }
 
     public static void initImageLoaderKit() {
-        imageLoaderKit = new ImageLoaderKit(context, null);
+        imageLoaderKit = new ImageLoaderKit(context, DrawableUtils.getConfiguration(context));
     }
 }

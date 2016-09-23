@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.net.ContentLoader;
@@ -252,6 +253,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         public void onModifyUserProfile(LoginUser user) {
             Intent intent = new Intent();
             if (actionType == ACTION_NICKNAME_MODIFY) {
+                UserHelper.updateNickName(AccountEidt2Activity.this,user.getNickName());
                 intent.putExtra(KeyParams.NICKNAME, user.getNickName());
                 setResult(RESULT_CODE_NICKNAME, intent);
             } else if (actionType == ACTION_PHONE_MODIFY) {

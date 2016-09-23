@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.KeyboardUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.adapter.LiveSearchAdapter;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
@@ -37,7 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LiveSearchActivity extends BaseActivity implements TextView.OnEditorActionListener {
+public class LiveSearchActivity extends BaseActivity implements TextView.OnEditorActionListener{
 
     @BindView(R.id.live_search_edt)
     EditText liveSearchEdt;
@@ -68,6 +70,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         liveSearchEdt.setOnEditorActionListener(this);
         liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.setPullRefreshEnabled(false);
+            liveSearchXrlv.addOnScrollListener(new LiveSearchScorllListener());
         setLoaderCallBack(new LiveSearchCallBack());
 
     }
@@ -81,7 +84,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     }
 
 
-    @OnClick({R.id.live_search_cancel_tv,R.id.live_back_img})
+    @OnClick({R.id.live_search_cancel_tv, R.id.live_back_img})
     public void onClick() {
         finish();
     }
@@ -104,6 +107,8 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         }
         return false;
     }
+
+
 
     class LiveSearchCallBack extends ICallBack implements XRecyclerView.LoadingListener, OnItemClickListener {
         int toalPages;
@@ -179,7 +184,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         @Override
         public void onItemClickListener(View view, int position) {
             LiveRowsBean liveRowsBean = (LiveRowsBean) view.getTag();
-            String roomId =String.valueOf( liveRowsBean.getRoomId());
+            String roomId = String.valueOf(liveRowsBean.getRoomId());
             String createRoom = SPCUtils.getString(LiveSearchActivity.this, CREATE_ROOMID);
             String s = String.valueOf(roomId);
             if (createRoom != null && createRoom.equals(s)) {
@@ -194,9 +199,27 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
             } else {
                 ann = "这是公告哈";
             }
-            AudienceActivity.start(LiveSearchActivity.this,liveRowsBean,ann);
+            AudienceActivity.start(LiveSearchActivity.this, liveRowsBean, ann);
         }
     }
+
+    class LiveSearchScorllListener extends  RecyclerView.OnScrollListener{
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+            AppLog.print(String.format("recyclerScollListenr     onScrolled  dx=%1$d,  dy=%2d",dx,dy));
+        }
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+            AppLog.print(String.format("recyclerScollListenr  onScrollStateChanged  newSate="+newState));
+            if (newState==RecyclerView.SCROLL_STATE_DRAGGING){
+                KeyboardUtil.hidenSoftKey(liveSearchEdt);
+            }
+        }
+    }
+
 
 
 }

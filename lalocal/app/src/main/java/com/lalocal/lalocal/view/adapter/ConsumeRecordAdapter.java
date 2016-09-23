@@ -34,7 +34,7 @@ public class ConsumeRecordAdapter extends BaseRecyclerAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        context=parent.getContext();
+        context = parent.getContext();
         View itemView = LayoutInflater.from(context).inflate(R.layout.consume_record_item, parent, false);
         return new ConsumeHolder(itemView);
     }
@@ -43,11 +43,30 @@ public class ConsumeRecordAdapter extends BaseRecyclerAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ConsumeHolder itemHolder = (ConsumeHolder) holder;
         if (mRows != null && mRows.size() > 0) {
-            if (position > 0) {
-                itemHolder.lin1.setPadding((int) context.getResources().getDimension(R.dimen.dimen_size_15_dp), 0, (int) context.getResources().getDimension(R.dimen.dimen_size_15_dp), 0);
-            }
-            if (position == mRows.size() - 1) {
+            if (position == 0) {
+                itemHolder.lin1.setVisibility(View.VISIBLE);
+                if (itemHolder.lin2.getVisibility() == View.VISIBLE) {
+                    itemHolder.lin2.setVisibility(View.INVISIBLE);
+                }
+                if (itemHolder.lin3.getVisibility() == View.VISIBLE) {
+                    itemHolder.lin3.setVisibility(View.INVISIBLE);
+                }
+
+
+            } else if (position == mRows.size() - 1) {
+                itemHolder.lin3.setVisibility(View.VISIBLE);
                 itemHolder.lin2.setVisibility(View.VISIBLE);
+                if (itemHolder.lin1.getVisibility() == View.VISIBLE) {
+                    itemHolder.lin1.setVisibility(View.INVISIBLE);
+                }
+            } else {
+                itemHolder.lin3.setVisibility(View.VISIBLE);
+                if (itemHolder.lin1.getVisibility() == View.VISIBLE) {
+                    itemHolder.lin1.setVisibility(View.INVISIBLE);
+                }
+                if (itemHolder.lin2.getVisibility() == View.VISIBLE) {
+                    itemHolder.lin2.setVisibility(View.INVISIBLE);
+                }
             }
             ConsumeRecord.RowsBean rowsBean = mRows.get(position);
             itemHolder.channel_tv.setText(rowsBean.getChannel());
@@ -83,6 +102,8 @@ public class ConsumeRecordAdapter extends BaseRecyclerAdapter {
         View lin1;
         @BindView(R.id.consume_record_item_line2)
         View lin2;
+        @BindView(R.id.consume_record_item_line3)
+        View lin3;
 
 
         public ConsumeHolder(View itemView) {
