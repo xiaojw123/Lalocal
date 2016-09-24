@@ -1,0 +1,13 @@
+/build
+/.idea
+.gradle
+*.iml
+/local.properties
+.DS_Store
+/captures
+/wkvideoplayer/build
+/shinebuttonlib/build
+/library/build
+/easeui/build
+/pingpp/build
+/projectFilesBackup

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_my_favorite_item_height"
+        android:paddingBottom="@dimen/home_me_my_favorite_item_top"
+        android:paddingLeft="@dimen/home_me_my_favorite_item_left"
+        android:paddingRight="@dimen/home_me_my_favorite_item_left"
+        android:paddingTop="@dimen/home_me_my_favorite_item_top"
+        android:background="@color/white"
+        >
+
+
+        <ImageView
+            android:id="@+id/my_favorite_item_img"
+            android:layout_width="@dimen/my_favorite_item_img_width"
+            android:layout_height="@dimen/my_favorite_item_img_width"
+            android:scaleType="centerCrop" />
+        <!--android:src="@drawable/home_me_personheadnormal"-->
+
+        <TextView
+            android:id="@+id/my_favorite_item_type"
+            android:layout_width="@dimen/my_favorite_item_type_width"
+            android:layout_height="@dimen/my_favorite_item_type_height"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_10_sp" />
+
+        <TextView
+            android:id="@+id/my_favorite_item_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/my_favorite_item_title_left"
+            android:layout_marginTop="@dimen/my_favorite_item_title_top"
+            android:layout_toRightOf="@+id/my_favorite_item_img"
+            android:ellipsize="end"
+            android:lines="2"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/text_size_15_sp" />
+
+        <!--商品类型-->
+        <TextView
+            android:id="@+id/my_favorite_item_goods_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/my_favorite_item_img"
+            android:layout_alignLeft="@+id/my_favorite_item_title"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            android:paddingLeft="@dimen/my_favorite_item_goods_price_left"
+            android:textColor="@color/color_ffaa2a"
+            android:textSize="@dimen/text_size_16_sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/my_favorite_item_authoravatar"
+            android:layout_width="@dimen/my_favorite_item_authoravatar_width"
+            android:layout_height="@dimen/my_favorite_item_authoravatar_height"
+            android:layout_alignBottom="@+id/my_favorite_item_article_author"
+            android:layout_alignLeft="@+id/my_favorite_item_title" />
+
+        <!--文章类型-->
+        <TextView
+            android:id="@+id/my_favorite_item_article_author"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/my_favorite_item_goods_price_hegiht"
+            android:layout_alignBottom="@+id/my_favorite_item_img"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            android:layout_marginLeft="@dimen/dimen_size_6_dp"
+            android:layout_toRightOf="@+id/my_favorite_item_authoravatar"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/my_favorite_item_goods_price_left"
+            android:singleLine="true"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_14_sp" />
+
+        <!--资讯-->
+        <TextView
+            android:id="@+id/my_favorite_item_information_comment_num"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/my_favorite_item_information_comment_height"
+            android:layout_alignBottom="@+id/my_favorite_item_img"
+            android:layout_alignLeft="@+id/my_favorite_item_title"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            android:drawableLeft="@drawable/comment_icon"
+            android:drawablePadding="@dimen/my_favorite_item_information_comment_drawable_padding"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:paddingLeft="@dimen/my_favorite_item_goods_price_left"
+            android:singleLine="true"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp"
+            android:visibility="gone" />
+
+        <!--路线-->
+        <TextView
+            android:id="@+id/my_favorite_item_route_collect_num"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/my_favorite_item_information_comment_height"
+            android:layout_alignBottom="@+id/my_favorite_item_img"
+            android:layout_alignStart="@+id/my_favorite_item_title"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            android:drawablePadding="@dimen/my_favorite_item_information_comment_drawable_padding"
+            android:drawableStart="@drawable/collect_icon"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:paddingStart="@dimen/my_favorite_item_goods_price_left"
+            android:singleLine="true"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        style="@style/CommonDeLineTheme"
+        android:layout_gravity="bottom" />
+</FrameLayout>

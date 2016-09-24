@@ -1,0 +1,239 @@
+<resources>
+    <string name="app_name">乐可旅行</string>
+    <string name="login">登录</string>
+    <string name="write_email">填写邮箱</string>
+    <string name="write_psw">填写密码</string>
+    <string name="write_nickname">填写昵称</string>
+    <string name="input_email">输入邮箱</string>
+    <string name="input_psw">输入密码</string>
+    <string name="input_verification_code">输入验证码</string>
+    <string name="input_latest_psw">输入新密码</string>
+    <string name="register_describe">点击注册即表示您同意</string>
+    <string name="user_protocol">用户协议</string>
+    <string name="recommend">推荐</string>
+    <string name="me">我</string>
+    <string name="destination">目的地</string>
+    <string name="please_login">请登录</string>
+    <string name="verified">已验证</string>
+    <string name="no_verified">未验证</string>
+    <string name="my_favorite">我的喜欢</string>
+    <string name="my_order">我的订单</string>
+    <string name="coupons">优惠券</string>
+    <string name="forget_psw">忘记密码</string>
+    <string name="other_login_way">其他登录方式</string>
+    <string name="weixin">微信</string>
+    <string name="qq">QQ</string>
+    <string name="weibo">微博</string>
+    <string name="sure">确认</string>
+    <string name="email_no_right">邮箱输入格式有误</string>
+    <string name="psw_no_right">密码必须6-20位</string>
+    <string name="nickname_no_right">昵称不正确</string>
+    <string name="nickname_input_error">昵称输入有误</string>
+    <string name="message_not_empty">信息不能为空</string>
+    <string name="register_success_prompt">我们已发送一份邮件到邮箱，请前往验证，我们致力于更好地为你服务</string>
+    <string name="veritied_code_no_empty">验证码不能为空</string>
+    <string name="psw_no_empty">密码不能为空</string>
+    <string name="email_no_empty">邮箱不能为空</string>
+    <string name="next">下一步</string>
+    <string name="sign_out">退出账号</string>
+    <string name="immediately_login">马上登录</string>
+    <string name="about_us">关于我们</string>
+    <string name="clear_cache">清理缓存</string>
+    <string name="modify_psw">修改密码</string>
+    <string name="company_name">LALOCAL</string>
+    <string name="slogan">像当地人那样旅行</string>
+    <string name="contact_us">联系我们</string>
+    <string name="company_email">feedback@mddtrip.cn</string>
+    <string name="company_phone">(+86)0571-86808267  (境内)</string>
+    <string name="company_phone_outer"> 400-017-8056  (境外)</string>
+    <string name="grade">去评分</string>
+    <string name="use_clauses">使用条款</string>
+    <string name="publisher">©2015杭州目的地科技有限公司</string>
+    <string name="reserved">Copyright（c）2015 HangZhou Destionation Technology Ltd. All rights reserved.</string>
+    <string name="edit_account">编辑账号</string>
+    <string name="sex">性别</string>
+    <string name="phone">电话</string>
+    <string name="email">邮箱</string>
+    <string name="select">选择</string>
+    <string name="photograph">拍照</string>
+    <string name="photoalbum">相册获取</string>
+    <string name="cancel">取消</string>
+    <string name="continue_liveplay">继续直播</string>
+    <string name="country_code">国家号</string>
+    <string name="phone_number">手机号</string>
+    <string name="send_again">重新发送</string>
+    <string name="change_email">更换邮箱</string>
+    <string name="bound_email">绑定邮箱</string>
+    <string name="send_email_vercode">发送验证</string>
+    <string name="email_or_psw_no_empty">邮箱或密码不能为空</string>
+    <string name="nickname_no_empty">昵称不能为空</string>
+    <!--<string name="psw_limit_dights">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNUVWXYZOPQRST</string>-->
+    <string name="email_or_psw_no_right">邮箱地址或密码输入不正确,请重试</string>
+    <string name="email_no_change">您的邮箱并未发生改动，无需重复认证</string>
+
+
+    <!-- XListView -->
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">松开刷新数据</string>
+    <string name="xlistview_header_hint_loading">正在加载...</string>
+    <string name="xlistview_header_last_time">上次更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+    <string name="article">文章</string>
+    <string name="goods">商品</string>
+    <string name="route">路线</string>
+    <string name="special">专题</string>
+    <string name="information">资讯</string>
+    <string name="no_oder">没有订单</string>
+    <string name="convert">我有优惠码</string>
+    <string name="coupon_convert_rule">所有特价商品不可使用旅行基金</string>
+    <string name="convert_coupon">兑换</string>
+    <string name="input_favorable_code">请输入优惠码</string>
+    <string name="order_number">订单编号</string>
+    <string name="toal">合计:</string>
+    <string name="payment">付款</string>
+    <string name="order_detail">订单详情</string>
+    <string name="service">客服</string>
+    <string name="travel_information">出行信息</string>
+    <string name="packages_choose">套餐选择</string>
+    <string name="travel_time">出行时间</string>
+    <string name="travel_person">出行人</string>
+    <string name="pay_money">支付金额</string>
+    <string name="order_info">订单信息</string>
+    <string name="order_time">下单时间</string>
+    <string name="pay_time">支付时间</string>
+    <string name="pay_channel">支付渠道</string>
+    <string name="evaluate_time">评价时间</string>
+    <string name="mobile">手机</string>
+    <string name="unlogin_warn">你还没有登录，即使是我们的工程师也不能算出你有多少优惠券</string>
+    <string name="search">搜索</string>
+    <string name="input_key_word">请输入关键字</string>
+    <string name="hot">热门</string>
+    <string name="strategy">攻略</string>
+    <string name="packagetour">精品游</string>
+    <string name="freewarker">自由行</string>
+    <string name="lacoalplay">当地玩乐</string>
+    <string name="route_overview">行程概览</string>
+    <string name="buy">购买</string>
+    <string name="one_sale">可单买</string>
+    <!--lalocal servcie chat-->
+    <string name="text_ack_msg">已读</string>
+    <string name="text_delivered_msg">送达</string>
+    <string name="save">保存</string>
+    <string name="button_send">发送</string>
+    <string name="attach_picture">图片</string>
+    <string name="attach_take_pic">拍照</string>
+    <string name="send_fail">发送消息失败,</string>
+    <string name="resend">重发</string>
+    <string name="confirm_resend">确认重发该信息？</string>
+    <string name="connect_failuer_toast">请检查网络或稍候重试</string>
+    <string name="ok">确定</string>
+    <string name="prompt">提示</string>
+    <string name="location_recv">[%1$s的位置]</string>
+    <string name="location_prefix">[我的位置]</string>
+    <string name="picture">[图片]</string>
+    <string name="video">[视频]</string>
+    <string name="file">[文件]</string>
+    <string name="voice_call">[语音通话]</string>
+    <string name="setting">设置</string>
+    <string name="register">注册</string>
+    <string name="Download_the_pictures">下载图片: 0%</string>
+    <string name="Download_the_pictures_new">下载图片:</string>
+    <string name="Failed_to_download_file">下载文件失败:</string>
+
+    <string name="adapter_no_content">没有您要的搜索结果，请更换搜索关键字</string>
+    <string name="pay">支付</string>
+    <string name="pay_amount">付款</string>
+    <string name="pay_manner">支付方式</string>
+    <string name="alipay">支付宝</string>
+    <string name="xincheng_instalments">信诚分期付</string>
+    <string name="showdetail">明细</string>
+    <string name="go_to_pay">去支付</string>
+    <string name="liveplay">直播</string>
+    <string name="pull_to_refresh_pull_label" translatable="false">向下拉动可以刷新</string>
+    <string name="pull_to_refresh_release_label" translatable="false">松开可以刷新</string>
+    <string name="pull_to_refresh_refreshing_label" translatable="false">加载中...</string>
+    <!--im-->
+    <string name="empty"></string>
+
+
+    <string name="clear_empty">清空</string>
+    <string name="iknow">知道了</string>
+    <string name="send">发送</string>
+    <string name="unknow_size">未知大小</string>
+
+
+    <string name="copyright">Copyright ©1997-2016 网易公司版权所有</string>
+    <string name="net_broken">当前网络不可用</string>
+
+    <!-- 登录/注册 -->
+
+    <string name="login_failed">帐号或密码错误</string>
+
+    <string name="recording_init_failed">初始化录音失败</string>
+    <string name="recording_max_time">录音达到最大时间，是否发送？</string>
+
+    <string name="repeat_download_message">重新下载?</string>
+
+    <string name="unsupport_title">无法显示该内容</string>
+    <string name="unsupport_desc">客户端版本不支持该内容</string>
+
+    <string name="input_edittext_hint">请输入内容（弹幕限时免费）</string>
+    <!--entertainement-->
+    <string name="finish_confirm">确定结束直播？</string>
+    <string name="send_gift">送了</string>
+    <string name="confirm">结束直播</string>
+    <string name="no_gift">当前还没收到礼物</string>
+    <string name="live_finish">直播结束</string>
+    <string name="live_over_expression">表现很棒 ！ ！</string>
+    <string name="live_audience_count">观众人数</string>
+    <string name="live_time_count">直播时间</string>
+    <string name="live_over_money">获得游票</string>
+    <string name="live_back">返回首页</string>
+    <string name="live_over_share">与好友分享成功的喜悦</string>
+    <string name="live_master_attention">关注</string>
+    <string name="live_master_fans">粉丝</string>
+    <string name="live_master_contribute">乐钻贡献</string>
+    <string name="live_master_home">主页</string>
+    <string name="pay_complete">支付完成</string>
+    <string name="pay_success">支付成功</string>
+    <string name="commodity_information">商品信息</string>
+    <string name="contacts_information">联系人信息</string>
+    <string name="name">姓名</string>
+    <string name="view_order">查看订单</string>
+    <string name="contacts">联系人</string>
+    <string name="supplementary_information">补充信息</string>
+    <string name="shuttle_location">接送地点</string>
+    <string name="shuttle_time">接送时间</string>
+    <string name="language_of_guide">导游语言</string>
+    <string name="pay_immediately">立即支付</string>
+    <string name="evaluate_immediately">立即评价</string>
+    <string name="evaluate">评价</string>
+    <string name="shuttle_setup">接送设定</string>
+    <string name="remark">备注</string>
+    <string name="language">语言</string>
+    <string name="no_content">没有任何内容</string>
+    <string name="my_wallet">我的钱包</string>
+    <string name="my_diamond">我的乐钻</string>
+    <string name="my_travelticket">我的游票</string>
+    <string name="my_coupon">我的优惠券</string>
+    <string name="current">当前</string>
+    <string name="my_diamond_no_recharge">你还没有消费充值过呢</string>
+    <string name="recharge">充值</string>
+    <string name="consume_doubt">对消费有疑问？</string>
+    <string name="no_travel_ticket">没有游票</string>
+    <string name="recharge_diamond">兑换乐钻</string>
+    <string name="withdraw_cash">提现</string>
+    <string name="ticket_exchage_diamond">游票兑换乐钻</string>
+    <string name="recharge_doubt_customer">充值问题联系客服</string>
+    <string name="exchange">兑换</string>
+    <string name="no_live">没有搜索到相关直播</string>
+    <string name="start_live">开始直播</string>
+
+    <!--直播-->
+    <string name="live_login_hint">您还没有登录,请登录!</string>
+    <string name="live_login_imm">马上登录</string>
+    <string name="live_canncel">取消</string>
+    <string name="lvie_sure">确定</string>
+    <string name="more">More</string>
+</resources>

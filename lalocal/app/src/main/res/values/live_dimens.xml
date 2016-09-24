@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="live_padding_2dp">2dp</dimen>
+    <dimen name="live_padding_5dp">5dp</dimen>
+    <dimen name="live_padding_6dp">6dp</dimen>
+    <dimen name="live_padding_8dp">8dp</dimen>
+    <dimen name="live_padding_10dp">10dp</dimen>
+    <dimen name="live_padding_12dp">12dp</dimen>
+    <dimen name="live_padding_15dp">15dp</dimen>
+    <dimen name="live_padding_20dp">20dp</dimen>
+    <dimen name="live_padding_21dp">21dp</dimen>
+    <dimen name="live_padding_24dp">24dp</dimen>
+    <dimen name="live_padding_30dp">30dp</dimen>
+    <dimen name="live_padding_48dp">48dp</dimen>
+    <dimen name="live_over_padding_top">156dp</dimen>
+    <dimen name="live_over_padding_left">110dp</dimen>
+
+
+    <dimen name="live_height_30dp">30dp</dimen>
+    <dimen name="live_height_35dp">35dp</dimen>
+    <dimen name="live_height_36dp">36dp</dimen>
+    <dimen name="live_height_40dp">40dp</dimen>
+    <dimen name="live_height_44dp">44dp</dimen>
+    <dimen name="live_height_50dp">50dp</dimen>
+    <dimen name="live_height_52dp">52dp</dimen>
+    <dimen name="live_height_60dp">60dp</dimen>
+    <dimen name="live_height_66dp">66dp</dimen>
+    <dimen name="live_height_80dp">80dp</dimen>
+    <dimen name="live_height_81dp">81dp</dimen>
+    <dimen name="live_height_70dp">70dp</dimen>
+    <dimen name="live_height_90dp">90dp</dimen>
+    <dimen name="live_height_100dp">100dp</dimen>
+    <dimen name="live_height_119dp">119dp</dimen>
+    <dimen name="live_height_125dp">125dp</dimen>
+    <dimen name="live_height_150dp">150dp</dimen>
+    <dimen name="live_height_220dp">220dp</dimen>
+    <dimen name="live_height_250dp">250dp</dimen>
+    <dimen name="live_height_320dp">320dp</dimen>
+    <dimen name="live_height_345dp">345dp</dimen>
+    <dimen name="live_height_350dp">350dp</dimen>
+    <dimen name="live_height_355dp">355dp</dimen>
+    <dimen name="live_height_442dp">445dp</dimen>
+
+
+
+    <dimen name="live_radius_3dp">3dp</dimen>
+
+    <dimen name="live_text_15sp">15sp</dimen>
+    <dimen name="live_text_16sp">16sp</dimen>
+    <dimen name="live_text_13sp">13sp</dimen>
+    <dimen name="live_text_12sp">12sp</dimen>
+    <dimen name="live_text_10sp">10sp</dimen>
+    <dimen name="live_text_24sp">24sp</dimen>
+    <dimen name="erros_height">168dp</dimen>
+    <dimen name="erros_width">283dp</dimen>
+    <dimen name="live_search_edt_width">300dp</dimen>
+    <dimen name="live_search_edt_height">30dp</dimen>
+    <dimen name="live_search_adapter_item_height">190dp</dimen>
+    <dimen name="live_search_item_photo_width">150dp</dimen>
+    <dimen name="live_search_onlinUser_num_top">22dp</dimen>
+    <dimen name="live_search_item_useravatar_width">30dp</dimen>
+    <dimen name="live_search_item_usename_left">6dp</dimen>
+    <dimen name="live_make_icon_width">22dp</dimen>
+    <dimen name="audient_gift_plane_bg_height">40dp</dimen>
+    <dimen name="audience_anchor_headportrait_width">40dp</dimen>
+</resources>
