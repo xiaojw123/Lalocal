@@ -33,6 +33,7 @@ import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
+import com.lalocal.lalocal.model.ArticlesResp;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
@@ -57,6 +58,7 @@ import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
+import com.lalocal.lalocal.model.RecommendListDataResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
@@ -482,6 +484,15 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    // 首页推荐列表，包括：专题、商品、直播列表
+    public void indexRecommentList() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_INDEX_RECOMMEND_LIST);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getIndexRecommendListUrl(), response, response);
+
+        requestQueue.add(request);
+    }
 
     //发送验证码
     public void sendVerificationCode(String email, TextView textView) {
@@ -546,6 +557,15 @@ public class ContentLoader {
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
+    }
+
+    public void articleList(int pageSize, int pageNumber) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ARTICLE_LIST);
+        }
+        String getParameter = "pageSize=" + pageSize + "&pageNumber=" + pageNumber;
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleListUrl() + getParameter, response, response);
+        requestQueue.add(contentRequest);
     }
 
     //取消收藏
@@ -1257,6 +1277,12 @@ public class ContentLoader {
                     case RequestCode.LIVE_GIFT_RANKS:
                         responseGiftRanks(json);
                         break;
+                    case RequestCode.GET_INDEX_RECOMMEND_LIST:
+                        responseIndexRecommendList(json);
+                        break;
+                    case RequestCode.GET_ARTICLE_LIST:
+                        responseArticleList(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1285,6 +1311,15 @@ public class ContentLoader {
         private void responseChargeGold(JSONObject jsonObj) {
             String result = jsonObj.optString(ResultParams.REULST);
             callBack.onChargeGold(result);
+        }
+
+        // 首页推荐文章列表
+        private void responseArticleList(String json) {
+            AppLog.i("aaa", "response article lsit " + json);
+            ArticlesResp articlesResp = new Gson().fromJson(json, ArticlesResp.class);
+            if (articlesResp.getReturnCode() == 0) {
+                callBack.onArticleListResult(articlesResp);
+            }
         }
 
         private void responseGetRechargeProduct(JSONObject jsonObj) {
@@ -1523,6 +1558,16 @@ public class ContentLoader {
             Gson gson = new Gson();
             OrderDetail orderItem = gson.fromJson(resultJsObj.toString(), OrderDetail.class);
             callBack.onGetOrderDetail(orderItem);
+        }
+
+
+        // 首页推荐列表，包括：直播、专题、商品
+        private void responseIndexRecommendList(String json) {
+            AppLog.i("hehe", "recommendList is " + json);
+            RecommendListDataResp recommendListDataResp = new Gson().fromJson(json, RecommendListDataResp.class);
+            if (recommendListDataResp != null) {
+                callBack.onRecommendList(recommendListDataResp);
+            }
         }
 
         private void responseGetMyOrderItems(JSONObject jsonObj) {
@@ -2201,6 +2246,8 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
+        int GET_INDEX_RECOMMEND_LIST=300;
+        int GET_ARTICLE_LIST=301;
 
     }
 

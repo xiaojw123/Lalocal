@@ -9,6 +9,11 @@ import android.content.pm.PackageManager;
  */
 public class AppConfig {
 
+    //用户协议-h5
+    public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
+    //预定商品-h5
+    public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+
     //    private static String baseUrl = "http://api.lalocal.cn/api/";
     // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
@@ -21,6 +26,16 @@ public class AppConfig {
     public static String getSystemConfigUrl() {
 
         return baseUrl + "system/configs";
+    }
+
+    // 文章列表
+    public static String getArticleListUrl() {
+        return baseUrl + "articles?";
+    }
+
+    // 首页推荐接口 包含：直播列表、专题列表、商品列表
+    public static String getIndexRecommendListUrl() {
+        return baseUrl + "/index";
     }
 
     public static void setUserRuleUrl(String userRuleUrl) {

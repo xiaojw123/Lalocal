@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/article_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/dimen_size_25_dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_recommend_title_bar_height"
+            android:layout_marginBottom="@dimen/home_recommend_title_bar_margin_vertical"
+            android:layout_marginTop="@dimen/home_recommend_title_bar_margin_vertical">
+
+            <ImageView
+                android:id="@+id/img_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/title_rectangle" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/home_recommend_title_margin"
+                android:layout_toRightOf="@id/img_bar"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="旅行笔记"
+                    android:textColor="@color/color_1a"
+                    android:textSize="@dimen/home_recommend_title_text_size" />
+
+                <TextView
+                    android:id="@+id/tv_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="Travel Diary"
+                    android:textColor="@color/color_b3"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="137.5dp"
+                android:layout_height="2.5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/home_recommend_more_icon_margin"
+                android:src="@drawable/not_any_more" />
+        </RelativeLayout>
+
+        <com.lalocal.lalocal.view.WrapContentListView
+            android:id="@+id/lv_article"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</FrameLayout>

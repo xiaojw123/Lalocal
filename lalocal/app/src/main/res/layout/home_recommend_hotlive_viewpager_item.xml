@@ -1,0 +1,77 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/layout_pic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.lalocal.lalocal.view.ScaleImageView
+                android:id="@+id/img_live_pic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/androidloading" />
+
+            <ImageView
+                android:layout_width="@dimen/home_recommend_play_icon_size"
+                android:layout_height="@dimen/home_recommend_play_icon_size"
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/home_living_play_btn" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_live_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/home_hotlive_content_margin_horizontal"
+            android:layout_marginTop="@dimen/home_hotlive_content_margin_vertical"
+            android:text="给你们看看什么是浪"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <RelativeLayout
+            android:id="@+id/layout_people"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/home_hotlive_content_margin_vertical"
+            android:layout_marginLeft="@dimen/home_hotlive_content_margin_horizontal"
+            android:layout_marginRight="@dimen/home_hotlive_content_margin_horizontal"
+            android:layout_marginTop="@dimen/home_hotlive_content_margin_vertical">
+
+            <ImageView
+                android:id="@+id/icon_people"
+                android:layout_width="@dimen/home_recommend_hotlive_user_icon_size"
+                android:layout_height="@dimen/home_recommend_hotlive_user_icon_size"
+                android:layout_centerVertical="true"
+                android:src="@drawable/many_people_light" />
+
+            <TextView
+                android:id="@+id/tv_live_people"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="3dp"
+                android:layout_toRightOf="@id/icon_people"
+                android:text="1,089" />
+
+            <com.lalocal.lalocal.live.im.ui.widget.CircleImageView
+                android:id="@+id/img_live_avatar"
+                android:layout_width="@dimen/hot_recommend_hotlive_circle_imgview_size"
+                android:layout_height="@dimen/hot_recommend_hotlive_circle_imgview_size"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/androidloading" />
+        </RelativeLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>
