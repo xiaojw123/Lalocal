@@ -102,6 +102,13 @@
         android:overScrollMode="never"
         android:scrollbars="none" />
 
+   <!-- <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/xrecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>-->
+
 
     <!--<RelativeLayout-->
     <!--android:layout_width="match_parent"-->

@@ -118,6 +118,14 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         liveSeachFl.setOnClickListener(this);
+
+    /*    XRecyclerView xRecyclerView= (XRecyclerView) view.findViewById(R.id.xrecyclerview);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        xRecyclerView.setLayoutManager(layoutManager);
+       */
+
+
         return view;
     }
 

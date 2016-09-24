@@ -1057,7 +1057,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onResult(boolean success, List<ChatRoomMember> result) {
                 if (success) {
                         addMembers(result);
-
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
@@ -1173,7 +1172,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-
                         if(mIsRefreshing){
                             clearCache();
                             fetchData();
@@ -1186,12 +1184,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     }
                     @Override
                     public void onFailed(int code) {
-
                     }
 
                     @Override
                     public void onException(Throwable exception) {
-
                     }
                 });
             }
