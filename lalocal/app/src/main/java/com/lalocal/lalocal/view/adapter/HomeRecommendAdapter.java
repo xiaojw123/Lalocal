@@ -325,9 +325,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 sliderLayout.setVisibility(View.GONE);
                 return;
             }
-
             adResultList = ads;
-
             // 重新关联控件
             sliderLayout = (DisallowParentTouchSliderLayout) itemView.findViewById(R.id.ad_slider);
             // 传入父容器
