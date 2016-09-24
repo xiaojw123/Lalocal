@@ -92,8 +92,8 @@
     <dimen name="dot_size">6dp</dimen>
     <dimen name="home_recommend_commodity_gridview_spacing">15dp</dimen>
     <dimen name="home_recommend_commodity_gridview_item_price_margin_bottom">10dp</dimen>
-    <dimen name="home_recommend_hot_live_view_pager_height">330dp</dimen>
-    <dimen name="home_recommend_special_viewpager_item_content_margin">20dp</dimen>
+    <dimen name="home_recommend_hot_live_view_pager_height">340dp</dimen>
+    <dimen name="home_recommend_theme_viewpager_item_content_margin">20dp</dimen>
     <dimen name="home_recommend_article_img_width">114dp</dimen>
     <dimen name="home_recommend_article_img_height">160dp</dimen>
     <dimen name="ptr_header_height">160dp</dimen>

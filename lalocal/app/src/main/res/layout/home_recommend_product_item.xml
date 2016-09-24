@@ -3,6 +3,7 @@
     android:id="@+id/commodity_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_fa"
     android:paddingBottom="@dimen/dimen_size_25_dp">
 
     <LinearLayout

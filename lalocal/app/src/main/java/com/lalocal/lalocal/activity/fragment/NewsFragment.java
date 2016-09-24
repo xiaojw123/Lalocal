@@ -95,7 +95,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-        contentService.liveRecommendList();
+      //  contentService.liveRecommendList();
 
       //  contentService.liveRecommendList();
 

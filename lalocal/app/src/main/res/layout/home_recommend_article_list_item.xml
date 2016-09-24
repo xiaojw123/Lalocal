@@ -6,6 +6,7 @@
     android:paddingRight="@dimen/dimen_size_15_dp"
     android:paddingTop="@dimen/dimen_size_15_dp"
     android:paddingBottom="@dimen/dimen_size_25_dp"
+    android:background="@color/white"
     android:orientation="horizontal">
 
     <ImageView
