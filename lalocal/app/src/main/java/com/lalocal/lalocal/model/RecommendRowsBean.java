@@ -11,6 +11,34 @@ public class RecommendRowsBean {
     private String photo;
     private Object author;
     private String description;
+    private String subTitle;
+
+    public int getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(int readNum) {
+        this.readNum = readNum;
+    }
+
+    public int getPraiseNum() {
+        return praiseNum;
+    }
+
+    public void setPraiseNum(int praiseNum) {
+        this.praiseNum = praiseNum;
+    }
+
+    private int readNum;
+    private int praiseNum;
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
 
     public int getId() {
         return id;

@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -14,6 +15,7 @@ import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendFragment;
+import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
 import com.lalocal.lalocal.util.AppLog;
 
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
@@ -22,6 +24,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     ViewGroup lastSelectedTab;
     FragmentManager fm;
     Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
+
+    private int selected = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +65,11 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         setSelectedTab(container);
         switch (container.getId()) {
             case R.id.home_tab_recommend:
+                selected = FRAGMENT_RECOMMEND;
                 AppLog.print("recommend__"+recommendFragment);
                 if (recommendFragment == null) {
                     AppLog.print("___add");
-                    recommendFragment = new RecommendFragment();
+                    recommendFragment = new RecommendNewFragment();
                     ft.add(R.id.home_fragment_container, recommendFragment);
                 } else {
                     AppLog.print("___show");
@@ -72,6 +77,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_destination:
+                selected = FRAGMENT_DESTINATION;
                 if (distinationFragment == null) {
                     distinationFragment = new DestinationFragment();
                     ft.add(R.id.home_fragment_container, distinationFragment);
@@ -80,6 +86,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_liveplay:
+                selected = FRAGMENT_NEWS;
                 if (newsFragment == null) {
                     newsFragment = new NewsFragment();
                     ft.add(R.id.home_fragment_container, newsFragment);
@@ -88,6 +95,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
                 break;
             case R.id.home_tab_me:
+                selected = FRAGMENT_ME;
                 if (meFragment == null) {
                     meFragment = new MeFragment();
                     ft.add(R.id.home_fragment_container, meFragment);
@@ -138,5 +146,30 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     public void onShowRecommendFragment() {
         AppLog.print("Activity  onShowRecommendFragment");
         showFragment(home_recommend_tab);
+    }
+
+    public static final int FRAGMENT_RECOMMEND = 0;
+    public static final int FRAGMENT_DESTINATION = 1;
+    public static final int FRAGMENT_NEWS = 2;
+    public static final int FRAGMENT_ME = 3;
+
+    public void goToFragment(int position) {
+        if (selected != position) {
+            switch (position) {
+                case FRAGMENT_RECOMMEND:
+                    showFragment(home_recommend_tab);
+                    break;
+                case FRAGMENT_DESTINATION:
+                    showFragment(home_destination_tab);
+                    break;
+                case FRAGMENT_NEWS:
+                    Log.d("hahaha", "showFragment");
+                    showFragment(home_news_tab);
+                    break;
+                case FRAGMENT_ME:
+                    showFragment(home_me_tab);
+                    break;
+            }
+        }
     }
 }

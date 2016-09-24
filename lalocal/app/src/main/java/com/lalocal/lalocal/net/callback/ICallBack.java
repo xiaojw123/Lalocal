@@ -8,6 +8,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
+import com.lalocal.lalocal.model.ArticlesResp;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
@@ -31,6 +32,7 @@ import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.ArticleItem;
+import com.lalocal.lalocal.model.RecommendListDataResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.SearchItem;
@@ -276,4 +278,10 @@ public abstract class ICallBack {
     //在线人数
     public void onOnLinesCount(String json) {
     }
+
+    // 首页推荐列表，包含：直播列表、专题列表、商品列表
+    public void onRecommendList(RecommendListDataResp recommendListDataResp) {}
+
+    // 文章列表
+    public void onArticleListResult(ArticlesResp articlesResp) {}
 }

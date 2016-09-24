@@ -295,6 +295,8 @@
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false"
+
+
             />
 
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity"
@@ -315,6 +317,7 @@
         <activity android:name=".activity.ChargePayActivity" />
         <activity android:name=".activity.LiveSearchActivity" />
         <activity android:name=".activity.MyCouponActivity"></activity>
+        <activity android:name=".activity.ThemeActivity" />
 
     </application>
 
