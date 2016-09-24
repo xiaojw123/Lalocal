@@ -295,8 +295,8 @@
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false"
-
             />
+
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity"
             >
 

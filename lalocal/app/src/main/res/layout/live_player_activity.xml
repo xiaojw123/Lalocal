@@ -8,7 +8,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:gravity="bottom"
         >
 
         <RelativeLayout
@@ -63,6 +63,7 @@
 
             <include layout="@layout/live_over_layout"></include>
         </RelativeLayout>
+
     </RelativeLayout>
 
     <RelativeLayout

@@ -1188,11 +1188,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
                 int childCount = palyerLayout.getChildCount();
 
-
                 if(childCount>0){
                     palyerLayout.removeAllViews();
                 }
                 palyerLayout.addView(surfaceV);
+
 
                 surfaceV.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                     @Override
@@ -1207,7 +1207,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         }
                     }
                 });
-
 
                 surfaceV.setZOrderOnTop(true);
                 surfaceV.setZOrderMediaOverlay(true);
@@ -1280,6 +1279,5 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         AppLog.i("TAG","用户离开直播间回调:"+stats.toString());
 
     }
-
 
 }

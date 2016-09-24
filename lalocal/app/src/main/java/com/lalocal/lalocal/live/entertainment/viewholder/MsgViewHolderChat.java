@@ -112,42 +112,42 @@ public class MsgViewHolderChat extends TViewHolder {
             case "0":
                 itemContent = message.getContent();
                 textColor="#ffffff";
-              //  bodyText.setTextColor(Color.WHITE);
+                //  bodyText.setTextColor(Color.WHITE);
                 break;
             case "2"://点赞
                 itemContent="给主播点了个赞";
                 textColor="#97d3e9";
-              //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
+                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
                /* itenImage.setVisibility(View.VISIBLE);
                 itenImage.setImageResource(R.drawable.);*/
                 break;
             case "6"://禁言
                 itemContent="禁言了"+disableSendMsgNickName;
                 textColor="#97d3e9";
-              //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
+                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "7":
                 itemContent="解除了"+disableSendMsgNickName+"的禁言";
                 textColor="#97d3e9";
-              //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
+                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "8":
                 itemContent="将"+adminSendMsgNickName+"授权为管理员";
                 textColor="#97d3e9";
-              //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
+                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "9":
 
                 itemContent="取消了"+adminSendMsgNickName+"的管理员权限";
                 textColor="#97d3e9";
-               // setNameTextView("主播",);
-             //   bodyText.setTextColor(Color.parseColor("#97d3e9"));
+                // setNameTextView("主播",);
+                //   bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "10":
                 GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
                 itemContent="给主播送了"+giftCount+"个"+giftName;
                 textColor="#97d3e9";
-             //   bodyText.setTextColor(Color.parseColor("#97d3e9"));
+                //   bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 itenImage.setVisibility(View.VISIBLE);
                 DrawableUtils.displayImg(context,itenImage,messageToGiftBean.getGiftImage());
                 break;
@@ -156,8 +156,8 @@ public class MsgViewHolderChat extends TViewHolder {
 
         setNameTextView(creatorAccount,itemContent,textColor);
 
-     //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
-     //   bodyText.setMovementMethod(LinkMovementMethod.getInstance());
+        //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
+        //   bodyText.setMovementMethod(LinkMovementMethod.getInstance());
     }
 
     private SpannableStringBuilder textviewSetContent(String text,String textColor) {
@@ -199,21 +199,21 @@ public class MsgViewHolderChat extends TViewHolder {
             }*/
 
 
-        //    nameText.setText(textviewSetContent(contentItem));
+            //    nameText.setText(textviewSetContent(contentItem));
             if(message.getRemoteExtension() != null) {
                 String fromAccount = message.getFromAccount();
 
-             //   AppLog.i("TAG","fromAccount"+fromAccount+"   creatorAccount:"+creatorAccount);
+                //   AppLog.i("TAG","fromAccount"+fromAccount+"   creatorAccount:"+creatorAccount);
                 String account = DemoCache.getUserInfo().getAccount();
                 if(fromAccount!=null&&fromAccount.equals(account)){
                     contentItem="我  :  "+itemContent;
-                 //   nameText.setText("我");
+                    //   nameText.setText("我");
                 }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
-                    contentItem="主播  :  "+itemContent;
-                  //  nameText.setText("主播");
+                    contentItem="我  :  "+itemContent;
+                    //  nameText.setText("主播");
                 } else{
                     contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
-                   // nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
+                    // nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
                 }
 
             }

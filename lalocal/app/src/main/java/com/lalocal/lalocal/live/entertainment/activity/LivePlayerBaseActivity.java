@@ -126,7 +126,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public static final String LIVE_USER_ID = "LIVE_USER_ID";
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
     public static final String CHANNELID = "CHANNELID";
+
     private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 3000;
+
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
@@ -353,7 +355,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     /****************************
      * 布局初始化
      **************************/
+
     private boolean mIsRefreshing=true;
+
     protected void findViews() {
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
         barrageView = (BarrageView) findViewById(R.id.barrageView_test);
@@ -370,6 +374,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg=(ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
+
         String userAvatar = UserHelper.getUserAvatar(this);
         AppLog.i("TAG","主播名字："+UserHelper.getUserName(this)+"主播头像:"+userAvatar);
 
@@ -395,6 +400,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         if (messageListPanel == null) {
             messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, LivePlayerBaseActivity.this);
         }
+
 
         touristList.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -439,7 +445,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 } else {
                     return false;
                 }*/
-
 
             }
         });
@@ -1051,10 +1056,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void onResult(boolean success, List<ChatRoomMember> result) {
                 if (success) {
-
-
                         addMembers(result);
-
 
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
@@ -1089,7 +1091,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             touristList.setAdapter(tourisAdapter);
             isFirstLoadding = false;
         } else {
+
             tourisAdapter.refresh(allItems);
+
         }
 
         tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
@@ -1169,6 +1173,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
+
                         if(mIsRefreshing){
                             clearCache();
                             fetchData();
@@ -1395,12 +1400,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onPause() {
         super.onPause();
+
         if (inputPanel != null) {
             inputPanel.hideInputMethod();
             inputPanel.collapse(false);
-
         }
-        //   isFirstClick = true;
+
     }
 
     @Override
@@ -1408,6 +1413,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         super.onResume();
         if (inputPanel != null) {
             inputPanel.hideInputMethod();
+
             inputPanel.collapse(false);
 
         }

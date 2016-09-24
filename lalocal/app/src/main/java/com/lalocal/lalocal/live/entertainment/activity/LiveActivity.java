@@ -155,7 +155,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private long startTime;
     private long endTime;
     private TextView overMoney;
+
     private MyCallBack myCallBack;
+
 
 
     private boolean isBroadcaster(int cRole) {
@@ -190,12 +192,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-
     private void startLive() {
 
         int cRole = Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
         doConfigEngine(cRole);
         if (isBroadcaster(cRole)) {
+
           //  主播播放器：1725    oldBottom:894
             final SurfaceView surfaceView = RtcEngine.CreateRendererView(getApplicationContext());
 
@@ -228,6 +230,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private void doConfigEngine(int cRole) {
 
         int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
+
         switch (CustomDialogStyle.LIVE_DEFINITION){
             case 1:
                 vProfile= IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
@@ -325,6 +328,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         contentLoader = new ContentLoader(this);
         myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
+
         viewById = findViewById(R.id.live_layout);
         uploadManager = new UploadManager();//七牛云api
         //获取屏幕高度
@@ -344,6 +348,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onResume() {
         super.onResume();
         viewById.addOnLayoutChangeListener(this);
+
 
         AppLog.i("TAG", "LiveActivity:onResume");
 
@@ -643,10 +648,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.onOnLinesCount(json);
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             AppLog.i("TAG", "获取在线人数" + onLineUser.getResult());
-
-
             if (onLineUser.getReturnCode() == 0&&onLineUser.getResult()!=0) {
                 onlineCountText.setText(String.format("%s人", String.valueOf(onLineUser.getResult())));
+
+
                 LiveMessage liveMessage = new LiveMessage();
                 liveMessage.setStyle("12");
                 liveMessage.setCreatorAccount(creatorAccount);
@@ -790,8 +795,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (timer != null) {
             timer.cancel();
         }
+
         contentLoader.cancelLiveRoom(channelId);
         contentLoader.setCallBack(myCallBack);
+
         LiveMessage liveMessage = new LiveMessage();
         liveMessage.setStyle("11");
         liveMessage.setCreatorAccount(creatorAccount);
