@@ -52,14 +52,14 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         ThemeViewHolder holder = (ThemeViewHolder) viewHolder;
 
         String name = bean.getName();
-        String description = bean.getDescription();
+        String subtitle = bean.getSubTitle();
         String photo = bean.getPhoto();
         String readNum = formatNum(bean.getReadNum());
         String praiseNum = formatNum(bean.getPraiseNum());
         final String rowId = String.valueOf(bean.getId());
 
         holder.tvThemeName.setText(name);
-        holder.tvThemeDescription.setText(description);
+        holder.tvThemeSubTitle.setText(subtitle);
         DrawableUtils.displayImg(mContext, holder.imgTheme, photo);
         holder.tvReadNum.setText(readNum);
         holder.tvPraiseNum.setText(praiseNum);
@@ -86,7 +86,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         LinearLayout layoutContainer;
         ImageView imgTheme;
         TextView tvThemeName;
-        TextView tvThemeDescription;
+        TextView tvThemeSubTitle;
         TextView tvReadNum;
         TextView tvPraiseNum;
 
@@ -96,7 +96,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             layoutContainer = (LinearLayout) view.findViewById(R.id.container);
             imgTheme = (ImageView) view.findViewById(R.id.img_theme);
             tvThemeName = (TextView) view.findViewById(R.id.tv_theme_name);
-            tvThemeDescription = (TextView) view.findViewById(R.id.tv_theme_description);
+            tvThemeSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
             tvReadNum = (TextView) view.findViewById(R.id.tv_read_num);
             tvPraiseNum = (TextView) view.findViewById(R.id.tv_praise_num);
         }

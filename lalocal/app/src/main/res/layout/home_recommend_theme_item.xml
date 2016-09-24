@@ -3,7 +3,7 @@
     android:id="@+id/theme_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/color_fa"
     android:paddingBottom="@dimen/dimen_size_25_dp">
 
     <LinearLayout
@@ -11,11 +11,12 @@
         android:layout_height="match_parent"
         android:clipChildren="false"
         android:layerType="software"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/home_recommend_title_bar_height"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/home_recommend_title_bar_margin_vertical"
             android:layout_marginTop="@dimen/home_recommend_title_bar_margin_vertical"
             android:orientation="horizontal">
@@ -24,6 +25,7 @@
                 android:id="@+id/img_bar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
                 android:src="@drawable/title_rectangle" />
 
             <LinearLayout
