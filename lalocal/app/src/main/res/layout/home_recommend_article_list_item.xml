@@ -89,6 +89,7 @@
                 android:id="@+id/tv_author_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="加载中"
                 android:textColor="@color/color_7babbd"/>
         </LinearLayout>
