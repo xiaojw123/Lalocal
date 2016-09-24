@@ -26,7 +26,7 @@ import butterknife.OnClick;
 import static com.lalocal.lalocal.R.id.exchage_btn;
 
 public class ExchangeActivity extends BaseActivity implements TextWatcher, CustomTitleView.onBackBtnClickListener {
-
+    private static String FORMART_EXCHARGE_PROMPT = "%1$d优惠券马上要兑换成%2$s乐钻啦";
     @BindView(R.id.exchage_score_num_tv)
     TextView exchageScoreNumTv;
     @BindView(R.id.exchage_gold_num_tv)
@@ -74,11 +74,11 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
                 if (!TextUtils.isEmpty(socreText)) {
                     long socre = Long.parseLong(socreText);
                     socre *= 100;
-                    CustomDialog dialog = new CustomDialog(this);
-                    dialog.setTitle("提示");
-                    dialog.setMessage("是否继续兑换");
-                    dialog.setCancelBtn("否", null);
                     final long finalSocre = socre;
+                    CustomDialog dialog = new CustomDialog(this);
+                    dialog.setTitle("兑换");
+                    dialog.setMessage(String.format(FORMART_EXCHARGE_PROMPT, socre, exchageGoldNumTv.getText().toString()));
+                    dialog.setCancelBtn("否", null);
                     dialog.setSurceBtn("是", new CustomDialog.CustomDialogListener() {
                         @Override
                         public void onDialogClickListener() {

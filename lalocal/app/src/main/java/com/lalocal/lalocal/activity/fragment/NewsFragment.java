@@ -119,6 +119,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         liveSeachFl.setOnClickListener(this);
+        //Todo:test
         return view;
     }
 

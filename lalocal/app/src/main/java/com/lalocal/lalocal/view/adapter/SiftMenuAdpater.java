@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.im.ui.widget.CircleImageView;
 import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -42,9 +43,8 @@ public class SiftMenuAdpater extends BaseRecyclerAdapter {
         contianer.setOrientation(LinearLayout.VERTICAL);
         contianer.setGravity(Gravity.CENTER_HORIZONTAL);
         contianer.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        ImageView menuImg = new ImageView(mContext);
+        CircleImageView menuImg = new CircleImageView(mContext);
         menuImg.setLayoutParams(new LinearLayout.LayoutParams((int) res.getDimension(R.dimen.sift_menu_img_width), (int) res.getDimension(R.dimen.sift_menu_img_width)));
-        menuImg.setScaleType(ImageView.ScaleType.FIT_XY);
         TextView name = new TextView(mContext);
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_size_12_sp));
         name.setTextColor(res.getColor(R.color.white));

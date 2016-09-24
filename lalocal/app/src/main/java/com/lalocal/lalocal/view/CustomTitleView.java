@@ -38,16 +38,20 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleView);
         String name = a.getString(R.styleable.CustomTitleView_title_name);
         boolean lineVisible = a.getBoolean(R.styleable.CustomTitleView_lineVisible, true);
+        boolean backVisible=a.getBoolean(R.styleable.CustomTitleView_backVisible,true);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_title_layout, this);
         ImageView backImg = (ImageView) findViewById(R.id.titleview_back_img);
         title_tv = (TextView) findViewById(R.id.titleview_title_tv);
         View line = findViewById(R.id.titleview_line);
+        backImg.setOnClickListener(this);
         if (!lineVisible) {
             line.setVisibility(GONE);
         }
+        if (!backVisible){
+            backImg.setVisibility(GONE);
+        }
         title_tv.setText(name);
-        backImg.setOnClickListener(this);
     }
 
     public void setFisishEanble(boolean isFinishEanble) {

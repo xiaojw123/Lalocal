@@ -1,10 +1,12 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +46,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     RecyclerView myCouponRlv;
     EditText couponInputEdt;
     View spaceView;
+    View headView;
 
     @BindView(R.id.my_coupon_ctv)
     CustomTitleView myCouponCtv;
@@ -82,21 +85,27 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_coupon_exchage_btn:
+                AppLog.print("exchange___click__");
                 if (window == null) {
-                    View popContentView = LayoutInflater.from(this).inflate(R.layout.pop_coupon_excharge, couponContainer, false);
+                    View popContentView = LayoutInflater.from(this).inflate(R.layout.pop_coupon_excharge, null);
                     couponInputEdt = (EditText) popContentView.findViewById(R.id.pop_coupon_edt);
                     spaceView = popContentView.findViewById(R.id.pop_blank_view);
+                    headView = popContentView.findViewById(R.id.pop_coupon_headerview);
                     Button exchargeBtn = (Button) popContentView.findViewById(R.id.pop_coupon_excharge_btn);
                     couponInputEdt.setOnClickListener(exhargeBtnClickListener);
+                    headView.setOnClickListener(exhargeBtnClickListener);
                     spaceView.setOnClickListener(exhargeBtnClickListener);
                     exchargeBtn.setOnClickListener(exhargeBtnClickListener);
                     window = new PopupWindow(popContentView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                     window.setSoftInputMode(PopupWindow.INPUT_METHOD_NEEDED);
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
                     window.setFocusable(true);
+                    window.setBackgroundDrawable(new PaintDrawable(android.R.color.transparent));
                 }
                 couponInputEdt.setText("");
-                window.showAsDropDown(myCouponCtv);
+                window.showAtLocation(couponContainer, Gravity.CENTER, 0, 0);
+//                window.showAsDropDown(myCouponCtv);
+//                window.showAsDropDown(couponContainer);
                 break;
             case R.id.my_coupon_use_btn:
                 String text = myCouponUseBtn.getText().toString();
@@ -134,9 +143,9 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                 if (!TextUtils.isEmpty(text)) {
                     mContentloader.exchargeCopon(text);
                 } else {
-                    CommonUtil.showPromptDialog(MyCouponActivity.this, "优惠码不能为空",null);
+                    CommonUtil.showPromptDialog(MyCouponActivity.this, "优惠码不能为空", null);
                 }
-            } else if (id == R.id.pop_blank_view) {
+            } else if (id == R.id.pop_blank_view || id == R.id.pop_coupon_headerview) {
                 AppLog.print("blankView__");
                 if (window != null && window.isShowing()) {
                     AppLog.print("window dimisss__");
@@ -149,6 +158,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
 
     @Override
     public void onBackClick() {
+        AppLog.print("___onBackClick___");
         setBackResult();
     }
 
@@ -210,10 +220,14 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        AppLog.print("onBackPressed_____");
         setBackResult();
     }
 
     public void setBackResult() {
+//        if (window!=null&&window.isShowing()){
+//            window.dismiss();
+//        }
         if (pageType == KeyParams.PAGE_TYPE_WALLET) {
             setResult(KeyParams.RESULT_UPDATE_WALLET);
         } else {
@@ -221,6 +235,4 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
         }
 
     }
-
-
 }

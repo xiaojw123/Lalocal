@@ -23,6 +23,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 app:lineVisible="false"
+                app:backVisible="false"
                 app:title_name="@string/liveplay"/>
             <LinearLayout
                     android:id="@+id/live_create_room"
