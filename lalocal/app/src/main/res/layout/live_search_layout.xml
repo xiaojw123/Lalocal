@@ -23,30 +23,32 @@
         android:textSize="@dimen/text_size_15_sp"
         android:visibility="gone" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/live_search_edt_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
         android:layout_alignParentTop="true"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:paddingBottom="@dimen/dimen_size_10_dp"
         android:layout_centerHorizontal="true"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dimen_size_10_dp"
         android:paddingTop="@dimen/dimen_size_10_dp">
+
         <ImageView
             android:id="@+id/live_back_img"
-            android:layout_width="@dimen/dimen_size_15_dp"
+            android:layout_width="@dimen/dimen_size_20_dp"
             android:layout_height="match_parent"
-            android:paddingLeft="@dimen/dimen_size_2_dp"
-            android:paddingRight="@dimen/dimen_size_5_dp"
-           />
-        <!--android:src="@drawable/common_back_btn_bg"-->
+            android:paddingLeft="@dimen/dimen_size_6_dp"
+            android:paddingRight="@dimen/dimen_size_6_dp"
+            android:src="@drawable/common_back_btn_bg" />
 
 
+        <!--android:layout_width="@dimen/live_search_edt_width"-->
         <com.lalocal.lalocal.view.ClearEditText
             android:id="@+id/live_search_edt"
-            android:layout_width="@dimen/live_search_edt_width"
-            android:layout_height="@dimen/live_search_edt_height"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/live_search_cancel_tv"
+            android:layout_toRightOf="@+id/live_back_img"
             android:background="@drawable/live_search_bg"
             android:hint=" 请输入关键字"
             android:imeOptions="actionSearch"
@@ -61,11 +63,15 @@
         <TextView
             android:id="@+id/live_search_cancel_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/dimen_size_5_dp"
+            android:layout_marginRight="@dimen/dimen_size_5_dp"
             android:text="@string/cancel"
             android:textColor="@color/color_b3"
-            android:textSize="@dimen/text_size_15_sp" />
-    </LinearLayout>
+            android:textSize="@dimen/text_size_15_sp"
+            android:gravity="center"
+            />
+    </RelativeLayout>
 
 </RelativeLayout>
