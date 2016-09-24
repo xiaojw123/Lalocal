@@ -16,6 +16,10 @@
         attr:lineVisible="false"
         app:title_name="专题列表" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@android:color/darker_gray" />
 
     <com.chanven.lib.cptr.PtrClassicFrameLayout
         android:id="@+id/ptr_frame_layout"

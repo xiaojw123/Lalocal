@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -155,6 +156,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private long endTime;
     private TextView overMoney;
 
+    private MyCallBack myCallBack;
+
+
 
     private boolean isBroadcaster(int cRole) {
         return cRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
@@ -193,23 +197,40 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         int cRole = Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
         doConfigEngine(cRole);
         if (isBroadcaster(cRole)) {
-            SurfaceView surfaceView = RtcEngine.CreateRendererView(getApplicationContext());
 
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            lp.gravity = Gravity.BOTTOM;
+          //  主播播放器：1725    oldBottom:894
+            final SurfaceView surfaceView = RtcEngine.CreateRendererView(getApplicationContext());
 
-            rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0));//VideoCanvas:本地代码显示属性
-            //  surfaceView.setZOrderOnTop(true);
-            //surfaceView.setZOrderMediaOverlay(true);
-            worker().preview(true, surfaceView, UserHelper.getUserId(LiveActivity.this));
+            surfaceView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    AppLog.i("TAG", "主播播放器："+bottom+"    oldBottom:"+oldBottom);
+                    if(palyerLayout!=null&&palyerLayout.getChildAt(0)!=null){
+                        if(bottom>oldBottom){
+                            palyerLayout.getChildAt(0).layout(left,top,right,bottom);
+                        }else {
+                            palyerLayout.getChildAt(0).layout(oldLeft,oldTop,oldRight,oldBottom);
+                        }
+                    }
+                }
+            });
+            RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(this.getWindowManager().getDefaultDisplay().getWidth(),this.getWindowManager().getDefaultDisplay().getHeight());
+            lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            lp.bottomMargin=0;
             palyerLayout.addView(surfaceView, lp);
+            rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0));//VideoCanvas:本地代码显示属性
+            surfaceView.setZOrderOnTop(true);
+            surfaceView.setZOrderMediaOverlay(true);
+            worker().preview(true, surfaceView, UserHelper.getUserId(LiveActivity.this));
+
         }
         worker().joinChannel(cname, UserHelper.getUserId(LiveActivity.this));
     }
 
     private void doConfigEngine(int cRole) {
 
-        int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
+        int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
+
         switch (CustomDialogStyle.LIVE_DEFINITION){
             case 1:
                 vProfile= IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
@@ -303,8 +324,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         contentLoader = new ContentLoader(this);
-        contentLoader.setCallBack(new MyCallBack());
+        myCallBack = new MyCallBack();
+        contentLoader.setCallBack(myCallBack);
+
         viewById = findViewById(R.id.live_layout);
         uploadManager = new UploadManager();//七牛云api
         //获取屏幕高度
@@ -324,6 +348,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onResume() {
         super.onResume();
         viewById.addOnLayoutChangeListener(this);
+
+
         AppLog.i("TAG", "LiveActivity:onResume");
 
     }
@@ -622,8 +648,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.onOnLinesCount(json);
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             AppLog.i("TAG", "获取在线人数" + onLineUser.getResult());
-            onlineCountText.setText(String.format("%s人", String.valueOf(onLineUser.getResult())));
-            if (onLineUser.getReturnCode() == 0) {
+            if (onLineUser.getReturnCode() == 0&&onLineUser.getResult()!=0) {
+                onlineCountText.setText(String.format("%s人", String.valueOf(onLineUser.getResult())));
+
+
                 LiveMessage liveMessage = new LiveMessage();
                 liveMessage.setStyle("12");
                 liveMessage.setCreatorAccount(creatorAccount);
@@ -768,6 +796,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             timer.cancel();
         }
 
+        contentLoader.cancelLiveRoom(channelId);
+        contentLoader.setCallBack(myCallBack);
+
         LiveMessage liveMessage = new LiveMessage();
         liveMessage.setStyle("11");
         liveMessage.setCreatorAccount(creatorAccount);
@@ -786,6 +817,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
             isStartLive = false;
             drawerLayout.closeDrawer(Gravity.RIGHT);
+
             SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
             formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
             String hms = formatter.format(endTime - startTime);
@@ -793,7 +825,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             overTime.setText(hms);
             aucienceCount.setText(String.valueOf(maxOnLineCount));
             liveFinishLayout.setVisibility(View.VISIBLE);
-            contentLoader.cancelLiveRoom(channelId);
+
         } else {
             finish();
         }

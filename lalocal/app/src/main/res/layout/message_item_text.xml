@@ -17,6 +17,16 @@
         android:singleLine="false"
        />
 
+    <ImageView
+        android:id="@+id/nim_message_item_iv"
+        android:layout_width="@dimen/dimen_size_25_dp"
+        android:layout_height="@dimen/dimen_size_25_dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/dimen_size_3_dp"
+        android:src="@drawable/androidloading"
+        />
+
     <TextView
         android:id="@+id/nim_message_item_text_body"
         android:layout_width="wrap_content"
@@ -29,13 +39,4 @@
 
        />
 
-    <ImageView
-        android:id="@+id/nim_message_item_iv"
-        android:layout_width="@dimen/dimen_size_25_dp"
-        android:layout_height="@dimen/dimen_size_25_dp"
-        android:layout_marginLeft="10dp"
-       android:gravity="center_vertical"
-        android:paddingBottom="@dimen/dimen_size_3_dp"
-       android:src="@drawable/androidloading"
-        />
 </LinearLayout>

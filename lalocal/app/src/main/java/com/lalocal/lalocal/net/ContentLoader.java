@@ -494,7 +494,6 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
-
     //发送验证码
     public void sendVerificationCode(String email, TextView textView) {
         if (callBack != null) {
@@ -2247,7 +2246,6 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
-
         int GET_INDEX_RECOMMEND_LIST=300;
         int GET_ARTICLE_LIST=301;
 

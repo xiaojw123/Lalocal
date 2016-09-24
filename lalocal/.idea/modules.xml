@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easeui/easeui.iml" filepath="$PROJECT_DIR$/easeui/easeui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gifviewlibrary/gifviewlibrary.iml" filepath="$PROJECT_DIR$/gifviewlibrary/gifviewlibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/lalocal.iml" filepath="$PROJECT_DIR$/lalocal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pingpp/pingpp.iml" filepath="$PROJECT_DIR$/pingpp/pingpp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shinebuttonlib/shinebuttonlib.iml" filepath="$PROJECT_DIR$/shinebuttonlib/shinebuttonlib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" filepath="$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" />
+    </modules>
+  </component>
+</project>

@@ -96,6 +96,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
         contentService.liveRecommendList();
+
+      //  contentService.liveRecommendList();
+
         requestBasicPermission(); // 申请APP基本权限
 
 

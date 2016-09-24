@@ -37,7 +37,10 @@ public class TouristAdapter extends RecyclerView.Adapter {
     }
     public void refresh(List<ChatRoomMember> items) {
         this.items = items;
+
+
         notifyDataSetChanged();
+
     }
 
     @Override

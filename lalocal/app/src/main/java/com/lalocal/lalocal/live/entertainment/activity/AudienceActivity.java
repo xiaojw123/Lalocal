@@ -1187,10 +1187,27 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                 SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
                 int childCount = palyerLayout.getChildCount();
+
                 if(childCount>0){
                     palyerLayout.removeAllViews();
                 }
                 palyerLayout.addView(surfaceV);
+
+
+                surfaceV.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                    @Override
+                    public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                        AppLog.i("TAG", "主播播放器："+bottom+"    oldBottom:"+oldBottom);
+                        if(palyerLayout!=null&&palyerLayout.getChildAt(0)!=null){
+                            if(bottom>oldBottom){
+                                palyerLayout.getChildAt(0).layout(left,top,right,bottom);
+                            }else {
+                                palyerLayout.getChildAt(0).layout(oldLeft,oldTop,oldRight,oldBottom);
+                            }
+                        }
+                    }
+                });
+
                 surfaceV.setZOrderOnTop(true);
                 surfaceV.setZOrderMediaOverlay(true);
                 Log.i("TAG","远端视频接收解码回调："+config().mUid+"   uid:"+uid);
@@ -1262,4 +1279,5 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         AppLog.i("TAG","用户离开直播间回调:"+stats.toString());
 
     }
+
 }

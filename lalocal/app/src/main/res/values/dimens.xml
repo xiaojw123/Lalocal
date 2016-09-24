@@ -70,7 +70,6 @@
     <dimen name="product_details_padding_bottom">10dp</dimen>
     <dimen name="dialog_card_margin">5dp</dimen>
 
-
     <dimen name="home_recommend_category_padding_vertical">40dp</dimen>
     <dimen name="home_recommend_category_icon_size">40dp</dimen>
     <dimen name="home_recommend_category_text_size">10sp</dimen>

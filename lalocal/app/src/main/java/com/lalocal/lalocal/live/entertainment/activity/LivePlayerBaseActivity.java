@@ -126,7 +126,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public static final String LIVE_USER_ID = "LIVE_USER_ID";
     public static final String ANNOUCEMENT = "ANNOUCEMENT";
     public static final String CHANNELID = "CHANNELID";
-    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 5000;
+
+    private final static int FETCH_ONLINE_PEOPLE_COUNTS_DELTA = 3000;
+
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
@@ -353,7 +355,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     /****************************
      * 布局初始化
      **************************/
-    private boolean mIsRefreshing=false;
+
+    private boolean mIsRefreshing=true;
+
     protected void findViews() {
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
         barrageView = (BarrageView) findViewById(R.id.barrageView_test);
@@ -370,8 +374,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg=(ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
-
-
 
         String userAvatar = UserHelper.getUserAvatar(this);
         AppLog.i("TAG","主播名字："+UserHelper.getUserName(this)+"主播头像:"+userAvatar);
@@ -399,14 +401,51 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, LivePlayerBaseActivity.this);
         }
 
+
+        touristList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState==RecyclerView.SCROLL_STATE_IDLE){
+                    mIsRefreshing=true;
+                }else {
+                    mIsRefreshing=false;
+                }
+            }
+        });
+
         touristList.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (mIsRefreshing) {
+
+                switch (event.getAction()){
+
+                    case MotionEvent.ACTION_DOWN:
+                        mIsRefreshing=false;
+                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_DOWN");
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mIsRefreshing=false;
+                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_MOVE");
+                        break;
+                    case MotionEvent.ACTION_UP:
+                        mIsRefreshing=true;
+                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_UP");
+                        break;
+                    case MotionEvent.ACTION_CANCEL:
+                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_CANCEL");
+
+                        break;
+                }
+
+
+                return  false;
+              /*  if (mIsRefreshing) {
                     return true;
                 } else {
                     return false;
-                }
+                }*/
+
             }
         });
 
@@ -933,11 +972,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     member1.setRoomId(roomInfo.getRoomId());
                     ChatRoomMemberCache.getInstance().saveMyMember(member1);
                     DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
-                  /*  if(UserHelper.getUserName(LivePlayerBaseActivity.this)!=null){
-                        masterName.setText(UserHelper.getUserName(LivePlayerBaseActivity.this));
-                    }else{
-                        masterName.setText(enterroomgetnick);
-                    }*/
+
                     updateUI();
                     DemoCache.setLoginChatRoomStatus(true);
                     chatRoomStatusRemind("登陆聊天室成功...");
@@ -1021,7 +1056,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void onResult(boolean success, List<ChatRoomMember> result) {
                 if (success) {
-                    addMembers(result);
+                        addMembers(result);
+
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
@@ -1137,8 +1173,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-                        clearCache();
-                        fetchData();
+
+                        if(mIsRefreshing){
+                            clearCache();
+                            fetchData();
+                        }
+
                         int onlineUserCount = param.getOnlineUserCount();
                         if (onlineUserCount > maxOnLineCount) {//计算最大在线人数
                             maxOnLineCount = onlineUserCount;
@@ -1360,7 +1400,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onPause() {
         super.onPause();
-        //   isFirstClick = true;
+
+        if (inputPanel != null) {
+            inputPanel.hideInputMethod();
+            inputPanel.collapse(false);
+        }
+
     }
 
     @Override
@@ -1368,6 +1413,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         super.onResume();
         if (inputPanel != null) {
             inputPanel.hideInputMethod();
+
+            inputPanel.collapse(false);
+
         }
 
         if (messageListPanel != null) {
