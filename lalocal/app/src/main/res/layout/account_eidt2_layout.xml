@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_fa"
+    tools:context=".activity.AccountEidt2Activity">
+
+    <RelativeLayout
+        android:id="@+id/edit_accout_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_actionbar_height"
+        android:background="@color/white">
+
+        <com.lalocal.lalocal.view.CustomTitleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title_name="@string/edit_account" />
+
+        <TextView
+            android:id="@+id/account_edit_save"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/app_statusbar_height"
+            android:gravity="center"
+            android:paddingEnd="@dimen/forgetpsw_next_text_left"
+            android:text="@string/save" />
+    </RelativeLayout>
+
+
+    <EditText
+        android:id="@+id/nickname_modify_edit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_edit_height"
+        android:layout_below="@+id/edit_accout_title"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:background="@drawable/account_edittext_bg"
+        android:maxLength="20"
+        android:singleLine="true"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/phone_modify_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_accout_title"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:background="@drawable/account_edittext_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <TextView
+            android:id="@+id/account_edit2_countrycode"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/country_code"
+            android:textSize="@dimen/text_size_14_sp" />
+
+        <TextView
+            android:layout_width="@dimen/dimen_size_1_dp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            android:layout_marginEnd="@dimen/dimen_size_10_dp"
+            android:layout_marginTop="@dimen/dimen_size_10_dp"
+            android:background="@color/color_b3" />
+
+
+        <EditText
+            android:id="@+id/account_edit2_phone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_edit_height"
+            android:background="@android:color/transparent"
+            android:hint="@string/phone_number"
+            android:inputType="number"
+            android:maxLength="20"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/custom_edit_cursor"
+            android:textSize="@dimen/text_size_14_sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/email_modify_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edit_accout_title"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/account_eidt2_email_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/account_eidt2_sendagain_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_btn_height"
+            android:layout_marginLeft="@dimen/dimen_size_12_dp"
+            android:layout_marginRight="@dimen/dimen_size_12_dp"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
+            android:background="@drawable/orange_corner_btn_bg"
+            android:padding="0dp"
+            android:text="@string/send_again"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_18_sp" />
+
+        <Button
+            android:id="@+id/account_eidt2_changeemail_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_btn_height"
+            android:layout_marginLeft="@dimen/dimen_size_12_dp"
+            android:layout_marginRight="@dimen/dimen_size_12_dp"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
+            android:background="@drawable/register_button_bg"
+            android:text="@string/change_email"
+            android:textSize="@dimen/text_size_18_sp" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

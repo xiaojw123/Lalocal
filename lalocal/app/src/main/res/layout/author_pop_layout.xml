@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pop_layout"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="@dimen/author_padding_15dp"
+    android:layout_marginRight="@dimen/author_padding_15dp"
+    android:layout_marginBottom="@dimen/author_padding_67dp"
+    android:layout_marginTop="@dimen/author_padding_67dp"
+    android:background="@android:color/white">
+    <ImageView
+        android:id="@+id/author_code_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="20dp"
+        android:src="@drawable/btnbg_close"
+        />
+    <ImageView
+        android:id="@+id/author_code_iv"
+        android:layout_width="@dimen/author_code_height"
+        android:layout_height="@dimen/author_code_height"
+        android:scaleType="centerCrop"
+        android:paddingTop="20dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/author_padding_62dp"
+        android:layout_marginRight="@dimen/author_padding_62dp"
+        />
+    <TextView
+        android:id="@+id/author_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:paddingTop="@dimen/author_padding_10dp"
+        android:text="lalocal"
+        />
+    <TextView
+        android:id="@+id/author_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+       android:paddingTop="@dimen/author_padding_10dp"
+        android:paddingBottom="@dimen/author_circle_30dp"
+        android:layout_marginLeft="@dimen/author_padding_15dp"
+        android:layout_marginRight="@dimen/author_padding_15dp"
+        android:gravity="center"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+       android:gravity="center_horizontal"
+        android:background="#97d3e9"
+        android:paddingTop="@dimen/author_padding_25dp"
+        android:paddingLeft="@dimen/author_padding_15dp"
+        android:paddingRight="@dimen/author_padding_15dp">
+        <LinearLayout
+            android:id="@+id/author_code_download"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/bigpicture_share"
+            >
+            <ImageView
+                android:id="@+id/bigpicture_img_share"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:src="@drawable/download_arrow"
+                />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/author_padding_15dp"
+            android:text="下载到本地的二维码可以用“微信”_“扫一扫”_“相册”选中后读取"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
+
+</LinearLayout>
+
+</LinearLayout>

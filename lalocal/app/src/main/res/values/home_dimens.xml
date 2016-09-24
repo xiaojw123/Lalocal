@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="home_tab_container_height">49dp</dimen>
+    <dimen name="home_tab_recommend_img_top">3dp</dimen>
+    <dimen name="home_tab_img_width">22dp</dimen>
+    <dimen name="home_tab_text_top">6dp</dimen>
+</resources>

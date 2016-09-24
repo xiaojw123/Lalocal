@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:paddingLeft="@dimen/home_me_my_favorite_item_left"
+    android:paddingRight="@dimen/home_me_my_favorite_item_left"
+    android:paddingTop="@dimen/dimen_size_15_dp"
+    >
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/my_coupon_convert_btn_height"
+        android:text="@string/convert"
+        android:textSize="@dimen/text_size_16_sp"
+        android:textColor="@color/white"
+        android:background="@color/color_30b3"
+         />
+    <!--android:background="@drawable/account_edit2_changeemail_btn_bg"-->
+
+    <TextView
+        android:id="@+id/my_coupon_convert_rule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/coupon_convert_rule"
+        android:layout_marginTop="@dimen/dimen_size_10_dp"
+        />
+
+    <ImageView
+        android:id="@+id/my_coupon_nothing_img"
+        android:layout_width="@dimen/my_oder_nothing_img_width"
+        android:layout_height="@dimen/my_oder_nothing_img_height"
+        android:background="@drawable/order_image_nothing"
+        android:layout_marginTop="@dimen/my_coupon_nothing_img_top"
+        />
+    <TextView
+        android:id="@+id/my_coupon_nothing_warn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_b3"
+        android:text="@string/unlogin_warn"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_15_sp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        />
+
+
+
+
+</LinearLayout>
