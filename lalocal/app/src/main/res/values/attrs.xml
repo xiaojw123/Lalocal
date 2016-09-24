@@ -25,6 +25,7 @@
     <declare-styleable name="CustomTitleView">
         <attr name="title_name" format="string"/>
         <attr name="lineVisible" format="boolean"/>
+        <attr name="backVisible" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="GifView">

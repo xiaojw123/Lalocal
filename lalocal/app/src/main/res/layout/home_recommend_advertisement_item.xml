@@ -7,25 +7,6 @@
     android:layout_height="200dp"
     android:orientation="vertical">
 
-    <!--<com.daimajia.slider.library.Indicators.PagerIndicator-->
-        <!--android:id="@+id/ad_indicator"-->
-        <!--app:selected_color="#0095BF"-->
-        <!--app:selected_height="6dp"-->
-        <!--app:selected_padding_left="2dp"-->
-        <!--app:selected_padding_right="2dp"-->
-        <!--app:selected_width="6dp"-->
-        <!--app:shape="rect"-->
-        <!--app:unselected_color="#ffffffff"-->
-        <!--app:unselected_height="6dp"-->
-        <!--app:unselected_padding_left="2dp"-->
-        <!--app:unselected_padding_right="2dp"-->
-        <!--app:unselected_width="6dp"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:gravity="center" />-->
 
     <com.daimajia.slider.library.Indicators.PagerIndicator
         android:id="@+id/ad_indicator"

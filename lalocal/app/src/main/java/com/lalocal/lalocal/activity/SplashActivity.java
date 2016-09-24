@@ -114,6 +114,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        timeTv.setEnabled(false);
         if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
             mHandler.removeMessages(MSG_UPDATE_TIME);
         }

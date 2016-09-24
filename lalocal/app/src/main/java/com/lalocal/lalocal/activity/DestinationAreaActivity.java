@@ -465,11 +465,6 @@ public class DestinationAreaActivity extends BaseActivity {
                     poupWindow.setSiftItemClickListener(siftItemClickListener);
                     poupWindow.setOutsideTouchable(true);
                 }
-                HeaderViewListAdapter headerViewListAdapter = (HeaderViewListAdapter) desAreaItemsXlv.getAdapter();
-                AreaDetailAdapter adapter = (AreaDetailAdapter) headerViewListAdapter.getWrappedAdapter();
-                if (adapter != null) {
-                    poupWindow.setBlurImgUrl(adapter.getBlurImgUrl());
-                }
                 poupWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
                 break;
 

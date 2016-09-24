@@ -6,6 +6,7 @@
     android:paddingRight="@dimen/dimen_size_15_dp"
     android:paddingTop="@dimen/dimen_size_15_dp"
     android:paddingBottom="@dimen/dimen_size_25_dp"
+    android:background="@color/white"
     android:orientation="horizontal">
 
     <ImageView
@@ -88,6 +89,7 @@
                 android:id="@+id/tv_author_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
                 android:text="加载中"
                 android:textColor="@color/color_7babbd"/>
         </LinearLayout>

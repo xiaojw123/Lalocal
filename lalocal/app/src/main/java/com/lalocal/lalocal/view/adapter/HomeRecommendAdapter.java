@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -309,9 +308,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             super(itemView);
 
             this.context = context;
-//            sliderLayout = (DisallowParentTouchSliderLayout) itemView.findViewById(R.id.ad_slider);
+            sliderLayout = (DisallowParentTouchSliderLayout) itemView.findViewById(R.id.ad_slider);
             // 传入父容器
-//            sliderLayout.setNestParent(mPtrLayout);
+            sliderLayout.setNestParent(mPtrLayout);
         }
 
         /**
@@ -326,10 +325,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 return;
             }
             adResultList = ads;
-            // 重新关联控件
-            sliderLayout = (DisallowParentTouchSliderLayout) itemView.findViewById(R.id.ad_slider);
-            // 传入父容器
-            sliderLayout.setNestParent(mPtrLayout);
+
+            sliderLayout.removeAllSliders();
             for (int i = 0; i < adResultList.size(); i++) {
                 TextSliderView textSliderView = new TextSliderView(context);
                 RecommendAdResultBean ad = adResultList.get(i);
@@ -359,7 +356,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
          * @param sliderLayout
          */
         private void removeSlider(SliderLayout sliderLayout) {
-            for (int i = 0; i < sliderLayout.getChildCount(); i++) {
+            int size = sliderLayout.getChildCount();
+            for (int i = size - 1; i >= 0; i++) {
                 sliderLayout.removeSliderAt(i);
             }
         }
@@ -438,6 +436,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
 
             selected = vpHotLives.getCurrentItem();
+            AppLog.i("slidder", "selected is " + selected);
 
             // 初始化小圆点
             dotBtns = initDot(context, vpHotLives, dotContainer, size, selected);
@@ -493,7 +492,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 View view = LayoutInflater.from(context).inflate(R.layout.home_recommend_hotlive_viewpager_item, null);
                 final LiveRowsBean liveRowsBean = hotLiveList.get(position);
                 SubHotLiveViewHolder hotLiveViewHolder = new SubHotLiveViewHolder();
-                hotLiveViewHolder.container = (CardView) view.findViewById(R.id.container);
+                hotLiveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
                 hotLiveViewHolder.imgLivePic = (ScaleImageView) view.findViewById(R.id.img_live_pic);
                 hotLiveViewHolder.tvLivePeopleAmount = (TextView) view.findViewById(R.id.tv_live_people);
                 hotLiveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
@@ -502,7 +501,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 设置播放图片
                 String photo = liveRowsBean.getPhoto();
                 if (!TextUtils.isEmpty(photo)) {
-                    DrawableUtils.displayImg(mContext, hotLiveViewHolder.imgLivePic, photo);
+                    DrawableUtils.displayRadiusImg(mContext, hotLiveViewHolder.imgLivePic, photo,
+                            DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
                 }
 
                 // 设置播放标题
@@ -522,7 +522,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 获取头像uri
                 final String avatar = user.getAvatar();
                 // 设置头像
-//                hotLiveViewHolder.imgLiveAvatar.setImageURI(Uri.parse(avatar));
                 DrawableUtils.displayImg(mContext, hotLiveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
 
                 // 获取视频播放相关数据
@@ -563,7 +562,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         class SubHotLiveViewHolder {
-            CardView container;
+            FrameLayout container;
             ScaleImageView imgLivePic;
             TextView tvLiveTitle;
             TextView tvLivePeopleAmount;
@@ -850,15 +849,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                         R.layout.home_recommend_theme_viewpager_item, null);
                 RecommendRowsBean bean = themeList.get(position);
                 SubThemeViewHolder holder = new SubThemeViewHolder();
-                holder.imgSpecial = (ImageView) view.findViewById(R.id.img_speical);
+                holder.imgTheme = (ImageView) view.findViewById(R.id.img_theme);
                 holder.tvSpecialName = (TextView) view.findViewById(R.id.tv_theme_name);
                 holder.tvSpecialSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
                 holder.tvReadQuantity = (TextView) view.findViewById(R.id.tv_read_quantity);
                 holder.tvSaveQuantity = (TextView) view.findViewById(R.id.tv_save_quantity);
 
                 // 设置专题图片
-                DrawableUtils.displayImg(mContext, holder.imgSpecial, bean.getPhoto(), 10,
-                        R.drawable.androidloading);
+                DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
+                        DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
 
                 // 设置名字
                 String name = bean.getName();
@@ -897,7 +896,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
 
         private class SubThemeViewHolder {
-            ImageView imgSpecial;
+            ImageView imgTheme;
             TextView tvSpecialName;
             TextView tvSpecialSubTitle;
             TextView tvReadQuantity;
@@ -993,7 +992,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      */
     private List<Button> initDot(Context context, final ViewPager viewPager, LinearLayout dotContainer, int size, int selected) {
         final List<Button> dotBtns = new ArrayList<>();
-        if (size > 0 && selected > 0 && selected <= size) {
+        if (size > 0 && selected >= 0 && selected < size) {
             // 移除所有视图
             ((ViewGroup) dotContainer).removeAllViews();
             for (int i = 0; i < size; i++) {

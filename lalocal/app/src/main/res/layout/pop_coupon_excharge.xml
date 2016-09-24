@@ -3,8 +3,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/color_90_black"
     >
+    <View
+        android:id="@+id/pop_coupon_headerview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_actionbar_height"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,6 +41,7 @@
         android:id="@+id/pop_blank_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/color_90_black"
         />
 
 </LinearLayout>
