@@ -60,7 +60,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
         }else{
             liveViewHodler.managerMark.setVisibility(View.GONE);
         }
-        AppLog.i("TAG","游客头像连接:"+member.getAvatar());
+
         if(member.getAvatar()==null||member.getAvatar().length()==0){
            liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
         }else{
@@ -71,7 +71,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 if(onTouristItemClickListener!=null){
-                    AppLog.i("TAG","游客列表position:"+position+"    member:"+member.getAccount());
+
                     onTouristItemClickListener.showTouristInfo(member,false);
                 }
             }

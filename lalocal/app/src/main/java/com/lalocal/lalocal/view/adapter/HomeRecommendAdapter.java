@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -325,7 +324,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 sliderLayout.setVisibility(View.GONE);
                 return;
             }
-
             adResultList = ads;
 
             sliderLayout.removeAllSliders();

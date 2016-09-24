@@ -20,4 +20,7 @@ public class CustomDialogStyle {
     //直播清晰度
     public static  int LIVE_DEFINITION=0;
 
+    //充值
+    public static  boolean IS_FIRST_CLICK_PAGE=true;
+
 }

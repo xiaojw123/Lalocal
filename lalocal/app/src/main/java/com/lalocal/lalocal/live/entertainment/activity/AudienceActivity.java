@@ -151,6 +151,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private String liveStatus;
     protected LiveRowsBean liveRowsBean;
     private int myGold;
+    private CustomLiveUserInfoDialog customLiveUserInfoDialog;
 
 
     public static void start(Context context,LiveRowsBean liveRowsBean,String annoucement){
@@ -185,16 +186,17 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if("0".equals(liveStatus)){
-            showFinishLayout(true,2);
-        }
+
         initAudienceParam();
         parseIntent();
+
         initView();
         registerObservers(true);
         loginIm();
         initData();
-
+        if("0".equals(liveStatus)){
+            showFinishLayout(true,2);
+        }
     }
 
 
@@ -387,6 +389,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         MsgStatusEnum status = message.getStatus();
 
                         if (creatorAccount.equals(fromAccountIn)) {
+
                             showFinishLayout(false, 2);
                             AppLog.i("TAG", "主播回来了。。。。。。。。");
                         }
@@ -397,6 +400,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         AppLog.i("TAG", "直播间被关闭");
                         break;
                     case ChatRoomMemberExit://主播退出房间监听
+
+
                      /*   String fromAccountExit = message.getFromAccount();
                         if (creatorAccount.equals(fromAccountExit)) {
                             showFinishLayout(true, 2);
@@ -605,7 +610,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 
-
         backHome.setOnClickListener(buttonClickListener);
         keyboardLayout.setAlpha(0);
         keyboardLayout.setFocusable(false);
@@ -646,7 +650,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
 
-    boolean isFirstClickSendGiftBtn=true;
+
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
 
         @Override
@@ -703,14 +707,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                        Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
                     } else if(!"1".equals(playType)) {
 
-                        if(isFirstClickSendGiftBtn){
-                            isFirstClickSendGiftBtn=false;
+                        if(CustomDialogStyle.IS_FIRST_CLICK_PAGE){
+                            CustomDialogStyle.IS_FIRST_CLICK_PAGE=false;
                             contentLoader.getMyWallet();
                             contentLoader.setCallBack(new ICallBack(){
                                 @Override
                                 public void onGetMyWallet(WalletContent content) {
                                     super.onGetMyWallet(content);
+
                                     myGold = (int)content.getGold();
+                                    AppLog.i("TAG","我的乐钻石："+myGold);
                                     showGiftPage(myGold);
                                 }
                             } );
@@ -748,18 +754,20 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         super.onGetMyWallet(content);
                         int gold = (int) content.getGold();
                         if (payBalance > gold) {
-                            CustomChatDialog rechargeDialog = new CustomChatDialog(AudienceActivity.this);
+                            final CustomChatDialog rechargeDialog = new CustomChatDialog(AudienceActivity.this);
                             rechargeDialog.setTitle("提示");
                             rechargeDialog.setContent("乐钻不足,请充值!");
                             rechargeDialog.setCancelable(false);
                             rechargeDialog.setCancelBtn("取消", null);
-                            rechargeDialog.setSurceBtn("充值",null);
+
                             rechargeDialog.setSurceBtn("充值", new CustomChatDialog.CustomDialogListener() {
                                 @Override
                                 public void onDialogClickListener() {
+                                  CustomDialogStyle.IS_FIRST_CLICK_PAGE=true;
                                     Intent intent = new Intent(AudienceActivity.this, RechargeActivity.class);
                                     intent.putExtra(KeyParams.WALLET_CONTENT, content);
                                     startActivity(intent);
+                                    giftStorePopuWindow.dismiss();
                                 }
                             });
                             rechargeDialog.show();
@@ -771,7 +779,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     @Override
                     public void onSendGiftsBack(String result) {
                         super.onSendGiftsBack(result);
-
 
                         SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
                         if (sendGiftResp.getReturnCode() == 0) {
@@ -840,7 +847,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         } else {
             isManager = false;
         }
-        final CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(AudienceActivity.this, result, isManager, isMuted);
+        customLiveUserInfoDialog = new CustomLiveUserInfoDialog(AudienceActivity.this, result, isManager, isMuted);
         customLiveUserInfoDialog.setCancelable(false);
 
         Object statusa = result.getAttentionVO().getStatus();
@@ -935,7 +942,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
 
         }
-        customLiveUserInfoDialog.setAttention(status == 0 ? "关注" : "正在关注", new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
+        customLiveUserInfoDialog.setAttention(status == 0 ? getString(R.string.live_attention):getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
             int fansCounts = -2;
 
             @Override
@@ -945,14 +952,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     fansCounts = fansCount;
                 }
                 if (status == 0) {
-                    attentionStatus.setText("正在关注");
+                    attentionStatus.setText(getString(R.string.live_attention_ok));
                     attentionStatus.setAlpha(0.4f);
                     ++fansCounts;
                     fansView.setText(String.valueOf(fansCounts));
                     contentLoader.getAddAttention(id);
                     status = 1;
                 } else {
-                    attentionStatus.setText("关注");
+                    attentionStatus.setText(getString(R.string.live_attention));
                     attentionStatus.setAlpha(1);
                     --fansCounts;
                     fansView.setText(String.valueOf(fansCounts));
@@ -1093,6 +1100,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             if(giftsRankPopuWindow!=null){
                 giftsRankPopuWindow.dismiss();
             }
+            if(customLiveUserInfoDialog!=null){
+                customLiveUserInfoDialog.dismiss();
+            }
             contentLoader.getLiveUserInfo(userId);
             contentLoader.setCallBack(new ICallBack() {
                 @Override
@@ -1147,7 +1157,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
-        AppLog.i("TAG","bottom:"+bottom+"  oldBottom:"+oldBottom);//bottom:939  oldBottom:1740
+
         if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {//显示
             if(liveSettingLayout!=null&&keyboardLayout!=null){
                 keyboardLayout.setAlpha(1);
@@ -1197,7 +1207,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 surfaceV.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                     @Override
                     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                        AppLog.i("TAG", "主播播放器："+bottom+"    oldBottom:"+oldBottom);
+
                         if(palyerLayout!=null&&palyerLayout.getChildAt(0)!=null){
                             if(bottom>oldBottom){
                                 palyerLayout.getChildAt(0).layout(left,top,right,bottom);

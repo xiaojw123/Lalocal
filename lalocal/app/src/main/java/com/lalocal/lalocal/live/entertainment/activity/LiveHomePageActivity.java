@@ -131,7 +131,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 overridePendingTransition(R.anim.head_in, R.anim.head_out);
 
                 break;
-            case R.id.master_attention_layout:
+            case R.id.master_attention:
                 String text = (String) masterAttention.getText();
                 if ("关注".equals(text)) {
                     contentLoader.getAddAttention(userId);

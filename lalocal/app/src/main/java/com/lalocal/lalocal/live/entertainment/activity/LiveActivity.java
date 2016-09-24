@@ -40,6 +40,7 @@ import com.lalocal.lalocal.live.entertainment.ui.CreateLiveRoomPopuwindow;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.live.thirdparty.live.LivePlayer;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
@@ -157,7 +158,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private TextView overMoney;
 
     private MyCallBack myCallBack;
-
+    private BlurImageView blurImageView;
 
 
     private boolean isBroadcaster(int cRole) {
@@ -281,7 +282,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     //判断软键盘显示与隐藏
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        AppLog.i("TAG", "bottom:" + bottom + "  oldBottom:" + oldBottom);//bottom:939  oldBottom:1740显示
+
         if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
             if (inputLiveRoom != null && inputLiveRoom.getVisibility() == View.VISIBLE) {
                 liveSettingLayout.setVisibility(View.GONE);
@@ -416,6 +417,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         overTime = (TextView) findViewById(R.id.live_over_time_tv);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
         playLike = (ImageView) findViewById(R.id.live_telecast_like);
+        blurImageView = (BlurImageView) findViewById(R.id.live_over_bg);
         playLike.setVisibility(View.INVISIBLE);
 
         //结束直播
@@ -825,7 +827,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             overTime.setText(hms);
             aucienceCount.setText(String.valueOf(maxOnLineCount));
             liveFinishLayout.setVisibility(View.VISIBLE);
-
+            blurImageView.setBlurImageURL(avatar);
+            blurImageView.setScaleRatio(20);
+            blurImageView.setBlurRadius(1);
         } else {
             finish();
         }
@@ -906,7 +910,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             });
         } else {
             CustomDialogStyle.IDENTITY = CustomDialogStyle.LIVEER_CHECK_ADMIN;
-            customLiveUserInfoDialog.setAttention(status == 0 ? "关注" : "正在关注", new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
+            customLiveUserInfoDialog.setAttention(status == 0 ? getString(R.string.live_attention):getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
                 int fansCounts = -2;
 
                 @Override
@@ -915,14 +919,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         fansCounts = fansCount;
                     }
                     if (status == 0) {
-                        textView.setText("正在关注");
+                        textView.setText(getString(R.string.live_attention_ok));
                         textView.setAlpha(0.4f);
                         ++fansCounts;
                         fansView.setText(String.valueOf(fansCounts));
                         contentLoader.getAddAttention(id);
                         status = 1;
                     } else {
-                        textView.setText("关注");
+                        textView.setText(getString(R.string.live_attention));
                         textView.setAlpha(1);
                         --fansCounts;
                         fansView.setText(String.valueOf(fansCounts));
