@@ -65,9 +65,9 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_search_layout);
         unbinder = ButterKnife.bind(this);
-        backImg.setImageDrawable(getColorDrawable(searchIconColor,R.drawable.common_back_btn_bg));
+        backImg.setImageDrawable(getColorDrawable(searchIconColor, R.drawable.common_back_btn_bg));
         liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
-        liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor,R.drawable.searchbar_searchicon), null, null, null);
+        liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor, R.drawable.searchbar_searchicon), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
         liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.setPullRefreshEnabled(false);
@@ -77,7 +77,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     }
 
     @NonNull
-    private Drawable getColorDrawable(int color,int id) {
+    private Drawable getColorDrawable(int color, int id) {
         Drawable drawable = getResources().getDrawable(id);
         Drawable colorDrawable = DrawableUtils.tintDrawable(drawable, ColorStateList.valueOf(color));
         colorDrawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
@@ -96,10 +96,12 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         String searchText = v.getText().toString();
         searchText = searchText.replaceAll(" ", "");
         searchText = searchText.trim();
-        if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(searchText) && !searchText.equals(mLastSearhText)) {
-            mLastSearhText = searchText;
-            mPageNumb = 1;
-            mContentloader.searchLive(mPageNumb, searchText);
+        if (actionId == EditorInfo.IME_ACTION_SEARCH && !TextUtils.isEmpty(searchText)) {
+            if (!searchText.equals(mLastSearhText)) {
+                mLastSearhText = searchText;
+                mPageNumb = 1;
+                mContentloader.searchLive(mPageNumb, searchText);
+            }
         } else {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 liveSearchNull.setVisibility(View.VISIBLE);

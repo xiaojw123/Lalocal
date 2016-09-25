@@ -159,6 +159,7 @@ public class BookActivity extends BaseActivity {
                 params="[]";
             }
             String js = String.format("javascript:backOrderWeb(%1$s)", params);
+            AppLog.print("book___js_____"+js);
             mPreOrderWv.loadUrl(js);
         } else if (resultCode == PayActivity.RESULT_BACK_PRODUCT) {
             finish();
