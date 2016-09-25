@@ -27,11 +27,13 @@ import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
+import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.im.ui.widget.CircleImageView;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
@@ -340,12 +342,54 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                         // 点击跳转
                         RecommendAdResultBean recommendAdResultBean = ads.get(position);
                         String url = recommendAdResultBean.url;
-                        if (TextUtils.isEmpty(url)) {
-                            return;
+                        int targetType = recommendAdResultBean.targetType;
+                        int targetId = recommendAdResultBean.targetId;
+//                        if (TextUtils.isEmpty(url)) {
+//                            return;
+//                        }
+
+                        Intent intent = null;
+                        switch (targetType) {
+                            case Constants.TARGET_TYPE_URL:
+                                AppLog.i("addd", "链接");
+                                intent = new Intent(mContext, CarouselFigureActivity.class);
+                                intent.putExtra("carousefigure", recommendAdResultBean);
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_ARTICLE:
+                                AppLog.i("addd", "文章");
+                                intent = new Intent(mContext, ArticleActivity.class);
+                                intent.putExtra("targetID", String.valueOf(targetId));
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_PRODUCT:
+                                AppLog.i("addd", "产品--" + targetId);
+                                // 跳转到商品详情界面
+                                SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
+                                specialToH5Bean.setTargetId(71);
+
+                                intent = new Intent(mContext, ProductDetailsActivity.class);
+                                intent.putExtra("productdetails", specialToH5Bean);
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_ROUTE:
+                                AppLog.i("addd", "路线");
+                                intent = new Intent(mContext, RouteDetailActivity.class);
+                                intent.putExtra("detail_id", targetId);
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_THEME:
+                                AppLog.i("addd", "专题");
+                                intent = new Intent(mContext, SpecialDetailsActivity.class);
+                                intent.putExtra("rowId", targetId + "");
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_LIVE:
+                                // 跳转播放界面 TODO: 暂时不用做
+//                                AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                                break;
                         }
-                        Intent intent = new Intent(mContext, CarouselFigureActivity.class);
-                        intent.putExtra("carousefigure", recommendAdResultBean);
-                        mContext.startActivity(intent);
+
                     }
                 });
                 sliderLayout.addSlider(textSliderView);
@@ -493,18 +537,19 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             public Object instantiateItem(ViewGroup container, int position) {
                 View view = LayoutInflater.from(context).inflate(R.layout.home_recommend_hotlive_viewpager_item, null);
                 final LiveRowsBean liveRowsBean = hotLiveList.get(position);
-                SubHotLiveViewHolder hotLiveViewHolder = new SubHotLiveViewHolder();
+                SubLiveViewHolder hotLiveViewHolder = new SubLiveViewHolder();
                 hotLiveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
                 hotLiveViewHolder.imgLivePic = (ScaleImageView) view.findViewById(R.id.img_live_pic);
                 hotLiveViewHolder.tvLivePeopleAmount = (TextView) view.findViewById(R.id.tv_live_people);
                 hotLiveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
                 hotLiveViewHolder.imgLiveAvatar = (CircleImageView) view.findViewById(R.id.img_live_avatar);
 
+                // 设置直播用户头像
+                LiveUserBean user = liveRowsBean.getUser();
                 // 设置播放图片
-                String photo = liveRowsBean.getPhoto();
+                String photo = user.getAvatarOrigin();
                 if (!TextUtils.isEmpty(photo)) {
-                    DrawableUtils.displayRadiusImg(mContext, hotLiveViewHolder.imgLivePic, photo,
-                            DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+                    DrawableUtils.displayImg(mContext, hotLiveViewHolder.imgLivePic, photo);
                 }
 
                 // 设置播放标题
@@ -519,8 +564,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 人数以“,”将千分位隔开
                 hotLiveViewHolder.tvLivePeopleAmount.setText(formatNum(onlineUser));
 
-                // 设置直播用户头像
-                LiveUserBean user = liveRowsBean.getUser();
                 // 获取头像uri
                 final String avatar = user.getAvatar();
                 // 设置头像
@@ -563,7 +606,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
 
-        class SubHotLiveViewHolder {
+        class SubLiveViewHolder {
             FrameLayout container;
             ScaleImageView imgLivePic;
             TextView tvLiveTitle;
