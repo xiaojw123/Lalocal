@@ -754,11 +754,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     if(giftStoreFirstClick){
                         giftStoreFirstClick=false;
 
-
                     boolean loginedq = UserHelper.isLogined(AudienceActivity.this);
                     if (!loginedq) {
                         showLoginViewDialog();
-
+                        giftStoreFirstClick=true;
                     }else if(!DemoCache.getLoginChatRoomStatus()) {
                        Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
                     } else if(!"1".equals(playType)) {
@@ -770,7 +769,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                                 @Override
                                 public void onGetMyWallet(WalletContent content) {
                                     super.onGetMyWallet(content);
-
                                     myGold = (int)content.getGold();
                                     AppLog.i("TAG","我的乐钻石："+myGold);
                                     showGiftPage(myGold);

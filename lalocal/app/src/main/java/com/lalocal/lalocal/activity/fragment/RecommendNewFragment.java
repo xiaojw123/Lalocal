@@ -34,8 +34,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,8 +96,9 @@ public class RecommendNewFragment extends Fragment {
                         isRefreshing = false;
                         mPtrLayout.refreshComplete();
                         AppLog.i("aaa", "refreshComplete...");
-                        mAdapter.notifyDataSetChanged();
+//                        mRecommendAdapter.notifyDataSetChanged();
                         AppLog.i("aaa", "adapter update");
+                        setAdapter();
 //                        mPtrLayout.loadMoreComplete(false);
                         break;
                     }
@@ -221,6 +220,7 @@ public class RecommendNewFragment extends Fragment {
                 isRefreshing = true;
                 mPtrLayout.setLoadMoreEnable(true);
                 mContentLoader.recommendAd();
+
 
             }
         });

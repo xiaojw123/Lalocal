@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +77,12 @@ public class LiveMainListAdapter extends BaseAdapter {
         LiveUserBean user = liveRowsBean.getUser();
         liveViewHodler.liveCompereHeadTv.setText(user.getNickName());
         DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, user.getAvatar());
-        DrawableUtils.displayRadiusImg(mContext,liveViewHodler.liveCoverIv,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+        if(!TextUtils.isEmpty(liveRowsBean.getPhoto())){
+            DrawableUtils.displayRadiusImg(mContext,liveViewHodler.liveCoverIv,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+        }else if(!TextUtils.isEmpty(liveRowsBean.getUser().getAvatarOrigin())) {
+            DrawableUtils.displayRadiusImg(mContext,liveViewHodler.liveCoverIv,liveRowsBean.getUser().getAvatarOrigin(), DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+        }
+
 
         return convertView;
     }

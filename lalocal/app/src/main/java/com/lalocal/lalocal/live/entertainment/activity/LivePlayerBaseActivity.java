@@ -535,6 +535,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onLoginSucess(User user) {
             super.onLoginSucess(user);
+
         }
 
         @Override

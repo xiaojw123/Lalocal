@@ -77,9 +77,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecommendListBean mRecommendListBean;
     private List<ArticleDetailsResultBean> mArticleList;
 
-    private static final int MAX_HOT_LIVE = 10;
+//    private static final int MAX_HOT_LIVE = 10;
     private static final int MAX_PRODUCT = 4;
-    private static final int MAX_THEME = 10;
+//    private static final int MAX_THEME = 10;
 
     private RecyclerView mRvRecommendList;
 
@@ -524,7 +524,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             @Override
             public int getCount() {
-                return Math.min(hotLiveList == null ? 0 : hotLiveList.size(), MAX_HOT_LIVE);
+//                return Math.min(hotLiveList == null ? 0 : hotLiveList.size(), MAX_HOT_LIVE);
+                return hotLiveList == null ? 0 : hotLiveList.size();
             }
 
             @Override
@@ -552,9 +553,12 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 LiveUserBean user = liveRowsBean.getUser();
                 // 设置播放图片
                 String photo = user.getAvatarOrigin();
-                if (!TextUtils.isEmpty(photo)) {
+                AppLog.i("TAG","首頁直播頭像:"+liveRowsBean.getPhoto());
+                if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
 //                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
-                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, photo, DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                }else if(!TextUtils.isEmpty(photo)){
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic,user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                 }
 
                 // 设置播放标题
@@ -885,7 +889,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             @Override
             public int getCount() {
-                return Math.min(themeList == null ? 0 : themeList.size(), MAX_THEME);
+//                return Math.min(themeList == null ? 0 : themeList.size(), MAX_THEME);
+                return themeList == null ? 0 : themeList.size();
             }
 
             @Override

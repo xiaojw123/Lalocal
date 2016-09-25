@@ -256,7 +256,7 @@ public class AppConfig {
 
     //上传在线人数  http://dev.lalocal.cn:8080/api/system/numbs?number=1
     public static final String getOnLineUserCount(){
-        return  baseUrl+"/system/numbs?number=";
+        return  baseUrl+"system/numbs?number=";
     }
 
     public static String getBaseUrl() {

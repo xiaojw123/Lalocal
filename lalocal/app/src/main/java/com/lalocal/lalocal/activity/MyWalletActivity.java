@@ -42,7 +42,6 @@ public class MyWalletActivity extends BaseActivity {
         setLoaderCallBack(new WalletCallBack());
         mContentloader.getMyWallet();
 
-
     }
 
     @OnClick({R.id.my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt})
