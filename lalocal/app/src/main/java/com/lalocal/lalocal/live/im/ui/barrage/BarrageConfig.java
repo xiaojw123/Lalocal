@@ -10,7 +10,7 @@ import java.util.List;
 public class BarrageConfig {
     private int minTextSizeSp = 14;
     private int maxTextSizeSp = 18;
-    private int duration = 5000;
+    private int duration = 7000;
     private List<Integer> colors;
 
     public BarrageConfig() {

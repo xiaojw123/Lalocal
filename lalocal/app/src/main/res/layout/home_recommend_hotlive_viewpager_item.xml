@@ -12,7 +12,7 @@
         app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/live_radius_3dp"
         app:cardPreventCornerOverlap="false"
-        app:cardElevation="10dp"
+        app:cardElevation="3dp"
         app:cardUseCompatPadding="false">
 
 

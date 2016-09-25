@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.im.session.BarrageViewBean;
+import com.lalocal.lalocal.util.AppLog;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -202,16 +203,14 @@ public class BarrageView extends RelativeLayout {
     private ObjectAnimator buildTranslationAnimator(final TextView target, final int line,final BarrageViewBean text) {
 
 
-
-        final int duration = config.getDuration() + random.nextInt() % 500;
         final int textLength = (int) target.getPaint().measureText(target.getText().toString());
+        final int duration = config.getDuration() +( random.nextInt() % 500);
         final int freeLineDuration = (int) ((textLength + 50.0f) / (1.0f * getWidth() / duration));
-
         ObjectAnimator animator = ObjectAnimator.ofFloat(target, "translationX", getWidth(), -textLength).setDuration(duration);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                log("text barrage run, line=" + line + ", duration=" + duration + ", freeLineDuration=" + freeLineDuration);
+                AppLog.i("TAG","text barrage run, line=" + line + ", duration=" + duration + ", freeLineDuration=" + freeLineDuration);
 
                 postDelayed(new Runnable() {
                     @Override
@@ -233,7 +232,6 @@ public class BarrageView extends RelativeLayout {
 
             @Override
             public void onAnimationRepeat(Animator animation) {
-
             }
         });
         target.setOnClickListener(new OnClickListener() {

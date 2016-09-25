@@ -186,7 +186,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private SpecialShareVOBean shareVO;
 
     public int onlineCounts;
-    protected int maxOnLineCount = 0;
+
     public String avatar;
     public String annoucement;//公告
     protected String userId;
@@ -356,7 +356,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
      * 布局初始化
      **************************/
 
-    private boolean mIsRefreshing=true;
+    private boolean mIsTouchUP=true;
+    private boolean isScrollStop=true;
 
     protected void findViews() {
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
@@ -375,8 +376,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         anchorHeadImg=(ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
 
-        String userAvatar = UserHelper.getUserAvatar(this);
-        AppLog.i("TAG","主播名字："+UserHelper.getUserName(this)+"主播头像:"+userAvatar);
 
         // 礼物列表
         findGiftLayout();
@@ -407,9 +406,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState==RecyclerView.SCROLL_STATE_IDLE){
-                    mIsRefreshing=true;
+                    isScrollStop=true;
                 }else {
-                    mIsRefreshing=false;
+                    isScrollStop=false;
                 }
             }
         });
@@ -419,22 +418,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public boolean onTouch(View v, MotionEvent event) {
 
                 switch (event.getAction()){
-
                     case MotionEvent.ACTION_DOWN:
-                        mIsRefreshing=false;
-                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_DOWN");
+                        mIsTouchUP=false;
                         break;
                     case MotionEvent.ACTION_MOVE:
-                        mIsRefreshing=false;
-                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_MOVE");
+                        mIsTouchUP=false;
                         break;
-                    case MotionEvent.ACTION_UP:
-                        mIsRefreshing=true;
-                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_UP");
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                        AppLog.i("TAG","游客列表滑动事件监听:MotionEvent.ACTION_CANCEL");
-
+                    default:
+                        mIsTouchUP=true;
                         break;
                 }
 
@@ -576,17 +567,16 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
             if (liveGiftRanksResp.getReturnCode() == 0) {
-                AppLog.i("TAG", "榜单CallBack:");
                 List<TotalRanksBean> currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                 if (currentRanks != null && currentRanks.size() > 0) {
                     for (int i = 0; i < currentRanks.size(); i++) {
                         totalGold = totalGold + currentRanks.get(i).getGold();
                     }
                 }
-
                 showGiftRanksPopuWindow(liveGiftRanksResp);
             }
         }
+
     }
 
     int totalGold = 0;
@@ -621,6 +611,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void onDismiss() {
                 drawerLayout.openDrawer(Gravity.RIGHT);
+                firstClick=true;
             }
         });
 
@@ -655,15 +646,21 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     /***************************
      * 监听
      ****************************/
+    boolean firstClick=true;//排行榜
+    boolean userInfoFirstclick=true;
 
     View.OnClickListener clickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-
                 case R.id.live_master_info_layout:
-                    inputPanel.hideInputMethod();
+                  if(CustomDialogStyle.USER_INFO_FIRST_CLICK){
+                      CustomDialogStyle.USER_INFO_FIRST_CLICK=false;
+
+                    if(inputPanel!=null){
+                        inputPanel.hideInputMethod();
+                    }
                     contentLoader.getLiveUserInfo(userId);
                     contentLoader.setCallBack(myCallBack);
                     if (userId.equals(UserHelper.getUserId(LivePlayerBaseActivity.this))) {
@@ -673,8 +670,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                         CustomDialogStyle.IDENTITY = CustomDialogStyle.IS_LIVEER;
                     }
-
                     userIdItem = userId;
+                  }
                     break;
 
                 case R.id.live_telecast_share:
@@ -691,13 +688,18 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     finish();
                     break;
                 case R.id.audience_score_layout:
-                    boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
-                    if(logineds){
-                        contentLoader.liveGiftRanks(channelId);
-                        contentLoader.setCallBack(myCallBack);
-                    }else {
-                        showLoginViewDialog();
+
+                    if(firstClick){
+                        firstClick=false;
+                        boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                        if(logineds){
+                            contentLoader.liveGiftRanks(channelId);
+                            contentLoader.setCallBack(myCallBack);
+                        }else {
+                            showLoginViewDialog();
+                        }
                     }
+
 
                     break;
                 case R.id.live_telecast_input_text:
@@ -855,9 +857,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case "12":
                         //更新在綫人數
                         AppLog.i("TAG","获取主播上传的人数:"+onlineNum);
-                        if(onlineNum!=null&&onlineNum.length()>0){
-                            onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
-                        }
+                      /*  if(onlineNum!=null&&onlineNum.length()>0){
+                         //   onlineCountText.setText(String.format("%s人", String.valueOf(onlineNum)));
+                            onlineCountText.setText(String.valueOf(onlineNum)+"人");
+                        }*/
 
                         break;
                     case "11":
@@ -874,10 +877,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
                         //发送进入直播间的通知
+                        isOnLineUsersCountChange=true;
                         sendMessage(message, MessageType.text);
                         break;
 
                     case ChatRoomMemberExit:
+                        isOnLineUsersCountChange=true;
                         //退出直播间，解除禁言
                        /* if (banListLive.size() > 0) {
                             for (int i = 0; i < banListLive.size(); i++) {
@@ -1057,16 +1062,16 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<>();
 
     private void getMembers(final MemberQueryType memberQueryType, final long time, int limit) {
-        AppLog.i("TAG","查询游客列表:"+"time:"+time+"   limit:"+limit+"   LIMIT:"+LIMIT);
+
         ChatRoomMemberCache.getInstance().fetchRoomMembers(roomId, memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
             @Override
             public void onResult(boolean success, List<ChatRoomMember> result) {
-                AppLog.i("TAG","游客列表请求getMembers："+success);
+
                 if (success) {
                         addMembers(result);
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
-                        AppLog.i("TAG","固定成员拉完了哈哈哈哈哈");
+
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
                     }
                 }else{
@@ -1114,9 +1119,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             @Override
             public void showTouristInfo(ChatRoomMember member, boolean isMasterAccount) {
 
+                if(CustomDialogStyle.USER_INFO_FIRST_CLICK){
+                    CustomDialogStyle.USER_INFO_FIRST_CLICK=false;
+
                 boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
-
-
                 if (!isLogin) {
                     showLoginViewDialog();
                 } else {
@@ -1142,6 +1148,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                 }
 
+            }
             }
         });
     }
@@ -1171,8 +1178,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         //  onlineCountText.setText(String.format("%s人", String.valueOf(roomInfo.getOnlineUserCount())));
         fetchOnlineCount();
     }
-
-
+    boolean isOnLineUsersCountChange=true;
     private void fetchOnlineCount() {
 
         if (timer == null) {
@@ -1183,33 +1189,34 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if (isOnLineUsersCountChange) {
+                    isOnLineUsersCountChange=false;
                 NIMClient.getService(ChatRoomService.class).fetchRoomInfo(roomId).setCallback(new RequestCallback<ChatRoomInfo>() {
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-                        if(mIsRefreshing){
+                        AppLog.i("TAG","基类获取在线人数:"+onlineCounts);
+                        if (isScrollStop && mIsTouchUP) {
                             clearCache();
                             fetchData();
                         }
 
-                        int onlineUserCount = param.getOnlineUserCount();
-                        if (onlineUserCount > maxOnLineCount) {//计算最大在线人数
-                            maxOnLineCount = onlineUserCount;
-                        }
                     }
+
                     @Override
                     public void onFailed(int code) {
-                        timer.cancel();
-                         enterRoom();
-
-
+                        if (timer != null) {
+                            timer.cancel();
+                        }
+                        enterRoom();
                     }
 
                     @Override
                     public void onException(Throwable exception) {
-                        AppLog.i("TAG","查询列表定时任务失败：");
+                        AppLog.i("TAG", "查询列表定时任务失败：");
                     }
                 });
+            }
             }
         }, 100, FETCH_ONLINE_PEOPLE_COUNTS_DELTA);
     }

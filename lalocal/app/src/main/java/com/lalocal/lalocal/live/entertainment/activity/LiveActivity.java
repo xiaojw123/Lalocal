@@ -241,8 +241,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 break;
             case 3:
                 break;
-
-
         }
 
         worker().configEngine(cRole, vProfile);
@@ -490,6 +488,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         AppLog.i("TAG", "直播端接受到一帧视频");
     }
 
+    private int maxOnLineUserCount=0;
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
         AppLog.i("TAG", "加入频道回调onJoinChannelSuccess;" + channel + "   uid:" + uid + " elapsed:" + elapsed + "     config().mUid:" + config().mUid);
@@ -583,7 +582,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             @Override
             public void onFailed(int i) {
 
-
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -650,10 +648,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.onOnLinesCount(json);
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             AppLog.i("TAG", "获取在线人数" + onLineUser.getResult());
-            if (onLineUser.getReturnCode() == 0&&onLineUser.getResult()!=0) {
-                onlineCountText.setText(String.format("%s人", String.valueOf(onLineUser.getResult())));
+            int result = onLineUser.getResult();
+            if(maxOnLineUserCount<result){
+                maxOnLineUserCount=result;
+            }
+            if (onLineUser.getReturnCode() == 0&&onLineUser.getResult()!=0&&onLineUser.getResult()>0) {
 
-
+                onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
                 LiveMessage liveMessage = new LiveMessage();
                 liveMessage.setStyle("12");
                 liveMessage.setCreatorAccount(creatorAccount);
@@ -770,9 +771,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         });
     }
-
-    ;
-
     // 退出聊天室
     private void logoutChatRoom() {
         CustomChatDialog customDialog = new CustomChatDialog(getActivity());
@@ -781,7 +779,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customDialog.setCancelBtn("结束直播", new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
-                //   sendLiveStatusMessgae("11");
                 //结束直播的时间
                 endTime = System.currentTimeMillis();
                 endLive();
@@ -812,7 +809,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             isLeaveChannel = false;
         }
 
-
         if (isClickStartLiveBtn) {
             if (inputPanel != null) {
                 inputPanel.collapse(true);// 收起软键盘
@@ -825,7 +821,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             String hms = formatter.format(endTime - startTime);
             AppLog.i("TAG", "结束时间：" + hms + "    " + (endTime - startTime));
             overTime.setText(hms);
-            aucienceCount.setText(String.valueOf(maxOnLineCount));
+            aucienceCount.setText(String.valueOf(maxOnLineUserCount));
             liveFinishLayout.setVisibility(View.VISIBLE);
             blurImageView.setBlurImageURL(avatar);
             blurImageView.setScaleRatio(20);
@@ -1084,6 +1080,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             @Override
             public void onDismiss(DialogInterface dialog) {
                 CustomDialogStyle.IDENTITY = CustomDialogStyle.LIVEER_CHECK_ADMIN;
+                CustomDialogStyle.USER_INFO_FIRST_CLICK=true;
             }
         });
 

@@ -95,8 +95,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-
-
         requestBasicPermission(); // 申请APP基本权限
 
 
@@ -152,13 +150,18 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+   boolean firstLoadData=true;
     @Override
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
         super.onHiddenChanged(hidden);
         if (!hidden) {
             isFirstLoad = true;
             allRows.clear();
-            contentService.liveList(10, 1);
+            if(firstLoadData){
+                firstLoadData=false;
+                contentService.liveList(10, 1);
+            }
+
         }
     }
 
@@ -201,7 +204,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onLiveList(LiveListDataResp liveListDataResp) {
             super.onLiveList(liveListDataResp);
+
             List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
+
             if (rows.size() > 0 && isFirstLoad) {
                 allRows.addAll(0, rows);
                 Collections.sort(allRows);//排序
@@ -217,6 +222,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 allRows.addAll(allRows.size(), rows);
                 Collections.sort(allRows);
                 liveMainListAdapter.refresh(allRows);
+                firstLoadData=true;
             }
 
 
@@ -437,12 +443,20 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         if (allRows != null) {
             allRows.clear();
         }
-        contentService.liveList(10, 1);
+        if(firstLoadData){
+            firstLoadData=false;
+            contentService.liveList(10, 1);
+        }
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 allRows.clear();
-                contentService.liveList(10, 1);
+                if(firstLoadData){
+                    firstLoadData=false;
+                    contentService.liveList(10, 1);
+                }
+
             }
         }, 1000 * 60 * 5);
         AppLog.i("TAG", "onStart");

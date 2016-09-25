@@ -5,7 +5,6 @@
     android:layout_height="@dimen/live_height_50dp"
     android:layout_alignParentBottom="true"
     android:layout_gravity="center"
-
     android:gravity="center">
 
     <ImageView

@@ -23,4 +23,7 @@ public class CustomDialogStyle {
     //充值
     public static  boolean IS_FIRST_CLICK_PAGE=true;
 
+    //用户信息dialog
+    public static  boolean USER_INFO_FIRST_CLICK=true;
+
 }

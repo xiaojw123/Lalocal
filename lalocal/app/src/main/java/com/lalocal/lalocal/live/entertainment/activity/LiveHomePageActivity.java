@@ -20,7 +20,9 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.BigPictureActivity;
+import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -93,6 +95,16 @@ public class LiveHomePageActivity extends BaseActivity {
         contentLoader.getLiveUserInfo(userId);
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == LoginActivity.REGISTER_OK) {
+            String email = data.getStringExtra(LoginActivity.EMAIL);
+            String psw = data.getStringExtra(LoginActivity.PSW);
+            contentLoader.login(email, psw);
+        }
+
+    }
+
 
 
     @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page,R.id.master_attention_layout})
@@ -132,14 +144,37 @@ public class LiveHomePageActivity extends BaseActivity {
 
                 break;
             case R.id.master_attention:
-                String text = (String) masterAttention.getText();
-                if ("关注".equals(text)) {
-                    contentLoader.getAddAttention(userId);
-                } else {
-                    showAttentionPopuwindow(userId);
+                boolean isLogin = UserHelper.isLogined(LiveHomePageActivity.this);
+                if(isLogin){
+                    String text = (String) masterAttention.getText();
+                    if ("关注".equals(text)) {
+                        contentLoader.getAddAttention(userId);
+                    } else {
+                        showAttentionPopuwindow(userId);
+                    }
+                }else{
+
+                    showLoginViewDialog();
+
                 }
+
                 break;
         }
+    }
+
+    private void showLoginViewDialog() {
+        CustomChatDialog customDialog = new CustomChatDialog(this);
+        customDialog.setContent(getString(R.string.live_login_hint));
+        customDialog.setCancelable(false);
+        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                Intent intent = new Intent(LiveHomePageActivity.this, LoginActivity.class);
+                startActivityForResult(intent,LoginActivity.REGISTER_OK);
+            }
+        });
+        customDialog.show();
     }
 
     private void showAttentionPopuwindow(final String userId) {
@@ -218,8 +253,11 @@ public class LiveHomePageActivity extends BaseActivity {
                     masterAttention.setText("关注");
                     masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
 
-                } else {
+                } else if(status==1) {
                     masterAttention.setText("已关注");
+                    masterAttention.setTextColor(Color.BLACK);
+                }else if(status==2){
+                    masterAttention.setText("已相互关注");
                     masterAttention.setTextColor(Color.BLACK);
                 }
             } else {
@@ -236,6 +274,12 @@ public class LiveHomePageActivity extends BaseActivity {
                 if (status == 1) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已关注");
+                    fansNum = fansNum + 1;
+                    homepageFansCount.setText(String.valueOf(fansNum));
+                    masterAttention.setTextColor(Color.BLACK);
+                }else if(status==2){
+                    Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
+                    masterAttention.setText("已相互关注");
                     fansNum = fansNum + 1;
                     homepageFansCount.setText(String.valueOf(fansNum));
                     masterAttention.setTextColor(Color.BLACK);

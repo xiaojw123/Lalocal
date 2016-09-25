@@ -284,4 +284,11 @@ public abstract class ICallBack {
 
     // 文章列表
     public void onArticleListResult(ArticlesResp articlesResp) {}
+
+    //获取在线人数
+    public void onGetAudienceOnLineUserCount(String json) {
+    }
+    //分享统计
+    public void onShareStatistics(String json) {
+    }
 }

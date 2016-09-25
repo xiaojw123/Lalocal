@@ -673,6 +673,15 @@ public class ContentLoader {
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
         requestQueue.add(request);
     }
+    //用户获取在线人数
+     public  void getAudienceUserOnLine(int onLineUser){
+         if (callBack != null) {
+             response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
+         }
+         ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount()+onLineUser, response, response);
+         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+         requestQueue.add(request);
+     }
 
     //关闭直播间
     public void cancelLiveRoom(String userId) {
@@ -822,6 +831,20 @@ public class ContentLoader {
         requestQueue.add(request);
 
     }
+
+    //分享统计
+    public void getShareStatistics(String targetType,String targetId,String channelType){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SHARE_STATISTICS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getShareStatistics(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getBodyParams(targetType, targetId, channelType));
+        requestQueue.add(request);
+
+
+    }
+
 
     //搜索关注粉丝
     public void getSearchUser(String nickName) {
@@ -1283,6 +1306,12 @@ public class ContentLoader {
                     case RequestCode.GET_ARTICLE_LIST:
                         responseArticleList(json);
                         break;
+                    case RequestCode.GET_ONLINE_COUNT:
+                        responseAudienceUserOnLineCount(json);
+                        break;
+                    case RequestCode.SHARE_STATISTICS:
+                        responseShareStatistics(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1379,6 +1408,14 @@ public class ContentLoader {
 
 
         }
+
+
+        //用户获取在线人数
+        private void responseAudienceUserOnLineCount(String json) {
+            callBack.onGetAudienceOnLineUserCount(json);
+
+        }
+
 
         private void responseGetAreaDetailItems(JSONObject jsonObj, int moduleType) {
             JSONObject resJobj = jsonObj.optJSONObject(ResultParams.REULST);
@@ -1905,6 +1942,14 @@ public class ContentLoader {
             callBack.onLiveAttentionStatus(liveAttentionStatusBean);
         }
 
+        //分享统计
+        private void responseShareStatistics(String json) {
+
+            AppLog.i("TAG","分享统计:"+json);
+            callBack.onShareStatistics(json);
+        }
+
+
         //取消关注
         private void responseCancelAttention(String json) {
             LiveCancelAttention liveCancelAttention = new Gson().fromJson(json, LiveCancelAttention.class);
@@ -1958,6 +2003,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -2097,6 +2143,23 @@ public class ContentLoader {
 
     }
 
+    //分享统计
+    private String getBodyParams(String targetType, String targetId, String channelType) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("targetType", targetType);
+            jsonObject.put("targetId", targetId);
+            jsonObject.put("channelType", channelType);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+
+
+    }
+
+
     //上传在线人数
     public String getUserOnLines(String onLinesUser) {
         JSONObject jsonObject = new JSONObject();
@@ -2108,6 +2171,7 @@ public class ContentLoader {
         }
         return jsonObject.toString();
     }
+
 
     //修改直播
     private String getAlterLiveRoom(String title, String photo, String announcement, String longitude, String latitude) {
@@ -2246,6 +2310,10 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
+        int GET_ONLINE_COUNT=230;
+        int SHARE_STATISTICS=231;
+
+
         int GET_INDEX_RECOMMEND_LIST=300;
         int GET_ARTICLE_LIST=301;
 

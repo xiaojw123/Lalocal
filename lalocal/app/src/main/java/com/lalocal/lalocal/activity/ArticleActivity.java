@@ -76,6 +76,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     private int praiseNum;
     private int readNum;
     private BlurImageView blurImageView;
+    private int userId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -168,11 +169,10 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
     private void showShare(SpecialShareVOBean shareVO) {
 
-        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO,targetID);
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
                 Gravity.CENTER, 0, 0);
-
     }
 
     //判断二维码是否下载过
@@ -215,6 +215,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 String url = articleDetailsRespResult.getUrl();
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
                 String photo = articleDetailsRespResult.getPhoto();
+                userId = articleDetailsResp.getResult().getId();
                 if(photo!=null){
                     blurImageView.setBlurImageURL(photo);
                     blurImageView.setBlurRadius(1);

@@ -148,6 +148,7 @@ public class AppConfig {
     }
 
 
+
     //直播列表
     public static String getLiveListUrl() {
         return baseUrl + "channels?";
@@ -246,6 +247,16 @@ public class AppConfig {
     //礼物排行榜http://dev.lalocal.cn:8080/api/
     public static final String getGiftRanks() {
         return baseUrl + "channels/";
+    }
+
+    //分享统计
+    public static final String getShareStatistics(){
+        return  baseUrl+"system/share";
+    }
+
+    //上传在线人数  http://dev.lalocal.cn:8080/api/system/numbs?number=1
+    public static final String getOnLineUserCount(){
+        return  baseUrl+"/system/numbs?number=";
     }
 
     public static String getBaseUrl() {

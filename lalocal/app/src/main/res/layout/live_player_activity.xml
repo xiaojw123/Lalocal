@@ -73,7 +73,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:layout_marginLeft="-65dp"
-        android:background="#28000000">
+       >
 
 
         <RelativeLayout

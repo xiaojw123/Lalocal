@@ -2,6 +2,7 @@ package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
@@ -33,6 +34,7 @@ import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
+import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.model.SendGiftResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
@@ -70,6 +72,8 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.agora.rtc.Constants;
@@ -145,13 +149,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private AnimationDrawable rocketAnimation;
     protected String channelId;
     private GiftStorePopuWindow giftStorePopuWindow;
-    private ContentLoader contentLoader1;
+
     private NEVideoView videoView;
     private String cname;
     private String liveStatus;
     protected LiveRowsBean liveRowsBean;
     private int myGold;
     private CustomLiveUserInfoDialog customLiveUserInfoDialog;
+    private Timer timerOnLine;
+    private OnLineCallBack onLineCallBack;
+    private ContentLoader contentLoader1;
 
 
     public static void start(Context context,LiveRowsBean liveRowsBean,String annoucement){
@@ -189,17 +196,55 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         initAudienceParam();
         parseIntent();
-
         initView();
         registerObservers(true);
         loginIm();
         initData();
+        postOnLineUser();
+        if(onLineCallBack==null){
+            onLineCallBack = new OnLineCallBack();
+        }
+
+        contentLoader1 = new ContentLoader(this);
+        contentLoader1.setCallBack(onLineCallBack);
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);
         }
     }
 
+    private void postOnLineUser() {
+        if (timerOnLine == null) {
+            timerOnLine = new Timer(true);
+        }
+        timerOnLine.schedule(new TimerTask() {
 
+            @Override
+            public void run() {
+
+                        AppLog.i("TAG", "用户获取在线人数：" + onlineCounts);
+                        if (onlineCounts > 0&&contentLoader1!=null) {
+                            contentLoader1.getAudienceUserOnLine(onlineCounts);
+                            contentLoader1.setCallBack(onLineCallBack);
+                        }
+
+            }
+        }, 1000, 2 * 1000);
+
+    }
+
+
+    private class OnLineCallBack extends ICallBack{
+        @Override
+        public void onGetAudienceOnLineUserCount(String json) {
+            super.onGetAudienceOnLineUserCount(json);
+
+            OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
+            if(onLineUser!=null&&onLineUser.getResult()>0){
+                onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
+            }
+
+        }
+    }
 
     @Override
     protected void initUIandEvent() {
@@ -243,14 +288,19 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             case 3:
                 break;
         }
-
         worker().configEngine(cRole, vProfile);
 
     }
 
     private void initData() {
         contentLoader.liveGiftStore();
+
+
     }
+
+
+
+
 
     private void loginIm() {
         if (!DemoCache.getLoginStatus()) {
@@ -350,6 +400,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         }
     };
     boolean masterFirstEnter = true;
+    boolean audienceOnLineCountsChange=true;
     Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
 
         private String style;
@@ -385,11 +436,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 ChatRoomNotificationAttachment notificationAttachment = (ChatRoomNotificationAttachment) message.getAttachment();
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
+                        audienceOnLineCountsChange=true;
+
                         String fromAccountIn = message.getFromAccount();
                         MsgStatusEnum status = message.getStatus();
-
                         if (creatorAccount.equals(fromAccountIn)) {
-
                             showFinishLayout(false, 2);
                             AppLog.i("TAG", "主播回来了。。。。。。。。");
                         }
@@ -400,7 +451,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         AppLog.i("TAG", "直播间被关闭");
                         break;
                     case ChatRoomMemberExit://主播退出房间监听
-
+                        audienceOnLineCountsChange=true;
 
                      /*   String fromAccountExit = message.getFromAccount();
                         if (creatorAccount.equals(fromAccountExit)) {
@@ -441,7 +492,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void onPause() {
         super.onPause();
-
         // 暂停播放
         if (videoPlayer != null) {
             videoPlayer.onActivityPause();
@@ -452,6 +502,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     protected void onDestroy() {
         // 释放资源
         if (videoPlayer != null) {
+
             videoPlayer.resetVideo();
         }
         deInitUIandEvent();
@@ -650,7 +701,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
 
-
+    boolean giftStoreFirstClick=true;
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
 
         @Override
@@ -699,6 +750,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     startActivity(intent);
                     break;
                 case R.id.live_gift_img:
+
+                    if(giftStoreFirstClick){
+                        giftStoreFirstClick=false;
+
+
                     boolean loginedq = UserHelper.isLogined(AudienceActivity.this);
                     if (!loginedq) {
                         showLoginViewDialog();
@@ -723,10 +779,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         }else {
                             showGiftPage(myGold);
                         }
-
-
                     }
-
+                    }
                     break;
 
             }
@@ -799,6 +853,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             @Override
             public void onDismiss() {
                 liveSettingLayout.setVisibility(View.VISIBLE);
+                giftStoreFirstClick=true;
             }
         });
 
@@ -969,10 +1024,18 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
         });
         customLiveUserInfoDialog.show();
+
+        customLiveUserInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                CustomDialogStyle.USER_INFO_FIRST_CLICK=true;
+            }
+        });
     }
 
 
     private void finishLive() {
+
         if (isStartLive) {
             logoutChatRoom();
         } else {
@@ -1235,6 +1298,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 }
             }
         });
+    }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        CustomDialogStyle.IS_FIRST_CLICK_PAGE=true;
     }
 
     @Override

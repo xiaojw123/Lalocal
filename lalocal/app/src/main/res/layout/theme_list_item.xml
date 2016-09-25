@@ -56,7 +56,7 @@
                 <ImageView
                     android:layout_width="@dimen/dimen_size_12_dp"
                     android:layout_height="@dimen/dimen_size_12_dp"
-                    android:src="@drawable/reader_quantity"
+                    android:src="@drawable/raeder_quantity"
                     android:layout_gravity="center_vertical"/>
 
                 <TextView

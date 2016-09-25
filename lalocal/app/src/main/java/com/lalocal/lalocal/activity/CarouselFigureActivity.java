@@ -37,6 +37,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     private RecommendAdResultBean recommendAdResultBean;
     private SpecialShareVOBean shareVO;
     private CustomTitleView carousFigureCtv;
+    private int targetId;
 
 
     @Override
@@ -48,6 +49,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         recommendAdResultBean = intent.getParcelableExtra("carousefigure");
         String url = recommendAdResultBean.url;
         shareVO = recommendAdResultBean.shareVO;
+        targetId = recommendAdResultBean.targetId;
         carousFigure.getSettings().setJavaScriptEnabled(true);
         carousFigure.loadUrl(url);
         carousFigure.setWebViewClient(new CarouseLWebViewClient());
@@ -75,7 +77,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO);
+        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO,String.valueOf(targetId));
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.CENTER, 0, 0);

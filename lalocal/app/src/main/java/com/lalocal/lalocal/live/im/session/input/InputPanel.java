@@ -345,6 +345,14 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
                 Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 if(selectorStatus){
+
+                    int length = text.toString().length();
+                    if(length>20){
+                        Toast.makeText(container.activity,"弹幕做多发送20个字",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","1");

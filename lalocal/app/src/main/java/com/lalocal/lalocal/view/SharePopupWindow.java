@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.umeng.socialize.ShareAction;
@@ -35,10 +36,18 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private BlurImageView shareBlur;
     private View view;
     private View cancelLayout;
+    private ContentLoader contentLoader;
+    private  String  targetId;
 
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
         this.shareVO = shareVO;
+    }
+
+    public  SharePopupWindow(Context cx,SpecialShareVOBean shareVO,String targetId){
+        this.context=cx;
+        this.shareVO=shareVO;
+        this.targetId=targetId;
     }
 
     public void showShareWindow() {
@@ -48,12 +57,10 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         shareFriends = (LinearLayout) view.findViewById(R.id.share_friends);
         shareWechat = (LinearLayout) view.findViewById(R.id.share_wechat);
         shareWeibo = (LinearLayout) view.findViewById(R.id.share_weibo);
-       // cancel = (TextView) view.findViewById(R.id.cancel_share);
         cancelLayout = view.findViewById(R.id.cancel_layout);
         shareFriends.setOnClickListener(this);
         shareWechat.setOnClickListener(this);
         shareWeibo.setOnClickListener(this);
-      //  cancel.setOnClickListener(this);
         cancelLayout.setOnClickListener(this);
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -62,8 +69,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         this.setAnimationStyle(R.style.AnimBottom);
         ColorDrawable dw = new ColorDrawable();
         this.setBackgroundDrawable(dw);
-
-
+   //     contentLoader = new ContentLoader(context);
 
     }
 
@@ -112,6 +118,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                 dismiss();
                 break;
         }
+
+
         dismiss();
     }
 
@@ -211,7 +219,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-
+        //    contentLoader.getShareStatistics(String.valueOf(shareVO.getType()), "12",share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
            if(share_media.equals(SHARE_MEDIA.SINA)){
                Toast.makeText(context,"微博分享成功!",Toast.LENGTH_SHORT).show();
            }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){

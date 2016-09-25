@@ -16,7 +16,8 @@
         android:paddingTop="30dp"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/text_size_18_sp"
-        android:text="主播暂时离开了！!"/>
+        android:textColor="@android:color/white"
+        android:text="主播休息了！!"/>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"

@@ -8,6 +8,7 @@
     android:background="@drawable/nim_message_view_bottom"
     android:gravity="center"
 
+
     >
 
     <FrameLayout

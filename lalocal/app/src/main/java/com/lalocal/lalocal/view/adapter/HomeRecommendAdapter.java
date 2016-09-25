@@ -498,11 +498,12 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 hotLiveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
                 hotLiveViewHolder.imgLiveAvatar = (CircleImageView) view.findViewById(R.id.img_live_avatar);
 
-                // 设置播放图片
-                String photo = liveRowsBean.getPhoto();
+                // 设置直播用户头像
+                LiveUserBean user = liveRowsBean.getUser();
+            // 设置播放图片
+                String photo = user.getAvatarOrigin();
                 if (!TextUtils.isEmpty(photo)) {
-                    DrawableUtils.displayRadiusImg(mContext, hotLiveViewHolder.imgLivePic, photo,
-                            DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+                    DrawableUtils.displayImg(mContext, hotLiveViewHolder.imgLivePic, photo);
                 }
 
                 // 设置播放标题
@@ -517,8 +518,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 人数以“,”将千分位隔开
                 hotLiveViewHolder.tvLivePeopleAmount.setText(formatNum(onlineUser));
 
-                // 设置直播用户头像
-                LiveUserBean user = liveRowsBean.getUser();
                 // 获取头像uri
                 final String avatar = user.getAvatar();
                 // 设置头像

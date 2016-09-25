@@ -180,10 +180,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     Handler handler = new Handler() {
         @Override
         public String getMessageName(Message message) {
-
             switch (message.what) {
                 case RESULT_PLAY:
-
                     break;
             }
             return super.getMessageName(message);
@@ -197,9 +195,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onResult(SHARE_MEDIA share_media) {
-
     }
-
     @Override
     public void onError(SHARE_MEDIA share_media, Throwable throwable) {
 
