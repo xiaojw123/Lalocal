@@ -80,6 +80,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
     protected static final int REQUEST_CODE_CAMERA = 2;
     protected static final int REQUEST_CODE_LOCAL = 3;
     public static  final int CAMERA_RQUEST_CODE=0x24;
+    public static final  int READ_SOTRE_QUEST_CODE=0x26;
 
     /**
      * 传入fragment的参数
@@ -117,6 +118,7 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
     private EMChatRoomChangeListener chatRoomChangeListener;
     private boolean isMessageListInited;
     protected MyItemClickListener extendMenuItemClickListener;
+    Uri selectedImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -356,9 +358,20 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
                     sendImageMessage(cameraFile.getAbsolutePath());
             } else if (requestCode == REQUEST_CODE_LOCAL) { // 发送本地图片
                 if (data != null) {
-                    Uri selectedImage = data.getData();
+                    selectedImage = data.getData();
                     if (selectedImage != null) {
-                        sendPicByUri(selectedImage);
+                        if (Build.VERSION.SDK_INT>=23){
+                            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                                    != PackageManager.PERMISSION_GRANTED) {
+                                Log.d("xiaojw","checkSelfPermission____");
+                                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                                        READ_SOTRE_QUEST_CODE);
+                            }else{
+                                sendPicByUri(selectedImage);
+                            }
+                        }else{
+                            sendPicByUri(selectedImage);
+                        }
                     }
                 }
             }
@@ -603,6 +616,16 @@ public class EaseChatFragment extends EaseBaseFragment implements EMEventListene
                 // Permission Denied
                 Toast.makeText(getActivity(),"权限被拒绝，允许之后可以使用该功能",Toast.LENGTH_SHORT).show();
             }
+        }else if (requestCode==READ_SOTRE_QUEST_CODE){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("xiaojw","grantResults____");
+                // Permission Granted
+                sendPicByUri(selectedImage);
+            } else {
+                // Permission Denied
+                Toast.makeText(getActivity(),"权限被拒绝，允许之后可以使用该功能",Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
