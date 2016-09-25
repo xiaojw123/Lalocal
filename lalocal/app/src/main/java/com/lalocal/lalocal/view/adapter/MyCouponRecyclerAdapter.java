@@ -69,11 +69,11 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
         mUseBtn = useBtn;
     }
 
-//    public List<View> getSelectedCouponViews() {
+    //    public List<View> getSelectedCouponViews() {
 //        return lastSelectView;
 //    }
-    public  Map<Integer,Coupon> getSelectedCouponMap(){
-        return  seliCopMap;
+    public Map<Integer, Coupon> getSelectedCouponMap() {
+        return seliCopMap;
     }
 
 
@@ -153,7 +153,7 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
                     couponHolder.itemView.setSelected(false);
                 }
 
-                if (isClickEnalbe && (item.getStatus() ==0||item.getStatus()==1)) {
+                if (isClickEnalbe && (item.getStatus() == 0 || item.getStatus() == 1)) {
 
                     couponHolder.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -268,7 +268,13 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
 
     private void updateCouponView(Coupon itemCoupon, boolean isSelected, int position) {
         if (isSelected) {
-            updateHistoryCouponList(itemCoupon.getType());
+            int type = itemCoupon.getType();
+            if (type == 0) {
+                seliCopMap.clear();
+                notifyDataSetChanged();
+            } else {
+                updateHistoryCouponList(itemCoupon.getType());
+            }
 //            seliCopIems.append(position, itemCoupon);
             seliCopMap.put(position, itemCoupon);
         } else {
@@ -282,7 +288,7 @@ public class MyCouponRecyclerAdapter extends BaseRecyclerAdapter {
             double couponValue = 0;
 
             for (Map.Entry<Integer, Coupon> entry : seliCopMap.entrySet()) {
-                Coupon coupon=entry.getValue();
+                Coupon coupon = entry.getValue();
                 couponValue += coupon.getDiscount();
             }
 //            for (Coupon coupon : seliIems) {
