@@ -43,7 +43,8 @@ public class JsInterface {
         AppLog.print("postMessage___callback__"+callback);
         switch (callback){
             case BookActivity.PAGET_TO_COUPON:
-                gotoMyCoupon();
+                //TODO:优惠券影响预定流程
+//                gotoMyCoupon();
                 break;
 
         }

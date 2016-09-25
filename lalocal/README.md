@@ -1,40 +1,34 @@
-关闭日志MyApplication/isDebug=false;
-关闭bugTag
-1. lalocal/build.gradle
-   dependencies{
-     classpath 'com.bugtags.library:bugtags-gradle:latest.integration'
-   }
-2. lalocal/app/build.gradle
-   apply plugin: 'com.bugtags.library.plugin'
-apply plugin: 'com.bugtags.library.plugin'
-bugtags {
-    //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "fa970dd98b61298053b6a9cb88597605"  //这里是你的 appKey
-    appSecret "76f72474a71536c759f78f82d2121c30"    //这里是你的 appSecret，管理员在设置页可以查看
-    mappingUploadEnabled true
+三方库说明
 
-    //网络跟踪功能配置(企业版)
-    trackingNetworkEnabled true
-}
-dependencies {
-    compile 'com.bugtags.library:bugtags-lib:latest.integration'
-}
-3. MyApplication/oncreate()
-   Bugtags.start("fa970dd98b61298053b6a9cb88597605", this, Bugtags.BTGInvocationEventBubble);
-4. BaseActivity
-    @Override
-    protected void onResume() {
-        super.onResume();
-       Bugtags.onResume(this);
-    }
+EaseMobSDK：环信SDK，主要是是提供移动客服的功能，为客服跟客户之间架起交流的桥梁；
+1.Social_Sdk：分享，用于分享到第三方平台(友盟)；
+2.Ping++：主要是为支付提供支持，如微信或支付宝支付等；
+3.Volley： 网络请求
+4.云信SDK：直播，聊天功能
+5.Imgeloader：图片加载缓存
+6.Qiniu：七牛上传图片加速SDK
+代码约定规则(同IOS)
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-       Bugtags.onPause(this);
-    }
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-      Bugtags.onDispatchTouchEvent(this, event);
-        return super.dispatchTouchEvent(event);
-    }
+URL Schemes: LLalocal
+
+APP外部HTML打开APP
+
+跳转指定页
+
+llalocal://path?{"targetType":"10","targetId":"35","targetUrl":"https://dev.lalocal.cn/wechat/app_theme?id=35"}
+打开app
+
+llalocal://callback?
+APP内部HTML链接解析
+
+指定跳转页
+
+lalocal://app?{"targetType": "10","targetId": "35","targetUrl": "https://dev.lalocal.cn/wechat/app_theme?id=35"}
+用户未登录: lalocal://app?
+文章中二维码点击
+
+lalocal://codeimageclick?{"name": "10","wechatNo": "35","imageUrl": "http://7xpid3.com1.z0.glb.clouddn.com/2016052111453710470326042255"}
+信程支付成功回调
+
+myweb:lalocalcreditpaysuccessful
+
