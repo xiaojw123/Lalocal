@@ -742,13 +742,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 isClickStartLiveBtn = true;
                 //开始直播的时间
                 startTime = System.currentTimeMillis();
-                if (isShareSelector == 0) {
+              /*  if (isShareSelector == 0) {
                     liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 } else if (isShareSelector == 1) {
                     liveShare(SHARE_MEDIA.SINA);
                 } else if (isShareSelector == 2) {
                     liveShare(SHARE_MEDIA.WEIXIN);
-                }
+                }*/
                 if (channelId != null) {
                     contentLoader.alterLive(roomName, channelId, null, null, null, null);
                 } else {

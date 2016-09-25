@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -26,11 +27,13 @@ import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
+import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.im.ui.widget.CircleImageView;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
@@ -338,12 +341,54 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                         // 点击跳转
                         RecommendAdResultBean recommendAdResultBean = ads.get(position);
                         String url = recommendAdResultBean.url;
-                        if (TextUtils.isEmpty(url)) {
-                            return;
+                        int targetType = recommendAdResultBean.targetType;
+                        int targetId = recommendAdResultBean.targetId;
+//                        if (TextUtils.isEmpty(url)) {
+//                            return;
+//                        }
+
+                        Intent intent = null;
+                        switch (targetType) {
+                            case Constants.TARGET_TYPE_URL:
+                                AppLog.i("addd", "链接");
+                                intent = new Intent(mContext, CarouselFigureActivity.class);
+                                intent.putExtra("carousefigure", recommendAdResultBean);
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_ARTICLE:
+                                AppLog.i("addd", "文章");
+                                intent = new Intent(mContext, ArticleActivity.class);
+                                intent.putExtra("targetID", String.valueOf(targetId));
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_PRODUCT:
+                                AppLog.i("addd", "产品--" + targetId);
+                                // 跳转到商品详情界面
+                                SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
+                                specialToH5Bean.setTargetId(71);
+
+                                intent = new Intent(mContext, ProductDetailsActivity.class);
+                                intent.putExtra("productdetails", specialToH5Bean);
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_ROUTE:
+                                AppLog.i("addd", "路线");
+                                intent = new Intent(mContext, RouteDetailActivity.class);
+                                intent.putExtra("detail_id", targetId);
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_THEME:
+                                AppLog.i("addd", "专题");
+                                intent = new Intent(mContext, SpecialDetailsActivity.class);
+                                intent.putExtra("rowId", targetId + "");
+                                mContext.startActivity(intent);
+                                break;
+                            case Constants.TARGET_TYPE_LIVE:
+                                // 跳转播放界面 TODO: 暂时不用做
+//                                AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                                break;
                         }
-                        Intent intent = new Intent(mContext, CarouselFigureActivity.class);
-                        intent.putExtra("carousefigure", recommendAdResultBean);
-                        mContext.startActivity(intent);
+
                     }
                 });
                 sliderLayout.addSlider(textSliderView);
@@ -422,7 +467,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             // 改变大小透明度的工具类
             ScaleAlphaPageTransformer mScaleAlphaPageTransformer = new ScaleAlphaPageTransformer();
             // TODO: 获取网络数据后，传递数据
-            HotLiveAdapter hotLiveAdapter = new HotLiveAdapter(context, hotLiveList);
+            LiveAdapter hotLiveAdapter = new LiveAdapter(context, hotLiveList);
             // 配置适配器
             vpHotLives.setAdapter(hotLiveAdapter);
             // 设置值改变透明度，不改变大小
@@ -468,11 +513,11 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             });
         }
 
-        class HotLiveAdapter extends PagerAdapter {
+        class LiveAdapter extends PagerAdapter {
             private Context context;
             private List<LiveRowsBean> hotLiveList;
 
-            public HotLiveAdapter(Context context, List<LiveRowsBean> hotLiveList) {
+            public LiveAdapter(Context context, List<LiveRowsBean> hotLiveList) {
                 this.context = context;
                 this.hotLiveList = hotLiveList;
             }
@@ -491,37 +536,43 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             public Object instantiateItem(ViewGroup container, int position) {
                 View view = LayoutInflater.from(context).inflate(R.layout.home_recommend_hotlive_viewpager_item, null);
                 final LiveRowsBean liveRowsBean = hotLiveList.get(position);
-                SubHotLiveViewHolder hotLiveViewHolder = new SubHotLiveViewHolder();
-                hotLiveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
-                hotLiveViewHolder.imgLivePic = (ScaleImageView) view.findViewById(R.id.img_live_pic);
-                hotLiveViewHolder.tvLivePeopleAmount = (TextView) view.findViewById(R.id.tv_live_people);
-                hotLiveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
-                hotLiveViewHolder.imgLiveAvatar = (CircleImageView) view.findViewById(R.id.img_live_avatar);
+                SubLiveViewHolder liveViewHolder = new SubLiveViewHolder();
+                liveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
+                liveViewHolder.cardView = (CardView) view.findViewById(R.id.card_view);
+                liveViewHolder.imgLivePic = (ScaleImageView) view.findViewById(R.id.img_live_pic);
+                liveViewHolder.tvLivePeopleAmount = (TextView) view.findViewById(R.id.tv_live_people);
+                liveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
+                liveViewHolder.imgLiveAvatar = (CircleImageView) view.findViewById(R.id.img_live_avatar);
+
+//                liveViewHolder.cardView.setRadius(10.0f);  //设置CardView的圆角半径
+//                liveViewHolder.cardView.setCardElevation(10.0f); //设置CardView的阴影半径
+//                liveViewHolder.cardView.setContentPadding(5,5,5,5); //设置CardView的父控件与子控件的距离
 
                 // 设置直播用户头像
                 LiveUserBean user = liveRowsBean.getUser();
-            // 设置播放图片
+                // 设置播放图片
                 String photo = user.getAvatarOrigin();
                 if (!TextUtils.isEmpty(photo)) {
-                    DrawableUtils.displayImg(mContext, hotLiveViewHolder.imgLivePic, photo);
+//                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, photo, DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                 }
 
                 // 设置播放标题
                 String liveTitle = liveRowsBean.getTitle();
                 if (!TextUtils.isEmpty(liveTitle)) {
-                    hotLiveViewHolder.tvLiveTitle
+                    liveViewHolder.tvLiveTitle
                             .setText(liveTitle);
                 }
 
                 // 设置在线用户人数
                 int onlineUser = liveRowsBean.getOnlineUser();
                 // 人数以“,”将千分位隔开
-                hotLiveViewHolder.tvLivePeopleAmount.setText(formatNum(onlineUser));
+                liveViewHolder.tvLivePeopleAmount.setText(formatNum(onlineUser));
 
                 // 获取头像uri
                 final String avatar = user.getAvatar();
                 // 设置头像
-                DrawableUtils.displayImg(mContext, hotLiveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
+                DrawableUtils.displayImg(mContext, liveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
 
                 // 获取视频播放相关数据
                 final int roomId = liveRowsBean.getRoomId();
@@ -541,7 +592,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 final int channelId = liveRowsBean.getId();
 
                 final String finalAnn1 = ann;
-                hotLiveViewHolder.container.setOnClickListener(new View.OnClickListener() {
+                liveViewHolder.container.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         // 跳转播放界面
@@ -560,13 +611,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         }
 
-        class SubHotLiveViewHolder {
+        class SubLiveViewHolder {
             FrameLayout container;
+            CardView cardView;
             ScaleImageView imgLivePic;
             TextView tvLiveTitle;
             TextView tvLivePeopleAmount;
             CircleImageView imgLiveAvatar;
-//            ImageView btnPlay;
         }
     }
 

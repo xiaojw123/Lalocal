@@ -1482,8 +1482,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         if (inputPanel != null) {
             inputPanel.collapse(false);
         }
-
-
     }
 
     @Override

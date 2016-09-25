@@ -145,7 +145,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 String email = data.getStringExtra(LoginActivity.EMAIL);
                 String psw = data.getStringExtra(LoginActivity.PSW);
                 contentService.login(email, psw);
-
             }
         }
     }
@@ -157,11 +156,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         if (!hidden) {
             isFirstLoad = true;
             allRows.clear();
-            if(firstLoadData){
-                firstLoadData=false;
-                contentService.liveList(10, 1);
-            }
-
+            contentService.liveList(10, 1);
         }
     }
 
@@ -204,7 +199,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onLiveList(LiveListDataResp liveListDataResp) {
             super.onLiveList(liveListDataResp);
-
+            firstLoadData=true;
             List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
 
             if (rows.size() > 0 && isFirstLoad) {
@@ -222,7 +217,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 allRows.addAll(allRows.size(), rows);
                 Collections.sort(allRows);
                 liveMainListAdapter.refresh(allRows);
-                firstLoadData=true;
+
             }
 
 

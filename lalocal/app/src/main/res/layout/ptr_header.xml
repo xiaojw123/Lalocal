@@ -15,6 +15,4 @@
             android:layout_gravity="center"
             app:gif="@drawable/loading" />
     </RelativeLayout>
-
-
 </LinearLayout>

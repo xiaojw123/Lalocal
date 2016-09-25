@@ -4,7 +4,7 @@
     <item android:drawable="@color/white" />
 
     <item
-        android:bottom="@dimen/dimen_size_30_dp"
+        android:bottom="@dimen/dimen_size_60_dp"
         >
         <bitmap
             android:gravity="bottom"

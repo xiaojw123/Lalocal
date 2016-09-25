@@ -48,10 +48,7 @@
                         android:textColor="@color/color_66"
                         android:textSize="@dimen/text_size_10_sp"
                         android:layout_marginTop="@dimen/dimen_size_5_dp"
-
                         />
-
-
                 </LinearLayout>
 
             <!--<TextView-->

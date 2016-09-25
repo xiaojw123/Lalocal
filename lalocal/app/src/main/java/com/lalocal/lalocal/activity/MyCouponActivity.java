@@ -33,6 +33,7 @@ import com.lalocal.lalocal.view.adapter.MyCouponRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -112,15 +113,16 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                 Intent intent = null;
                 if ("使用".equals(text)) {
                     if (adapter != null) {
-                        List<View> selectedViews = adapter.getSelectedCouponViews();
+//                        List<Coupon> selectedViews = adapter.getSelectedCoupons();
+                        Map<Integer, Coupon> selelctedMap = adapter.getSelectedCouponMap();
+                        List<Coupon> selectedViews = new ArrayList<>();
+                        for (Map.Entry<Integer, Coupon> entry : selelctedMap.entrySet()) {
+                            Coupon coupon = entry.getValue();
+                            selectedViews.add(coupon);
+                        }
                         if (selectedViews.size() > 0) {
-                            List<Coupon> coupons = new ArrayList<>();
-                            for (View itemView : selectedViews) {
-                                Coupon coupon = (Coupon) itemView.getTag();
-                                coupons.add(coupon);
-                            }
                             Gson gson = new Gson();
-                            String json = gson.toJson(coupons);
+                            String json = gson.toJson(selectedViews);
                             intent = new Intent();
                             AppLog.print("myCoupon____json___" + json);
                             intent.putExtra("selectedCoupons", json);
