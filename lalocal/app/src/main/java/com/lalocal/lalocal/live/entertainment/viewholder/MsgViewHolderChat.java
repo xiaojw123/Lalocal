@@ -198,7 +198,6 @@ public class MsgViewHolderChat extends TViewHolder {
                 contentItem=( DemoCache.getUserInfo() == null ? DemoCache.getAccount() : DemoCache.getUserInfo().getName())+":"+itemContent;
             }*/
 
-
             //    nameText.setText(textviewSetContent(contentItem));
             if(message.getRemoteExtension() != null) {
                 String fromAccount = message.getFromAccount();
@@ -209,7 +208,7 @@ public class MsgViewHolderChat extends TViewHolder {
                     contentItem="我  :  "+itemContent;
                     //   nameText.setText("我");
                 }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
-                    contentItem="我  :  "+itemContent;
+                    contentItem="主播  :  "+itemContent;
                     //  nameText.setText("主播");
                 } else{
                     contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;

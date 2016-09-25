@@ -972,8 +972,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     member1.setRoomId(roomInfo.getRoomId());
                     ChatRoomMemberCache.getInstance().saveMyMember(member1);
                     DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
-
-                    updateUI();
+                    if(isFirstEnrRoom){
+                        updateUI();
+                    }
                     DemoCache.setLoginChatRoomStatus(true);
                     chatRoomStatusRemind("登陆聊天室成功...");
                     initInputPanel(creatorAccount);
@@ -1007,7 +1008,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 }
             });
             //查询在线成员列表
-            fetchData();
+            if(isFirstEnrRoom){
+                fetchData();
+            }
+
         }
     }
     protected void initInputPanel(String creatorAccount) {
@@ -1049,21 +1053,32 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         isNormalEmpty = false;
     }
 
+    boolean isFirstEnrRoom=true;
     private Map<String, ChatRoomMember> memberCache = new ConcurrentHashMap<>();
 
     private void getMembers(final MemberQueryType memberQueryType, final long time, int limit) {
+        AppLog.i("TAG","查询游客列表:"+"time:"+time+"   limit:"+limit+"   LIMIT:"+LIMIT);
         ChatRoomMemberCache.getInstance().fetchRoomMembers(roomId, memberQueryType, time, (LIMIT - limit), new SimpleCallback<List<ChatRoomMember>>() {
             @Override
             public void onResult(boolean success, List<ChatRoomMember> result) {
+                AppLog.i("TAG","游客列表请求getMembers："+success);
                 if (success) {
                         addMembers(result);
-
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
+                        AppLog.i("TAG","固定成员拉完了哈哈哈哈哈");
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
                     }
+                }else{
+
+                    NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                    isFirstEnrRoom=false;
+                    enterRoom();
+
+
                 }
             }
+
         });
     }
 
@@ -1090,10 +1105,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             tourisAdapter = new TouristAdapter(LivePlayerBaseActivity.this, allItems);
             touristList.setAdapter(tourisAdapter);
             isFirstLoadding = false;
-        } else {
 
+        } else if(allItems.size()>0){
             tourisAdapter.refresh(allItems);
-
         }
 
         tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
@@ -1173,7 +1187,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     @Override
                     public void onSuccess(final ChatRoomInfo param) {
                         onlineCounts = param.getOnlineUserCount();
-
                         if(mIsRefreshing){
                             clearCache();
                             fetchData();
@@ -1186,12 +1199,15 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     }
                     @Override
                     public void onFailed(int code) {
+                        timer.cancel();
+                         enterRoom();
+
 
                     }
 
                     @Override
                     public void onException(Throwable exception) {
-
+                        AppLog.i("TAG","查询列表定时任务失败：");
                     }
                 });
             }
@@ -1300,7 +1316,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     .setCallback(new RequestCallback<Void>() {
                         @Override
                         public void onSuccess(Void param) {
-                            AppLog.i("TAG", "消息发送成功");
+                          //  AppLog.i("TAG", "消息发送成功");
                         }
 
                         @Override

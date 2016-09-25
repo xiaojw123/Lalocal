@@ -229,14 +229,14 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             double parseDouble = Double.parseDouble(String.valueOf(statusa));
             int status = (int) parseDouble;
             if(status==1){
-                attentionStatus.setText("正在关注");
+                attentionStatus.setText(context.getString(R.string.live_attention_ok));
                 attentionStatus.setAlpha(0.4f);
 
             }else if(status==2){
-                attentionStatus.setText("相互关注");
+                attentionStatus.setText(context.getString(R.string.live_attention_mutual));
                 attentionStatus.setAlpha(0.4f);
             }else{
-                attentionStatus.setText("关注");
+                attentionStatus.setText(context.getString(R.string.live_attention));
                 attentionStatus.setAlpha(1);
             }
         }

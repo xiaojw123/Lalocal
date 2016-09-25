@@ -12,7 +12,7 @@
     <dimen name="live_padding_24dp">24dp</dimen>
     <dimen name="live_padding_30dp">30dp</dimen>
     <dimen name="live_padding_48dp">48dp</dimen>
-    <dimen name="live_over_padding_top">156dp</dimen>
+    <dimen name="live_over_padding_top">136dp</dimen>
     <dimen name="live_over_padding_left">110dp</dimen>
 
 

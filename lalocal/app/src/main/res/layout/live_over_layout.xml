@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/live_over_bg"
    >
 
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
+        android:id="@+id/live_over_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
+   android:layout_height="match_parent"
     android:paddingLeft="@dimen/live_over_padding_left"
+    android:background="@color/live_over_bg"
     android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
@@ -107,22 +111,31 @@
     </LinearLayout>
 
 
+
 </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:textColor="@color/color_chat_content"
-        android:text="@string/live_over_share"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/live_padding_12dp"
-        android:textSize="@dimen/text_size_12"/>
+
+
+        <TextView
+            android:id="@+id/live_over_back_home"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/live_back"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_16_sp"
+            android:textColor="@color/live_start_tv"
+            android:background="@color/live_input_live_bg"/>
+
+
     <LinearLayout
+        android:id="@+id/live_over_share_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/live_height_44dp"
         android:orientation="horizontal"
         android:gravity="center"
+        android:layout_above="@+id/live_over_back_home"
         android:layout_marginBottom="@dimen/live_padding_24dp">
 
         <ImageView
@@ -146,15 +159,18 @@
             android:src="@drawable/create_live_share_weixin_selector" />
     </LinearLayout>
 
-        <TextView
-            android:id="@+id/live_over_back_home"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_50dp"
-            android:text="@string/live_back"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_16_sp"
-            android:textColor="@color/live_start_tv"
-            android:background="@color/live_input_live_bg"/>
 
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:textColor="@color/color_chat_content"
+        android:text="@string/live_over_share"
+        android:gravity="center"
+        android:layout_above="@+id/live_over_share_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/live_padding_12dp"
+
+        android:textSize="@dimen/text_size_12"/>
+
+</RelativeLayout>
