@@ -75,10 +75,10 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
             myDiamondCosumeXrv.setLayoutManager(new LinearLayoutManager(this));
             myDiamondCosumeXrv.setVisibility(View.VISIBLE);
             myDiamondCosumeXrv.setPullRefreshEnabled(false);
-            mContentloader.getGoldLogs(1);
         } else {
             myDiamondNoRecharge.setVisibility(View.VISIBLE);
         }
+        mContentloader.getGoldLogs(1);
     }
 
 
@@ -132,12 +132,20 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
 
         @Override
         public void onError(VolleyError volleyError) {
-            isLoadMore = false;
+            hidenLoadingAnimation();
+            loadMoreComplete();
         }
+
+        private void loadMoreComplete() {
+            isLoadMore = false;
+            myDiamondCosumeXrv.loadMoreComplete();
+        }
+
 
         @Override
         public void onResponseFailed() {
-            isLoadMore = false;
+            hidenLoadingAnimation();
+            loadMoreComplete();
         }
 
 
