@@ -1,7 +1,0 @@
-#Sun Sep 25 21:08:36 CST 2016
-base.0=D\:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\transforms\\dex\\_360\\debug\\folders\\1000\\10\\instant-run-bootstrap_95e371014bff5048209335ea4e59974589a8b042
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=D\:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\transforms\\dex\\_360\\debug\\folders\\1000\\10\\instant-run_93bbab1d00a0b93d05c9156a42e97b2f9183c1e0\\classes.dex
-base.1=D\:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\transforms\\dex\\_360\\debug\\folders\\1000\\10\\instant-run_93bbab1d00a0b93d05c9156a42e97b2f9183c1e0
-file.0=D\:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\transforms\\dex\\_360\\debug\\folders\\1000\\10\\instant-run-bootstrap_95e371014bff5048209335ea4e59974589a8b042\\classes.dex
