@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/OrderCarditemContainerStyle"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dimen_size_5_dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp">
+
+
+        <TextView
+            android:id="@+id/travel_person_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:layout_marginRight="@dimen/dimen_size_36_dp"
+            android:textColor="@drawable/travel_person_nam_ch_textcolor"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <ImageView
+            android:id="@+id/travel_person_leader_ic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:visibility="invisible"
+            android:background="@drawable/teamleader_ic" />
+
+    </FrameLayout>
+
+
+
+    <View
+        style="@style/CommonD9LineTheme"
+        android:layout_marginTop="@dimen/dimen_size_5_dp" />
+
+    <FrameLayout
+        android:id="@+id/travelperson_phone_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            style="@style/OrderCardItemTextStyle"
+            android:gravity="center_vertical"
+            android:text="@string/mobile" />
+
+        <TextView
+            android:id="@+id/travel_person_mobile_numb"
+            style="@style/OrderCardItemTextStyle"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:singleLine="true" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/travelperson_email_cotainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            style="@style/OrderCardItemTextStyle"
+            android:gravity="center_vertical"
+            android:text="@string/email" />
+
+        <TextView
+            android:id="@+id/travel_person_email"
+            style="@style/OrderCardItemTextStyle"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:singleLine="true" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/travelperson_sex_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:visibility="gone"
+        >
+
+        <TextView
+            style="@style/OrderCardItemTextStyle"
+            android:gravity="center_vertical"
+            android:text="@string/sex" />
+
+        <TextView
+            android:id="@+id/travel_person_sex"
+            style="@style/OrderCardItemTextStyle"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:singleLine="true" />
+    </FrameLayout>
+
+
+</LinearLayout>

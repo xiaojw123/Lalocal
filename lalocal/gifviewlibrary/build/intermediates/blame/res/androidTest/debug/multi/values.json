@@ -1,0 +1,45 @@
+[
+    {
+        "outputFile": "D:\\Git_lalocal\\lalocal\\gifviewlibrary\\build\\intermediates\\incremental\\mergeDebugAndroidTestResources\\merged.dir\\values\\values.xml",
+        "map": [
+            {
+                "to": {
+                    "startLine": 4,
+                    "startColumn": 4,
+                    "startOffset": 298,
+                    "endColumn": 44,
+                    "endOffset": 338
+                },
+                "from": {
+                    "file": "D:\\Git_lalocal\\lalocal\\gifviewlibrary\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 4,
+                        "startColumn": 4,
+                        "startOffset": 298,
+                        "endColumn": 44,
+                        "endOffset": 338
+                    }
+                }
+            },
+            {
+                "to": {
+                    "startLine": 5,
+                    "startColumn": 4,
+                    "startOffset": 343,
+                    "endColumn": 65,
+                    "endOffset": 404
+                },
+                "from": {
+                    "file": "D:\\Git_lalocal\\lalocal\\gifviewlibrary\\build\\intermediates\\bundles\\debug\\res\\values\\values.xml",
+                    "position": {
+                        "startLine": 5,
+                        "startColumn": 4,
+                        "startOffset": 343,
+                        "endColumn": 65,
+                        "endOffset": 404
+                    }
+                }
+            }
+        ]
+    }
+]

@@ -1,0 +1,1122 @@
+[
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_search_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_search_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\viewpager.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\viewpager.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\activity_empt.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\activity_empt.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_fragment_tag_edit.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_fragment_tag_edit.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_item_hot.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_item_hot.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_layout_emojicon_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_layout_emojicon_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_fragment_quick_signin.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_fragment_quick_signin.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\my_order_adult_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\my_order_adult_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\activity_my_coupon.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\activity_my_coupon.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\photo_to_text.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\photo_to_text.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pop_coupon_excharge.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pop_coupon_excharge.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_ptr_simple_loading.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\ultra-ptr\\1.0.11\\res\\layout\\cube_ptr_simple_loading.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\orderdetail_more_operation.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\orderdetail_more_operation.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_mode_close_item_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_mode_close_item_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_telecast_visitors_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_telecast_visitors_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\big_picture_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\big_picture_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_widget_emojicon_tab_bar.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_widget_emojicon_tab_bar.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\indicator_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.daimajia.slider\\library\\1.1.5\\res\\layout\\indicator_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_attention_popu_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_attention_popu_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\article_test.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\article_test.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_easy_alert_dialog_title.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_easy_alert_dialog_title.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\chat_head_items.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\chat_head_items.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pull_to_refresh_header.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pull_to_refresh_header.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\travel_person_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\travel_person_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\author_pop_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\author_pop_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\user_attention_list_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\user_attention_list_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\content_page_loading.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\content_page_loading.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\user_search_live_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\user_search_live_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\view_banner.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\view_banner.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\destination_area_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\destination_area_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\xlistview_footer.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\xlistview_footer.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_bar_title_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_bar_title_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_template_big_media_narrow.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_template_big_media_narrow.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\carous_figure_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\carous_figure_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cmbkeyboard.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\pingpp\\unspecified\\res\\layout\\cmbkeyboard.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_media_cancel_action.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_media_cancel_action.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_big_expression.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_big_expression.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_emoji_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_emoji_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ptr_header.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\ptr_header.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\support_simple_spinner_dropdown_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\support_simple_spinner_dropdown_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\email_bound_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\email_bound_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\account_eidt2_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\account_eidt2_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_menu_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_menu_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_des_area_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_des_area_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\select_dialog_multichoice_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\select_dialog_multichoice_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_list_menu_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_list_menu_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_telecast_bottom_tab.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_telecast_bottom_tab.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\common_adapter_null.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\common_adapter_null.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_easy_alert_dialog_bottom_button.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_easy_alert_dialog_bottom_button.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_chat_dialog.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_chat_dialog.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_me_my_coupon_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_me_my_coupon_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_me_my_favorite_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_me_my_favorite_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\product_check_detail_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\product_check_detail_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_received_message.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_received_message.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\login_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\login_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_activity_chooser_view.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_activity_chooser_view.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\phototselect_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\phototselect_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_gifts_ranking_pop_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_gifts_ranking_pop_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_advertisement_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_advertisement_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\account_eidt1_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\account_eidt1_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\render_type_default.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.daimajia.slider\\library\\1.1.5\\res\\layout\\render_type_default.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_mints_base_content_frame_with_title_header.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_mints_base_content_frame_with_title_header.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_activity_chooser_view_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_activity_chooser_view_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\listview_header.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.jcodecraeer\\xrecyclerview\\1.2.7\\res\\layout\\listview_header.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_widget_chat_input_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_widget_chat_input_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_result_item_article.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_result_item_article.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_search_view.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_search_view.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\em_row_sent_transfertokefu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\em_row_sent_transfertokefu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_expression.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_expression.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\render_type_text.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.daimajia.slider\\library\\1.1.5\\res\\layout\\render_type_text.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\wheeldialog_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\wheeldialog_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\theme_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\theme_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\activity_pingpp_payment.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\pingpp\\unspecified\\res\\layout\\activity_pingpp_payment.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_received_file.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_received_file.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_media_action.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_media_action.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_quick_signin.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_quick_signin.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\em_activity_chat.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\em_activity_chat.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\day_route_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\day_route_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_sticker_picker_view.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_sticker_picker_view.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_me_my_oder_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_me_my_oder_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\product_title_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\product_title_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\welcome_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\welcome_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\order_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\order_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\product_details_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\product_details_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_remind_login_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_remind_login_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\recharge_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\recharge_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_fab_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_fab_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_over_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_over_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_widget_chat_primary_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_widget_chat_primary_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\register_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\register_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_template_part_chronometer.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\slider_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.daimajia.slider\\library\\1.1.5\\res\\layout\\slider_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_tag_state.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_tag_state.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\audience_gift_viewpager_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\audience_gift_viewpager_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_sent_file.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_sent_file.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pull_to_refresh_header_horizontal.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pull_to_refresh_header_horizontal.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_attention_list_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_attention_list_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\question_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\question_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pay_manner_sel_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pay_manner_sel_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_fragment_chat.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_fragment_chat.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\password_forget_layout2.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\password_forget_layout2.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_listview_refresh.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_listview_refresh.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\route_detail_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\route_detail_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_mints_base_list_menu_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_mints_base_list_menu_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_result_item_product.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_result_item_product.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_ptr_classic_default_header.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\ultra-ptr\\1.0.11\\res\\layout\\cube_ptr_classic_default_header.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\message_item_text.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\message_item_text.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\listview_footerview.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\listview_footerview.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_fragment_login.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_fragment_login.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_activity_show_big_image.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_activity_show_big_image.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_template_lines.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_template_lines.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_gifts_ranking_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_gifts_ranking_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\travel_person_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\travel_person_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_bar_view_list_nav_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_bar_view_list_nav_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_player_activity.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_player_activity.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\activity_test_widget.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\activity_test_widget.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_sent_picture.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_sent_picture.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_alert_dialog_button_bar_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_alert_dialog_button_bar_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\em_row_received_transfertokefu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\em_row_received_transfertokefu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_article_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_article_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_message_item_notification.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_message_item_notification.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\gift_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\gift_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_edit_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_edit_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_easy_progress_dialog.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_easy_progress_dialog.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_create_room_pop_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_create_room_pop_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_fragment_guide.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_fragment_guide.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\page_loading.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\page_loading.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_bar_up_container.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_bar_up_container.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_mints_base_fragment_block_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_mints_base_fragment_block_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\password_forget_layout1.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\password_forget_layout1.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_hotlive_viewpager_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_hotlive_viewpager_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_category_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_category_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_menu_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_menu_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_select_dialog_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_select_dialog_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_alert_dialog.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_alert_dialog.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\special_details_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\special_details_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\recharge_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\recharge_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_action_mode_bar.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_action_mode_bar.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\master_info_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\master_info_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_easy_alert_dialog_with_listview.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_easy_alert_dialog_with_listview.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_chat_message_list.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_chat_message_list.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\order_pays_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\order_pays_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_result_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_result_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\mix_audio_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\mix_audio_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\audience_custom_header_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\audience_custom_header_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\select_dialog_item_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\select_dialog_item_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\fullsreen_back_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\fullsreen_back_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\my_wallet_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\my_wallet_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\country_select_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\country_select_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_destination_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_destination_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_chat_menu_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_chat_menu_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_template_big_media.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_template_big_media.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_fragment_report.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_fragment_report.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_me_my_coupon_item1.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_me_my_coupon_item1.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\gift_list_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\gift_list_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_news_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_news_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pay_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pay_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\my_diamond_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\my_diamond_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\tourist_list_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\tourist_list_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\listview_footer.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.jcodecraeer\\xrecyclerview\\1.2.7\\res\\layout\\listview_footer.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_list_menu_item_radio.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_list_menu_item_radio.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_test_activity.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_test_activity.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\load_more_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\load_more_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_screen_toolbar.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_screen_toolbar.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_member.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_member.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_dialog_audience_header_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_dialog_audience_header_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\activity_theme.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\activity_theme.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_history_detete_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_history_detete_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_sent_message.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_sent_message.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\xlistview_header.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\xlistview_header.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_me_my_oder_nothing.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_me_my_oder_nothing.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_expanded_menu_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_expanded_menu_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_message_activity_text_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_message_activity_text_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\page_base_loading.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\page_base_loading.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\area_detail_item_route.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\area_detail_item_route.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_priority_pick.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_priority_pick.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_loading_page.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_loading_page.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\article_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\article_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_alert_dialog_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_alert_dialog_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\net_info_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\net_info_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_layout_chat_primary_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_layout_chat_primary_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\start_live_botton_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\start_live_botton_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\consume_record_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\consume_record_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\view_cycle_viewpager_indicator.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\view_cycle_viewpager_indicator.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_screen_simple_overlay_action_mode.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_screen_simple_overlay_action_mode.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_activity.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_activity.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_result_item_route.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_result_item_route.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_search_dropdown_item_icons_2line.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_search_dropdown_item_icons_2line.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_emoji_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_emoji_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_popup_menu_header_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_popup_menu_header_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\me_fragment_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\me_fragment_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\book_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\book_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_message_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_message_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_product_gridview_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_product_gridview_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\audience_custom_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\audience_custom_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_hotlive_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_hotlive_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_alert_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_alert_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\exchange_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\exchange_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_sent_bigexpression.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_sent_bigexpression.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_expression_gridview.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_expression_gridview.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\audience_gift_page_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\audience_gift_page_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\loadmore_default_footer.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.chanven.lib\\cptr\\1.1.0\\res\\layout\\loadmore_default_footer.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_product_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_product_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\audience_over_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\audience_over_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\my_coupon_rlv_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\my_coupon_rlv_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\super_vodeo_player_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\wkvideoplayer\\unspecified\\res\\layout\\super_vodeo_player_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\dgfgg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\dgfgg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\view_cycle_viewpager_contet.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\view_cycle_viewpager_contet.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\em_row_sent_picture_new.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\em_row_sent_picture_new.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\use_clauses_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\use_clauses_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_me_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_me_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\share_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\share_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\em_row_received_menu.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\em_row_received_menu.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\create_live_room_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\create_live_room_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_mints_base_block_menu_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_mints_base_block_menu_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_template_part_time.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_template_part_time.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_views_load_more_default_footer.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_views_load_more_default_footer.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_custom_master_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_custom_master_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pay_complete_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pay_complete_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\costom_live_popuwindow.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\costom_live_popuwindow.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_view.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_view.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_list_menu_item_icon.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_list_menu_item_icon.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\mediacontroller.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\mediacontroller.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\coupon_convert_dialog.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\coupon_convert_dialog.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_custom_dialog_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_custom_dialog_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\recommend_listview_item2.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\recommend_listview_item2.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_attention_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_attention_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_popup_menu_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_popup_menu_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\tab_layout_main.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\tab_layout_main.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_theme_viewpager_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_theme_viewpager_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_activity_show_file.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_activity_show_file.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\notification_template_media.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\notification_template_media.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_list_menu_item_checkbox.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_list_menu_item_checkbox.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_global_progress.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_global_progress.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\banner_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\banner_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\area_detail_item_product.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\area_detail_item_product.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\btg_view_fab_action.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\layout\\btg_view_fab_action.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\select_dialog_singlechoice_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\select_dialog_singlechoice_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\about_us_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\about_us_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\product_viewpager.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\product_viewpager.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_mints_update_notify.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_mints_update_notify.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_easy_alert_dialog_default_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_easy_alert_dialog_default_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\product_details_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\product_details_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pull_to_refresh_head.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.jcodecraeer\\xrecyclerview\\1.2.7\\res\\layout\\pull_to_refresh_head.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_screen_simple.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_screen_simple.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\video_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\video_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_result_item_more.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_result_item_more.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\charge_pay_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\charge_pay_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_scroll_tab_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_scroll_tab_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_dialog_title_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_dialog_title_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\cube_mints_base_header_bar_title.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\layout\\cube_mints_base_header_bar_title.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\abc_screen_content_include.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\layout\\abc_screen_content_include.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_new_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_new_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_info_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_info_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\sift_poupwidow.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\sift_poupwidow.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\setting_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\setting_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\audience_activity.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\audience_activity.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_received_picture.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_received_picture.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\search_item_history.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\search_item_history.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_title_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_title_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\about_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\about_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_dialog.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_dialog.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\gift_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\gift_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_personal_homepage_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_personal_homepage_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_article_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_article_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\my_travel_ticket_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\my_travel_ticket_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_dialog_manager_to_user_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_dialog_manager_to_user_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\custom_dialog_audience_to_live_bottom_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\custom_dialog_audience_to_live_bottom_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_row_received_bigexpression.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_row_received_bigexpression.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\home_recommend_theme_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\home_recommend_theme_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_message_item_unknown.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_message_item_unknown.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\nim_message_item_text.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\nim_message_item_text.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\pull_to_refresh_header_vertical.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\pull_to_refresh_header_vertical.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_mian_recy_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_mian_recy_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\live_search_item_layout.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\layout\\live_search_item_layout.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\biz_video_media_controller.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\wkvideoplayer\\unspecified\\res\\layout\\biz_video_media_controller.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\layout\\ease_widget_emojicon.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\layout\\ease_widget_emojicon.xml"
+    }
+]

@@ -1,0 +1,714 @@
+[
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_priority_0.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_priority_0.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\setting_sign_out_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\setting_sign_out_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\create_live_share_weixin_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\create_live_share_weixin_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_list_selector_holo_dark.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_list_selector_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\video_format_switcher_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\wkvideoplayer\\unspecified\\res\\drawable\\video_format_switcher_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_btn_check_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_btn_check_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_switch_thumb_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_switch_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_chat_send_btn_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_chat_send_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_seekbar_thumb_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_seekbar_thumb_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\pay_manner_checkbox_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\pay_manner_checkbox_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\gift_item_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\gift_item_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\lalocal_play_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\lalocal_play_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_tab_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_tab_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\imag_line.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\imag_line.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\cursor_color_orange.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\cursor_color_orange.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\order_card_item_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\order_card_item_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_chat_image_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_chat_image_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_spinner_textfield_background_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_spinner_textfield_background_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_me_content_tab_container_border.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_me_content_tab_container_border.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_btn_colored_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_priority_1.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_priority_1.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\em_bg_button_satisfaction.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\em_bg_button_satisfaction.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_btn_cancel_normal_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_btn_cancel_normal_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_order_status_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_order_status_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\register_edit_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\register_edit_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_list_selector_background_transition_holo_light.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_list_selector_background_transition_holo_light.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_attenton_search_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_attenton_search_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_message_button_bottom_add_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_message_button_bottom_add_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_fab.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_fab.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_priority_2.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_priority_2.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_list_item_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_list_item_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\biz_video_progressbar.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\wkvideoplayer\\unspecified\\res\\drawable\\biz_video_progressbar.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\indicator_bg_bottom.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\indicator_bg_bottom.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_go_search_api_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_go_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\icon_dot_selected.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\icon_dot_selected.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\setting_item_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\setting_item_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_list_selector_holo_light.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_list_selector_holo_light.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\logo_splash.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\logo_splash.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_search_api_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_blue_rect.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_blue_rect.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_edit_text_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_edit_text_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ff.9.png",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\ff.9.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_item_background_holo_dark.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_item_background_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_btn_cancel_pressed_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_btn_cancel_pressed_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_list_selector_background_transition_holo_dark.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_list_selector_background_transition_holo_dark.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\search_key_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\search_key_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\wel_time_tv_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\wel_time_tv_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_voice_search_api_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_voice_search_api_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\custom_dialog_border.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\custom_dialog_border.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\pay_detail_triangle_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\pay_detail_triangle_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_priority_3.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_priority_3.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_btn_default_mtrl_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_btn_default_mtrl_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_right.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_right.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ratingbar_indicator_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ratingbar_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\common_edittext_normal.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\common_edittext_normal.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\custom_edit_cursor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\custom_edit_cursor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_btn_blue_pressed_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_btn_blue_pressed_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_vector_test.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_vector_test.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_coupon_card_bg2.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_coupon_card_bg2.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_me_verified_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_me_verified_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\cmbkb_btn_keyboard_key.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\pingpp\\unspecified\\res\\drawable\\cmbkb_btn_keyboard_key.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\barrage_view_textview_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\barrage_view_textview_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\biz_video_bar_bg.9.png",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\wkvideoplayer\\unspecified\\res\\drawable\\biz_video_bar_bg.9.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_recommend_img_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_recommend_img_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_message_view_bottom.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_message_view_bottom.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\accout_edit_girl_sex_cb_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\accout_edit_girl_sex_cb_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\item_border.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\item_border.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\barrage_and_chat_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\barrage_and_chat_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_cab_background_top_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_cab_background_top_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\email_bound_edit_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\email_bound_edit_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_text_cursor_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_text_cursor_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\product_service_icon_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\product_service_icon_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_item_background_holo_light.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_item_background_holo_light.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\cri_num_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\cri_num_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_btn_blue_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_btn_blue_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_tab_indicator_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_tab_indicator_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_user.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_user.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_over_dialog_remind_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_over_dialog_remind_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_order_btn_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_order_btn_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\indicator_bg_top.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\indicator_bg_top.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\favorable_code_edit_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\favorable_code_edit_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_msg_state_failed_resend.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_msg_state_failed_resend.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\giftmassagebg9.9.png",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\giftmassagebg9.9.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ratingbar_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ratingbar_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_textfield_search_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_textfield_search_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\orange_corner_btn_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\orange_corner_btn_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_me_content_tab_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_me_content_tab_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_me_img_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_me_img_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\create_live_room_title_border.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\create_live_room_title_border.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\back_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\back_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\account_edittext_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\account_edittext_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_btn_cancel_bj.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_btn_cancel_bj.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_coupon_card_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_coupon_card_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_btn_radio_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_btn_radio_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_me_username_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_me_username_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_news_img_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_news_img_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_arrow_down.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_arrow_down.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_over_dialog_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_over_dialog_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_coupon_discout_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_coupon_discout_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\accout_edit_boy_sex_cb_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\accout_edit_boy_sex_cb_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\icon_close_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\icon_close_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\home_destination_img_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\home_destination_img_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\progressloading.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.jcodecraeer\\xrecyclerview\\1.2.7\\res\\drawable\\progressloading.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_white_rect.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_white_rect.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_report.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_report.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\create_live_share_friends_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\create_live_share_friends_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_message_item_round_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_message_item_round_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\loading_anim_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\loading_anim_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\register_button_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\register_button_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_quick_signin.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_quick_signin.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_search_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_search_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ratingbar_small_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ratingbar_small_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_menu_overflow_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_menu_overflow_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_chat_takepic_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_chat_takepic_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_count_time_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_count_time_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_left.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_left.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_master_info_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_master_info_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\send_gift_avatar_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\send_gift_avatar_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_icon_tag_priority.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_icon_tag_priority.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_over_dialog_cancel_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_over_dialog_cancel_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\send_gift_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\send_gift_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_type_select_btn.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_type_select_btn.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_oder_img_drawable.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_oder_img_drawable.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_dialog_material_background.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_dialog_material_background.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\gift_icon_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\gift_icon_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_message_button_bottom_emoji_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_message_button_bottom_emoji_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\route_deital_one_salebg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\route_deital_one_salebg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_chatto_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_chatto_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\list_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\list_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\g_white_btn_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\g_white_btn_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\indicator_corner_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.daimajia.slider\\library\\1.1.5\\res\\drawable\\indicator_corner_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\bigpicture_share.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\bigpicture_share.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_cross.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_cross.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\exchage_btn_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\exchage_btn_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_edit_text_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_edit_text_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_cab_background_internal_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_cab_background_internal_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_text_white.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_text_white.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_chatfrom_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_chatfrom_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_exchange.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_exchange.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\loading_refresh.gif",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\loading_refresh.gif"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\search_view_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\search_view_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_seekbar_track_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_seekbar_track_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\imgloadingbg.gif",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\imgloadingbg.gif"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\actionbar_logo_white.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\actionbar_logo_white.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\loading.gif",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\loading.gif"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_sticker_button_background_pressed_layer_list.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_sticker_button_background_pressed_layer_list.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_seekbar_tick_mark_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_seekbar_tick_mark_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_over_dialog_wai_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_over_dialog_wai_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\route_detail_comb_llt_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\route_detail_comb_llt_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_order_btn_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_order_btn_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\des_area_nav_menu_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\des_area_nav_menu_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\route_detail_day_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\route_detail_day_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_sticker_button_background_normal_layer_list.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_sticker_button_background_normal_layer_list.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\area_detail_item_product_title_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\area_detail_item_product_title_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_view_pager_indicator_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_view_pager_indicator_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\nim_emoji_item_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\nim_emoji_item_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_btn_blue_normal_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_btn_blue_normal_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\country_item_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\country_item_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_arrow_drop_right_black_24dp.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_btn_borderless_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_btn_borderless_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\like_icon_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\like_icon_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_tick.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_tick.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\common_back_btn_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\common_back_btn_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\my_coupon_card_bg1.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\my_coupon_card_bg1.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_clear_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_clear_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\gift_background.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\gift_background.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ptr_circle_loading.png",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\ptr_circle_loading.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\create_live_share_weibo_selector.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\create_live_share_weibo_selector.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\abc_ic_ab_back_material.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.android.support\\appcompat-v7\\24.2.0\\res\\drawable\\abc_ic_ab_back_material.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\item_border_selected.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\item_border_selected.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\register_button_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\register_button_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_text_black.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_text_black.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\travel_person_nam_ch_textcolor.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\travel_person_nam_ch_textcolor.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\live_emcee_info_shape.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\live_emcee_info_shape.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\ease_timestampe_bg.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\lalocal\\easeui\\unspecified\\res\\drawable\\ease_timestampe_bg.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\btg_btn_publish.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\com.bugtags.library\\bugtags-lib\\1.3.3\\res\\drawable\\btg_btn_publish.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\icon_dot_normal.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\src\\main\\res\\drawable\\icon_dot_normal.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\res\\merged\\_360\\debug\\drawable\\cube_mints_update_progressbar.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\app\\build\\intermediates\\exploded-aar\\in.srain.cube\\cube-sdk\\1.0.44\\res\\drawable\\cube_mints_update_progressbar.xml"
+    }
+]
