@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/serach_result_item_more_height"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/search_result_item_more_name"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_15_sp"
+        android:gravity="center_vertical"
+        />
+        <ImageView
+            android:layout_width="@dimen/arrow_right_width"
+            android:layout_height="@dimen/arrow_right_height"
+            android:background="@drawable/arrow_right"
+            android:layout_gravity="center_vertical|right"
+            android:layout_marginRight="@dimen/dimen_size_12_dp"
+            />
+
+    </FrameLayout>

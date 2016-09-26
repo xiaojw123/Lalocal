@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/message_item_text_wang"
+    android:clickable="true"
+    android:orientation="horizontal"
+   >
+
+    <TextView
+        android:id="@+id/message_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:textColor="#97d3e9"
+        android:textSize="14sp"
+        android:singleLine="false"
+       />
+
+    <ImageView
+        android:id="@+id/nim_message_item_iv"
+        android:layout_width="@dimen/dimen_size_25_dp"
+        android:layout_height="@dimen/dimen_size_25_dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
+        android:paddingBottom="@dimen/dimen_size_3_dp"
+        android:src="@drawable/androidloading"
+        />
+
+    <TextView
+        android:id="@+id/nim_message_item_text_body"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:singleLine="false"
+        android:maxWidth="@dimen/max_text_bubble_width"
+        android:textColor="@color/color_chat_content"
+        android:textSize="14sp"
+
+       />
+
+</LinearLayout>

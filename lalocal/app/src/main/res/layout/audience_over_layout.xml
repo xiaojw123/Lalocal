@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:id="@+id/audience_over"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
+        android:id="@+id/audience_over_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/text_size_18_sp"
+        android:textColor="@android:color/white"
+        android:text="主播休息了！!"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true">
+    <include layout="@layout/costom_live_popuwindow"></include>
+</LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/master_info_back_home"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+       android:layout_alignParentBottom="true"
+        android:background="@color/live_input_live_bg"
+        android:gravity="center|bottom"
+      >
+
+        <TextView
+            android:id="@+id/audience_over_back_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/live_back"
+            android:textColor="@color/live_start_tv"
+            android:textSize="@dimen/text_size_16_sp" />
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/area_detail_item_product_height"
+        android:layout_marginBottom="@dimen/dimen_size_10_dp"
+        android:background="@drawable/area_detail_item_product_title_bg"
+
+        >
+
+        <ImageView
+            android:id="@+id/area_detail_item_product_img"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/des_area_detail_item_height"
+            android:scaleType="centerCrop"
+
+            />
+        <TextView
+            android:id="@+id/area_detail_item_status_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:padding="@dimen/dimen_size_5_dp"
+            android:background="@color/color_b3"
+            android:visibility="gone"
+            />
+
+
+        <!--<TextView-->
+            <!--android:id="@+id/area_detail_item_product_price"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignBottom="@+id/area_detail_item_product_img"-->
+            <!--android:layout_marginBottom="@dimen/dimen_size_8_dp"-->
+            <!--android:layout_marginLeft="@dimen/dimen_size_15_dp"-->
+            <!--android:textColor="@color/color_ffaa2a"-->
+            <!--android:textSize="@dimen/text_size_16_sp"-->
+            <!--/>-->
+
+
+        <TextView
+            android:id="@+id/area_detail_item_product_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/area_detail_item_product_img"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dimen_size_15_dp"
+            android:singleLine="true"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/text_size_15_sp"
+            android:layout_marginBottom="@dimen/dimen_size_2_dp"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

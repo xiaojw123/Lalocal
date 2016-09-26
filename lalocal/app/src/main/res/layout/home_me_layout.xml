@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/app_statusbar_height"
+    android:background="@color/white"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_title_height"
+        android:background="@color/color_f8"
+        >
+
+        <ImageButton
+            android:src="@drawable/home_me_setting"
+            android:id="@+id/home_me_set_btn"
+            android:layout_width="@dimen/home_me_set_btn_width"
+            android:layout_height="@dimen/home_me_set_btn_height"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/home_me_set_btn_right"
+            android:layout_marginTop="@dimen/home_me_set_btn_top"
+            android:paddingTop="@dimen/dimen_size_5_dp"
+            android:paddingBottom="@dimen/dimen_size_5_dp"
+            android:paddingLeft="@dimen/dimen_size_5_dp"
+            android:background="@null" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_title_divde_line_height"
+            android:layout_alignParentBottom="true"
+            android:background="@color/color_b3" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/home_me_headportrait_img"
+        android:layout_width="@dimen/home_me_headportrait_img_width"
+        android:layout_height="@dimen/home_me_headportrait_img_height"
+        android:background="@drawable/home_me_head_bg"
+        android:paddingBottom="@dimen/home_me_headportrait_img_bottom"
+        android:paddingLeft="@dimen/home_me_headportrait_img_left"
+        android:paddingRight="@dimen/home_me_headportrait_img_right"
+        android:paddingTop="@dimen/home_me_headportrait_img_top"
+        android:scaleType="fitXY"
+        android:src="@drawable/home_me_personheadnormal" />
+
+
+    <TextView
+        android:id="@+id/home_me_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/home_me_username_left"
+        android:layout_marginTop="@dimen/home_me_username_top"
+        android:text="@string/please_login"
+        android:singleLine="true"
+        android:maxEms="18"
+        android:ems="8"
+        android:ellipsize="end"
+        android:textColor="@drawable/home_me_username_textcolor"
+        android:textSize="@dimen/text_size_15_sp" />
+
+    <TextView
+        android:id="@+id/home_me_verified"
+        android:layout_width="@dimen/home_me_verified_wdith"
+        android:layout_height="@dimen/home_me_verified_height"
+        android:layout_alignLeft="@+id/home_me_username"
+        android:layout_below="@+id/home_me_username"
+        android:layout_marginTop="@dimen/home_me_verified_top"
+        android:background="@drawable/home_me_verified_bg"
+        android:gravity="center"
+        android:text="@string/verified"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_10_sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/home_me_content_tab_top_margin"
+        >
+        <LinearLayout
+            android:id="@+id/home_me_fans_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="invisible"
+            >
+            <View
+                style="@style/CommonD9LineTheme"
+                />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_content_tab_height"
+        android:orientation="horizontal"
+        >
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_favorite_fans_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/live_master_fans" />
+
+            <TextView
+                android:id="@+id/home_me_fans_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+        </com.lalocal.lalocal.view.CustomTabLayout>
+        <View
+            style="@style/CommonD9LineTheme"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/dimen_size_1_dp"
+            />
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_favorite_follow_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/live_master_attention" />
+
+            <TextView
+                android:id="@+id/home_me_follow_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+        </com.lalocal.lalocal.view.CustomTabLayout>
+        <View
+            style="@style/CommonD9LineTheme"
+            android:layout_height="match_parent"
+            android:layout_width="@dimen/dimen_size_1_dp"
+            />
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_wallet_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/my_wallet"
+                android:layout_marginTop="@dimen/dimen_size_20_dp"
+                />
+
+            <!--<TextView-->
+                <!--android:id="@+id/home_me_wallet_num"-->
+                <!--style="@style/HomeMeTabItemNumTheme"-->
+                <!--android:text="0" />-->
+        </com.lalocal.lalocal.view.CustomTabLayout>
+        </LinearLayout>
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/home_me_content_tab_height"
+        android:background="@drawable/home_me_content_tab_container_border"
+        android:orientation="horizontal">
+
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_favorite_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/my_favorite" />
+
+            <TextView
+                android:id="@+id/home_me_favorite_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+        </com.lalocal.lalocal.view.CustomTabLayout>
+
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_order_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/my_order" />
+
+            <TextView
+                android:id="@+id/home_me_order_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+
+        </com.lalocal.lalocal.view.CustomTabLayout>
+
+        <com.lalocal.lalocal.view.CustomTabLayout
+            android:id="@+id/home_me_coupon_tab"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+
+            <TextView
+                style="@style/HomeMeTabTitleTheme"
+                android:text="@string/coupons" />
+
+            <TextView
+                android:id="@+id/home_me_coupons_num"
+                style="@style/HomeMeTabItemNumTheme"
+                android:text="0" />
+        </com.lalocal.lalocal.view.CustomTabLayout>
+    </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

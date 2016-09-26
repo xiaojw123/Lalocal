@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/app_actionbar_height"
+    android:paddingTop="@dimen/app_statusbar_height"
+    >
+    <ImageView
+        android:id="@+id/titleview_back_img"
+        android:layout_width="@dimen/common_back_btn_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:paddingBottom="@dimen/common_back_btn_top_padding"
+        android:paddingLeft="@dimen/common_back_btn_left_padding"
+        android:paddingRight="@dimen/common_back_btn_left_padding"
+        android:paddingTop="@dimen/common_back_btn_top_padding"
+        android:src="@drawable/common_back_btn_bg" />
+    <TextView
+        android:id="@+id/titleview_title_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textColor="@color/color_1a"
+        android:textSize="@dimen/text_size_17_sp" />
+    <View
+        android:id="@+id/titleview_line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_title_divde_line_height"
+        android:layout_gravity="bottom"
+        android:background="@color/color_b3" />
+
+</FrameLayout>

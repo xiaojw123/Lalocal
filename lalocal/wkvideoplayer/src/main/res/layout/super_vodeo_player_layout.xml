@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout
+    android:id="@+id/video_inner_container"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="fill"
+    android:background="@android:color/black">
+
+
+    <VideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"/>
+
+
+
+    <com.android.tedcoder.wkvideoplayer.view.MediaController
+        android:id="@+id/controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+
+    <LinearLayout
+        android:id="@+id/touch_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:layout_centerInParent="true"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:visibility="invisible"
+        android:alpha="0.7"
+        android:background="#000">
+        <ImageView android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:id="@+id/touchStatusImg"/>
+        <TextView
+            android:id="@+id/touch_time"
+            android:layout_width="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#fff"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.lalocal.lalocal.activity.ChargePayActivity">
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/charge_pay_state1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/pay"
+        />
+    <TextView
+        android:id="@+id/charge_pay_fee_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_36_sp"
+        android:textColor="@color/color_1a"
+        android:layout_marginLeft="@dimen/charge_pay_fee_tv_left"
+        android:layout_marginTop="@dimen/charge_pay_fee_tv_top"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/charge_pay_state1"
+        />
+    <TextView
+        android:id="@+id/charge_pay_state2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_30_1a"
+        android:text="@string/buy"
+        android:layout_marginLeft="@dimen/charge_pay_state2_left"
+        android:layout_below="@+id/charge_pay_fee_tv"
+        android:layout_marginTop="@dimen/charge_pay_state2_top"
+        />
+    <TextView
+        android:id="@+id/charge_pay_gold_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/charge_pay_state2"
+        android:layout_toRightOf="@+id/charge_pay_state2"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:drawablePadding="@dimen/dimen_size_5_dp"
+        android:drawableLeft="@drawable/monetary"
+        android:textColor="@color/color_30_1a"
+        android:textSize="@dimen/text_size_16_sp"
+        android:gravity="center_vertical"
+        />
+    <include
+        layout="@layout/pay_manner_sel_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/charge_pay_state2"
+        android:layout_marginTop="@dimen/dimen_size_30_dp"
+        />
+
+    <Button
+        android:id="@+id/charge_pay_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/color_ffaa2a"
+        android:text="@string/pay"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16_sp"
+        />
+
+
+
+
+
+</RelativeLayout>

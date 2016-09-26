@@ -1,0 +1,101 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="dimen_size_1_dp">1dp</dimen>
+    <dimen name="dimen_size_2_dp">2dp</dimen>
+    <dimen name="dimen_size_3_dp">3dp</dimen>
+    <dimen name="dimen_size_4_dp">4dp</dimen>
+    <dimen name="dimen_size_5_dp">5dp</dimen>
+    <dimen name="dimen_size_6_dp">6dp</dimen>
+    <dimen name="dimen_size_7_dp">7dp</dimen>
+    <dimen name="dimen_size_8_dp">8dp</dimen>
+    <dimen name="dimen_size_9_dp">9dp</dimen>
+    <dimen name="dimen_size_10_dp">10dp</dimen>
+    <dimen name="dimen_size_11_dp">11dp</dimen>
+    <dimen name="dimen_size_12_dp">12dp</dimen>
+    <dimen name="dimen_size_13_dp">13dp</dimen>
+    <dimen name="dimen_size_14_dp">14dp</dimen>
+    <dimen name="dimen_size_15_dp">15dp</dimen>
+    <dimen name="dimen_size_20_dp">20dp</dimen>
+    <dimen name="dimen_size_25_dp">25dp</dimen>
+    <dimen name="dimen_size_30_dp">30dp</dimen>
+    <dimen name="dimen_size_35_dp">35dp</dimen>
+    <dimen name="dimen_size_40_dp">40dp</dimen>
+    <dimen name="dimen_size_50_dp">50dp</dimen>
+    <dimen name="dimen_size_36_dp">36dp</dimen>
+    <dimen name="dimen_size_60_dp">60dp</dimen>
+    <dimen name="custom_dialog_container_width">320dp</dimen>
+    <dimen name="custom_dialog_container_padding">20dp</dimen>
+    <dimen name="custom_dialog_message_top_margin">15dp</dimen>
+    <dimen name="custom_dialog_message_left">5dp</dimen>
+    <dimen name="custom_neutral_btn_height">50dp</dimen>
+    <dimen name="custom_neutral_btn_top">15dp</dimen>
+    <dimen name="app_statusbar_height">0dp</dimen>
+    <dimen name="app_actionbar_height">54dp</dimen>
+    <!--im-->
+    <dimen name="split_one_pixels">1px</dimen>
+    <dimen name="text_size_9">9sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
+    <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+
+    <!-- message -->
+    <dimen name="message_bottom_function_viewpager_height">220dp</dimen>
+    <dimen name="input_panel_image_margin_bottom">3dip</dimen>
+    <dimen name="input_panel_image_margin_top">20dip</dimen>
+
+    <!-- avatar -->
+    <dimen name="avatar_max_size">60dip</dimen>
+    <dimen name="avatar_size_in_session">40dip</dimen>
+
+    <!-- bubble -->
+    <dimen name="max_text_bubble_width">222dip</dimen>
+    <dimen name="bottom_component_margin_horizontal">6dip</dimen>
+    <dimen name="bubble_time_layout_margin_bottom">8dip</dimen>
+    <dimen name="bubble_head_margin_horizontal">8dip</dimen>
+    <!-- dialog -->
+    <dimen name="very_samll_text_size">9sp</dimen>
+    <dimen name="normal_text_size">16sp</dimen>
+    <dimen name="big_text_size">17sp</dimen>
+    <dimen name="light_line_size">1px</dimen>
+    <dimen name="dialog_text_margin_horizontal">15dip</dimen>
+    <dimen name="dialog_padding_vertical">20dip</dimen>
+    <dimen name="custom_dialog_padding_vertical">15dip</dimen>
+    <!--product_detail-->
+    <dimen name="product_details_photo_height">204dp</dimen>
+    <dimen name="product_details_interval">20dp</dimen>
+    <dimen name="product_details_title_tv">18sp</dimen>
+    <dimen name="product_details_padding_left">15dp</dimen>
+    <dimen name="product_details_padding_bottom">10dp</dimen>
+    <dimen name="dialog_card_margin">5dp</dimen>
+
+    <dimen name="home_recommend_category_padding_vertical">40dp</dimen>
+    <dimen name="home_recommend_category_icon_size">40dp</dimen>
+    <dimen name="home_recommend_category_text_size">10sp</dimen>
+    <dimen name="home_recommend_category_text_margin_top">5dp</dimen>
+    <dimen name="home_recommend_title_bar_height">40dp</dimen>
+    <dimen name="home_recommend_title_bar_margin_vertical">15dp</dimen>
+    <dimen name="home_recommend_title_margin">15dp</dimen>
+    <dimen name="home_recommend_title_text_size">16sp</dimen>
+    <dimen name="home_recommend_more_icon_size">12dp</dimen>
+    <dimen name="home_recommend_more_icon_margin">15dp</dimen>
+    <dimen name="home_recommend_live_height">336dp</dimen>
+    <dimen name="home_recommend_viewpager_margin">60dp</dimen>
+    <dimen name="home_recommend_viewpager_page_margin">25dp</dimen>
+    <dimen name="home_recommend_hotlive_img_size">255dp</dimen>
+    <dimen name="home_recommend_play_icon_size">70dp</dimen>
+    <dimen name="home_hotlive_content_margin_horizontal">10dp</dimen>
+    <dimen name="home_hotlive_content_margin_vertical">15dp</dimen>
+    <dimen name="home_recommend_hotlive_user_icon_size">12dp</dimen>
+    <dimen name="hot_recommend_hotlive_circle_imgview_size">25dp</dimen>
+    <dimen name="dot_size">6dp</dimen>
+    <dimen name="home_recommend_commodity_gridview_spacing">15dp</dimen>
+    <dimen name="home_recommend_commodity_gridview_item_price_margin_bottom">10dp</dimen>
+    <dimen name="home_recommend_hot_live_view_pager_height">340dp</dimen>
+    <dimen name="home_recommend_theme_viewpager_item_content_margin">20dp</dimen>
+    <dimen name="home_recommend_article_img_width">114dp</dimen>
+    <dimen name="home_recommend_article_img_height">160dp</dimen>
+    <dimen name="ptr_header_height">160dp</dimen>
+    <dimen name="cardview_margin">0dp</dimen>
+</resources>

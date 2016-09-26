@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/live_over_bg"
+   >
+
+    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
+        android:id="@+id/live_over_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
+<LinearLayout
+    android:layout_width="match_parent"
+   android:layout_height="match_parent"
+    android:paddingLeft="@dimen/live_over_padding_left"
+    android:background="@color/live_over_bg"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_over_padding_top"
+        android:textColor="@color/color_chat_content"
+        android:alpha="0.5"
+        android:text="@string/live_finish"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/goodjob_big_ic_yellow"
+        android:drawablePadding="@dimen/live_padding_10dp"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:text="@string/live_over_expression"
+        android:textColor="@color/color_ffaa2a"
+        android:textSize="@dimen/live_text_24sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:textColor="@color/color_chat_content"
+        android:paddingTop="@dimen/live_padding_15dp"
+        android:text="@string/live_audience_count"/>
+    <TextView
+        android:id="@+id/live_over_audience_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:drawablePadding="@dimen/live_padding_10dp"
+        android:drawableLeft="@drawable/manypeople_big_ic_white"
+        android:textColor="@color/white"
+        android:textSize="@dimen/live_text_24sp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_15dp"
+        android:alpha="0.5"
+        android:textColor="@color/color_chat_content"
+        android:text="@string/live_time_count"/>
+
+    <TextView
+        android:id="@+id/live_over_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:drawableLeft="@drawable/clock_big_ic_white"
+        android:drawablePadding="@dimen/live_padding_10dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/live_text_24sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_15dp"
+        android:alpha="0.5"
+        android:textColor="@color/color_chat_content"
+        android:text="@string/live_over_money"/>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/live_padding_30dp"
+            android:paddingRight="@dimen/dimen_size_10_dp"
+            android:text="+"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingRight="@dimen/live_padding_10dp"
+            android:paddingBottom="@dimen/live_padding_5dp"
+            android:src="@drawable/score"/>
+        <TextView
+            android:id="@+id/live_over_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textColor="@color/white"
+            android:drawablePadding="@dimen/live_padding_10dp"
+            android:textSize="@dimen/live_text_24sp"
+            />
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+
+
+        <TextView
+            android:id="@+id/live_over_back_home"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:layout_alignParentBottom="true"
+            android:text="@string/live_back"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_16_sp"
+            android:textColor="@color/live_start_tv"
+            android:background="@color/live_input_live_bg"/>
+
+
+    <LinearLayout
+        android:id="@+id/live_over_share_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_44dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_above="@+id/live_over_back_home"
+        android:layout_marginBottom="@dimen/live_padding_24dp">
+
+        <ImageView
+            android:id="@+id/live_over_share_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/create_live_share_friends_selector"
+            android:paddingRight="@dimen/live_padding_21dp"/>
+
+        <ImageView
+            android:id="@+id/live_over_share_weibo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/create_live_share_weibo_selector"
+            android:paddingRight="@dimen/live_padding_21dp"/>
+
+        <ImageView
+            android:id="@+id/live_over_share_weixin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/create_live_share_weixin_selector" />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.5"
+        android:textColor="@color/color_chat_content"
+        android:text="@string/live_over_share"
+        android:gravity="center"
+        android:layout_above="@+id/live_over_share_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/live_padding_12dp"
+
+        android:textSize="@dimen/text_size_12"/>
+
+</RelativeLayout>
