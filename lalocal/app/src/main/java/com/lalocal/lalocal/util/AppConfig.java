@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
  */
 public class AppConfig {
 
+
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
