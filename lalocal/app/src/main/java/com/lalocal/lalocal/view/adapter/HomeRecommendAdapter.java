@@ -19,9 +19,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
@@ -77,7 +80,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecommendListBean mRecommendListBean;
     private List<ArticleDetailsResultBean> mArticleList;
 
-//    private static final int MAX_HOT_LIVE = 10;
+    //    private static final int MAX_HOT_LIVE = 10;
     private static final int MAX_PRODUCT = 4;
 //    private static final int MAX_THEME = 10;
 
@@ -303,15 +306,23 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      */
     class ADViewHolder extends RecyclerView.ViewHolder {
 
+        LinearLayout adContainer;
+        LinearLayout dotContainer;
         DisallowParentTouchSliderLayout sliderLayout;
         Context context;
         List<RecommendAdResultBean> adResultList;
+        List<Button> dotBtns;
 
         public ADViewHolder(Context context, View itemView) {
             super(itemView);
 
             this.context = context;
+
+            adContainer = (LinearLayout) itemView.findViewById(R.id.ad_container);
+            dotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
             sliderLayout = (DisallowParentTouchSliderLayout) itemView.findViewById(R.id.ad_slider);
+            // 隐藏指示器
+            sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
             // 传入父容器
             sliderLayout.setNestParent(mPtrLayout);
         }
@@ -324,17 +335,18 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         public void initData(final List<RecommendAdResultBean> ads) {
             // 如果不存在数据，则不显示相应控件
             if (adEmpty) {
-                sliderLayout.setVisibility(View.GONE);
+                adContainer.setVisibility(View.GONE);
                 return;
             }
+            int size = ads.size();
             adResultList = ads;
 
             sliderLayout.removeAllSliders();
             for (int i = 0; i < adResultList.size(); i++) {
-                TextSliderView textSliderView = new TextSliderView(context);
+                DefaultSliderView defaultSliderView = new DefaultSliderView(context);
                 RecommendAdResultBean ad = adResultList.get(i);
-                textSliderView.image(ad.photo);
-                textSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
+                defaultSliderView.image(ad.photo);
+                defaultSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
                         int position = sliderLayout.getCurrentPosition();
@@ -343,9 +355,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                         String url = recommendAdResultBean.url;
                         int targetType = recommendAdResultBean.targetType;
                         int targetId = recommendAdResultBean.targetId;
-//                        if (TextUtils.isEmpty(url)) {
-//                            return;
-//                        }
 
                         Intent intent = null;
                         switch (targetType) {
@@ -391,8 +400,20 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                     }
                 });
-                sliderLayout.addSlider(textSliderView);
+                sliderLayout.addSlider(defaultSliderView);
             }
+
+            // 自定义指示器
+            dotBtns = initDot(context, sliderLayout, dotContainer, size, sliderLayout.getCurrentPosition(), RECT);
+
+            // 轮播图页面改变
+            sliderLayout.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    super.onPageSelected(position);
+                    selectDotBtn(dotBtns, position, RECT);
+                }
+            });
         }
 
         /**
@@ -484,7 +505,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppLog.i("slidder", "selected is " + selected);
 
             // 初始化小圆点
-            dotBtns = initDot(context, vpHotLives, dotContainer, size, selected);
+            dotBtns = initDot(context, vpHotLives, dotContainer, size, selected, SQUARE);
 
             // ViewPager添加滑动事件
             vpHotLives.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -495,7 +516,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 @Override
                 public void onPageSelected(int position) {
-                    selectDotBtn(dotBtns, position);
+                    selectDotBtn(dotBtns, position, SQUARE);
                 }
 
                 @Override
@@ -553,12 +574,12 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 LiveUserBean user = liveRowsBean.getUser();
                 // 设置播放图片
                 String photo = user.getAvatarOrigin();
-                AppLog.i("TAG","首頁直播頭像:"+liveRowsBean.getPhoto());
+                AppLog.i("TAG", "首頁直播頭像:" + liveRowsBean.getPhoto());
                 if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
 //                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
-                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                }else if(!TextUtils.isEmpty(photo)){
-                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic,user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                } else if (!TextUtils.isEmpty(photo)) {
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                 }
 
                 // 设置播放标题
@@ -848,7 +869,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             selected = vpTheme.getCurrentItem();
 
             // 初始化小圆点
-            dotBtns = initDot(context, vpTheme, dotContainer, size, selected);
+            dotBtns = initDot(context, vpTheme, dotContainer, size, selected, SQUARE);
 
 
             vpTheme.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -859,7 +880,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 @Override
                 public void onPageSelected(int position) {
-                    selectDotBtn(dotBtns, position);
+                    selectDotBtn(dotBtns, position, SQUARE);
                 }
 
                 @Override
@@ -912,7 +933,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 // 设置专题图片
                 DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
-                        DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+                        DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
 
                 // 设置名字
                 String name = bean.getName();
@@ -1035,6 +1056,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
+    private static final int RECT = 0x01;
+    private static final int SQUARE = 0x02;
+
     /**
      * 初始化小圆点
      *
@@ -1045,27 +1069,53 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      * @param selected
      * @return
      */
-    private List<Button> initDot(Context context, final ViewPager viewPager, LinearLayout dotContainer, int size, int selected) {
+    private List<Button> initDot(Context context, final ViewPager viewPager, LinearLayout dotContainer, int size, int selected, int type) {
         final List<Button> dotBtns = new ArrayList<>();
         if (size > 0 && selected >= 0 && selected < size) {
             // 移除所有视图
             ((ViewGroup) dotContainer).removeAllViews();
+
+            int width = 0;
+            int height = 0;
+            int marginHorizontal = 0;
+            int marginVertical = 0;
+            int selectedResId = 0;
+            int normalResId = 0;
+
+            if (type == RECT) {
+                width = (int) context.getResources().getDimension(R.dimen.dot_rect_width);
+                height = (int) context.getResources().getDimension(R.dimen.dot_rect_height);
+
+                marginHorizontal = DensityUtil.dip2px(context, 2);
+                marginVertical = DensityUtil.dip2px(context, 10);
+
+                selectedResId = R.color.black;
+                normalResId = R.color.color_761a1a1a;
+            } else if (type == SQUARE) {
+                width = (int) context.getResources().getDimension(R.dimen.dot_size);
+                ;
+                height = width;
+
+                marginHorizontal = DensityUtil.dip2px(context, 4);
+                marginVertical = DensityUtil.dip2px(context, 15);
+
+                selectedResId = R.drawable.icon_dot_selected;
+                normalResId = R.drawable.icon_dot_normal;
+            }
+
             for (int i = 0; i < size; i++) {
                 // 新建一个按钮
                 Button btn = new Button(context);
                 // 点的大小
-                int dipSize = (int) context.getResources().getDimension(R.dimen.dot_size);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(dipSize, dipSize);
-                int marginHorizontal = DensityUtil.dip2px(context, 4);
-                int marginVertical = DensityUtil.dip2px(context, 15);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
                 // 设置点的边距
                 params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
                 // 设置按钮的大小属性
                 btn.setLayoutParams(params);
                 if (i == selected) {
-                    btn.setBackgroundResource(R.drawable.icon_dot_selected);
+                    btn.setBackgroundResource(selectedResId);
                 } else {
-                    btn.setBackgroundResource(R.drawable.icon_dot_normal);
+                    btn.setBackgroundResource(normalResId);
                 }
                 dotBtns.add(btn);
                 dotContainer.addView(btn);
@@ -1077,7 +1127,83 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
                         viewPager.setCurrentItem(finalI);
-                        selectDotBtn(dotBtns, finalI);
+                        selectDotBtn(dotBtns, finalI, SQUARE);
+                    }
+                });
+            }
+        }
+        return dotBtns;
+    }
+
+    /**
+     * 初始化小圆点
+     *
+     * @param context
+     * @param sliderLayout
+     * @param dotContainer
+     * @param size
+     * @param selected
+     * @return
+     */
+    private List<Button> initDot(Context context, final SliderLayout sliderLayout, LinearLayout dotContainer, int size, int selected, int type) {
+        final List<Button> dotBtns = new ArrayList<>();
+        if (size > 0 && selected >= 0 && selected < size) {
+            // 移除所有视图
+            ((ViewGroup) dotContainer).removeAllViews();
+
+            int width = 0;
+            int height = 0;
+            int marginHorizontal = 0;
+            int marginVertical = 0;
+            int selectedResId = 0;
+            int normalResId = 0;
+
+            if (type == RECT) {
+                width = (int) context.getResources().getDimension(R.dimen.dot_rect_width);
+                height = (int) context.getResources().getDimension(R.dimen.dot_rect_height);
+
+                marginHorizontal = DensityUtil.dip2px(context, 2);
+                marginVertical = DensityUtil.dip2px(context, 10);
+
+                selectedResId = R.color.black;
+                normalResId = R.color.color_761a1a1a;
+            } else if (type == SQUARE) {
+                width = (int) context.getResources().getDimension(R.dimen.dot_size);
+                ;
+                height = width;
+
+                marginHorizontal = DensityUtil.dip2px(context, 4);
+                marginVertical = DensityUtil.dip2px(context, 15);
+
+                selectedResId = R.drawable.icon_dot_selected;
+                normalResId = R.drawable.icon_dot_normal;
+            }
+
+            for (int i = 0; i < size; i++) {
+                // 新建一个按钮
+                Button btn = new Button(context);
+                // 点的大小
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
+                // 设置点的边距
+                params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
+                // 设置按钮的大小属性
+                btn.setLayoutParams(params);
+                if (i == selected) {
+                    btn.setBackgroundResource(selectedResId);
+                } else {
+                    btn.setBackgroundResource(normalResId);
+                }
+                dotBtns.add(btn);
+                dotContainer.addView(btn);
+            }
+
+            for (int i = 0; i < dotBtns.size(); i++) {
+                final int finalI = i;
+                dotBtns.get(i).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        sliderLayout.setCurrentPosition(finalI);
+                        selectDotBtn(dotBtns, finalI, SQUARE);
                     }
                 });
             }
@@ -1090,12 +1216,24 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      *
      * @param finalI
      */
-    private void selectDotBtn(List<Button> dotBtns, int finalI) {
+    private void selectDotBtn(List<Button> dotBtns, int finalI, int type) {
+
+        int selectedResId = 0;
+        int normalResId = 0;
+
+        if (type == RECT) {
+            selectedResId = R.color.black;
+            normalResId = R.color.color_761a1a1a;
+        } else if (type == SQUARE) {
+            selectedResId = R.drawable.icon_dot_selected;
+            normalResId = R.drawable.icon_dot_normal;
+        }
+
         for (int i = 0; i < dotBtns.size(); i++) {
             if (i == finalI) {
-                dotBtns.get(i).setBackgroundResource(R.drawable.icon_dot_selected);
+                dotBtns.get(i).setBackgroundResource(selectedResId);
             } else {
-                dotBtns.get(i).setBackgroundResource(R.drawable.icon_dot_normal);
+                dotBtns.get(i).setBackgroundResource(normalResId);
             }
         }
     }

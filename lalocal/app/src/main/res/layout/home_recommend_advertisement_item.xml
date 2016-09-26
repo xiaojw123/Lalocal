@@ -1,28 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.lalocal.lalocal.view.DisallowParentTouchSliderLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ad_slider"
+    android:id="@+id/ad_container"
+    android:background="@color/white"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <com.lalocal.lalocal.view.DisallowParentTouchSliderLayout
+        android:id="@+id/ad_slider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"/>
 
-    <com.daimajia.slider.library.Indicators.PagerIndicator
-        android:id="@+id/ad_indicator"
+    <LinearLayout
+        android:id="@+id/dot_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        custom:selected_color="@color/color_1a"
-        custom:unselected_color="#4c1a1a1a"
-        custom:shape="rect"
-        custom:selected_padding_left="2dp"
-        custom:selected_padding_right="2dp"
-        custom:unselected_padding_left="2dp"
-        custom:unselected_padding_right="2dp"
-        custom:selected_width="16dp"
-        custom:selected_height="3dp"
-        custom:unselected_width="16dp"
-        custom:unselected_height="3dp"
-        />
-</com.lalocal.lalocal.view.DisallowParentTouchSliderLayout>
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"/>
+</LinearLayout>

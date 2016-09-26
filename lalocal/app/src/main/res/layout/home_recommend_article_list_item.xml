@@ -28,6 +28,7 @@
             android:layout_height="22dp"
             android:gravity="center_vertical"
             android:text="加载中"
+            android:singleLine="true"
             android:textSize="@dimen/text_size_16_sp"
             android:textColor="@color/color_1a"/>
 
