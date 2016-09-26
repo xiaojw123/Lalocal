@@ -6,7 +6,6 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
 import com.easemob.chat.EMChat;
 import com.lalocal.lalocal.easemob.DemoHelper;
@@ -48,7 +47,7 @@ import io.fabric.sdk.android.Fabric;
  * 线上版本 友盟日志关闭
  */
 public class MyApplication extends Application {
-    private static boolean isDebug = true;
+    private static boolean isDebug = false;
     private WorkerThread mWorkerThread;
     @Override
     public void onCreate() {
@@ -69,8 +68,7 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
-
-        Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
+    //    Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
 
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());

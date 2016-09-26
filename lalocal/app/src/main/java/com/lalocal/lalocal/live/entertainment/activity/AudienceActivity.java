@@ -573,11 +573,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             videoPlayer = new VideoPlayer(AudienceActivity.this, videoView, null, url,
                     bufferStrategy, this, VideoConstant.VIDEO_SCALING_MODE_FIT, mediaType);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(videoView.getLayoutParams());
-
             palyerLayout.setBackgroundColor(Color.BLACK);
             videoView.setLayoutParams(lp);
             videoPlayer.openVideo();
-            errorListener();
+         //   errorListener();
         }/* else if("0".equals(playType)){
 
             bufferStrategy = 0;
