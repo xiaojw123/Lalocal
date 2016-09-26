@@ -1,4 +1,8 @@
-三方库说明
+### lalocal_Android
+
+
+
+ **三方库说明** 
 
 EaseMobSDK：环信SDK，主要是是提供移动客服的功能，为客服跟客户之间架起交流的桥梁；
 1.Social_Sdk：分享，用于分享到第三方平台(友盟)；
@@ -7,7 +11,9 @@ EaseMobSDK：环信SDK，主要是是提供移动客服的功能，为客服跟�
 4.云信SDK：直播，聊天功能
 5.Imgeloader：图片加载缓存
 6.Qiniu：七牛上传图片加速SDK
-代码约定规则(同IOS)
+
+
+ **代码约定规则(同IOS)** 
 
 URL Schemes: LLalocal
 
