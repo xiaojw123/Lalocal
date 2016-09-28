@@ -79,11 +79,12 @@
                     android:src="@drawable/many_people_light" />
 
                 <TextView
-                    android:id="@+id/tv_icon"
+                    android:id="@+id/tv_icon_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="3dp"
+                    android:singleLine="true"
                     android:layout_toRightOf="@id/icon"
                     android:text="1,089" />
 

@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -582,7 +583,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 liveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
                 liveViewHolder.cardView = (CardView) view.findViewById(R.id.card_view);
                 liveViewHolder.imgLivePic = (ScaleImageView) view.findViewById(R.id.img_live_pic);
-                liveViewHolder.tvLivePeopleAmount = (TextView) view.findViewById(R.id.tv_live_people);
+                liveViewHolder.imgIcon = (ImageView) view.findViewById(R.id.icon);
+                liveViewHolder.tvLiveIconContent = (TextView) view.findViewById(R.id.tv_icon_content);
                 liveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
                 liveViewHolder.imgLiveAvatar = (CircleImageView) view.findViewById(R.id.img_live_avatar);
 
@@ -606,17 +608,24 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                     }
                 }
 
+                // 如果图片链接一致，说明是公告视频，下方显示地理位置
+                if (liveRowsBean.getType() == 1) { // 云信通过type来判断：1-系统，2-用户；声网通过cname来判断：null-系统，否则为用户
+                    liveViewHolder.imgIcon.setImageResource(R.drawable.peopleliving_location_darkic);
+                    String address = liveRowsBean.getAddress();
+                    liveViewHolder.tvLiveIconContent.setText(address);
+                } else {
+                    // 设置在线用户人数
+                    int onlineUser = liveRowsBean.getOnlineUser();
+                    // 人数以“,”将千分位隔开
+                    liveViewHolder.tvLiveIconContent.setText(formatNum(onlineUser));
+                }
+
                 // 设置播放标题
                 String liveTitle = liveRowsBean.getTitle();
                 if (!TextUtils.isEmpty(liveTitle)) {
                     liveViewHolder.tvLiveTitle
                             .setText(liveTitle);
                 }
-
-                // 设置在线用户人数
-                int onlineUser = liveRowsBean.getOnlineUser();
-                // 人数以“,”将千分位隔开
-                liveViewHolder.tvLivePeopleAmount.setText(formatNum(onlineUser));
 
                 // 获取头像uri
                 final String avatar = user.getAvatar();
@@ -670,8 +679,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             CardView cardView;
             ScaleImageView imgLivePic;
             TextView tvLiveTitle;
-            TextView tvLivePeopleAmount;
+            TextView tvLiveIconContent;
             CircleImageView imgLiveAvatar;
+            ImageView imgIcon;
         }
     }
 
@@ -1066,6 +1076,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 .load(bean.getPhoto())
                                 .centerCrop()
                                 .crossFade()
+                                // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE )
                                 .into(imgArticle);
                     }
 

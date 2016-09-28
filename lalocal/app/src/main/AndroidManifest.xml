@@ -320,6 +320,10 @@
         <activity android:name=".activity.MyCouponActivity"></activity>
         <activity android:name=".activity.ThemeActivity" />
 
+        <!--GlideModule-->
+        <meta-data
+            android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
+            android:value="GlideModule" />
     </application>
 
 </manifest>
