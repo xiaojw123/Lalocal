@@ -1,7 +1,5 @@
 package com.lalocal.lalocal.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,6 +14,7 @@ import android.webkit.WebViewClient;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.JsInterface;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 public class BookActivity extends BaseActivity {
     public static final String BOOK_URL = "pre_order_url";
@@ -57,17 +56,17 @@ public class BookActivity extends BaseActivity {
         public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
             AppLog.print("alert__" + message);
             if (!TextUtils.isEmpty(message)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(BookActivity.this);
-                builder.setTitle("提示");
-                builder.setMessage(message);
-                builder.setNegativeButton("确定", new DialogInterface.OnClickListener() {
+                CustomDialog dialog=new CustomDialog(BookActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage(message);
+                dialog.setNeturalBtn("确定", new CustomDialog.CustomDialogListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onDialogClickListener() {
                         result.confirm();
                     }
                 });
-                builder.setCancelable(false);
-                builder.show();
+                dialog.setCancelable(false);
+                dialog.show();
                 return true;
             }
             return super.onJsAlert(view, url, message, result);
@@ -77,25 +76,23 @@ public class BookActivity extends BaseActivity {
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
             AppLog.print("onJsConfirm____");
             if (!TextUtils.isEmpty(message)) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(BookActivity.this);
-                builder.setMessage(message);
-                builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                CustomDialog dialog=new CustomDialog(BookActivity.this);
+                dialog.setTitle("提示");
+                dialog.setMessage(message);
+                dialog.setSurceBtn("确定", new CustomDialog.CustomDialogListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
+                    public void onDialogClickListener() {
+                        result.confirm();
+                    }
+                });
+                dialog.setCancelBtn("取消", new CustomDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
                         result.cancel();
                     }
                 });
-                builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        result.confirm();
-
-                    }
-                });
-                builder.setCancelable(false);
-                builder.show();
+                dialog.setCancelable(false);
+                dialog.show();
                 return true;
             }
             return super.onJsConfirm(view, url, message, result);

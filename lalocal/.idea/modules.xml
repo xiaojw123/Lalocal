@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/pingpp/pingpp.iml" filepath="$PROJECT_DIR$/pingpp/pingpp.iml" />
       <module fileurl="file://$PROJECT_DIR$/shinebuttonlib/shinebuttonlib.iml" filepath="$PROJECT_DIR$/shinebuttonlib/shinebuttonlib.iml" />
       <module fileurl="file://$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" filepath="$PROJECT_DIR$/wkvideoplayer/wkvideoplayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xrecyclerview/xrecyclerview.iml" filepath="$PROJECT_DIR$/xrecyclerview/xrecyclerview.iml" />
     </modules>
   </component>
 </project>

@@ -22,7 +22,7 @@ public class Coupon {
     private double discount;
     private int status;
     private String statusName="";
-    private double minFee;
+    private int minFee;
     private int type;//优惠券类型,0普通优惠券 1作者优惠券
 
     public int getId() {
@@ -73,11 +73,11 @@ public class Coupon {
         this.statusName = statusName;
     }
 
-    public double getMinFee() {
+    public int getMinFee() {
         return minFee;
     }
 
-    public void setMinFee(double minFee) {
+    public void setMinFee(int minFee) {
         this.minFee = minFee;
     }
 
