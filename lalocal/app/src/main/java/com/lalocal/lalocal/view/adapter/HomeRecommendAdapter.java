@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -112,6 +113,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private boolean themeEmpty;
     private boolean articleEmpty;
 
+    private boolean isScrolling;
+
     private MyPtrClassicFrameLayout mPtrLayout;
 
     public HomeRecommendAdapter(Context context) {
@@ -155,6 +158,14 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppLog.i("hehe", "article list null");
             articleEmpty = true;
         }
+    }
+
+    public void setScrolling(boolean isScrolling) {
+        this.isScrolling = isScrolling;
+    }
+
+    public boolean getScrolling() {
+        return this.isScrolling;
     }
 
     public void setAdData(List<RecommendAdResultBean> adList) {
@@ -345,7 +356,12 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             for (int i = 0; i < adResultList.size(); i++) {
                 DefaultSliderView defaultSliderView = new DefaultSliderView(context);
                 RecommendAdResultBean ad = adResultList.get(i);
-                defaultSliderView.image(ad.photo);
+                // 滚动不加载图片
+                if (isScrolling) {
+                    defaultSliderView.image(R.drawable.androidloading);
+                } else {
+                    defaultSliderView.image(ad.photo);
+                }
                 defaultSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
@@ -470,10 +486,14 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
          * 初始化数据
          */
         public void initData(List<LiveRowsBean> list, String title, String subtitle) {
-            if (!TextUtils.isEmpty(title)) {
+            if (TextUtils.isEmpty(title)) {
+                titleView.setText("");
+            } else {
                 titleView.setText(title);
             }
-            if (!TextUtils.isEmpty(subtitle)) {
+            if (TextUtils.isEmpty(subtitle)) {
+                subTitleView.setText("");
+            } else {
                 subTitleView.setText(subtitle);
             }
 
@@ -487,7 +507,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
             // 改变大小透明度的工具类
             ScaleAlphaPageTransformer mScaleAlphaPageTransformer = new ScaleAlphaPageTransformer();
-            // TODO: 获取网络数据后，传递数据
+            // 填充数据
             LiveAdapter hotLiveAdapter = new LiveAdapter(context, hotLiveList);
             // 配置适配器
             vpHotLives.setAdapter(hotLiveAdapter);
@@ -575,11 +595,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 设置播放图片
                 String photo = user.getAvatarOrigin();
                 AppLog.i("TAG", "首頁直播頭像:" + liveRowsBean.getPhoto());
-                if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
+                if (isScrolling) {
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, "", DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                } else {
+                    if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
 //                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
-                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                } else if (!TextUtils.isEmpty(photo)) {
-                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                        DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                    } else if (!TextUtils.isEmpty(photo)) {
+                        DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                    }
                 }
 
                 // 设置播放标题
@@ -596,8 +620,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 // 获取头像uri
                 final String avatar = user.getAvatar();
-                // 设置头像
-                DrawableUtils.displayImg(mContext, liveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
+                // 滑动不加载图片
+                if (isScrolling) {
+                    liveViewHolder.imgLiveAvatar.setImageResource(R.drawable.androidloading);
+                } else {
+                    // 设置头像
+                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
+                }
 
                 // 获取视频播放相关数据
                 final int roomId = liveRowsBean.getRoomId();
@@ -752,7 +781,11 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void convert(CommonViewHolder holder, ProductDetailsResultBean bean) {
                     // 设置商品图片
                     SquareImageView imgComoddity = holder.getView(R.id.img_commodity);
-                    DrawableUtils.displayImg(mContext, imgComoddity, bean.photo, R.drawable.androidloading);
+                    if (isScrolling) {
+                        imgComoddity.setImageResource(R.drawable.androidloading);
+                    } else {
+                        DrawableUtils.displayImg(mContext, imgComoddity, bean.photo, R.drawable.androidloading);
+                    }
 
                     // 设置商品价格
                     String price = "￥ " + formatNum(bean.price) + "起";
@@ -932,8 +965,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.tvSaveQuantity = (TextView) view.findViewById(R.id.tv_save_quantity);
 
                 // 设置专题图片
-                DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
-                        DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                if (isScrolling) {
+                    DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, "",
+                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                } else {
+                    DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
+                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                }
 
                 // 设置名字
                 String name = bean.getName();
@@ -1020,7 +1058,16 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void convert(CommonViewHolder holder, ArticleDetailsResultBean bean) {
                     // 设置图片
                     ImageView imgArticle = holder.getView(R.id.img_article);
-                    DrawableUtils.displayImg(context, imgArticle, bean.getPhoto());
+                    if (isScrolling) {
+                        imgArticle.setImageResource(R.drawable.androidloading);
+                    } else {
+//                        DrawableUtils.displayImg(context, imgArticle, bean.getPhoto());
+                        Glide.with(mContext)
+                                .load(bean.getPhoto())
+                                .centerCrop()
+                                .crossFade()
+                                .into(imgArticle);
+                    }
 
                     // 设置标题
                     holder.setText(R.id.tv_article_title, bean.getTitle());

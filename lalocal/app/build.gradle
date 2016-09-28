@@ -4,7 +4,7 @@ apply plugin: 'android-apt'
 def cfg = rootProject.ext.configuration
 def libs = rootProject.ext.libraries
 repositories {
-
+    mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
 }
 android {

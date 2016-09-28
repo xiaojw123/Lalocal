@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,8 @@ public class RecommendNewFragment extends Fragment {
 
     private int mArticlePageSize = 10;
     private int mArticlePageNum = 1;
+
+    private boolean mScrolled = false;
 
     // 是否在刷新
     private boolean isRefreshing = false;
@@ -185,6 +188,8 @@ public class RecommendNewFragment extends Fragment {
         initRecyclerView();
         // 初始化ContentLoader
         initLoader();
+        // 滑动不加载图片
+        scrollNotLoadPic();
     }
 
     /**
@@ -260,10 +265,40 @@ public class RecommendNewFragment extends Fragment {
 //        mContentLoader.articleList(10, 0);
     }
 
+    /**
+     * 滑动不加载图片
+     */
+    private void scrollNotLoadPic() {
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE: // 当前未滑动
+                        if (mRecommendAdapter.getScrolling() && mScrolled) {
+                            // 对于滚动不加载图片的尝试
+                            mRecommendAdapter.setScrolling(false);
+                            mAdapter.notifyDataSetChangedHF();
+                        }
+
+                        mScrolled = false;
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING: // 开始拖拽
+
+                        break;
+                    case RecyclerView.SCROLL_STATE_SETTLING: // 滑动到某个位置
+
+                        break;
+                }
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
+
+    }
+
     public class MyCallBack extends ICallBack {
 
         @Override
-        public void onRecommendAd(RecommendAdResp recommendAdResp) {
+        public void onRecommendAd(final RecommendAdResp recommendAdResp) {
             super.onRecommendAd(recommendAdResp);
             try {
                 if (recommendAdResp.getReturnCode() == 0) {
@@ -277,6 +312,7 @@ public class RecommendNewFragment extends Fragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
         /**
@@ -285,7 +321,7 @@ public class RecommendNewFragment extends Fragment {
          * @param recommendListDataResp
          */
         @Override
-        public void onRecommendList(RecommendListDataResp recommendListDataResp) {
+        public void onRecommendList(final RecommendListDataResp recommendListDataResp) {
             super.onRecommendList(recommendListDataResp);
             try {
                 if (recommendListDataResp.getReturnCode() == 0) {
@@ -299,7 +335,7 @@ public class RecommendNewFragment extends Fragment {
         }
 
         @Override
-        public void onArticleListResult(ArticlesResp articlesResp) {
+        public void onArticleListResult(final ArticlesResp articlesResp) {
             super.onArticleListResult(articlesResp);
             try {
                 if (articlesResp.getReturnCode() == 0) {
