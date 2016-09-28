@@ -576,7 +576,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             palyerLayout.setBackgroundColor(Color.BLACK);
             videoView.setLayoutParams(lp);
             videoPlayer.openVideo();
-         //   errorListener();
+            errorListener();
         }/* else if("0".equals(playType)){
 
             bufferStrategy = 0;
@@ -594,7 +594,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if(videoView==null){
             return;
         }
-
+/*
         videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
@@ -631,7 +631,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 }
                 return false;
             }
-        });
+        });*/
+
         videoView.setOnPreparedListener(new NELivePlayer.OnPreparedListener() {
             @Override
             public void onPrepared(NELivePlayer neLivePlayer) {

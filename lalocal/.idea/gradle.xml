@@ -15,19 +15,10 @@
             <option value="$PROJECT_DIR$/pingpp" />
             <option value="$PROJECT_DIR$/shinebuttonlib" />
             <option value="$PROJECT_DIR$/wkvideoplayer" />
+            <option value="$PROJECT_DIR$/xrecyclerview" />
           </set>
         </option>
-        <option name="myModules">
-          <set>
-            <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/easeui" />
-            <option value="$PROJECT_DIR$/gifviewlibrary" />
-            <option value="$PROJECT_DIR$/pingpp" />
-            <option value="$PROJECT_DIR$/shinebuttonlib" />
-            <option value="$PROJECT_DIR$/wkvideoplayer" />
-          </set>
-        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
