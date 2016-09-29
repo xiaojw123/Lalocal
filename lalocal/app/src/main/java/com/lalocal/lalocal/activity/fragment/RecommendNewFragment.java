@@ -92,25 +92,19 @@ public class RecommendNewFragment extends Fragment {
 //                    mRecommendAdapter.setListData(mRecommendListBeen);
                     break;
                 case GET_ARTICLE_LIST:
-                    AppLog.i("aaa", "GET_ARTICLE_LIST");
                     if (isRefreshing) {
-                        AppLog.i("aaa", "isRefreshing...");
                         isLoadingMore = false;
                         isRefreshing = false;
                         mPtrLayout.refreshComplete();
-                        AppLog.i("aaa", "refreshComplete...");
 //                        mRecommendAdapter.notifyDataSetChanged();
-                        AppLog.i("aaa", "adapter update");
                         setAdapter();
 //                        mPtrLayout.loadMoreComplete(false);
                         break;
                     }
                     if (isLoadingMore) {
-                        AppLog.i("aaa", "isLoading...");
                         isRefreshing = false;
                         isLoadingMore = false;
                         mRecommendAdapter.setArticleData(mArticleList);
-                        AppLog.i("aaa", "setArticleData...");
                         mPtrLayout.loadMoreComplete(true);
                         break;
                     }
@@ -119,12 +113,12 @@ public class RecommendNewFragment extends Fragment {
 //                    mRecommendAdapter.setArticleData(mArticleList);
                     break;
                 case NO_MORE_ARTICLE:
-                    AppLog.i("aaa", "NO_MORE_ARTICLE");
                     isRefreshing = false;
                     isLoadingMore = false;
                     mPtrLayout.loadMoreComplete(true);
                     mPtrLayout.setLoadMoreEnable(false);
-                    AppLog.i("aaa", "setLoadMOreEnable false");
+                    View bottomView = LayoutInflater.from(getActivity()).inflate(R.layout.load_more_layout, null);
+                    mRecyclerView.addView(bottomView);
                     Toast.makeText(getActivity(), "没有更多文章咯~", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -234,10 +228,8 @@ public class RecommendNewFragment extends Fragment {
         mPtrLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void loadMore() {
-                AppLog.i("aaa", "上拉加载");
                 isLoadingMore = true;
                 mArticlePageNum++;
-                AppLog.i("aaa", "page num " + mArticlePageNum);
                 mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
             }
         });
@@ -339,29 +331,35 @@ public class RecommendNewFragment extends Fragment {
             super.onArticleListResult(articlesResp);
             try {
                 if (articlesResp.getReturnCode() == 0) {
-                    AppLog.i("aaa", "article get return code 0");
                     // 获取首页推荐文章列表
                     ArticlesResultBean articlesResultBean = articlesResp.getResult();
                     List<ArticleDetailsResultBean> articleList = articlesResultBean == null ? null : articlesResultBean.getRows();
                     if (isLoadingMore) {
-                        AppLog.i("aaa", "load more");
                         if (articleList == null || articleList.size() == 0) {
-                            AppLog.i("aaa", "list null or 0");
                             mHanlder.sendEmptyMessage(NO_MORE_ARTICLE);
                             return;
                         } else {
-                            AppLog.i("aaa", "list not null, add new data");
                             mArticleList.addAll(articleList);
                         }
                     } else {
+//                        mArticleList.clear();
+//                        emptyArticleList();
                         mArticleList = articleList;
-                        AppLog.i("aaa", "not load more, the list size is " + mAdResultList.size());
                     }
                     mHanlder.sendEmptyMessage(GET_ARTICLE_LIST);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 清空列表
+     */
+    private void emptyArticleList() {
+        for (int i = mArticleList.size() - 1; i >= 0; i++) {
+            mArticleList.remove(i);
         }
     }
 }

@@ -1062,7 +1062,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @OnMPermissionGranted(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionSuccess() {
 
-        initAudienceParam();
+//        initAudienceParam();
     }
 
     @OnMPermissionDenied(BASIC_PERMISSION_REQUEST_CODE)
