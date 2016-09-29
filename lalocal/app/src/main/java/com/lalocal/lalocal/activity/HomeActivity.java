@@ -6,9 +6,11 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
@@ -26,6 +28,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
 
     private int selected = 0;
+
+    // 记录第一次点击back的时间
+    private long clickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +175,30 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                     showFragment(home_me_tab);
                     break;
             }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 2秒内连续点击back键，退出应用
+     */
+    private void exit() {
+        // 退出提示
+        if ((System.currentTimeMillis() - clickTime) > 2000) {
+            Toast.makeText(HomeActivity.this, "再按一次返回键退出应用", Toast.LENGTH_SHORT).show();
+            // 获取点击时间
+            clickTime = System.currentTimeMillis();
+        } else {
+            // 退出应用
+            this.finish();
         }
     }
 }
