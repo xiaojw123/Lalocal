@@ -114,7 +114,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private boolean themeEmpty;
     private boolean articleEmpty;
 
-    private boolean isScrolling;
+//    private boolean isScrolling;
 
     private MyPtrClassicFrameLayout mPtrLayout;
 
@@ -161,13 +161,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    public void setScrolling(boolean isScrolling) {
-        this.isScrolling = isScrolling;
-    }
+//    public void setScrolling(boolean isScrolling) {
+//        this.isScrolling = isScrolling;
+//    }
 
-    public boolean getScrolling() {
-        return this.isScrolling;
-    }
+//    public boolean getScrolling() {
+//        return this.isScrolling;
+//    }
 
     public void setAdData(List<RecommendAdResultBean> adList) {
         this.mAdList = adList;
@@ -358,11 +358,11 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 DefaultSliderView defaultSliderView = new DefaultSliderView(context);
                 RecommendAdResultBean ad = adResultList.get(i);
                 // 滚动不加载图片
-                if (isScrolling) {
-                    defaultSliderView.image(R.drawable.androidloading);
-                } else {
+//                if (isScrolling) {
+//                    defaultSliderView.image(R.drawable.androidloading);
+//                } else {
                     defaultSliderView.image(ad.photo);
-                }
+//                }
                 defaultSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
                     public void onSliderClick(BaseSliderView slider) {
@@ -597,16 +597,16 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 设置播放图片
                 String photo = user.getAvatarOrigin();
                 AppLog.i("TAG", "首頁直播頭像:" + liveRowsBean.getPhoto());
-                if (isScrolling) {
-                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, "", DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                } else {
+//                if (isScrolling) {
+//                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, "", DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+//                } else {
                     if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
 //                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
                         DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                     } else if (!TextUtils.isEmpty(photo)) {
                         DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                     }
-                }
+//                }
 
                 // 如果图片链接一致，说明是公告视频，下方显示地理位置
                 if (liveRowsBean.getType() == 1) { // 云信通过type来判断：1-系统，2-用户；声网通过cname来判断：null-系统，否则为用户
@@ -630,12 +630,12 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 // 获取头像uri
                 final String avatar = user.getAvatar();
                 // 滑动不加载图片
-                if (isScrolling) {
-                    liveViewHolder.imgLiveAvatar.setImageResource(R.drawable.androidloading);
-                } else {
+//                if (isScrolling) {
+//                    liveViewHolder.imgLiveAvatar.setImageResource(R.drawable.androidloading);
+//                } else {
                     // 设置头像
                     DrawableUtils.displayImg(mContext, liveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
-                }
+//                }
 
                 // 获取视频播放相关数据
                 final int roomId = liveRowsBean.getRoomId();
@@ -791,11 +791,11 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void convert(CommonViewHolder holder, ProductDetailsResultBean bean) {
                     // 设置商品图片
                     SquareImageView imgComoddity = holder.getView(R.id.img_commodity);
-                    if (isScrolling) {
-                        imgComoddity.setImageResource(R.drawable.androidloading);
-                    } else {
+//                    if (isScrolling) {
+//                        imgComoddity.setImageResource(R.drawable.androidloading);
+//                    } else {
                         DrawableUtils.displayImg(mContext, imgComoddity, bean.photo, R.drawable.androidloading);
-                    }
+//                    }
 
                     // 设置商品价格
                     String price = "￥ " + formatNum(bean.price) + "起";
@@ -975,13 +975,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 holder.tvSaveQuantity = (TextView) view.findViewById(R.id.tv_save_quantity);
 
                 // 设置专题图片
-                if (isScrolling) {
-                    DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, "",
-                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                } else {
+//                if (isScrolling) {
+//                    DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, "",
+//                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+//                } else {
                     DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
                             DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                }
+//                }
 
                 // 设置名字
                 String name = bean.getName();
@@ -1068,9 +1068,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 public void convert(CommonViewHolder holder, ArticleDetailsResultBean bean) {
                     // 设置图片
                     ImageView imgArticle = holder.getView(R.id.img_article);
-                    if (isScrolling) {
-                        imgArticle.setImageResource(R.drawable.androidloading);
-                    } else {
+//                    if (isScrolling) {
+//                        imgArticle.setImageResource(R.drawable.androidloading);
+//                    } else {
 //                        DrawableUtils.displayImg(context, imgArticle, bean.getPhoto());
                         Glide.with(mContext)
                                 .load(bean.getPhoto())
@@ -1079,7 +1079,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
                                 .diskCacheStrategy(DiskCacheStrategy.SOURCE )
                                 .into(imgArticle);
-                    }
+//                    }
 
                     // 设置标题
                     holder.setText(R.id.tv_article_title, bean.getTitle());

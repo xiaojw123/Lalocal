@@ -15,6 +15,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -74,7 +75,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
     private ContentLoader contentService;
     private ListView liveRecyclearView;
-//    private BlurImageView layoutBg;
+    //    private BlurImageView layoutBg;
     private LiveMainListAdapter liveMainListAdapter;
     private List<LiveRowsBean> allRows = new ArrayList<LiveRowsBean>();
     private boolean isFirstLoad = true;//刷新列表
@@ -149,13 +150,15 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-   boolean firstLoadData=true;
+    boolean firstLoadData=true;
     @Override
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
         super.onHiddenChanged(hidden);
         if (!hidden) {
             isFirstLoad = true;
             allRows.clear();
+            pageCount=2;
+            isLoadEnd=false;
             contentService.liveList(10, 1);
         }
     }
@@ -193,6 +196,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     private int liveUserId;
     private String createNickName;
     String createAnn = null;
+    private boolean isLoadEnd=false;
 
     public class MyCallBack extends ICallBack {
 
@@ -201,7 +205,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             super.onLiveList(liveListDataResp);
             firstLoadData=true;
             List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
-
+            AppLog.i("TAG","添加集合数据："+rows.size());
             if (rows.size() > 0 && isFirstLoad) {
                 allRows.addAll(0, rows);
                 Collections.sort(allRows);//排序
@@ -212,6 +216,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 if (rows.size() == 10) {
                     pageSize = pageSize + rows.size();
                     pageCount = pageCount + 1;
+                }else{
+                    isLoadEnd=true;
                 }
 
                 allRows.addAll(allRows.size(), rows);
@@ -266,7 +272,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
     private int pageCount = 2;
     private boolean isLoading = false;
-    private int pageSize = 9;
+    private int pageSize = 10;
 
     private void initRecyclerView(final List<LiveRowsBean> rows) {
         if (getActivity() != null) {
@@ -301,7 +307,24 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
             });
 
+            liveRecyclearView.setOnScrollListener(new AbsListView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+                    int firstVisiblePosition = liveRecyclearView.getFirstVisiblePosition();
+                    int lastVisiblePosition = liveRecyclearView.getLastVisiblePosition();
+                    AppLog.i("TAG","直播列表lastVisiblePosition:"+lastVisiblePosition+"allRows:"+allRows.size());
+                    if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {//静止时进行高斯背景模糊
+                        if (lastVisiblePosition==allRows.size()+1&&!isLoadEnd){
+                            contentService.liveList(10, pageCount);
+                        }
+                    }
+                }
 
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                }
+            });
         }
     }
 
@@ -438,6 +461,12 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         if (allRows != null) {
             allRows.clear();
         }
+        if(pageCount!=2){
+            pageCount=2;
+            isLoadEnd=false;
+        }
+
+
         if(firstLoadData){
             firstLoadData=false;
             contentService.liveList(10, 1);

@@ -183,7 +183,7 @@ public class RecommendNewFragment extends Fragment {
         // 初始化ContentLoader
         initLoader();
         // 滑动不加载图片
-        scrollNotLoadPic();
+//        scrollNotLoadPic();
     }
 
     /**
@@ -260,32 +260,31 @@ public class RecommendNewFragment extends Fragment {
     /**
      * 滑动不加载图片
      */
-    private void scrollNotLoadPic() {
-        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                switch (newState) {
-                    case RecyclerView.SCROLL_STATE_IDLE: // 当前未滑动
-                        if (mRecommendAdapter.getScrolling() && mScrolled) {
-                            // 对于滚动不加载图片的尝试
-                            mRecommendAdapter.setScrolling(false);
-                            mAdapter.notifyDataSetChangedHF();
-                        }
-
-                        mScrolled = false;
-                        break;
-                    case RecyclerView.SCROLL_STATE_DRAGGING: // 开始拖拽
-
-                        break;
-                    case RecyclerView.SCROLL_STATE_SETTLING: // 滑动到某个位置
-
-                        break;
-                }
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
-
-    }
+//    private void scrollNotLoadPic() {
+//        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                switch (newState) {
+//                    case RecyclerView.SCROLL_STATE_IDLE: // 当前未滑动
+//                        if (mRecommendAdapter.getScrolling() && mScrolled) {
+//                            // 对于滚动不加载图片的尝试
+//                            mRecommendAdapter.setScrolling(false);
+//                            mAdapter.notifyDataSetChangedHF();
+//                        }
+//                        mScrolled = false;
+//                        break;
+//                    case RecyclerView.SCROLL_STATE_DRAGGING: // 开始拖拽
+//
+//                        break;
+//                    case RecyclerView.SCROLL_STATE_SETTLING: // 滑动到某个位置
+//
+//                        break;
+//                }
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//        });
+//
+//    }
 
     public class MyCallBack extends ICallBack {
 
@@ -343,7 +342,11 @@ public class RecommendNewFragment extends Fragment {
                         }
                     } else {
 //                        mArticleList.clear();
+//                        AppLog.i("refreshs", "1");
 //                        emptyArticleList();
+//                        AppLog.i("refreshs", "2");
+//                        mArticleList.addAll(articleList);
+//                        AppLog.i("refreshs", "3");
                         mArticleList = articleList;
                     }
                     mHanlder.sendEmptyMessage(GET_ARTICLE_LIST);
@@ -358,7 +361,10 @@ public class RecommendNewFragment extends Fragment {
      * 清空列表
      */
     private void emptyArticleList() {
+        AppLog.i("refreshs", "emptyArticleList");
+        AppLog.i("refresh", "list size is " );
         for (int i = mArticleList.size() - 1; i >= 0; i++) {
+            AppLog.i("refreshs", "size = " + mArticleList.size() + ", position is " + i);
             mArticleList.remove(i);
         }
     }
