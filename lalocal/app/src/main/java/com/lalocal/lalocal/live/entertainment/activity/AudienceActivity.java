@@ -326,6 +326,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         cname= liveRowsBean.getCname();
         liveStatus=String.valueOf(liveRowsBean.getStatus());
          shareVO = liveRowsBean.getShareVO();
+        AppLog.i("TAG","用户端channelId："+channelId);
     }
 
 
@@ -502,7 +503,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     protected void onDestroy() {
         // 释放资源
         if (videoPlayer != null) {
-
             videoPlayer.resetVideo();
         }
         deInitUIandEvent();
@@ -513,6 +513,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         finishLive();
     }
 
@@ -566,6 +567,19 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         if ("1".equals(playType)) {
             videoView = new NEVideoView(this);
+
+            videoView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if(palyerLayout!=null&&palyerLayout.getChildAt(0)!=null){
+                        if(bottom>oldBottom){
+                            palyerLayout.getChildAt(0).layout(left,top,right,bottom);
+                        }else {
+                            palyerLayout.getChildAt(0).layout(oldLeft,oldTop,oldRight,oldBottom);
+                        }
+                    }
+                }
+            });
             palyerLayout.addView(videoView);
             bufferStrategy = 1;
             videoView.setBufferStrategy(bufferStrategy);
@@ -576,7 +590,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             palyerLayout.setBackgroundColor(Color.BLACK);
             videoView.setLayoutParams(lp);
             videoPlayer.openVideo();
-         //   errorListener();
+           errorListener();
         }/* else if("0".equals(playType)){
 
             bufferStrategy = 0;
@@ -594,7 +608,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if(videoView==null){
             return;
         }
-
+/*
         videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
@@ -631,7 +645,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 }
                 return false;
             }
-        });
+        });*/
         videoView.setOnPreparedListener(new NELivePlayer.OnPreparedListener() {
             @Override
             public void onPrepared(NELivePlayer neLivePlayer) {
@@ -732,11 +746,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     boolean logineds = UserHelper.isLogined(AudienceActivity.this);
                     if (!logineds) {
                         showLoginViewDialog();
-                    } else{
+                    } else if(DemoCache.getLoginChatRoomStatus()){
                         keyboardLayout.setAlpha(1.0f);
                         keyboardLayout.setClickable(true);
                         liveSettingLayout.setVisibility(View.GONE);
-                        inputPanel.switchToTextLayout(true);
+
+                            inputPanel.switchToTextLayout(true);
+                    }else {
+                        Toast.makeText(AudienceActivity.this,"没有登录聊天室，请退出重进!",Toast.LENGTH_SHORT).show();
                     }
 
                     break;
@@ -760,7 +777,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     }else if(!DemoCache.getLoginChatRoomStatus()) {
                        Toast.makeText(AudienceActivity.this,"未登录聊天室",Toast.LENGTH_SHORT).show();
                     } else if(!"1".equals(playType)) {
-
                         if(CustomDialogStyle.IS_FIRST_CLICK_PAGE){
                             CustomDialogStyle.IS_FIRST_CLICK_PAGE=false;
                             contentLoader.getMyWallet();
@@ -792,6 +808,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         giftStorePopuWindow.showGiftStorePopuWindow(gold);
         giftStorePopuWindow.showAtLocation(this.findViewById(R.id.live_layout),
                 Gravity.BOTTOM, 0, 0);
+
         giftStorePopuWindow.setOnSendClickListener(new GiftStorePopuWindow.OnSendClickListener() {
             @Override
             public void sendGiftMessage(final int itemPosition, final int sendTotal, final int payBalance) {
@@ -1033,6 +1050,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     private void finishLive() {
 
+        if (videoPlayer != null) {
+            videoPlayer.resetVideo();
+        }
+
         if (isStartLive) {
             logoutChatRoom();
         } else {
@@ -1061,7 +1082,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @OnMPermissionGranted(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionSuccess() {
 
-        initAudienceParam();
+       // initAudienceParam();
     }
 
     @OnMPermissionDenied(BASIC_PERMISSION_REQUEST_CODE)

@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.live.permission.MPermission;
@@ -89,7 +90,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //注：回调 1
-     //   Bugtags.onResume(this);
+        Bugtags.onResume(this);
         MobclickAgent.onResume(this);
     }
 
@@ -98,7 +99,7 @@ public class BaseActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //注：回调 2
-     //   Bugtags.onPause(this);
+        Bugtags.onPause(this);
         MobclickAgent.onPause(this);
     }
 
@@ -106,7 +107,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         //注：回调 3
-     //   Bugtags.onDispatchTouchEvent(this, event);
+        Bugtags.onDispatchTouchEvent(this, event);
         return super.dispatchTouchEvent(event);
     }
 

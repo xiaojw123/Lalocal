@@ -320,7 +320,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                     break;
                 case MSG_ENTER_APP:
                     String apiUrl = result.getApiUrl();
-                    AppConfig.setBaseUrl(apiUrl);
+                 //   AppConfig.setBaseUrl(apiUrl);
                     mContentloader.getSystemConfigs();
                     break;
                 case MSG_VERSION_UPDATE:
