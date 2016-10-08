@@ -9,7 +9,7 @@ public class LiveMessage {
     private String userRole;
     private String msg;
     private String isAt;
-    private String style;
+    private int style;
     private String scenesType;
     private String disableSendMsgUserId;
     private String disableSendMsgNickName;
@@ -22,8 +22,12 @@ public class LiveMessage {
     private String questionUserName;
     private GiftBean giftModel;
     private String targetType;
+<<<<<<< HEAD
     private String challengeModel;
     private String channelId;
+=======
+    private ChallengeInitiateResultBean challengeModel;
+>>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
 
     public String getAdminSendMsgUserId() {
         return adminSendMsgUserId;
@@ -121,11 +125,11 @@ public class LiveMessage {
         this.isAt = isAt;
     }
 
-    public String getStyle() {
+    public int getStyle() {
         return style;
     }
 
-    public void setStyle(String style) {
+    public void setStyle(int style) {
         this.style = style;
     }
 
@@ -201,11 +205,11 @@ public class LiveMessage {
         this.targetType = targetType;
     }
 
-    public String getChallengeModel() {
+    public ChallengeInitiateResultBean getChallengeModel() {
         return challengeModel;
     }
 
-    public void setChallengeModel(String challengeModel) {
+    public void setChallengeModel(ChallengeInitiateResultBean challengeModel) {
         this.challengeModel = challengeModel;
     }
 

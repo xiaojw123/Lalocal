@@ -55,12 +55,22 @@
         android:layout_marginRight="@dimen/live_padding_20dp"
         android:scaleType="centerCrop"
         android:src="@drawable/peopleliving_like" />
+
+    <ImageView
+        android:id="@+id/live_telecast_challenge"
+        android:layout_width="@dimen/live_height_30dp"
+        android:layout_height="@dimen/live_height_30dp"
+        android:layout_centerInParent="true"
+        android:layout_toLeftOf="@id/live_telecast_like"
+        android:layout_marginRight="@dimen/live_padding_20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/peopleliving_fight" />
     <ImageView
         android:id="@+id/live_gift_img"
         android:layout_width="@dimen/live_height_30dp"
         android:layout_height="@dimen/live_height_30dp"
         android:layout_centerInParent="true"
-        android:layout_toLeftOf="@id/live_telecast_like"
+        android:layout_toLeftOf="@id/live_telecast_challenge"
         android:layout_marginRight="@dimen/live_padding_20dp"
         android:scaleType="centerCrop"
         android:src="@drawable/peopleliving_gift"

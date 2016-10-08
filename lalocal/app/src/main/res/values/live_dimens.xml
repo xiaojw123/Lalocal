@@ -15,7 +15,7 @@
     <dimen name="live_over_padding_top">136dp</dimen>
     <dimen name="live_over_padding_left">110dp</dimen>
 
-
+    <dimen name="live_height_20dp">20dp</dimen>
     <dimen name="live_height_30dp">30dp</dimen>
     <dimen name="live_height_35dp">35dp</dimen>
     <dimen name="live_height_36dp">36dp</dimen>

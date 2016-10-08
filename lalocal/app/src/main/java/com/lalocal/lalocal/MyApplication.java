@@ -48,6 +48,10 @@ import io.fabric.sdk.android.Fabric;
  * 线上版本 友盟日志关闭
  */
 public class MyApplication extends Application {
+<<<<<<< HEAD
+=======
+
+>>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
     public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
     @Override
@@ -69,6 +73,7 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
+
         if (isDebug){
         Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
         }

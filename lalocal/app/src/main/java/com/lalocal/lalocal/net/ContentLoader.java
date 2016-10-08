@@ -842,8 +842,38 @@ public class ContentLoader {
         request.setBodyParams(getBodyParams(targetType, targetId, channelType));
         requestQueue.add(request);
 
-
     }
+
+    //发起挑战
+    public void getChallenge(String content,int targetGold, String  channelId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHALLENGE_INITIATE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getChallageInitiate(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getChallengeBodyParams(content,targetGold,channelId));
+        requestQueue.add(request);
+    }
+    //挑战详情
+    public  void getChallengeDetails(String channelId,int status){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHALLENGE_DEATILS);
+        }
+        String url=channelId+(status==-1?"":("&status="+status));
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+url , response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //主播操作挑战
+    public void getLiveChallengeStatus(int challengeId,int status){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_CHALLENGE_STATUS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getLiveChallengeStatus(challengeId,status), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
 
 
     //搜索关注粉丝
@@ -1311,6 +1341,15 @@ public class ContentLoader {
                         break;
                     case RequestCode.SHARE_STATISTICS:
                         responseShareStatistics(json);
+                        break;
+                    case RequestCode.CHALLENGE_INITIATE:
+                        responseChallengeInitiate(json);
+                        break;
+                    case RequestCode.CHALLENGE_DEATILS:
+                        responseChallengeDetails(json);
+                        break;
+                    case RequestCode.LIVE_CHALLENGE_STATUS:
+                        responLiveChallengeIdStatus(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -1949,6 +1988,23 @@ public class ContentLoader {
             callBack.onShareStatistics(json);
         }
 
+        //发起挑战
+        private void responseChallengeInitiate(String json) {
+
+            callBack.onChallengeInitiate(json);
+        }
+
+        //挑战详情
+        private void responseChallengeDetails(String json) {
+            AppLog.i("TAG","挑战详情："+json);
+            callBack.onChallengeDetails(json);
+        }
+        //主播操作挑战
+        private void responLiveChallengeIdStatus(String json) {
+            AppLog.i("TAG","主播操作挑战："+json);
+            callBack.onLiveChallengeStatus(json);
+        }
+
 
         //取消关注
         private void responseCancelAttention(String json) {
@@ -2156,7 +2212,20 @@ public class ContentLoader {
         }
         return jsonObject.toString();
 
+    }
 
+    //发起挑战
+    private String getChallengeBodyParams(String content,int targetGold, String  channelId){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("content", content);
+            jsonObject.put("targetGold", targetGold);
+            jsonObject.put("channelId", channelId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 
 
@@ -2312,7 +2381,9 @@ public class ContentLoader {
         int LIVE_GIFT_RANKS = 229;
         int GET_ONLINE_COUNT=230;
         int SHARE_STATISTICS=231;
-
+        int CHALLENGE_INITIATE=232;
+        int CHALLENGE_DEATILS=233;
+        int LIVE_CHALLENGE_STATUS=234;
 
         int GET_INDEX_RECOMMEND_LIST=300;
         int GET_ARTICLE_LIST=301;

@@ -15,9 +15,10 @@ public class AppConfig {
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
+
         private static String baseUrl = "http://api.lalocal.cn/api/";
     // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
-//    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+  //  private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {
@@ -258,6 +259,20 @@ public class AppConfig {
     //上传在线人数  http://dev.lalocal.cn:8080/api/system/numbs?number=1
     public static final String getOnLineUserCount(){
         return  baseUrl+"system/numbs?number=";
+    }
+
+    //发起挑战 http://dev.lalocal.cn:8080/api/challenges
+    public static final String getChallageInitiate(){
+        return  baseUrl+"challenges";
+    }
+
+    //挑战详情 http://dev.lalocal.cn:8080/api/challenges?channelId=1&status=0
+    public static final String getChallengeDetails(){
+        return  baseUrl+"challenges?channelId=";
+    }
+    //主播操作挑战 http://dev.lalocal.cn:8080/api/challenges/6/status
+    public static final String getLiveChallengeStatus(int challengeId,int status){
+        return  baseUrl+"challenges/"+challengeId+"/"+status;
     }
 
     public static String getBaseUrl() {

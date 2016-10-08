@@ -107,7 +107,7 @@ public class LiveHomePageActivity extends BaseActivity {
 
 
 
-    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page,R.id.master_attention_layout})
+    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page, R.id.master_attention_layout})
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.homepage_attention_layout:
@@ -171,7 +171,7 @@ public class LiveHomePageActivity extends BaseActivity {
             @Override
             public void onDialogClickListener() {
                 Intent intent = new Intent(LiveHomePageActivity.this, LoginActivity.class);
-                startActivityForResult(intent,LoginActivity.REGISTER_OK);
+                startActivityForResult(intent, LoginActivity.REGISTER_OK);
             }
         });
         customDialog.show();

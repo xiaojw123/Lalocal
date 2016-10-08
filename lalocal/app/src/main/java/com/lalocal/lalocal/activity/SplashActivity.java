@@ -25,7 +25,8 @@ import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
 import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
@@ -173,7 +174,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         break;
                     case 21:
                         String enumValue = item.getEnumValue();
-                        CustomDialogStyle.LIVE_DEFINITION = Integer.parseInt(enumValue);
+                        LiveConstant.LIVE_DEFINITION = Integer.parseInt(enumValue);
                         break;
                 }
 

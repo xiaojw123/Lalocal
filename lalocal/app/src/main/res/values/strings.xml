@@ -239,4 +239,26 @@
     <string name="live_attention_mutual">相互关注</string>
     <string name="live_attention">关注</string>
     <string name="more">More</string>
+    <string name="live_not_cancel">暂不取消</string>
+    <string name="lvie_setting_manager">设为管理员</string>
+    <string name="live_setting_manager_confirm">确定要撤销他的管理员权限？</string>
+    <string name="live_cancel_manager_cancel">取消管理员</string>
+    <string name="live_ban">禁言</string>
+    <string name="live_relieve_ban">解除禁言</string>
+    <string name="live_over">结束直播</string>
+    <string name="live_continue">继续直播</string>
+    <string name="live_manager_count">最多设置3个管理员</string>
+    <string name="live_manager_setting_success">设置管理员成功</string>
+    <string name="live_hint">提示</string>
+    <string name="live_net_type_cmcc">当前网络为移动网络，是否继续直播？</string>
+    <string name="live_continue_look">继续观看</string>
+    <string name="live_video_conncet_fail">视频连接失败!</string>
+    <string name="live_quit_room">退出直播间</string>
+    <string name="live_again_conncet">重新连接</string>
+    <string name="live_unlogin_room">未登录聊天室</string>
+    <string name="live_recharge_hint">乐钻不足,请充值!</string>
+    <string name="live_recharge">充值</string>
+    <string name="live_sendgift_fail">赠送失败!</string>
+    <string name="chanllage_initiate_hint">挑战已发起，请等待主播接受!</string>
+    <string name="chanllage_initiate_ok">好</string>
 </resources>
