@@ -28,9 +28,9 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
     private Context mContext;
     private EditText liveRoomName;
     private TextView textCount;
- //   private ImageView shareFriends;
-  //  private ImageView shareWeibo;
- //   private ImageView shareWeixin;
+    private ImageView shareFriends;
+    private ImageView shareWeibo;
+    private ImageView shareWeixin;
     private ImageView cancelCreateRoom;
     private TextView inputLiveRoom;
     private ScrollView startLiveScrollview;
@@ -47,9 +47,9 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         inputLiveRoom = (TextView) view.findViewById(R.id.input_start_live);
         startLiveScrollview = (ScrollView) view.findViewById(R.id.start_live_bottom_layout);
         startLiveLayout1 = (LinearLayout) view.findViewById(R.id.start_live_layout);
-      //  shareFriends = (ImageView) view.findViewById(R.id.live_create_share_friends);
-      //  shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
-     //   shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
+        shareFriends = (ImageView) view.findViewById(R.id.live_create_share_friends);
+        shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
+        shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
         roomBg = (BlurImageView) view.findViewById(R.id.live_create_room_bg);
         String userAvatar = UserHelper.getUserAvatar(mContext);
         if(userAvatar!=null){
@@ -60,11 +60,11 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         roomBg.setBlurRadius(1);
 
 
-     //   shareFriends.setSelected(true);
+        shareFriends.setSelected(true);
         isShareSelector = 0;
-      /*  shareFriends.setOnClickListener(buttonClickListener);
+        shareFriends.setOnClickListener(buttonClickListener);
         shareWeibo.setOnClickListener(buttonClickListener);
-        shareWeixin.setOnClickListener(buttonClickListener);*/
+        shareWeixin.setOnClickListener(buttonClickListener);
         startLiveLayout1.setOnClickListener(buttonClickListener);
         cancelCreateRoom.setOnClickListener(buttonClickListener);
         //自动调用软键盘
@@ -120,8 +120,8 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
-             //   case R.id.live_create_share_friends:
-                  /*  if(isFirstFirendsClick){
+                case R.id.live_create_share_friends:
+                    if(isFirstFirendsClick){
                         isFirstFirendsClick=false;
                         shareFriends.setSelected(false);
                         isShareSelector=-1;
@@ -130,20 +130,20 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
                         shareFriends.setSelected(true);
                         shareWeixin.setSelected(false);
                         isShareSelector=0;
-                    }*/
-                 //   break;
-               // case R.id.live_create_share_weibo:
-                 /*   shareWeibo.setSelected(true);
+                    }
+                    break;
+                case R.id.live_create_share_weibo:
+                    shareWeibo.setSelected(true);
                     shareFriends.setSelected(false);
                     shareWeixin.setSelected(false);
-                    isShareSelector = 1;*/
-                 //   break;
-             //   case R.id.live_create_share_weixin:
-               /*     shareFriends.setSelected(false);
+                    isShareSelector = 1;
+                    break;
+                case R.id.live_create_share_weixin:
+                    shareFriends.setSelected(false);
                     shareWeibo.setSelected(false);
                     shareWeixin.setSelected(true);
-                    isShareSelector = 2;*/
-                 //   break;
+                    isShareSelector = 2;
+                    break;
                 case R.id.start_live_layout:
                     roomName = liveRoomName.getText().toString().trim();
                     InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -166,7 +166,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
     private OnCreateLiveListener onCreateLiveListener;
 
     public interface OnCreateLiveListener {
-        void startLiveBtn(String roomName,int isShareSelector);
+        void startLiveBtn(String roomName, int isShareSelector);
         void closeLiveBtn();
     }
 

@@ -17,7 +17,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResultBean;
 
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class GiftStorePopuWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 if (UserHelper.isLogined(mContext)) {
-                    CustomDialogStyle.IS_FIRST_CLICK_PAGE=true;
+                    LiveConstant.IS_FIRST_CLICK_PAGE=true;
                     charge();//跳转充值页面
                     dismiss();
                 }else{

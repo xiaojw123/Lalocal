@@ -97,7 +97,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         adapter.setEventListener(new MsgItemEventListener());
 
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
-       View view= View.inflate(container.activity,R.layout.chat_head_items,null);
+       View view= View.inflate(container.activity, R.layout.chat_head_items,null);
        TextView headInfos= (TextView) view.findViewById(R.id.chat_info_head);
 
         headInfos.setText("公告： "+content);

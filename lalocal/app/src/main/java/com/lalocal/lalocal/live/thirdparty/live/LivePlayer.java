@@ -10,8 +10,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.WindowManager;
 
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
+import com.lalocal.lalocal.util.AppLog;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.livestreamingFilter.filter.Filters;

@@ -67,7 +67,7 @@ public class DemoCache {
     }
 
     public static NimUserInfo getRegUserInfo(){
-        userInfo=NIMClient.getService(UserService.class).getUserInfo(account);
+        userInfo= NIMClient.getService(UserService.class).getUserInfo(account);
         return  userInfo;
     }
     public static ImageLoaderKit getImageLoaderKit() {

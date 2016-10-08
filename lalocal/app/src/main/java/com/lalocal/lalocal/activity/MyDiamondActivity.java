@@ -117,7 +117,8 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
             }
             if (isLoadMore) {
                 isLoadMore = false;
-                myDiamondCosumeXrv.loadMoreComplete();
+                myDiamondCosumeXrv.setNoMore(true);
+//                myDiamondCosumeXrv.loadMoreComplete();
             } else {
                 mRows.clear();
             }
@@ -138,7 +139,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
 
         private void loadMoreComplete() {
             isLoadMore = false;
-            myDiamondCosumeXrv.loadMoreComplete();
+            myDiamondCosumeXrv.setNoMore(true);
         }
 
 
@@ -158,7 +159,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
 
         @Override
         public void onRefresh() {
-
+            myDiamondCosumeXrv.refreshComplete();
         }
 
         @Override
@@ -168,7 +169,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
                 ++pageNum;
                 mContentloader.getGoldLogs(pageNum);
             } else {
-                myDiamondCosumeXrv.loadMoreComplete();
+                myDiamondCosumeXrv.setNoMore(true);
             }
 
         }

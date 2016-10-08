@@ -90,6 +90,8 @@
     <dimen name="home_recommend_hotlive_user_icon_size">12dp</dimen>
     <dimen name="hot_recommend_hotlive_circle_imgview_size">25dp</dimen>
     <dimen name="dot_size">6dp</dimen>
+    <dimen name="dot_rect_width">12dp</dimen>
+    <dimen name="dot_rect_height">3dp</dimen>
     <dimen name="home_recommend_commodity_gridview_spacing">15dp</dimen>
     <dimen name="home_recommend_commodity_gridview_item_price_margin_bottom">10dp</dimen>
     <dimen name="home_recommend_hot_live_view_pager_height">340dp</dimen>

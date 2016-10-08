@@ -14,7 +14,7 @@
             android:id="@+id/player_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-           android:layout_alignParentBottom="true"
+            android:layout_alignParentBottom="true"
 
             >
         </RelativeLayout>
@@ -51,228 +51,228 @@
         android:layout_gravity="right"
         android:layout_marginLeft="-65dp"
 
-       >
+        >
+
+
+        <LinearLayout
+            android:id="@+id/live_telecast_model_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_40dp"
+            android:layout_marginTop="@dimen/live_padding_12dp"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/live_padding_10dp">
+
 
 
             <LinearLayout
-                android:id="@+id/live_telecast_model_layout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/live_height_40dp"
-                android:layout_marginTop="@dimen/live_padding_12dp"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/live_padding_10dp">
+                android:id="@+id/live_master_info_layout"
+                android:layout_width="@dimen/live_height_119dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/live_emcee_info_shape"
+                android:orientation="horizontal">
 
-
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/live_emcee_head"
+                    android:layout_width="@dimen/live_height_40dp"
+                    android:layout_height="@dimen/live_height_40dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/androidloading" />
 
                 <LinearLayout
-                    android:id="@+id/live_master_info_layout"
-                    android:layout_width="@dimen/live_height_119dp"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/live_emcee_info_shape"
-                    android:orientation="horizontal">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/live_emcee_head"
-                        android:layout_width="@dimen/live_height_40dp"
-                        android:layout_height="@dimen/live_height_40dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/androidloading" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical"
-                        android:paddingLeft="@dimen/live_padding_5dp">
-
-                        <TextView
-                            android:id="@+id/live_emcee_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/onlivelight"
-                            android:drawableRight="@drawable/onlive"
-                            android:textColor="@android:color/white"
-                            android:drawablePadding="@dimen/live_padding_5dp"
-                            android:textSize="@dimen/live_text_12sp" />
-
-                        <TextView
-                            android:id="@+id/live_online_count"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/white"
-                            android:drawableLeft="@drawable/manypeople_light"
-                            android:drawablePadding="@dimen/live_padding_5dp"
-                            android:textSize="@dimen/live_text_12sp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/live_visitors_list_recy"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/live_padding_20dp">
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/live_padding_5dp">
 
-                </android.support.v7.widget.RecyclerView>
+                    <TextView
+                        android:id="@+id/live_emcee_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/onlivelight"
+                        android:drawableRight="@drawable/onlive"
+                        android:textColor="@android:color/white"
+                        android:drawablePadding="@dimen/live_padding_5dp"
+                        android:textSize="@dimen/live_text_12sp" />
+
+                    <TextView
+                        android:id="@+id/live_online_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:drawableLeft="@drawable/manypeople_light"
+                        android:drawablePadding="@dimen/live_padding_5dp"
+                        android:textSize="@dimen/live_text_12sp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:id="@+id/audience_score_layout"
-                android:layout_width="87dp"
-                android:layout_height="22dp"
-                android:layout_below="@+id/live_telecast_model_layout"
-                android:layout_marginLeft="@dimen/live_padding_10dp"
-                android:layout_marginTop="@dimen/live_padding_10dp"
-                android:background="@drawable/live_emcee_info_shape">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/live_padding_5dp"
-                    android:src="@drawable/score" />
-
-                <TextView
-                    android:id="@+id/audience_score_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:ellipsize="end"
-                    android:maxLength="6"
-                    android:paddingLeft="@dimen/live_padding_5dp"
-                    android:paddingRight="@dimen/live_padding_5dp"
-                    android:text="榜单"
-                    android:textColor="@android:color/white" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingRight="@dimen/live_padding_5dp"
-                    android:src="@drawable/circlenext_ic" />
-            </RelativeLayout>
-
-
-
-            <RelativeLayout
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/live_visitors_list_recy"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-               >
-                <LinearLayout
-                    android:id="@+id/messageActivityBottomLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true">
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/live_padding_20dp">
 
-                    <include layout="@layout/nim_message_activity_text_layout" />
-                </LinearLayout>
+            </android.support.v7.widget.RecyclerView>
+        </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/setting_bottom_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true">
-
-                    <include layout="@layout/live_telecast_bottom_tab"></include>
-                </LinearLayout>
-
-                <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
-                    android:id="@+id/periscope"
-                    android:layout_width="@dimen/live_height_70dp"
-                    android:layout_height="@dimen/live_height_350dp"
-                    android:layout_above="@id/setting_bottom_layout"
-                    android:layout_alignParentBottom="true" />
-
-                <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
-                    android:id="@+id/messageListView"
-                    style="@style/list_view"
-                    android:layout_width="@dimen/live_height_320dp"
-                    android:layout_height="@dimen/live_height_150dp"
-                    android:layout_above="@id/messageActivityBottomLayout"
-                    android:layout_marginBottom="@dimen/author_padding_10dp"
-                    android:cacheColorHint="@android:color/transparent"
-                    android:divider="@null"
-                    android:fadingEdge="none"
-
-                    android:listSelector="@android:color/transparent"
-                    android:scrollbars="vertical" />
-
-                <include
-                    android:id="@+id/gift_animation_view"
-                    layout="@layout/gift_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-
-                    android:layout_above="@id/messageListView"
-                    android:layout_marginBottom="20dp" />
-
-                <include
-                    android:id="@+id/gift_animation_view_up"
-                    layout="@layout/gift_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_above="@id/gift_animation_view"
-                    android:layout_marginBottom="10dp" />
-
-            </RelativeLayout>
-
-            <include layout="@layout/audience_over_layout"></include>
-
+        <RelativeLayout
+            android:id="@+id/audience_score_layout"
+            android:layout_width="87dp"
+            android:layout_height="22dp"
+            android:layout_below="@+id/live_telecast_model_layout"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_marginTop="@dimen/live_padding_10dp"
+            android:background="@drawable/live_emcee_info_shape">
 
             <ImageView
-                android:id="@+id/gift_plane_up"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:src="@drawable/score" />
 
-            <RelativeLayout
-                android:id="@+id/audient_gift_plane_bg"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/audient_gift_plane_bg_height"
-                android:layout_marginTop="120dp"
-                android:background="@drawable/giftmassagebg"
-                android:visibility="gone">
+            <TextView
+                android:id="@+id/audience_score_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ellipsize="end"
+                android:maxLength="6"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:paddingRight="@dimen/live_padding_5dp"
+                android:text="榜单"
+                android:textColor="@android:color/white" />
 
-                <View
-                    android:layout_width="@dimen/dimen_size_10_dp"
-                    android:layout_height="match_parent"
-                    android:background="#90ffffff" />
-
-                <TextView
-                    android:id="@+id/audience_gift_send_plane"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_size_30_dp"
-                    android:text="一位不愿透露姓名的网友  与主播飞机旅行"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_16_sp" />
-            </RelativeLayout>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/audience_anchor_headportrait"
-                android:layout_width="@dimen/audience_anchor_headportrait_width"
-                android:layout_height="@dimen/audience_anchor_headportrait_width"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="@dimen/dimen_size_2_dp"
-                android:layout_marginTop="225dp"
-                android:layout_marginLeft="108dp"
-                android:visibility="gone"
-                />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/audience_user_headportrait"
-                android:layout_width="@dimen/audience_anchor_headportrait_width"
-                android:layout_height="@dimen/audience_anchor_headportrait_width"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="@dimen/dimen_size_2_dp"
-                android:layout_toRightOf="@+id/audience_anchor_headportrait"
-                android:layout_marginLeft="-8dp"
-                android:layout_alignTop="@+id/audience_anchor_headportrait"
-                android:layout_marginTop="4dp"
-                android:visibility="gone"
-                />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:paddingRight="@dimen/live_padding_5dp"
+                android:src="@drawable/circlenext_ic" />
         </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <LinearLayout
+                android:id="@+id/messageActivityBottomLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <include layout="@layout/nim_message_activity_text_layout" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/setting_bottom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true">
+
+                <include layout="@layout/live_telecast_bottom_tab"></include>
+            </LinearLayout>
+
+            <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
+                android:id="@+id/periscope"
+                android:layout_width="@dimen/live_height_70dp"
+                android:layout_height="@dimen/live_height_350dp"
+                android:layout_above="@id/setting_bottom_layout"
+                android:layout_alignParentBottom="true" />
+
+            <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
+                android:id="@+id/messageListView"
+                style="@style/list_view"
+                android:layout_width="@dimen/live_height_320dp"
+                android:layout_height="@dimen/live_height_150dp"
+                android:layout_above="@id/messageActivityBottomLayout"
+                android:layout_marginBottom="@dimen/author_padding_10dp"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@null"
+                android:fadingEdge="none"
+
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="vertical" />
+
+            <include
+                android:id="@+id/gift_animation_view"
+                layout="@layout/gift_layout"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+
+                android:layout_above="@id/messageListView"
+                android:layout_marginBottom="20dp" />
+
+            <include
+                android:id="@+id/gift_animation_view_up"
+                layout="@layout/gift_layout"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_above="@id/gift_animation_view"
+                android:layout_marginBottom="10dp" />
+
+        </RelativeLayout>
+
+        <include layout="@layout/audience_over_layout"></include>
+
+
+        <ImageView
+            android:id="@+id/gift_plane_up"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/audient_gift_plane_bg"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/audient_gift_plane_bg_height"
+            android:layout_marginTop="120dp"
+            android:background="@drawable/giftmassagebg"
+            android:visibility="gone">
+
+            <View
+                android:layout_width="@dimen/dimen_size_10_dp"
+                android:layout_height="match_parent"
+                android:background="#90ffffff" />
+
+            <TextView
+                android:id="@+id/audience_gift_send_plane"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dimen_size_30_dp"
+                android:text="一位不愿透露姓名的网友  与主播飞机旅行"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16_sp" />
+        </RelativeLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/audience_anchor_headportrait"
+            android:layout_width="@dimen/audience_anchor_headportrait_width"
+            android:layout_height="@dimen/audience_anchor_headportrait_width"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="@dimen/dimen_size_2_dp"
+            android:layout_marginTop="225dp"
+            android:layout_marginLeft="108dp"
+            android:visibility="gone"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/audience_user_headportrait"
+            android:layout_width="@dimen/audience_anchor_headportrait_width"
+            android:layout_height="@dimen/audience_anchor_headportrait_width"
+            app:civ_border_color="@color/white"
+            app:civ_border_width="@dimen/dimen_size_2_dp"
+            android:layout_toRightOf="@+id/audience_anchor_headportrait"
+            android:layout_marginLeft="-8dp"
+            android:layout_alignTop="@+id/audience_anchor_headportrait"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
+            />
+    </RelativeLayout>
 
 
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

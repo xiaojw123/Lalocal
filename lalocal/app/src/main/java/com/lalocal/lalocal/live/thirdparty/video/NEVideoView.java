@@ -39,12 +39,12 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
 import com.lalocal.lalocal.live.im.util.storage.StorageType;
 import com.lalocal.lalocal.live.im.util.storage.StorageUtil;
 import com.lalocal.lalocal.live.thirdparty.video.constant.VideoConstant;
+import com.lalocal.lalocal.util.AppLog;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.neliveplayer.NELivePlayer.OnBufferingUpdateListener;
 import com.netease.neliveplayer.NELivePlayer.OnCompletionListener;

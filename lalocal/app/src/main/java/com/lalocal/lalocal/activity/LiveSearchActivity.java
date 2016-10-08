@@ -70,7 +70,6 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor, R.drawable.searchbar_searchicon), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
         liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
-        liveSearchXrlv.setPullRefreshEnabled(false);
         liveSearchXrlv.addOnScrollListener(new LiveSearchScorllListener());
         setLoaderCallBack(new LiveSearchCallBack());
 
@@ -133,7 +132,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
             if (mPageNumb <= 1) {
                 mAllRows.clear();
             } else {
-                liveSearchXrlv.loadMoreComplete();
+                liveSearchXrlv.setNoMore(true);
             }
             AppLog.print("row size___" + item.getRows().size());
             mAllRows.addAll(item.getRows());
@@ -156,7 +155,6 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
 
         @Override
         public void onRefresh() {
-            liveSearchXrlv.refreshComplete();
         }
 
         @Override
@@ -176,7 +174,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
                 ++mPageNumb;
                 mContentloader.searchLive(mPageNumb, mLastSearhText);
             } else {
-                liveSearchXrlv.loadMoreComplete();
+                liveSearchXrlv.setNoMore(true);
             }
 
         }
@@ -220,6 +218,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
                 KeyboardUtil.hidenSoftKey(liveSearchEdt);
             }
         }
+
     }
 
 

@@ -50,17 +50,17 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		super(context, attrs);
 	}
 
-	public PullToRefreshListView(Context context, Mode mode) {
+	public PullToRefreshListView(Context context, PullToRefreshBase.Mode mode) {
 		super(context, mode);
 	}
 
-	public PullToRefreshListView(Context context, Mode mode, AnimationStyle style) {
+	public PullToRefreshListView(Context context, PullToRefreshBase.Mode mode, PullToRefreshBase.AnimationStyle style) {
 		super(context, mode, style);
 	}
 
 	@Override
-	public final Orientation getPullToRefreshScrollDirection() {
-		return Orientation.VERTICAL;
+	public final PullToRefreshBase.Orientation getPullToRefreshScrollDirection() {
+		return PullToRefreshBase.Orientation.VERTICAL;
 	}
 
 	public int getVerticalScrollOffset(){
@@ -196,7 +196,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 			 * header/footer, but only scroll if: we've pulled to refresh, it's
 			 * positioned correctly
 			 */
-			if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING) {
+			if (scrollLvToEdge && getState() != PullToRefreshBase.State.MANUAL_REFRESHING) {
 				mRefreshableView.setSelection(selection);
 				setHeaderScroll(scrollToHeight);
 			}
@@ -206,7 +206,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		super.onReset();
 	}
 
-	protected LoadingLayout createLvLoadingLayout(Context context, Mode mode, TypedArray attrs) {
+	protected LoadingLayout createLvLoadingLayout(Context context, PullToRefreshBase.Mode mode, TypedArray attrs) {
 		return super.createLoadingLayout(context, mode, attrs);
 	}
 
@@ -215,7 +215,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		LoadingLayoutProxy proxy = super.createLoadingLayoutProxy(includeStart, includeEnd);
 
 		if (mListViewExtrasEnabled) {
-			final Mode mode = getMode();
+			final PullToRefreshBase.Mode mode = getMode();
 
 			if (includeStart && mode.showHeaderLoadingLayout()) {
 				proxy.addLayout(mHeaderLoadingView);
@@ -262,7 +262,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 			// Create Loading Views ready for use later
 			FrameLayout frame = new FrameLayout(getContext());
-			mHeaderLoadingView = createLvLoadingLayout(getContext(), Mode.PULL_FROM_START, a);
+			mHeaderLoadingView = createLvLoadingLayout(getContext(), PullToRefreshBase.Mode.PULL_FROM_START, a);
 			mHeaderLoadingView.setVisibility(View.GONE);
 			frame.addView(mHeaderLoadingView, lp);
 
@@ -272,7 +272,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 			}
 
 			mLvFooterLoadingFrame = new FrameLayout(getContext());
-			mFooterLoadingView = createLvLoadingLayout(getContext(), Mode.PULL_FROM_END, a);
+			mFooterLoadingView = createLvLoadingLayout(getContext(), PullToRefreshBase.Mode.PULL_FROM_END, a);
 			mFooterLoadingView.setVisibility(View.GONE);
 			mLvFooterLoadingFrame.addView(mFooterLoadingView, lp);
 

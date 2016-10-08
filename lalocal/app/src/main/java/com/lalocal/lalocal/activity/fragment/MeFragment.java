@@ -1,11 +1,13 @@
 package com.lalocal.lalocal.activity.fragment;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -59,6 +61,7 @@ import java.util.List;
  * Created by xiaojw on 2016/6/3.
  * note: isRefresh更新
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class MeFragment extends Fragment implements XListView.IXListViewListener {
     public static final String ACTION_UPDATE_DATA = "action_update_data";
     private static final String PAGE_NAME = "MeFragment";

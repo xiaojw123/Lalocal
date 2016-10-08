@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
+import com.lalocal.lalocal.util.AppLog;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;

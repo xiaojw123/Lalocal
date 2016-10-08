@@ -4,7 +4,7 @@ package com.lalocal.lalocal.live.entertainment.constant;
 /**
  * Created by android on 2016/9/4.
  */
-public class CustomDialogStyle {
+public class LiveConstant {
 
     public  static final int IS_LIVEER=1;//主播
     public static final int IS__MANAGER=2;//管理员

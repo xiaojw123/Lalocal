@@ -25,7 +25,8 @@ import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
 import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
@@ -62,7 +63,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     TextView timeTv;
     int totalTime = 0;
     SplashHandler mHandler;
-    int splashDuration = 2200;
     VersionResult result;
 
     @Override
@@ -170,7 +170,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         break;
                     case 21:
                         String enumValue = item.getEnumValue();
-                        CustomDialogStyle.LIVE_DEFINITION = Integer.parseInt(enumValue);
+                        LiveConstant.LIVE_DEFINITION = Integer.parseInt(enumValue);
                         break;
                 }
 
@@ -184,13 +184,13 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             String photo = welcomeImg.getPhoto();
             if (TextUtils.isEmpty(photo)) {
                 startHomePage();
-                mHandler.sendEmptyMessageDelayed(MSG_START_HOME,splashDuration);
+                mHandler.sendEmptyMessage(MSG_START_HOME);
             } else {
                 totalTime = welcomeImg.getSecond();
                 Message message = mHandler.obtainMessage();
                 message.what = MSG_DISPAY_IMG;
                 message.obj = photo;
-                mHandler.sendMessageDelayed(message, splashDuration);
+                mHandler.sendMessage(message);
             }
         }
     }
@@ -273,8 +273,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 try {
                     EMChatManager.getInstance().loadAllConversations();
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
+                    AppLog.print("环信账号登录异常");
                 }
                 updateVersion();
             }
@@ -320,7 +319,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                     break;
                 case MSG_ENTER_APP:
                     String apiUrl = result.getApiUrl();
-                 //   AppConfig.setBaseUrl(apiUrl);
+                    AppConfig.setBaseUrl(apiUrl);
                     mContentloader.getSystemConfigs();
                     break;
                 case MSG_VERSION_UPDATE:

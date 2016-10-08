@@ -109,7 +109,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private BarrageView barrageView;
 
 
-    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId) {
+    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig, String creatorAccount, int userId) {
         this.mContext=mContext;
         this.container = container;
         this.view = view;
@@ -121,7 +121,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         init();
     }
 
-    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId) {
+    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, String creatorAccount, int userId) {
         this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId);
     }
 
@@ -309,7 +309,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     //弹幕开关状态监听
     private  OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener;
     public interface OnBarrageViewCheckStatusListener {
-        void getBarrageViewCheckStatus(boolean isCheck,String content);
+        void getBarrageViewCheckStatus(boolean isCheck, String content);
     }
 
     public void setOnBarrageViewCheckStatusListener(OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener) {

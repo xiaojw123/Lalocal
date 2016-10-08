@@ -291,4 +291,13 @@ public abstract class ICallBack {
     //分享统计
     public void onShareStatistics(String json) {
     }
+    //发起挑战
+    public void onChallengeInitiate(String json) {
+    }
+    //挑战详情
+    public void onChallengeDetails(String json) {
+    }
+    //主播操作挑战
+    public void onLiveChallengeStatus(String json) {
+    }
 }

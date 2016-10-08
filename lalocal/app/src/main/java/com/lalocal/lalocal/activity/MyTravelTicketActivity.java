@@ -144,7 +144,7 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
 
         private void loadMoreComplete() {
             isLoadMore = false;
-            myTicketCosumeXrv.loadMoreComplete();
+            myTicketCosumeXrv.setNoMore(true);
         }
 
         @Override
@@ -160,7 +160,8 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
                 ++pageNum;
                 mContentloader.getScoreLogs(pageNum);
             } else {
-                myTicketCosumeXrv.loadMoreComplete();
+                isLoadMore=false;
+                myTicketCosumeXrv.setNoMore(true);
             }
 
         }

@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -59,7 +59,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private boolean isMuted;
 
 
-    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager,boolean isMuted) {
+    public CustomLiveUserInfoDialog(Context context, LiveUserInfoResultBean result, boolean isManager, boolean isMuted) {
         super(context, R.style.prompt_dialog);
         this.context = context;
         this.result=result;
@@ -170,16 +170,16 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
 
 
 
-        if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_LIVEER){//主播
+        if(LiveConstant.IDENTITY== LiveConstant.IS_LIVEER){//主播
             setAttentionStatus(attentionStatus);
             headerLayout.setVisibility(View.VISIBLE);
             audienceToLiveToBottom.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_ONESELF){//自己
+            LiveConstant.IDENTITY=-1;
+        }else if(LiveConstant.IDENTITY== LiveConstant.IS_ONESELF){//自己
             homeLayoutBtn.setVisibility(View.VISIBLE);
             claseLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.MANAGER_IS_ME){//我是管理员
+            LiveConstant.IDENTITY=-1;
+        }else if(LiveConstant.IDENTITY== LiveConstant.MANAGER_IS_ME){//我是管理员
             if(!TextUtils.isEmpty(ban)){
                 if(isMuted){
                     audienceManagerban.setText("解除禁言");
@@ -193,9 +193,9 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             setAttentionStatus(audienceManagerAttention);
             claseLayout.setVisibility(View.VISIBLE);
             audienceManagerLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
+            LiveConstant.IDENTITY=-1;
 
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.LIVEER_CHECK_ADMIN){//主播设置管理员
+        }else if(LiveConstant.IDENTITY== LiveConstant.LIVEER_CHECK_ADMIN){//主播设置管理员
             if(!TextUtils.isEmpty(ban)){
 
                 if(isMuted){
@@ -210,13 +210,13 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             setAttentionStatus(dialogLiveAttention);
             headerLayout.setVisibility(View.VISIBLE);
             liveBottomLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
+            LiveConstant.IDENTITY=-1;
 
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.ME_CHECK_OTHER){//我看别人
+        }else if(LiveConstant.IDENTITY== LiveConstant.ME_CHECK_OTHER){//我看别人
             setAttentionStatus(audienceAttention);
             claseLayout.setVisibility(View.VISIBLE);
             audienceBottomLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
+            LiveConstant.IDENTITY=-1;
         }
 
         setCanceledOnTouchOutside(true);
@@ -359,9 +359,9 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
 
     public static interface CustomLiveUserInfoDialogListener {
-        void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark);
+        void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark);
     }
     public  static interface CustomLiveFansOrAttentionListener{
-        void onCustomLiveFansOrAttentionListener(String id,TextView fansView,TextView attentionView,int fansCount,int attentionCount,TextView attentionStatus);
+        void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus);
     }
 }
