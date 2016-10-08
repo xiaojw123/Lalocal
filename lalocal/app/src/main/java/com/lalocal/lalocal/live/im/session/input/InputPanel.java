@@ -95,6 +95,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private Context mContext;
     private String creatorAccount;
     private  int userId;
+    private String channelId;
 
     // state
     private boolean actionPanelBottomLayoutHasSetup = false;
@@ -109,7 +110,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private BarrageView barrageView;
 
 
-    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId) {
+    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId, String channelId) {
         this.mContext=mContext;
         this.container = container;
         this.view = view;
@@ -118,11 +119,12 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         this.inputConfig = inputConfig;
         this.creatorAccount=creatorAccount;
         this.userId=userId;
+        this.channelId = channelId;
         init();
     }
 
-    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId) {
-        this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId);
+    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId, String channelId) {
+        this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId, channelId);
     }
 
     public void onPause() {
@@ -359,6 +361,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId",userId);
                         ext.put("disableSendMsgUserId",userId);
+                        ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage, MessageType.barrage)) {
@@ -371,6 +374,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId",userId);
                         ext.put("disableSendMsgUserId",userId);
+                        ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage,MessageType.text)) {

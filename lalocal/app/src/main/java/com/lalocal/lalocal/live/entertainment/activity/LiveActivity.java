@@ -660,6 +660,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 liveMessage.setCreatorAccount(creatorAccount);
                 liveMessage.setUserId(userId);
                 liveMessage.setOnlineNum(String.valueOf(onLineUser.getResult()));
+                liveMessage.setChannelId(channelId);
                 IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "上传在线人数", roomId, AuthPreferences.getUserAccount(), liveMessage);
 
                 sendMessage(imMessage, MessageType.onlineNum);
@@ -802,6 +803,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveMessage.setStyle("11");
         liveMessage.setCreatorAccount(creatorAccount);
         liveMessage.setUserId(userId);
+        liveMessage.setChannelId(channelId);
         IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播了哈哈哈哈哈哈", roomId, AuthPreferences.getUserAccount(), liveMessage);
         sendMessage(imMessage, MessageType.leaveLive);
         if (isLeaveChannel) {
@@ -957,6 +959,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     liveMessage.setDisableSendMsgUserId(String.valueOf(result1.getId()));
                                     liveMessage.setUserId(userId);
                                     liveMessage.setCreatorAccount(creatorAccount);
+                                    liveMessage.setChannelId(channelId);
                                     IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
 
                                     if (banListLive.size() > 0) {
@@ -1020,6 +1023,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             liveMessage.setAdminSendMsgUserId(String.valueOf(result1.getId()));
                             liveMessage.setUserId(userId);
                             liveMessage.setCreatorAccount(creatorAccount);
+                            liveMessage.setChannelId(channelId);
                             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
 
                             sendMessage(imMessage, MessageType.managerLive);
@@ -1046,6 +1050,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     liveMessage.setAdminSendMsgUserId(String.valueOf(result1.getId()));
                                     liveMessage.setUserId(userId);
                                     liveMessage.setCreatorAccount(creatorAccount);
+                                    liveMessage.setChannelId(channelId);
                                     IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
                                     sendMessage(imMessage, MessageType.cancel);
                                     textView.setText("设为管理员");

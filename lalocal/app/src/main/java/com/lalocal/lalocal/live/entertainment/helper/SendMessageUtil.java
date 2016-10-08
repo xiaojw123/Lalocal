@@ -28,6 +28,7 @@ public class SendMessageUtil {
             ext.put("userId",liveMessage.getUserId());
             ext.put("creatorAccount",liveMessage.getCreatorAccount());
             ext.put("onlineNum",liveMessage.getOnlineNum());
+            ext.put("channelId", liveMessage.getChannelId());
 
             if(liveMessage.getGiftModel()!=null){
                 Map<String, Object> ext1 = new HashMap<>();

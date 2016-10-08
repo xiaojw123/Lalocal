@@ -111,11 +111,13 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         View inflate = View.inflate(getActivity(), R.layout.listview_footerview, null);
         liveRecyclearView.addHeaderView(inflate);
         liveRecyclearView.addFooterView(inflate);
+
         //TODO:直播搜索 add by xiaojw
         TextView liveSearchTv = (TextView) view.findViewById(R.id.live_search_textview);
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         liveSeachFl.setOnClickListener(this);
+        contentService.liveList(10, 1);
 
 
     /*    XRecyclerView xRecyclerView= (XRecyclerView) view.findViewById(R.id.xrecyclerview);
@@ -458,31 +460,31 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         //注册监听
         registerObservers(true);
-        if (allRows != null) {
-            allRows.clear();
-        }
-        if(pageCount!=2){
-            pageCount=2;
-            isLoadEnd=false;
-        }
-
-
-        if(firstLoadData){
-            firstLoadData=false;
-            contentService.liveList(10, 1);
-        }
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                allRows.clear();
-                if(firstLoadData){
-                    firstLoadData=false;
-                    contentService.liveList(10, 1);
-                }
-
-            }
-        }, 1000 * 60 * 5);
+//        if (allRows != null) {
+//            allRows.clear();
+//        }
+//        if(pageCount!=2){
+//            pageCount=2;
+//            isLoadEnd=false;
+//        }
+//
+//
+//        if(firstLoadData){
+//            firstLoadData=false;
+//            contentService.liveList(10, 1);
+//        }
+//
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                allRows.clear();
+//                if(firstLoadData){
+//                    firstLoadData=false;
+//                    contentService.liveList(10, 1);
+//                }
+//
+//            }
+//        }, 1000 * 60 * 5);
         AppLog.i("TAG", "onStart");
 
     }

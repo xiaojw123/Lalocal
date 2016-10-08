@@ -87,7 +87,7 @@
             android:layout_marginLeft="@dimen/home_recommend_viewpager_margin"
             android:layout_marginRight="@dimen/home_recommend_viewpager_margin"
             android:clipChildren="false" />
-        <!--android:layout_marginRight="@dimen/home_recommend_hotlive_viewpager_margin"-->
+        android:layout_marginRight="@dimen/home_recommend_hotlive_viewpager_margin"
 
         <RelativeLayout
             android:layout_width="match_parent"

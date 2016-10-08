@@ -23,6 +23,7 @@ public class LiveMessage {
     private GiftBean giftModel;
     private String targetType;
     private String challengeModel;
+    private String channelId;
 
     public String getAdminSendMsgUserId() {
         return adminSendMsgUserId;
@@ -206,5 +207,13 @@ public class LiveMessage {
 
     public void setChallengeModel(String challengeModel) {
         this.challengeModel = challengeModel;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 }

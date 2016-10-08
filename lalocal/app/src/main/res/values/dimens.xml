@@ -100,4 +100,5 @@
     <dimen name="home_recommend_article_img_height">160dp</dimen>
     <dimen name="ptr_header_height">160dp</dimen>
     <dimen name="cardview_margin">0dp</dimen>
+    <dimen name="novice_guide_vp_margin">48dp</dimen>
 </resources>
