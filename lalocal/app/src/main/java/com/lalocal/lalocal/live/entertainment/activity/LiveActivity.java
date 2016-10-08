@@ -4,17 +4,23 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -54,6 +60,9 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.SPCUtils;
+import com.lalocal.lalocal.view.ScaleImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -70,6 +79,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +173,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private ContentLoader userInfoContentLoader;
     private ImageView challengeNewTask;
 
+    private static final int GUIDE_PAGE_SIZE = 4;
 
     private boolean isBroadcaster(int cRole) {
         return cRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
@@ -182,6 +193,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @Override
     protected void clickChallengeBtn() {
+        initGuideDialog();
         challengeNewTask.setVisibility(View.VISIBLE);
     }
 
@@ -189,7 +201,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public Activity getActivity() {
         return LiveActivity.this;
     }
-
 
     @Override
     protected void initUIandEvent() {
@@ -338,8 +349,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
        keyHeight = screenHeight / 3;
         gainIntent();
         setListener();
-    }
 
+    }
 
     @Override
     protected void onResume() {
@@ -456,7 +467,133 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @Override
     protected void receiveChallengeMessage(ChatRoomMessage message) {
+    }
 
+    /**
+     * 初始化新手引导弹窗
+     */
+    private void initGuideDialog() {
+        Toast.makeText(LiveActivity.this, "新手引导", Toast.LENGTH_SHORT).show();
+        // 是否跳过新手引导
+        boolean isSkipGuide = SPCUtils.getBoolean(this, "skip_guide");
+        List<Button> dotBtns = new ArrayList<>();
+        // 不跳过
+        if (!isSkipGuide) {
+            // 显示过新手引导后，不再显示新手引导
+//            SPCUtils.put(this, "skip_guide", true);
+            // -弹出新手引导窗口
+            // 获取弹出窗口的view
+            View popView = LayoutInflater.from(this).inflate(R.layout.novice_guide_layout, null);
+            View rootView = LayoutInflater.from(this).inflate(R.layout.live_player_activity, null);
+            // 初始化弹出窗口
+            final PopupWindow pop = new PopupWindow(popView, RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.MATCH_PARENT, true);
+            // 设置可触摸
+            pop.setTouchable(true);
+            // 设置内容外不可触摸
+            pop.setOutsideTouchable(false);
+            // 设置无背景
+            pop.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap)null));
+            // 背景变暗
+            CommonUtil.backgroundAlpha(LiveActivity.this, 0.5f);
+            // 全屏居中显示
+            pop.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+            // 弹窗消失事件
+            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
+                @Override
+                public void onDismiss() {
+                    CommonUtil.backgroundAlpha(LiveActivity.this, 1f);
+                }
+            });
+
+            // -新手引导ViewPager实现
+            // 新手引导ViewPager
+            ViewPager vp = (ViewPager) popView.findViewById(R.id.vp_guide);
+            // 跳过按钮
+            final Button btnSkip = (Button) popView.findViewById(R.id.btn_skip);
+            // 小点容器
+            LinearLayout dotContainer = (LinearLayout) popView.findViewById(R.id.dot_container);
+            // 小点列表
+            dotBtns = CommonUtil.initDot(this, vp, dotContainer, GUIDE_PAGE_SIZE, 0, CommonUtil.WHITE_DOT);
+
+            final List<Button> finalDotBtns = dotBtns;
+            // 设置适配器
+            vp.setAdapter(new GuideAdapter());
+            // 设置页边距
+            vp.setPageMargin((int) getResources().getDimension(R.dimen.novice_guide_vp_margin));
+            // 取消按钮点击事件
+            btnSkip.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 弹窗消失
+                    pop.dismiss();
+                }
+            });
+            // 页面滑动时间
+            vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    // 根据ViewPager滑动选择对应小圆点
+                    CommonUtil.selectDotBtn(finalDotBtns, position, CommonUtil.WHITE_DOT);
+                    // 如果是最后一页，则去掉不显示取消按钮
+                    if (position == GUIDE_PAGE_SIZE - 1) {
+                        btnSkip.setVisibility(View.INVISIBLE);
+                    } else {
+                        btnSkip.setVisibility(View.VISIBLE);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+        }
+    }
+
+    private class GuideAdapter extends PagerAdapter {
+
+        @Override
+        public int getCount() {
+            return GUIDE_PAGE_SIZE;
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            View view = LayoutInflater.from(LiveActivity.this).inflate(R.layout.novice_guide_item, null);
+            ScaleImageView page = (ScaleImageView) view.findViewById(R.id.img_guide);
+            switch (position) {
+                case 0:
+                    page.setImageResource(R.drawable.card_1);
+                    break;
+                case 1:
+                    page.setImageResource(R.drawable.card_2);
+                    break;
+                case 2:
+                    page.setImageResource(R.drawable.card_3);
+                    break;
+                case 3:
+                    page.setImageResource(R.drawable.card_4);
+                    break;
+            }
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView((View) object);
+        }
     }
 
     private void setListener() {

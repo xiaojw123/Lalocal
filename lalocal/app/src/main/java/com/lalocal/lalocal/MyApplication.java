@@ -48,10 +48,6 @@ import io.fabric.sdk.android.Fabric;
  * 线上版本 友盟日志关闭
  */
 public class MyApplication extends Application {
-<<<<<<< HEAD
-=======
-
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
     public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
     @Override

@@ -40,6 +40,7 @@
                 android:visibility="invisible" />
         </LinearLayout>
 
+
         <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
@@ -62,12 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-<<<<<<< HEAD
         android:layout_marginLeft="-65dp">
-=======
-        android:layout_marginLeft="-65dp"
-        >
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
 
 
         <RelativeLayout

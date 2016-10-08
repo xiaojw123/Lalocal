@@ -110,11 +110,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private BarrageView barrageView;
 
 
-<<<<<<< HEAD
     public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId, String channelId) {
-=======
-    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig, String creatorAccount, int userId) {
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
         this.mContext=mContext;
         this.container = container;
         this.view = view;
@@ -127,13 +123,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         init();
     }
 
-<<<<<<< HEAD
     public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId, String channelId) {
         this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId, channelId);
-=======
-    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, String creatorAccount, int userId) {
-        this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId);
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
     }
 
     public void onPause() {

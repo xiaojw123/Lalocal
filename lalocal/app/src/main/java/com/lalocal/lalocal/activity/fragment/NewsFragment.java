@@ -115,18 +115,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.home_news_layout, container, false);
         LinearLayout createLiveRoom = (LinearLayout) view.findViewById(R.id.live_create_room);
         createLiveRoom.setOnClickListener(this);
-<<<<<<< HEAD
-        liveRecyclearView = (ListView) view.findViewById(R.id.live_recy_list);
-        View inflate = View.inflate(getActivity(), R.layout.listview_footerview, null);
-        liveRecyclearView.addHeaderView(inflate);
-        liveRecyclearView.addFooterView(inflate);
 
-=======
-      //  liveRecyclearView = (ListView) view.findViewById(R.id.live_recy_list);
-      //  View inflate = View.inflate(getActivity(), R.layout.listview_footerview, null);
-    //    liveRecyclearView.addHeaderView(inflate);
-   //     liveRecyclearView.addFooterView(inflate);
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
         //TODO:直播搜索 add by xiaojw
         TextView liveSearchTv = (TextView) view.findViewById(R.id.live_search_textview);
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
@@ -554,55 +543,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         //注册监听
         registerObservers(true);
-<<<<<<< HEAD
-//        if (allRows != null) {
-//            allRows.clear();
-//        }
-//        if(pageCount!=2){
-//            pageCount=2;
-//            isLoadEnd=false;
-//        }
-//
-//
-//        if(firstLoadData){
-//            firstLoadData=false;
-//            contentService.liveList(10, 1);
-//        }
-//
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                allRows.clear();
-//                if(firstLoadData){
-//                    firstLoadData=false;
-//                    contentService.liveList(10, 1);
-//                }
-//
-//            }
-//        }, 1000 * 60 * 5);
-        AppLog.i("TAG", "onStart");
-=======
-/*        if (allRows != null) {
-            allRows.clear();
-        }
-        if(firstLoadData){
-            firstLoadData=false;
-            contentService.liveList(10, 1);
-        }
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                allRows.clear();
-                if(firstLoadData){
-                    firstLoadData=false;
-                    contentService.liveList(10, 1);
-                }
-
-            }
-        }, 1000 * 60 * 5);
-        AppLog.i("TAG", "onStart");*/
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
 
     }
 

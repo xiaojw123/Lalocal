@@ -7,33 +7,47 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clickable="false"
+        android:clipChildren="false"
+        android:layerType="software"
         android:layout_centerInParent="true">
         
         <android.support.v4.view.ViewPager
+            android:id="@+id/vp_guide"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/guide_vp_height"
             android:layout_marginLeft="@dimen/novice_guide_vp_margin"
             android:layout_marginRight="@dimen/novice_guide_vp_margin"
+            android:layout_marginBottom="21dp"
             android:clipChildren="false"/>
-        
-        <LinearLayout
-            android:id="@+id/dot_container"
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/dimen_size_15_dp"
-            android:orientation="horizontal"/>
-        
-        <TextView
-            android:id="@+id/tv_skip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="跳过"
-            android:textSize="@dimen/text_size_12_sp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dimen_size_15_dp"
-            android:textColor="@color/white"/>
+            android:layout_below="@id/vp_guide"
+            android:layout_alignRight="@id/vp_guide"
+            android:layout_alignLeft="@id/vp_guide"
+            android:paddingLeft="@dimen/dimen_size_15_dp"
+            android:paddingRight="@dimen/dimen_size_15_dp">
+            <LinearLayout
+                android:id="@+id/dot_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"/>
+
+            <Button
+                android:id="@+id/btn_skip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:text="跳过"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
     </RelativeLayout>
 </RelativeLayout>

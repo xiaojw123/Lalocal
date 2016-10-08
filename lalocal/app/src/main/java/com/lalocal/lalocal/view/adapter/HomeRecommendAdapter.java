@@ -50,6 +50,7 @@ import com.lalocal.lalocal.model.SpecialAuthorBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
@@ -421,14 +422,14 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             }
 
             // 自定义指示器
-            dotBtns = initDot(context, sliderLayout, dotContainer, size, sliderLayout.getCurrentPosition(), RECT);
+            dotBtns = CommonUtil.initDot(context, sliderLayout, dotContainer, size, sliderLayout.getCurrentPosition(), CommonUtil.AD_DOT);
 
             // 轮播图页面改变
             sliderLayout.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
-                    selectDotBtn(dotBtns, position, RECT);
+                    CommonUtil.selectDotBtn(dotBtns, position, CommonUtil.AD_DOT);
                 }
             });
         }
@@ -526,7 +527,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppLog.i("slidder", "selected is " + selected);
 
             // 初始化小圆点
-            dotBtns = initDot(context, vpHotLives, dotContainer, size, selected, SQUARE);
+            dotBtns = CommonUtil.initDot(context, vpHotLives, dotContainer, size, selected, CommonUtil.DARK_DOT);
 
             // ViewPager添加滑动事件
             vpHotLives.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -537,7 +538,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 @Override
                 public void onPageSelected(int position) {
-                    selectDotBtn(dotBtns, position, SQUARE);
+                    CommonUtil.selectDotBtn(dotBtns, position, CommonUtil.DARK_DOT);
                 }
 
                 @Override
@@ -912,7 +913,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             selected = vpTheme.getCurrentItem();
 
             // 初始化小圆点
-            dotBtns = initDot(context, vpTheme, dotContainer, size, selected, SQUARE);
+            dotBtns = CommonUtil.initDot(context, vpTheme, dotContainer, size, selected, CommonUtil.DARK_DOT);
 
 
             vpTheme.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -923,7 +924,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                 @Override
                 public void onPageSelected(int position) {
-                    selectDotBtn(dotBtns, position, SQUARE);
+                    CommonUtil.selectDotBtn(dotBtns, position, CommonUtil.DARK_DOT);
                 }
 
                 @Override
@@ -1112,188 +1113,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                     mContext.startActivity(intent);
                 }
             });
-        }
-    }
-
-    private static final int RECT = 0x01;
-    private static final int SQUARE = 0x02;
-
-    /**
-     * 初始化小圆点
-     *
-     * @param context
-     * @param viewPager
-     * @param dotContainer
-     * @param size
-     * @param selected
-     * @return
-     */
-    private List<Button> initDot(Context context, final ViewPager viewPager, LinearLayout dotContainer, int size, int selected, int type) {
-        final List<Button> dotBtns = new ArrayList<>();
-        if (size > 0 && selected >= 0 && selected < size) {
-            // 移除所有视图
-            ((ViewGroup) dotContainer).removeAllViews();
-
-            int width = 0;
-            int height = 0;
-            int marginHorizontal = 0;
-            int marginVertical = 0;
-            int selectedResId = 0;
-            int normalResId = 0;
-
-            if (type == RECT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_rect_width);
-                height = (int) context.getResources().getDimension(R.dimen.dot_rect_height);
-
-                marginHorizontal = DensityUtil.dip2px(context, 2);
-                marginVertical = DensityUtil.dip2px(context, 10);
-
-                selectedResId = R.color.black;
-                normalResId = R.color.color_761a1a1a;
-            } else if (type == SQUARE) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_dot_selected;
-                normalResId = R.drawable.icon_dot_normal;
-            }
-
-            for (int i = 0; i < size; i++) {
-                // 新建一个按钮
-                Button btn = new Button(context);
-                // 点的大小
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
-                // 设置点的边距
-                params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
-                // 设置按钮的大小属性
-                btn.setLayoutParams(params);
-                if (i == selected) {
-                    btn.setBackgroundResource(selectedResId);
-                } else {
-                    btn.setBackgroundResource(normalResId);
-                }
-                dotBtns.add(btn);
-                dotContainer.addView(btn);
-            }
-
-            for (int i = 0; i < dotBtns.size(); i++) {
-                final int finalI = i;
-                dotBtns.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewPager.setCurrentItem(finalI);
-                        selectDotBtn(dotBtns, finalI, SQUARE);
-                    }
-                });
-            }
-        }
-        return dotBtns;
-    }
-
-    /**
-     * 初始化小圆点
-     *
-     * @param context
-     * @param sliderLayout
-     * @param dotContainer
-     * @param size
-     * @param selected
-     * @return
-     */
-    private List<Button> initDot(Context context, final SliderLayout sliderLayout, LinearLayout dotContainer, int size, int selected, int type) {
-        final List<Button> dotBtns = new ArrayList<>();
-        if (size > 0 && selected >= 0 && selected < size) {
-            // 移除所有视图
-            ((ViewGroup) dotContainer).removeAllViews();
-
-            int width = 0;
-            int height = 0;
-            int marginHorizontal = 0;
-            int marginVertical = 0;
-            int selectedResId = 0;
-            int normalResId = 0;
-
-            if (type == RECT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_rect_width);
-                height = (int) context.getResources().getDimension(R.dimen.dot_rect_height);
-
-                marginHorizontal = DensityUtil.dip2px(context, 2);
-                marginVertical = DensityUtil.dip2px(context, 10);
-
-                selectedResId = R.color.black;
-                normalResId = R.color.color_761a1a1a;
-            } else if (type == SQUARE) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_dot_selected;
-                normalResId = R.drawable.icon_dot_normal;
-            }
-
-            for (int i = 0; i < size; i++) {
-                // 新建一个按钮
-                Button btn = new Button(context);
-                // 点的大小
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
-                // 设置点的边距
-                params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
-                // 设置按钮的大小属性
-                btn.setLayoutParams(params);
-                if (i == selected) {
-                    btn.setBackgroundResource(selectedResId);
-                } else {
-                    btn.setBackgroundResource(normalResId);
-                }
-                dotBtns.add(btn);
-                dotContainer.addView(btn);
-            }
-
-            for (int i = 0; i < dotBtns.size(); i++) {
-                final int finalI = i;
-                dotBtns.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sliderLayout.setCurrentPosition(finalI);
-                        selectDotBtn(dotBtns, finalI, SQUARE);
-                    }
-                });
-            }
-        }
-        return dotBtns;
-    }
-
-    /**
-     * 选择按钮
-     *
-     * @param finalI
-     */
-    private void selectDotBtn(List<Button> dotBtns, int finalI, int type) {
-
-        int selectedResId = 0;
-        int normalResId = 0;
-
-        if (type == RECT) {
-            selectedResId = R.color.black;
-            normalResId = R.color.color_761a1a1a;
-        } else if (type == SQUARE) {
-            selectedResId = R.drawable.icon_dot_selected;
-            normalResId = R.drawable.icon_dot_normal;
-        }
-
-        for (int i = 0; i < dotBtns.size(); i++) {
-            if (i == finalI) {
-                dotBtns.get(i).setBackgroundResource(selectedResId);
-            } else {
-                dotBtns.get(i).setBackgroundResource(normalResId);
-            }
         }
     }
 

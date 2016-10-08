@@ -954,12 +954,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         giftBean.setGiftName(giftSresult.get(itemPosition).getName());
        giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity.this));
         liveMessage.setGiftModel(giftBean);
-<<<<<<< HEAD
-        liveMessage.setStyle("10");
         liveMessage.setChannelId(channelId);
-=======
         liveMessage.setStyle(MessageType.gift);
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
         IMMessage giftMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, AuthPreferences.getUserAccount(), liveMessage);
 
         if ("003".equals(code)) {

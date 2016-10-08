@@ -22,12 +22,8 @@ public class LiveMessage {
     private String questionUserName;
     private GiftBean giftModel;
     private String targetType;
-<<<<<<< HEAD
-    private String challengeModel;
     private String channelId;
-=======
     private ChallengeInitiateResultBean challengeModel;
->>>>>>> e1bc629e368e34a6cae7adff7f8acfa33053117b
 
     public String getAdminSendMsgUserId() {
         return adminSendMsgUserId;
