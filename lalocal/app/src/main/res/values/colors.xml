@@ -120,5 +120,5 @@
     <color name="color_7babbd">#7babbd</color>
     <color name="color_979797">#979797</color>
     <color name="color_761a1a1a">#761a1a1a</color>
-
+    <color name="color_guide_dialog_bg">#99000000</color>
 </resources>

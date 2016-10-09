@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -386,9 +387,9 @@ public class CommonUtil {
      * 设置屏幕的背景透明度
      * @param bgAlpha
      */
-    public static void backgroundAlpha(Activity activity, float bgAlpha) {
-        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+    public static void backgroundAlpha(Window window, float bgAlpha) {
+        WindowManager.LayoutParams lp = window.getAttributes();
         lp.alpha = bgAlpha;
-        activity.getWindow().setAttributes(lp);
+        window.setAttributes(lp);
     }
 }

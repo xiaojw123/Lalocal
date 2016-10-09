@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -473,7 +475,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
      * 初始化新手引导弹窗
      */
     private void initGuideDialog() {
-        Toast.makeText(LiveActivity.this, "新手引导", Toast.LENGTH_SHORT).show();
         // 是否跳过新手引导
         boolean isSkipGuide = SPCUtils.getBoolean(this, "skip_guide");
         List<Button> dotBtns = new ArrayList<>();
@@ -492,17 +493,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             pop.setTouchable(true);
             // 设置内容外不可触摸
             pop.setOutsideTouchable(false);
-            // 设置无背景
-            pop.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap)null));
+            // 设置背景
+//            pop.setBackgroundDrawable(getResources().getDrawable(R.color.color_guide_dialog_bg));
             // 背景变暗
-            CommonUtil.backgroundAlpha(LiveActivity.this, 0.5f);
+//            CommonUtil.backgroundAlpha(getWindow(), 0.5f);
             // 全屏居中显示
             pop.showAtLocation(rootView, Gravity.CENTER, 0, 0);
             // 弹窗消失事件
             pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-                    CommonUtil.backgroundAlpha(LiveActivity.this, 1f);
+//                    CommonUtil.backgroundAlpha(getWindow(), 1f);
                 }
             });
 
@@ -521,7 +522,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             vp.setAdapter(new GuideAdapter());
             // 设置页边距
             vp.setPageMargin((int) getResources().getDimension(R.dimen.novice_guide_vp_margin));
-            // 取消按钮点击事件
+            // “跳过”按钮下划线
+            btnSkip.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
+            // 抗锯齿
+            btnSkip.getPaint().setAntiAlias(true);
+            // “跳过”按钮点击事件
             btnSkip.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -556,6 +561,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
+    /**
+     * 新手引导页适配器
+     */
     private class GuideAdapter extends PagerAdapter {
 
         @Override
