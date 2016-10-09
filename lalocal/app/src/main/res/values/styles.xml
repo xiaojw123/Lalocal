@@ -534,7 +534,9 @@
         <item name="android:textColor">@color/color_66</item>
     </style>
 
-
-
+    <style name="GuidePopupStyle">
+        <item name="android:windowEnterAnimation">@anim/guide_in</item>
+        <item name="android:windowExitAnimation">@anim/guide_out</item>
+    </style>
 
 </resources>

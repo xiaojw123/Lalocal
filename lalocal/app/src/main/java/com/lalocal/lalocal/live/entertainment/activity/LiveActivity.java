@@ -493,17 +493,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             pop.setTouchable(true);
             // 设置内容外不可触摸
             pop.setOutsideTouchable(false);
-            // 设置背景
-//            pop.setBackgroundDrawable(getResources().getDrawable(R.color.color_guide_dialog_bg));
-            // 背景变暗
-//            CommonUtil.backgroundAlpha(getWindow(), 0.5f);
             // 全屏居中显示
             pop.showAtLocation(rootView, Gravity.CENTER, 0, 0);
+            // 进入时渐变动画
+            pop.setAnimationStyle(R.style.GuidePopupStyle);
             // 弹窗消失事件
             pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
                 @Override
                 public void onDismiss() {
-//                    CommonUtil.backgroundAlpha(getWindow(), 1f);
+
                 }
             });
 
@@ -519,7 +517,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             final List<Button> finalDotBtns = dotBtns;
             // 设置适配器
-            vp.setAdapter(new GuideAdapter());
+            vp.setAdapter(new GuideAdapter(pop));
             // 设置页边距
             vp.setPageMargin((int) getResources().getDimension(R.dimen.novice_guide_vp_margin));
             // “跳过”按钮下划线
@@ -566,6 +564,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
      */
     private class GuideAdapter extends PagerAdapter {
 
+        PopupWindow window;
+
+        public GuideAdapter(PopupWindow window) {
+            this.window = window;
+        }
+
         @Override
         public int getCount() {
             return GUIDE_PAGE_SIZE;
@@ -577,7 +581,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(final ViewGroup container, int position) {
             View view = LayoutInflater.from(LiveActivity.this).inflate(R.layout.novice_guide_item, null);
             ScaleImageView page = (ScaleImageView) view.findViewById(R.id.img_guide);
             switch (position) {
@@ -593,6 +597,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 case 3:
                     page.setImageResource(R.drawable.card_4);
                     break;
+            }
+            if (position == GUIDE_PAGE_SIZE - 1) {
+                view.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        window.dismiss();
+                    }
+                });
             }
             container.addView(view);
             return view;
