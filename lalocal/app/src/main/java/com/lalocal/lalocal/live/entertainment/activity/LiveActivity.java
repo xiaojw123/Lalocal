@@ -1119,7 +1119,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                    Toast.makeText(LiveActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(LiveActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
+                    // 进入举报界面
+                    Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
+                    LiveActivity.this.startActivity(intent);
                 }
             });
             customLiveUserInfoDialog.setBanBtn(isMuteds == true ? getString(R.string.live_relieve_ban) : getString(R.string.live_ban) , new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {

@@ -135,6 +135,7 @@ repositories {
 }
 dependencies {
     compile(name:'videoprp', ext:'aar')
+    compile project(path: ':galleryfinal')
 }
 
 
