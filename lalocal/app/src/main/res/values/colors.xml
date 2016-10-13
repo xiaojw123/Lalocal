@@ -77,7 +77,7 @@
     <color name="live_start_tv">#ffaa2a</color>
     <color name="live_barraview">#73000000</color>
     <color name="live_gift">#64000000</color>
-<!--umeng-->
+    <!--umeng-->
     <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
     <color name="umeng_socialize_divider">#E6E6E6</color>
     <!--im-->
@@ -120,5 +120,9 @@
     <color name="color_7babbd">#7babbd</color>
     <color name="color_979797">#979797</color>
     <color name="color_761a1a1a">#761a1a1a</color>
+    <color name="color_f1">#f1f1f1</color>
+    <color name="color_fff93f">#fff9ef</color>
+
+
 
 </resources>

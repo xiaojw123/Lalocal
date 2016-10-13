@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_fa"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/live_detail_ctv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title_name="@string/showdetail" />
+
+        <com.lalocal.lalocal.view.CustomerServiceView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dimen_size_15_dp" />
+    </FrameLayout>
+
+    <ScrollView
+        android:id="@+id/live_detail_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/dimen_size_20_dp"
+                android:paddingLeft="@dimen/dimen_size_15_dp"
+                android:paddingRight="@dimen/dimen_size_15_dp"
+                android:paddingTop="@dimen/dimen_size_20_dp">
+
+                <ImageView
+                    android:id="@+id/live_detail_img"
+                    android:layout_width="@dimen/item_my_live_img_width"
+                    android:layout_height="@dimen/item_my_live_img_width"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/personhaednormal" />
+
+                <TextView
+                    android:id="@+id/live_detail_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/live_detail_img"
+                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                    android:layout_toRightOf="@+id/live_detail_img"
+                    android:text="我正在南非给大家直播"
+                    android:textColor="@color/color_1a"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/live_detail_onlinenum"
+                    android:layout_alignLeft="@+id/live_detail_title"
+                    android:layout_marginBottom="@dimen/dimen_size_4_dp"
+                    android:drawableLeft="@drawable/pl_location_darkic"
+                    android:drawablePadding="@dimen/dimen_size_4_dp"
+                    android:text="金州"
+                    android:textColor="@color/color_b3"
+                    android:textSize="@dimen/text_size_12_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_onlinenum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/live_detail_livelen"
+                    android:layout_alignLeft="@+id/live_detail_title"
+                    android:layout_marginBottom="@dimen/dimen_size_4_dp"
+                    android:drawableLeft="@drawable/manypeople_arkic"
+                    android:drawablePadding="@dimen/dimen_size_4_dp"
+                    android:text="2010"
+                    android:textColor="@color/color_b3"
+                    android:textSize="@dimen/text_size_12_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_livelen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/live_detail_img"
+                    android:layout_alignLeft="@+id/live_detail_title"
+                    android:layout_marginBottom="@dimen/dimen_size_4_dp"
+                    android:drawableLeft="@drawable/manytime_light"
+                    android:drawablePadding="@dimen/dimen_size_4_dp"
+                    android:text="00:30:20"
+                    android:textColor="@color/color_b3"
+                    android:textSize="@dimen/text_size_12_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/live_detail_livelen"
+                    android:text="2016-09-12"
+                    android:textColor="@color/color_b3"
+                    android:textSize="@dimen/text_size_12_sp" />
+
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                android:layout_marginTop="@dimen/dimen_size_25_dp"
+                android:text="@string/the_live_income"
+                android:textColor="@color/color_8c"
+                android:textSize="@dimen/text_size_12_sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                android:layout_marginTop="@dimen/dimen_size_10_dp"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_size_10_dp"
+                    android:background="@drawable/score" />
+
+                <TextView
+                    android:id="@+id/live_detail_scorenum_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="10,086"
+                    android:textColor="@color/color_1a"
+                    android:textSize="@dimen/text_size_32_sp" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="@dimen/dimen_size_10_dp"
+                android:paddingLeft="@dimen/dimen_size_15_dp"
+                android:paddingRight="@dimen/dimen_size_15_dp"
+                android:paddingTop="@dimen/dimen_size_10_dp">
+
+                <TextView
+                    android:id="@+id/livelen_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/live_len"
+                    android:textColor="@color/color_1a"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_livelen2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/livelen_text"
+                    android:layout_marginTop="@dimen/dimen_size_2_dp"
+                    android:text="00:00:00"
+                    android:textColor="@color/color_8c"
+                    android:textSize="@dimen/text_size_12_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_toal_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="+1090"
+                    android:textColor="@color/color_ffaa2a"
+                    android:textSize="@dimen/text_size_16_sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10_dp"
+                android:background="@color/white"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                    android:layout_marginTop="@dimen/dimen_size_17_dp"
+                    android:text="@string/gift"
+                    android:textColor="@color/color_1a"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <TextView
+                    android:id="@+id/live_detail_gift_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="@dimen/dimen_size_15_dp"
+                    android:layout_marginTop="@dimen/dimen_size_19_dp"
+                    android:text="+11"
+                    android:textColor="@color/color_ffaa2a"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/live_detail_gift_rlv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/live_detail_gift_score" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_15_dp"
+                android:background="@color/white"
+               >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dimen_size_20_dp"
+                    android:layout_marginTop="@dimen/dimen_size_20_dp"
+                    android:text="@string/challenge_task"
+                    android:layout_marginLeft="@dimen/dimen_size_15_dp"
+                    android:textColor="@color/color_1a"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <TextView
+                    android:id="@+id/live_detial_challenge_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/dimen_size_20_dp"
+                    android:layout_marginRight="@dimen/dimen_size_15_dp"
+                    android:layout_marginTop="@dimen/dimen_size_20_dp"
+                    android:text="111"
+                    android:textColor="@color/color_ffaa2a"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/live_detail_challenge_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:layout_below="@+id/live_detial_challenge_score" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

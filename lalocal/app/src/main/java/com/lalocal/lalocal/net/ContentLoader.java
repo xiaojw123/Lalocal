@@ -66,6 +66,7 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -114,6 +115,15 @@ public class ContentLoader {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+    //获取用户直播
+    public void getUserLive(int userid,int pageNum){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.USER_LIVE);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUserLiveUrl(userid,pageNum),response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
     }
 
     public void exchargeCopon(String code) {
@@ -441,6 +451,16 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    public void getMyFavor(int userid, String token, int pageNumber) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getFavoriteItemsUrl() + "pageNumber=" + pageNumber + "&pageSize=10", response, response);
+        AppLog.print("FAVOR RQUEST__uRL__" + AppConfig.getFavoriteItemsUrl() + "pageNumber=" + pageNumber + "&pageSize=10");
+        request.setHeaderParams(getHeaderParams(userid, token));
+        requestQueue.add(request);
+    }
+
 
     public void getUserProfile(int userid, String token) {
         if (callBack != null) {
@@ -452,13 +472,13 @@ public class ContentLoader {
     }
 
     //修改的用户资料
-    public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, int userid, String token) {
+    public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, String description, int userid, String token) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserProfileModifyUrl(), response, response);
         request.setHeaderParams(getHeaderParams(userid, token));
-        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
+        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone, description));
         requestQueue.add(request);
     }
 
@@ -673,15 +693,16 @@ public class ContentLoader {
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
         requestQueue.add(request);
     }
+
     //用户获取在线人数
-     public  void getAudienceUserOnLine(int onLineUser){
-         if (callBack != null) {
-             response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
-         }
-         ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount()+onLineUser, response, response);
-         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-         requestQueue.add(request);
-     }
+    public void getAudienceUserOnLine(int onLineUser) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount() + onLineUser, response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
 
     //关闭直播间
     public void cancelLiveRoom(String userId) {
@@ -833,7 +854,7 @@ public class ContentLoader {
     }
 
     //分享统计
-    public void getShareStatistics(String targetType,String targetId,String channelType){
+    public void getShareStatistics(String targetType, String targetId, String channelType) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SHARE_STATISTICS);
         }
@@ -905,7 +926,7 @@ public class ContentLoader {
         }
 
         ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleDetailsUrl() + targetId, response, response);
-
+        contentRequest.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(contentRequest);
     }
 
@@ -990,8 +1011,9 @@ public class ContentLoader {
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
-        public void setPassWord(String psw){
-            this.psw=psw;
+
+        public void setPassWord(String psw) {
+            this.psw = psw;
 
         }
 
@@ -1073,6 +1095,9 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.USER_LIVE:
+                        responseGetUserLive(jsonObj);
+                        break;
                     case RequestCode.EXCHARGE_COUPON:
                         responseExchargeCoupon(jsonObj);
                         break;
@@ -1317,6 +1342,13 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseGetUserLive(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            UserLiveItem item=gson.fromJson(json,UserLiveItem.class);
+            callBack.onGetUserLive(item);
         }
 
         private void responseExchargeCoupon(JSONObject jsonObj) {
@@ -1778,20 +1810,12 @@ public class ContentLoader {
 
         //点赞
         private void responseParises(String json) {
-
-            if (!UserHelper.favorites.contains(targetId)) {
-                UserHelper.favorites.add(targetId);
-            }
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onInputPariseResult(pariseResult);
         }
 
         //取消赞
         private void responseCancelParises(String json) {
-
-            if (UserHelper.favorites.contains(targetId)) {
-                UserHelper.favorites.remove(targetId);
-            }
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onPariseResult(pariseResult);
         }
@@ -1832,7 +1856,7 @@ public class ContentLoader {
 
         //推荐直播列表
         private void responseLiveRecommendList(String json) {
-            AppLog.i("TAG","推荐直播列表:"+json);
+            AppLog.i("TAG", "推荐直播列表:" + json);
             LiveRecommendListDataResp liveRecommendListDataResp = new Gson().fromJson(json, LiveRecommendListDataResp.class);
             callBack.onLiveRecommendList(liveRecommendListDataResp);
         }
@@ -1861,7 +1885,7 @@ public class ContentLoader {
 
         //上传在线人数
         private void responseOnLinesCount(String json) {
-            AppLog.i("TAG","上传在线人数"+json);
+            AppLog.i("TAG", "上传在线人数" + json);
             callBack.onOnLinesCount(json);
         }
 
@@ -1874,7 +1898,7 @@ public class ContentLoader {
 
         //关闭直播间
         private void responseCancelLive(String json) {
-            AppLog.i("TAG","关闭直播:"+json);
+            AppLog.i("TAG", "关闭直播:" + json);
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }
@@ -1945,7 +1969,7 @@ public class ContentLoader {
         //分享统计
         private void responseShareStatistics(String json) {
 
-            AppLog.i("TAG","分享统计:"+json);
+            AppLog.i("TAG", "分享统计:" + json);
             callBack.onShareStatistics(json);
         }
 
@@ -2005,11 +2029,11 @@ public class ContentLoader {
     }
 
 
-
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
-            phone) {
+            phone, String description) {
         JSONObject jsonObj = new JSONObject();
         try {
+
             if (!TextUtils.isEmpty(nickname)) {
                 jsonObj.put("nickName", nickname);
             }
@@ -2023,6 +2047,10 @@ public class ContentLoader {
             if (!TextUtils.isEmpty(phone)) {
                 jsonObj.put("phone", phone);
             }
+            if (!TextUtils.isEmpty(description)) {
+                jsonObj.put("description", description);
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2278,6 +2306,7 @@ public class ContentLoader {
         int EXCHARGE_GOLD = 137;
         int SEARCH_LIVE = 138;
         int EXCHARGE_COUPON = 139;
+        int USER_LIVE=140;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2310,12 +2339,12 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
-        int GET_ONLINE_COUNT=230;
-        int SHARE_STATISTICS=231;
+        int GET_ONLINE_COUNT = 230;
+        int SHARE_STATISTICS = 231;
 
 
-        int GET_INDEX_RECOMMEND_LIST=300;
-        int GET_ARTICLE_LIST=301;
+        int GET_INDEX_RECOMMEND_LIST = 300;
+        int GET_ARTICLE_LIST = 301;
 
     }
 

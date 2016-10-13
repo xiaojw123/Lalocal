@@ -129,10 +129,10 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         if (KeyParams.SETTING.equals(setting)) {
             setResult(SettingActivity.UN_LOGIN_OK);
         }
+        super.onBackPressed();
     }
 
     public void login(String email, String psw) {

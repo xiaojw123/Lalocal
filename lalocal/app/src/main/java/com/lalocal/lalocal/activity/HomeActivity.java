@@ -5,20 +5,26 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
-import com.lalocal.lalocal.activity.fragment.RecommendFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
+import com.lalocal.lalocal.model.VersionResult;
+import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
+    public static final String VERSION_RESULT = "version_result";
     LinearLayout home_recommend_tab, home_destination_tab, home_news_tab, home_me_tab;
     LinearLayout home_tab_container;
     ViewGroup lastSelectedTab;
@@ -33,6 +39,26 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
         initView();
+        checkUpdate();
+    }
+
+    private void checkUpdate() {
+        VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
+        boolean flag = result.isForceFlag();
+        boolean checkUpdate = result.isCheckUpdate();
+        String downLoadUrl = result.getDownloadUrl();
+//        flag = false;
+//        checkUpdate = true;
+//        downLoadUrl = "http://media.lalocal.cn/app/lalocal_2_1_2.apk";
+        if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
+            if (flag) {
+                update(downLoadUrl);
+            } else {
+                showUpdateDialog(downLoadUrl);
+            }
+        }
+
+
     }
 
     private void initView() {
@@ -66,7 +92,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         switch (container.getId()) {
             case R.id.home_tab_recommend:
                 selected = FRAGMENT_RECOMMEND;
-                AppLog.print("recommend__"+recommendFragment);
+                AppLog.print("recommend__" + recommendFragment);
                 if (recommendFragment == null) {
                     AppLog.print("___add");
                     recommendFragment = new RecommendNewFragment();
@@ -172,4 +198,57 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             }
         }
     }
+
+
+    private void showUpdateDialog(final String dowloadUrl) {
+        CustomDialog dialog=new CustomDialog(this,R.style.custom_dialog,CustomDialog.Style.STYLE_IOS);
+        dialog.setTitle("请更新至最新版本");
+        dialog.setMessage("更新内容：\n1.直播首页改版\n2.个人页面改版\n3.直播录制功能优化");
+        dialog.setSurceBtn("立即更新", new CustomDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                if (Environment.getExternalStorageState().equals(
+                        Environment.MEDIA_MOUNTED)) {
+                    update(dowloadUrl);
+                } else {
+                    Toast.makeText(HomeActivity.this, "无可用存储空间",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        dialog.setCancelBtn("稍后更新",null);
+        dialog.show();
+
+//
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//        builder.setTitle("请更新至最新版本");
+//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                if (Environment.getExternalStorageState().equals(
+//                        Environment.MEDIA_MOUNTED)) {
+//                    update(dowloadUrl);
+//                } else {
+//                    Toast.makeText(HomeActivity.this, "无可用存储空间",
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
+//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//
+//        });
+//        builder.create().show();
+    }
+
+    private void update(String downLoadUrl) {
+        UpdateTask task = new UpdateTask(this);
+        task.execute(downLoadUrl);
+    }
+
 }

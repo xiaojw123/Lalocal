@@ -38,8 +38,7 @@ import java.util.List;
 /**
  * Created by xiaojw on 2016/6/3.
  */
-public class RecommendFragment extends Fragment implements XListView.IXListViewListener {
-    private static final  String PAGE_NAME="RecommendFragment";
+public class RecommendFragment extends BaseFragment implements XListView.IXListViewListener {
     private int pageNumber;
     private int pageSize;
     private XListView xlistview;
@@ -225,15 +224,5 @@ public class RecommendFragment extends Fragment implements XListView.IXListViewL
             throw new RuntimeException(e);
         }
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(PAGE_NAME);
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(PAGE_NAME);
-    }
 }

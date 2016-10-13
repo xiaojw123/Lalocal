@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -244,7 +243,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
 
     public void showCompletePay() {
         if (KeyParams.ACTION_UPDATE_ORDER.equals(actionType)) {
-            setResult(MeFragment.UPDATE_MY_ORDER);
+            setResult(MyOrderActivity.UPDATE_MY_ORDER);
         }
         Intent intent = new Intent(this, PayCompleteActivity.class);
         intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());

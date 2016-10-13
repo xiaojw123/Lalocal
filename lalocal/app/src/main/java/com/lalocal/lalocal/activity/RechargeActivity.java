@@ -67,7 +67,7 @@ public class RechargeActivity extends BaseActivity implements CustomTitleView.on
             mContentloader.getMyWallet();
         }
         rechargePackageRlv.setLayoutManager(new LinearLayoutManager(this));
-        rechargePackageRlv.addItemDecoration(new LinearItemDecoration());
+        rechargePackageRlv.addItemDecoration(new LinearItemDecoration(this));
         mContentloader.getRechargeProducts();
     }
 

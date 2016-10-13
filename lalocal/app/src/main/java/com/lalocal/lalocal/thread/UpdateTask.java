@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.lalocal.lalocal.activity.SplashActivity;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 
@@ -28,11 +27,9 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
     private static final String APK_NAME = "lalocal.apk";
     ProgressDialog pBar;
     Context mContext;
-    SplashActivity.SplashHandler mHandler;
 
-    public UpdateTask(Context context, SplashActivity.SplashHandler handler) {
+    public UpdateTask(Context context) {
         mContext = context;
-        mHandler = handler;
     }
 
 
@@ -58,6 +55,7 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
             int resCode = urlConnection.getResponseCode();
             if (resCode == HttpURLConnection.HTTP_OK) {
                 int length = urlConnection.getContentLength();
+                AppLog.print("progres len__"+length);
                 pBar.setMax(length / 1024);
                 InputStream is = urlConnection.getInputStream();
                 //设置进度条的总长度
@@ -71,13 +69,17 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
                     file.createNewFile();
                     FileOutputStream fos = new FileOutputStream(file);
                     byte[] buf = new byte[1024];   //这个是缓冲区，即一次读取10个比特，我弄的小了点，因为在本地，所以数值太大一 下就下载完了，看不出progressbar的效果。
-                    int ch = -1;
+                    int b = 0;
                     int process = 0;
-                    while ((ch = is.read(buf)) != -1) {
-                        fos.write(buf, 0, ch);
-                        process += ch;
+                    AppLog.print("start read____b__"+b);
+                    while ((b = is.read(buf)) != -1) {
+                        AppLog.print("read____b__"+b);
+                        fos.write(buf, 0, b);
+                        process += b;
+                        AppLog.print("progress__"+process);
                         pBar.setProgress(process / 1024);       //这里就是关键的实时更新进度了！
                     }
+                    AppLog.print("read____b__"+b);
                     fos.flush();
                     fos.close();
                     is.close();
@@ -111,7 +113,6 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
             }
         }
         Toast.makeText(mContext, "更新失败", Toast.LENGTH_SHORT).show();
-        mHandler.sendEmptyMessage(SplashActivity.MSG_ENTER_APP);
     }
 
 

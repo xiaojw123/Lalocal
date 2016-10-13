@@ -11,12 +11,15 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.view.CustomTitleView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyWalletActivity extends BaseActivity {
+import static com.lalocal.lalocal.activity.fragment.MeFragment.UPDAE_MY_WALLET;
+
+public class MyWalletActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
 
     @BindView(R.id.my_diamond_num)
     TextView myDiamondNum;
@@ -30,6 +33,8 @@ public class MyWalletActivity extends BaseActivity {
     TextView myCouponNum;
     @BindView(R.id.my_coupon_llt)
     LinearLayout myCouponLlt;
+    @BindView(R.id.my_wallet_ctv)
+    CustomTitleView myWalletCtv;
     WalletContent mWalletContent;
 
 
@@ -37,10 +42,16 @@ public class MyWalletActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_wallet_layout);
-        showLoadingAnimation();
         unbinder = ButterKnife.bind(this);
+        myWalletCtv.setOnBackClickListener(this);
         setLoaderCallBack(new WalletCallBack());
-        mContentloader.getMyWallet();
+        mWalletContent = getWalletContent();
+        if (mWalletContent == null) {
+            showLoadingAnimation();
+            mContentloader.getMyWallet();
+        } else {
+            updateView(mWalletContent);
+        }
 
     }
 
@@ -49,22 +60,33 @@ public class MyWalletActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.my_diamond_llt:
                 Intent diamondIntent = new Intent(this, MyDiamondActivity.class);
-                diamondIntent.putExtra(KeyParams.WALLET_CONTENT,mWalletContent);
-                startActivityForResult(diamondIntent,KeyParams.REQUEST_CODE);
+                diamondIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
+                startActivityForResult(diamondIntent, KeyParams.REQUEST_CODE);
                 break;
 
             case R.id.my_travelticket_llt:
                 Intent scoreIntent = new Intent(this, MyTravelTicketActivity.class);
-                scoreIntent.putExtra(KeyParams.WALLET_CONTENT,mWalletContent);
-                startActivityForResult(scoreIntent,KeyParams.REQUEST_CODE);
+                scoreIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
+                startActivityForResult(scoreIntent, KeyParams.REQUEST_CODE);
                 break;
             case R.id.my_coupon_llt:
-                Intent couponIntent=new Intent(this,MyCouponActivity.class);
-                couponIntent.putExtra(KeyParams.PAGE_TYPE,KeyParams.PAGE_TYPE_WALLET);
-                couponIntent.putExtra(KeyParams.WALLET_CONTENT,mWalletContent);
-                startActivityForResult(couponIntent,KeyParams.REQUEST_CODE);
+                Intent couponIntent = new Intent(this, MyCouponActivity.class);
+                couponIntent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
+                couponIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
+                startActivityForResult(couponIntent, KeyParams.REQUEST_CODE);
                 break;
         }
+    }
+
+    @Override
+    public void onBackClick() {
+        setResult(UPDAE_MY_WALLET);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(UPDAE_MY_WALLET);
+        super.onBackPressed();
     }
 
     class WalletCallBack extends ICallBack {
@@ -73,23 +95,32 @@ public class MyWalletActivity extends BaseActivity {
             hidenLoadingAnimation();
             mWalletContent = content;
             if (content != null) {
-                String goldText = CommonUtil.formartNum(content.getGold());
-                String scoreText = CommonUtil.formartNum(content.getScore());
-                String couponText = CommonUtil.formartNum(content.getCouponNumb());
-                myDiamondNum.setText(goldText);
-                myTravelticketNum.setText(scoreText);
-                myCouponNum.setText(couponText);
+                updateView(content);
             }
         }
 
     }
 
+    private void updateView(WalletContent content) {
+        String goldText = CommonUtil.formartNum(content.getGold());
+        String scoreText = CommonUtil.formartNum(content.getScore());
+        String couponText = CommonUtil.formartNum(content.getCouponNumb());
+        myDiamondNum.setText(goldText);
+        myTravelticketNum.setText(scoreText);
+        myCouponNum.setText(couponText);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==KeyParams.RESULT_UPDATE_WALLET){
+        if (resultCode == KeyParams.RESULT_UPDATE_WALLET) {
             mContentloader.getMyWallet();
         }
+
+    }
+
+    public WalletContent getWalletContent() {
+        return getIntent().getParcelableExtra(KeyParams.WALLET_CONTENT);
 
     }
 }

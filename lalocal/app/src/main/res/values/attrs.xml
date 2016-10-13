@@ -39,5 +39,11 @@
         <attr name="drawable_width" format="dimension"/>
         <attr name="drawable_height" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="ShapeTextView">
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="corner_radius" format="dimension"/>
+        <attr name="solid_color" format="color"/>
+        <attr name="stroke_color" format="color"/>
+    </declare-styleable>
 
 </resources>

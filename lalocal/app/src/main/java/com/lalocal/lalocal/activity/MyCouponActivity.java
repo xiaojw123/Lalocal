@@ -234,9 +234,9 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
 
     @Override
     public void onBackPressed() {
+        setBackResult();
         super.onBackPressed();
         AppLog.print("onBackPressed_____");
-        setBackResult();
     }
 
     public void setBackResult() {

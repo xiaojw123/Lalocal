@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.activity.fragment;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,15 +19,13 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.view.adapter.DesAreaAdapter;
 import com.lalocal.lalocal.view.decoration.SpaceItemDecoration;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.List;
 
 /**
  * Created by xiaojw on 2016/6/3.
  */
-public class DestinationFragment extends Fragment implements View.OnClickListener {
-    private static final String PAGE_NAME = "DestinationFragment";
+public class DestinationFragment extends BaseFragment implements View.OnClickListener {
     private RecyclerView mRecyclerView;
     private FrameLayout mSearchView;
 
@@ -49,17 +46,7 @@ public class DestinationFragment extends Fragment implements View.OnClickListene
         loader.getDestinationAreas();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        MobclickAgent.onPageStart(PAGE_NAME);
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(PAGE_NAME);
-    }
 
     @Override
     public void onClick(View v) {

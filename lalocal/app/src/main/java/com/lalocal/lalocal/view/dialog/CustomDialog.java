@@ -3,10 +3,11 @@ package com.lalocal.lalocal.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.StyleRes;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -24,7 +25,8 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     Context context;
     String title, message, neturalText, sureText, cancelText;
     CustomDialogListener neutralBtnlistener, sureBtnLisener, cancelBtnListener;
-    FrameLayout chooseContainer;
+    ViewGroup chooseContainer;
+    int style;
 
 
     public CustomDialog(Context context) {
@@ -32,13 +34,25 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         this.context = context;
     }
 
+    public CustomDialog(Context context, @StyleRes int themeResId, int style) {
+        super(context, themeResId);
+        this.context = context;
+        this.style = style;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.custom_dialog);
+        if (style == Style.STYLE_IOS) {
+            setContentView(R.layout.custom_dialog_2);
+        } else {
+            setContentView(R.layout.custom_dialog);
+
+        }
         initView();
 
     }
+
 
     private void initView() {
         title_tv = (TextView) findViewById(R.id.custom_dialog_title);
@@ -46,7 +60,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         neutral_btn = (Button) findViewById(R.id.custom_neutral_btn);
         sure_btn = (Button) findViewById(R.id.custom_sure_btn);
         cancel_btn = (Button) findViewById(R.id.custom_cancel_btn);
-        chooseContainer = (FrameLayout) findViewById(R.id.custom_dialog_choose_continaer);
+        chooseContainer = (ViewGroup) findViewById(R.id.custom_dialog_choose_continaer);
         neutral_btn.setOnClickListener(this);
         sure_btn.setOnClickListener(this);
         cancel_btn.setOnClickListener(this);
@@ -142,6 +156,12 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
 
     public static interface CustomDialogListener {
         void onDialogClickListener();
+    }
+
+   public interface Style {
+        public static final int STYLE_NOMORL = 0x11;
+        public static final int STYLE_IOS = 0x12;
+
     }
 
 

@@ -42,6 +42,7 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -290,5 +291,8 @@ public abstract class ICallBack {
     }
     //分享统计
     public void onShareStatistics(String json) {
+    }
+    public void onGetUserLive(UserLiveItem item){
+
     }
 }

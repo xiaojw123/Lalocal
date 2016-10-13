@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/custom_dialog_container_width"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_dialog_border"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    >
+
+
+    <TextView
+        android:id="@+id/custom_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_1a"
+        android:textSize="@dimen/text_size_17_sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/custom_dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/custom_dialog_message_left"
+        android:layout_marginRight="@dimen/custom_dialog_message_left"
+        android:layout_marginTop="@dimen/custom_dialog_message_top_margin"
+        android:textColor="@color/color_1a"
+        android:textSize="@dimen/text_size_18_sp" />
+
+    <View style="@style/CommonD9LineTheme" />
+
+    <Button
+        android:id="@+id/custom_neutral_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/custom_neutral_btn_height"
+        android:background="@color/transparent"
+        android:textColor="@color/color_ffaa2a"
+        android:textSize="@dimen/text_size_17_sp"
+        android:text="确定"
+        android:visibility="gone"
+        />
+
+    <LinearLayout
+        android:id="@+id/custom_dialog_choose_continaer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/custom_cancel_btn"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/custom_neutral_btn_height"
+            android:background="@color/transparent"
+            android:text="取消"
+            android:textColor="@color/color_8c"
+            android:textSize="@dimen/text_size_17_sp" />
+
+        <View style="@style/CommonD9VertialLineTheme" />
+
+        <Button
+            android:id="@+id/custom_sure_btn"
+            android:layout_height="@dimen/custom_neutral_btn_height"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:background="@color/transparent"
+            android:text="确认"
+            android:textColor="@color/color_ffaa2a"
+            android:textSize="@dimen/text_size_17_sp" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

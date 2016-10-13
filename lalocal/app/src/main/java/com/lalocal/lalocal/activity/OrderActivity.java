@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
@@ -205,7 +204,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 String text = evalute_btn.getText().toString();
                 if (getResources().getString(R.string.pay_immediately).equals(text)) {
                     if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
-                        setResult(MeFragment.UPDATE_MY_ORDER);
+                        setResult(MyOrderActivity.UPDATE_MY_ORDER);
                     }
                     Intent intent = new Intent(this, PayActivity.class);
                     intent.putExtra(PayActivity.ORDER_ID, mOrderDetail.getId());
@@ -268,8 +267,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         setBackResult();
+        super.onBackPressed();
 
     }
 
@@ -279,7 +278,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             setResult(PayActivity.RESULT_BACK_PRODUCT);
         } else {
             Intent intent = new Intent();
-            intent.setAction(MeFragment.ACTION_UPDATE_DATA);
             sendBroadcast(intent);
         }
 
@@ -305,7 +303,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             }
             isCancelOrder = true;
             if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
-                setResult(MeFragment.UPDATE_MY_ORDER);
+                setResult(MyOrderActivity.UPDATE_MY_ORDER);
             }
             mContentloader.getOrderDetail(getOrderId());
         }

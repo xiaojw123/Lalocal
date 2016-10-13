@@ -2,7 +2,6 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -55,7 +54,6 @@ import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,9 +62,8 @@ import java.util.List;
 /**
  * Created by xiaojw on 2016/6/3.
  */
-public class NewsFragment extends Fragment implements View.OnClickListener {
+public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
-    private static final String PAGE_NAME = "NewsFragment";
     private final int BASIC_PERMISSION_REQUEST_CODE = 100;
     public static final int RESQUEST_COD = 701;
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
@@ -461,8 +458,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-
-        MobclickAgent.onPageStart(PAGE_NAME);
         if (CommonUtil.RESULT_DIALOG == 2) {
             CommonUtil.RESULT_DIALOG = 0;
             final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
@@ -491,12 +486,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         AppLog.i("TAG", "onResume");
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        MobclickAgent.onPageEnd(PAGE_NAME);
-        AppLog.i("TAG", "onPause");
-    }
 
     @Override
     public void onStop() {

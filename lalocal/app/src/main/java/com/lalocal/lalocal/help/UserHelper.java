@@ -9,17 +9,11 @@ import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by xiaojw on 2016/7/7.
  */
 public class UserHelper {
     //保存收藏 ，订单，优惠券使用记录
-    public static List<String> favorites = new ArrayList<>();
-    public static List<String> orders = new ArrayList<>();
-    public static List<String> coupons = new ArrayList<>();
     static SharedPreferences sp;
 
     private static void initSPref(Context context) {

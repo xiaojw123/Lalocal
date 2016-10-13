@@ -1,12 +1,9 @@
 package com.lalocal.lalocal.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
@@ -34,7 +31,6 @@ import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.model.WelcomeImg;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -55,9 +51,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     private static final int MSG_UPDATE_TIME = 0x001;
     private static final int MSG_DISPAY_IMG = 0x002;
     private static final int MSG_LOGIN_HUANXIN = 0x003;
-    public static final int MSG_ENTER_APP = 0x004;
     public static final int MSG_VERSION_UPDATE = 0x005;
-    public static  final  int MSG_START_HOME=0x006;
     ImageView welImg;
     TextView timeTv;
     int totalTime = 0;
@@ -133,18 +127,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         public void onVersionResult(VersionInfo versionInfo) {
             result = versionInfo.getResult();
             if (result != null) {
-                boolean flag = result.isForceFlag();
-                boolean checkUpdate = result.isCheckUpdate();
-                String downLoadUrl = result.getDownloadUrl();
-                if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
-                    if (flag) {
-                        update(downLoadUrl);
-                    } else {
-                        showUpdateDialog(downLoadUrl);
-                    }
-                } else {
-                    mHandler.sendEmptyMessage(MSG_ENTER_APP);
-                }
+                String apiUrl = result.getApiUrl();
+                AppConfig.setBaseUrl(apiUrl);
+                mContentloader.getSystemConfigs();
+            }else{
+                Toast.makeText(SplashActivity.this,"系统服务异常",Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -183,7 +170,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             String photo = welcomeImg.getPhoto();
             if (TextUtils.isEmpty(photo)) {
                 startHomePage();
-                mHandler.sendEmptyMessage(MSG_START_HOME);
             } else {
                 totalTime = welcomeImg.getSecond();
                 Message message = mHandler.obtainMessage();
@@ -197,6 +183,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
     private void startHomePage() {
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+        intent.putExtra(HomeActivity.VERSION_RESULT, result);
         startActivity(intent);
         finish();
     }
@@ -316,16 +303,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 case MSG_LOGIN_HUANXIN:
                     loginChatService();
                     break;
-                case MSG_ENTER_APP:
-                    String apiUrl = result.getApiUrl();
-                    AppConfig.setBaseUrl(apiUrl);
-                    mContentloader.getSystemConfigs();
-                    break;
                 case MSG_VERSION_UPDATE:
                     mContentloader.versionUpdate(AppConfig.getVersionName(SplashActivity.this));
-                    break;
-                case MSG_START_HOME:
-                    startHomePage();
                     break;
 
             }
@@ -362,42 +341,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
-    }
-
-    private void showUpdateDialog(final String dowloadUrl) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(android.R.drawable.ic_dialog_info);
-        builder.setTitle("请更新至最新版本");
-        builder.setCancelable(false);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
-                    update(dowloadUrl);
-                } else {
-                    Toast.makeText(SplashActivity.this, "无可用存储空间",
-                            Toast.LENGTH_SHORT).show();
-                    mHandler.sendEmptyMessage(MSG_ENTER_APP);
-                }
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                mHandler.sendEmptyMessage(MSG_ENTER_APP);
-            }
-
-        });
-        builder.create().show();
-    }
-
-    private void update(String downLoadUrl) {
-        UpdateTask task = new UpdateTask(this, mHandler);
-        task.execute(downLoadUrl);
     }
 
 }
