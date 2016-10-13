@@ -660,7 +660,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if ("1".equals(playType)) {
             videoView = new NEVideoView(this);
             // 防止软键盘挤压屏幕
-            videoView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+           /* videoView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                 @Override
                 public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
                     if(palyerLayout!=null&&palyerLayout.getChildAt(0)!=null){
@@ -671,7 +671,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         }
                     }
                 }
-            });
+            });*/
             palyerLayout.addView(videoView);
             bufferStrategy = 1;
             videoView.setBufferStrategy(bufferStrategy);

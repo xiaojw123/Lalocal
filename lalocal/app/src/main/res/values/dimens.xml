@@ -114,4 +114,6 @@
     <dimen name="report_et_padding_right">15dp</dimen>
     <dimen name="report_et_padding_bottom">10dp</dimen>
     <dimen name="report_item_margni_left">15dp</dimen>
+    <dimen name="dimen_size_16_dp">16dp</dimen>
+    <dimen name="homepage_playback_img_dimen">120dp</dimen>
 </resources>
