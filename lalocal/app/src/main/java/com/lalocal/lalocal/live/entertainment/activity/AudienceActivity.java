@@ -1368,7 +1368,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-        AppLog.i("TAG","接收远端视频解码回调:"+uid);
+      
         this.uid=uid;
         doRenderRemoteUi(uid);
     }
