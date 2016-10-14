@@ -58,6 +58,8 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private MsgAdapter adapter;
     private String content;
     private   Context context;
+    private TextView headInfos;
+
     public ChatRoomMsgListPanel(Container container, View rootView, String content, Context context) {
         this.container = container;
         this.rootView = rootView;
@@ -98,9 +100,10 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
        View view= View.inflate(container.activity, R.layout.chat_head_items,null);
-       TextView headInfos= (TextView) view.findViewById(R.id.chat_info_head);
+        headInfos = (TextView) view.findViewById(R.id.chat_info_head);
 
         headInfos.setText("公告： "+content);
+        headInfos.setVisibility(View.GONE);
         messageListView.addHeaderView(view);
         messageListView.requestDisallowInterceptTouchEvent(true);
 
@@ -119,8 +122,9 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
             }
         });
     }
-
-
+    public void setHeaderViewVisible(){
+        headInfos.setVisibility(View.VISIBLE);
+    }
 
 
 

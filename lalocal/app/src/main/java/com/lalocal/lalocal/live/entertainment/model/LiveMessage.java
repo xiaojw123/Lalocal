@@ -22,8 +22,10 @@ public class LiveMessage {
     private String questionUserName;
     private GiftBean giftModel;
     private String targetType;
+    private ChallengeDetailsResp.ResultBean  challengeModel;
+
     private String channelId;
-    private ChallengeInitiateResultBean challengeModel;
+
 
     public String getAdminSendMsgUserId() {
         return adminSendMsgUserId;
@@ -201,12 +203,12 @@ public class LiveMessage {
         this.targetType = targetType;
     }
 
-    public ChallengeInitiateResultBean getChallengeModel() {
+    public ChallengeDetailsResp.ResultBean  getChallengeModel() {
         return challengeModel;
     }
 
-    public void setChallengeModel(ChallengeInitiateResultBean challengeModel) {
-        this.challengeModel = challengeModel;
+    public void setChallengeModel(ChallengeDetailsResp.ResultBean resultBean) {
+        this.challengeModel = resultBean;
     }
 
     public String getChannelId() {

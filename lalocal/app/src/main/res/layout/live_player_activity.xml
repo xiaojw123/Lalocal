@@ -229,15 +229,14 @@
 
             <ImageView
                 android:id="@+id/challenge_new_task"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/live_height_36dp"
+                android:layout_height="@dimen/live_height_51dp"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/live_telecast_model_layout"
-                android:paddingRight="@dimen/live_padding_20dp"
+                android:paddingTop="@dimen/live_padding_15dp"
+                android:paddingRight="@dimen/live_padding_12dp"
                 android:visibility="gone"
                 android:src="@drawable/newtask"/>
-
-
         </RelativeLayout>
 
         <LinearLayout
@@ -311,6 +310,5 @@
                 app:civ_border_color="@color/white"
                 app:civ_border_width="@dimen/dimen_size_2_dp" />
         </RelativeLayout>
-
     </RelativeLayout>
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

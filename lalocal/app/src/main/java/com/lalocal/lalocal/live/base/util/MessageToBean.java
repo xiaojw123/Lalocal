@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.base.util;
 
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
@@ -9,7 +10,7 @@ import java.util.Map;
 /**
  * Created by android on 2016/9/17.
  */
-public class MessageToGiftBean {
+public class MessageToBean {
 
     public static GiftBean getMessageToGiftBean(ChatRoomMessage message){
         GiftBean giftBean = new GiftBean();
@@ -57,4 +58,43 @@ public class MessageToGiftBean {
         }
         return giftBean;
     }
+
+    public static ChallengeDetailsResp.ResultBean getMessageToChallengeBean(ChatRoomMessage message){
+        ChallengeDetailsResp.ResultBean resultBean=new  ChallengeDetailsResp.ResultBean();
+        Map<String, Object> remoteExtension = message.getRemoteExtension();
+        if (remoteExtension != null) {
+            Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<String, Object> next = iterator.next();
+                String key= next.getKey();
+                Object value= next.getValue();
+                if("challengeModel".equals(key)){
+                    String model = value.toString();
+                    if(model!=null&&!"null".equals(model)){
+                        Map<String, Object> map = (Map<String, Object>) value;
+                        Iterator<Map.Entry<String, Object>> mapItem = map.entrySet().iterator();
+                        while (mapItem.hasNext()){
+                            Map.Entry<String, Object> next1 = mapItem.next();
+                            String key1 = next1.getKey();
+                            Object value1 = next1.getValue();
+                            if("content".equals(key1)){
+
+                            }
+                            if("targetgold".equals(key1)) {
+
+                            }
+                            if("status".equals(key1)){
+                                resultBean.setStatus((int)value1);
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        return  resultBean;
+    }
+
 }

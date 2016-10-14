@@ -2,8 +2,11 @@ package com.lalocal.lalocal.net.callback;
 
 
 import com.android.volley.VolleyError;
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
@@ -22,6 +25,7 @@ import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -293,7 +297,10 @@ public abstract class ICallBack {
     //分享统计
     public void onShareStatistics(String json) {
     }
-    public void onGetUserLive(UserLiveItem item){
+    public void onGetUserLive(UserLiveItem item) {
+    }
+    //发起挑战
+    public void onChallengeInitiate( ChallengeDetailsResp.ResultBean resultBean) {
 
     }
     //发起挑战
@@ -304,7 +311,22 @@ public abstract class ICallBack {
     public void onChallengeDetails(String json) {
     }
     //主播操作挑战
-    public void onLiveChallengeStatus(String json) {
+    public void onLiveChallengeStatus(ChallengeDetailsResp.ResultBean resultBean) {
+    }
+    //挑战列表
+    public void onChallengeList(String json) {
+    }
+    //直播首页列表
+    public void onLiveHomeList(LiveHomeListResp liveListDataResp) {
+    }
+    //历史回放
+    public void onPlayBackList(String json) {
+    }
+    //直播地区分类
+    public void onLiveHomeArea(LiveHomeAreaResp liveHomeAreaResp) {
+    }
+    //历史回放详情
+    public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
     }
     public void onGetChannelRecord(ChannelRecord record){
 

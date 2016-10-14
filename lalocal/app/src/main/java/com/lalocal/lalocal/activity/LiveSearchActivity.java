@@ -69,6 +69,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
         liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor, R.drawable.searchbar_searchicon), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
+        liveSearchXrlv.setPullRefreshEnabled(false);
         liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.addOnScrollListener(new LiveSearchScorllListener());
         setLoaderCallBack(new LiveSearchCallBack());

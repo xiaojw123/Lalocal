@@ -19,6 +19,7 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.LiveCallengeAdapter;
 import com.lalocal.lalocal.view.LiveGiftAdapter;
+import com.lalocal.lalocal.view.decoration.LinearItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -79,6 +80,7 @@ public class LiveDetailActivity extends BaseActivity {
         liveDetailGiftRlv.setLayoutManager(new GridLayoutManager(this, 4));
         liveDetailChallengeList.setNestedScrollingEnabled(false);
         liveDetailChallengeList.setLayoutManager(new LinearLayoutManager(this));
+        liveDetailChallengeList.addItemDecoration(new LinearItemDecoration(this));
         if (item != null) {
             DrawableUtils.displayImg(this, liveDetailImg, item.getPhoto());
             liveDetailTitle.setText(item.getTitle());

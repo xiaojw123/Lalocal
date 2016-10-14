@@ -25,8 +25,11 @@ import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
@@ -48,6 +51,7 @@ import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -890,26 +894,71 @@ public class ContentLoader {
         requestQueue.add(request);
     }
     //挑战详情
-    public  void getChallengeDetails(String channelId,int status){
+    public  void getChallengeDetails(String challengeId){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_DEATILS);
         }
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+challengeId , response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //挑战列表
+    public  void getChallengeList(String channelId,int status){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHALLENGE_LIST);
+        }
         String url=channelId+(status==-1?"":("&status="+status));
-        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+url , response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeList()+url , response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
     //主播操作挑战
-    public void getLiveChallengeStatus(int challengeId,int status){
+    public void getLiveChallengeStatus(int status,int challengeId){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_CHALLENGE_STATUS);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getLiveChallengeStatus(challengeId,status), response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getLiveChallengeStatus(challengeId), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getChallengeStatusBodyParams(status));
         requestQueue.add(request);
     }
 
-
+    //直播地区列表
+    public  void getLiveArea(){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_AREA);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveArea(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //直播首页
+    public void getLivelist(String areaId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //历史直播
+    public  void getPlayBackLiveList(String areaId,int pageNumber){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //历史直播详情
+    public  void getPlayBackLiveDetails(int id){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_PALY_BACK_DETAILS);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLiveDetails(id), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
 
     //搜索关注粉丝
     public void getSearchUser(String nickName) {
@@ -983,13 +1032,19 @@ public class ContentLoader {
             this(Method.GET, url, listener, errorListener);
         }
 
-        @Override
+      /*  @Override
         public void setRetryPolicy(RetryPolicy retryPolicy) {
             super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        }
+        }*/
 
+        @Override
+        public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
+            return super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        }
 
         public ContentRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);
@@ -1385,14 +1440,30 @@ public class ContentLoader {
                         responseShareStatistics(json);
                         break;
                     case RequestCode.CHALLENGE_INITIATE:
-                        responseChallengeInitiate(json);
+                        responseChallengeInitiate(jsonObj);
                         break;
                     case RequestCode.CHALLENGE_DEATILS:
                         responseChallengeDetails(json);
                         break;
                     case RequestCode.LIVE_CHALLENGE_STATUS:
-                        responLiveChallengeIdStatus(json);
+                        responLiveChallengeIdStatus(jsonObj);
                         break;
+                    case RequestCode.CHALLENGE_LIST:
+                        responLiveChallengeList(json);
+                        break;
+                    case RequestCode.LIVE_AREA:
+                        responLiveArea(json);
+                        break;
+                    case RequestCode.LIVE_HOME_LIST:
+                        responListHomeList(json);
+                        break;
+                    case RequestCode.LIVE_PALY_BACK:
+                        responPlayBackLive(json);
+                        break;
+                    case RequestCode.LIVE_PALY_BACK_DETAILS:
+                        responPlayBackDetails(jsonObj);
+                        break;
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -2037,9 +2108,10 @@ public class ContentLoader {
         }
 
         //发起挑战
-        private void responseChallengeInitiate(String json) {
-
-            callBack.onChallengeInitiate(json);
+        private void responseChallengeInitiate(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
+            callBack.onChallengeInitiate(resultBean);
         }
 
         //挑战详情
@@ -2047,10 +2119,43 @@ public class ContentLoader {
             AppLog.i("TAG","挑战详情："+json);
             callBack.onChallengeDetails(json);
         }
+        //挑战列表
+        private void responLiveChallengeList(String json) {
+            AppLog.i("TAG","挑战列表："+json);
+            callBack.onChallengeList(json);
+        }
+
         //主播操作挑战
-        private void responLiveChallengeIdStatus(String json) {
-            AppLog.i("TAG","主播操作挑战："+json);
-            callBack.onLiveChallengeStatus(json);
+        private void responLiveChallengeIdStatus(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
+            callBack.onLiveChallengeStatus(resultBean);
+        }
+        //直播地区列表
+        private void responLiveArea(String json) {
+            AppLog.i("TAG","直播地区列表:"+json);
+            LiveHomeAreaResp liveHomeAreaResp = new Gson().fromJson(json, LiveHomeAreaResp.class);
+            callBack.onLiveHomeArea(liveHomeAreaResp);
+
+        }
+        //直播首页列表
+        private void responListHomeList(String json) {
+            LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
+            if (liveHomeListResp != null) {
+                callBack.onLiveHomeList(liveHomeListResp);
+            }
+        }
+
+        //历史直播
+        private void responPlayBackLive(String json) {
+            AppLog.i("TAG","历史直播:"+json);
+            callBack.onPlayBackList(json);
+        }
+        //历史直播详情
+        private void responPlayBackDetails(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            LiveRowsBean liveRowsBean = new Gson().fromJson(resultJson.toString(), LiveRowsBean.class);
+            callBack.onPlayBackDetails(liveRowsBean);
         }
 
 
@@ -2212,6 +2317,17 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("style", 0);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+    //主播操作挑战
+    private String getChallengeStatusBodyParams(int status) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("status",status);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2438,6 +2554,12 @@ public class ContentLoader {
         int CHALLENGE_INITIATE=232;
         int CHALLENGE_DEATILS=233;
         int LIVE_CHALLENGE_STATUS=234;
+        int CHALLENGE_LIST=235;
+        int LIVE_AREA=236;
+        int LIVE_HOME_LIST=237;
+        int LIVE_PALY_BACK=238;
+        int LIVE_PALY_BACK_DETAILS=239;
+
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

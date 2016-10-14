@@ -34,12 +34,10 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_remind_login_layout);
         initView();
-
     }
 
 
     private void initView() {
-
         LinearLayout overLive = (LinearLayout) findViewById(R.id.remind_over_live);
         LinearLayout continueLive = (LinearLayout) findViewById(R.id.remind_contiun_live);
         remindMetermine = (TextView) findViewById(R.id.remind_determine);

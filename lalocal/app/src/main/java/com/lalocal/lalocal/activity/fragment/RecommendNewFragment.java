@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -133,7 +132,6 @@ public class RecommendNewFragment extends BaseFragment {
         mRecommendAdapter = new HomeRecommendAdapter(getActivity(), mAdResultList, mRecommendListBeen, mArticleList, mPtrLayout);
         mAdapter = new RecyclerAdapterWithHF(mRecommendAdapter);
         mRecyclerView.setAdapter(mAdapter);
-
         // 加载数据以后显示加载更多
         mPtrLayout.setLoadMoreEnable(true);
         // 设置适配器

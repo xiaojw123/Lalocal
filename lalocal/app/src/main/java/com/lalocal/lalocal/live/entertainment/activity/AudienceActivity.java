@@ -1,15 +1,18 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.View;
@@ -27,11 +30,12 @@ import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
-import com.lalocal.lalocal.live.entertainment.model.ChallengeInitiateDataResp;
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResultBean;
@@ -78,7 +82,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.agora.rtc.Constants;
@@ -89,7 +92,9 @@ import io.agora.rtc.video.VideoCanvas;
 /**
  * 观众端
  * Created by hzxuwen on 2016/3/18.
+ * 日志聚合系统kids
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlayerProxy, View.OnLayoutChangeListener,GiftStorePopuWindow.OnSendClickListener {
     public static final String LIVE_SEARCH_ITEM = "live_search_item";
     private static final String TAG = AudienceActivity.class.getSimpleName();
@@ -105,9 +110,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     public static final String CHANNELID = "CHANNELID";
     public static final String CNAME="CNAME";
     public static final String STATUS="STATUS";
-    // view
-
-
     private Button sendGiftBtn;
 
     // 播放器
@@ -165,6 +167,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private AudienceCallBack audienceCallBack;
     private ContentLoader contentLoaderAudience;
     protected List<GiftDataResultBean> giftSresult;
+    private TextView challengeHint;
+    private LinearLayout challengeRaiseLayout;
+    private SurfaceView surfaceV;
 
     public static void start(Context context, LiveRowsBean liveRowsBean, String annoucement){
         Intent intent = new Intent();
@@ -198,7 +203,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   initAudienceParam();
         parseIntent();
         initView();
         registerObservers(true);
@@ -207,34 +211,24 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         contentLoaderAudience.setCallBack(audienceCallBack);
         contentLoaderAudience.liveGiftStore();
         loginIm();
-        postOnLineUser();
-
+       handler.postDelayed(new MyRunnable(),2000);
 
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);
         }
     }
+    private class MyRunnable implements Runnable {
 
-    private void postOnLineUser() {
-        if (timerOnLine == null) {
-            timerOnLine = new Timer(true);
-        }
-        timerOnLine.schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-
-                        AppLog.i("TAG", "用户获取在线人数：" + onlineCounts);
-                        if (onlineCounts > 0&&contentLoaderAudience!=null) {
-                            contentLoaderAudience.getAudienceUserOnLine(onlineCounts);
-
-                        }
-
+        @Override
+        public void run() {
+            handler.removeCallbacks(this);
+            if (onlineCounts > 0&&contentLoaderAudience!=null) {
+                contentLoaderAudience.getAudienceUserOnLine(onlineCounts);
             }
-        }, 1000, 2 * 1000);
+            handler.postDelayed(this, 2000);
+        }
 
     }
-
 
     private class AudienceCallBack extends ICallBack {
         @Override
@@ -298,19 +292,15 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         }
 
         @Override
-        public void onChallengeInitiate(String json) {
-            super.onChallengeInitiate(json);
-            ChallengeInitiateDataResp challengeInitiateDataResp = new Gson().fromJson(json, ChallengeInitiateDataResp.class);
-            if(challengeInitiateDataResp.getReturnCode()==0){
-
+        public void onChallengeInitiate( ChallengeDetailsResp.ResultBean resultBean) {
+            super.onChallengeInitiate(resultBean);
                 LiveMessage liveMessage = new LiveMessage();
                 liveMessage.setStyle(MessageType.challenge);
                 liveMessage.setUserId(userId);
                 liveMessage.setCreatorAccount(creatorAccount);
-                liveMessage.setChallengeModel(challengeInitiateDataResp.getResult());
+                liveMessage.setChallengeModel(resultBean);
                 IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "发起挑战", roomId, AuthPreferences.getUserAccount(), liveMessage);
-
-                sendMessage(imMessage, MessageType.onlineNum);
+                sendMessage(imMessage, MessageType.challenge);
                 final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
                 customDialog.setContent(getString(R.string.chanllage_initiate_hint));
                 customDialog.setCancelable(false);
@@ -321,7 +311,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     }
                 });
                 customDialog.show();
-            }
+
 
 
         }
@@ -409,6 +399,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     private void initView() {
         viewById = findViewById(R.id.live_layout);
         loadingPage = findViewById(R.id.live_loading_page);
+        BlurImageView blurView= (BlurImageView) loadingPage.findViewById(R.id.loading_page_bg);
+        blurView.setBlurImageURL(avatar);
+        blurView.setScaleRatio(20);
+        blurView.setBlurRadius(1);
         audienceOver.setVisibility(View.GONE);
         andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
@@ -745,8 +739,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
         });
 
-
-
     }
 
     protected void findViews() {
@@ -756,6 +748,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         clickPraise = (ImageView) findViewById(R.id.live_telecast_like);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
         liveSettingLayout = findViewById(R.id.setting_bottom_layout);
+        challengeHint = (TextView) findViewById(R.id.audience_hint_emcee_accept);
+        challengeRaiseLayout = (LinearLayout) findViewById(R.id.audience_challenge_raise_layout);
+        challengeRaiseLayout.setOnClickListener(buttonClickListener);
         liveSettingLayout.setVisibility(View.VISIBLE);
         liveSettingLayout.setClickable(true);
         ImageView settingBtn = (ImageView) findViewById(R.id.live_telecast_setting);
@@ -807,10 +802,27 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     protected void receiveChallengeMessage(ChatRoomMessage message) {
+        ChallengeDetailsResp.ResultBean messageToChallengeBean = MessageToBean.getMessageToChallengeBean(message);
+        if(messageToChallengeBean.getStatus()==1){
+            challengeHint.setVisibility(View.VISIBLE);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    challengeHint.setVisibility(View.GONE);
+                }
+            },1500);
 
-
-
+            challengeRaiseLayout.setVisibility(View.VISIBLE);
+        }
     }
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+        }
+    };
+
 
 
     boolean giftStoreFirstClick=true;
@@ -823,9 +835,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
 
                 case R.id.live_telecast_like:
-                    CustomChallengeRaiseDialog  customChallengeRaiseDialog=new CustomChallengeRaiseDialog(AudienceActivity.this);
 
-                    customChallengeRaiseDialog.show();
                     boolean logined = UserHelper.isLogined(AudienceActivity.this);
                     if (!logined) {
                         showLoginViewDialog();
@@ -842,15 +852,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     finishLive();
                     break;
                 case R.id.live_telecast_input_text:
-//                    boolean logineds = UserHelper.isLogined(AudienceActivity.this);
-//                    if (!logineds) {
-//                        showLoginViewDialog();
-//                    } else{
-//                        keyboardLayout.setAlpha(1.0f);
-//                        keyboardLayout.setClickable(true);
-//                        liveSettingLayout.setVisibility(View.GONE);
-//                        inputPanel.switchToTextLayout(true);
-//                    }
+
                     boolean logineds = UserHelper.isLogined(AudienceActivity.this);
                     if (!logineds) {
                         showLoginViewDialog();
@@ -895,6 +897,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         }
                     }
                     }
+                    break;
+                case R.id.audience_challenge_raise_layout://显示任务众筹卡片
+                    CustomChallengeRaiseDialog  customChallengeRaiseDialog=new CustomChallengeRaiseDialog(AudienceActivity.this);
+
+                    customChallengeRaiseDialog.show();
+
                     break;
 
             }
@@ -1256,10 +1264,15 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         }
         if (!liveEnd && !isAudienceOver) {
+            AppLog.i("TAG","主播回来了隐藏主播信息界面");
             isAudienceOver = true;
             loadingPage.setVisibility(View.GONE);
             audienceOver.setVisibility(View.GONE);
-
+            if ("1".equals(playType)) {
+                palyerLayout.addView(videoView);
+            }else {
+                doRenderRemoteUi(uid);
+            }
         }
     }
 
@@ -1270,7 +1283,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         rechargeDialog.setContent(getString(R.string.live_recharge_hint));
         rechargeDialog.setCancelable(false);
         rechargeDialog.setCancelBtn(getString(R.string.live_canncel), null);
-
         rechargeDialog.setSurceBtn("充值", new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
@@ -1350,26 +1362,22 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-
+        AppLog.i("TAG","接收远端视频解码回调:"+uid);
+        this.uid=uid;
         doRenderRemoteUi(uid);
-
-
     }
-
+    int uid;
     private void doRenderRemoteUi(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-                SurfaceView surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
+                surfaceV = RtcEngine.CreateRendererView(getApplicationContext());
                 int childCount = palyerLayout.getChildCount();
 
                 if(childCount>0){
                     palyerLayout.removeAllViews();
                 }
                 palyerLayout.addView(surfaceV);
-
-
                 surfaceV.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                     @Override
                     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -1386,7 +1394,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                 surfaceV.setZOrderOnTop(true);
                 surfaceV.setZOrderMediaOverlay(true);
-                Log.i("TAG","远端视频接收解码回调："+config().mUid+"   uid:"+uid);
                 rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置远端视频属性
 
               /*  if (config().mUid == uid) {
@@ -1413,6 +1420,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
+        AppLog.i("TAG","用户端走了:onJoinChannelSuccess");
 
     }
 

@@ -53,6 +53,17 @@
 
         >
 
+        <TextView
+            android:id="@+id/audience_hint_emcee_accept"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/live_padding_5dp"
+            android:text="主播接受了任务"
+            android:textColor="@android:color/white"
+            android:layout_centerInParent="true"
+            android:background="#cc000000"
+            android:gravity="center"
+            android:visibility="gone"/>
 
         <LinearLayout
             android:id="@+id/live_telecast_model_layout"
@@ -114,6 +125,19 @@
 
             </android.support.v7.widget.RecyclerView>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/audience_challenge_raise_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/live_padding_15dp"
+            android:layout_below="@+id/live_telecast_model_layout"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+           >
+            <include layout="@layout/challenge_raise_money_layout" />
+        </LinearLayout>
+
 
         <RelativeLayout
             android:id="@+id/audience_score_layout"

@@ -6,13 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.LiveRowsBean;
-import com.lalocal.lalocal.model.LiveUserBean;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -26,6 +23,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by android on 2016/7/18.
  */
 public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClickListener {
+
 
 
     private Context mContext;
@@ -43,27 +41,41 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         notifyDataSetChanged();
     }
 
+    //  DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, user.getAvatar());
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.live_mian_recy_item, parent, false);
+        View view = inflater.inflate(R.layout.live_list_item_new_layout, parent, false);
         LiveViewHodler holder = new LiveViewHodler(view);
         view.setOnClickListener(this);
         return holder;
     }
+
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
-       final LiveRowsBean liveRowsBean = rowsBeen.get(position);
-        liveViewHodler.liveTheme.setText(liveRowsBean.getTitle());
-        liveViewHodler.liveOnlineCountTv.setText(liveRowsBean.getOnlineUser() + "");
-        LiveUserBean user = liveRowsBean.getUser();
-        liveViewHodler.liveCompereHeadTv.setText(user.getNickName());
-        DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, user.getAvatar());
-        DrawableUtils.displayRadiusImg(mContext,liveViewHodler.liveCoverIv,liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext,3),R.drawable.androidloading);
+        final LiveRowsBean liveRowsBean = rowsBeen.get(position);
+        boolean challengeStatus = liveRowsBean.isChallengeStatus();
+      if(liveRowsBean.getStartAt()!=null&&liveRowsBean.getEndAt()!=null){
+            liveViewHodler.liveListItemStatus.setText("回放");
+            liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_playback_bg);
+        }else if(challengeStatus){
+          liveViewHodler.liveListItemStatus.setText("挑战任务中");
+          liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_challenge_bg);
+      }else {
+          liveViewHodler.liveListItemStatus.setText("直播中");
+          liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_living_bg);
+      }
+        liveViewHodler.itemLiveName.setText(liveRowsBean.getUser().getNickName());
+        if(liveRowsBean.getTitle()==null){
+            liveViewHodler.liveListItemTitle.setText(liveRowsBean.getUser().getNickName());
+        }else {
+            liveViewHodler.liveListItemTitle.setText(liveRowsBean.getTitle());
+        }
 
-
-
-        liveViewHodler.liveCoverIv.setOnClickListener(new View.OnClickListener() {
+        liveViewHodler.itemLiveAdress.setText(liveRowsBean.getAddress());
+        DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait,liveRowsBean.getUser().getAvatar());
+        DrawableUtils.displayImg(mContext, liveViewHodler.itemLiveCoverIv,liveRowsBean.getPhoto());
+        liveViewHodler.itemLiveCoverIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -73,7 +85,6 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
             }
         });
     }
-
 
 
     @Override
@@ -88,22 +99,19 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     }
 
     public class LiveViewHodler extends RecyclerView.ViewHolder {
-        @BindView(R.id.live_status)
-        TextView liveStatus;
-        @BindView(R.id.live_theme)
-        TextView liveTheme;
-        @BindView(R.id.live_online_count_tv)
-        TextView liveOnlineCountTv;
-        @BindView(R.id.live_compere_location)
-        TextView liveCompereLocation;
-        @BindView(R.id.live_people_layout)
-        LinearLayout livePeopleLayout;
+
+        @BindView(R.id.live_list_item_title)
+        TextView liveListItemTitle;
+        @BindView(R.id.live_list_item_status)
+        TextView liveListItemStatus;
+        @BindView(R.id.item_live_cover_iv)
+        ImageView itemLiveCoverIv;
         @BindView(R.id.live_compere_head_portrait)
         CircleImageView liveCompereHeadPortrait;
-        @BindView(R.id.live_compere_head_tv)
-        TextView liveCompereHeadTv;
-        @BindView(R.id.live_cover_iv)
-        ImageView liveCoverIv;
+        @BindView(R.id.item_live_name)
+        TextView itemLiveName;
+        @BindView(R.id.item_live_adress)
+        TextView itemLiveAdress;
 
         public LiveViewHodler(View itemView) {
             super(itemView);
@@ -115,7 +123,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     private OnLiveItemClickListener onLiveItemClickListener;
 
     public interface OnLiveItemClickListener {
-        void goLiveRoom( LiveRowsBean liveRowsBean);
+        void goLiveRoom(LiveRowsBean liveRowsBean);
     }
 
     public void setOnLiveItemClickListener(OnLiveItemClickListener onLiveItemClickListener) {
