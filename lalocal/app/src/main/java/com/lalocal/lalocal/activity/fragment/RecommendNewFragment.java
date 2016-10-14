@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,8 @@ public class RecommendNewFragment extends BaseFragment {
     private int mArticlePageSize = 10;
     private int mArticlePageNum = 1;
 
+    private boolean mScrolled = false;
+
     // 是否在刷新
     private boolean isRefreshing = false;
     // 是否在加载
@@ -89,25 +92,19 @@ public class RecommendNewFragment extends BaseFragment {
 //                    mRecommendAdapter.setListData(mRecommendListBeen);
                     break;
                 case GET_ARTICLE_LIST:
-                    AppLog.i("aaa", "GET_ARTICLE_LIST");
                     if (isRefreshing) {
-                        AppLog.i("aaa", "isRefreshing...");
                         isLoadingMore = false;
                         isRefreshing = false;
                         mPtrLayout.refreshComplete();
-                        AppLog.i("aaa", "refreshComplete...");
 //                        mRecommendAdapter.notifyDataSetChanged();
-                        AppLog.i("aaa", "adapter update");
                         setAdapter();
 //                        mPtrLayout.loadMoreComplete(false);
                         break;
                     }
                     if (isLoadingMore) {
-                        AppLog.i("aaa", "isLoading...");
                         isRefreshing = false;
                         isLoadingMore = false;
                         mRecommendAdapter.setArticleData(mArticleList);
-                        AppLog.i("aaa", "setArticleData...");
                         mPtrLayout.loadMoreComplete(true);
                         break;
                     }
@@ -116,12 +113,12 @@ public class RecommendNewFragment extends BaseFragment {
 //                    mRecommendAdapter.setArticleData(mArticleList);
                     break;
                 case NO_MORE_ARTICLE:
-                    AppLog.i("aaa", "NO_MORE_ARTICLE");
                     isRefreshing = false;
                     isLoadingMore = false;
                     mPtrLayout.loadMoreComplete(true);
                     mPtrLayout.setLoadMoreEnable(false);
-                    AppLog.i("aaa", "setLoadMOreEnable false");
+                    View bottomView = LayoutInflater.from(getActivity()).inflate(R.layout.load_more_layout, null);
+                    mRecyclerView.addView(bottomView);
                     Toast.makeText(getActivity(), "没有更多文章咯~", Toast.LENGTH_SHORT).show();
                     break;
             }
@@ -185,6 +182,8 @@ public class RecommendNewFragment extends BaseFragment {
         initRecyclerView();
         // 初始化ContentLoader
         initLoader();
+        // 滑动不加载图片
+//        scrollNotLoadPic();
     }
 
     /**
@@ -217,11 +216,13 @@ public class RecommendNewFragment extends BaseFragment {
         mPtrLayout.setPtrHandler(new com.chanven.lib.cptr.PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(com.chanven.lib.cptr.PtrFrameLayout frame) {
-                isRefreshing = true;
-                mPtrLayout.setLoadMoreEnable(true);
-                mContentLoader.recommendAd();
-
-
+                if (mPtrLayout != null && mAdapter != null) {
+                    isRefreshing = true;
+                    mPtrLayout.setLoadMoreEnable(true);
+                    mContentLoader.recommendAd();
+                } else {
+                    mPtrLayout.refreshComplete();
+                }
             }
         });
 
@@ -229,10 +230,8 @@ public class RecommendNewFragment extends BaseFragment {
         mPtrLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void loadMore() {
-                AppLog.i("aaa", "上拉加载");
                 isLoadingMore = true;
                 mArticlePageNum++;
-                AppLog.i("aaa", "page num " + mArticlePageNum);
                 mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
             }
         });
@@ -260,10 +259,39 @@ public class RecommendNewFragment extends BaseFragment {
 //        mContentLoader.articleList(10, 0);
     }
 
+    /**
+     * 滑动不加载图片
+     */
+//    private void scrollNotLoadPic() {
+//        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                switch (newState) {
+//                    case RecyclerView.SCROLL_STATE_IDLE: // 当前未滑动
+//                        if (mRecommendAdapter.getScrolling() && mScrolled) {
+//                            // 对于滚动不加载图片的尝试
+//                            mRecommendAdapter.setScrolling(false);
+//                            mAdapter.notifyDataSetChangedHF();
+//                        }
+//                        mScrolled = false;
+//                        break;
+//                    case RecyclerView.SCROLL_STATE_DRAGGING: // 开始拖拽
+//
+//                        break;
+//                    case RecyclerView.SCROLL_STATE_SETTLING: // 滑动到某个位置
+//
+//                        break;
+//                }
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//        });
+//
+//    }
+
     public class MyCallBack extends ICallBack {
 
         @Override
-        public void onRecommendAd(RecommendAdResp recommendAdResp) {
+        public void onRecommendAd(final RecommendAdResp recommendAdResp) {
             super.onRecommendAd(recommendAdResp);
             try {
                 if (recommendAdResp.getReturnCode() == 0) {
@@ -277,6 +305,7 @@ public class RecommendNewFragment extends BaseFragment {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+
         }
 
         /**
@@ -285,7 +314,7 @@ public class RecommendNewFragment extends BaseFragment {
          * @param recommendListDataResp
          */
         @Override
-        public void onRecommendList(RecommendListDataResp recommendListDataResp) {
+        public void onRecommendList(final RecommendListDataResp recommendListDataResp) {
             super.onRecommendList(recommendListDataResp);
             try {
                 if (recommendListDataResp.getReturnCode() == 0) {
@@ -299,33 +328,46 @@ public class RecommendNewFragment extends BaseFragment {
         }
 
         @Override
-        public void onArticleListResult(ArticlesResp articlesResp) {
+        public void onArticleListResult(final ArticlesResp articlesResp) {
             super.onArticleListResult(articlesResp);
             try {
                 if (articlesResp.getReturnCode() == 0) {
-                    AppLog.i("aaa", "article get return code 0");
                     // 获取首页推荐文章列表
                     ArticlesResultBean articlesResultBean = articlesResp.getResult();
                     List<ArticleDetailsResultBean> articleList = articlesResultBean == null ? null : articlesResultBean.getRows();
                     if (isLoadingMore) {
-                        AppLog.i("aaa", "load more");
                         if (articleList == null || articleList.size() == 0) {
-                            AppLog.i("aaa", "list null or 0");
                             mHanlder.sendEmptyMessage(NO_MORE_ARTICLE);
                             return;
                         } else {
-                            AppLog.i("aaa", "list not null, add new data");
                             mArticleList.addAll(articleList);
                         }
                     } else {
+//                        mArticleList.clear();
+//                        AppLog.i("refreshs", "1");
+//                        emptyArticleList();
+//                        AppLog.i("refreshs", "2");
+//                        mArticleList.addAll(articleList);
+//                        AppLog.i("refreshs", "3");
                         mArticleList = articleList;
-                        AppLog.i("aaa", "not load more, the list size is " + mAdResultList.size());
                     }
                     mHanlder.sendEmptyMessage(GET_ARTICLE_LIST);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 清空列表
+     */
+    private void emptyArticleList() {
+        AppLog.i("refreshs", "emptyArticleList");
+        AppLog.i("refresh", "list size is ");
+        for (int i = mArticleList.size() - 1; i >= 0; i++) {
+            AppLog.i("refreshs", "size = " + mArticleList.size() + ", position is " + i);
+            mArticleList.remove(i);
         }
     }
 }

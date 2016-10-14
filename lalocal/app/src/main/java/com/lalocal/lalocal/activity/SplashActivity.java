@@ -22,7 +22,7 @@ import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
 import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
@@ -57,6 +57,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     int totalTime = 0;
     SplashHandler mHandler;
     VersionResult result;
+
+    private boolean isNotJumpt = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +120,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
             mHandler.removeMessages(MSG_UPDATE_TIME);
         }
-        startHomePage();
+        if (isNotJumpt) {
+            startHomePage();
+        }
     }
 
     public class MyCallBack extends ICallBack {
@@ -156,7 +160,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         break;
                     case 21:
                         String enumValue = item.getEnumValue();
-                        CustomDialogStyle.LIVE_DEFINITION = Integer.parseInt(enumValue);
+                        LiveConstant.LIVE_DEFINITION = Integer.parseInt(enumValue);
                         break;
                 }
 
@@ -169,7 +173,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
             String photo = welcomeImg.getPhoto();
             if (TextUtils.isEmpty(photo)) {
-                startHomePage();
+                if (isNotJumpt) {
+                    startHomePage();
+                }
             } else {
                 totalTime = welcomeImg.getSecond();
                 Message message = mHandler.obtainMessage();
@@ -182,6 +188,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
 
     private void startHomePage() {
+        isNotJumpt = false;
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
         intent.putExtra(HomeActivity.VERSION_RESULT, result);
         startActivity(intent);
@@ -294,7 +301,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         if (hasMessages(MSG_UPDATE_TIME)) {
                             removeMessages(MSG_UPDATE_TIME);
                         }
-                        startHomePage();
+                        if (isNotJumpt) {
+                            startHomePage();
+                        }
                     }
                     break;
                 case MSG_DISPAY_IMG:
@@ -306,7 +315,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 case MSG_VERSION_UPDATE:
                     mContentloader.versionUpdate(AppConfig.getVersionName(SplashActivity.this));
                     break;
-
             }
         }
 
@@ -320,7 +328,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
             AppLog.print("onLoadingFailed____");
-            startHomePage();
+            if (isNotJumpt) {
+                startHomePage();
+            }
 
         }
 
@@ -333,7 +343,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onLoadingCancelled(String imageUri, View view) {
             AppLog.print("onLoadingCancelled_____");
-            startHomePage();
+            if (isNotJumpt) {
+                startHomePage();
+            }
         }
     }
 

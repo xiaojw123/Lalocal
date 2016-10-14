@@ -65,6 +65,9 @@ public class VersionResult implements Parcelable {
         this.msg = msg;
     }
 
+    public VersionResult() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -73,20 +76,21 @@ public class VersionResult implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeByte(this.forceFlag ? (byte) 1 : (byte) 0);
+        dest.writeString(this.apiUrl);
         dest.writeByte(this.checkUpdate ? (byte) 1 : (byte) 0);
         dest.writeString(this.downloadUrl);
-    }
-
-    public VersionResult() {
+        dest.writeStringList(this.msg);
     }
 
     protected VersionResult(Parcel in) {
         this.forceFlag = in.readByte() != 0;
+        this.apiUrl = in.readString();
         this.checkUpdate = in.readByte() != 0;
         this.downloadUrl = in.readString();
+        this.msg = in.createStringArrayList();
     }
 
-    public static final Parcelable.Creator<VersionResult> CREATOR = new Parcelable.Creator<VersionResult>() {
+    public static final Creator<VersionResult> CREATOR = new Creator<VersionResult>() {
         @Override
         public VersionResult createFromParcel(Parcel source) {
             return new VersionResult(source);

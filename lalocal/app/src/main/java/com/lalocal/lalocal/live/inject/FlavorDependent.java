@@ -10,7 +10,7 @@ import com.netease.nimlib.sdk.msg.attachment.MsgAttachmentParser;
 /**
  * Created by huangjun on 2016/3/15.
  */
-public class FlavorDependent implements IFlavorDependent{
+public class FlavorDependent implements IFlavorDependent {
     @Override
     public String getFlavorName() {
         return "entertainment";

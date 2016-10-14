@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.view.MyLiveAdapter;
+import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,20 +49,20 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
     @Override
     public void onLoadMore() {
-        if (pageNum<pageSize){
-            isLoadMore=true;
+        if (pageNum < pageSize) {
+            isLoadMore = true;
             ++pageNum;
 //            mContentloader.getUserLive(UserHelper.getUserId(this),pageNum);
-            mContentloader.getUserLive(9368,pageNum);
-        }else{
-            isLoadMore=false;
+            mContentloader.getUserLive(9368, pageNum);
+        } else {
+            isLoadMore = false;
             mXRecyclerView.setNoMore(true);
         }
 
 
     }
 
-    class LiveCallBack extends ICallBack {
+    class LiveCallBack extends ICallBack implements OnItemClickListener {
         List<UserLiveItem.RowsBean> rowsList = new ArrayList<>();
         MyLiveAdapter adapter;
 
@@ -71,22 +73,23 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
                 if (toalRows > 0) {
                     pageNum = item.getPageNumber();
                     pageSize = item.getPageSize();
-                    totalNumTv.setText("共"+item.getTotalRows()+"篇");
-                    if (isRefresh){
-                        isRefresh=false;
+                    totalNumTv.setText("共" + item.getTotalRows() + "篇");
+                    if (isRefresh) {
+                        isRefresh = false;
                         mXRecyclerView.refreshComplete();
                     }
                     if (isLoadMore) {
-                        isLoadMore=false;
+                        isLoadMore = false;
                         mXRecyclerView.setNoMore(true);
                     } else {
                         rowsList.clear();
                     }
                     rowsList.addAll(item.getRows());
-                    if (adapter==null){
-                        adapter=new MyLiveAdapter(rowsList);
+                    if (adapter == null) {
+                        adapter = new MyLiveAdapter(rowsList);
+                        adapter.setOnItemClickListener(this);
                         mXRecyclerView.setAdapter(adapter);
-                    }else{
+                    } else {
                         adapter.updateItems(rowsList);
                     }
                 } else {
@@ -96,13 +99,13 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
             }
         }
 
-        public void resetLoad(){
-            if (isRefresh){
-                isRefresh=false;
+        public void resetLoad() {
+            if (isRefresh) {
+                isRefresh = false;
                 mXRecyclerView.refreshComplete();
             }
             if (isLoadMore) {
-                isLoadMore=false;
+                isLoadMore = false;
                 mXRecyclerView.setNoMore(true);
             }
         }
@@ -116,6 +119,17 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         @Override
         public void onResponseFailed() {
             resetLoad();
+        }
+
+        @Override
+        public void onItemClickListener(View view, int position) {
+            UserLiveItem.RowsBean item = (UserLiveItem.RowsBean) view.getTag();
+            if (item != null) {
+                Intent intent = new Intent(MyLiveActivity.this, LiveDetailActivity.class);
+                intent.putExtra(LiveDetailActivity.LIVE_ITEM, item);
+                startActivity(intent);
+            }
+
         }
     }
 }

@@ -3,7 +3,6 @@ package com.lalocal.lalocal.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.StyleRes;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     String title, message, neturalText, sureText, cancelText;
     CustomDialogListener neutralBtnlistener, sureBtnLisener, cancelBtnListener;
     ViewGroup chooseContainer;
-    int style;
 
 
     public CustomDialog(Context context) {
@@ -34,21 +32,11 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         this.context = context;
     }
 
-    public CustomDialog(Context context, @StyleRes int themeResId, int style) {
-        super(context, themeResId);
-        this.context = context;
-        this.style = style;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (style == Style.STYLE_IOS) {
-            setContentView(R.layout.custom_dialog_2);
-        } else {
-            setContentView(R.layout.custom_dialog);
-
-        }
+        setContentView(R.layout.custom_dialog);
         initView();
 
     }
@@ -158,11 +146,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
         void onDialogClickListener();
     }
 
-   public interface Style {
-        public static final int STYLE_NOMORL = 0x11;
-        public static final int STYLE_IOS = 0x12;
-
-    }
 
 
 }

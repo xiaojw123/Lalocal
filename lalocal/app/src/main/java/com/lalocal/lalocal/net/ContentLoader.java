@@ -34,6 +34,7 @@ import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
@@ -116,6 +117,19 @@ public class ContentLoader {
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
     }
+
+    public void getChannelRecords(int id){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.CHANNEL_RECORDS);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getChannelRecords(id),response,response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+
+
+
+    }
+
     //获取用户直播
     public void getUserLive(int userid,int pageNum){
         if (callBack!=null){
@@ -863,8 +877,38 @@ public class ContentLoader {
         request.setBodyParams(getBodyParams(targetType, targetId, channelType));
         requestQueue.add(request);
 
-
     }
+
+    //发起挑战
+    public void getChallenge(String content,int targetGold, String  channelId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHALLENGE_INITIATE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getChallageInitiate(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getChallengeBodyParams(content,targetGold,channelId));
+        requestQueue.add(request);
+    }
+    //挑战详情
+    public  void getChallengeDetails(String channelId,int status){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHALLENGE_DEATILS);
+        }
+        String url=channelId+(status==-1?"":("&status="+status));
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+url , response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //主播操作挑战
+    public void getLiveChallengeStatus(int challengeId,int status){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_CHALLENGE_STATUS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getLiveChallengeStatus(challengeId,status), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
 
 
     //搜索关注粉丝
@@ -1095,6 +1139,9 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.CHANNEL_RECORDS:
+                        responseGetChannelRecords(jsonObj);
+                        break;
                     case RequestCode.USER_LIVE:
                         responseGetUserLive(jsonObj);
                         break;
@@ -1337,11 +1384,27 @@ public class ContentLoader {
                     case RequestCode.SHARE_STATISTICS:
                         responseShareStatistics(json);
                         break;
+                    case RequestCode.CHALLENGE_INITIATE:
+                        responseChallengeInitiate(json);
+                        break;
+                    case RequestCode.CHALLENGE_DEATILS:
+                        responseChallengeDetails(json);
+                        break;
+                    case RequestCode.LIVE_CHALLENGE_STATUS:
+                        responLiveChallengeIdStatus(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseGetChannelRecords(JSONObject jsonObj) {
+            Gson gson=new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            ChannelRecord record=gson.fromJson(json,ChannelRecord.class);
+            callBack.onGetChannelRecord(record);
         }
 
         private void responseGetUserLive(JSONObject jsonObj) {
@@ -1973,6 +2036,23 @@ public class ContentLoader {
             callBack.onShareStatistics(json);
         }
 
+        //发起挑战
+        private void responseChallengeInitiate(String json) {
+
+            callBack.onChallengeInitiate(json);
+        }
+
+        //挑战详情
+        private void responseChallengeDetails(String json) {
+            AppLog.i("TAG","挑战详情："+json);
+            callBack.onChallengeDetails(json);
+        }
+        //主播操作挑战
+        private void responLiveChallengeIdStatus(String json) {
+            AppLog.i("TAG","主播操作挑战："+json);
+            callBack.onLiveChallengeStatus(json);
+        }
+
 
         //取消关注
         private void responseCancelAttention(String json) {
@@ -2184,7 +2264,20 @@ public class ContentLoader {
         }
         return jsonObject.toString();
 
+    }
 
+    //发起挑战
+    private String getChallengeBodyParams(String content,int targetGold, String  channelId){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("content", content);
+            jsonObject.put("targetGold", targetGold);
+            jsonObject.put("channelId", channelId);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 
 
@@ -2307,6 +2400,7 @@ public class ContentLoader {
         int SEARCH_LIVE = 138;
         int EXCHARGE_COUPON = 139;
         int USER_LIVE=140;
+        int CHANNEL_RECORDS=150;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2339,9 +2433,11 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
-        int GET_ONLINE_COUNT = 230;
-        int SHARE_STATISTICS = 231;
-
+        int GET_ONLINE_COUNT=230;
+        int SHARE_STATISTICS=231;
+        int CHALLENGE_INITIATE=232;
+        int CHALLENGE_DEATILS=233;
+        int LIVE_CHALLENGE_STATUS=234;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

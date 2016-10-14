@@ -109,4 +109,20 @@
     <dimen name="home_recommend_article_img_height">160dp</dimen>
     <dimen name="ptr_header_height">160dp</dimen>
     <dimen name="cardview_margin">0dp</dimen>
+    <dimen name="novice_guide_vp_margin">48dp</dimen>
+    <dimen name="guide_vp_height">320dp</dimen>
+    <dimen name="report_close_bar_height">50dp</dimen>
+    <dimen name="report_close_btn_dimen">50dp</dimen>
+    <dimen name="report_close_btn_padding">16dp</dimen>
+    <dimen name="report_item_line_height">50dp</dimen>
+    <dimen name="report_item_padding_left_15dp">15dp</dimen>
+    <dimen name="report_divider_margin_left">45dp</dimen>
+    <dimen name="report_et_height">160dp</dimen>
+    <dimen name="report_et_padding_left">45dp</dimen>
+    <dimen name="report_et_padding_top">10dp</dimen>
+    <dimen name="report_et_padding_right">15dp</dimen>
+    <dimen name="report_et_padding_bottom">10dp</dimen>
+    <dimen name="report_item_margni_left">15dp</dimen>
+    <dimen name="dimen_size_16_dp">16dp</dimen>
+    <dimen name="homepage_playback_img_dimen">120dp</dimen>
 </resources>

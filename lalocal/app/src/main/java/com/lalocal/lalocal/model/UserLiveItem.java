@@ -1,5 +1,8 @@
 package com.lalocal.lalocal.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
@@ -78,7 +81,7 @@ public class UserLiveItem {
         this.rows = rows;
     }
 
-    public static class RowsBean {
+    public static class RowsBean implements Parcelable {
         private int id;
         private String startAt;
         private String endAt;
@@ -90,7 +93,28 @@ public class UserLiveItem {
         private String title;
         private int channelId;
         private int number;
+
+        public String getDate() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
+        }
+
+        private String liveLen;
+        private String date;
+
+        public String getLiveLen() {
+            return liveLen;
+        }
+
+        public void setLiveLen(String liveLen) {
+            this.liveLen = liveLen;
+        }
+
         /**
+
          * id : 9368
          * nickName : g郭黑化股份
          * email : liuyang@mddtrip.cn
@@ -262,5 +286,46 @@ public class UserLiveItem {
                 this.avatarOrigin = avatarOrigin;
             }
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeString(this.onlineNumber);
+            dest.writeString(this.photo);
+            dest.writeString(this.title);
+            dest.writeString(this.address);
+            dest.writeString(this.liveLen);
+            dest.writeString(this.date);
+        }
+
+        public RowsBean() {
+        }
+
+        protected RowsBean(Parcel in) {
+            this.id = in.readInt();
+            this.onlineNumber = in.readString();
+            this.photo = in.readString();
+            this.title = in.readString();
+            this.address = in.readString();
+            this.liveLen=in.readString();
+            this.date=in.readString();
+        }
+
+        public static final Parcelable.Creator<RowsBean> CREATOR = new Parcelable.Creator<RowsBean>() {
+            @Override
+            public RowsBean createFromParcel(Parcel source) {
+                return new RowsBean(source);
+            }
+
+            @Override
+            public RowsBean[] newArray(int size) {
+                return new RowsBean[size];
+            }
+        };
     }
 }

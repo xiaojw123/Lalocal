@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.MyArticleActivity;
 import com.lalocal.lalocal.activity.MyFavoriteActivity;
 import com.lalocal.lalocal.activity.MyLiveActivity;
 import com.lalocal.lalocal.activity.MyOrderActivity;
@@ -45,7 +46,7 @@ import butterknife.OnClick;
 
 /**
  * Created by xiaojw on 2016/6/3.
- * note: isRefresh更新
+ *
  */
 public class MeFragment extends BaseFragment {
     public static final int UPDAE_MY_WALLET = 0x01323;
@@ -287,10 +288,11 @@ public class MeFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_flow_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
+    @OnClick({R.id.home_me_item_artice,R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_flow_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_me_item_artice:
+                gotoMyItemPage(MyArticleActivity.class);
                 break;
             case R.id.home_me_username:
             case R.id.home_me_headportrait_img:

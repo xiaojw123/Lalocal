@@ -59,7 +59,6 @@
                     android:layout_alignTop="@+id/live_detail_img"
                     android:layout_marginLeft="@dimen/dimen_size_15_dp"
                     android:layout_toRightOf="@+id/live_detail_img"
-                    android:text="我正在南非给大家直播"
                     android:textColor="@color/color_1a"
                     android:textSize="@dimen/text_size_16_sp" />
 
@@ -72,9 +71,10 @@
                     android:layout_marginBottom="@dimen/dimen_size_4_dp"
                     android:drawableLeft="@drawable/pl_location_darkic"
                     android:drawablePadding="@dimen/dimen_size_4_dp"
-                    android:text="金州"
                     android:textColor="@color/color_b3"
-                    android:textSize="@dimen/text_size_12_sp" />
+                    android:textSize="@dimen/text_size_12_sp"
+                    android:visibility="gone"
+                    />
 
                 <TextView
                     android:id="@+id/live_detail_onlinenum"
@@ -85,7 +85,7 @@
                     android:layout_marginBottom="@dimen/dimen_size_4_dp"
                     android:drawableLeft="@drawable/manypeople_arkic"
                     android:drawablePadding="@dimen/dimen_size_4_dp"
-                    android:text="2010"
+                    android:text="0"
                     android:textColor="@color/color_b3"
                     android:textSize="@dimen/text_size_12_sp" />
 
@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_alignTop="@+id/live_detail_livelen"
-                    android:text="2016-09-12"
+                    android:text="00-00-00"
                     android:textColor="@color/color_b3"
                     android:textSize="@dimen/text_size_12_sp" />
 
@@ -139,14 +139,12 @@
                     android:background="@drawable/score" />
 
                 <TextView
-                    android:id="@+id/live_detail_scorenum_tv"
+                    android:id="@+id/live_detail_toalscore_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10,086"
+                    android:layout_marginLeft="@dimen/dimen_size_3_dp"
                     android:textColor="@color/color_1a"
                     android:textSize="@dimen/text_size_32_sp" />
-
-
             </LinearLayout>
 
             <RelativeLayout
@@ -177,12 +175,12 @@
                     android:textSize="@dimen/text_size_12_sp" />
 
                 <TextView
-                    android:id="@+id/live_detail_toal_score"
+                    android:id="@+id/live_detail_live_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:text="+1090"
+                    android:text="+0"
                     android:textColor="@color/color_ffaa2a"
                     android:textSize="@dimen/text_size_16_sp" />
             </RelativeLayout>
@@ -210,7 +208,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dimen_size_15_dp"
                     android:layout_marginTop="@dimen/dimen_size_19_dp"
-                    android:text="+11"
+                    android:text="+0"
                     android:textColor="@color/color_ffaa2a"
                     android:textSize="@dimen/text_size_16_sp" />
 
@@ -246,7 +244,7 @@
                     android:layout_marginBottom="@dimen/dimen_size_20_dp"
                     android:layout_marginRight="@dimen/dimen_size_15_dp"
                     android:layout_marginTop="@dimen/dimen_size_20_dp"
-                    android:text="111"
+                    android:text="+0"
                     android:textColor="@color/color_ffaa2a"
                     android:textSize="@dimen/text_size_16_sp" />
 

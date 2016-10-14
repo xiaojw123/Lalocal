@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--<item android:state_checked="true"-->
+        <!--android:drawable="@drawable/only_checkbox_sel" />-->
+
+    <!--<item android:state_window_focused="false"-->
+        <!--android:drawable="@drawable/only_checkbox_unsel" />-->
+
+    <item android:drawable="@drawable/only_checkbox_unsel" android:state_window_focused="false"/>
+
+    <item android:drawable="@drawable/only_checkbox_sel"
+        android:state_focused="false"
+        android:state_pressed="true"/>
+    <item android:drawable="@drawable/only_checkbox_sel"
+        android:state_focused="false"
+        android:state_checked="true"/>
+    <item android:drawable="@drawable/only_checkbox_sel"
+        android:state_focused="true"
+        android:state_checked="false"/>
+    <item android:drawable="@drawable/only_checkbox_sel"
+        android:state_focused="true"
+        android:state_checked="true"/>
+</selector>

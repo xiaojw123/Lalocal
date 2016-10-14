@@ -72,13 +72,20 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
                 if (!TextUtils.isEmpty(onlienNum)) {
                     itemHolder.onlineNumTv.setText(onlienNum);
                 }
+                String liveLen = "00:00:00";
                 if (!TextUtils.isEmpty(startAt) && !TextUtils.isEmpty(endAt)) {
-                    itemHolder.liveLenTv.setText(getLiveLen(startAt, endAt));
+                    liveLen = getLiveLen(startAt, endAt);
+                    itemHolder.liveLenTv.setText(liveLen);
                 }
                 if (!TextUtils.isEmpty(toalScore)) {
                     itemHolder.scoreNumTv.setText(toalScore);
 
                 }
+                item.setLiveLen(liveLen);
+                if (!TextUtils.isEmpty(endAt)) {
+                    item.setDate(endAt.substring(0, 10));
+                }
+                itemHolder.itemView.setTag(item);
             }
         }
 

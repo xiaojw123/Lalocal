@@ -92,6 +92,7 @@ public class MyApplication extends Application {
         // init demo helper
         DemoHelper.getInstance().init(this);
         //TODO:bugtags online delete
+
         if (isDebug){
         Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
         }

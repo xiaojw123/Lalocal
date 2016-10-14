@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -21,7 +22,10 @@ import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.wevey.selector.dialog.DialogOnClickListener;
+import com.wevey.selector.dialog.NormalAlertDialog;
+
+import java.util.List;
 
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
     public static final String VERSION_RESULT = "version_result";
@@ -32,6 +36,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
 
     private int selected = 0;
+
+    // 记录第一次点击back的时间
+    private long clickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +51,15 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
-        boolean flag = result.isForceFlag();
+        boolean forceFlag = result.isForceFlag();
         boolean checkUpdate = result.isCheckUpdate();
         String downLoadUrl = result.getDownloadUrl();
-//        flag = false;
-//        checkUpdate = true;
-//        downLoadUrl = "http://media.lalocal.cn/app/lalocal_2_1_2.apk";
+        String contentText = getUpdateContent(result.getMsg());
         if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
-            if (flag) {
-                update(downLoadUrl);
+            if (forceFlag) {
+                showForceUpdateDialog(downLoadUrl, contentText);
             } else {
-                showUpdateDialog(downLoadUrl);
+                showUpdateDialog(downLoadUrl, contentText);
             }
         }
 
@@ -199,14 +204,29 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         }
     }
 
-
-    private void showUpdateDialog(final String dowloadUrl) {
-        CustomDialog dialog=new CustomDialog(this,R.style.custom_dialog,CustomDialog.Style.STYLE_IOS);
-        dialog.setTitle("请更新至最新版本");
-        dialog.setMessage("更新内容：\n1.直播首页改版\n2.个人页面改版\n3.直播录制功能优化");
-        dialog.setSurceBtn("立即更新", new CustomDialog.CustomDialogListener() {
+    private void showForceUpdateDialog(final String dowloadUrl, String contentText) {
+        NormalAlertDialog.Builder builder = new NormalAlertDialog.Builder(this);
+        final NormalAlertDialog forceDailog = builder.setHeight(0.23f).setCancelable(false)  //屏幕高度*0.23
+                .setWidth(0.8f)  //屏幕宽度*0.65
+                .setTitleVisible(true)
+                .setTitleText("版本更新")
+                .setTitleTextColor(R.color.black_light)
+                .setContentText(contentText)
+                .setContentTextColor(R.color.black_light)
+                .setLeftButtonText("退出")
+                .setLeftButtonTextColor(R.color.color_8c)
+                .setRightButtonText("立即更新")
+                .setRightButtonTextColor(R.color.color_ffaa2a).build();
+        builder.setOnclickListener(new DialogOnClickListener() {
             @Override
-            public void onDialogClickListener() {
+            public void clickLeftButton(View view) {
+                forceDailog.dismiss();
+                System.exit(0);
+            }
+
+            @Override
+            public void clickRightButton(View view) {
+                forceDailog.dismiss();
                 if (Environment.getExternalStorageState().equals(
                         Environment.MEDIA_MOUNTED)) {
                     update(dowloadUrl);
@@ -216,34 +236,57 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 }
             }
         });
-        dialog.setCancelBtn("稍后更新",null);
-        dialog.show();
+        forceDailog.show();
+    }
 
-//
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle("请更新至最新版本");
-//        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                if (Environment.getExternalStorageState().equals(
-//                        Environment.MEDIA_MOUNTED)) {
-//                    update(dowloadUrl);
-//                } else {
-//                    Toast.makeText(HomeActivity.this, "无可用存储空间",
-//                            Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-//        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//
-//        });
-//        builder.create().show();
+    public String getUpdateContent(List<String> msgList) {
+        StringBuffer sb = new StringBuffer();
+        int len = msgList.size();
+        for (int i = 0; i < len; i++) {
+            String msg = msgList.get(i);
+            if (i == len - 1) {
+                sb.append(msg);
+            } else {
+                sb.append(msg + "\n");
+            }
+        }
+        return sb.toString();
+    }
+
+
+    private void showUpdateDialog(final String dowloadUrl, String contentText) {
+        NormalAlertDialog.Builder builder = new NormalAlertDialog.Builder(this);
+        final NormalAlertDialog normalDialog = builder.setHeight(0.23f)  //屏幕高度*0.23
+                .setWidth(0.8f)  //屏幕宽度*0.65
+                .setTitleVisible(true)
+                .setTitleText("版本更新")
+                .setTitleTextColor(R.color.black_light)
+                .setContentText(contentText)
+                .setContentTextColor(R.color.black_light)
+                .setLeftButtonText("稍候更新")
+                .setLeftButtonTextColor(R.color.color_8c)
+                .setRightButtonText("立即更新")
+                .setRightButtonTextColor(R.color.color_ffaa2a).build();
+        builder.setOnclickListener(new DialogOnClickListener() {
+            @Override
+            public void clickLeftButton(View view) {
+                normalDialog.dismiss();
+            }
+
+            @Override
+            public void clickRightButton(View view) {
+
+                normalDialog.dismiss();
+                if (Environment.getExternalStorageState().equals(
+                        Environment.MEDIA_MOUNTED)) {
+                    update(dowloadUrl);
+                } else {
+                    Toast.makeText(HomeActivity.this, "无可用存储空间",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        normalDialog.show();
     }
 
     private void update(String downLoadUrl) {
@@ -251,4 +294,27 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         task.execute(downLoadUrl);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    /**
+     * 2秒内连续点击back键，退出应用
+     */
+    private void exit() {
+        // 退出提示
+        if ((System.currentTimeMillis() - clickTime) > 2000) {
+            Toast.makeText(HomeActivity.this, "再按一次返回键退出应用", Toast.LENGTH_SHORT).show();
+            // 获取点击时间
+            clickTime = System.currentTimeMillis();
+        } else {
+            // 退出应用
+            this.finish();
+        }
+    }
 }

@@ -9,6 +9,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
@@ -293,6 +294,19 @@ public abstract class ICallBack {
     public void onShareStatistics(String json) {
     }
     public void onGetUserLive(UserLiveItem item){
+
+    }
+    //发起挑战
+    public void onChallengeInitiate(String json){
+
+        }
+    //挑战详情
+    public void onChallengeDetails(String json) {
+    }
+    //主播操作挑战
+    public void onLiveChallengeStatus(String json) {
+    }
+    public void onGetChannelRecord(ChannelRecord record){
 
     }
 }

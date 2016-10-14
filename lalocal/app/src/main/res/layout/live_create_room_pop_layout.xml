@@ -65,16 +65,16 @@
             android:layout_marginBottom="@dimen/author_padding_15dp"
             />
 
-      <!--  <TextView
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_12_sp"
             android:text="与好友分享眼前美景"
             android:textColor="@color/live_text_color"
             android:layout_marginTop="@dimen/live_padding_15dp"
-            android:layout_marginBottom="@dimen/live_padding_10dp"/>-->
+            android:layout_marginBottom="@dimen/live_padding_10dp"/>
 
-      <!--  <LinearLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_44dp"
             android:orientation="horizontal">
@@ -97,7 +97,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/create_live_share_weixin_selector" />
-        </LinearLayout>-->
+        </LinearLayout>
     </LinearLayout>
     </LinearLayout>
 

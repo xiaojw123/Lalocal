@@ -237,7 +237,9 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
             case R.id.seach_clear_btn:
 
                 liveAttentionSearchEt.setText("");
-                attentionOrFansAdapter.refresh(null);
+                if(attentionOrFansAdapter!=null){
+                    attentionOrFansAdapter.refresh(null);
+                }
                 searchClearBtn.setVisibility(View.GONE);
                 break;
         }

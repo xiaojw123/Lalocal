@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.BigPictureActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.adapter.LiveArticleVPAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
@@ -76,6 +79,21 @@ public class LiveHomePageActivity extends BaseActivity {
 
     @BindView(R.id.live_attention_homepage)
     RelativeLayout liveAttentionHomepage;
+
+    @BindView(R.id.tv_live)
+    TextView mTvLive;
+    @BindView(R.id.tv_article)
+    TextView mTvArticle;
+    @BindView(R.id.img_live_selected)
+    ImageView mImgLiveSelected;
+    @BindView(R.id.img_article_selected)
+    ImageView mImgArticleSelected;
+
+    @BindView(R.id.vp_live_article)
+    ViewPager mVpLiveArticle;
+
+    private LiveArticleVPAdapter mVPAdapter;
+
     private ContentLoader contentLoader;
     private String userId;
     private TextView popuCancel;
@@ -94,7 +112,42 @@ public class LiveHomePageActivity extends BaseActivity {
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(userId);
 
+        // 初始化直播、文章列表
+        initLiveArticle();
     }
+
+    /**
+     * 初始化直播、文章列表
+     */
+    private void initLiveArticle() {
+        if (mVPAdapter == null)
+            mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this);
+
+        // 设置适配器
+        mVpLiveArticle.setAdapter(mVPAdapter);
+
+        // 默认显示第一页（下标为0）
+        selecteTab(0);
+
+        // 设置vp滑动监听事件
+        mVpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                selecteTab(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == LoginActivity.REGISTER_OK) {
@@ -105,9 +158,7 @@ public class LiveHomePageActivity extends BaseActivity {
 
     }
 
-
-
-    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page,R.id.master_attention_layout})
+    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page, R.id.master_attention_layout, R.id.tv_article, R.id.tv_live})
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.homepage_attention_layout:
@@ -115,7 +166,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 intent.putExtra("liveType", "0");
                 intent.putExtra("userId", userId);
                 startActivity(intent);
-                if(back!=null){
+                if (back != null) {
                     finish();
                 }
                 break;
@@ -124,17 +175,17 @@ public class LiveHomePageActivity extends BaseActivity {
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
                 startActivity(intent1);
-                if(back!=null){
+                if (back != null) {
                     finish();
                 }
                 break;
 
             case R.id.personal_home_page:
-                BigPictureBean bean=new BigPictureBean();
-                 bean.setUserAvatar(true);
+                BigPictureBean bean = new BigPictureBean();
+                bean.setUserAvatar(true);
                 String avatarOrigin = result.getAvatarOrigin();
-                if(result.getAvatarOrigin()==null){
-                    avatarOrigin= result.getAvatar();
+                if (result.getAvatarOrigin() == null) {
+                    avatarOrigin = result.getAvatar();
                 }
                 bean.setImgUrl(avatarOrigin);
                 Intent intent2 = new Intent(this, BigPictureActivity.class);
@@ -145,19 +196,28 @@ public class LiveHomePageActivity extends BaseActivity {
                 break;
             case R.id.master_attention:
                 boolean isLogin = UserHelper.isLogined(LiveHomePageActivity.this);
-                if(isLogin){
+                if (isLogin) {
                     String text = (String) masterAttention.getText();
                     if ("关注".equals(text)) {
                         contentLoader.getAddAttention(userId);
                     } else {
                         showAttentionPopuwindow(userId);
                     }
-                }else{
+                } else {
 
                     showLoginViewDialog();
 
                 }
 
+                break;
+
+            case R.id.tv_live: // 他的直播
+                // 选中直播
+                selecteTab(TAB_LIVE);
+                break;
+            case R.id.tv_article: // 他的文章
+                // 选中文章
+                selecteTab(TAB_ARTICLE);
                 break;
         }
     }
@@ -171,7 +231,7 @@ public class LiveHomePageActivity extends BaseActivity {
             @Override
             public void onDialogClickListener() {
                 Intent intent = new Intent(LiveHomePageActivity.this, LoginActivity.class);
-                startActivityForResult(intent,LoginActivity.REGISTER_OK);
+                startActivityForResult(intent, LoginActivity.REGISTER_OK);
             }
         });
         customDialog.show();
@@ -218,9 +278,45 @@ public class LiveHomePageActivity extends BaseActivity {
         getWindow().setAttributes(lp);
     }
 
+    private static final int TAB_LIVE = 0;
+    private static final int TAB_ARTICLE = 1;
+
+    private void selecteTab(int whichTab) {
+        switch (whichTab) {
+            case TAB_LIVE:
+                // ContextCompat.getColor(this, R.color.color_1a)用来替代过时的getResources().getColor()
+                // 设置直播tab颜色为选中的颜色
+                mTvLive.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
+                // 显示直播选中标记
+                mImgLiveSelected.setVisibility(View.VISIBLE);
+                // 设置文章tab颜色为未选中的颜色
+                mTvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
+                // 隐藏文章选中标记
+                mImgArticleSelected.setVisibility(View.INVISIBLE);
+
+                // viewpager滑动到直播
+                mVpLiveArticle.setCurrentItem(TAB_LIVE);
+                break;
+            case TAB_ARTICLE:
+                // 设置直播tab颜色为未选中的颜色
+                mTvLive.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
+                // 隐藏直播选中标记
+                mImgLiveSelected.setVisibility(View.INVISIBLE);
+                // 设置文章tab颜色为选中的颜色
+                mTvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
+                // 显示文章选中标记
+                mImgArticleSelected.setVisibility(View.VISIBLE);
+
+                // viewpager滑动到文章
+                mVpLiveArticle.setCurrentItem(TAB_ARTICLE);
+                break;
+        }
+    }
+
     private int attentionNum;
     private int fansNum;
     private LiveUserInfoResultBean result;
+
     public class MyCallBack extends ICallBack {
 
         @Override
@@ -253,10 +349,10 @@ public class LiveHomePageActivity extends BaseActivity {
                     masterAttention.setText("关注");
                     masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
 
-                } else if(status==1) {
+                } else if (status == 1) {
                     masterAttention.setText("已关注");
                     masterAttention.setTextColor(Color.BLACK);
-                }else if(status==2){
+                } else if (status == 2) {
                     masterAttention.setText("已相互关注");
                     masterAttention.setTextColor(Color.BLACK);
                 }
@@ -277,7 +373,7 @@ public class LiveHomePageActivity extends BaseActivity {
                     fansNum = fansNum + 1;
                     homepageFansCount.setText(String.valueOf(fansNum));
                     masterAttention.setTextColor(Color.BLACK);
-                }else if(status==2){
+                } else if (status == 2) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已相互关注");
                     fansNum = fansNum + 1;
@@ -302,8 +398,6 @@ public class LiveHomePageActivity extends BaseActivity {
             }
         }
     }
-
-
 
 
 }

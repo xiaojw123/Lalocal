@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_dark">
+
+
+    <RelativeLayout
+        android:layout_width="120dp"
+        android:layout_height="160dp"
+        android:gravity="right"
+        android:layout_gravity="right"
+        android:layout_marginRight="@dimen/live_padding_10dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/live_padding_15dp"
+            android:layout_marginRight="@dimen/live_padding_5dp"
+            android:background="@drawable/challenge_raise_money_bg">
+
+            <TextView
+                android:id="@+id/challenge_raise_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="任务众筹中"
+                 android:textStyle="bold"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@color/color_ffaa2a"/>
+            <TextView
+                android:id="@+id/challenge_raise_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLength="20"
+                android:ellipsize="end"
+                android:paddingTop="@dimen/live_padding_5dp"
+                android:layout_below="@+id/challenge_raise_title"
+                android:textColor="@android:color/white"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                android:paddingRight="@dimen/live_padding_5dp"
+                android:text="去跳楼交水电费发斯蒂芬多架飞机是东方房间后付款方附件是东方航空是东方红可是对方会觉得"
+                android:textSize="@dimen/text_size_12_sp"
+                />
+
+            <TextView
+                android:id="@+id/challenge_raise_yue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="剩余"
+                android:textStyle="bold"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@android:color/white"
+                android:layout_below="@+id/challenge_raise_content"
+                android:paddingLeft="@dimen/live_padding_5dp"
+                />
+            <TextView
+                android:id="@+id/cchallenge_raise_need"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/monetary"
+                android:drawablePadding="@dimen/dimen_size_3_dp"
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:layout_below="@+id/challenge_raise_content"
+               android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/live_padding_5dp"
+                android:text="200"
+                />
+
+            <ProgressBar
+                android:id="@+id/challenge_raise_progress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_padding_12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:progressDrawable="@drawable/progresschart_end"
+
+                android:progress="0"
+                android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/task_time_light"
+            android:text="08:34"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dimen_size_3_dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/task_timetag"/>
+
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

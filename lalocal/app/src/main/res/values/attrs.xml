@@ -46,4 +46,13 @@
         <attr name="stroke_color" format="color"/>
     </declare-styleable>
 
+    <!-- 圆的颜色  弧形进度圈的颜色  圆的厚度  中间百分比文字的颜色 中间百分比文字的大小-->
+    <declare-styleable name="RoundProgress">
+        <attr name="roundColor" format="color"/>
+        <attr name="roundProgressColor" format="color"/>
+        <attr name="roundWidth" format="dimension"/>
+        <attr name="percentTextColor" format="color"/>
+        <attr name="percentTextSize" format="dimension"/>
+    </declare-styleable>
+
 </resources>

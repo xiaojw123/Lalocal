@@ -21,7 +21,6 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_12_sp"
         android:textColor="@color/color_7babbd"
-        android:text="太史慈"
         android:layout_toRightOf="@+id/item_challenge_avatar"
         android:layout_marginLeft="@dimen/dimen_size_10_dp"
         />
@@ -29,7 +28,6 @@
         android:id="@+id/item_chllenge_timepoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="10:10"
         android:layout_marginTop="@dimen/dimen_size_1_dp"
         android:layout_alignLeft="@id/item_challenge_username"
         android:textColor="@color/color_b3"
@@ -37,10 +35,9 @@
         android:layout_below="@+id/item_challenge_username"
         />
     <TextView
-        android:id="@+id/item_chllenge_descripton"
+        android:id="@+id/item_chllenge_content"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_chllenge_descripton_height"
-        android:text="主播先去买个冰箱，再去买个大象，然后把大象装进冰箱你就能获"
         android:layout_alignLeft="@+id/item_challenge_username"
         android:textColor="@color/color_8c"
         android:textSize="@dimen/text_size_15_sp"
@@ -53,7 +50,7 @@
         android:id="@+id/item_chllenge_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="+10098"
+        android:text="+0"
         android:textSize="@dimen/text_size_16_sp"
         android:textColor="@color/color_ffaa2a"
         android:layout_alignParentRight="true"

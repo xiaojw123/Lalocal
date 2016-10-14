@@ -179,12 +179,11 @@
 
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="category"
-            />
+            android:value="category" />
 
-        <!--<meta-data-->
-            <!--android:name="UMENG_CHANNEL"-->
-            <!--android:value="${CATEGORY}" />-->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_CHANNEL" -->
+        <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1e017a0e358e7dcc6793beda9888be87" />
@@ -270,7 +269,7 @@
 
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="4cbe3856032ad3755da23525e596405f" />
+            android:value="efc9614a32336704ec2577f2129929fb" />
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -317,8 +316,15 @@
         <activity android:name=".activity.MyFavoriteActivity" />
         <activity android:name=".activity.MyOrderActivity" />
         <activity android:name=".activity.PersonalIntroActivity" />
-        <activity android:name=".activity.MyLiveActivity"/>
-        <activity android:name=".activity.LiveDetailActivity"/>
+        <activity android:name=".activity.MyLiveActivity" />
+        <activity android:name=".activity.LiveDetailActivity" />
+        <!-- GlideModule -->
+        <meta-data
+            android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
+            android:value="GlideModule" />
+
+        <activity android:name=".live.entertainment.activity.ReportActivity" />
+        <activity android:name=".activity.MyArticleActivity"></activity>
     </application>
 
 </manifest>

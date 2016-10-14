@@ -87,7 +87,7 @@ public class LiveSearchUserActivity extends BaseActivity implements XListView.IX
     }
 
 
-    @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel,R.id.seach_clear_btn})
+    @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel, R.id.seach_clear_btn})
     public void clickButton(View view) {
         switch (view.getId()){
             case R.id.live_attention_search_et:

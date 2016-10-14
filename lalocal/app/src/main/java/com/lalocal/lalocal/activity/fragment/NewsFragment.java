@@ -11,10 +11,11 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LiveSearchActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -44,9 +46,10 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
-import com.lalocal.lalocal.view.adapter.LiveMainListAdapter;
+import com.lalocal.lalocal.view.adapter.LiveMainAdapter;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -72,7 +75,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private ContentLoader contentService;
     private ListView liveRecyclearView;
 //    private BlurImageView layoutBg;
-    private LiveMainListAdapter liveMainListAdapter;
+ //   private LiveMainListAdapter liveMainListAdapter;
     private List<LiveRowsBean> allRows = new ArrayList<LiveRowsBean>();
     private boolean isFirstLoad = true;//刷新列表
     boolean closeRegister = true;
@@ -85,6 +88,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private String createAvatar;
     private SpecialShareVOBean shareVOCreate;
     private FrameLayout liveSeachFl;
+    private XRecyclerView xRecyclerView;
+    private LiveMainAdapter liveMainAdapter;
+    private int pageNumber;
+    private int totalPages;
 
 
     @Override
@@ -92,6 +99,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
+        contentService.liveList(10, 1);
         requestBasicPermission(); // 申请APP基本权限
 
 
@@ -103,26 +111,55 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.home_news_layout, container, false);
         LinearLayout createLiveRoom = (LinearLayout) view.findViewById(R.id.live_create_room);
         createLiveRoom.setOnClickListener(this);
-        liveRecyclearView = (ListView) view.findViewById(R.id.live_recy_list);
-        View inflate = View.inflate(getActivity(), R.layout.listview_footerview, null);
-        liveRecyclearView.addHeaderView(inflate);
-        liveRecyclearView.addFooterView(inflate);
+
         //TODO:直播搜索 add by xiaojw
         TextView liveSearchTv = (TextView) view.findViewById(R.id.live_search_textview);
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         liveSeachFl.setOnClickListener(this);
+        contentService.liveList(10, 1);
+
+        xRecyclerView = (XRecyclerView) view.findViewById(R.id.xrecyclerview);
 
 
-    /*    XRecyclerView xRecyclerView= (XRecyclerView) view.findViewById(R.id.xrecyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        xRecyclerView.setLayoutManager(layoutManager);
-       */
-
+        initRecyclerView();
 
         return view;
     }
+
+
+    private void initRecyclerView() {
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        xRecyclerView.setLayoutManager(layoutManager);
+        XRecyclerviewLoadingListener xRecyclerviewLoadingListener = new XRecyclerviewLoadingListener();
+        xRecyclerView.setLoadingListener(xRecyclerviewLoadingListener);
+        xRecyclerView.setPullRefreshEnabled(true);
+        xRecyclerView.setLoadingMoreEnabled(true);
+        xRecyclerView.setRefreshing(true);
+
+
+        xRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+          @Override
+          public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+              super.onScrollStateChanged(recyclerView, newState);
+          }
+
+          @Override
+          public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+              super.onScrolled(recyclerView, dx, dy);
+              int top = xRecyclerView.getChildAt(0).getTop();
+              int i = DensityUtil.dip2px(getActivity(), 10);
+              if(Math.abs(top)>i){
+
+              }
+              AppLog.i("TAG","直播页面滚动监听:"+top);
+          }
+      });
+
+    }
+
 
     @NonNull
     private Drawable getTextColorDrawable(TextView liveSearchTv) {
@@ -151,9 +188,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
         super.onHiddenChanged(hidden);
         if (!hidden) {
-            isFirstLoad = true;
+          /*  isFirstLoad = true;
             allRows.clear();
-            contentService.liveList(10, 1);
+            contentService.liveList(10, 1);*/
+
         }
     }
 
@@ -190,30 +228,43 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private int liveUserId;
     private String createNickName;
     String createAnn = null;
+    boolean isRefresh=false;
 
     public class MyCallBack extends ICallBack {
 
         @Override
         public void onLiveList(LiveListDataResp liveListDataResp) {
             super.onLiveList(liveListDataResp);
-            firstLoadData=true;
-            List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
-
-            if (rows.size() > 0 && isFirstLoad) {
-                allRows.addAll(0, rows);
+            if(liveListDataResp.getReturnCode()==0){
+                List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
+                totalPages = liveListDataResp.getResult().getTotalPages();
+                if(rows==null){
+                    return;
+                }
+                if(isRefresh){
+                    allRows.clear();
+                }
+                if(allRows.size()==0){
+                    allRows.addAll(0, rows);
+                }else {
+                    allRows.addAll(allRows.size(), rows);
+                }
                 Collections.sort(allRows);//排序
-                initRecyclerView(allRows);//获取正在直播列表
-                isFirstLoad = false;
-
-            } else if (rows.size() > 0 && !isFirstLoad) {
-                if (rows.size() == 10) {
-                    pageSize = pageSize + rows.size();
-                    pageCount = pageCount + 1;
+                if(isFirstLoad){
+                    isFirstLoad=false;
+                    liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+                    xRecyclerView.setAdapter(liveMainAdapter);
+                    hotLiveItemClick();
+                }else {
+                    AppLog.i("TAG","直播页面刷新");
+                    liveMainAdapter.refresh(allRows);
                 }
 
-                allRows.addAll(allRows.size(), rows);
-                Collections.sort(allRows);
-                liveMainListAdapter.refresh(allRows);
+                if(isRefresh){
+                    xRecyclerView.refreshComplete();
+                }else {
+                    xRecyclerView.loadMoreComplete();
+                }
 
             }
 
@@ -244,8 +295,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 //初始化直播间
                 LiveActivity.start(getActivity(),result,createAnn,reminfBack);
             }
-
-
         }
 
 
@@ -261,21 +310,75 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
+    private void hotLiveItemClick() {
+        liveMainAdapter.setOnLiveItemClickListener(new LiveMainAdapter.OnLiveItemClickListener() {
+            @Override
+            public void goLiveRoom(LiveRowsBean liveRowsBean) {
+
+                roomId = liveRowsBean.getRoomId();
+                String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
+                String s = String.valueOf(roomId);
+                if (createRoom != null && createRoom.equals(s)) {
+                    CommonUtil.REMIND_BACK = 1;
+                    SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
+                    prepareLive();
+                    return;
+                }
+                Object annoucement = liveRowsBean.getAnnoucement();
+                String ann = null;
+                if (annoucement != null) {
+                    ann = annoucement.toString();
+                } else {
+                    ann = "这是公告哈";
+                }
+                SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
+                AudienceActivity.start(getActivity(),liveRowsBean,ann);
+            }
+        });
+
+
+    }
+
+
     private int pageCount = 2;
     private boolean isLoading = false;
     private int pageSize = 9;
 
-    private void initRecyclerView(final List<LiveRowsBean> rows) {
-        if (getActivity() != null) {
-            liveMainListAdapter = new LiveMainListAdapter(getActivity(), rows);
-            liveRecyclearView.setAdapter(liveMainListAdapter);
-            liveRecyclearView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+    public  class  XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
+
+        @Override
+        public void onRefresh() {
+            isRefresh=true;
+            contentService.liveList(10, 1);
+        }
+
+        @Override
+        public void onLoadMore() {
+            isRefresh=false;
+            if(pageCount<=totalPages){
+                contentService.liveList(10,pageCount);
+                ++pageCount;
+            }else{
+                xRecyclerView.loadMoreComplete();
+               // xRecyclerView.setIsnomore(true);
+            }
+
+        }
+
+    }
+
+
+
+    private void initRecyclerViewNew(List<LiveRowsBean> allRows) {
+        if(getActivity()!=null){
+            liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+            xRecyclerView.setAdapter(liveMainAdapter);
+            xRecyclerView.refreshComplete();
+            liveMainAdapter.setOnLiveItemClickListener(new LiveMainAdapter.OnLiveItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    if(position<1){
-                        return;
-                    }
-                    LiveRowsBean liveRowsBean = rows.get(position - 1);
+                public void goLiveRoom(LiveRowsBean liveRowsBean) {
+
                     roomId = liveRowsBean.getRoomId();
                     String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                     String s = String.valueOf(roomId);
@@ -295,12 +398,16 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
                     AudienceActivity.start(getActivity(),liveRowsBean,ann);
                 }
-
             });
 
-
         }
+
+
     }
+
+
+
+
 
     boolean isLogining = false;
 
@@ -432,26 +539,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         super.onStart();
         //注册监听
         registerObservers(true);
-        if (allRows != null) {
-            allRows.clear();
-        }
-        if(firstLoadData){
-            firstLoadData=false;
-            contentService.liveList(10, 1);
-        }
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                allRows.clear();
-                if(firstLoadData){
-                    firstLoadData=false;
-                    contentService.liveList(10, 1);
-                }
-
-            }
-        }, 1000 * 60 * 5);
-        AppLog.i("TAG", "onStart");
 
     }
 

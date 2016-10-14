@@ -11,7 +11,7 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/color_fa"
+        card_view:cardBackgroundColor="@color/color_fa"
         card_view:cardPreventCornerOverlap="false"
         app:cardCornerRadius="3dp"
         >
@@ -72,19 +72,20 @@
                 android:layout_marginTop="@dimen/home_hotlive_content_margin_vertical">
 
                 <ImageView
-                    android:id="@+id/icon_people"
+                    android:id="@+id/icon"
                     android:layout_width="@dimen/home_recommend_hotlive_user_icon_size"
                     android:layout_height="@dimen/home_recommend_hotlive_user_icon_size"
                     android:layout_centerVertical="true"
                     android:src="@drawable/many_people_light" />
 
                 <TextView
-                    android:id="@+id/tv_live_people"
+                    android:id="@+id/tv_icon_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="3dp"
-                    android:layout_toRightOf="@id/icon_people"
+                    android:singleLine="true"
+                    android:layout_toRightOf="@id/icon"
                     android:text="1,089" />
 
                 <com.lalocal.lalocal.live.im.ui.widget.CircleImageView

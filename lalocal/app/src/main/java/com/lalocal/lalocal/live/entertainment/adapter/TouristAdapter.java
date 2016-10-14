@@ -9,7 +9,6 @@ import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.LiveRowsBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
@@ -55,7 +54,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
       final ChatRoomMember member = items.get(position);
         MemberType memberType = member.getMemberType();
-        if(memberType==MemberType.ADMIN){
+        if(memberType== MemberType.ADMIN){
             liveViewHodler.managerMark.setVisibility(View.VISIBLE);
         }else{
             liveViewHodler.managerMark.setVisibility(View.GONE);

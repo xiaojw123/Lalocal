@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_dark">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/live_padding_20dp"
+        android:layout_marginRight="@dimen/live_padding_20dp"
+        android:layout_marginTop="@dimen/live_height_60dp"
+        android:layout_marginBottom="@dimen/live_height_60dp"
+        android:background="@drawable/popuwindow_bg"
+       >
+        <ImageView
+            android:id="@+id/chanllage_dialog_close_iv"
+            android:paddingTop="@dimen/live_padding_20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btnbg_close" />
+
+        <TextView
+            android:id="@+id/chanllenge_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始挑战"
+            android:gravity="center"
+            android:textColor="@color/color_ffaa2a"
+            android:layout_alignParentBottom="true"
+
+            />
+
+
+
+    </RelativeLayout>
+
+</LinearLayout>

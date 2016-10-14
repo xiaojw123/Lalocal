@@ -7,10 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.util.DrawableUtils;
+
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
