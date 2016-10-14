@@ -76,8 +76,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
 
     public void showLiveUserInfoPopuwindow(){
-        //    FrameLayout headerLayout = (FrameLayout) findViewById(R.id.custom_info_header_layout);
-        //   FrameLayout  goMainLayout = (FrameLayout) findViewById(R.id.go_main_layout);
+
         masterInfoHeadIv = (CircleImageView) findViewById(R.id.master_info_head_iv);
         masterInfoNickTv = (TextView)findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)findViewById(R.id.master_info_signature);

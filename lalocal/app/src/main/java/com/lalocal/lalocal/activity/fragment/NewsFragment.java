@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.activity.fragment;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.content.Intent;
@@ -14,34 +15,56 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.daimajia.slider.library.Indicators.PagerIndicator;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.ArticleActivity;
+import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.activity.LiveSearchActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.ProductDetailsActivity;
+import com.lalocal.lalocal.activity.RouteDetailActivity;
+import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.adapter.LiveClassifyGridViewAdapter;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
+import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
-import com.lalocal.lalocal.model.LiveListDataResp;
-import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.RecommendAdResp;
+import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -50,6 +73,7 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
+import com.lalocal.lalocal.view.DisallowParentTouchSliderLayout;
 import com.lalocal.lalocal.view.adapter.LiveMainAdapter;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -94,8 +118,21 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     private FrameLayout liveSeachFl;
     private XRecyclerView xRecyclerView;
     private LiveMainAdapter liveMainAdapter;
-    private int pageNumber;
+
     private int totalPages;
+    private TextView titleHot;
+    private LinearLayout hotContent;
+    private GridView gridView;
+    private LiveClassifyGridViewAdapter liveClassifyGridViewAdapter;
+    private LinearLayout searchLayout;
+    private RelativeLayout.LayoutParams lp;
+    private View viewCover;
+    private View inflate;
+    private DisallowParentTouchSliderLayout sliderLayout;
+    private TextView titleAttention;
+    private TextPaint paint2;
+    private TextPaint paint1;
+    private LinearLayout dotContainer;
 
 
     @Override
@@ -103,9 +140,10 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-        contentService.liveList(10, 1);
+        contentService.getLiveArea();
+        contentService.getLivelist(null);
+        contentService. recommendAd();
         requestBasicPermission(); // 申请APP基本权限
-
 
     }
 
@@ -115,54 +153,169 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.home_news_layout, container, false);
         LinearLayout createLiveRoom = (LinearLayout) view.findViewById(R.id.live_create_room);
         createLiveRoom.setOnClickListener(this);
-      //  liveRecyclearView = (ListView) view.findViewById(R.id.live_recy_list);
-      //  View inflate = View.inflate(getActivity(), R.layout.listview_footerview, null);
-    //    liveRecyclearView.addHeaderView(inflate);
-   //     liveRecyclearView.addFooterView(inflate);
+
+
         //TODO:直播搜索 add by xiaojw
         TextView liveSearchTv = (TextView) view.findViewById(R.id.live_search_textview);
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         liveSeachFl.setOnClickListener(this);
-
+        titleAttention = (TextView) view.findViewById(R.id.live_fragment_title_attention);
+        titleAttention.setOnClickListener(this);
+        titleHot = (TextView) view.findViewById(R.id.live_fragment_title_hot);
+        titleHot.setOnClickListener(this);
+        paint2 = titleAttention.getPaint();
+        paint1 = titleHot.getPaint();
         xRecyclerView = (XRecyclerView) view.findViewById(R.id.xrecyclerview);
+
+        FrameLayout headerContainer= (FrameLayout) view.findViewById(R.id.live_header_container);
+        headerContainer.bringToFront();
+
+        searchLayout = (LinearLayout) view.findViewById(R.id.live_search_layout);
+
+        lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        int i = DensityUtil.dip2px(getActivity(), 50);
+        lp.setMargins(0,i,0,0);
+        searchLayout.setLayoutParams(lp);
+
+
+        hotContent = (LinearLayout) view.findViewById(R.id.hot_content);
+        gridView = (GridView) view.findViewById(R.id.live_classify);
+
+        hotContent.bringToFront();
 
 
         initRecyclerView();
 
         return view;
     }
+    private void initGridView(final List<LiveHomeAreaResp.ResultBean> result) {
+        LiveHomeAreaResp.ResultBean resultBean = new LiveHomeAreaResp.ResultBean();
+        resultBean.setName("热门");
+        result.add(0,resultBean);
+        liveClassifyGridViewAdapter = new LiveClassifyGridViewAdapter(getActivity(),result );
+        gridView.setAdapter(liveClassifyGridViewAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView classifyItem= (TextView) view.findViewById(R.id.live_classify_item_tv);
+                LiveHomeAreaResp.ResultBean resultBean1 = result.get(position);
+                int id1 = resultBean1.getId();
+                titleHot.setText(resultBean1.getName());
+                paint1.setFakeBoldText(true);
+                liveClassifyGridViewAdapter.setSelectedPosition(position);
+                liveClassifyGridViewAdapter.notifyDataSetChanged();
+                if(allRows!=null){
+                    allRows.clear();
+                    pageNumber=1;
+                }
+                if(position==0){
+                    contentService.getLivelist(null);
+                }else {
+                    contentService.getLivelist(String.valueOf(id1));
+                }
 
+            }
+        });
 
+    }
+
+    int startScollYDistance=0;
+    boolean isFirstGetData=true;
+    int endScollYDistance=0;
     private void initRecyclerView() {
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         xRecyclerView.setLayoutManager(layoutManager);
+        initHeaderView();
         XRecyclerviewLoadingListener xRecyclerviewLoadingListener = new XRecyclerviewLoadingListener();
         xRecyclerView.setLoadingListener(xRecyclerviewLoadingListener);
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingMoreEnabled(true);
         xRecyclerView.setRefreshing(true);
-
-
         xRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
           @Override
           public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
               super.onScrollStateChanged(recyclerView, newState);
+              int scollYDistance = getScollYDistance();
+              if(scollYDistance>0&&isFirstGetData){
+                  startScollYDistance=scollYDistance;
+                  isFirstGetData=false;
+              }
+              AppLog.i("TAG","scollYDistance:"+scollYDistance);
+              if(!isClick){
+                  isClick=true;
+                  showClassifyView(0,isClick);
+              }
           }
 
           @Override
           public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
               super.onScrolled(recyclerView, dx, dy);
               int top = xRecyclerView.getChildAt(0).getTop();
+              int scollYDistance = getScollYDistance();
               int i = DensityUtil.dip2px(getActivity(), 10);
-              if(Math.abs(top)>i){
-
+              int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
+              AppLog.i("TAG","recyclerviw滑动距离监听："+top+"  scollYDistance:"+scollYDistance+"  scollDy:"+scollDy);
+              if(scollDy>0){
+                /*  lp.setMargins(0,DensityUtil.dip2px(getActivity(),scollDy),0,0);
+                  searchLayout.setLayoutParams(lp);*/
               }
-              AppLog.i("TAG","直播页面滚动监听:"+top);
+
+             /* if(Math.abs(top)>i){
+                  int abs = Math.abs(top);
+                  lp.setMargins(0,DensityUtil.px2dip(getActivity(),Math.abs(top)),0,0);
+                  searchLayout.setLayoutParams(lp);
+              }*/
+
           }
+
       });
+
+    }
+
+    private int getScollYDistance() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) xRecyclerView.getLayoutManager();
+        int position = layoutManager.findFirstVisibleItemPosition();
+        View firstVisiableChildView = layoutManager.findViewByPosition(position);
+        int itemHeight = firstVisiableChildView.getHeight();
+        return (position) * itemHeight - firstVisiableChildView.getTop();
+
+    }
+
+
+    private int[] imgs={R.drawable.a,R.drawable.loading_10,R.drawable.loading_01};
+    List<Button> dotBtns;
+    private static final int RECT = 0x01;
+    private static final int SQUARE = 0x02;
+    private int prePosition = -1;
+    private void initHeaderView() {
+        AppLog.i("TAG","给recycler添加头部");
+        inflate = View.inflate(getActivity(), R.layout.live_recommend_layout, null);
+        LinearLayout adContainer = (LinearLayout) inflate.findViewById(R.id.live_ad_container);
+        dotContainer = (LinearLayout) inflate.findViewById(R.id.live_dot_container);
+        sliderLayout = (DisallowParentTouchSliderLayout) inflate.findViewById(R.id.live_ad_slider);
+        sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
+        // 轮播图页面改变
+        sliderLayout.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                AppLog.i("TAG","轮播图显示page:"+position);
+                if(dotContainer.getChildAt(0)!=null){
+                    dotContainer.getChildAt(position).setBackgroundResource(
+                            R.drawable.icon_dot_selected);
+                    if(prePosition!=-1){
+                        dotContainer.getChildAt(prePosition ).setBackgroundResource(
+                                R.drawable.icon_dot_normal);
+                    }
+
+                    prePosition = position;
+                }
+
+            }
+        });
+        xRecyclerView.addHeaderView(inflate);
 
     }
 
@@ -194,10 +347,10 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
         super.onHiddenChanged(hidden);
         if (!hidden) {
-          /*  isFirstLoad = true;
-            allRows.clear();
-            contentService.liveList(10, 1);*/
-
+          /*  xRecyclerView.setPullRefreshEnabled(true);
+            xRecyclerView.setRefreshing(true);
+            isRefresh=true;
+            contentService.getLivelist(null);*/
         }
     }
 
@@ -214,6 +367,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         }
     };
 
+    boolean isClick=true;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -228,63 +382,90 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(getActivity(), LiveSearchActivity.class);
                 startActivity(intent);
                 break;
+            case R.id.live_fragment_title_hot:
+                if(isClick){
+                    isClick=false;
+                    showClassifyView(160,isClick);
+                }else{
+                    isClick=true;
+                    showClassifyView(0,isClick);
+                }
+                break;
+            case R.id.live_fragment_title_attention:
+                isClick=true;
+                showClassifyView(0,isClick);
+
+                paint2.setFakeBoldText(true);
+
+                titleHot.setCompoundDrawables(null,null,null,null);
+                paint1.setFakeBoldText(false);
+                Drawable drawable1 = getActivity().getResources().getDrawable(R.drawable.tab_morefanction_unsel);
+                drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
+                Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
+                drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
+                titleAttention.setCompoundDrawables(null,null,drawable1,drawable2);
+                break;
         }
     }
+
+   public void  showClassifyView(int height,boolean isClick){
+       ObjectAnimator objectAnimator=ObjectAnimator.ofInt(new WrapView(hotContent),"height",DensityUtil.dip2px(getActivity(),height));
+       objectAnimator.setDuration(300);
+       objectAnimator.start();
+      if(isClick){
+          Drawable drawable1 = getActivity().getResources().getDrawable(R.drawable.tab_morefanction_unsel);
+          drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
+          Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
+          drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
+          titleHot.setCompoundDrawables(null,null,drawable1,drawable2);
+
+      }else{
+          Drawable drawable1 = getActivity().getResources().getDrawable(R.drawable.tab_morefanction_sel );
+          drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
+          Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
+          drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
+          titleHot.setCompoundDrawables(null,null,drawable1,drawable2);
+      }
+       titleAttention.setCompoundDrawables(null,null,null,null);
+       paint2.setFakeBoldText(false);
+       paint1.setFakeBoldText(true);
+   }
+
+    class  WrapView{
+        private  View view;
+        private  int width;
+        private  int height;
+        public  WrapView(View view){
+            this.view=view;
+        }
+        public  int getWidth(){
+            return  view.getLayoutParams().width;
+        }
+        public  void setWidth(int width){
+            this.width=width;
+            view.getLayoutParams().width=width;
+            view.requestLayout();
+        }
+        public  int getHeight(){
+            return  view.getLayoutParams().height;
+        }
+        public  void setHeight(int height){
+            this.height=height;
+            view.getLayoutParams().height=height;
+            view.requestLayout();
+        }
+    }
+
 
     private int liveUserId;
     private String createNickName;
     String createAnn = null;
     boolean isRefresh=false;
-
+    int pageNumber=1;
+    boolean lastPage=false;
+    private List<RecommendAdResultBean> adResultList;
     public class MyCallBack extends ICallBack {
-
-        @Override
-        public void onLiveList(LiveListDataResp liveListDataResp) {
-            super.onLiveList(liveListDataResp);
-            if(liveListDataResp.getReturnCode()==0){
-                List<LiveRowsBean> rows = liveListDataResp.getResult().getRows();
-                totalPages = liveListDataResp.getResult().getTotalPages();
-                if(rows==null){
-                    return;
-                }
-                if(isRefresh){
-                    allRows.clear();
-                }
-                if(allRows.size()==0){
-                    allRows.addAll(0, rows);
-                }else {
-                    allRows.addAll(allRows.size(), rows);
-                }
-                Collections.sort(allRows);//排序
-                if(isFirstLoad){
-                    isFirstLoad=false;
-                    liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
-                    xRecyclerView.setAdapter(liveMainAdapter);
-                    hotLiveItemClick();
-                }else {
-                    AppLog.i("TAG","直播页面刷新");
-                    liveMainAdapter.refresh(allRows);
-                }
-
-                if(isRefresh){
-                    xRecyclerView.refreshComplete();
-                }else {
-                    xRecyclerView.loadMoreComplete();
-                }
-
-            }
-
-
-        }
-
-        @Override
-        public void onLiveRecommendList(LiveRecommendListDataResp liveRecommendListDataResp) {
-            super.onLiveRecommendList(liveRecommendListDataResp);
-
-        }
-
         String reminfBack = "0";
-
         @Override
         public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
             super.onCreateLiveRoom(createLiveRoomDataResp);
@@ -303,6 +484,115 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             }
         }
 
+        @Override
+        public void onLiveHomeList(LiveHomeListResp liveListDataResp) {
+            super.onLiveHomeList(liveListDataResp);
+            if(liveListDataResp.getReturnCode()==0){
+
+                List<LiveRowsBean> rows = liveListDataResp.getResult();
+                if(rows==null){
+                    return;
+                }
+                if(isRefresh){
+                    allRows.clear();
+                }
+                if(allRows.size()==0){
+                    allRows.addAll(0, rows);
+                }else {
+                    allRows.addAll(allRows.size(), rows);
+                }
+
+                Collections.sort(allRows);//排序
+                if(isFirstLoad){
+                    isFirstLoad=false;
+                    liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+                    AppLog.i("TAG","给recycler   liveMainAdapter");
+                    xRecyclerView.setAdapter(liveMainAdapter);
+                    hotLiveItemClick();
+                }else {
+                    liveMainAdapter.refresh(allRows);
+                }
+                contentService.getPlayBackLiveList(null,1);
+            }
+        }
+
+        @Override
+        public void onPlayBackList(String json) {
+            super.onPlayBackList(json);
+            LivePlayBackListResp livePlayBackListResp = new Gson().fromJson(json, LivePlayBackListResp.class);
+            if(livePlayBackListResp.getReturnCode()==0){
+                LivePlayBackListResp.ResultBean result = livePlayBackListResp.getResult();
+                pageNumber= result.getPageNumber()+1;
+                lastPage = result.isLastPage();
+                List<LiveRowsBean> rows = result.getRows();
+                if(rows==null){
+                    return;
+                }
+                allRows.addAll(allRows.size(), rows);
+                liveMainAdapter.refresh(allRows);
+                if(isRefresh){
+                    xRecyclerView.refreshComplete();
+                }else if(!lastPage){
+                    xRecyclerView.setNoMore(true);
+                }else {
+                    xRecyclerView.loadMoreComplete();
+                }
+            }
+
+        }
+
+        @Override
+        public void onLiveHomeArea(LiveHomeAreaResp liveHomeAreaResp) {
+            super.onLiveHomeArea(liveHomeAreaResp);
+            if(liveHomeAreaResp.getReturnCode()==0){
+                List<LiveHomeAreaResp.ResultBean> result = liveHomeAreaResp.getResult();
+                initGridView(result);
+            }
+        }
+
+        @Override
+        public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+            super.onPlayBackDetails(liveRowsBean);
+            PlayBackActivity.start(getActivity(),liveRowsBean);
+        }
+
+        @Override
+        public void onRecommendAd(RecommendAdResp recommendAdResp) {
+            super.onRecommendAd(recommendAdResp);
+            try {
+                if (recommendAdResp.getReturnCode() == 0) {
+                    // 获取广告数据
+                    adResultList = recommendAdResp.getResult();
+                    sliderLayout.removeAllSliders();
+                    for(int i=0;i<adResultList.size();i++){
+                        DefaultSliderView defaultSliderView = new DefaultSliderView(getActivity());
+                        defaultSliderView.image(adResultList.get(i).photo);
+                        defaultSliderView.setOnSliderClickListener(onSliderClickListener);
+                        sliderLayout.addSlider(defaultSliderView);
+
+                        View point = new View(getActivity());
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                15, 15);
+                        params.leftMargin = 20;
+                        point.setBackgroundResource(R.drawable.icon_dot_normal);
+                        point.setLayoutParams(params);
+                        // 为point设置标识,便于将来识别point
+                        point.setTag(i);
+                        dotContainer.addView(point);
+                    }
+                    dotContainer.getChildAt(0).setBackgroundResource(R.drawable.icon_dot_selected);
+                    RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    inflate.setLayoutParams(params);
+
+
+
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         @Override
         public void onLoginSucess(User user) {
@@ -316,29 +606,90 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
     }
 
+   private BaseSliderView.OnSliderClickListener onSliderClickListener= new BaseSliderView.OnSliderClickListener(){
+       @Override
+       public void onSliderClick(BaseSliderView slider) {
+           int position = sliderLayout.getCurrentPosition();
+           // 点击跳转
+           RecommendAdResultBean recommendAdResultBean = adResultList.get(position);
+           String url = recommendAdResultBean.url;
+           int targetType = recommendAdResultBean.targetType;
+           int targetId = recommendAdResultBean.targetId;
+           Intent intent = null;
+           switch (targetType) {
+               case Constants.TARGET_TYPE_URL:
+                   AppLog.i("addd", "链接");
+                   intent = new Intent(getActivity(), CarouselFigureActivity.class);
+                   intent.putExtra("carousefigure", recommendAdResultBean);
+                   getActivity().startActivity(intent);
+                   break;
+               case Constants.TARGET_TYPE_ARTICLE:
+                   AppLog.i("addd", "文章");
+                   intent = new Intent(getActivity(), ArticleActivity.class);
+                   intent.putExtra("targetID", String.valueOf(targetId));
+                   getActivity().startActivity(intent);
+                   break;
+               case Constants.TARGET_TYPE_PRODUCT:
+                   AppLog.i("addd", "产品--" + targetId);
+                   // 跳转到商品详情界面
+                   SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
+                   specialToH5Bean.setTargetId(71);
+
+                   intent = new Intent(getActivity(), ProductDetailsActivity.class);
+                   intent.putExtra("productdetails", specialToH5Bean);
+                   getActivity().startActivity(intent);
+                   break;
+               case Constants.TARGET_TYPE_ROUTE:
+                   AppLog.i("addd", "路线");
+                   intent = new Intent(getActivity(), RouteDetailActivity.class);
+                   intent.putExtra("detail_id", targetId);
+                   getActivity().startActivity(intent);
+                   break;
+               case Constants.TARGET_TYPE_THEME:
+                   AppLog.i("addd", "专题");
+                   intent = new Intent(getActivity(), SpecialDetailsActivity.class);
+                   intent.putExtra("rowId", targetId + "");
+                   getActivity().startActivity(intent);
+                   break;
+               case Constants.TARGET_TYPE_LIVE:
+                   // 跳转播放界面 TODO: 暂时不用做
+//                                AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                   break;
+           }
+       }
+   };
+
+
+
+
     private void hotLiveItemClick() {
         liveMainAdapter.setOnLiveItemClickListener(new LiveMainAdapter.OnLiveItemClickListener() {
             @Override
             public void goLiveRoom(LiveRowsBean liveRowsBean) {
 
-                roomId = liveRowsBean.getRoomId();
-                String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
-                String s = String.valueOf(roomId);
-                if (createRoom != null && createRoom.equals(s)) {
-                    CommonUtil.REMIND_BACK = 1;
-                    SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
-                    prepareLive();
-                    return;
+                if(liveRowsBean.getEndAt()!=null&&liveRowsBean.getStartAt()!=null){
+                    contentService.getPlayBackLiveDetails(liveRowsBean.getId());
+                }else {
+                    roomId = liveRowsBean.getRoomId();
+                    String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
+                    String s = String.valueOf(roomId);
+                    if (createRoom != null && createRoom.equals(s)) {
+                        CommonUtil.REMIND_BACK = 1;
+                        SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
+                        prepareLive();
+                        return;
+                    }
+                    Object annoucement = liveRowsBean.getAnnoucement();
+                    String ann = null;
+                    if (annoucement != null) {
+                        ann = annoucement.toString();
+                    } else {
+                        ann = "这是公告哈";
+                    }
+
+                    SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
+                    AudienceActivity.start(getActivity(),liveRowsBean,ann);
                 }
-                Object annoucement = liveRowsBean.getAnnoucement();
-                String ann = null;
-                if (annoucement != null) {
-                    ann = annoucement.toString();
-                } else {
-                    ann = "这是公告哈";
-                }
-                SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                AudienceActivity.start(getActivity(),liveRowsBean,ann);
             }
         });
 
@@ -356,63 +707,22 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onRefresh() {
             isRefresh=true;
-            contentService.liveList(10, 1);
+            contentService.getLivelist(null);
         }
 
         @Override
         public void onLoadMore() {
             isRefresh=false;
-            if(pageCount<=totalPages){
-                contentService.liveList(10,pageCount);
-                ++pageCount;
-            }else{
-                xRecyclerView.loadMoreComplete();
-               // xRecyclerView.setIsnomore(true);
+            if(lastPage){
+                xRecyclerView.setNoMore(true);
+            }else {
+                contentService.getPlayBackLiveList(null,pageNumber);
             }
 
-        }
-
-    }
-
-
-
-    private void initRecyclerViewNew(List<LiveRowsBean> allRows) {
-        if(getActivity()!=null){
-            liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
-            xRecyclerView.setAdapter(liveMainAdapter);
-            xRecyclerView.refreshComplete();
-            liveMainAdapter.setOnLiveItemClickListener(new LiveMainAdapter.OnLiveItemClickListener() {
-                @Override
-                public void goLiveRoom(LiveRowsBean liveRowsBean) {
-
-                    roomId = liveRowsBean.getRoomId();
-                    String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
-                    String s = String.valueOf(roomId);
-                    if (createRoom != null && createRoom.equals(s)) {
-                        CommonUtil.REMIND_BACK = 1;
-                        SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
-                        prepareLive();
-                        return;
-                    }
-                    Object annoucement = liveRowsBean.getAnnoucement();
-                    String ann = null;
-                    if (annoucement != null) {
-                        ann = annoucement.toString();
-                    } else {
-                        ann = "这是公告哈";
-                    }
-                    SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                    AudienceActivity.start(getActivity(),liveRowsBean,ann);
-                }
-            });
 
         }
 
-
     }
-
-
-
 
 
     boolean isLogining = false;
@@ -611,6 +921,11 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onStop() {
         super.onStop();
+        if(!isClick){
+
+            isClick=true;
+            showClassifyView(0,isClick);
+        }
         registerObservers(false);
         AppLog.i("TAG", "onStop");
     }

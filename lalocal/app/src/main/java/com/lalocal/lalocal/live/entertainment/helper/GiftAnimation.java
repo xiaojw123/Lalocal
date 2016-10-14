@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
+import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
@@ -52,7 +52,7 @@ public class GiftAnimation {
 
     // 收到礼物，等待显示动画
     public void showGiftAnimation(final ChatRoomMessage message) {
-        GiftBean giftBean = MessageToGiftBean.getMessageToGiftBean(message);
+        GiftBean giftBean = MessageToBean.getMessageToGiftBean(message);
         cache.add(giftBean);
         checkAndStart();
     }

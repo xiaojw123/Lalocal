@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_dark">
-
-
+    android:layout_width="110dp"
+    android:layout_height="150dp"
+    android:gravity="right"
+    android:layout_gravity="right"
+    android:layout_marginRight="@dimen/live_padding_10dp"
+   >
     <RelativeLayout
-        android:layout_width="120dp"
-        android:layout_height="160dp"
-        android:gravity="right"
-        android:layout_gravity="right"
-        android:layout_marginRight="@dimen/live_padding_10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         >
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/live_padding_15dp"
-            android:layout_marginRight="@dimen/live_padding_5dp"
-            android:background="@drawable/challenge_raise_money_bg">
+            android:layout_marginLeft="@dimen/live_padding_5dp"
+            android:background="@drawable/challenge_raise_money_bg"
+            >
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gift_sel">
             <TextView
                 android:id="@+id/challenge_raise_title"
                 android:layout_width="wrap_content"
@@ -29,7 +32,7 @@
                 android:paddingTop="@dimen/live_padding_10dp"
                 android:paddingLeft="@dimen/live_padding_5dp"
                 android:textSize="@dimen/text_size_12_sp"
-                android:textColor="@color/color_ffaa2a"/>
+                android:textColor="#f8e71c"/>
             <TextView
                 android:id="@+id/challenge_raise_content"
                 android:layout_width="wrap_content"
@@ -40,9 +43,10 @@
                 android:layout_below="@+id/challenge_raise_title"
                 android:textColor="@android:color/white"
                 android:paddingLeft="@dimen/live_padding_5dp"
-                android:paddingRight="@dimen/live_padding_5dp"
+
                 android:text="去跳楼交水电费发斯蒂芬多架飞机是东方房间后付款方附件是东方航空是东方红可是对方会觉得"
                 android:textSize="@dimen/text_size_12_sp"
+
                 />
 
             <TextView
@@ -73,15 +77,15 @@
                 android:text="200"
                 />
 
-            <ProgressBar
-                android:id="@+id/challenge_raise_progress"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/live_padding_12dp"
-                style="@android:style/Widget.ProgressBar.Horizontal"
-                android:progressDrawable="@drawable/progresschart_end"
+                <ProgressBar
+                    android:id="@+id/challenge_raise_progress"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/live_padding_12dp"
+                    style="@android:style/Widget.ProgressBar.Horizontal"
+                    android:progressDrawable="@drawable/progresschart_end"
+                    android:layout_alignParentBottom="true"/>
+        </RelativeLayout>
 
-                android:progress="0"
-                android:layout_alignParentBottom="true"/>
         </RelativeLayout>
         <TextView
             android:layout_width="wrap_content"

@@ -261,4 +261,12 @@
     <string name="live_sendgift_fail">赠送失败!</string>
     <string name="chanllage_initiate_hint">挑战已发起，请等待主播接受!</string>
     <string name="chanllage_initiate_ok">好</string>
+    <string name="challenge_complete_task">完成任务</string>
+    <string name="challenge_waive_task">放弃任务</string>
+    <string name="challenge_complete_content">如果没有完成任务却点了完成，这是对观众的一种欺骗，我们将冻结你的账户，请谨慎对待。</string>
+    <string name="challenge_waive_content">放弃任务将得不到乐钻奖励，并让你的观众失望。最重要的，你将有30分钟不能接受任务。</string>
+    <string name="challenge_dialog_cancel">我点错了</string>
+    <string name="challenge_dialog_complete">完成 !!!</string>
+    <string name="challenge_dialog_waive_ok">我意已决</string>
+    <string name="challenge_task_accept">任务已接受,请等待众筹乐钻!</string>
 </resources>

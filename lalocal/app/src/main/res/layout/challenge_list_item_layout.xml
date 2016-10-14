@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:id="@+id/challenge_list_item"
+    android:layout_marginBottom="@dimen/live_padding_20dp"
+  >
+    <TextView
+        android:id="@+id/challenge_list_item_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+       android:paddingBottom="@dimen/live_padding_5dp"
+        android:paddingLeft="@dimen/live_padding_15dp"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:text="正在进行（任务完成才能接受新任务）"/>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/challenge_list_item_status">
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/challenge_list_item_initiate_head"
+        android:layout_width="@dimen/live_height_36dp"
+        android:layout_height="@dimen/live_height_36dp"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="@dimen/live_padding_15dp"
+        android:src="@drawable/androidloading"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/live_padding_10dp"
+        android:layout_toRightOf="@+id/challenge_list_item_initiate_head">
+
+        <TextView
+            android:id="@+id/challenge_list_item_initiate_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="lalocal"
+            android:textColor="#7babbd"
+            android:paddingBottom="@dimen/live_padding_5dp"
+            android:textSize="@dimen/text_size_12_sp"/>
+        <TextView
+            android:id="@+id/challenge_list_item_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEW"
+            android:textScaleX="1.5"
+            android:layout_alignParentRight="true"
+            android:paddingBottom="@dimen/live_padding_5dp"
+            android:textColor="@android:color/holo_red_dark"
+            android:paddingRight="@dimen/live_padding_15dp"
+
+            android:textStyle="italic|bold"/>
+
+        <TextView
+            android:id="@+id/challenge_list_item_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_63dp"
+            android:gravity="center|left"
+            android:layout_below="@+id/challenge_list_item_initiate_name"
+            android:paddingRight="@dimen/live_padding_15dp"
+            android:lineSpacingExtra="@dimen/live_padding_3dp"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:text="手机发空间撒地方及水电费就输了房价上飞机上开了房间时发生的副驾驶的快捷方式的发送到,房价疯狂就分开交电费粉红色的激发客户说打开房间号多少复合防水的接口发顺丰"/>
+
+        <TextView
+            android:id="@+id/challenge_list_item_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/monetary"
+            android:drawablePadding="@dimen/live_padding_5dp"
+            android:textSize="@dimen/text_size_14_sp"
+            android:text="520"
+            android:paddingTop="@dimen/live_padding_15dp"
+            android:layout_below="@+id/challenge_list_item_content"
+            />
+
+        <TextView
+            android:id="@+id/chalenge_list_item_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="完成"
+            android:textSize="@dimen/text_size_14_sp"
+            android:paddingTop="@dimen/live_padding_15dp"
+            android:layout_below="@+id/challenge_list_item_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="@dimen/live_padding_15dp"
+            android:visibility="gone"
+            android:textColor="@color/color_ffaa2a"/>
+
+        <TextView
+            android:id="@+id/challenge_list_item_waive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_14_sp"
+            android:paddingTop="@dimen/live_padding_15dp"
+            android:layout_below="@+id/challenge_list_item_content"
+            android:paddingRight="@dimen/live_padding_22dp"
+            android:layout_toLeftOf="@+id/chalenge_list_item_complete"
+            android:visibility="gone"
+            android:text="放弃"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+
+
+</RelativeLayout>

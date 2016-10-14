@@ -319,6 +319,9 @@
         <activity android:name=".activity.LiveSearchActivity" />
         <activity android:name=".activity.MyCouponActivity"></activity>
         <activity android:name=".activity.ThemeActivity" />
+        <activity android:name=".live.entertainment.activity.LiveAttentionDemo">
+        </activity>
+        <activity android:name=".live.entertainment.activity.PlayBackActivity"></activity>
 
         <!--GlideModule-->
         <meta-data

@@ -59,7 +59,6 @@ public class ChallengeDetailsResp  {
         private int nowGold;
         private int status;
         private int channelId;
-
         private CreaterBean creater;
         private Object shareVO;
         private int score;

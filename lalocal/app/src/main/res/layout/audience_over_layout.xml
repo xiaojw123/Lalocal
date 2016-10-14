@@ -25,7 +25,6 @@
     <include layout="@layout/costom_live_popuwindow"></include>
 </LinearLayout>
 
-
     <LinearLayout
         android:id="@+id/master_info_back_home"
         android:layout_width="match_parent"

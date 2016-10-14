@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="live_padding_2dp">2dp</dimen>
+    <dimen name="live_padding_3dp">3dp</dimen>
     <dimen name="live_padding_5dp">5dp</dimen>
     <dimen name="live_padding_6dp">6dp</dimen>
     <dimen name="live_padding_8dp">8dp</dimen>
@@ -9,9 +10,12 @@
     <dimen name="live_padding_15dp">15dp</dimen>
     <dimen name="live_padding_20dp">20dp</dimen>
     <dimen name="live_padding_21dp">21dp</dimen>
+    <dimen name="live_padding_22dp">22dp</dimen>
     <dimen name="live_padding_24dp">24dp</dimen>
     <dimen name="live_padding_30dp">30dp</dimen>
     <dimen name="live_padding_48dp">48dp</dimen>
+    <dimen name="live_padding_55dp">55dp</dimen>
+    <dimen name="live_padding_124dp">124dp</dimen>
     <dimen name="live_over_padding_top">136dp</dimen>
     <dimen name="live_over_padding_left">110dp</dimen>
 
@@ -22,17 +26,23 @@
     <dimen name="live_height_40dp">40dp</dimen>
     <dimen name="live_height_44dp">44dp</dimen>
     <dimen name="live_height_50dp">50dp</dimen>
+    <dimen name="live_height_51dp">51dp</dimen>
     <dimen name="live_height_52dp">52dp</dimen>
     <dimen name="live_height_60dp">60dp</dimen>
+    <dimen name="live_height_63dp">63dp</dimen>
     <dimen name="live_height_66dp">66dp</dimen>
     <dimen name="live_height_80dp">80dp</dimen>
     <dimen name="live_height_81dp">81dp</dimen>
     <dimen name="live_height_70dp">70dp</dimen>
     <dimen name="live_height_90dp">90dp</dimen>
     <dimen name="live_height_100dp">100dp</dimen>
+    <dimen name="live_height_110dp">110dp</dimen>
     <dimen name="live_height_119dp">119dp</dimen>
     <dimen name="live_height_125dp">125dp</dimen>
+    <dimen name="live_height_147dp">147dp</dimen>
     <dimen name="live_height_150dp">150dp</dimen>
+    <dimen name="live_height_160dp">160dp</dimen>
+    <dimen name="live_height_210dp">210dp</dimen>
     <dimen name="live_height_220dp">220dp</dimen>
     <dimen name="live_height_250dp">250dp</dimen>
     <dimen name="live_height_320dp">320dp</dimen>

@@ -266,13 +266,35 @@ public class AppConfig {
         return  baseUrl+"challenges";
     }
 
-    //挑战详情 http://dev.lalocal.cn:8080/api/challenges?channelId=1&status=0
-    public static final String getChallengeDetails(){
+    //挑战列表 http://dev.lalocal.cn:8080/api/challenges?channelId=1&status=0 getChallengeList
+    public static final String getChallengeList(){
         return  baseUrl+"challenges?channelId=";
     }
     //主播操作挑战 http://dev.lalocal.cn:8080/api/challenges/6/status
-    public static final String getLiveChallengeStatus(int challengeId,int status){
-        return  baseUrl+"challenges/"+challengeId+"/"+status;
+    public static final String getLiveChallengeStatus(int challengeId){
+        return  baseUrl+"challenges/"+challengeId+"/status";
+    }
+    //挑战详情
+    public static final String getChallengeDetails(){
+        return baseUrl+"challenges";
+    }
+
+    //直播地区列表
+    public  static  final String getLiveArea(){
+        return baseUrl+"system/areas?channelFlag=true";
+    }
+    //直播首页 http://dev.lalocal.cn:8080/api/channels/index?area=2&attentionFlag=
+    public  static  final  String getLiveHotList(String areaId){
+        return  baseUrl+(areaId==null?"channels/index?area=":("channels/index?area="+areaId));
+    }
+    //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
+    public static final String getPlayBackLive(String areaId,int pageNumber){
+        return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+    }
+    //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
+    public  static final String getPlayBackLiveDetails(int id){
+
+        return baseUrl+"channels/historys/"+id;
     }
 
     public static String getBaseUrl() {

@@ -27,6 +27,72 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     private String address;
     private int number;
     private boolean challengeStatus;
+    private String startAt;
+    private String endAt;
+    private int totalScore;
+    private int onlineNumber;
+    private String videoUrl;
+    private int direction;
+    private int channelId;
+
+    public int getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(int channelId) {
+        this.channelId = channelId;
+    }
+
+    public String getStartAt() {
+        return startAt;
+    }
+
+    public void setStartAt(String startAt) {
+        this.startAt = startAt;
+    }
+
+    public String getEndAt() {
+        return endAt;
+    }
+
+    public void setEndAt(String endAt) {
+        this.endAt = endAt;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    public int getOnlineNumber() {
+        return onlineNumber;
+    }
+
+    public void setOnlineNumber(int onlineNumber) {
+        this.onlineNumber = onlineNumber;
+    }
+
+    public String getVideoUrl() {
+        return videoUrl;
+    }
+
+    public void setVideoUrl(String videoUrl) {
+        this.videoUrl = videoUrl;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
+
+
+
 
 
     public String getAddress() {
@@ -225,6 +291,13 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         dest.writeString(this.address);
         dest.writeInt(this.number);
         dest.writeByte(this.challengeStatus ? (byte) 1 : (byte) 0);
+        dest.writeString(this.startAt);
+        dest.writeString(this.endAt);
+        dest.writeInt(this.totalScore);
+        dest.writeInt(this.onlineNumber);
+        dest.writeString(this.videoUrl);
+        dest.writeInt(this.direction);
+        dest.writeInt(this.channelId);
     }
 
     protected LiveRowsBean(Parcel in) {
@@ -248,6 +321,13 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.address = in.readString();
         this.number = in.readInt();
         this.challengeStatus = in.readByte() != 0;
+        this.startAt = in.readString();
+        this.endAt = in.readString();
+        this.totalScore = in.readInt();
+        this.onlineNumber = in.readInt();
+        this.videoUrl = in.readString();
+        this.direction = in.readInt();
+        this.channelId = in.readInt();
     }
 
     public static final Creator<LiveRowsBean> CREATOR = new Creator<LiveRowsBean>() {

@@ -4,7 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_dark"
+
 >
 
     <RelativeLayout
@@ -73,8 +73,8 @@
 
         <com.lalocal.lalocal.live.entertainment.ui.RoundProgress
             android:id="@+id/challenge_raise_money_progress"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="@dimen/live_height_210dp"
+            android:layout_height="@dimen/live_height_210dp"
             android:layout_marginTop="@dimen/live_padding_30dp"
             android:layout_below="@+id/challenge_initiate_head"
             android:layout_centerInParent="true"
@@ -82,7 +82,7 @@
             app:percentTextSize="16sp"
             app:roundColor="@android:color/darker_gray"
             app:roundProgressColor="@android:color/holo_red_dark"
-            app:roundWidth="10dp">
+            app:roundWidth="@dimen/live_padding_15dp">
             >
 
         </com.lalocal.lalocal.live.entertainment.ui.RoundProgress>
@@ -122,6 +122,7 @@
             android:layout_height="wrap_content"
             android:hint="请输入众筹金额"
             android:textColorHint="@color/color_ffaa2a"
+            android:textCursorDrawable="@null"
             android:layout_above="@id/challenge_user_account_money"
             android:textColor="@color/color_ffaa2a"/>
 
