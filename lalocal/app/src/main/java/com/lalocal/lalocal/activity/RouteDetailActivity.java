@@ -41,6 +41,7 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.CustomViewPager;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.adapter.DayRouteApater;
@@ -55,7 +56,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoadedListener, View.OnClickListener {
+public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoadedListener, View.OnClickListener, CustomTitleView.onBackBtnClickListener {
     public static final String DETAILS_ID = "detail_id";
     private static final String FORMART_BETWEEN = "Day  %1$s - %2$s";
     RouteDetail mRouteDetail;
@@ -91,7 +92,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     HorizontalScrollView routeDetailHsv;
     @BindView(R.id.route_detail_btn_share)
     ImageView routeDetailBtnShare;
-    @BindView(R.id.route_detail_collect_sbtn)
+//    @BindView(R.id.route_detail_collect_sbtn)
     ShineButton likeBtn;
     @BindView(R.id.route_detail_buy)
     FrameLayout routeDetailBuy;
@@ -100,6 +101,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     int dayItemLeft, firstDayLeft;
     @BindView(R.id.route_detail_day_point)
     ImageView dayPointImg;
+    @BindView(R.id.route_detail_title)
+    CustomTitleView routeDetailTitle;
     Bundle savedInstanceState;
     DayRouteItemAdpater mItemAdapter;
 
@@ -110,6 +113,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         setContentView(R.layout.route_detail_layout);
         showLoadingAnimation();
         unbinder = ButterKnife.bind(this);
+        likeBtn=(ShineButton)findViewById(R.id.route_detail_collect_sbtn);
+        routeDetailTitle.setOnBackClickListener(this);
         this.savedInstanceState = savedInstanceState;
         dayItemLeft = (int) getResources().getDimension(R.dimen.dimen_size_36_dp);
         initLoader();
@@ -415,6 +420,17 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         }
         AppLog.print("setSelectItem___end_");
 
+    }
+
+    @Override
+    public void onBackClick() {
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+        super.onBackPressed();
     }
 
     class RouteDetailCallBack extends ICallBack {

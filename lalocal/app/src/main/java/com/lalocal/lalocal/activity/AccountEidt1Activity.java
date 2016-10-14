@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.FrameLayout;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,9 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -30,14 +35,9 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.FileUploadUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
-import com.lalocal.lalocal.live.permission.MPermission;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AccountEidt1Activity extends BaseActivity implements View.OnClickListener, PhotoSelectDialog.OnDialogClickListener, CustomTitleView.onBackBtnClickListener {
     public static final int UPDATE_ME_DATA = 301;
@@ -47,23 +47,26 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     private static final int MODIFY_USER_PROFILE = 4;
     private static final int LOGIN_RQEUST_CODE = 5;
     private File tempFile;
-    CircleImageView personalheader_civ;
+    ImageView personalheader_civ;
     RelativeLayout nickname_rlt;
     TextView nickaname_tv;
-    CheckBox boysex_cb, girlsex_cb;
-    FrameLayout boysex_fl, girlsex_fl;
     RelativeLayout email_rlt;
     RelativeLayout phone_rlt;
     TextView phone_tv;
     TextView areacode_tv;
     TextView email_tv;
+    TextView sex_tv;
     ContentLoader contentService;
     LoginUser user;
-    int sex = -1;
     boolean isEmailUpdate;
     Intent backIntent = new Intent();
     Bitmap bitmap;
     CustomTitleView customTitleView;
+    Dialog sexSelecorDialog;
+    RelativeLayout editsex_rlt;
+    TextView description_tv;
+    RelativeLayout description_rlt;
+
 
 
     @Override
@@ -92,27 +95,25 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
 
     private void initView() {
+        description_tv= (TextView) findViewById(R.id.acount_edit_description_text);
+        description_rlt= (RelativeLayout) findViewById(R.id.account_edit_description);
+        editsex_rlt =(RelativeLayout) findViewById(R.id.account_edit_sex);
+        sex_tv= (TextView) findViewById(R.id.account_edit_sex_text);
         customTitleView = (CustomTitleView) findViewById(R.id.account_eidt1_titleview);
-        personalheader_civ = (CircleImageView) findViewById(R.id.account_edit_personalheader);
+        personalheader_civ = (ImageView) findViewById(R.id.account_edit_personalheader);
         nickname_rlt = (RelativeLayout) findViewById(R.id.account_edit_nickname);
         nickaname_tv = (TextView) findViewById(R.id.account_edit_nickname_text);
-        boysex_fl = (FrameLayout) findViewById(R.id.accout_edit_boy_sex_fl);
-        girlsex_fl = (FrameLayout) findViewById(R.id.accout_edit_girl_sex_fl);
-        boysex_cb = (CheckBox) findViewById(R.id.accout_edit_boy_sex_cb);
-        girlsex_cb = (CheckBox) findViewById(R.id.accout_edit_girl_sex_cb);
         phone_rlt = (RelativeLayout) findViewById(R.id.account_edit_phone);
         areacode_tv = (TextView) findViewById(R.id.account_edit_areacode_text);
         phone_tv = (TextView) findViewById(R.id.acount_edit_phone_text);
         email_rlt = (RelativeLayout) findViewById(R.id.account_edit_email);
         email_tv = (TextView) findViewById(R.id.acount_edit_email_text);
+        editsex_rlt.setOnClickListener(this);
         personalheader_civ.setOnClickListener(this);
         nickname_rlt.setOnClickListener(this);
-        boysex_fl.setOnClickListener(this);
-        girlsex_fl.setOnClickListener(this);
-        boysex_cb.setOnClickListener(this);
-        girlsex_cb.setOnClickListener(this);
         phone_rlt.setOnClickListener(this);
         email_rlt.setOnClickListener(this);
+        description_rlt.setOnClickListener(this);
         customTitleView.setOnBackClickListener(this);
 
     }
@@ -121,6 +122,25 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.account_edit_description:
+                Intent desIntent=new Intent(this,PersonalIntroActivity.class);
+                String des=description_tv.getText().toString();
+                desIntent.putExtra(KeyParams.DESCRIPTON,des);
+                startActivityForResult(desIntent,MODIFY_USER_PROFILE);
+                break;
+
+            case R.id.account_edit_sex:
+                showSexSelectorDialog();
+                break;
+
+            case R.id.sex_selector_man_tv:
+                sexSelecorDialog.dismiss();
+                contentService.modifyUserProfile(null, 1, null, null, null, user.getId(), getToken());
+                break;
+            case R.id.sex_selector_woman_tv:
+                sexSelecorDialog.dismiss();
+                contentService.modifyUserProfile(null, 0, null, null, null, user.getId(), getToken());
+                break;
             case R.id.account_edit_personalheader:
                 PhotoSelectDialog dialog = new PhotoSelectDialog(this);
                 dialog.setButtonClickListener(this);
@@ -129,21 +149,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             case R.id.account_edit_nickname:
                 startEditIntent(AccountEidt2Activity.ACTION_NICKNAME_MODIFY);
                 break;
-            case R.id.accout_edit_boy_sex_fl:
-                AppLog.print("boy onclick___");
-                sex = 1;
-                girlsex_cb.setSelected(false);
-                boysex_cb.setSelected(true);
-                contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
-                break;
 
-            case R.id.accout_edit_girl_sex_fl:
-                sex = 0;
-                girlsex_cb.setSelected(true);
-                boysex_cb.setSelected(false);
-                AppLog.print("girl onclick___");
-                contentService.modifyUserProfile(null, sex, null, null, user.getId(), getToken());
-                break;
             case R.id.account_edit_phone:
                 startEditIntent(AccountEidt2Activity.ACTION_PHONE_MODIFY);
                 break;
@@ -273,6 +279,11 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 String nickname = data.getStringExtra(KeyParams.NICKNAME);
                 backIntent.putExtra(KeyParams.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
+            }else  if (resultCode==PersonalIntroActivity.RESULT_CODE_PERINTRO){
+                String descripton=data.getStringExtra(KeyParams.DESCRIPTON);
+                if (!TextUtils.isEmpty(descripton)){
+                    description_tv.setText(descripton);
+                }
             }
 
         } else if (requestCode == LOGIN_RQEUST_CODE) {
@@ -334,6 +345,14 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
 
     class CallBack extends ICallBack {
+        @Override
+        public void onModifyUserProfile(LoginUser user) {
+            if (user.isSex()) {
+                sex_tv.setText(getResources().getString(R.string.man));
+            } else {
+                sex_tv.setText(getResources().getString(R.string.woman));
+            }
+        }
 
         @Override
         public void onGetUserProfile(LoginUser user) {
@@ -357,11 +376,9 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             DrawableUtils.displayImg(this, personalheader_civ, user.getAvatar(), R.drawable.home_me_personheadnormal);
             nickaname_tv.setText(user.getNickName());
             if (user.isSex()) {
-                boysex_cb.setSelected(true);
-                girlsex_cb.setSelected(false);
+                sex_tv.setText(getResources().getString(R.string.man));
             } else {
-                girlsex_cb.setSelected(true);
-                boysex_cb.setSelected(false);
+                sex_tv.setText(getResources().getString(R.string.woman));
             }
             if (!TextUtils.isEmpty(user.getPhone())) {
                 AppLog.print("updateUser___areacode___" + user.getAreaCode());
@@ -377,7 +394,12 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         } else {
             email_tv.setText(user.getEmail());
         }
+        String descripton=user.getDescription();
+        if (!TextUtils.isEmpty(descripton)){
+            description_tv.setText(descripton);
+        }
         backIntent.putExtra(KeyParams.STATUS, status);
+
     }
 
     @Override
@@ -398,6 +420,23 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     @Override
     public void onBackClick() {
         setResult(UPDATE_ME_DATA, backIntent);
+    }
+
+    public void showSexSelectorDialog() {
+        if (sexSelecorDialog == null) {
+            sexSelecorDialog = new Dialog(this, R.style.test_dialog);
+            View view = View.inflate(this, R.layout.sex_selector_dialog, null);
+            ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            TextView manSelTv = (TextView) view.findViewById(R.id.sex_selector_man_tv);
+            TextView womanSelTv = (TextView) view.findViewById(R.id.sex_selector_woman_tv);
+            manSelTv.setOnClickListener(this);
+            womanSelTv.setOnClickListener(this);
+            sexSelecorDialog.setContentView(view,params);
+            Window dialogWindow = sexSelecorDialog.getWindow();
+            dialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            dialogWindow.setGravity(Gravity.BOTTOM);
+        }
+        sexSelecorDialog.show();
     }
 
 }

@@ -12,6 +12,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
@@ -46,6 +47,7 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -295,9 +297,16 @@ public abstract class ICallBack {
     //分享统计
     public void onShareStatistics(String json) {
     }
+    public void onGetUserLive(UserLiveItem item) {
+    }
     //发起挑战
     public void onChallengeInitiate( ChallengeDetailsResp.ResultBean resultBean) {
+
     }
+    //发起挑战
+    public void onChallengeInitiate(String json){
+
+        }
     //挑战详情
     public void onChallengeDetails(String json) {
     }
@@ -318,5 +327,8 @@ public abstract class ICallBack {
     }
     //历史回放详情
     public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+    }
+    public void onGetChannelRecord(ChannelRecord record){
+
     }
 }

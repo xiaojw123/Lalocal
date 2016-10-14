@@ -4,6 +4,7 @@ package com.lalocal.lalocal.help;
  * Created by xiaojw on 2016/6/16.
  */
 public interface KeyParams {
+    public static final  String DESCRIPTON="descriptoin";
     public static  final String EMAIL="email";
     public static final  String PHONE="phone";
     public static final  String AREA_Code="areaCode";

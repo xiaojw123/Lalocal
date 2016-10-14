@@ -8,6 +8,7 @@
     tools:context="com.lalocal.lalocal.activity.MyWalletActivity">
 
     <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/my_wallet_ctv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title_name="@string/my_wallet"

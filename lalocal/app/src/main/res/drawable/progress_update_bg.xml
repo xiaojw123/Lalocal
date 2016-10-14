@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background" android:height="@dimen/dimen_size_3_dp" android:drawable="@color/gray"/>
+    <item android:id="@android:id/progress" android:height="@dimen/dimen_size_3_dp">
+        <clip  android:drawable="@color/color_ffaa2a"/>
+    </item>
+</layer-list>

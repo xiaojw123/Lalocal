@@ -480,5 +480,18 @@ public class AppConfig {
         return baseUrl + "codes";
     }
 
+    //用户历史直播
+    public static  String getUserLiveUrl(int userid,int pageNum){
+
+        return  baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+
+    }
+    //用户明细
+    public static  String getChannelRecords(int id){
+
+        return  baseUrl+"channels/records/"+id;
+    }
+
+
 
 }

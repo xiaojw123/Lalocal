@@ -179,7 +179,11 @@
 
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${CATEGORY}" />
+            android:value="category" />
+
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_CHANNEL" -->
+        <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1e017a0e358e7dcc6793beda9888be87" />
@@ -294,7 +298,7 @@
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false" />
-        <activity android:name=".live.entertainment.activity.LiveHomePageActivity"></activity>
+        <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
             android:hardwareAccelerated="false"
@@ -309,16 +313,21 @@
         <activity android:name=".activity.LiveSearchActivity" />
         <activity android:name=".activity.MyCouponActivity" />
         <activity android:name=".activity.ThemeActivity" />
+        <activity android:name=".activity.MyFavoriteActivity" />
+        <activity android:name=".activity.MyOrderActivity" />
+        <activity android:name=".activity.PersonalIntroActivity" />
+        <activity android:name=".activity.MyLiveActivity" />
+        <activity android:name=".activity.LiveDetailActivity" />
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo">
         </activity>
         <activity android:name=".live.entertainment.activity.PlayBackActivity"></activity>
-
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
 
-        <activity android:name=".live.entertainment.activity.ReportActivity"></activity>
+        <activity android:name=".live.entertainment.activity.ReportActivity" />
+        <activity android:name=".activity.MyArticleActivity"></activity>
     </application>
 
 </manifest>

@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecommendNewFragment extends Fragment {
+public class RecommendNewFragment extends BaseFragment {
 
     private View mContentView;
 

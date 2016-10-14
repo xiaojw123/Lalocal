@@ -40,18 +40,18 @@ android {
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/2'] } }
     //渠道Flavors，配置不同风格的app
-    productFlavors {
-        _360 {}
-        baidu {}
-        huawei {}
-        xiaomi {}
-        tencent {}
-        wandoujia {}
-    }
+//    productFlavors {
+//        _360 {}
+//        baidu {}
+//        huawei {}
+//        xiaomi {}
+//        tencent {}
+//        wandoujia {}
+//    }
     //批量配置
-    productFlavors.all { flavor ->
-        flavor.manifestPlaceholders = [CATEGORY: name]
-    }
+//    productFlavors.all { flavor ->
+//        flavor.manifestPlaceholders = [CATEGORY: name]
+//    }
 
     sourceSets {
         main {
@@ -87,8 +87,10 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
+    //    compile 'com.lai.weavey:dialog:1.1'
     compile project(path: ':gifviewlibrary')
     compile project(':xrecyclerview')
+    compile project(':selectordialog')
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:percent:22.2.0'
 }
@@ -136,7 +138,7 @@ repositories {
     }
 }
 dependencies {
-    compile(name:'videoprp', ext:'aar')
+    compile(name: 'videoprp', ext: 'aar')
     compile project(path: ':galleryfinal')
 }
 

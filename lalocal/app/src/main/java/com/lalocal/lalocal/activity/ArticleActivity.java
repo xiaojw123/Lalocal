@@ -27,7 +27,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
+import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.PariseResult;
@@ -39,8 +40,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
-import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
-import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
 import java.io.File;
@@ -52,7 +51,7 @@ import java.io.IOException;
 /**
  * Created by lenovo on 2016/6/21.
  */
-public class ArticleActivity extends BaseActivity implements View.OnClickListener{
+public class ArticleActivity extends BaseActivity implements View.OnClickListener {
     private WebView articleWebview;
     private ShineButton btnLike;
     private ImageView btnComment;
@@ -105,7 +104,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         btnLike.setImageResource(R.drawable.index_article_btn_like);
 
 
-
         //点击事件
         backBtn.setOnClickListener(this);
         btnLike.setOnClickListener(this);
@@ -119,7 +117,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.article_common_back_btn:
                 AppLog.print("onclick___");
-                setResult(MeFragment.UPDATE_MY_DATA);
+                setResult(MyFavoriteActivity.UPDATE_MY_DATA);
                 finish();
                 break;
 
@@ -140,11 +138,11 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 if (praiseFlag && praiseId != null) {
                     contentService.cancelParises(praiseId, Integer.parseInt(targetID));//取消赞
                 } else {
-                    contentService.specialPraise(Integer.parseInt(targetID), 1);
+                    contentService.specialPraise(Integer.parseInt(targetID), articleDetailsRespResult.getTargetType());
                 }
                 break;
             case R.id.author_code_close:
-              pw.dismiss();
+                pw.dismiss();
                 break;
             case R.id.author_code_download:
 
@@ -152,12 +150,11 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
                     image = ((BitmapDrawable) authorCodeImg.getDrawable()).getBitmap();
 
-                   if(fileIsExists()){
-                       Toast.makeText(mContext,"已下载过啦！",Toast.LENGTH_SHORT).show();
-                   }else {
-                       saveImageToGallery(mContext, image);//保存图片到相册
-                   }
-
+                    if (fileIsExists()) {
+                        Toast.makeText(mContext, "已下载过啦！", Toast.LENGTH_SHORT).show();
+                    } else {
+                        saveImageToGallery(mContext, image);//保存图片到相册
+                    }
 
 
                 }
@@ -169,25 +166,25 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
     private void showShare(SpecialShareVOBean shareVO) {
 
-        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO,targetID);
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO, targetID);
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
                 Gravity.CENTER, 0, 0);
     }
 
     //判断二维码是否下载过
-    public boolean fileIsExists(){
+    public boolean fileIsExists() {
 
-        try{
+        try {
 
             File appDir = new File(Environment.getExternalStorageDirectory(), "ywq");
-            String fileName =authorVO.authorId + ".jpg";
+            String fileName = authorVO.authorId + ".jpg";
             File file = new File(appDir, fileName);
-            if(!file.exists()){
+            if (!file.exists()) {
                 return false;
             }
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             // TODO: handle exception
             return false;
         }
@@ -216,7 +213,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 praiseFlag = articleDetailsRespResult.isPraiseFlag();
                 String photo = articleDetailsRespResult.getPhoto();
                 userId = articleDetailsResp.getResult().getId();
-                if(photo!=null){
+                if (photo != null) {
                     blurImageView.setBlurImageURL(photo);
                     blurImageView.setBlurRadius(1);
                     blurImageView.setScaleRatio(20);
@@ -247,7 +244,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
             if (pariseResult.getReturnCode() == 0) {
                 praiseFlag = false;
                 btnLike.setChecked(false);
-                praiseNum= praiseNum - 1;
+                praiseNum = praiseNum - 1;
                 collectTv.setText(" · 收藏 " + praiseNum);
 
             }
@@ -261,13 +258,12 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
                 praiseId = pariseResult.getResult();
                 praiseFlag = true;
                 btnLike.setChecked(true);
-                praiseNum=praiseNum + 1;
+                praiseNum = praiseNum + 1;
                 collectTv.setText(" · 收藏 " + praiseNum);
 
             }
         }
     }
-
 
 
     private void showReadAndCollect(int praiseNum, int readNum) {
@@ -301,141 +297,146 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 
-            AppLog.i("TAG", "shouldOverrideUrlLoading"+url);
+            AppLog.i("TAG", "shouldOverrideUrlLoading" + url);
             if (url.matches(".*codeImageClick.*")) {
-                    //TODO 作者二维码
-                    if (authorVO != null) {
-                        showPopupWindow(authorVO);
-                    }
+                //TODO 作者二维码
+                if (authorVO != null) {
+                    showPopupWindow(authorVO);
+                }
             }
             if (url.matches(".*app.*")) {
 
-                    String[] split = url.split("\\?");
-                    String json = split[1];
-                    SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-                    if (specialToH5Bean.getTargetType() == 2) {
-                        // 去商品详情
-                        Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
-                        intent2.putExtra("productdetails", specialToH5Bean);
-                        startActivity(intent2);
+                String[] split = url.split("\\?");
+                String json = split[1];
+                SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
+                if (specialToH5Bean.getTargetType() == 2) {
+                    // 去商品详情
+                    Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
+                    intent2.putExtra("productdetails", specialToH5Bean);
+                    startActivity(intent2);
 
-                    }else if(specialToH5Bean.getTargetType()==12){
-                        // 去用户详情页
-                        int targetId = specialToH5Bean.getTargetId();
-                        Intent intent=new Intent(ArticleActivity.this,LiveHomePageActivity.class);
-                        intent.putExtra("userId",String.valueOf(targetId));
-                        startActivity(intent);
-                    }
+                } else if (specialToH5Bean.getTargetType() == 12) {
+                    // 去用户详情页
+                    int targetId = specialToH5Bean.getTargetId();
+                    Intent intent = new Intent(ArticleActivity.this, LiveHomePageActivity.class);
+                    intent.putExtra("userId", String.valueOf(targetId));
+                    startActivity(intent);
                 }
-
-            return  true;
-        }
-
-            @Override
-            public void onPageFinished (WebView view, String url){
-                super.onPageFinished(view, url);
-            /*    if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
-                    articleWebview.getSettings().setLoadsImagesAutomatically(true);
-                }*/
             }
-        }
 
-        private void showPopupWindow(SpecialAuthorBean authorVO) {
-
-            pw = new PopupWindow(this);
-            View view = View.inflate(this, R.layout.author_pop_layout, null);
-            LinearLayout codeDownload = (LinearLayout) view.findViewById(R.id.author_code_download);
-            LinearLayout popLayout = (LinearLayout) view.findViewById(R.id.pop_layout);
-            authorCodeImg = (ImageView) view.findViewById(R.id.author_code_iv);
-            TextView authorName = (TextView) view.findViewById(R.id.author_name_tv);
-            ImageView codeClose = (ImageView) view.findViewById(R.id.author_code_close);
-            TextView authorContent = (TextView) view.findViewById(R.id.author_content);
-            AppLog.i("TAG", authorVO.qrCode.toString());
-            DrawableUtils.displayImg(mContext, authorCodeImg, authorVO.qrCode.toString());
-            WindowManager.LayoutParams lp = this.getWindow().getAttributes();
-            lp.alpha = 0.15f;
-            getWindow().setAttributes(lp);
-            authorName.setText(authorVO.authorName);
-            authorContent.setText(authorVO.publicDescription.toString());
-            codeClose.setOnClickListener(this);
-            codeDownload.setOnClickListener(this);
-            pw.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-            pw.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-            pw.setContentView(view);
-            pw.setFocusable(true);
-            pw.setAnimationStyle(R.style.AnimBottom);
-            ColorDrawable dw = new ColorDrawable();
-            pw.setBackgroundDrawable(dw);
-
-            pw.showAtLocation(this.findViewById(R.id.article_relayout),
-                    Gravity.CENTER, 0, 0);
-            pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
-                    WindowManager.LayoutParams lp = getWindow().getAttributes();
-                    lp.alpha = 1f;
-                    getWindow().setAttributes(lp);
-                }
-            });
+            return true;
         }
 
         @Override
-        public boolean onKeyDown(int keyCode, KeyEvent event) {
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+            /*    if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
+                    articleWebview.getSettings().setLoadsImagesAutomatically(true);
+                }*/
+        }
+    }
+
+    private void showPopupWindow(SpecialAuthorBean authorVO) {
+
+        pw = new PopupWindow(this);
+        View view = View.inflate(this, R.layout.author_pop_layout, null);
+        LinearLayout codeDownload = (LinearLayout) view.findViewById(R.id.author_code_download);
+        LinearLayout popLayout = (LinearLayout) view.findViewById(R.id.pop_layout);
+        authorCodeImg = (ImageView) view.findViewById(R.id.author_code_iv);
+        TextView authorName = (TextView) view.findViewById(R.id.author_name_tv);
+        ImageView codeClose = (ImageView) view.findViewById(R.id.author_code_close);
+        TextView authorContent = (TextView) view.findViewById(R.id.author_content);
+        AppLog.i("TAG", authorVO.qrCode.toString());
+        DrawableUtils.displayImg(mContext, authorCodeImg, authorVO.qrCode.toString());
+        WindowManager.LayoutParams lp = this.getWindow().getAttributes();
+        lp.alpha = 0.15f;
+        getWindow().setAttributes(lp);
+        authorName.setText(authorVO.authorName);
+        authorContent.setText(authorVO.publicDescription.toString());
+        codeClose.setOnClickListener(this);
+        codeDownload.setOnClickListener(this);
+        pw.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        pw.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        pw.setContentView(view);
+        pw.setFocusable(true);
+        pw.setAnimationStyle(R.style.AnimBottom);
+        ColorDrawable dw = new ColorDrawable();
+        pw.setBackgroundDrawable(dw);
+
+        pw.showAtLocation(this.findViewById(R.id.article_relayout),
+                Gravity.CENTER, 0, 0);
+        pw.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                WindowManager.LayoutParams lp = getWindow().getAttributes();
+                lp.alpha = 1f;
+                getWindow().setAttributes(lp);
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
          /*   if ((keyCode == KeyEvent.KEYCODE_BACK) && articleWebview.canGoBack()) {
                 articleWebview.goBack(); // goBack()表示返回WebView的上一页面
                 return true;
             }*/
-            return super.onKeyDown(keyCode, event);
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    //保存二维码图片到相册
+    public void saveImageToGallery(Context context, Bitmap bmp) {
+        if (bmp == null) {
+            Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // 首先保存图片
+        File appDir = new File(Environment.getExternalStorageDirectory(), "ywq");
+        if (!appDir.exists()) {
+            appDir.mkdir();
+        }
+        String fileName = authorVO.authorId + ".jpg";
+        File file = new File(appDir, fileName);
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (Exception e) {
+            Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
 
+        // 最后通知图库更新
+        try {
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
+            Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show();
+            pw.dismiss();
 
-        //保存二维码图片到相册
-        public void saveImageToGallery(Context context, Bitmap bmp) {
-            if (bmp == null) {
-                Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            // 首先保存图片
-            File appDir = new File(Environment.getExternalStorageDirectory(), "ywq");
-            if (!appDir.exists()) {
-                appDir.mkdir();
-            }
-            String fileName =authorVO.authorId + ".jpg";
-            File file = new File(appDir, fileName);
-            try {
-                FileOutputStream fos = new FileOutputStream(file);
-                bmp.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                fos.flush();
-                fos.close();
-            } catch (FileNotFoundException e) {
-                Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (IOException e) {
-                Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            } catch (Exception e) {
-                Toast.makeText(context, "保存出错", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-
-            // 最后通知图库更新
-            try {
-                MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), fileName, null);
-                Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show();
-                pw.dismiss();
-
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri uri = Uri.fromFile(file);
-            intent.setData(uri);
-            context.sendBroadcast(intent);
-
-
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-
-        private int praisesNum;
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(file);
+        intent.setData(uri);
+        context.sendBroadcast(intent);
 
 
     }
+
+    private int praisesNum;
+
+    @Override
+    public void onBackPressed() {
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+        super.onBackPressed();
+    }
+}
+

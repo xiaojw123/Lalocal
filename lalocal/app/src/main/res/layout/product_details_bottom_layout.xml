@@ -45,12 +45,13 @@
             android:gravity="right"
             android:orientation="horizontal"
             >
-            <TextView
+            <com.lalocal.lalocal.view.ShapeTextView
                 android:id="@+id/product_details_reserve"
                 android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_18_sp"
+                app:corner_radius="@dimen/dimen_size_3_dp"
                 android:gravity="center"
                 android:layout_marginEnd="@dimen/dimen_size_5_dp"
                 android:layout_marginTop="@dimen/dimen_size_5_dp"

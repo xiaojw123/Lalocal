@@ -5,8 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -24,13 +24,14 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     Context context;
     String title, message, neturalText, sureText, cancelText;
     CustomDialogListener neutralBtnlistener, sureBtnLisener, cancelBtnListener;
-    FrameLayout chooseContainer;
+    ViewGroup chooseContainer;
 
 
     public CustomDialog(Context context) {
         super(context, R.style.prompt_dialog);
         this.context = context;
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,13 +41,14 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
 
     }
 
+
     private void initView() {
         title_tv = (TextView) findViewById(R.id.custom_dialog_title);
         message_tv = (TextView) findViewById(R.id.custom_dialog_message);
         neutral_btn = (Button) findViewById(R.id.custom_neutral_btn);
         sure_btn = (Button) findViewById(R.id.custom_sure_btn);
         cancel_btn = (Button) findViewById(R.id.custom_cancel_btn);
-        chooseContainer = (FrameLayout) findViewById(R.id.custom_dialog_choose_continaer);
+        chooseContainer = (ViewGroup) findViewById(R.id.custom_dialog_choose_continaer);
         neutral_btn.setOnClickListener(this);
         sure_btn.setOnClickListener(this);
         cancel_btn.setOnClickListener(this);
@@ -143,6 +145,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener {
     public static interface CustomDialogListener {
         void onDialogClickListener();
     }
+
 
 
 }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/dimen_size_20_dp"
+        android:paddingLeft="@dimen/dimen_size_15_dp"
+        android:paddingRight="@dimen/dimen_size_15_dp"
+        android:paddingTop="@dimen/dimen_size_20_dp">
+
+        <ImageView
+            android:id="@+id/item_my_live_img"
+            android:layout_width="@dimen/item_my_live_img_width"
+            android:layout_height="@dimen/item_my_live_img_width"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/dimen_size_15_dp"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:id="@+id/item_my_live_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@+id/item_my_live_img"
+            android:layout_toRightOf="@+id/item_my_live_img"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_15_sp" />
+
+
+        <TextView
+            android:id="@+id/item_my_live_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/item_my_live_onlinenum"
+            android:layout_alignLeft="@+id/item_my_live_title"
+            android:layout_marginBottom="@dimen/dimen_size_4_dp"
+            android:drawableLeft="@drawable/pl_location_darkic"
+            android:drawablePadding="@dimen/dimen_size_4_dp"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/item_my_live_onlinenum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/item_my_live_livelen"
+            android:layout_alignLeft="@+id/item_my_live_title"
+            android:layout_marginBottom="@dimen/dimen_size_4_dp"
+            android:drawableLeft="@drawable/many_people_light"
+            android:drawablePadding="@dimen/dimen_size_4_dp"
+            android:text="0"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/item_my_live_livelen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/item_my_live_scorenum"
+            android:layout_alignLeft="@+id/item_my_live_title"
+            android:layout_marginBottom="@dimen/dimen_size_4_dp"
+            android:drawableLeft="@drawable/manytime_light"
+            android:drawablePadding="@dimen/dimen_size_4_dp"
+            android:text="00:00:00"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/item_my_live_scorenum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_my_live_img"
+            android:layout_alignLeft="@+id/item_my_live_title"
+            android:drawableLeft="@drawable/score"
+            android:drawablePadding="@dimen/dimen_size_4_dp"
+            android:text="0"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/item_my_live_viewdetails"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_my_live_scorenum"
+            android:layout_marginLeft="@dimen/dimen_size_5_dp"
+            android:layout_toRightOf="@+id/item_my_live_scorenum"
+            android:textColor="@color/color_7babbd"
+            android:textSize="@dimen/text_size_12_sp" />
+
+    </RelativeLayout>
+    <TextView
+        style="@style/CommonDeLineTheme"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/dimen_size_166_dp"
+        />
+
+</FrameLayout>

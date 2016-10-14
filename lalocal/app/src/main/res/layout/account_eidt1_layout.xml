@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_fa"
+    android:background="@color/color_f8"
     tools:context=".activity.AccountEidt1Activity">
 
     <com.lalocal.lalocal.view.CustomTitleView
@@ -12,30 +12,55 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title_name="@string/edit_account"
+        android:background="@color/white"
 
         />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/account_edit_personalheader"
-        android:layout_width="@dimen/account_edit_personalheader_width"
-        android:layout_height="@dimen/account_edit_personalheader_width"
+    <FrameLayout
+        android:id="@+id/account_edit_personalheader_fl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/account_eidt1_titleview"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/account_edit_personalheader_bottom"
         android:layout_marginTop="@dimen/account_edit_personalheader_top"
+        >
+
+    <ImageView
+        android:id="@+id/account_edit_personalheader"
+        android:layout_width="@dimen/account_edit_personalheader_width"
+        android:layout_height="@dimen/account_edit_personalheader_width"
         android:src="@drawable/home_me_personheadnormal"
         android:scaleType="centerCrop" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_22_dp"
+            android:background="@color/color_black_b3000000"
+            android:textSize="@dimen/text_size_10_sp"
+            android:text="@string/edit_avatar"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:paddingLeft="@dimen/dimen_size_21_dp"
+            android:paddingRight="@dimen/dimen_size_21_dp"
+            android:drawableLeft="@drawable/camera_small_ic"
+            />
+            <!--android:drawableLeft="TODO:read 相机icon待添加"-->
 
+
+    </FrameLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/account_edit_personalheader"
         android:background="@color/white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_below="@+id/account_edit_personalheader_fl"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:layout_below="@+id/setting_clear_cache" />
+            />
 
         <RelativeLayout
             android:id="@+id/account_edit_nickname"
@@ -60,66 +85,35 @@
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:layout_below="@+id/setting_clear_cache" />
+            />
 
-        <RelativeLayout style="@style/AccoutEditItemTheme">
+        <RelativeLayout
+            android:id="@+id/account_edit_sex"
+            style="@style/AccoutEditItemTheme">
 
             <TextView
                 android:id="@+id/sex_text"
                 style="@style/AcountEditItemTitle"
                 android:text="@string/sex" />
-
-            <FrameLayout
-                android:id="@+id/accout_edit_girl_sex_fl"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/accout_edit_boy_sex_cb_left"
-                android:layout_toEndOf="@+id/sex_text">
-
-                <CheckBox
-                    android:id="@+id/accout_edit_girl_sex_cb"
-                    android:layout_width="@dimen/accout_edit_girl_sex_cb_width"
-                    android:layout_height="@dimen/accout_edit_girl_sex_cb_height"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dimen_size_15_dp"
-                    android:background="@drawable/accout_edit_girl_sex_cb_bg"
-                    android:button="@null" />
-            </FrameLayout>
-
             <TextView
-                android:id="@+id/sex_line"
-                android:layout_width="@dimen/dimen_size_1_dp"
-                android:layout_height="@dimen/accout_edit_sex_line_heigt"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/accout_edit_sex_line_left"
-                android:layout_toEndOf="@+id/accout_edit_girl_sex_fl"
-                android:background="@color/color_de" />
+                android:id="@+id/account_edit_sex_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right8"
+                />
 
-            <FrameLayout
-                android:id="@+id/accout_edit_boy_sex_fl"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="@dimen/accout_edit_girl_sex_cb_left"
-                android:layout_toEndOf="@+id/sex_line">
+            <ImageView
+                android:id="@+id/arrow_right8"
+                style="@style/AcountEditItemArrowRight" />
 
-                <CheckBox
-                    android:id="@+id/accout_edit_boy_sex_cb"
-                    android:layout_width="@dimen/accout_edit_boy_sex_cb_width"
-                    android:layout_height="@dimen/accout_edit_boy_sex_cb_height"
-                    android:layout_gravity="center_vertical"
-                    android:layout_margin="@dimen/dimen_size_15_dp"
-                    android:background="@drawable/accout_edit_boy_sex_cb_bg"
-                    android:button="@null" />
-            </FrameLayout>
         </RelativeLayout>
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:layout_below="@+id/setting_clear_cache" />
+            android:visibility="gone"
+            />
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/account_edit_phone"
             style="@style/AccoutEditItemTheme">
 
@@ -148,9 +142,11 @@
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:layout_below="@+id/setting_clear_cache" />
+            android:visibility="gone"
+            />
 
         <RelativeLayout
+            android:visibility="gone"
             android:id="@+id/account_edit_email"
             style="@style/AccoutEditItemTheme">
 
@@ -171,7 +167,43 @@
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:layout_below="@+id/setting_clear_cache" />
+
+            />
+
+        <RelativeLayout
+            android:id="@+id/account_edit_description"
+            android:layout_height="wrap_content"
+            style="@style/AccoutEditItemTheme"
+            android:minHeight="@dimen/setting_about_us_height"
+            >
+
+            <TextView
+                android:id="@+id/account_edit_description_title"
+                style="@style/AcountEditItemTitle"
+                android:text="@string/person_description"
+                android:layout_alignTop="@+id/acount_edit_description_text"
+                />
+
+            <TextView
+                android:id="@+id/acount_edit_description_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right4"
+                android:layout_centerVertical="true"
+                android:maxWidth="@dimen/acount_edit_description_text_max_width"
+            />
+
+            <ImageView
+                android:id="@+id/arrow_right4"
+                style="@style/AcountEditItemArrowRight"
+                android:layout_alignTop="@+id/acount_edit_description_text"
+                />
+        </RelativeLayout>
+        <TextView
+            style="@style/CommonDeLineTheme"
+
+            />
+
+
     </LinearLayout>
     >
 

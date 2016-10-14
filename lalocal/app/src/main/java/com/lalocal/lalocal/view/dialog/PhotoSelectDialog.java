@@ -3,6 +3,7 @@ package com.lalocal.lalocal.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +21,18 @@ public class PhotoSelectDialog extends Dialog implements View.OnClickListener {
 
 
     public PhotoSelectDialog(Context context) {
-        super(context, R.style.prompt_dialog);
+        super(context, R.style.test_dialog);
         this.context = context;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         View view = LayoutInflater.from(context).inflate(R.layout.phototselect_layout, null);
         setContentView(view, params);
-        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        getWindow().setGravity(Gravity.BOTTOM);
         Button photograph_btn = (Button) findViewById(R.id.photograph_btn);
         Button photoalbum_btn = (Button) findViewById(R.id.photoalbum_btn);
         Button cancleBtn = (Button) findViewById(R.id.cancel_selectephoto_btn);

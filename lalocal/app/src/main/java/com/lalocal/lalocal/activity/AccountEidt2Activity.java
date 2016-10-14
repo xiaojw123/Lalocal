@@ -195,7 +195,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
             finish();
             return true;
         }
-        contentService.modifyUserProfile(nickname, -1, null, null, userid, token);
+        contentService.modifyUserProfile(nickname, -1, null, null, null,userid, token);
         return false;
     }
 
@@ -222,7 +222,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         intent.putExtra(KeyParams.AREA_Code, areaCode);
         intent.putExtra(KeyParams.PHONE, phoneNumber);
         setResult(RESULT_CODE_PHONE, intent);
-        contentService.modifyUserProfile(null, -1, areaCode, phoneNumber, userid, token);
+        contentService.modifyUserProfile(null, -1, areaCode, phoneNumber,null, userid, token);
         return false;
     }
 

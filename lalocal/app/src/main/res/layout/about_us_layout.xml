@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         snser:title_name="@string/about_us" />
 
-    <ScrollView
+    <com.lalocal.lalocal.view.ReboundScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/dimen_size_15_dp"
@@ -253,5 +253,5 @@
                 android:textColor="@color/color_c5"
                 android:textSize="@dimen/text_size_10_sp" />
         </RelativeLayout>
-    </ScrollView>
+    </com.lalocal.lalocal.view.ReboundScrollView>
 </LinearLayout>

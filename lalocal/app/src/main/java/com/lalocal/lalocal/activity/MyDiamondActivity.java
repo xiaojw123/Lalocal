@@ -201,8 +201,8 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         setUpdateWalletResult();
+        super.onBackPressed();
     }
 
     //更新我的钱包

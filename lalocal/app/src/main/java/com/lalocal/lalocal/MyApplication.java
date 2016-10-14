@@ -45,7 +45,28 @@ import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by xiaojw on 2016/6/30.
- * 线上版本 友盟日志关闭
+ * 【APP上线注意事项】
+ *
+ * 1.为区分线上/线下版本，版本号定义如下
+ * 线下版本：版本号=版本名称数字
+ * 线下版本：版本号=版本名称数字+1
+ * eg:版本名称：2.1.3
+ *    线下版本号：213
+ *    线上版本号：214
+ *   此约定从2.1.3版本开始生效
+ *
+ * 2.设置isDebug=false
+ * 日志关闭
+ * bugTag关闭
+ * 友盟统计开启
+ * fabric开启
+ *
+ * 3.第三方加固
+ * meta-data选项选择UMENG_CHANNEL
+ * 根据不同市场设置对应value，生成
+ * 相应渠道包
+ * 此约定从2.1.3版本开始生效
+ *
  */
 public class MyApplication extends Application {
     public static final boolean isDebug = true;
@@ -59,8 +80,10 @@ public class MyApplication extends Application {
         AppCrashHandler.getInstance(this);
         EMChat.getInstance().init(this);
         EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
+        if (!isDebug){
         startFabric();
         startUmeng();
+        }
         //数据库
         intCountryDB();
         //代码中设置环信IM的Appkey
