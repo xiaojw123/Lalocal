@@ -3,16 +3,14 @@ package com.lalocal.lalocal.view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.Constants;
-import com.lalocal.lalocal.util.AppLog;
 
 /**
- * Created by wangjie on 2016/10/13.
+ * Created by wangjie on 2016/10/14.
  */
-public class ScaleImageView extends ImageView {
+public class ScaleRelativeLayout extends RelativeLayout {
 
     // 常量标记：固定宽度
     public static final int SOLID_WIDTH = -1;
@@ -27,15 +25,15 @@ public class ScaleImageView extends ImageView {
     // 固定标记
     private int mSolid = SOLID_WIDTH;
 
-    public ScaleImageView(Context context) {
+    public ScaleRelativeLayout(Context context) {
         this(context, null);
     }
 
-    public ScaleImageView(Context context, AttributeSet attrs) {
+    public ScaleRelativeLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ScaleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ScaleRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ScaleView);

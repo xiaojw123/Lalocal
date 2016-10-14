@@ -4,10 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -62,9 +59,8 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.SPCUtils;
-import com.lalocal.lalocal.view.ScaleImageView;
+import com.lalocal.lalocal.view.WrapContentImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -583,7 +579,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public Object instantiateItem(final ViewGroup container, int position) {
             View view = LayoutInflater.from(LiveActivity.this).inflate(R.layout.novice_guide_item, null);
-            ScaleImageView page = (ScaleImageView) view.findViewById(R.id.img_guide);
+            WrapContentImageView page = (WrapContentImageView) view.findViewById(R.id.img_guide);
             switch (position) {
                 case 0:
                     page.setImageResource(R.drawable.card_1);

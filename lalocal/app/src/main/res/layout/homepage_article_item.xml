@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dimen_size_20_dp"
+    android:paddingBottom="@dimen/dimen_size_10_dp"
+    android:paddingTop="@dimen/dimen_size_10_dp"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -20,13 +22,16 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/androidloading"/>
             
-            <RelativeLayout
-                android:layout_width="124dp"
+            <com.lalocal.lalocal.view.ScaleRelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:background="@color/black_opacity_45"
                 android:paddingLeft="23dp"
-                android:paddingRight="23dp">
+                android:paddingRight="23dp"
+                custom:scale="0.62"
+                custom:solid="solid_height"
+                >
                 <com.lalocal.lalocal.view.VerticalTextView
                     android:id="@+id/vtv_article_title"
                     android:layout_width="wrap_content"
@@ -35,21 +40,21 @@
                     android:paddingBottom="30dp"/>
                 
                 <ImageView
+                    android:id="@+id/icon_article_title_up"
                     android:layout_width="@dimen/dimen_size_16_dp"
                     android:layout_height="@dimen/dimen_size_8_dp"
                     android:src="@drawable/articletitletop_ic"
                     android:layout_above="@id/vtv_article_title"
-                    android:layout_alignRight="@id/vtv_article_title"
                     android:layout_marginBottom="21dp"/>
 
                 <ImageView
+                    android:id="@+id/icon_article_title_bottom"
                     android:layout_width="@dimen/dimen_size_16_dp"
                     android:layout_height="@dimen/dimen_size_8_dp"
                     android:src="@drawable/articletitlebottom_ic"
                     android:layout_below="@id/vtv_article_title"
-                    android:layout_alignLeft="@id/vtv_article_title"
                     android:layout_marginTop="21dp"/>
-            </RelativeLayout>
+            </com.lalocal.lalocal.view.ScaleRelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

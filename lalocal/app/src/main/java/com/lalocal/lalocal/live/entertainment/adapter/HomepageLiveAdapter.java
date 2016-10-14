@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.ScaleImageView;
 
 /**
  * Created by wangjie on 2016/10/12.
@@ -81,8 +82,9 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
     private class LivingViewHolder extends RecyclerView.ViewHolder {
         TextView tvLivingTitle;
         TextView tvLivingLocation;
-        ImageView imgLiving;
+        ScaleImageView imgLiving;
         CardView cardView;
+        ImageView imgLiveLocation;
 
         public LivingViewHolder(View itemView) {
             super(itemView);
@@ -90,8 +92,11 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             // -关联控件
             tvLivingTitle = (TextView) itemView.findViewById(R.id.tv_live_ing_title);
             tvLivingLocation = (TextView) itemView.findViewById(R.id.tv_live_ing_location);
-            imgLiving = (ImageView) itemView.findViewById(R.id.img_live_ing);
+            imgLiving = (ScaleImageView) itemView.findViewById(R.id.img_live_ing);
             cardView = (CardView) itemView.findViewById(R.id.card_view);
+            imgLiveLocation = (ImageView) itemView.findViewById(R.id.icon_live_location);
+            // 图标透明度设置为
+            imgLiveLocation.getDrawable().setAlpha(20);
         }
     }
 
@@ -105,6 +110,9 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         TextView tvLivePlaybackLocation;
         TextView tvLivePlaybackPeople;
         TextView tvLivePlaybackDuration;
+        ImageView imgPlaybackLocation;
+        ImageView imgPlaybackPeople;
+        ImageView imgPlaybackTime;
 
         public LivePlaybackViewHolder(View itemView) {
             super(itemView);
@@ -115,6 +123,13 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             this.tvLivePlaybackPeople = (TextView) itemView.findViewById(R.id.tv_live_playback_people);
             this.tvLivePlaybackDuration = (TextView) itemView.findViewById(R.id.tv_live_playback_duration);
 
+
+            imgPlaybackLocation = (ImageView) itemView.findViewById(R.id.icon_playback_location);
+            imgPlaybackPeople = (ImageView) itemView.findViewById(R.id.icon_playback_people);
+            imgPlaybackTime = (ImageView) itemView.findViewById(R.id.icon_playback_time);
+            imgPlaybackLocation.getDrawable().setAlpha(20);
+            imgPlaybackPeople.getDrawable().setAlpha(20);
+            imgPlaybackTime.getDrawable().setAlpha(20);
         }
     }
 }

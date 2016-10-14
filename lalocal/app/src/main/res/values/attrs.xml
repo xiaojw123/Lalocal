@@ -49,4 +49,11 @@
         <attr name="percentTextSize" format="dimension"/>
     </declare-styleable>
 
+    <declare-styleable name="ScaleView">
+        <attr name="scale" format="float" />
+        <attr name="solid" format="integer">
+            <enum name="solid_width" value="-1" />
+            <enum name="solid_height" value="-2" />
+        </attr>
+    </declare-styleable>
 </resources>
