@@ -48,7 +48,6 @@ import io.fabric.sdk.android.Fabric;
  * 线上版本 友盟日志关闭
  */
 public class MyApplication extends Application {
-
     public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
     @Override

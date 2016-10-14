@@ -214,11 +214,13 @@ public class RecommendNewFragment extends Fragment {
         mPtrLayout.setPtrHandler(new com.chanven.lib.cptr.PtrDefaultHandler() {
             @Override
             public void onRefreshBegin(com.chanven.lib.cptr.PtrFrameLayout frame) {
-                isRefreshing = true;
-                mPtrLayout.setLoadMoreEnable(true);
-                mContentLoader.recommendAd();
-
-
+                if (mPtrLayout != null && mAdapter != null) {
+                    isRefreshing = true;
+                    mPtrLayout.setLoadMoreEnable(true);
+                    mContentLoader.recommendAd();
+                } else {
+                    mPtrLayout.refreshComplete();
+                }
             }
         });
 
@@ -360,7 +362,7 @@ public class RecommendNewFragment extends Fragment {
      */
     private void emptyArticleList() {
         AppLog.i("refreshs", "emptyArticleList");
-        AppLog.i("refresh", "list size is " );
+        AppLog.i("refresh", "list size is ");
         for (int i = mArticleList.size() - 1; i >= 0; i++) {
             AppLog.i("refreshs", "size = " + mArticleList.size() + ", position is " + i);
             mArticleList.remove(i);

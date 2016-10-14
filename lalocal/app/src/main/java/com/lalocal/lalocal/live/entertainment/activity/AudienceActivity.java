@@ -1,11 +1,13 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -92,6 +94,7 @@ import io.agora.rtc.video.VideoCanvas;
  * Created by hzxuwen on 2016/3/18.
  * 日志聚合系统kids
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlayerProxy, View.OnLayoutChangeListener,GiftStorePopuWindow.OnSendClickListener {
     public static final String LIVE_SEARCH_ITEM = "live_search_item";
     private static final String TAG = AudienceActivity.class.getSimpleName();
@@ -650,6 +653,19 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         if ("1".equals(playType)) {
             videoView = new NEVideoView(this);
+            // 防止软键盘挤压屏幕
+           /* videoView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    if(palyerLayout!=null&&palyerLayout.getChildAt(0)!=null){
+                        if(bottom>oldBottom){
+                            palyerLayout.getChildAt(0).layout(left,top,right,bottom);
+                        }else {
+                            palyerLayout.getChildAt(0).layout(oldLeft,oldTop,oldRight,oldBottom);
+                        }
+                    }
+                }
+            });*/
             palyerLayout.addView(videoView);
             bufferStrategy = 1;
             videoView.setBufferStrategy(bufferStrategy);
@@ -836,16 +852,19 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     finishLive();
                     break;
                 case R.id.live_telecast_input_text:
+
                     boolean logineds = UserHelper.isLogined(AudienceActivity.this);
                     if (!logineds) {
                         showLoginViewDialog();
-                    } else{
+                    } else if(DemoCache.getLoginChatRoomStatus()){
                         keyboardLayout.setAlpha(1.0f);
                         keyboardLayout.setClickable(true);
                         liveSettingLayout.setVisibility(View.GONE);
-                        inputPanel.switchToTextLayout(true);
-                    }
 
+                        inputPanel.switchToTextLayout(true);
+                    }else {
+                        Toast.makeText(AudienceActivity.this,"没有登录聊天室，请退出重进!",Toast.LENGTH_SHORT).show();
+                    }
                     break;
                 case R.id.master_info_back_home:
                     finishLive();
@@ -943,6 +962,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         giftBean.setGiftName(giftSresult.get(itemPosition).getName());
        giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity.this));
         liveMessage.setGiftModel(giftBean);
+        liveMessage.setChannelId(channelId);
         liveMessage.setStyle(MessageType.gift);
         IMMessage giftMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, AuthPreferences.getUserAccount(), liveMessage);
 
@@ -1028,6 +1048,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                                     liveMessage.setDisableSendMsgUserId(String.valueOf(result.getId()));
                                     liveMessage.setUserId(userId);
                                     liveMessage.setCreatorAccount(creatorAccount);
+                                    liveMessage.setChannelId(channelId);
                                     IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
 
                                     if (banListLive.size() > 0) {
@@ -1049,6 +1070,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                                     liveMessage.setDisableSendMsgUserId(String.valueOf(result.getId()));
                                     liveMessage.setUserId(userId);
                                     liveMessage.setCreatorAccount(creatorAccount);
+                                    liveMessage.setChannelId(channelId);
                                     IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
 
                                     banListLive.add(meberAccount);
@@ -1107,6 +1129,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     private void finishLive() {
 
+        if (videoPlayer != null) {
+            videoPlayer.resetVideo();
+        }
+
         if (isStartLive) {
             logoutChatRoom();
         } else {
@@ -1114,6 +1140,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
             clearChatRoom();
         }
+
     }
 
     /**
@@ -1154,6 +1181,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             liveMessage.setStyle(MessageType.like);
             liveMessage.setUserId(userId);
             liveMessage.setCreatorAccount(creatorAccount);
+            liveMessage.setChannelId(channelId);
             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "给主播点了个赞", roomId, AuthPreferences.getUserAccount(), liveMessage);
 
             sendMessage(imMessage, MessageType.like);

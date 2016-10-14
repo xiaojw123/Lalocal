@@ -61,7 +61,8 @@ public class ThemeActivity extends AppCompatActivity {
                         AppLog.i("cannotload", "a");
                         isRefreshing = false;
                         isLoadingMore = false;
-                        mThemeAdapter.notifyDataSetChanged();
+//                        mThemeAdapter.notifyDataSetChanged();
+                        setAdapter(mThemeList);
                         mPtrFrame.refreshComplete();
 //                        mPtrFrame.loadMoreComplete(false);
                         break;

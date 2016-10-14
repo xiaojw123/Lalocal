@@ -24,6 +24,9 @@ public class LiveMessage {
     private String targetType;
     private ChallengeDetailsResp.ResultBean  challengeModel;
 
+    private String channelId;
+
+
     public String getAdminSendMsgUserId() {
         return adminSendMsgUserId;
     }
@@ -206,5 +209,13 @@ public class LiveMessage {
 
     public void setChallengeModel(ChallengeDetailsResp.ResultBean resultBean) {
         this.challengeModel = resultBean;
+    }
+
+    public String getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 }

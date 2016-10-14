@@ -65,6 +65,8 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     SplashHandler mHandler;
     VersionResult result;
 
+    private boolean isNotJumpt = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +127,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
             mHandler.removeMessages(MSG_UPDATE_TIME);
         }
-        startHomePage();
+        if (isNotJumpt) {
+            startHomePage();
+        }
     }
 
     public class MyCallBack extends ICallBack {
@@ -183,7 +187,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
             String photo = welcomeImg.getPhoto();
             if (TextUtils.isEmpty(photo)) {
-                startHomePage();
+                if (isNotJumpt) {
+                    startHomePage();
+                }
                 mHandler.sendEmptyMessage(MSG_START_HOME);
             } else {
                 totalTime = welcomeImg.getSecond();
@@ -197,6 +203,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
 
     private void startHomePage() {
+        isNotJumpt = false;
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
@@ -308,7 +315,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         if (hasMessages(MSG_UPDATE_TIME)) {
                             removeMessages(MSG_UPDATE_TIME);
                         }
-                        startHomePage();
+                        if (isNotJumpt) {
+                            startHomePage();
+                        }
                     }
                     break;
                 case MSG_DISPAY_IMG:
@@ -326,9 +335,10 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                     mContentloader.versionUpdate(AppConfig.getVersionName(SplashActivity.this));
                     break;
                 case MSG_START_HOME:
-                    startHomePage();
+                    if (isNotJumpt) {
+                        startHomePage();
+                    }
                     break;
-
             }
         }
 
@@ -342,7 +352,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
             AppLog.print("onLoadingFailed____");
-            startHomePage();
+            if (isNotJumpt) {
+                startHomePage();
+            }
 
         }
 
@@ -355,7 +367,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onLoadingCancelled(String imageUri, View view) {
             AppLog.print("onLoadingCancelled_____");
-            startHomePage();
+            if (isNotJumpt) {
+                startHomePage();
+            }
         }
     }
 

@@ -21,4 +21,8 @@ public class Constants {
     public static final int TARGET_TYPE_AUTHOR_PAGE = 12;
     public static final int TARGET_TYPE_NEWS = 13;
     public static final int TARGET_TYPE_LIVE = 14;
+
+    public static final String ADD_PIC = "empty for adding pic";
+    public static final int REQUEST_CODE_GALLERY = 0x01;
+    public static final int PIC_MAX_QUANTITY = 5;
 }

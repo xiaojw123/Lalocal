@@ -44,7 +44,7 @@ public class Dots extends LinearLayout {
      * 初始化试图
      */
     private void initView() {
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon_dot_normal);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon_dark_dot_normal);
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
                 LayoutParams.WRAP_CONTENT);
         // 水平居中
@@ -56,9 +56,9 @@ public class Dots extends LinearLayout {
             params.setMargins(4, 15, 4, 15);
             btn.setLayoutParams(params);
             if (i == mSelected) {
-                btn.setBackgroundResource(R.drawable.icon_dot_normal);
+                btn.setBackgroundResource(R.drawable.icon_dark_dot_normal);
             } else {
-                btn.setBackgroundResource(R.drawable.icon_dot_selected);
+                btn.setBackgroundResource(R.drawable.icon_white_dot_selected);
             }
             this.addView(btn);
         }

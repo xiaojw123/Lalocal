@@ -11,7 +11,7 @@
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/color_fa"
+        card_view:cardBackgroundColor="@color/color_fa"
         card_view:cardPreventCornerOverlap="false"
         app:cardCornerRadius="3dp"
         >

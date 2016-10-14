@@ -40,6 +40,7 @@
     <color name="color_fac1a0">#fac1a0</color>
     <color name="color_dcf3fa">#dcf3fa</color>
     <color name="color_eeee00">#90eaad3a</color>
+    <color name="color_e29428">#e29428</color>
 
 
     <!-- common -->
@@ -120,5 +121,9 @@
     <color name="color_7babbd">#7babbd</color>
     <color name="color_979797">#979797</color>
     <color name="color_761a1a1a">#761a1a1a</color>
+    <color name="color_guide_dialog_bg">#99000000</color>
+    <color name="titleBarBgColor">#f6f6f6</color>
+    <color name="titleBarTextColor">#000000</color>
 
+    <color name="black_opacity_45">#72000000</color>
 </resources>

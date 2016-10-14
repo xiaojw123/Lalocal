@@ -928,8 +928,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     }
                     DemoCache.setLoginChatRoomStatus(true);
                     chatRoomStatusRemind("登陆聊天室成功...");
-                    initInputPanel(creatorAccount);
                     LiveConstant.enterRoom=true;
+                    initInputPanel(creatorAccount, channelId);
+
                 }
 
                 @Override
@@ -967,9 +968,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
 
-    protected void initInputPanel(String creatorAccount) {
+    protected void initInputPanel(String creatorAccount, String channelId) {
+
         if (inputPanel == null) {
-            inputPanel = new InputPanel(LivePlayerBaseActivity.this, container, view, getActionList(), inputConfig, creatorAccount, UserHelper.getUserId(LivePlayerBaseActivity.this));
+            inputPanel = new InputPanel(LivePlayerBaseActivity.this, container, view, getActionList(), inputConfig, creatorAccount, UserHelper.getUserId(LivePlayerBaseActivity.this), channelId);
         } else {
             inputPanel.reload(container, inputConfig);
         }

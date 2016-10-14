@@ -89,6 +89,7 @@ dependencies {
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
     compile project(path: ':gifviewlibrary')
     compile project(':xrecyclerview')
+    compile 'com.mcxiaoke.volley:library:1.0.19'
 }
 
 
@@ -135,6 +136,7 @@ repositories {
 }
 dependencies {
     compile(name:'videoprp', ext:'aar')
+    compile project(path: ':galleryfinal')
 }
 
 

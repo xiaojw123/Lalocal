@@ -997,13 +997,19 @@ public class ContentLoader {
             this(Method.GET, url, listener, errorListener);
         }
 
-        @Override
+      /*  @Override
         public void setRetryPolicy(RetryPolicy retryPolicy) {
             super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        }
+        }*/
 
+        @Override
+        public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
+            return super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        }
 
         public ContentRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);

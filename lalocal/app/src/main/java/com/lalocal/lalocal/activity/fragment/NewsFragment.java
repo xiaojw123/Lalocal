@@ -160,12 +160,14 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         liveSearchTv.setCompoundDrawables(getTextColorDrawable(liveSearchTv), null, null, null);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         liveSeachFl.setOnClickListener(this);
+
         titleAttention = (TextView) view.findViewById(R.id.live_fragment_title_attention);
         titleAttention.setOnClickListener(this);
         titleHot = (TextView) view.findViewById(R.id.live_fragment_title_hot);
         titleHot.setOnClickListener(this);
         paint2 = titleAttention.getPaint();
         paint1 = titleHot.getPaint();
+
         xRecyclerView = (XRecyclerView) view.findViewById(R.id.xrecyclerview);
 
         FrameLayout headerContainer= (FrameLayout) view.findViewById(R.id.live_header_container);
@@ -304,10 +306,10 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                 AppLog.i("TAG","轮播图显示page:"+position);
                 if(dotContainer.getChildAt(0)!=null){
                     dotContainer.getChildAt(position).setBackgroundResource(
-                            R.drawable.icon_dot_selected);
+                            R.drawable.icon_dark_dot_selected);
                     if(prePosition!=-1){
                         dotContainer.getChildAt(prePosition ).setBackgroundResource(
-                                R.drawable.icon_dot_normal);
+                                R.drawable.icon_dark_dot_normal);
                     }
 
                     prePosition = position;
@@ -574,19 +576,15 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 15, 15);
                         params.leftMargin = 20;
-                        point.setBackgroundResource(R.drawable.icon_dot_normal);
+                        point.setBackgroundResource(R.drawable.icon_dark_dot_normal);
                         point.setLayoutParams(params);
                         // 为point设置标识,便于将来识别point
                         point.setTag(i);
                         dotContainer.addView(point);
                     }
-                    dotContainer.getChildAt(0).setBackgroundResource(R.drawable.icon_dot_selected);
+                    dotContainer.getChildAt(0).setBackgroundResource(R.drawable.icon_dark_dot_selected);
                     RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
                     inflate.setLayoutParams(params);
-
-
-
-
 
                 }
             } catch (Exception e) {
@@ -855,26 +853,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         //注册监听
         registerObservers(true);
-/*        if (allRows != null) {
-            allRows.clear();
-        }
-        if(firstLoadData){
-            firstLoadData=false;
-            contentService.liveList(10, 1);
-        }
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                allRows.clear();
-                if(firstLoadData){
-                    firstLoadData=false;
-                    contentService.liveList(10, 1);
-                }
-
-            }
-        }, 1000 * 60 * 5);
-        AppLog.i("TAG", "onStart");*/
 
     }
 
