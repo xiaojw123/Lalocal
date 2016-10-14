@@ -1,8 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,36 +8,35 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by android on 2016/10/4.
  */
-public class CustomChanllengeDialog extends Dialog{
+public class CustomChanllengeDialog extends BaseDialog{
     @BindView(R.id.chanllage_dialog_close_iv)
     ImageView chanllageDialogCloseIv;
     @BindView(R.id.chanllenge_start)
     TextView chanllengeStart;
     private Context mContext;
     ChanllengeInitiateDialogListener chanllageStartListener;
-
-    public CustomChanllengeDialog(Context mContext) {
-        super(mContext, R.style.prompt_dialog);
-        this.mContext = mContext;
+    public CustomChanllengeDialog(Context context) {
+        super(context);
     }
-
     public void startChanllageClikListener(ChanllengeInitiateDialogListener listener){
         this.chanllageStartListener=listener;
+    }
+
+    @Override
+    public void initView() {
 
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.challenge_dialog_initiate_layout);
-        ButterKnife.bind(this);
+    public int getLayoutId() {
+        return R.layout.challenge_dialog_initiate_layout;
     }
+
     @OnClick({R.id.chanllage_dialog_close_iv, R.id.chanllenge_start})
     public  void btnClick(View view){
         switch (view.getId()){

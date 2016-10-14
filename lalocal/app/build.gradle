@@ -90,6 +90,7 @@ dependencies {
     compile project(path: ':gifviewlibrary')
     compile project(':xrecyclerview')
     compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'com.android.support:percent:22.2.0'
 }
 
 

@@ -1,9 +1,7 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -14,7 +12,7 @@ import com.lalocal.lalocal.R;
 /**
  * Created by android on 2016/8/25.
  */
-public class CustomChatDialog extends Dialog implements View.OnClickListener {
+public class CustomChatDialog extends BaseDialog implements View.OnClickListener {
 
     Context context;
     CustomDialogListener sureBtnLisener, cancelBtnListener,okBtnListener;
@@ -24,20 +22,18 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
     private TextView remindOk;
     private TextView dialogTitle;
     String title, determine, cancel,okText,content;
+
     public CustomChatDialog(Context context) {
-        super(context, R.style.live_dialog);
-        this.context = context;
+        super(context);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.custom_remind_login_layout);
-        initView();
+    public int getLayoutId() {
+        return R.layout.custom_remind_login_layout;
     }
 
-
-    private void initView() {
+    @Override
+    public void initView() {
         LinearLayout overLive = (LinearLayout) findViewById(R.id.remind_over_live);
         LinearLayout continueLive = (LinearLayout) findViewById(R.id.remind_contiun_live);
         remindMetermine = (TextView) findViewById(R.id.remind_determine);
@@ -70,6 +66,7 @@ public class CustomChatDialog extends Dialog implements View.OnClickListener {
             dialogTitle.setText(title);
         }
     }
+
 
     public void setTitle(String title) {
         this.title = title;

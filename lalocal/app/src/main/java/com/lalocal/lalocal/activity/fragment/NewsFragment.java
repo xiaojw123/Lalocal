@@ -46,6 +46,7 @@ import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
@@ -141,8 +142,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
         contentService.getLiveArea();
-        contentService.getLivelist(null);
-        contentService. recommendAd();
+        contentService.recommendAd();
         requestBasicPermission(); // 申请APP基本权限
 
     }
@@ -293,7 +293,9 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
     private int prePosition = -1;
     private void initHeaderView() {
         AppLog.i("TAG","给recycler添加头部");
-        inflate = View.inflate(getActivity(), R.layout.live_recommend_layout, null);
+        inflate = View.inflate(getActivity(), R.layout.live_recommend_layout,null);
+        LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT);
+        inflate.setLayoutParams(params);
         LinearLayout adContainer = (LinearLayout) inflate.findViewById(R.id.live_ad_container);
         dotContainer = (LinearLayout) inflate.findViewById(R.id.live_dot_container);
         sliderLayout = (DisallowParentTouchSliderLayout) inflate.findViewById(R.id.live_ad_slider);
@@ -318,6 +320,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
             }
         });
         xRecyclerView.addHeaderView(inflate);
+
 
     }
 
@@ -571,7 +574,6 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         defaultSliderView.image(adResultList.get(i).photo);
                         defaultSliderView.setOnSliderClickListener(onSliderClickListener);
                         sliderLayout.addSlider(defaultSliderView);
-
                         View point = new View(getActivity());
                         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                                 15, 15);
@@ -583,9 +585,8 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                         dotContainer.addView(point);
                     }
                     dotContainer.getChildAt(0).setBackgroundResource(R.drawable.icon_dark_dot_selected);
-                    RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
-                    inflate.setLayoutParams(params);
 
+                    contentService.getLivelist(null);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -749,9 +750,12 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
 
                     Intent intent = new Intent(getActivity(), LoginActivity.class);
                     startActivityForResult(intent, RESQUEST_COD);
+
                 }
             });
             customDialog.show();
+
+            DialogUtil.addDialog(customDialog);
         }
     }
 
@@ -873,6 +877,7 @@ public class NewsFragment extends Fragment implements View.OnClickListener {
                     customDialog.dismiss();
                 }
             });
+
             customDialog.show();
         } else if (CommonUtil.RESULT_DIALOG == 3) {
             CommonUtil.RESULT_DIALOG = 0;

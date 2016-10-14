@@ -1,7 +1,5 @@
 package com.lalocal.lalocal.live.entertainment.ui;
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by android on 2016/8/28.
  */
-public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickListener{
+public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClickListener{
     private Context context;
     private LiveUserInfoResultBean result;
     private boolean isLiveOver;
@@ -59,20 +57,23 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private boolean isMuted;
 
 
+
     public CustomLiveUserInfoDialog(Context context, LiveUserInfoResultBean result, boolean isManager, boolean isMuted) {
-        super(context, R.style.prompt_dialog);
+        super(context);
         this.context = context;
         this.result=result;
         this.isManager=isManager;
         this.isMuted=isMuted;
-
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.master_info_layout);
+    public void initView() {
         showLiveUserInfoPopuwindow();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.master_info_layout;
     }
 
     public void showLiveUserInfoPopuwindow(){
@@ -106,8 +107,6 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         audienceManagerReport = (TextView) findViewById(R.id.audience_manager_report);
         audienceManagerban = (TextView) findViewById(R.id.audience_manager_ban);
         audienceManagerAttention = (TextView) findViewById(R.id.audience_manager_attention);
-
-
 
         LinearLayout homeLayoutBtn = (LinearLayout) findViewById(R.id.custom_dialog_home_layout);
         LinearLayout liveBottomLayout= (LinearLayout) findViewById(R.id.custom_dialog_live_bottom_layout);
