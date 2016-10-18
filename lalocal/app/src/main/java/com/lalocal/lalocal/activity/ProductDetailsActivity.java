@@ -17,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
@@ -43,6 +42,7 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
+import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
@@ -69,7 +69,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private LinearLayout checkDetails;
     private ShineButton btnLike;
     private ImageView btnShare;
-    private TextView productReserve;
+    private ShapeTextView productReserve;
     private ImageView customer;
     private TextView productService;
     private LinearLayout featureLayout;
@@ -115,7 +115,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         checkDetails = (LinearLayout) findViewById(R.id.product_check_detail);
         btnLike = (ShineButton) findViewById(R.id.product_btn_like);
         btnShare = (ImageView) findViewById(R.id.product_btn_share);
-        productReserve = (TextView) findViewById(R.id.product_details_reserve);
+        productReserve = (ShapeTextView) findViewById(R.id.product_details_reserve);
         customer = (ImageView) findViewById(R.id.product_customer_service);
         phones = (RelativeLayout) findViewById(R.id.product_details_phones);
         productService = (TextView) findViewById(R.id.product_service);
@@ -311,10 +311,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
 
     public void onBackClick() {
-        setResult(MeFragment.UPDATE_MY_DATA);
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
 
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+        super.onBackPressed();
+    }
 
     public class MyCallBack extends ICallBack {
 
@@ -434,22 +439,26 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             case 0:
                 productReserve.setText("预定");
                 productReserve.setEnabled(true);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_ffaa2a));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_ffaa2a));
+//                productReserve.setBackgroundColor();
                 break;
             case 1:
                 productReserve.setText("已售罄");
                 productReserve.setEnabled(false);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_b3));
+//                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 break;
             case 2:
                 productReserve.setText("已过期");
                 productReserve.setEnabled(false);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_b3));
+//                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 break;
             case -1:
                 productReserve.setText("已删除");
                 productReserve.setEnabled(false);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_b3));
+//                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 break;
 
 

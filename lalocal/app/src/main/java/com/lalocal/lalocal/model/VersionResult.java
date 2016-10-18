@@ -1,11 +1,14 @@
 package com.lalocal.lalocal.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
 /**
  * Created by android on 2016/7/14.
  */
-public class VersionResult {
+public class VersionResult implements Parcelable {
 
 
     /**
@@ -61,4 +64,41 @@ public class VersionResult {
     public void setMsg(List<String> msg) {
         this.msg = msg;
     }
+
+    public VersionResult() {
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte(this.forceFlag ? (byte) 1 : (byte) 0);
+        dest.writeString(this.apiUrl);
+        dest.writeByte(this.checkUpdate ? (byte) 1 : (byte) 0);
+        dest.writeString(this.downloadUrl);
+        dest.writeStringList(this.msg);
+    }
+
+    protected VersionResult(Parcel in) {
+        this.forceFlag = in.readByte() != 0;
+        this.apiUrl = in.readString();
+        this.checkUpdate = in.readByte() != 0;
+        this.downloadUrl = in.readString();
+        this.msg = in.createStringArrayList();
+    }
+
+    public static final Creator<VersionResult> CREATOR = new Creator<VersionResult>() {
+        @Override
+        public VersionResult createFromParcel(Parcel source) {
+            return new VersionResult(source);
+        }
+
+        @Override
+        public VersionResult[] newArray(int size) {
+            return new VersionResult[size];
+        }
+    };
 }

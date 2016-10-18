@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
+import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -53,7 +53,7 @@ public class GiftPlaneAnimation {
 
     public void showPlaneAnimation(ChatRoomMessage message) {
 
-        GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
+        GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
         cache.add(messageToGiftBean);
         startAnimation(giftPlaneUp,giftPlaneBg);
     }

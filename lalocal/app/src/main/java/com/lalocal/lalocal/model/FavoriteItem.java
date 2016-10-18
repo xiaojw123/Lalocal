@@ -21,11 +21,31 @@ public class FavoriteItem {
     private int targetType;
     private int targetId;
     private String targetName;
+    private String subTitle;
+
+    public String getSubTitle() {
+        return subTitle;
+    }
+
+    public void setSubTitle(String subTitle) {
+        this.subTitle = subTitle;
+    }
+
+    public void setReadNum(String readNum) {
+        this.readNum = readNum;
+    }
+
+    public String getReadNum() {
+        return readNum;
+
+    }
+
     private String photo;
     private Author author;
     private double price;
-    private int commentNum;
-    private int praiseNum;
+    private String commentNum;
+    private String praiseNum;
+    private String readNum;
     private int status;
 
     public int getTargetType() {
@@ -76,19 +96,19 @@ public class FavoriteItem {
         this.price = price;
     }
 
-    public Object getCommentNum() {
+    public String getCommentNum() {
         return commentNum;
     }
 
-    public void setCommentNum(int commentNum) {
+    public void setCommentNum(String commentNum) {
         this.commentNum = commentNum;
     }
 
-    public Object getPraiseNum() {
+    public String getPraiseNum() {
         return praiseNum;
     }
 
-    public void setPraiseNum(int praiseNum) {
+    public void setPraiseNum(String praiseNum) {
         this.praiseNum = praiseNum;
     }
 

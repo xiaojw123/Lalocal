@@ -26,7 +26,6 @@ import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.PariseResult;
@@ -190,7 +189,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onBackClick() {
-        setResult(MeFragment.UPDATE_MY_DATA);
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
     }
 
     @Override
@@ -593,5 +592,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         return super.onKeyDown(keyCode, event);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        AppLog.print("onBackPressed_____special__");
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+        super.onBackPressed();
+    }
 }

@@ -9,6 +9,8 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/card_view"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:cardCornerRadius="@dimen/dimen_size_3_dp">
@@ -22,15 +24,14 @@
                 android:scaleType="fitXY"
                 android:src="@drawable/androidloading"/>
             
-            <com.lalocal.lalocal.view.ScaleRelativeLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/article_title_container"
+                android:layout_width="120dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:background="@color/black_opacity_45"
                 android:paddingLeft="23dp"
                 android:paddingRight="23dp"
-                custom:scale="0.62"
-                custom:solid="solid_height"
                 >
                 <com.lalocal.lalocal.view.VerticalTextView
                     android:id="@+id/vtv_article_title"
@@ -54,7 +55,7 @@
                     android:src="@drawable/articletitlebottom_ic"
                     android:layout_below="@id/vtv_article_title"
                     android:layout_marginTop="21dp"/>
-            </com.lalocal.lalocal.view.ScaleRelativeLayout>
+            </RelativeLayout>
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

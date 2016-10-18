@@ -25,8 +25,11 @@ import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
@@ -34,12 +37,14 @@ import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -47,6 +52,8 @@ import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.LiveRowsDataResp;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -66,6 +73,8 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.UserLiveDataResp;
+import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -114,6 +123,28 @@ public class ContentLoader {
 
     public void setCallBack(ICallBack callBack) {
         this.callBack = callBack;
+    }
+
+    public void getChannelRecords(int id){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.CHANNEL_RECORDS);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getChannelRecords(id),response,response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+
+
+
+    }
+
+    //获取用户直播
+    public void getUserLive(int userid,int pageNum){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.USER_LIVE);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUserLiveUrl(userid,pageNum),response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
     }
 
     public void exchargeCopon(String code) {
@@ -441,6 +472,16 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    public void getMyFavor(int userid, String token, int pageNumber) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_FAVORITE_ITEMS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getFavoriteItemsUrl() + "pageNumber=" + pageNumber + "&pageSize=10", response, response);
+        AppLog.print("FAVOR RQUEST__uRL__" + AppConfig.getFavoriteItemsUrl() + "pageNumber=" + pageNumber + "&pageSize=10");
+        request.setHeaderParams(getHeaderParams(userid, token));
+        requestQueue.add(request);
+    }
+
 
     public void getUserProfile(int userid, String token) {
         if (callBack != null) {
@@ -452,13 +493,13 @@ public class ContentLoader {
     }
 
     //修改的用户资料
-    public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, int userid, String token) {
+    public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, String description, int userid, String token) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.MODIFY_USER_PROFILE);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserProfileModifyUrl(), response, response);
         request.setHeaderParams(getHeaderParams(userid, token));
-        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone));
+        request.setBodyParams(getModifyUserProfileParams(nickanme, sex, areaCode, phone, description));
         requestQueue.add(request);
     }
 
@@ -673,15 +714,16 @@ public class ContentLoader {
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));
         requestQueue.add(request);
     }
+
     //用户获取在线人数
-     public  void getAudienceUserOnLine(int onLineUser){
-         if (callBack != null) {
-             response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
-         }
-         ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount()+onLineUser, response, response);
-         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-         requestQueue.add(request);
-     }
+    public void getAudienceUserOnLine(int onLineUser) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount() + onLineUser, response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
 
     //关闭直播间
     public void cancelLiveRoom(String userId) {
@@ -833,7 +875,7 @@ public class ContentLoader {
     }
 
     //分享统计
-    public void getShareStatistics(String targetType,String targetId,String channelType){
+    public void getShareStatistics(String targetType, String targetId, String channelType) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SHARE_STATISTICS);
         }
@@ -855,26 +897,71 @@ public class ContentLoader {
         requestQueue.add(request);
     }
     //挑战详情
-    public  void getChallengeDetails(String channelId,int status){
+    public  void getChallengeDetails(String challengeId){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_DEATILS);
         }
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+challengeId , response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //挑战列表
+    public  void getChallengeList(String channelId,int status){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHALLENGE_LIST);
+        }
         String url=channelId+(status==-1?"":("&status="+status));
-        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+url , response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeList()+url , response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
     //主播操作挑战
-    public void getLiveChallengeStatus(int challengeId,int status){
+    public void getLiveChallengeStatus(int status,int challengeId){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_CHALLENGE_STATUS);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getLiveChallengeStatus(challengeId,status), response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getLiveChallengeStatus(challengeId), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getChallengeStatusBodyParams(status));
         requestQueue.add(request);
     }
 
-
+    //直播地区列表
+    public  void getLiveArea(){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_AREA);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveArea(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //直播首页
+    public void getLivelist(String areaId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //历史直播
+    public  void getPlayBackLiveList(String areaId,int pageNumber){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //历史直播详情
+    public  void getPlayBackLiveDetails(int id){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_PALY_BACK_DETAILS);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLiveDetails(id), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
 
     //搜索关注粉丝
     public void getSearchUser(String nickName) {
@@ -935,7 +1022,27 @@ public class ContentLoader {
         }
 
         ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleDetailsUrl() + targetId, response, response);
+        contentRequest.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(contentRequest);
+    }
 
+    // 获取用户当前直播
+    public void getUserCurLive(int userid) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_CUR_LIVE);
+        }
+
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getUserCurLive(userid), response, response);
+        requestQueue.add(contentRequest);
+    }
+
+    // 获取用户文章
+    public void getUserArticles(int userid, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_ARTICLE);
+        }
+
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getUserArticles(userid, pageNum), response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -948,13 +1055,19 @@ public class ContentLoader {
             this(Method.GET, url, listener, errorListener);
         }
 
-        @Override
+      /*  @Override
         public void setRetryPolicy(RetryPolicy retryPolicy) {
             super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        }
+        }*/
 
+        @Override
+        public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
+            return super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
+                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        }
 
         public ContentRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);
@@ -1020,8 +1133,9 @@ public class ContentLoader {
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
-        public void setPassWord(String psw){
-            this.psw=psw;
+
+        public void setPassWord(String psw) {
+            this.psw = psw;
 
         }
 
@@ -1103,6 +1217,12 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.CHANNEL_RECORDS:
+                        responseGetChannelRecords(jsonObj);
+                        break;
+                    case RequestCode.USER_LIVE:
+                        responseGetUserLive(jsonObj);
+                        break;
                     case RequestCode.EXCHARGE_COUPON:
                         responseExchargeCoupon(jsonObj);
                         break;
@@ -1343,19 +1463,55 @@ public class ContentLoader {
                         responseShareStatistics(json);
                         break;
                     case RequestCode.CHALLENGE_INITIATE:
-                        responseChallengeInitiate(json);
+                        responseChallengeInitiate(jsonObj);
                         break;
                     case RequestCode.CHALLENGE_DEATILS:
                         responseChallengeDetails(json);
                         break;
                     case RequestCode.LIVE_CHALLENGE_STATUS:
-                        responLiveChallengeIdStatus(json);
+                        responLiveChallengeIdStatus(jsonObj);
+                        break;
+                    case RequestCode.CHALLENGE_LIST:
+                        responLiveChallengeList(json);
+                        break;
+                    case RequestCode.LIVE_AREA:
+                        responLiveArea(json);
+                        break;
+                    case RequestCode.LIVE_HOME_LIST:
+                        responListHomeList(json);
+                        break;
+                    case RequestCode.LIVE_PALY_BACK:
+                        responPlayBackLive(json);
+                        break;
+                    case RequestCode.LIVE_PALY_BACK_DETAILS:
+                        responPlayBackDetails(jsonObj);
+                        break;
+                    case RequestCode.GET_USER_CUR_LIVE:
+                        responseUserCurLive(json);
+                        break;
+                    case RequestCode.GET_USER_ARTICLE:
+                        responseUserArticle(json);
                         break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseGetChannelRecords(JSONObject jsonObj) {
+            Gson gson=new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            ChannelRecord record=gson.fromJson(json,ChannelRecord.class);
+            callBack.onGetChannelRecord(record);
+        }
+
+        private void responseGetUserLive(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            AppLog.i("ussr", "the hist user live data  is " + json);
+            UserLiveItem item=gson.fromJson(json,UserLiveItem.class);
+            callBack.onGetUserLive(item);
         }
 
         private void responseExchargeCoupon(JSONObject jsonObj) {
@@ -1817,20 +1973,12 @@ public class ContentLoader {
 
         //点赞
         private void responseParises(String json) {
-
-            if (!UserHelper.favorites.contains(targetId)) {
-                UserHelper.favorites.add(targetId);
-            }
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onInputPariseResult(pariseResult);
         }
 
         //取消赞
         private void responseCancelParises(String json) {
-
-            if (UserHelper.favorites.contains(targetId)) {
-                UserHelper.favorites.remove(targetId);
-            }
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onPariseResult(pariseResult);
         }
@@ -1871,7 +2019,7 @@ public class ContentLoader {
 
         //推荐直播列表
         private void responseLiveRecommendList(String json) {
-            AppLog.i("TAG","推荐直播列表:"+json);
+            AppLog.i("TAG", "推荐直播列表:" + json);
             LiveRecommendListDataResp liveRecommendListDataResp = new Gson().fromJson(json, LiveRecommendListDataResp.class);
             callBack.onLiveRecommendList(liveRecommendListDataResp);
         }
@@ -1900,7 +2048,7 @@ public class ContentLoader {
 
         //上传在线人数
         private void responseOnLinesCount(String json) {
-            AppLog.i("TAG","上传在线人数"+json);
+            AppLog.i("TAG", "上传在线人数" + json);
             callBack.onOnLinesCount(json);
         }
 
@@ -1913,7 +2061,7 @@ public class ContentLoader {
 
         //关闭直播间
         private void responseCancelLive(String json) {
-            AppLog.i("TAG","关闭直播:"+json);
+            AppLog.i("TAG", "关闭直播:" + json);
             CloseLiveBean closeLiveBean = new Gson().fromJson(json, CloseLiveBean.class);
             callBack.onCloseLive(closeLiveBean);
         }
@@ -1984,14 +2132,15 @@ public class ContentLoader {
         //分享统计
         private void responseShareStatistics(String json) {
 
-            AppLog.i("TAG","分享统计:"+json);
+            AppLog.i("TAG", "分享统计:" + json);
             callBack.onShareStatistics(json);
         }
 
         //发起挑战
-        private void responseChallengeInitiate(String json) {
-
-            callBack.onChallengeInitiate(json);
+        private void responseChallengeInitiate(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
+            callBack.onChallengeInitiate(resultBean);
         }
 
         //挑战详情
@@ -1999,10 +2148,43 @@ public class ContentLoader {
             AppLog.i("TAG","挑战详情："+json);
             callBack.onChallengeDetails(json);
         }
+        //挑战列表
+        private void responLiveChallengeList(String json) {
+            AppLog.i("TAG","挑战列表："+json);
+            callBack.onChallengeList(json);
+        }
+
         //主播操作挑战
-        private void responLiveChallengeIdStatus(String json) {
-            AppLog.i("TAG","主播操作挑战："+json);
-            callBack.onLiveChallengeStatus(json);
+        private void responLiveChallengeIdStatus(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
+            callBack.onLiveChallengeStatus(resultBean);
+        }
+        //直播地区列表
+        private void responLiveArea(String json) {
+            AppLog.i("TAG","直播地区列表:"+json);
+            LiveHomeAreaResp liveHomeAreaResp = new Gson().fromJson(json, LiveHomeAreaResp.class);
+            callBack.onLiveHomeArea(liveHomeAreaResp);
+
+        }
+        //直播首页列表
+        private void responListHomeList(String json) {
+            LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
+            if (liveHomeListResp != null) {
+                callBack.onLiveHomeList(liveHomeListResp);
+            }
+        }
+
+        //历史直播
+        private void responPlayBackLive(String json) {
+            AppLog.i("TAG","历史直播:"+json);
+            callBack.onPlayBackList(json);
+        }
+        //历史直播详情
+        private void responPlayBackDetails(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            LiveRowsBean liveRowsBean = new Gson().fromJson(resultJson.toString(), LiveRowsBean.class);
+            callBack.onPlayBackDetails(liveRowsBean);
         }
 
 
@@ -2052,6 +2234,23 @@ public class ContentLoader {
             }
         }
 
+        // 响应用户当前直播数据
+        private void responseUserCurLive(String json) {
+            LiveRowsDataResp dataResp = new Gson().fromJson(json, LiveRowsDataResp.class);
+            if (dataResp.getReturnCode() == 0) {
+                callBack.onGetUserCurLive(dataResp.getResult());
+            }
+        }
+
+        // 响应用户直播列表
+        private void responseUserArticle(String json) {
+            HomepageUserArticlesResp articlesResp = new Gson().fromJson(json, HomepageUserArticlesResp.class);
+            if (articlesResp.getReturnCode() == 0) {
+                callBack.onGetUserArticles(articlesResp);
+            }
+        }
+
+
         @Override
         public void onDialogClickListener() {
             Intent intent = new Intent(context, RegisterActivity.class);
@@ -2061,11 +2260,11 @@ public class ContentLoader {
     }
 
 
-
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
-            phone) {
+            phone, String description) {
         JSONObject jsonObj = new JSONObject();
         try {
+
             if (!TextUtils.isEmpty(nickname)) {
                 jsonObj.put("nickName", nickname);
             }
@@ -2079,6 +2278,10 @@ public class ContentLoader {
             if (!TextUtils.isEmpty(phone)) {
                 jsonObj.put("phone", phone);
             }
+            if (!TextUtils.isEmpty(description)) {
+                jsonObj.put("description", description);
+            }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2160,6 +2363,17 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("style", 0);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+    //主播操作挑战
+    private String getChallengeStatusBodyParams(int status) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("status",status);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2347,6 +2561,8 @@ public class ContentLoader {
         int EXCHARGE_GOLD = 137;
         int SEARCH_LIVE = 138;
         int EXCHARGE_COUPON = 139;
+        int USER_LIVE=140;
+        int CHANNEL_RECORDS=150;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2384,10 +2600,17 @@ public class ContentLoader {
         int CHALLENGE_INITIATE=232;
         int CHALLENGE_DEATILS=233;
         int LIVE_CHALLENGE_STATUS=234;
+        int CHALLENGE_LIST=235;
+        int LIVE_AREA=236;
+        int LIVE_HOME_LIST=237;
+        int LIVE_PALY_BACK=238;
+        int LIVE_PALY_BACK_DETAILS=239;
 
-        int GET_INDEX_RECOMMEND_LIST=300;
-        int GET_ARTICLE_LIST=301;
 
+        int GET_INDEX_RECOMMEND_LIST = 300;
+        int GET_ARTICLE_LIST = 301;
+        int GET_USER_CUR_LIVE = 302;
+        int GET_USER_ARTICLE = 303;
     }
 
 }

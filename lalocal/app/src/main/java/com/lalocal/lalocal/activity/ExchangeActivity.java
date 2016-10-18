@@ -156,8 +156,8 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         setExchangeResult();
+        super.onBackPressed();
     }
 
     public void setExchangeResult() {

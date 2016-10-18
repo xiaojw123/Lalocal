@@ -301,7 +301,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 resultAapter = new SearchResultAapter(SearchActivity.this, items);
                 resultAapter.setOnItemClickListener(resultItemClickListener);
                 searchResultRlv.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
-                searchResultRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchResultRlv.addItemDecoration(new LinearItemDecoration(SearchActivity.this));
                 searchResultRlv.setAdapter(resultAapter);
             } else {
                 resultAapter.updateItems(items);
@@ -328,7 +328,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 tagAdapter = new SearchTagAdapter(SearchActivity.this, keys);
                 LinearLayoutManager lm = new LinearLayoutManager(SearchActivity.this);
                 searchTagRlv.setLayoutManager(lm);
-                searchTagRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchTagRlv.addItemDecoration(new LinearItemDecoration(SearchActivity.this));
                 tagAdapter.setOnItemClickListener(this);
                 searchTagRlv.setAdapter(tagAdapter);
             } else {
@@ -371,7 +371,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 hintAdapter.setOnItemClickListener(this);
                 LinearLayoutManager lm = new LinearLayoutManager(SearchActivity.this);
                 lm.setOrientation(LinearLayoutManager.VERTICAL);
-                searchHintRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchHintRlv.addItemDecoration(new LinearItemDecoration(SearchActivity.this));
                 searchHintRlv.setLayoutManager(lm);
                 searchHintRlv.setHasFixedSize(true);
                 searchHintRlv.setAdapter(hintAdapter);

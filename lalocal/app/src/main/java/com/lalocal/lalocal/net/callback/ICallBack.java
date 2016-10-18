@@ -2,18 +2,23 @@ package com.lalocal.lalocal.net.callback;
 
 
 import com.android.volley.VolleyError;
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -21,6 +26,8 @@ import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
+import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.LiveRowsDataResp;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -42,6 +49,8 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.UserLiveDataResp;
+import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
@@ -291,13 +300,45 @@ public abstract class ICallBack {
     //分享统计
     public void onShareStatistics(String json) {
     }
-    //发起挑战
-    public void onChallengeInitiate(String json) {
+    public void onGetUserLive(UserLiveItem item) {
     }
+    //发起挑战
+    public void onChallengeInitiate( ChallengeDetailsResp.ResultBean resultBean) {
+
+    }
+    //发起挑战
+    public void onChallengeInitiate(String json){
+
+        }
     //挑战详情
     public void onChallengeDetails(String json) {
     }
     //主播操作挑战
-    public void onLiveChallengeStatus(String json) {
+    public void onLiveChallengeStatus(ChallengeDetailsResp.ResultBean resultBean) {
     }
+    //挑战列表
+    public void onChallengeList(String json) {
+    }
+    //直播首页列表
+    public void onLiveHomeList(LiveHomeListResp liveListDataResp) {
+    }
+    //历史回放
+    public void onPlayBackList(String json) {
+    }
+    //直播地区分类
+    public void onLiveHomeArea(LiveHomeAreaResp liveHomeAreaResp) {
+    }
+    //历史回放详情
+    public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+    }
+    public void onGetChannelRecord(ChannelRecord record){
+
+    }
+
+    // 获取用户当前直播
+    public void onGetUserCurLive(LiveRowsBean liveRowsBean) {}
+
+    // 获取用户文章列表
+    public void onGetUserArticles(HomepageUserArticlesResp articlesResp) {}
+
 }

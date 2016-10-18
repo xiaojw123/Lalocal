@@ -2,10 +2,13 @@ package com.lalocal.lalocal.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.location.Location;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.util.AppLog;
 
 /**
  * Created by wangjie on 2016/10/14.
@@ -41,6 +44,9 @@ public class ScaleRelativeLayout extends RelativeLayout {
         mScale = ta.getFloat(R.styleable.ScaleView_scale, NO_SCALE);
         // 获取固定标记
         mSolid = ta.getInteger(R.styleable.ScaleView_solid, SOLID_WIDTH);
+        AppLog.i("widd", "scale = " + mScale);
+        AppLog.i("widd", "solid = " + mSolid);
+        AppLog.i("widd", "child -- " + getChildCount());
     }
 
     @Override
@@ -48,6 +54,7 @@ public class ScaleRelativeLayout extends RelativeLayout {
 
         if (mScale < 0) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            measureChildren(widthMeasureSpec, heightMeasureSpec);
             return;
         }
         // 计算ImageView的宽度
@@ -62,10 +69,17 @@ public class ScaleRelativeLayout extends RelativeLayout {
             width = (int) (height * mScale);
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            measureChildren(widthMeasureSpec, heightMeasureSpec);
             return;
         }
         // 将重新定义后的宽度和高度设置为图片显示的大小
         setMeasuredDimension(width, height);
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
 
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
     }
 }

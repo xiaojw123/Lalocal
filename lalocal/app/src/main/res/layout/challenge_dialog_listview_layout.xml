@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/live_padding_20dp"
+    android:paddingBottom="@dimen/live_padding_30dp"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/popuwindow_bg"
+        >
+        <ImageView
+            android:id="@+id/chanllage_dialog_listview_close_iv"
+            android:paddingTop="@dimen/live_padding_20dp"
+            android:paddingBottom="@dimen/live_padding_15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/btnbg_close" />
+
+
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/challenge_list_recy"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/chanllage_dialog_listview_close_iv"
+           >
+
+        </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+    </RelativeLayout>
+
+</LinearLayout>

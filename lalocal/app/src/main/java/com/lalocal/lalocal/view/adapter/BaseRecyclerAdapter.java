@@ -8,7 +8,7 @@ import com.lalocal.lalocal.view.listener.OnItemClickListener;
 /**
  * Created by xiaojw on 2016/7/21.
  */
-public  abstract  class BaseRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public  abstract  class BaseRecyclerAdapter extends RecyclerView.Adapter{
     public static final int ITEM_TYPE_NULL=0x11;
     OnItemClickListener listener;
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -22,5 +22,16 @@ public  abstract  class BaseRecyclerAdapter extends RecyclerView.Adapter<Recycle
         }
     }
 
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+          holder.itemView.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  if (listener!=null){
+                      listener.onItemClickListener(v,position);
+                  }
+              }
+          });
 
+    }
 }

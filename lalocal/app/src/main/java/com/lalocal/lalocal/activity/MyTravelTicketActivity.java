@@ -184,8 +184,8 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         setResultForUpdateWallet();
+        super.onBackPressed();
 
     }
 

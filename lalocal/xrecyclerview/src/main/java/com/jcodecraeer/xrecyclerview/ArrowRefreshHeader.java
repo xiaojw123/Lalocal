@@ -117,7 +117,6 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 		if (state == mState) return ;
 
 		if (state == STATE_REFRESHING) {	// 显示进度
-            AppLog.print("STATE_REFRESHING____");
             if (isSysResfresh){
                 mGifImageView.setVisibility(VISIBLE);
                  mGifImageView.setBackgroundResource(R.drawable.loading_down);
@@ -127,13 +126,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 			mProgressBar.setVisibility(View.VISIBLE);
             }
 		} else if(state == STATE_DONE) {
-            AppLog.print("STATE_DONE____");
             if (!isSysResfresh){
             mArrowImageView.setVisibility(View.INVISIBLE);
             mProgressBar.setVisibility(View.INVISIBLE);
             }
         } else {	// 显示箭头图片
-            AppLog.print("setate else____");
             if (isSysResfresh){
                 mGifImageView.setVisibility(VISIBLE);
             }else{
@@ -144,7 +141,6 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 
 		switch(state){
             case STATE_NORMAL:
-                AppLog.print("STATE_NORMAL————————————");
                 if (!isSysResfresh){
 
                 if (mState == STATE_RELEASE_TO_REFRESH) {
@@ -159,7 +155,6 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
                 }
                 break;
             case STATE_RELEASE_TO_REFRESH:
-                AppLog.print("STATE_RELEASE_TO_REFRESH————————————");
                 if (mState != STATE_RELEASE_TO_REFRESH) {
                     if (!isSysResfresh){
                     mArrowImageView.clearAnimation();
@@ -169,13 +164,11 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
                 }
                 break;
             case     STATE_REFRESHING:
-                AppLog.print("STATE_REFRESHING————————————");
                 if (!isSysResfresh){
                 mStatusTextView.setText(R.string.refreshing);
                 }
                 break;
             case    STATE_DONE:
-                AppLog.print("STATE_DONE————————————");
                 if (!isSysResfresh){
                 mStatusTextView.setText(R.string.refresh_done);
                 }else{
@@ -194,7 +187,6 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 
     @Override
 	public void refreshComplete(){
-        AppLog.print("refreshComplete_____");
         if (!isSysResfresh){
         mHeaderTimeView.setText(friendlyTime(new Date()));
         }

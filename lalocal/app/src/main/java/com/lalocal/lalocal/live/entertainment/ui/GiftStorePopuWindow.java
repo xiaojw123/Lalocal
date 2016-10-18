@@ -48,28 +48,13 @@ public class GiftStorePopuWindow extends PopupWindow {
         TextView giftSend = (TextView) giftView.findViewById(R.id.audience_gift_send);
         List<GridView> list = new ArrayList<>();
         View inflate = View.inflate(mContext, R.layout.audience_gift_viewpager_layout, null);
+        View inflate1 = View.inflate(mContext, R.layout.audience_gift_viewpager_layout, null);
         GridView giftGridView = (GridView) inflate.findViewById(R.id.audience_gift_list);
-   /*     int size = giftSresult.size();
-        int i = size % 6;
-        int pages=0;
-        if(i!=0){
-            pages=1+(size/6);
-        }else {
-            pages=size/6;
-        }
-        AppLog.i("TAG","礼物种类数量:pages:"+pages);
-        for(int page=0;page<pages;page++){
-            List<GiftDataResultBean> giftDataResultBeen = giftSresult.subList(page, page*6);
-            giftGridViewAdpter = new GiftGridViewAdpter(mContext, giftDataResultBeen);
-            giftGridView.setAdapter(giftGridViewAdpter);
-            list.add(giftGridView);
-            page=page*6;
-            AppLog.i("TAG","礼物gridview 显示");
-        }
-      */
-
           giftGridViewAdpter = new GiftGridViewAdpter(mContext, giftSresult);
         giftGridView.setAdapter(giftGridViewAdpter);
+
+
+
         list.add(giftGridView);
         final BannerPagerAdapter mBannerPagerAdapter = new BannerPagerAdapter(mContext, list);
         audienceGiftVp.setAdapter(mBannerPagerAdapter);

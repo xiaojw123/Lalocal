@@ -1,6 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.helper;
 
-import com.lalocal.lalocal.live.entertainment.model.ChallengeInitiateResultBean;
+import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
@@ -43,7 +43,7 @@ public class SendMessageUtil {
                 ext.put("giftModel", ext1);
             }
             if(liveMessage.getChallengeModel()!=null){
-                ChallengeInitiateResultBean challengeModel = liveMessage.getChallengeModel();
+                ChallengeDetailsResp.ResultBean challengeModel = liveMessage.getChallengeModel();
                 Map<String, Object> ext2 = new HashMap<>();
                 ext2.put("challengeId",challengeModel.getId());
                 ext2.put("content",challengeModel.getContent());

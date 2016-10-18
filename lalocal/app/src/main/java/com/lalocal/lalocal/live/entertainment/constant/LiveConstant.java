@@ -14,6 +14,8 @@ public class LiveConstant {
     public  static  final  int ME_CHECK_OTHER=6;//我看别人
     public static  int IDENTITY=0;
 
+    public  static boolean enterRoom=false;
+
     //网络类型检测
     public static  int NET_CHECK=0;
 
