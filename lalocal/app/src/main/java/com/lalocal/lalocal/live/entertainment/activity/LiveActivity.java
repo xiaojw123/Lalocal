@@ -781,20 +781,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (statusa != null) {
             double parseDouble = Double.parseDouble(String.valueOf(statusa));
             status = (int) parseDouble;
-
-            liveContentLoader.cancelLiveRoom(channelId);
-            LiveMessage liveMessage = new LiveMessage();
-            liveMessage.setStyle(MessageType.leaveLive);
-            liveMessage.setCreatorAccount(creatorAccount);
-            liveMessage.setUserId(userId);
-            liveMessage.setChannelId(channelId);
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播了哈哈哈哈哈哈", roomId, AuthPreferences.getUserAccount(), liveMessage);
-            sendMessage(imMessage, MessageType.leaveLive);
-            if (isLeaveChannel) {
-                deInitUIandEvent();
-                isLeaveChannel = false;
-
-            }
+        }
 
             isManager = managerId != 0 ? true : false;
             CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LiveActivity.this, result1, isManager, isMuted);
@@ -905,6 +892,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                         liveMessage.setDisableSendMsgNickName(result1.getNickName());
                                         liveMessage.setDisableSendMsgUserId(String.valueOf(result1.getId()));
                                         liveMessage.setUserId(userId);
+                                        liveMessage.setChannelId(channelId);
                                         liveMessage.setCreatorAccount(creatorAccount);
                                         IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
                                         banListLive.add(meberAccount);
@@ -1012,7 +1000,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 }
             });
             customLiveUserInfoDialog.show();
-        }
+
     }
 
     private void showCreateLiveRoomPopuwindow() {

@@ -30,6 +30,7 @@ import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.ui.TActivity;
+import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.entertainment.adapter.GiftAdapter;
 import com.lalocal.lalocal.live.entertainment.adapter.TouristAdapter;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.AGEventHandler;
@@ -1423,7 +1424,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     //登录界面
     public void showLoginViewDialog() {
-        CustomChatDialog customDialog = new CustomChatDialog(this);
+        final CustomChatDialog customDialog = new CustomChatDialog(this);
         customDialog.setContent(getString(R.string.live_login_hint));
         customDialog.setCancelable(false);
         customDialog.setCancelBtn(getString(R.string.live_canncel), null);
@@ -1432,12 +1433,15 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onDialogClickListener() {
                 DemoCache.setLoginStatus(false);
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-
                 startActivityForResult(new Intent(LivePlayerBaseActivity.this, LoginActivity.class), LIVE_BASE_RESQUEST_CODE);
             }
         });
         customDialog.show();
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DialogUtil.clear();
+    }
 }
