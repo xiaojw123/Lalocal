@@ -20,8 +20,8 @@
     <string name="my_order">我的订单</string>
     <string name="my_live">我的直播</string>
     <string name="coupons">优惠券</string>
-    <string name="forget_psw">忘记密码</string>
-    <string name="other_login_way">其他登录方式</string>
+    <string name="forget_psw">忘记密码</string>k
+    <string name="other_login_way">其他方式登录</string>
     <string name="weixin">微信</string>
     <string name="qq">QQ</string>
     <string name="weibo">微博</string>
@@ -291,4 +291,13 @@
     <string name="challenge_dialog_complete">完成 !!!</string>
     <string name="challenge_dialog_waive_ok">我意已决</string>
     <string name="challenge_task_accept">任务已接受,请等待众筹乐钻!</string>
+    <string name="get_password">获取密码</string>
+    <string name="input_dynamic_password">输入动态密码</string>
+    <string name="enter">进入</string>
+    <string name="input_phone">输入手机号</string>
+    <string name="welcome_to_back">欢迎回来</string>
+    <string name="skip">跳过</string>
+    <string name="email_bound_note">请输入你已在我们平注册过的邮箱账号, 如果没有的话就输入你常用的邮箱地址, 我们可以同步你的数据更好的为你服务</string>
+    <string name="set_pssword">设置密码</string>
+    <string name="start_lalocal_travel">开启乐可之旅</string>
 </resources>

@@ -48,7 +48,8 @@ import butterknife.OnClick;
  * Created by xiaojw on 2016/6/3.
  *
  */
-public class MeFragment extends BaseFragment {
+public class
+MeFragment extends BaseFragment {
     public static final int UPDAE_MY_WALLET = 0x01323;
     public static final String USER = "user";
     public boolean isImLogin;
@@ -168,8 +169,11 @@ public class MeFragment extends BaseFragment {
     }
 
     private void gotoLoginPage() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivityForResult(intent, 100);
+        //TODO:登录改版
+//        Intent intent = new Intent(getActivity(), LoginActivity.class);
+//        startActivityForResult(intent, 100);
+//        Intent intent = new Intent(getActivity(), LLoginActivity.class);
+//        startActivityForResult(intent, 100);
     }
 
 

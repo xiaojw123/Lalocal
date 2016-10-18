@@ -318,16 +318,17 @@
         <activity android:name=".activity.PersonalIntroActivity" />
         <activity android:name=".activity.MyLiveActivity" />
         <activity android:name=".activity.LiveDetailActivity" />
-        <activity android:name=".live.entertainment.activity.LiveAttentionDemo">
-        </activity>
-        <activity android:name=".live.entertainment.activity.PlayBackActivity"></activity>
+        <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
+        <activity android:name=".live.entertainment.activity.PlayBackActivity" />
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
 
         <activity android:name=".live.entertainment.activity.ReportActivity" />
-        <activity android:name=".activity.MyArticleActivity"></activity>
+        <activity android:name=".activity.MyArticleActivity" />
+        <activity android:name=".me.LLoginActivity" />
+        <activity android:name=".me.LPEmailBound2Activity"></activity>
     </application>
 
 </manifest>

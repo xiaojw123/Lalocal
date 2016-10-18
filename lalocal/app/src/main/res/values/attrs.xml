@@ -54,5 +54,17 @@
         <attr name="percentTextColor" format="color"/>
         <attr name="percentTextSize" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="MyEditText">
+        <attr name="my_title" format="string"/>
+        <attr name="is_password" format="boolean"/>
+        <attr name="my_maxLen" format="integer"/>
+        <attr name="hint" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="LCustomLayout">
+        <attr name="l_title" format="string"/>
+        <attr name="l_des" format="string"/>
+        <attr name="l_titleVisible" format="boolean"/>
+
+    </declare-styleable>
 
 </resources>

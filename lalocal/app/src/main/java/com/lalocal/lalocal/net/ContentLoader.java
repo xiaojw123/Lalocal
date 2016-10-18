@@ -122,24 +122,78 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
-    public void getChannelRecords(int id){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.CHANNEL_RECORDS);
+
+    public void registerByPhone(String phone, String code, String email, String password) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.REGISTER_PHONE);
+
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getChannelRecords(id),response,response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneRegisterUrl(), response, response);
+        JSONObject reqParams = new JSONObject();
+        try {
+            reqParams.put(RequestParams.PHONE, phone);
+            reqParams.put(RequestParams.CODE, code);
+            reqParams.put(RequestParams.EMAIL, email);
+            reqParams.put(RequestParams.PASSWORD, password);
+            request.setBodyParams(reqParams.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+    public void loginByPhone(String phone, String code) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LOGIN_PHEON);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneLoginUrl(), response, response);
+        JSONObject reqBody = new JSONObject();
+        try {
+            reqBody.put(RequestParams.PHONE, phone);
+            reqBody.put(RequestParams.CODE, code);
+            request.setBodyParams(reqBody.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+
+    public void getSMSCode(View resView,String phoneNum, String type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SMS_VER_CODE);
+            response.setResponseView(resView);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSMSVerCode(), response, response);
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put(RequestParams.PHONE, phoneNum);
+            requestBody.put(RequestParams.TYPE, type);
+            request.setBodyParams(requestBody.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+
+    public void getChannelRecords(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHANNEL_RECORDS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getChannelRecords(id), response, response);
         request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
-
 
 
     }
 
     //获取用户直播
-    public void getUserLive(int userid,int pageNum){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.USER_LIVE);
+    public void getUserLive(int userid, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.USER_LIVE);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUserLiveUrl(userid,pageNum),response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUserLiveUrl(userid, pageNum), response, response);
         request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
     }
@@ -884,36 +938,39 @@ public class ContentLoader {
     }
 
     //发起挑战
-    public void getChallenge(String content,int targetGold, String  channelId){
+    public void getChallenge(String content, int targetGold, String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_INITIATE);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getChallageInitiate(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getChallengeBodyParams(content,targetGold,channelId));
+        request.setBodyParams(getChallengeBodyParams(content, targetGold, channelId));
         requestQueue.add(request);
     }
+
     //挑战详情
-    public  void getChallengeDetails(String challengeId){
+    public void getChallengeDetails(String challengeId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_DEATILS);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+challengeId , response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails() + challengeId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //挑战列表
-    public  void getChallengeList(String channelId,int status){
+    public void getChallengeList(String channelId, int status) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_LIST);
         }
-        String url=channelId+(status==-1?"":("&status="+status));
-        ContentRequest request = new ContentRequest(AppConfig.getChallengeList()+url , response, response);
+        String url = channelId + (status == -1 ? "" : ("&status=" + status));
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeList() + url, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //主播操作挑战
-    public void getLiveChallengeStatus(int status,int challengeId){
+    public void getLiveChallengeStatus(int status, int challengeId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_CHALLENGE_STATUS);
         }
@@ -924,7 +981,7 @@ public class ContentLoader {
     }
 
     //直播地区列表
-    public  void getLiveArea(){
+    public void getLiveArea() {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_AREA);
         }
@@ -932,8 +989,9 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //直播首页
-    public void getLivelist(String areaId){
+    public void getLivelist(String areaId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
         }
@@ -941,17 +999,19 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //历史直播
-    public  void getPlayBackLiveList(String areaId,int pageNumber){
+    public void getPlayBackLiveList(String areaId, int pageNumber) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId, pageNumber), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //历史直播详情
-    public  void getPlayBackLiveDetails(int id){
+    public void getPlayBackLiveDetails(int id) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK_DETAILS);
         }
@@ -1194,6 +1254,16 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.LOGIN_PHEON:
+                        responseLoginPhone(jsonObj);
+                        break;
+
+                    case RequestCode.REGISTER_PHONE:
+                        responeRegisterPhone(jsonObj);
+                        break;
+                    case RequestCode.SMS_VER_CODE:
+                        responseGetSMSVerCode(jsonObj);
+                        break;
                     case RequestCode.CHANNEL_RECORDS:
                         responseGetChannelRecords(jsonObj);
                         break;
@@ -1471,17 +1541,45 @@ public class ContentLoader {
 
         }
 
-        private void responseGetChannelRecords(JSONObject jsonObj) {
-            Gson gson=new Gson();
+        private void responseLoginPhone(JSONObject jsonObj) {
+            Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
-            ChannelRecord record=gson.fromJson(json,ChannelRecord.class);
+            User item = gson.fromJson(json, User.class);
+            callBack.onLoginByPhone(item);
+        }
+
+        private void responeRegisterPhone(JSONObject jsonObj) {
+            String json = jsonObj.optString(ResultParams.REULST);
+            try {
+                JSONObject resultJobj = new JSONObject(json);
+                String phone = resultJobj.optString(RequestParams.PHONE);
+                String code = resultJobj.optString(RequestParams.CODE);
+                String email = resultJobj.optString(RequestParams.EMAIL);
+                String password = resultJobj.optString(RequestParams.PASSWORD);
+                callBack.onRegisterByPhone(phone, code, email, password);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        private void responseGetSMSVerCode(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+
+
+        }
+
+        private void responseGetChannelRecords(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            ChannelRecord record = gson.fromJson(json, ChannelRecord.class);
             callBack.onGetChannelRecord(record);
         }
 
         private void responseGetUserLive(JSONObject jsonObj) {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
-            UserLiveItem item=gson.fromJson(json,UserLiveItem.class);
+            UserLiveItem item = gson.fromJson(json, UserLiveItem.class);
             callBack.onGetUserLive(item);
         }
 
@@ -2116,12 +2214,13 @@ public class ContentLoader {
 
         //挑战详情
         private void responseChallengeDetails(String json) {
-            AppLog.i("TAG","挑战详情："+json);
+            AppLog.i("TAG", "挑战详情：" + json);
             callBack.onChallengeDetails(json);
         }
+
         //挑战列表
         private void responLiveChallengeList(String json) {
-            AppLog.i("TAG","挑战列表："+json);
+            AppLog.i("TAG", "挑战列表：" + json);
             callBack.onChallengeList(json);
         }
 
@@ -2131,13 +2230,15 @@ public class ContentLoader {
             ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
             callBack.onLiveChallengeStatus(resultBean);
         }
+
         //直播地区列表
         private void responLiveArea(String json) {
-            AppLog.i("TAG","直播地区列表:"+json);
+            AppLog.i("TAG", "直播地区列表:" + json);
             LiveHomeAreaResp liveHomeAreaResp = new Gson().fromJson(json, LiveHomeAreaResp.class);
             callBack.onLiveHomeArea(liveHomeAreaResp);
 
         }
+
         //直播首页列表
         private void responListHomeList(String json) {
             LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
@@ -2148,9 +2249,10 @@ public class ContentLoader {
 
         //历史直播
         private void responPlayBackLive(String json) {
-            AppLog.i("TAG","历史直播:"+json);
+            AppLog.i("TAG", "历史直播:" + json);
             callBack.onPlayBackList(json);
         }
+
         //历史直播详情
         private void responPlayBackDetails(JSONObject jsonObj) {
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
@@ -2198,7 +2300,7 @@ public class ContentLoader {
         }
 
         private void responseVersion(String json) {
-            AppLog.i("TAG", "responseVersion:" + json);
+            AppLog.print("TAG", "responseVersion:" + json);
             VersionInfo versionInfo = new Gson().fromJson(json, VersionInfo.class);
             if (versionInfo.getReturnCode() == 0) {
                 callBack.onVersionResult(versionInfo);
@@ -2323,11 +2425,12 @@ public class ContentLoader {
         }
         return jsonObject.toString();
     }
+
     //主播操作挑战
     private String getChallengeStatusBodyParams(int status) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("status",status);
+            jsonObject.put("status", status);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2383,7 +2486,7 @@ public class ContentLoader {
     }
 
     //发起挑战
-    private String getChallengeBodyParams(String content,int targetGold, String  channelId){
+    private String getChallengeBodyParams(String content, int targetGold, String channelId) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("content", content);
@@ -2476,6 +2579,14 @@ public class ContentLoader {
         String ROWS = "rows";
     }
 
+    interface RequestParams {
+        String PHONE = "phone";
+        String CODE = "code";
+        String TYPE = "type";
+        String EMAIL = "email";
+        String PASSWORD = "password";
+    }
+
     interface RequestCode {
         int REGISTER = 100;
         int LOGIN = 101;
@@ -2515,8 +2626,11 @@ public class ContentLoader {
         int EXCHARGE_GOLD = 137;
         int SEARCH_LIVE = 138;
         int EXCHARGE_COUPON = 139;
-        int USER_LIVE=140;
-        int CHANNEL_RECORDS=150;
+        int USER_LIVE = 140;
+        int CHANNEL_RECORDS = 150;
+        int SMS_VER_CODE = 151;
+        int LOGIN_PHEON = 152;
+        int REGISTER_PHONE = 153;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2549,16 +2663,16 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
-        int GET_ONLINE_COUNT=230;
-        int SHARE_STATISTICS=231;
-        int CHALLENGE_INITIATE=232;
-        int CHALLENGE_DEATILS=233;
-        int LIVE_CHALLENGE_STATUS=234;
-        int CHALLENGE_LIST=235;
-        int LIVE_AREA=236;
-        int LIVE_HOME_LIST=237;
-        int LIVE_PALY_BACK=238;
-        int LIVE_PALY_BACK_DETAILS=239;
+        int GET_ONLINE_COUNT = 230;
+        int SHARE_STATISTICS = 231;
+        int CHALLENGE_INITIATE = 232;
+        int CHALLENGE_DEATILS = 233;
+        int LIVE_CHALLENGE_STATUS = 234;
+        int CHALLENGE_LIST = 235;
+        int LIVE_AREA = 236;
+        int LIVE_HOME_LIST = 237;
+        int LIVE_PALY_BACK = 238;
+        int LIVE_PALY_BACK_DETAILS = 239;
 
 
         int GET_INDEX_RECOMMEND_LIST = 300;

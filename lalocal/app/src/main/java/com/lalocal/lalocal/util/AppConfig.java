@@ -491,6 +491,20 @@ public class AppConfig {
 
         return  baseUrl+"channels/records/"+id;
     }
+    //发送短信验证码
+    public static  String getSMSVerCode(){
+
+        return baseUrl+"users/phone/code";
+    }
+    //手机登录
+    public static  String getPhoneLoginUrl(){
+   return  baseUrl+"users/phone/login";
+    }
+    //手机注册
+    public static  String getPhoneRegisterUrl(){
+        return baseUrl+"users/phone/user";
+    }
+
 
 
 

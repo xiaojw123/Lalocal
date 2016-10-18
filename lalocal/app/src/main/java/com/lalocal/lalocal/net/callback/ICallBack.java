@@ -31,6 +31,7 @@ import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
+import com.lalocal.lalocal.model.PLoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.RechargeItem;
@@ -329,6 +330,18 @@ public abstract class ICallBack {
     public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
     }
     public void onGetChannelRecord(ChannelRecord record){
+
+    }
+    //手机号登录
+    public void onLoginByPhone(User user){
+
+    }
+    //手机号注册
+    public void onRegisterByPhone(String phone,String code,String email,String password){
+
+
+    }
+    public void onGetSmsCodeSuccess(){
 
     }
 }

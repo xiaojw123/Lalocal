@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.activity.EmailBoundActivity">
+
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/bound_email" />
+    <com.lalocal.lalocal.view.CustomEditText
+        android:id="@+id/p_emailbound_edit"
+        style="@style/CustomEditTextTheme"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+         app:maxLen="20"
+        app:isPsw="true"
+        app:text_hint="@string/set_pssword" />
+
+
+    <Button
+        android:id="@+id/p_emailbound_startlalocal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_btn_height"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:background="@drawable/orange_corner_btn_bg"
+        android:text="@string/start_lalocal_travel"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18_sp" />
+
+
+</LinearLayout>

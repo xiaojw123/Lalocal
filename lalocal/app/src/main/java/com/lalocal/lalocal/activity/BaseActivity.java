@@ -29,8 +29,8 @@ import butterknife.Unbinder;
 
 public class BaseActivity extends AppCompatActivity {
     public static final int PERMISSION_STGAT_CODE = 1123;
+    public ContentLoader mContentloader;
     Unbinder unbinder;
-    ContentLoader mContentloader;
     View mLoadingView;
 
     @Override

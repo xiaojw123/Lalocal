@@ -143,7 +143,7 @@
 
                     <TextView
                         style="@style/HomeMeTabTitleTheme"
-                        android:text="@string/live_master_fans" />
+                        android:text="@string/live_attention" />
 
                     <TextView
                         android:id="@+id/home_me_follow_num"

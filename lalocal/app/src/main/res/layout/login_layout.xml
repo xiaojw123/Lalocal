@@ -136,64 +136,64 @@
             android:paddingRight="@dimen/login_way_social_container_left_padding"
             android:visibility="gone">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:orientation="vertical">-->
 
-                <ImageView
-                    android:layout_width="@dimen/login_way_logo_width"
-                    android:layout_height="@dimen/login_way_logo_width"
-                    android:background="@drawable/login_wechat" />
+                <!--<ImageView-->
+                    <!--android:layout_width="@dimen/login_way_logo_width"-->
+                    <!--android:layout_height="@dimen/login_way_logo_width"-->
+                    <!--android:background="@drawable/login_wechat" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/login_way_logo_top"
-                    android:text="@string/weixin"
-                    android:textColor="@color/color_b3" />
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/login_way_logo_top"-->
+                    <!--android:text="@string/weixin"-->
+                    <!--android:textColor="@color/color_b3" />-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:orientation="vertical">-->
 
-                <ImageView
-                    android:layout_width="@dimen/login_way_logo_width"
-                    android:layout_height="@dimen/login_way_logo_width"
-                    android:background="@drawable/login_sina" />
+                <!--<ImageView-->
+                    <!--android:layout_width="@dimen/login_way_logo_width"-->
+                    <!--android:layout_height="@dimen/login_way_logo_width"-->
+                    <!--android:background="@drawable/login_sina" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/login_way_logo_top"
-                    android:text="@string/weibo"
-                    android:textColor="@color/color_b3" />
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/login_way_logo_top"-->
+                    <!--android:text="@string/weibo"-->
+                    <!--android:textColor="@color/color_b3" />-->
+            <!--</LinearLayout>-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="right"-->
+                <!--android:gravity="center_horizontal"-->
+                <!--android:orientation="vertical">-->
 
-                <ImageView
-                    android:layout_width="@dimen/login_way_logo_width"
-                    android:layout_height="@dimen/login_way_logo_width"
-                    android:background="@drawable/login_qq" />
+                <!--<ImageView-->
+                    <!--android:layout_width="@dimen/login_way_logo_width"-->
+                    <!--android:layout_height="@dimen/login_way_logo_width"-->
+                    <!--android:background="@drawable/login_qq" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/login_way_logo_top"
-                    android:text="@string/qq"
-                    android:textColor="@color/color_b3" />
-            </LinearLayout>
+                <!--<TextView-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/login_way_logo_top"-->
+                    <!--android:text="@string/qq"-->
+                    <!--android:textColor="@color/color_b3" />-->
+            <!--</LinearLayout>-->
 
         </FrameLayout>
 
