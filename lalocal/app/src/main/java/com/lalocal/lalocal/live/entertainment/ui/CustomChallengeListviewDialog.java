@@ -1,8 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,12 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 
 /**
  * Created by android on 2016/10/8.
  */
-public class CustomChallengeListviewDialog extends Dialog {
+public class CustomChallengeListviewDialog extends BaseDialog {
     @BindView(R.id.chanllage_dialog_listview_close_iv)
     ImageView chanllageDialogListviewCloseIv;
     @BindView(R.id.challenge_list_recy)
@@ -35,12 +32,15 @@ public class CustomChallengeListviewDialog extends Dialog {
         this.result = result;
     }
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.challenge_dialog_listview_layout);
-        ButterKnife.bind(this);
+    public void initView() {
         showChallengeList();
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.challenge_dialog_listview_layout;
     }
 
     private void showChallengeList() {

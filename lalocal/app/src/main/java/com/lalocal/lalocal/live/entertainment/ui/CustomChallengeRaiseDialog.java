@@ -1,8 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,14 +9,13 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by android on 2016/10/5.
  */
-public class CustomChallengeRaiseDialog extends Dialog {
+public class CustomChallengeRaiseDialog extends BaseDialog {
 
     @BindView(R.id.chanllage_dialog_raise_close_iv)
     ImageView chanllageDialogRaiseCloseIv;
@@ -46,17 +43,18 @@ public class CustomChallengeRaiseDialog extends Dialog {
     TextView challengeRaiseMoneyBtn;
     private Context mContext;
 
-    public CustomChallengeRaiseDialog(Context mContext) {
-        super(mContext, R.style.prompt_dialog);
-        this.mContext = mContext;
+    public CustomChallengeRaiseDialog(Context context) {
+        super(context);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.challenge_dialog_raise_layout);
-        ButterKnife.bind(this);
+    public void initView() {
         challengeRaiseMoneyProgress.setProgress(95);
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.challenge_dialog_raise_layout;
     }
 
 

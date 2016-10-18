@@ -510,9 +510,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                         String fromAccountIn = message.getFromAccount();
                         MsgStatusEnum status = message.getStatus();
-                        if (creatorAccount.equals(fromAccountIn)) {
-                            showFinishLayout(false, 2);
-                            AppLog.i("TAG", "主播回来了。。。。。。。。");
+                        if(fromAccountIn!=null&&creatorAccount!=null){
+                            if (creatorAccount.equals(fromAccountIn)) {
+                                showFinishLayout(false, 2);
+                                AppLog.i("TAG", "主播回来了。。。。。。。。");
+                            }
                         }
                         break;
                     case ChatRoomClose:
@@ -862,8 +864,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         keyboardLayout.setAlpha(1.0f);
                         keyboardLayout.setClickable(true);
                         liveSettingLayout.setVisibility(View.GONE);
+                        if(inputPanel!=null){
+                            inputPanel.switchToTextLayout(true);
+                        }
 
-                        inputPanel.switchToTextLayout(true);
                     }else {
                         Toast.makeText(AudienceActivity.this,"没有登录聊天室，请退出重进!",Toast.LENGTH_SHORT).show();
                     }
@@ -992,6 +996,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     protected void showMasterInfoPopuwindow(final LiveUserInfoResultBean result, boolean isMuted, final String meberAccount, int id, int managerId, List<LiveManagerListBean> managerList) {
 
+
+        AppLog.i("TAG","用户端走了showMasterInfoPopuwindow");
         isMuteds = isMuted;
         if (managerId != 0) {
             isManager = true;
@@ -1001,7 +1007,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         }
         customLiveUserInfoDialog = new CustomLiveUserInfoDialog(AudienceActivity.this, result, isManager, isMuted);
         customLiveUserInfoDialog.setCancelable(false);
-
         Object statusa = result.getAttentionVO().getStatus();
         if (statusa != null) {
             double parseDouble = Double.parseDouble(String.valueOf(statusa));
@@ -1123,7 +1128,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 }
             }
         });
-        customLiveUserInfoDialog.show();
+
 
         customLiveUserInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
@@ -1131,6 +1136,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 LiveConstant.USER_INFO_FIRST_CLICK=true;
             }
         });
+        customLiveUserInfoDialog.show();
     }
 
 
@@ -1369,7 +1375,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onFirstRemoteVideoDecoded(int uid, int width, int height, int elapsed) {
-        AppLog.i("TAG","接收远端视频解码回调:"+uid);
+
         this.uid=uid;
         doRenderRemoteUi(uid);
     }
@@ -1421,7 +1427,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     protected void onStop() {
         super.onStop();
-
+        if(giftStorePopuWindow!=null){
+            giftStorePopuWindow.dismiss();
+        }
+        if(giftsRankPopuWindow!=null){
+            giftsRankPopuWindow.dismiss();
+        }
         LiveConstant.IS_FIRST_CLICK_PAGE=true;
     }
 

@@ -4,6 +4,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <com.lalocal.lalocal.view.DisallowParentTouchSliderLayout
         android:id="@+id/live_ad_slider"
         android:layout_width="match_parent"
