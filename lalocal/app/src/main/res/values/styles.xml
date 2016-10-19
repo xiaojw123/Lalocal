@@ -557,5 +557,4 @@
         <item name="android:windowEnterAnimation">@anim/guide_in</item>
         <item name="android:windowExitAnimation">@anim/guide_out</item>
     </style>
-
 </resources>

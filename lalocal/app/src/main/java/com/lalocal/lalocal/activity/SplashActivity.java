@@ -129,6 +129,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onVersionResult(VersionInfo versionInfo) {
+            AppLog.print("onVersionResult______");
             result = versionInfo.getResult();
             if (result != null) {
                 String apiUrl = result.getApiUrl();
@@ -141,6 +142,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onGetSysConfigs(List<SysConfigItem> items) {
+            AppLog.print("onGetSysConfigs____");
             for (SysConfigItem item : items) {
                 int id = item.getId();
                 switch (id) {

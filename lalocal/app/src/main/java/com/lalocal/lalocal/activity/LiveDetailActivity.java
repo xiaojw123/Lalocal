@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.LiveRowsBean;
-import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -73,7 +72,9 @@ public class LiveDetailActivity extends BaseActivity {
         LiveRowsBean item = getUserLiveItem();
         intiView(item);
         setLoaderCallBack(new LiveDetailBack());
-        mContentloader.getChannelRecords(item.getId());
+        if (item != null) {
+            mContentloader.getChannelRecords(item.getId());
+        }
     }
 
     private void intiView(LiveRowsBean item) {

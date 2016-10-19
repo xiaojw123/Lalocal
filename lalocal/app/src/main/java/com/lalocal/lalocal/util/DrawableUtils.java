@@ -35,6 +35,7 @@ public class DrawableUtils {
         return wrappedDrawable;
     }
 
+
     public static void displayImg(Context context, ImageView img, String url) {
         displayImg(context, img, url, 0, DRAWABLE_NULL, null);
     }

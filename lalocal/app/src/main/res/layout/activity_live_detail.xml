@@ -23,7 +23,7 @@
             android:layout_marginRight="@dimen/dimen_size_15_dp" />
     </FrameLayout>
 
-    <ScrollView
+    <com.lalocal.lalocal.view.ReboundScrollView
         android:id="@+id/live_detail_scrollview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -246,7 +246,7 @@
                     android:layout_marginTop="@dimen/dimen_size_20_dp"
                     android:text="+0"
                     android:textColor="@color/color_ffaa2a"
-                    android:textSize="@dimen/text_size_16_sp" />
+                     android:textSize="@dimen/text_size_16_sp" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/live_detail_challenge_list"
@@ -257,7 +257,7 @@
             </RelativeLayout>
         </LinearLayout>
 
-    </ScrollView>
+    </com.lalocal.lalocal.view.ReboundScrollView>
 
 
 </LinearLayout>

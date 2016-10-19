@@ -87,7 +87,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-    //    compile 'com.lai.weavey:dialog:1.1'
     compile project(path: ':gifviewlibrary')
     compile project(':xrecyclerview')
     compile project(':selectordialog')
