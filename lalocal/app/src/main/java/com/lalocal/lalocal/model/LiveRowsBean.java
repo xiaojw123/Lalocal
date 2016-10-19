@@ -34,6 +34,28 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     private String endAt;
     private int totalScore;
     private int onlineNumber;
+    private List<VideoListBean> videoList;
+    private int direction;
+    private int channelId;
+
+    public String getLiveLen() {
+        return liveLen;
+    }
+
+    public void setLiveLen(String liveLen) {
+        this.liveLen = liveLen;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    private String liveLen;
+    private String date;
 
     public List<VideoListBean> getVideoList() {
         return videoList;
@@ -43,9 +65,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.videoList = videoList;
     }
 
-    private List<VideoListBean> videoList;
-    private int direction;
-    private int channelId;
+
 
     public int getChannelId() {
         return channelId;
@@ -362,6 +382,8 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         dest.writeList(this.videoList);
         dest.writeInt(this.direction);
         dest.writeInt(this.channelId);
+        dest.writeString(this.liveLen);
+        dest.writeString(this.date);
     }
 
     protected LiveRowsBean(Parcel in) {
@@ -393,6 +415,8 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         in.readList(this.videoList, VideoListBean.class.getClassLoader());
         this.direction = in.readInt();
         this.channelId = in.readInt();
+        this.liveLen = in.readString();
+        this.date = in.readString();
     }
 
     public static final Creator<LiveRowsBean> CREATOR = new Creator<LiveRowsBean>() {

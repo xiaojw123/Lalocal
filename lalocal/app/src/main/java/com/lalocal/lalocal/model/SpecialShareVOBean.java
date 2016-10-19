@@ -14,6 +14,8 @@ public class SpecialShareVOBean implements Parcelable {
     private String img;
     private int type;
     private Bitmap bitmap;
+    private int targetType;
+    private int targetId;
 
     public String getUrl() {
         return url;
@@ -63,6 +65,22 @@ public class SpecialShareVOBean implements Parcelable {
         this.bitmap = bitmap;
     }
 
+    public int getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(int targetType) {
+        this.targetType = targetType;
+    }
+
+    public int getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(int targetId) {
+        this.targetId = targetId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -76,6 +94,8 @@ public class SpecialShareVOBean implements Parcelable {
         dest.writeString(this.img);
         dest.writeInt(this.type);
         dest.writeParcelable(this.bitmap, flags);
+        dest.writeInt(this.targetType);
+        dest.writeInt(this.targetId);
     }
 
     public SpecialShareVOBean() {
@@ -88,6 +108,8 @@ public class SpecialShareVOBean implements Parcelable {
         this.img = in.readString();
         this.type = in.readInt();
         this.bitmap = in.readParcelable(Bitmap.class.getClassLoader());
+        this.targetType = in.readInt();
+        this.targetId = in.readInt();
     }
 
     public static final Parcelable.Creator<SpecialShareVOBean> CREATOR = new Parcelable.Creator<SpecialShareVOBean>() {

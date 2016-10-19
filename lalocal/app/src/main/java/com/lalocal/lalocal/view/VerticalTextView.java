@@ -23,6 +23,9 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+
+import com.lalocal.lalocal.util.AppLog;
 
 public class VerticalTextView extends View {
 
@@ -40,8 +43,7 @@ public class VerticalTextView extends View {
     private int oldwidth = 0 ;//存储久的width
     private String text="";//待显示的文字
 
-	private int mMaxLines = -1; // 最大行数
-    private boolean isLengthOver = false; // 标记 文本是否超出可视范围
+	private int mMaxLines = 9999; // 最大行数
 
     private Handler mHandler=null;
     private Matrix matrix;
@@ -83,7 +85,6 @@ public class VerticalTextView extends View {
 	 * @param lines
      */
 	public final void setTextMaxLines(int lines) {
-		// TODO---------------------------------------------------------------------------------------------------
         if (lines <= 0) {
             return;
         }
@@ -134,25 +135,52 @@ public class VerticalTextView extends View {
     	}
         //画字
         draw(canvas, this.text);
-    }  
+    }
+
     private void draw(Canvas canvas, String thetext) {
     	char ch;
+        int curLine = 1;
     	mTextPosy = 0;//初始化y坐标
     	mTextPosx = mTextWidth - mLineWidth;//初始化x坐标    	
         for (int i = 0; i < this.TextLength; i++) {
         	ch = thetext.charAt(i);
         	if (ch == '\n') {
-        		mTextPosx -= mLineWidth;// 换列
+                curLine++;
+                if (curLine > mMaxLines) {
+                    return;
+                }
+                mTextPosx -= mLineWidth;// 换列
     	    	mTextPosy = 0;
         	} else {
         		mTextPosy += mFontHeight;
-        		if (mTextPosy > this.mTextHeight) {
-        			mTextPosx -= mLineWidth;// 换列
-        			i--;
-        			mTextPosy = 0;
-        		}else{
-        			canvas.drawText(String.valueOf(ch), mTextPosx, mTextPosy, paint);
-        		}
+//        		if (mTextPosy > this.mTextHeight) {
+//        			mTextPosx -= mLineWidth;// 换列
+//        			i--;
+//        			mTextPosy = 0;
+//        		}else{
+//        			canvas.drawText(String.valueOf(ch), mTextPosx, mTextPosy, paint);
+//        		}
+                // 最后一行特殊处理，如果超出范围，则显示省略号
+                if (curLine == mMaxLines) {
+                    if (mTextPosy + this.mTextHeight > this.mTextHeight && i < this.TextLength - 1) {
+                        AppLog.i("ttt", "1");
+                        canvas.drawText("...", mTextPosx, mTextPosy, paint);
+                    }else{
+                        AppLog.i("ttt", "2");
+                        canvas.drawText(String.valueOf(ch), mTextPosx, mTextPosy, paint);
+                    }
+                } else { // 如果不是最后一行，则照常处理
+                    if (mTextPosy > this.mTextHeight) {
+                        AppLog.i("ttt", "3");
+                        curLine++; // 行号+1
+                        mTextPosx -= mLineWidth;// 换列
+                        i--;
+                        mTextPosy = 0;
+                    }else{
+                        AppLog.i("ttt", "4");
+                        canvas.drawText(String.valueOf(ch), mTextPosx, mTextPosy, paint);
+                    }
+                }
         	}	
         }
         
@@ -196,11 +224,6 @@ public class VerticalTextView extends View {
     	   }
     	}
     	mRealLine++;//额外增加一行
-        // 与最大行数比较
-        if (mRealLine > mMaxLines) {
-            mRealLine = mMaxLines;
-            this.isLengthOver = true;
-        }
     	mTextWidth = mLineWidth*mRealLine;//计算文字总宽度
     	measure(mTextWidth, getHeight());//重新调整大小
         layout(getLeft(), getTop(), getLeft()+mTextWidth, getBottom());//重新绘制容器

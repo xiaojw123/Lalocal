@@ -57,7 +57,7 @@ import com.lalocal.lalocal.view.DisallowParentTouchSliderLayout;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 import com.lalocal.lalocal.view.MyGridView;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
-import com.lalocal.lalocal.view.ScaleImageView;
+import com.lalocal.lalocal.view.WrapContentImageView;
 import com.lalocal.lalocal.view.SquareImageView;
 import com.lalocal.lalocal.view.WrapContentListView;
 
@@ -361,7 +361,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                if (isScrolling) {
 //                    defaultSliderView.image(R.drawable.androidloading);
 //                } else {
-                    defaultSliderView.image(ad.photo);
+                defaultSliderView.image(ad.photo);
 //                }
                 defaultSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
                     @Override
@@ -583,7 +583,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 SubLiveViewHolder liveViewHolder = new SubLiveViewHolder();
                 liveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
                 liveViewHolder.cardView = (CardView) view.findViewById(R.id.card_view);
-                liveViewHolder.imgLivePic = (ScaleImageView) view.findViewById(R.id.img_live_pic);
+                liveViewHolder.imgLivePic = (WrapContentImageView) view.findViewById(R.id.img_live_pic);
                 liveViewHolder.imgIcon = (ImageView) view.findViewById(R.id.icon);
                 liveViewHolder.tvLiveIconContent = (TextView) view.findViewById(R.id.tv_icon_content);
                 liveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
@@ -601,20 +601,25 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                if (isScrolling) {
 //                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, "", DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
 //                } else {
-                    if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
+                if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
 //                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
-                        DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                    } else if (!TextUtils.isEmpty(photo)) {
-                        DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-                    }
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                } else if (!TextUtils.isEmpty(photo)) {
+                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                }
 //                }
 
                 // 如果图片链接一致，说明是公告视频，下方显示地理位置
                 if (liveRowsBean.getType() == 1) { // 云信通过type来判断：1-系统，2-用户；声网通过cname来判断：null-系统，否则为用户
                     liveViewHolder.imgIcon.setImageResource(R.drawable.peopleliving_location_darkic);
+                    // 设置图标透明度为20%
+                    liveViewHolder.imgIcon.getDrawable().setAlpha(20);
                     String address = liveRowsBean.getAddress();
                     liveViewHolder.tvLiveIconContent.setText(address);
                 } else {
+                    liveViewHolder.imgIcon.setImageResource(R.drawable.manypeople_dark);
+                    // 设置图标透明度为20%
+                    liveViewHolder.imgIcon.getDrawable().setAlpha(20);
                     // 设置在线用户人数
                     int onlineUser = liveRowsBean.getOnlineUser();
                     // 人数以“,”将千分位隔开
@@ -634,8 +639,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                if (isScrolling) {
 //                    liveViewHolder.imgLiveAvatar.setImageResource(R.drawable.androidloading);
 //                } else {
-                    // 设置头像
-                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
+                // 设置头像
+                DrawableUtils.displayImg(mContext, liveViewHolder.imgLiveAvatar, avatar, R.drawable.androidloading);
 //                }
 
                 // 获取视频播放相关数据
@@ -678,7 +683,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         class SubLiveViewHolder {
             FrameLayout container;
             CardView cardView;
-            ScaleImageView imgLivePic;
+            WrapContentImageView imgLivePic;
             TextView tvLiveTitle;
             TextView tvLiveIconContent;
             CircleImageView imgLiveAvatar;
@@ -795,7 +800,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                    if (isScrolling) {
 //                        imgComoddity.setImageResource(R.drawable.androidloading);
 //                    } else {
-                        DrawableUtils.displayImg(mContext, imgComoddity, bean.photo, R.drawable.androidloading);
+                    DrawableUtils.displayImg(mContext, imgComoddity, bean.photo, R.drawable.androidloading);
 //                    }
 
                     // 设置商品价格
@@ -980,8 +985,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                    DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, "",
 //                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
 //                } else {
-                    DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
-                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
+                        DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
 //                }
 
                 // 设置名字
@@ -1073,13 +1078,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 //                        imgArticle.setImageResource(R.drawable.androidloading);
 //                    } else {
 //                        DrawableUtils.displayImg(context, imgArticle, bean.getPhoto());
-                        Glide.with(mContext)
-                                .load(bean.getPhoto())
-                                .centerCrop()
-                                .crossFade()
-                                // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
-                                .diskCacheStrategy(DiskCacheStrategy.SOURCE )
-                                .into(imgArticle);
+                    Glide.with(mContext)
+                            .load(bean.getPhoto())
+                            .centerCrop()
+                            .crossFade()
+                            // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
+                            .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                            .into(imgArticle);
 //                    }
 
                     // 设置标题

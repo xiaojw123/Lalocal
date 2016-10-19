@@ -761,6 +761,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
         audienceOver = findViewById(R.id.audience_over);
+        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home);
+        liveMasterHome.setOnClickListener(buttonClickListener);
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 
@@ -908,11 +910,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     customChallengeRaiseDialog.show();
                     break;
                 case R.id.live_master_home_over:
-                    Toast.makeText(AudienceActivity.this,"点阿基得了",Toast.LENGTH_SHORT).show();
+
                     Intent intent2 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent2.putExtra("userId", userId);
                     startActivity(intent2);
                     break;
+
 
             }
         }
@@ -1322,10 +1325,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveFans = (TextView) audienceOver.findViewById(R.id.live_fans);
         liveContribute = (TextView) audienceOver.findViewById(R.id.live_contribute);
         goMasterHome = (LinearLayout) audienceOver.findViewById(R.id.go_master_home);
+
         liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
         masterInfoCloseIv.setOnClickListener(buttonClickListener);
-        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
         liveMasterHome.setOnClickListener(buttonClickListener);
+
         goMasterHome.setOnClickListener(buttonClickListener);
         masterInfoBack.setOnClickListener(buttonClickListener);
         String avatar = result.getAvatar();

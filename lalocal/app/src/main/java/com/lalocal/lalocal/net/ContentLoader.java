@@ -44,6 +44,7 @@ import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -52,6 +53,7 @@ import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.LiveRowsDataResp;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -71,6 +73,7 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
+import com.lalocal.lalocal.model.UserLiveDataResp;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
@@ -1023,6 +1026,26 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
+    // 获取用户当前直播
+    public void getUserCurLive(int userid) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_CUR_LIVE);
+        }
+
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getUserCurLive(userid), response, response);
+        requestQueue.add(contentRequest);
+    }
+
+    // 获取用户文章
+    public void getUserArticles(int userid, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_ARTICLE);
+        }
+
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getUserArticles(userid, pageNum), response, response);
+        requestQueue.add(contentRequest);
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -1463,7 +1486,12 @@ public class ContentLoader {
                     case RequestCode.LIVE_PALY_BACK_DETAILS:
                         responPlayBackDetails(jsonObj);
                         break;
-
+                    case RequestCode.GET_USER_CUR_LIVE:
+                        responseUserCurLive(json);
+                        break;
+                    case RequestCode.GET_USER_ARTICLE:
+                        responseUserArticle(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1481,6 +1509,7 @@ public class ContentLoader {
         private void responseGetUserLive(JSONObject jsonObj) {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
+            AppLog.i("ussr", "the hist user live data  is " + json);
             UserLiveItem item=gson.fromJson(json,UserLiveItem.class);
             callBack.onGetUserLive(item);
         }
@@ -2205,6 +2234,23 @@ public class ContentLoader {
             }
         }
 
+        // 响应用户当前直播数据
+        private void responseUserCurLive(String json) {
+            LiveRowsDataResp dataResp = new Gson().fromJson(json, LiveRowsDataResp.class);
+            if (dataResp.getReturnCode() == 0) {
+                callBack.onGetUserCurLive(dataResp.getResult());
+            }
+        }
+
+        // 响应用户直播列表
+        private void responseUserArticle(String json) {
+            HomepageUserArticlesResp articlesResp = new Gson().fromJson(json, HomepageUserArticlesResp.class);
+            if (articlesResp.getReturnCode() == 0) {
+                callBack.onGetUserArticles(articlesResp);
+            }
+        }
+
+
         @Override
         public void onDialogClickListener() {
             Intent intent = new Intent(context, RegisterActivity.class);
@@ -2563,7 +2609,8 @@ public class ContentLoader {
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;
-
+        int GET_USER_CUR_LIVE = 302;
+        int GET_USER_ARTICLE = 303;
     }
 
 }

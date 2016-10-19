@@ -484,16 +484,30 @@ public class AppConfig {
 
     //用户历史直播
     public static  String getUserLiveUrl(int userid,int pageNum){
-
-        return  baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+        String url = baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+        AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
+        return url;
 
     }
+
     //用户明细
     public static  String getChannelRecords(int id){
 
         return  baseUrl+"channels/records/"+id;
     }
 
+    // 用户当前直播
+    public static String getUserCurLive(int userid) {
+        String url = baseUrl + "channels/users/" + userid + "/detail";
+        AppLog.i("ussr", "the getUserCurLive url is " + url);
+        return url;
+    }
 
+    // 获取用户文章列表
+    public static String getUserArticles(int userid, int pageNum) {
+        String url = baseUrl + "articles/author?authorId=" + userid + "&pageSize=10&pageNumber=" + pageNum;
+        AppLog.i("ussr", "the getUserArticles url is " + url);
+        return url;
+    }
 
 }

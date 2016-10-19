@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LiveDetailActivity;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.BaseRecyclerAdapter;
@@ -32,13 +33,13 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
     public static String FOMRAT_TIME = "%1$s:%2$s:%3$s";
 
     Context mContext;
-    List<UserLiveItem.RowsBean> mItems;
+    List<LiveRowsBean> mItems;
 
-    public MyLiveAdapter(List<UserLiveItem.RowsBean> items) {
+    public MyLiveAdapter(List<LiveRowsBean> items) {
         mItems = items;
     }
 
-    public void updateItems(List<UserLiveItem.RowsBean> items) {
+    public void updateItems(List<LiveRowsBean> items) {
         mItems = items;
         notifyDataSetChanged();
     }
@@ -55,16 +56,16 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
         if (mItems != null) {
-            UserLiveItem.RowsBean item = mItems.get(position);
+            LiveRowsBean item = mItems.get(position);
             if (item != null) {
                 ItemLiveHolder itemHolder = (ItemLiveHolder) holder;
                 DrawableUtils.displayImg(mContext, itemHolder.postImg, item.getPhoto());
                 itemHolder.titleTv.setText(item.getTitle());
                 String adddres = item.getAddress();
-                String onlienNum = item.getOnlineNumber();
+                String onlienNum = String.valueOf(item.getOnlineNumber());
                 String startAt = item.getStartAt();
                 String endAt = item.getEndAt();
-                String toalScore = item.getTotalScore();
+                String toalScore = String.valueOf(item.getTotalScore());
                 if (!TextUtils.isEmpty(adddres)) {
                     itemHolder.locationTv.setVisibility(View.VISIBLE);
                     itemHolder.locationTv.setText(adddres);

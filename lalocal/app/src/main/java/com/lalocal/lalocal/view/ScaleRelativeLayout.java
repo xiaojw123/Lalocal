@@ -2,17 +2,18 @@ package com.lalocal.lalocal.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.location.Location;
 import android.util.AttributeSet;
-import android.widget.ImageView;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.util.AppLog;
 
 /**
- * Created by wangjie on 2016/10/13.
+ * Created by wangjie on 2016/10/14.
  */
-public class ScaleImageView extends ImageView {
+public class ScaleRelativeLayout extends RelativeLayout {
 
     // 常量标记：固定宽度
     public static final int SOLID_WIDTH = -1;
@@ -27,15 +28,15 @@ public class ScaleImageView extends ImageView {
     // 固定标记
     private int mSolid = SOLID_WIDTH;
 
-    public ScaleImageView(Context context) {
+    public ScaleRelativeLayout(Context context) {
         this(context, null);
     }
 
-    public ScaleImageView(Context context, AttributeSet attrs) {
+    public ScaleRelativeLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ScaleImageView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public ScaleRelativeLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.ScaleView);
@@ -43,6 +44,9 @@ public class ScaleImageView extends ImageView {
         mScale = ta.getFloat(R.styleable.ScaleView_scale, NO_SCALE);
         // 获取固定标记
         mSolid = ta.getInteger(R.styleable.ScaleView_solid, SOLID_WIDTH);
+        AppLog.i("widd", "scale = " + mScale);
+        AppLog.i("widd", "solid = " + mSolid);
+        AppLog.i("widd", "child -- " + getChildCount());
     }
 
     @Override
@@ -50,6 +54,7 @@ public class ScaleImageView extends ImageView {
 
         if (mScale < 0) {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            measureChildren(widthMeasureSpec, heightMeasureSpec);
             return;
         }
         // 计算ImageView的宽度
@@ -64,10 +69,17 @@ public class ScaleImageView extends ImageView {
             width = (int) (height * mScale);
         } else {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+            measureChildren(widthMeasureSpec, heightMeasureSpec);
             return;
         }
         // 将重新定义后的宽度和高度设置为图片显示的大小
         setMeasuredDimension(width, height);
+        measureChildren(widthMeasureSpec, heightMeasureSpec);
 
+    }
+
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
     }
 }

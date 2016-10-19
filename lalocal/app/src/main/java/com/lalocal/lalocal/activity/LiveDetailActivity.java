@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ChannelRecord;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -69,13 +70,13 @@ public class LiveDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live_detail);
         ButterKnife.bind(this);
-        UserLiveItem.RowsBean item = getUserLiveItem();
+        LiveRowsBean item = getUserLiveItem();
         intiView(item);
         setLoaderCallBack(new LiveDetailBack());
         mContentloader.getChannelRecords(item.getId());
     }
 
-    private void intiView(UserLiveItem.RowsBean item) {
+    private void intiView(LiveRowsBean item) {
         liveDetailGiftRlv.setNestedScrollingEnabled(false);
         liveDetailGiftRlv.setLayoutManager(new GridLayoutManager(this, 4));
         liveDetailChallengeList.setNestedScrollingEnabled(false);
@@ -85,7 +86,7 @@ public class LiveDetailActivity extends BaseActivity {
             DrawableUtils.displayImg(this, liveDetailImg, item.getPhoto());
             liveDetailTitle.setText(item.getTitle());
             String addres = item.getAddress();
-            String onlineNum = item.getOnlineNumber();
+            String onlineNum = String.valueOf(item.getOnlineNumber());
             String liveLen = item.getLiveLen();
             if (!TextUtils.isEmpty(addres)) {
                 liveDetailLocation.setVisibility(View.VISIBLE);
@@ -124,7 +125,7 @@ public class LiveDetailActivity extends BaseActivity {
     }
 
 
-    public UserLiveItem.RowsBean getUserLiveItem() {
+    public LiveRowsBean getUserLiveItem() {
         return getIntent().getParcelableExtra(LIVE_ITEM);
     }
 
