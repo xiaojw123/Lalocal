@@ -26,16 +26,22 @@ import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.LiveArticleVPAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.BigPictureBean;
+import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
+import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -101,6 +107,13 @@ public class LiveHomePageActivity extends BaseActivity {
     private PopupWindow popupWindow;
     private String back;
 
+    // 用户历史直播列表
+    private List<LiveRowsBean> mUserLiveList;
+    // 用户当前直播
+    private LiveRowsBean mUserLiving;
+    // 用户文章列表
+    private List<ArticleDetailsResultBean> mUserArticleList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,40 +125,57 @@ public class LiveHomePageActivity extends BaseActivity {
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(userId);
 
-        // 初始化直播、文章列表
-        initLiveArticle();
+        // 获取用户历史直播列表
+        contentLoader.getUserLive(Integer.valueOf(userId), 1);
+        AppLog.i("ussr", "getUserLive");
+        // 获取用户当前直播
+        contentLoader.getUserCurLive(Integer.valueOf(userId));
+        AppLog.i("ussr", "getUserCurLive");
+        // 获取用户文章列表
+        contentLoader.getUserArticles(Integer.valueOf(userId), 1);
+        AppLog.i("ussr", "getUserArticles");
     }
 
     /**
-     * 初始化直播、文章列表
+     * 设置直播、文章列表数据
      */
-    private void initLiveArticle() {
-        if (mVPAdapter == null)
-            mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this);
+    private void setLiveArticleData() {
+        AppLog.i("ussr", "setLiveArticleData()");
+        // 初始化数据
+//        if (mVPAdapter == null) {
+            mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this, mUserLiving, mUserLiveList, mUserArticleList);
+            AppLog.i("ussr", "ViewPagerAdapter init");
 
-        // 设置适配器
-        mVpLiveArticle.setAdapter(mVPAdapter);
+            // 设置适配器
+            mVpLiveArticle.setAdapter(mVPAdapter);
+            AppLog.i("ussr", "setAdapter()");
 
-        // 默认显示第一页（下标为0）
-        selecteTab(0);
+            // 默认显示第一页（下标为0）
+            selecteTab(0);
+            AppLog.i("ussr", "select tab 0");
 
-        // 设置vp滑动监听事件
-        mVpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            // 设置vp滑动监听事件
+            mVpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-            }
+                }
 
-            @Override
-            public void onPageSelected(int position) {
-                selecteTab(position);
-            }
+                @Override
+                public void onPageSelected(int position) {
+                    selecteTab(position);
+                }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
+                @Override
+                public void onPageScrollStateChanged(int state) {
 
-            }
-        });
+                }
+            });
+//        } else {
+             // 更新数据
+//            mVPAdapter.notifyDataSetChanged();
+//            AppLog.i("ussr", "notifyDataSetChanged()");
+//        }
     }
 
     @Override
@@ -396,6 +426,47 @@ public class LiveHomePageActivity extends BaseActivity {
                 fansNum = fansNum - 1;
                 homepageFansCount.setText(String.valueOf(fansNum));
             }
+        }
+
+        /**
+         * 获取用户历史直播列表
+         * @param item
+         */
+        @Override
+        public void onGetUserLive(UserLiveItem item) {
+            super.onGetUserLive(item);
+            AppLog.i("ussr", "onGetUserLive()");
+            // 获取用户历史直播列表
+            mUserLiveList = item.getRows();
+            AppLog.i("ussr", "获取用户直播列表---" + mUserLiveList.toString() + ";数据量：" + mUserLiveList.size());
+            // 设置直播、文章列表数据
+            setLiveArticleData();
+        }
+
+        /**
+         * 获取用户当前直播
+         * @param liveRowsBean
+         */
+        @Override
+        public void onGetUserCurLive(LiveRowsBean liveRowsBean) {
+            super.onGetUserCurLive(liveRowsBean);
+            AppLog.i("ussr", "onGetUserCurLive()");
+            // 获取用户当前直播
+            mUserLiving = liveRowsBean;
+            AppLog.i("ussr", "获取用户当前直播---" + mUserLiving);
+            // 设置直播、文章列表数据
+            setLiveArticleData();
+        }
+
+        @Override
+        public void onGetUserArticles(HomepageUserArticlesResp articlesResp) {
+            super.onGetUserArticles(articlesResp);
+            AppLog.i("ussr", "onGetUserArticles()");
+            // 获取用户文章列表
+            mUserArticleList = articlesResp.getResult().getRows();
+            AppLog.i("ussr", "获取用户文章列表---" + mUserArticleList.toString());
+            // 设置直播、文章列表数据
+            setLiveArticleData();
         }
     }
 

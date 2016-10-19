@@ -22,7 +22,10 @@ import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -384,6 +387,7 @@ public class CommonUtil {
 
     /**
      * 设置屏幕的背景透明度
+     *
      * @param bgAlpha
      */
     public static void backgroundAlpha(Window window, float bgAlpha) {
@@ -391,4 +395,41 @@ public class CommonUtil {
         lp.alpha = bgAlpha;
         window.setAttributes(lp);
     }
+
+    /**
+     * 计算两个时间的时间差，以“00:00:00”格式输出
+     * @param start
+     * @param end
+     * @return
+     */
+    public static String calculateDuration(String start, String end) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            long s = sdf.parse(start).getTime();
+            long e = sdf.parse(end).getTime();
+            long duration = e - s;
+
+            duration = duration % (24 * 60 * 60 * 1000);
+            int hour = (int) (duration / (60 * 60 * 1000));
+
+            duration = duration % (60 * 60 * 1000);
+            int minute = (int) (duration / (60 * 1000));
+
+            duration = duration % (60 * 1000);
+            int second = (int) (duration / 1000);
+
+            return formatNum(hour) + ":" + formatNum(minute) + ":" + formatNum(second);
+
+        } catch (ParseException e) {
+            return "00:00:00";
+        }
+    }
+
+    public static String formatNum(int num) {
+        if (num < 10) {
+            return "0" + num;
+        }
+        return String.valueOf(num);
+    }
+
 }

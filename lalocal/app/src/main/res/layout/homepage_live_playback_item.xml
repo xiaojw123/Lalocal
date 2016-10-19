@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="160dp"
     android:background="@color/white"
@@ -42,8 +44,10 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/icon_playback_location"
                     android:layout_width="@dimen/dimen_size_12_dp"
                     android:layout_height="@dimen/dimen_size_12_dp"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/peopleliving_location_darkic" />
 
                 <TextView
@@ -65,8 +69,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/icon_playback_people"
                     android:layout_width="@dimen/dimen_size_12_dp"
                     android:layout_height="@dimen/dimen_size_12_dp"
+
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/manypeople_dark" />
 
                 <TextView
@@ -88,9 +95,11 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/icon_playback_time"
                     android:layout_width="@dimen/dimen_size_12_dp"
                     android:layout_height="@dimen/dimen_size_12_dp"
-                    android:src="@drawable/peopleliving_location_darkic" />
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/manytime_light" />
 
                 <TextView
                     android:id="@+id/tv_live_playback_duration"

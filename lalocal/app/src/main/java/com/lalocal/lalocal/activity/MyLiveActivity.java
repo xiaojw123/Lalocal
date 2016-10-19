@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.view.MyLiveAdapter;
@@ -63,7 +64,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
     }
 
     class LiveCallBack extends ICallBack implements OnItemClickListener {
-        List<UserLiveItem.RowsBean> rowsList = new ArrayList<>();
+        List<LiveRowsBean> rowsList = new ArrayList<>();
         MyLiveAdapter adapter;
 
         @Override
@@ -123,7 +124,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
         @Override
         public void onItemClickListener(View view, int position) {
-            UserLiveItem.RowsBean item = (UserLiveItem.RowsBean) view.getTag();
+            LiveRowsBean item = (LiveRowsBean) view.getTag();
             if (item != null) {
                 Intent intent = new Intent(MyLiveActivity.this, LiveDetailActivity.class);
                 intent.putExtra(LiveDetailActivity.LIVE_ITEM, item);

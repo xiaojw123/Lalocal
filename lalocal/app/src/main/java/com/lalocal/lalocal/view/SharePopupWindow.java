@@ -13,10 +13,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.net.ContentLoader;
-import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
@@ -36,8 +35,19 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private BlurImageView shareBlur;
     private View view;
     private View cancelLayout;
-    private ContentLoader contentLoader;
     private  String  targetId;
+
+       // contentLoader.getShareStatistics(String.valueOf(shareVO.getType()), "12",share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
+
+    private OnShareListener onShareListener;
+
+    public interface OnShareListener {
+        void getSharePlatform(SHARE_MEDIA share_media);
+    }
+
+    public void setOnLiveItemClickListener(OnShareListener onShareListener) {
+        this.onShareListener = onShareListener;
+    }
 
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
@@ -219,7 +229,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
-        //    contentLoader.getShareStatistics(String.valueOf(shareVO.getType()), "12",share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
+            if(onShareListener!=null){
+                onShareListener.getSharePlatform(share_media);
+            }
            if(share_media.equals(SHARE_MEDIA.SINA)){
                Toast.makeText(context,"微博分享成功!",Toast.LENGTH_SHORT).show();
            }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
@@ -248,6 +260,12 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                 Toast.makeText(context,"已取消微信朋友圈分享!",Toast.LENGTH_SHORT).show();
             }
         }
+
+
+
+
+
+
     }
 
 

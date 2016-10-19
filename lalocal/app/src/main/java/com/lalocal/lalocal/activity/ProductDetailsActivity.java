@@ -414,7 +414,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 praiseId = pariseResult.getResult();
                 praiseFlag = true;
             }
-
         }
     }
 

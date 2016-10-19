@@ -284,12 +284,14 @@ public class AppConfig {
         return baseUrl+"system/areas?channelFlag=true";
     }
     //直播首页 http://dev.lalocal.cn:8080/api/channels/index?area=2&attentionFlag=
-    public  static  final  String getLiveHotList(String areaId){
-        return  baseUrl+(areaId==null?"channels/index?area=":("channels/index?area="+areaId));
+    public  static  final  String getLiveHotList(String areaId,String attentionFlag){
+        return  baseUrl+"channels/index?area="+areaId+"&attentionFlag="+attentionFlag;
     }
     //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
-    public static final String getPlayBackLive(String areaId,int pageNumber){
-        return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+    public static final String getPlayBackLive(String areaId,int pageNumber,String attentionFlag){
+      //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+   return baseUrl+"channels/historys?area="+areaId+"&pageNumber="+pageNumber+"&attentionFlag="+attentionFlag;
+
     }
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public  static final String getPlayBackLiveDetails(int id){
@@ -482,10 +484,12 @@ public class AppConfig {
 
     //用户历史直播
     public static  String getUserLiveUrl(int userid,int pageNum){
-
-        return  baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+        String url = baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+        AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
+        return url;
 
     }
+
     //用户明细
     public static  String getChannelRecords(int id){
 
@@ -506,6 +510,18 @@ public class AppConfig {
     }
 
 
+    // 用户当前直播
+    public static String getUserCurLive(int userid) {
+        String url = baseUrl + "channels/users/" + userid + "/detail";
+        AppLog.i("ussr", "the getUserCurLive url is " + url);
+        return url;
+    }
 
+    // 获取用户文章列表
+    public static String getUserArticles(int userid, int pageNum) {
+        String url = baseUrl + "articles/author?authorId=" + userid + "&pageSize=10&pageNumber=" + pageNum;
+        AppLog.i("ussr", "the getUserArticles url is " + url);
+        return url;
+    }
 
 }

@@ -45,6 +45,7 @@ import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -53,6 +54,7 @@ import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.LiveRowsDataResp;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -998,21 +1000,21 @@ public class ContentLoader {
     }
 
     //直播首页
-    public void getLivelist(String areaId) {
+        public void getLivelist(String areaId,String attentionFlag){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId,attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
     //历史直播
-    public void getPlayBackLiveList(String areaId, int pageNumber) {
+    public  void getPlayBackLiveList(String areaId,int pageNumber,String attentionFlag){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId, pageNumber), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber,attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -1087,6 +1089,26 @@ public class ContentLoader {
 
         ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleDetailsUrl() + targetId, response, response);
         contentRequest.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(contentRequest);
+    }
+
+    // 获取用户当前直播
+    public void getUserCurLive(int userid) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_CUR_LIVE);
+        }
+
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getUserCurLive(userid), response, response);
+        requestQueue.add(contentRequest);
+    }
+
+    // 获取用户文章
+    public void getUserArticles(int userid, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_ARTICLE);
+        }
+
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getUserArticles(userid, pageNum), response, response);
         requestQueue.add(contentRequest);
     }
 
@@ -1541,7 +1563,12 @@ public class ContentLoader {
                     case RequestCode.LIVE_PALY_BACK_DETAILS:
                         responPlayBackDetails(jsonObj);
                         break;
-
+                    case RequestCode.GET_USER_CUR_LIVE:
+                        responseUserCurLive(json);
+                        break;
+                    case RequestCode.GET_USER_ARTICLE:
+                        responseUserArticle(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -2316,6 +2343,23 @@ public class ContentLoader {
             }
         }
 
+        // 响应用户当前直播数据
+        private void responseUserCurLive(String json) {
+            LiveRowsDataResp dataResp = new Gson().fromJson(json, LiveRowsDataResp.class);
+            if (dataResp.getReturnCode() == 0) {
+                callBack.onGetUserCurLive(dataResp.getResult());
+            }
+        }
+
+        // 响应用户直播列表
+        private void responseUserArticle(String json) {
+            HomepageUserArticlesResp articlesResp = new Gson().fromJson(json, HomepageUserArticlesResp.class);
+            if (articlesResp.getReturnCode() == 0) {
+                callBack.onGetUserArticles(articlesResp);
+            }
+        }
+
+
         @Override
         public void onDialogClickListener() {
             Intent intent = new Intent(context, RegisterActivity.class);
@@ -2686,7 +2730,8 @@ public class ContentLoader {
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;
-
+        int GET_USER_CUR_LIVE = 302;
+        int GET_USER_ARTICLE = 303;
     }
 
 }

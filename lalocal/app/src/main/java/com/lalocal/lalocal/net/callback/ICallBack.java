@@ -20,6 +20,7 @@ import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
+import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -344,4 +345,11 @@ public abstract class ICallBack {
     public void onGetSmsCodeSuccess(){
 
     }
+
+    // 获取用户当前直播
+    public void onGetUserCurLive(LiveRowsBean liveRowsBean) {}
+
+    // 获取用户文章列表
+    public void onGetUserArticles(HomepageUserArticlesResp articlesResp) {}
+
 }

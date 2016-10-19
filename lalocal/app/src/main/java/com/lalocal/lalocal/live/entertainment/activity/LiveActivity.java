@@ -64,7 +64,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
-import com.lalocal.lalocal.view.ScaleImageView;
+import com.lalocal.lalocal.view.WrapContentImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -482,7 +482,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public Object instantiateItem(final ViewGroup container, int position) {
             View view = LayoutInflater.from(LiveActivity.this).inflate(R.layout.novice_guide_item, null);
-            ScaleImageView page = (ScaleImageView) view.findViewById(R.id.img_guide);
+            WrapContentImageView page = (WrapContentImageView) view.findViewById(R.id.img_guide);
             switch (position) {
                 case 0:
                     page.setImageResource(R.drawable.card_1);
@@ -1220,7 +1220,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
                 AppLog.i("TAG","调用了上传直播间任务的的接口");
-                handlerLine.postDelayed(new MyRunnable(),2000);
+                //handlerLine.postDelayed(new MyRunnable(),2000);
             }
         });
 

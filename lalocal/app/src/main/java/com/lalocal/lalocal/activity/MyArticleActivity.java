@@ -17,7 +17,7 @@ public class MyArticleActivity extends BaseActivity {
         setContentView(R.layout.activity_my_article);
         mXRecyclerView= (XRecyclerView) findViewById(R.id.my_article_xrlv);
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mXRecyclerView.setAdapter(new HomepageArticleAdapter(this));
+        mXRecyclerView.setAdapter(new HomepageArticleAdapter(this, null));
 
     }
 }

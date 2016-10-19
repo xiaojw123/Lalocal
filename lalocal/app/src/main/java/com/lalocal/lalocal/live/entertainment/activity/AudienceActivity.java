@@ -211,7 +211,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         contentLoaderAudience.setCallBack(audienceCallBack);
         contentLoaderAudience.liveGiftStore();
         loginIm();
-       handler.postDelayed(new MyRunnable(),2000);
+    //   handler.postDelayed(new MyRunnable(),2000);
 
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);
@@ -360,12 +360,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 break;
         }
         worker().configEngine(cRole, vProfile);
-
     }
-
-
-
-
 
 
     private void loginIm() {
@@ -406,8 +401,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         audienceOver.setVisibility(View.GONE);
         andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
-
-
         //获取屏幕高度
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
         //阀值设置为屏幕高度的1/3
@@ -498,6 +491,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
             if("11".equals(style)){
                 AppLog.i("TAG","用户端接受到主播结束的消息");
+                Toast.makeText(AudienceActivity.this,"用户端接受到主播结束的消息",Toast.LENGTH_SHORT).show();
                 showFinishLayout(true, 2);
             }
 
@@ -696,8 +690,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         if(videoView==null){
             return;
         }
-/*
-        videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
+/*        videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 if (reminder == 0) {
@@ -740,6 +733,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 loadingPage.setVisibility(View.GONE);
             }
         });
+        videoView.setOnCompletionListener(new NELivePlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(NELivePlayer neLivePlayer) {
+                Toast.makeText(AudienceActivity.this,"播放完成",Toast.LENGTH_SHORT).show();
+                showFinishLayout(true, 2);
+                videoPlayer.resetVideo();
+            }
+        });
 
     }
 
@@ -760,8 +761,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
         audienceOver = findViewById(R.id.audience_over);
+        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home);
+        liveMasterHome.setOnClickListener(buttonClickListener);
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
+
+        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
+        liveMasterHome.setOnClickListener(buttonClickListener);
 
         backHome.setOnClickListener(buttonClickListener);
         keyboardLayout.setAlpha(0);
@@ -774,9 +780,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         quit.setOnClickListener(buttonClickListener);
         inputChar.setOnClickListener(buttonClickListener);
         liveQuit.setOnClickListener(buttonClickListener);
-
-
-
 
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -904,10 +907,15 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     break;
                 case R.id.audience_challenge_raise_layout://显示任务众筹卡片
                     CustomChallengeRaiseDialog  customChallengeRaiseDialog=new CustomChallengeRaiseDialog(AudienceActivity.this);
-
                     customChallengeRaiseDialog.show();
-
                     break;
+                case R.id.live_master_home_over:
+
+                    Intent intent2 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
+                    intent2.putExtra("userId", userId);
+                    startActivity(intent2);
+                    break;
+
 
             }
         }
@@ -1317,9 +1325,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveFans = (TextView) audienceOver.findViewById(R.id.live_fans);
         liveContribute = (TextView) audienceOver.findViewById(R.id.live_contribute);
         goMasterHome = (LinearLayout) audienceOver.findViewById(R.id.go_master_home);
-        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home);
+
+        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
         masterInfoCloseIv.setOnClickListener(buttonClickListener);
         liveMasterHome.setOnClickListener(buttonClickListener);
+
         goMasterHome.setOnClickListener(buttonClickListener);
         masterInfoBack.setOnClickListener(buttonClickListener);
         String avatar = result.getAvatar();
@@ -1406,6 +1416,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         rtcEngine().setupLocalVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置本地视频属性
                 } else {
                     rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置远端视频属性
+
                 }*/
                 loadingPage.setVisibility(View.GONE);
                 if(audienceOver!=null){
@@ -1448,8 +1459,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     public void onConnectionInterrupted() {
         AppLog.i("TAG","視頻連接中斷连接中断回调");
-
-
     }
 
     @Override

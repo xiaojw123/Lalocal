@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.lalocal.lalocal.view.ScaleImageView
+    <com.lalocal.lalocal.view.WrapContentImageView
         android:id="@+id/img_guide"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
