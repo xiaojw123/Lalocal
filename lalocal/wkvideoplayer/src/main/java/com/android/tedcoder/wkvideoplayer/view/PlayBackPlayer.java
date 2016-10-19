@@ -61,7 +61,7 @@ public class PlayBackPlayer extends RelativeLayout {
 
     private float touchLastX;
     private int position;
-    private int touchStep = 1000*60;//快进的时间，1秒
+    private int touchStep = 1000*10;//快进的时间，1秒
     private int touchPosition = -111111111;
     private View.OnTouchListener mOnTouchVideoListener = new OnTouchListener() {
         @Override
@@ -219,7 +219,15 @@ public class PlayBackPlayer extends RelativeLayout {
             mVideoPlayCallback.onClickQuit();
         }
 
+        @Override
+        public void onClickBefore(ImageView imageView) {
+            mVideoPlayCallback.onClickBefore(imageView);
+        }
 
+        @Override
+        public void onClickNext(ImageView imageView) {
+        mVideoPlayCallback.onClickNext(imageView);
+        }
     };
 
     // 当MediaPlayer准备好后触发该回调
@@ -566,5 +574,7 @@ public class PlayBackPlayer extends RelativeLayout {
 
         void onClickQuit();
         void onClickShare();
+        void  onClickBefore(ImageView view);
+        void onClickNext(ImageView view);
     }
 }

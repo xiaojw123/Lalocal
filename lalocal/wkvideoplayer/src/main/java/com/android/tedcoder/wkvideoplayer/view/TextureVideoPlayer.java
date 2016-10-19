@@ -45,6 +45,7 @@ public class TextureVideoPlayer extends RelativeLayout {
     private TextView touchStatusTime;
 
 
+
     public void setAutoHideController(boolean autoHideController) {
         mAutoHideController = autoHideController;
     }
@@ -153,6 +154,8 @@ public class TextureVideoPlayer extends RelativeLayout {
         touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
         touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
         touchStatusTime = (TextView) inflate.findViewById(R.id.touch_time);
+
+
         TextView loadingTv = (TextView) inflate.findViewById(R.id.loading_tv);
         loadingTv.setVisibility(View.GONE);
         mMediaController.setMediaControl(mMediaControl);
@@ -273,6 +276,8 @@ public class TextureVideoPlayer extends RelativeLayout {
 
         void onClickQuit();
         void onClickShare();
+        void  onClickBefore(ImageView view);
+        void onClickNext(ImageView view);
     }
     //set回调方法，实现回调在本类中的实例化
     public void setVideoPlayCallback(VideoPlayCallbackImpl videoPlayCallback) {
@@ -330,6 +335,16 @@ public class TextureVideoPlayer extends RelativeLayout {
         @Override
         public void onClickQuit() {
             mVideoPlayCallback.onClickQuit();
+        }
+
+        @Override
+        public void onClickBefore(ImageView view) {
+            mVideoPlayCallback.onClickBefore(view);
+        }
+
+        @Override
+        public void onClickNext(ImageView view) {
+            mVideoPlayCallback.onClickNext(view);
         }
     };
     private MediaPlayer.OnPreparedListener mOnPreparedListener = new MediaPlayer.OnPreparedListener() {

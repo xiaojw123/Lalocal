@@ -283,7 +283,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     }
 
 
-    public static class VideoListBean {
+    public static class VideoListBean implements Parcelable{
         private int id;
         private int size;
         private double duration;
@@ -338,6 +338,45 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         public void setUrl(String url) {
             this.url = url;
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeInt(this.size);
+            dest.writeDouble(this.duration);
+            dest.writeString(this.startTime);
+            dest.writeString(this.endTime);
+            dest.writeString(this.url);
+        }
+
+        public VideoListBean() {
+        }
+
+        protected VideoListBean(Parcel in) {
+            this.id = in.readInt();
+            this.size = in.readInt();
+            this.duration = in.readDouble();
+            this.startTime = in.readString();
+            this.endTime = in.readString();
+            this.url = in.readString();
+        }
+
+        public static final Creator<VideoListBean> CREATOR = new Creator<VideoListBean>() {
+            @Override
+            public VideoListBean createFromParcel(Parcel source) {
+                return new VideoListBean(source);
+            }
+
+            @Override
+            public VideoListBean[] newArray(int size) {
+                return new VideoListBean[size];
+            }
+        };
     }
 
     @Override

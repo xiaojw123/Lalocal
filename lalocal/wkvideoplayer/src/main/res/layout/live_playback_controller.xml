@@ -33,19 +33,44 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:progressDrawable="@drawable/biz_video_progressbar"
-                android:thumb="@drawable/biz_video_progress_thumb"
+                android:thumb="@drawable/now_progress"
                 android:layout_below="@+id/time"
                 android:thumbOffset="1.5dip"/>
 
             <ImageView
-                android:id="@+id/pause"
+                android:id="@+id/video_before"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="20dp"
                 android:paddingTop="5dp"
                 android:layout_below="@+id/media_controller_progress"
-                android:src="@drawable/biz_video_play"/>
+                android:src="@drawable/video_before_btn"/>
+
+
+            <ImageView
+                android:id="@+id/pause"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:layout_toRightOf="@+id/video_before"
+                android:layout_below="@+id/media_controller_progress"
+                android:src="@drawable/livingreplay_unplay"/>
+
+
+            <ImageView
+                android:id="@+id/video_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingTop="5dp"
+                android:layout_toRightOf="@+id/pause"
+                android:layout_below="@+id/media_controller_progress"
+                android:src="@drawable/video_next_btn"/>
+
 
 
             <ImageView

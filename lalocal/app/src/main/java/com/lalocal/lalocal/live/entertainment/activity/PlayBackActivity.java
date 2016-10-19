@@ -6,8 +6,10 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -89,14 +91,22 @@ public class PlayBackActivity extends AppCompatActivity {
         videoList = liveRowsBean.getVideoList();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
+        playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineUser()));
     }
+
     private boolean isPlayStatus = true;//视频播放状态
+    private int position = 0;
+
     private void startPlayer() {
 
         videoPlayer.setVideoPlayCallback(mVideoPlayCallback);
         videoPlayer.setAutoHideController(true);
-        Uri uri = Uri.parse(videoList.get(0).getUrl());
-        videoPlayer.loadAndPlay(uri, 0);
+        if (videoList != null && videoList.size() > 0) {
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+            Toast.makeText(this,"共："+videoList.size()+"段视频",Toast.LENGTH_SHORT).show();
+        }
+        ++position;
 
     }
 
@@ -143,21 +153,29 @@ public class PlayBackActivity extends AppCompatActivity {
          */
         @Override
         public void onPlayFinish() {
+
+            Toast.makeText(PlayBackActivity.this,"哈哈哈播放完毕",Toast.LENGTH_SHORT).show();
+            if (videoList.size() == position) {
+                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
+                position = 0;
+            }
+            videoPlayer.close();
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+            ++position;
         }
 
         @Override
         public void onPlayStatus(boolean isPlay) {
             isPlayStatus = isPlay;
-            if(isPlay){
-                playbackLoadingPage.setVisibility(View.GONE);
-            }
+            Log.i("TAG", " 播放状态:" + (isPlay == true ? "开始播放" : "没有播放"));
+            playbackLoadingPage.setVisibility(View.GONE);
         }
 
         @Override
         public void onClickQuit() {
             videoPlayer.close();
             finish();
-
         }
 
         @Override
@@ -170,6 +188,38 @@ public class PlayBackActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
             }
+
+        }
+
+        @Override
+        public void onClickBefore(ImageView view) {
+            if(videoList==null||videoList.size()==0){
+                return;
+            }
+            position=position-2;
+            if(videoList.size()==position||position<0){
+                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
+                position = 0;
+            }
+            videoPlayer.close();
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+        }
+
+        @Override
+        public void onClickNext(ImageView view) {
+            if(videoList==null||videoList.size()==0){
+                return;
+            }
+            if (videoList.size() == position) {
+                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
+                position = 0;
+            }
+
+            videoPlayer.close();
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+            ++position;
 
         }
 
