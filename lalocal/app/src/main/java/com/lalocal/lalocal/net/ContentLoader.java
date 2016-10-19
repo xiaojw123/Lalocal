@@ -933,20 +933,20 @@ public class ContentLoader {
         requestQueue.add(request);
     }
     //直播首页
-    public void getLivelist(String areaId){
+    public void getLivelist(String areaId,String attentionFlag){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId,attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
     //历史直播
-    public  void getPlayBackLiveList(String areaId,int pageNumber){
+    public  void getPlayBackLiveList(String areaId,int pageNumber,String attentionFlag){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber,attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }

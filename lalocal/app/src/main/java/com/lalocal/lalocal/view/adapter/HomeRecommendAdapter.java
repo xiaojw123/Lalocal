@@ -25,7 +25,6 @@ import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
@@ -429,6 +428,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 @Override
                 public void onPageSelected(int position) {
                     super.onPageSelected(position);
+                    AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
                     CommonUtil.selectDotBtn(dotBtns, position, CommonUtil.AD_DOT);
                 }
             });

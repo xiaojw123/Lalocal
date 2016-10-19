@@ -100,13 +100,11 @@ public class VideoPlayer {
             return true;
         }
     };
-
     // onCompletion
     private NELivePlayer.OnCompletionListener onCompletionListener = new NELivePlayer.OnCompletionListener() {
         @Override
         public void onCompletion(NELivePlayer neLivePlayer) {
             AppLog.i("TAG", "播放器video on completed, post delay reopen task, delay " + VIDEO_COMPLETED_REOPEN_TIMEOUT);
-
             proxy.onCompletion();
             handler.postDelayed(reopenVideoRunnable, VIDEO_COMPLETED_REOPEN_TIMEOUT); // 开启reopen定时器
         }

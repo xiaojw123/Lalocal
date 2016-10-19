@@ -1220,7 +1220,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
                 AppLog.i("TAG","调用了上传直播间任务的的接口");
-                handlerLine.postDelayed(new MyRunnable(),2000);
+                //handlerLine.postDelayed(new MyRunnable(),2000);
             }
         });
 

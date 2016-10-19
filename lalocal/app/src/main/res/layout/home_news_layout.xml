@@ -5,51 +5,34 @@
     android:layout_height="match_parent"
     android:background="@color/color_fa"
     >
-    <LinearLayout
-        android:id="@+id/live_search_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/live_height_50dp"
-        android:background="@color/white"
-        >
-        <FrameLayout
-            android:id="@+id/live_search_fl"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_30dp"
-            android:layout_marginBottom="@dimen/dimen_size_10_dp"
-            android:layout_marginLeft="@dimen/dimen_size_15_dp"
-            android:layout_marginRight="@dimen/dimen_size_15_dp"
-            android:background="@drawable/live_search_bg"
-            android:layout_marginTop="@dimen/dimen_size_10_dp"
-            >
-            <TextView
-                android:id="@+id/live_search_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center_vertical"
-                android:text="@string/search"
-                android:textColor="@color/color_b3"
-                android:textSize="@dimen/text_size_15_sp" />
-        </FrameLayout>
-    </LinearLayout>
+
 
         <FrameLayout
             android:id="@+id/live_header_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white">
+
+            <ImageView
+                android:id="@+id/live_search_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/searchbar_searchicon"
+                android:paddingLeft="@dimen/live_padding_10dp"
+                android:visibility="gone"/>
                <TextView
                    android:id="@+id/live_fragment_title_hot"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:textSize="@dimen/live_text_16sp"
                    android:layout_gravity="center_vertical"
-                   android:paddingLeft="@dimen/live_padding_124dp"
+                   android:layout_marginLeft="@dimen/live_padding_124dp"
                    android:textStyle="bold"
                    android:drawableRight="@drawable/tab_morefanction_unsel"
                    android:drawablePadding="@dimen/dimen_size_3_dp"
                    android:drawableBottom="@drawable/tabselect_line"
+
                    android:text="热门"/>
             <TextView
                 android:id="@+id/live_fragment_title_attention"
@@ -57,8 +40,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/live_text_16sp"
                 android:drawablePadding="@dimen/dimen_size_3_dp"
+                android:textStyle="bold"
                 android:layout_gravity="center_vertical|right"
-                android:paddingRight="@dimen/live_padding_124dp"
+                android:layout_marginRight="@dimen/live_padding_124dp"
                 android:text="关注"/>
 
             <LinearLayout
@@ -95,7 +79,7 @@
         android:id="@+id/xrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/live_search_layout"
+        android:layout_below="@+id/live_header_container"
         android:divider="@null"
         android:overScrollMode="never"
         android:scrollbars="none">
@@ -105,7 +89,7 @@
         android:id="@+id/hot_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="@dimen/live_padding_55dp"
+      android:layout_below="@+id/live_header_container"
         android:orientation="vertical"
         android:background="@android:color/white"
        >

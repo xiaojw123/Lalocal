@@ -3,6 +3,9 @@ package com.lalocal.lalocal.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by android on 2016/7/19.
  */
@@ -31,7 +34,16 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     private String endAt;
     private int totalScore;
     private int onlineNumber;
-    private String videoUrl;
+
+    public List<VideoListBean> getVideoList() {
+        return videoList;
+    }
+
+    public void setVideoList(List<VideoListBean> videoList) {
+        this.videoList = videoList;
+    }
+
+    private List<VideoListBean> videoList;
     private int direction;
     private int channelId;
 
@@ -75,13 +87,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.onlineNumber = onlineNumber;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
-    }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
 
     public int getDirection() {
         return direction;
@@ -256,6 +262,64 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.cname = cname;
     }
 
+
+    public static class VideoListBean {
+        private int id;
+        private int size;
+        private double duration;
+        private String startTime;
+        private String endTime;
+        private String url;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
+
+        public double getDuration() {
+            return duration;
+        }
+
+        public void setDuration(double duration) {
+            this.duration = duration;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+    }
+
     @Override
     public int compareTo(LiveRowsBean another) {
         return another.getOnlineUser() - this.getOnlineUser();
@@ -295,7 +359,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         dest.writeString(this.endAt);
         dest.writeInt(this.totalScore);
         dest.writeInt(this.onlineNumber);
-        dest.writeString(this.videoUrl);
+        dest.writeList(this.videoList);
         dest.writeInt(this.direction);
         dest.writeInt(this.channelId);
     }
@@ -325,7 +389,8 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.endAt = in.readString();
         this.totalScore = in.readInt();
         this.onlineNumber = in.readInt();
-        this.videoUrl = in.readString();
+        this.videoList = new ArrayList<VideoListBean>();
+        in.readList(this.videoList, VideoListBean.class.getClassLoader());
         this.direction = in.readInt();
         this.channelId = in.readInt();
     }

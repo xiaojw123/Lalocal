@@ -209,6 +209,7 @@ public class RecommendNewFragment extends BaseFragment {
 //                mPtrLayout.autoRefresh(false);
 //            }
 //        }, 0);
+//        }, 0);
 
         // 下拉刷新
         mPtrLayout.setPtrHandler(new com.chanven.lib.cptr.PtrDefaultHandler() {

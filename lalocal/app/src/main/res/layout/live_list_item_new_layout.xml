@@ -14,6 +14,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/tittlehighline"
+        android:scaleType="centerCrop"
+        
         />
     <TextView
         android:id="@+id/live_list_item_title"
@@ -21,7 +23,7 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/live_padding_5dp"
         android:textSize="@dimen/live_text_16sp"
-        android:maxLines="15"
+        android:maxEms="15"
         android:ellipsize="end"
         />
     <TextView
