@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,8 @@ import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.MyEditText;
 
 import butterknife.BindColor;
@@ -66,6 +69,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
         ButterKnife.bind(this);
         phoneEdt.setOnFocusChangeListener(this);
         setLoaderCallBack(new LoginCallBack());
+        setBackResult(true);
     }
 
     @Override
@@ -89,6 +93,12 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 finish();
                 break;
             case R.id.login_next_btn:
+                String phone = getPhone();
+                String code = getCode();
+                if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(code)) {
+                    CommonUtil.showPromptDialog(this, "手机号或密码为空", null);
+                    return;
+                }
                 mContentloader.loginByPhone(getPhone(), getCode());
                 break;
             case R.id.login_get_password:
@@ -97,8 +107,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 break;
             case R.id.login_email_btn:
                 Intent intent = new Intent(this, LEmailLoginActivity.class);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,KeyParams.REQUEST_CODE);
                 break;
 
         }
@@ -117,17 +126,18 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
 
         @Override
         public void onGetSmsCodeSuccess() {
+            AppLog.print("onGetSmsCodeSuccess____");
             pswGetBtn.setEnabled(false);
             mHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIMER, 1000);
         }
 
         @Override
-        public void onLoginByPhone(User user) {
+        public void onLoginByPhone(User user, String phone, String code) {
             if (user == null) {
                 Intent intent = new Intent(LLoginActivity.this, LPEmailBoundActivity.class);
-                intent.putExtra(KeyParams.PHONE,getPhone());
-                intent.putExtra(KeyParams.CODE,getCode());
-                startActivity(intent);
+                intent.putExtra(KeyParams.PHONE, phone);
+                intent.putExtra(KeyParams.CODE, code);
+                startActivityForResult(intent,KeyParams.REQUEST_CODE);
             } else {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(MeFragment.USER, user);
@@ -137,6 +147,15 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mHandler.hasMessages(MSG_UPDATE_TIMER)){
+            mHandler.removeMessages(MSG_UPDATE_TIMER);
+        }
+        pswGetBtn.setEnabled(true);
+        pswGetBtn.setText(pswGetStr);
+    }
 
     Handler mHandler = new Handler() {
         int timerLen = 60;
@@ -146,7 +165,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
             int what = msg.what;
             switch (what) {
                 case MSG_UPDATE_TIMER:
-                    pswGetBtn.setText(String.valueOf(timerLen--));
+                    pswGetBtn.setText(timerLen-- + "s");
                     if (timerLen < 0) {
                         if (hasMessages(MSG_UPDATE_TIMER)) {
                             removeMessages(MSG_UPDATE_TIMER);

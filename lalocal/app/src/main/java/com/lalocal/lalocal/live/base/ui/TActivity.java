@@ -7,13 +7,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
 import com.lalocal.lalocal.MyApplication;
+import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.live.base.util.ReflectionUtil;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.EngineConfig;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.MyEngineEventHandler;
@@ -22,7 +22,7 @@ import com.lalocal.lalocal.live.entertainment.agora.openlive.WorkerThread;
 import io.agora.rtc.RtcEngine;
 
 
-public abstract class TActivity extends AppCompatActivity {
+public abstract class TActivity extends BaseActivity {
 
     private boolean destroyed = false;
 

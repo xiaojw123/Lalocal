@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
@@ -89,6 +90,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -98,6 +100,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by xiaojw on 2016/6/1.
@@ -126,15 +129,18 @@ public class ContentLoader {
     public void registerByPhone(String phone, String code, String email, String password) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER_PHONE);
-
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneRegisterUrl(), response, response);
         JSONObject reqParams = new JSONObject();
         try {
             reqParams.put(RequestParams.PHONE, phone);
             reqParams.put(RequestParams.CODE, code);
-            reqParams.put(RequestParams.EMAIL, email);
-            reqParams.put(RequestParams.PASSWORD, password);
+            if (!TextUtils.isEmpty(email)) {
+                reqParams.put(RequestParams.EMAIL, email);
+            }
+            if (!TextUtils.isEmpty(password)) {
+                reqParams.put(RequestParams.PASSWORD, password);
+            }
             request.setBodyParams(reqParams.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -145,6 +151,7 @@ public class ContentLoader {
     public void loginByPhone(String phone, String code) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN_PHEON);
+            response.setPLoginInfo(phone, code);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneLoginUrl(), response, response);
         JSONObject reqBody = new JSONObject();
@@ -159,7 +166,7 @@ public class ContentLoader {
     }
 
 
-    public void getSMSCode(View resView,String phoneNum, String type) {
+    public void getSMSCode(View resView, String phoneNum, String type) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SMS_VER_CODE);
             response.setResponseView(resView);
@@ -1092,12 +1099,6 @@ public class ContentLoader {
             this(Method.GET, url, listener, errorListener);
         }
 
-      /*  @Override
-        public void setRetryPolicy(RetryPolicy retryPolicy) {
-            super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        }*/
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
@@ -1166,10 +1167,17 @@ public class ContentLoader {
         private String key;
         private int pageType;
         private int collectionId;
+        private String phone, code;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
+
+        public void setPLoginInfo(String phone, String code) {
+            this.phone = phone;
+            this.code = code;
+        }
+
 
         public void setPassWord(String psw) {
             this.psw = psw;
@@ -1262,7 +1270,7 @@ public class ContentLoader {
                         responeRegisterPhone(jsonObj);
                         break;
                     case RequestCode.SMS_VER_CODE:
-                        responseGetSMSVerCode(jsonObj);
+                        responseGetSMSVerCode();
                         break;
                     case RequestCode.CHANNEL_RECORDS:
                         responseGetChannelRecords(jsonObj);
@@ -1545,28 +1553,20 @@ public class ContentLoader {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
             User item = gson.fromJson(json, User.class);
-            callBack.onLoginByPhone(item);
+            saveUserInfo(item);
+            callBack.onLoginByPhone(item, phone, code);
         }
 
         private void responeRegisterPhone(JSONObject jsonObj) {
-            String json = jsonObj.optString(ResultParams.REULST);
-            try {
-                JSONObject resultJobj = new JSONObject(json);
-                String phone = resultJobj.optString(RequestParams.PHONE);
-                String code = resultJobj.optString(RequestParams.CODE);
-                String email = resultJobj.optString(RequestParams.EMAIL);
-                String password = resultJobj.optString(RequestParams.PASSWORD);
-                callBack.onRegisterByPhone(phone, code, email, password);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void responseGetSMSVerCode(JSONObject jsonObj) {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
+            User item = gson.fromJson(json, User.class);
+            saveUserInfo(item);
+            callBack.onRegisterByPhone(item);
+        }
 
-
+        private void responseGetSMSVerCode() {
+            callBack.onGetSmsCodeSuccess();
         }
 
         private void responseGetChannelRecords(JSONObject jsonObj) {
@@ -1987,23 +1987,32 @@ public class ContentLoader {
                 user = gson.fromJson(resutJson.toString(), User.class);
             }
             AppLog.i("TAG", "responseLogin" + jsonObject.toString());
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(KeyParams.IS_LOGIN, true);
-            bundle.putString(KeyParams.EMAIL, email);
-            bundle.putString(KeyParams.PASSWORD, psw);
-            bundle.putInt(KeyParams.USERID, user.getId());
-            bundle.putString(KeyParams.TOKEN, user.getToken());
-            bundle.putString(KeyParams.AVATAR, user.getAvatar());
-            bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
-            bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
-            bundle.putString(KeyParams.NICKNAME, user.getNickName());
-            UserHelper.saveLoginInfo(context, bundle);
-            DemoCache.clear();
-            AuthPreferences.clearUserInfo();
-            AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
-            AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-            loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+            saveUserInfo(user);
             callBack.onLoginSucess(user);
+        }
+
+        private void saveUserInfo(User user) {
+            if (user != null) {
+                if (!MyApplication.isDebug) {
+                    MobclickAgent.onProfileSignIn(String.valueOf(user.getId()));
+                }
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(KeyParams.IS_LOGIN, true);
+                bundle.putString(KeyParams.EMAIL, email);
+                bundle.putString(KeyParams.PASSWORD, psw);
+                bundle.putInt(KeyParams.USERID, user.getId());
+                bundle.putString(KeyParams.TOKEN, user.getToken());
+                bundle.putString(KeyParams.AVATAR, user.getAvatar());
+                bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
+                bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
+                bundle.putString(KeyParams.NICKNAME, user.getNickName());
+                UserHelper.saveLoginInfo(context, bundle);
+                DemoCache.clear();
+                AuthPreferences.clearUserInfo();
+                AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
+                AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
+                loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+            }
         }
 
         private void loginIMServer(final String imccId, String imToken) {

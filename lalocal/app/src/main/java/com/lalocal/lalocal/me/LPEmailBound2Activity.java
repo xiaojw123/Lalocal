@@ -7,10 +7,12 @@ import android.widget.Button;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.HomeActivity;
+import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -39,27 +41,25 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
             CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
             return;
         }
+        AppLog.print("register phone="+phone+", code="+code+", email="+email+", psw="+psw);
         mContentloader.registerByPhone(phone, code, email, psw);
     }
 
 
     class PemailBound2CallBack extends ICallBack implements CustomDialog.CustomDialogListener {
+        User user;
 
         @Override
-        public void onRegisterByPhone(String phone, String code, String email, String password) {
-            mContentloader.loginByPhone(phone, code);
-        }
-
-        @Override
-        public void onLoginByPhone(User user) {
-            CommonUtil.showPromptDialog(LPEmailBound2Activity.this,"绑定成功",this);
+        public void onRegisterByPhone(User user) {
+            this.user = user;
+            CommonUtil.showPromptDialog(LPEmailBound2Activity.this, "绑定成功", this);
 
         }
-
         @Override
         public void onDialogClickListener() {
-            Intent intent=new Intent(LPEmailBound2Activity.this, HomeActivity.class);
-            startActivity(intent);
+            Intent intent = new Intent();
+            intent.putExtra(MeFragment.USER, user);
+            setResult(LoginActivity.LOGIN_OK, intent);
             finish();
         }
     }

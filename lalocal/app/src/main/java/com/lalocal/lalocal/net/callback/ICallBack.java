@@ -11,9 +11,11 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
+import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
+import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
@@ -31,19 +33,16 @@ import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
-import com.lalocal.lalocal.model.PLoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
+import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
-import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.RecommendListDataResp;
 import com.lalocal.lalocal.model.RouteDetail;
-import com.lalocal.lalocal.model.ConsumeRecord;
-import com.lalocal.lalocal.model.SearchItem;
-import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RouteItem;
+import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
@@ -333,11 +332,12 @@ public abstract class ICallBack {
 
     }
     //手机号登录
-    public void onLoginByPhone(User user){
+    public void onLoginByPhone(User user,String phone,String code){
+
 
     }
     //手机号注册
-    public void onRegisterByPhone(String phone,String code,String email,String password){
+    public void onRegisterByPhone(User user){
 
 
     }

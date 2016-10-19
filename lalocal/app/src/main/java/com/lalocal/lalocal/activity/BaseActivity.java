@@ -1,8 +1,7 @@
 package com.lalocal.lalocal.activity;
 
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,13 +31,14 @@ public class BaseActivity extends AppCompatActivity {
     public ContentLoader mContentloader;
     Unbinder unbinder;
     View mLoadingView;
+    boolean mBackResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
 
     }
@@ -52,6 +52,10 @@ public class BaseActivity extends AppCompatActivity {
         } else {
             mLoadingView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public void setBackResult(boolean backResult) {
+        mBackResult = backResult;
     }
 
     //页面全屏加载loading隐藏
@@ -93,6 +97,7 @@ public class BaseActivity extends AppCompatActivity {
         if (MyApplication.isDebug) {
             Bugtags.onResume(this);
         } else {
+            MobclickAgent.onPageStart(getClass().getName());
             MobclickAgent.onResume(this);
         }
     }
@@ -104,6 +109,7 @@ public class BaseActivity extends AppCompatActivity {
         if (MyApplication.isDebug) {
             Bugtags.onPause(this);
         } else {
+            MobclickAgent.onPageEnd(getClass().getName());
             MobclickAgent.onPause(this);
         }
     }
@@ -121,14 +127,24 @@ public class BaseActivity extends AppCompatActivity {
         return getIntent().getIntExtra(KeyParams.PAGE_TYPE, 0);
     }
 
-    /**
-     * 通过xml查找相应的ID，通用方法
-     *
-     * @param id
-     * @param <T>
-     * @return
-     */
-    protected <T extends View> T $(@IdRes int id) {
-        return (T) findViewById(id);
+//    /**
+//     * 通过xml查找相应的ID，通用方法
+//     *
+//     * @param id
+//     * @param <T>
+//     * @return
+//     */
+//    protected <T extends View> T $(@IdRes int id) {
+//        return (T) findViewById(id);
+//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (mBackResult) {
+            setResult(resultCode, data);
+            finish();
+        }
+
     }
 }

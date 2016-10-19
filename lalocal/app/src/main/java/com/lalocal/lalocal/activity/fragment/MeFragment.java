@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -27,6 +28,7 @@ import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -37,6 +39,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
+import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindDimen;
 import butterknife.BindString;
@@ -46,7 +49,6 @@ import butterknife.OnClick;
 
 /**
  * Created by xiaojw on 2016/6/3.
- *
  */
 public class
 MeFragment extends BaseFragment {
@@ -172,8 +174,8 @@ MeFragment extends BaseFragment {
         //TODO:登录改版
 //        Intent intent = new Intent(getActivity(), LoginActivity.class);
 //        startActivityForResult(intent, 100);
-//        Intent intent = new Intent(getActivity(), LLoginActivity.class);
-//        startActivityForResult(intent, 100);
+        Intent intent = new Intent(getActivity(), LLoginActivity.class);
+        startActivityForResult(intent, KeyParams.REQUEST_CODE);
     }
 
 
@@ -213,6 +215,9 @@ MeFragment extends BaseFragment {
     }
 
     private void signOut() {
+        if (!MyApplication.isDebug) {
+            MobclickAgent.onProfileSignOff();
+        }
         UserHelper.updateSignOutInfo(getActivity());
         updateFragmentView(false, null);
     }
@@ -292,7 +297,7 @@ MeFragment extends BaseFragment {
         }
     }
 
-    @OnClick({R.id.home_me_item_artice,R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_flow_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
+    @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_flow_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_me_item_artice:

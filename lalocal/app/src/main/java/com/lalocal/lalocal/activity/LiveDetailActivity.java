@@ -72,7 +72,9 @@ public class LiveDetailActivity extends BaseActivity {
         UserLiveItem.RowsBean item = getUserLiveItem();
         intiView(item);
         setLoaderCallBack(new LiveDetailBack());
-        mContentloader.getChannelRecords(item.getId());
+        if (item != null) {
+            mContentloader.getChannelRecords(item.getId());
+        }
     }
 
     private void intiView(UserLiveItem.RowsBean item) {

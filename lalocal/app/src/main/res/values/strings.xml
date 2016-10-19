@@ -300,4 +300,8 @@
     <string name="email_bound_note">请输入你已在我们平注册过的邮箱账号, 如果没有的话就输入你常用的邮箱地址, 我们可以同步你的数据更好的为你服务</string>
     <string name="set_pssword">设置密码</string>
     <string name="start_lalocal_travel">开启乐可之旅</string>
+    <string name="reigister_new_account">注册新账户</string>
+    <string name="set_your_password">设置你的密码</string>
+    <string name="set_your_nickname">设置你的昵称</string>
+
 </resources>
