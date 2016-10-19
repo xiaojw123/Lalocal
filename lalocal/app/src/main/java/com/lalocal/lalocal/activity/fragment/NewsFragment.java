@@ -395,6 +395,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
                 drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
                 titleAttention.setCompoundDrawables(null, null, drawable1, drawable2);
+                xRecyclerView.setAdapter(null);
                 break;
             case R.id.live_search_bar:
                 Intent intent1 = new Intent(getActivity(), LiveSearchActivity.class);

@@ -81,7 +81,7 @@ public class MyApplication extends Application {
         EMChat.getInstance().init(this);
         EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         if (isDebug) {
-            Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
+            Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
         }else{
             startFabric();
             startUmeng();

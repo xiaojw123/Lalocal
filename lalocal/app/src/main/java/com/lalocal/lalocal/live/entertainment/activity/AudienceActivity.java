@@ -761,8 +761,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
         audienceOver = findViewById(R.id.audience_over);
-        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home);
-        liveMasterHome.setOnClickListener(buttonClickListener);
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 

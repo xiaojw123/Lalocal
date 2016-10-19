@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -23,7 +24,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by android on 2016/7/18.
  */
 public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClickListener {
-
 
 
     private Context mContext;
@@ -55,26 +55,26 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
         final LiveRowsBean liveRowsBean = rowsBeen.get(position);
         boolean challengeStatus = liveRowsBean.isChallengeStatus();
-      if(liveRowsBean.getStartAt()!=null&&liveRowsBean.getEndAt()!=null){
+        if (liveRowsBean.getStartAt() != null && liveRowsBean.getEndAt() != null) {
             liveViewHodler.liveListItemStatus.setText("回放");
             liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_playback_bg);
-        }else if(challengeStatus){
-          liveViewHodler.liveListItemStatus.setText("挑战任务中");
-          liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_challenge_bg);
-      }else {
-          liveViewHodler.liveListItemStatus.setText("直播中");
-          liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_living_bg);
-      }
+        } else if (challengeStatus) {
+            liveViewHodler.liveListItemStatus.setText("挑战任务中");
+            liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_challenge_bg);
+        } else {
+            liveViewHodler.liveListItemStatus.setText("直播中");
+            liveViewHodler.liveListItemStatus.setBackgroundResource(R.drawable.live_status_living_bg);
+        }
         liveViewHodler.itemLiveName.setText(liveRowsBean.getUser().getNickName());
-        if(liveRowsBean.getTitle()==null){
+        if (liveRowsBean.getTitle() == null) {
             liveViewHodler.liveListItemTitle.setText(liveRowsBean.getUser().getNickName());
-        }else {
+        } else {
             liveViewHodler.liveListItemTitle.setText(liveRowsBean.getTitle());
         }
 
         liveViewHodler.itemLiveAdress.setText(liveRowsBean.getAddress());
-        DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait,liveRowsBean.getUser().getAvatar());
-        DrawableUtils.displayImg(mContext, liveViewHodler.itemLiveCoverIv,liveRowsBean.getPhoto());
+        DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, liveRowsBean.getUser().getAvatar());
+        DrawableUtils.displayImg(mContext, liveViewHodler.itemLiveCoverIv, liveRowsBean.getPhoto());
         liveViewHodler.itemLiveCoverIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +116,30 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         public LiveViewHodler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    public class LiveHightHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.item_hightlists_avatar)
+        CircleImageView itemHightlistsAvatar;
+        @BindView(R.id.item_hightlists_nickname)
+        TextView itemHightlistsNickname;
+        @BindView(R.id.item_hightlists_location)
+        TextView itemHightlistsLocation;
+        @BindView(R.id.item_hightlists_title)
+        TextView itemHightlistsTitle;
+        @BindView(R.id.item_hightlists_photo)
+        ImageView itemHightlistsPhoto;
+        @BindView(R.id.item_hightlists_onlinenum)
+        TextView itemHightlistsOnlinenum;
+        @BindView(R.id.item_hightlists_starttime)
+        TextView itemHightlistsStarttime;
+        @BindView(R.id.item_hightlists_liveroom)
+        RelativeLayout itemHightlistsLiveroom;
+
+        public LiveHightHolder(View itemView) {
+            super(itemView);
         }
     }
 
