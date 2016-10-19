@@ -45,7 +45,7 @@ import java.util.List;
  * Created by huangjun on 2016/1/27.
  */
 public class ChatRoomMsgListPanel implements TAdapterDelegate {
-    private static final int MESSAGE_CAPACITY = 500;
+    private static final int MESSAGE_CAPACITY = 150;
     public static final String NIM_CHAT_MESSAGE_INFO="nimlivesenfmessage";
     // container
     private Container container;
