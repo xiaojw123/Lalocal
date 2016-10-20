@@ -177,7 +177,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private AbortableFuture<EnterChatRoomResultData> enterRequest;
 
     private NetworkInfo netInfo;
-    private TouristAdapter tourisAdapter;
+    protected TouristAdapter tourisAdapter;
     private ChatRoomMember master;
     ChatRoomMember member1;
     private List<ChatRoomMember> items = null;
@@ -944,9 +944,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     LiveConstant.enterRoom=true;
                     initInputPanel(creatorAccount, channelId);
                     testMessage();
-
                 }
-
                 @Override
                 public void onFailed(int code) {
                     AppLog.i("TAG", "登录聊天室失败：" + code);
@@ -1168,7 +1166,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void run() {
             handler.removeCallbacks(this);
             fetchOnlineCount();
-            if (onlineCounts > 0&&contentLoader!=null) {
+            if (contentLoader!=null) {
                 contentLoader.getAudienceUserOnLine(onlineCounts,channelId);
             }
             handler.postDelayed(this, 2000);
