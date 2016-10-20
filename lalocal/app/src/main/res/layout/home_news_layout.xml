@@ -76,7 +76,16 @@
 
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
-        android:id="@+id/xrecyclerview"
+    android:id="@+id/xrecyclerview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_below="@+id/live_header_container"
+    android:divider="@null"
+    android:overScrollMode="never"
+    android:scrollbars="none">
+</com.jcodecraeer.xrecyclerview.XRecyclerView>
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/attern_xrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/live_header_container"

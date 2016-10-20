@@ -176,7 +176,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         resultBean.setName("热门");
         result.add(0, resultBean);
         int size = result.size();
-        classflyHeight=((size%4)==0?((size/4)*40):((size/4)+1)*40);
+        classflyHeight = ((size % 4) == 0 ? ((size / 4) * 40) : ((size / 4) + 1) * 40);
         liveClassifyGridViewAdapter = new LiveClassifyGridViewAdapter(getActivity(), result);
         gridView.setAdapter(liveClassifyGridViewAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -186,7 +186,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 LiveHomeAreaResp.ResultBean resultBean1 = result.get(position);
                 int id1 = resultBean1.getId();
                 titleHot.setText(resultBean1.getName());
-            //    paint1.setFakeBoldText(true);
+                //    paint1.setFakeBoldText(true);
                 liveClassifyGridViewAdapter.setSelectedPosition(position);
                 liveClassifyGridViewAdapter.notifyDataSetChanged();
                 if (allRows != null) {
@@ -194,9 +194,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     pageNumber = 1;
                 }
                 if (position == 0) {
-                    contentService.getLivelist("","");
+                    contentService.getLivelist("", "");
                 } else {
-                    contentService.getLivelist(String.valueOf(id1),"");
+                    contentService.getLivelist(String.valueOf(id1), "");
                 }
             }
         });
@@ -240,15 +240,15 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 int scollYDistance = getScollYDistance();
                 int i = DensityUtil.dip2px(getActivity(), 10);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
-                AppLog.i("TAG", "recyclerviw滑动距离监听：" + top + "  scollYDistance:" + scollYDistance + "  scollDy:" + scollDy+"firstVisibleItemPosition"+firstVisibleItemPosition);
+                AppLog.i("TAG", "recyclerviw滑动距离监听：" + top + "  scollYDistance:" + scollYDistance + "  scollDy:" + scollDy + "firstVisibleItemPosition" + firstVisibleItemPosition);
 
-                if ( (scollDy < 10 || firstVisibleItemPosition > 1)) {
-                    if(isVisible){
+                if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
+                    if (isVisible) {
                         searchBar.setVisibility(View.VISIBLE);
                         isVisible = false;
                     }
-                } else  {
-                    if(!isVisible){
+                } else {
+                    if (!isVisible) {
                         isVisible = true;
                         searchBar.setVisibility(View.GONE);
                     }
@@ -268,6 +268,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private int prePosition = -1;
+
     private void initHeaderView() {
         AppLog.i("TAG", "给recycler添加头部");
         inflate = View.inflate(getActivity(), R.layout.live_recommend_layout, null);
@@ -357,7 +358,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     };
 
     boolean isClick = true;
-    int classflyHeight=0;
+    int classflyHeight = 0;
 
     @Override
     public void onClick(View v) {
@@ -395,7 +396,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
                 drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
                 titleAttention.setCompoundDrawables(null, null, drawable1, drawable2);
-                xRecyclerView.setAdapter(null);
+                xRecyclerView.setHeaderVisible();
+                contentService.getLivelist("", "true");
                 break;
             case R.id.live_search_bar:
                 Intent intent1 = new Intent(getActivity(), LiveSearchActivity.class);
@@ -487,8 +489,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
-        public void onLiveHomeList(LiveHomeListResp liveListDataResp) {
-            super.onLiveHomeList(liveListDataResp);
+        public void onLiveHomeList(LiveHomeListResp liveListDataResp, String attentionFlag) {
             if (sliderLayout != null) {
                 sliderLayout.startAutoCycle();
             }
@@ -507,28 +508,43 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 }
 
                 Collections.sort(allRows);//排序
-                if (isFirstLoad) {
-                    isFirstLoad = false;
+                boolean isAttentionFlag = Boolean.parseBoolean(attentionFlag);
+                if (isAttentionFlag) {
                     liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
-                    AppLog.i("TAG", "给recycler   liveMainAdapter");
+                    AppLog.print("onLiveHomeList size____"+allRows.size());
+                    liveMainAdapter.setHightPostion(true, allRows.size());
                     xRecyclerView.setAdapter(liveMainAdapter);
-                    hotLiveItemClick();
                 } else {
-                    liveMainAdapter.refresh(allRows);
+                    if (isFirstLoad) {
+                        isFirstLoad = false;
+                        liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+                        AppLog.i("TAG", "给recycler   liveMainAdapter");
+                        if (isAttentionFlag) {
+                            liveMainAdapter.setHightPostion(true, allRows.size());
+                        }
+                        xRecyclerView.setAdapter(liveMainAdapter);
+                        hotLiveItemClick();
+
+                    } else {
+                        if (isAttentionFlag) {
+                            liveMainAdapter.setHightPostion(true, allRows.size());
+                        }
+                        liveMainAdapter.refresh(allRows);
+                    }
                 }
-                contentService.getPlayBackLiveList("", 1,"");
+                contentService.getPlayBackLiveList("", 1, attentionFlag);
             }
         }
 
         @Override
-        public void onPlayBackList(String json) {
-            super.onPlayBackList(json);
+        public void onPlayBackList(String json, String attentionFlag) {
             LivePlayBackListResp livePlayBackListResp = new Gson().fromJson(json, LivePlayBackListResp.class);
             if (livePlayBackListResp.getReturnCode() == 0) {
                 LivePlayBackListResp.ResultBean result = livePlayBackListResp.getResult();
                 pageNumber = result.getPageNumber() + 1;
                 lastPage = result.isLastPage();
                 List<LiveRowsBean> rows = result.getRows();
+                AppLog.print("onPlayBackList size____"+rows.size());
                 if (rows == null) {
                     return;
                 }
@@ -704,7 +720,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onRefresh() {
             isRefresh = true;
-            contentService.getLivelist("","");
+            contentService.getLivelist("", "");
 
         }
 
@@ -714,7 +730,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             if (lastPage) {
                 xRecyclerView.setNoMore(true);
             } else {
-                contentService.getPlayBackLiveList("", pageNumber,"");
+                contentService.getPlayBackLiveList("", pageNumber, "");
             }
 
 

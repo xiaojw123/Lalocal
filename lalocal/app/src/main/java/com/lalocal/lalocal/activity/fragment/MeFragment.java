@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -26,6 +25,7 @@ import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -38,7 +38,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindDimen;
 import butterknife.BindString;
@@ -214,9 +213,7 @@ MeFragment extends BaseFragment {
     }
 
     private void signOut() {
-        if (!MyApplication.isDebug) {
-            MobclickAgent.onProfileSignOff();
-        }
+        MobHelper.singOff();
         UserHelper.updateSignOutInfo(getActivity());
         updateFragmentView(false, null);
     }

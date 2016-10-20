@@ -44,7 +44,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
     @Override
     public void onRefresh() {
         isRefresh = true;
-        mContentloader.getUserLive(9368, 1);
+        mContentloader.getUserLive(8746, 1);
 //        mContentloader.getUserLive(UserHelper.getUserId(this), 1);
     }
 
@@ -54,7 +54,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
             isLoadMore = true;
             ++pageNum;
 //            mContentloader.getUserLive(UserHelper.getUserId(this),pageNum);
-            mContentloader.getUserLive(9368, pageNum);
+            mContentloader.getUserLive(8746, pageNum);
         } else {
             isLoadMore = false;
             mXRecyclerView.setNoMore(true);
