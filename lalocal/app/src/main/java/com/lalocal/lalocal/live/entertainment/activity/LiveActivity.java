@@ -550,7 +550,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     keyboardLayout.setClickable(true);
                     liveSettingLayout.setVisibility(View.GONE);
                     liveSettingLayout.setClickable(false);
-                    inputPanel.switchToTextLayout(true);
+                    if(inputPanel!=null){
+                        inputPanel.switchToTextLayout(true);
+                    }
                     break;
                 case R.id.live_telecast_like:
                     break;
@@ -982,6 +984,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                 customDialog.setSurceBtn(getString(R.string.live_not_cancel), null);
                                 customDialog.show();
                             }
+
                         }
 
                         userInfoContentLoader.setCallBack(new ICallBack() {
@@ -1030,7 +1033,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             public void startLiveBtn(String rooName, int isShareSelector) {
                 liveSettingLayout.setVisibility(View.GONE);
                 if (TextUtils.isEmpty(rooName)) {
-                    roomName = createNickName;
+                   Toast.makeText(LiveActivity.this,"直播间标题不能为空!",Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
                     roomName = rooName;
                 }
@@ -1079,7 +1083,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 endTime = System.currentTimeMillis();
                 isCloseLive = true;
                 endLive();
-
             }
         });
         customDialog.setSurceBtn(getString(R.string.live_continue), null);
@@ -1212,7 +1215,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 liveSettingLayout.setClickable(true);
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
-                AppLog.i("TAG","调用了上传直播间任务的的接口");
                 //handlerLine.postDelayed(new MyRunnable(),2000);
             }
         });

@@ -13,7 +13,6 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.View;
@@ -66,7 +65,6 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
-import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -84,7 +82,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -1064,7 +1061,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                     if (bean.getId() == UserHelper.getUserId(AudienceActivity.this)) {
 
-
                         LiveConstant.IDENTITY = LiveConstant.MANAGER_IS_ME;
                         customLiveUserInfoDialog.setBanBtn(isMuteds == true ? getString(R.string.live_relieve_ban) : getString(R.string.live_ban), new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                             @Override
@@ -1326,44 +1322,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
 
 
-    private void showMasterInfoLayout(LiveUserInfoResultBean result) {
-        infoId = result.getId();
-        masterInfoCloseIv = (ImageView) audienceOver.findViewById(R.id.custom_dialog_close_iv);
-        masterInfoCloseIv.setVisibility(View.INVISIBLE);
-        masterInfoHeadIv = (CircleImageView) audienceOver.findViewById(R.id.master_info_head_iv);
-        masterInfoNickTv = (TextView) audienceOver.findViewById(R.id.master_info_nick_tv);
-        masterInfoSignature = (TextView) audienceOver.findViewById(R.id.master_info_signature);
-        liveAttention = (TextView) audienceOver.findViewById(R.id.live_attention);
-        masterInfoBack = (LinearLayout) audienceOver.findViewById(R.id.master_info_back_home);
-        liveFans = (TextView) audienceOver.findViewById(R.id.live_fans);
-        liveContribute = (TextView) audienceOver.findViewById(R.id.live_contribute);
-        goMasterHome = (LinearLayout) audienceOver.findViewById(R.id.go_master_home);
-
-        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
-        masterInfoCloseIv.setOnClickListener(buttonClickListener);
-        liveMasterHome.setOnClickListener(buttonClickListener);
-
-        goMasterHome.setOnClickListener(buttonClickListener);
-        masterInfoBack.setOnClickListener(buttonClickListener);
-        String avatar = result.getAvatar();
-        String nickName = result.getNickName();
-        int fansNum = result.getFansNum();
-        int attentionNum = result.getAttentionNum();
-        String description = result.getDescription();
-        liveFans.setText(String.valueOf(fansNum));
-        liveAttention.setText(String.valueOf(attentionNum));
-        if (!TextUtils.isEmpty(description)) {
-            masterInfoSignature.setText(description);
-        }
-        DrawableUtils.displayImg(AudienceActivity.this, masterInfoHeadIv, avatar);
-        masterInfoNickTv.setText(nickName);
-        liveMasterHome.setOnClickListener(buttonClickListener);
-    }
-
-
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-
 
         if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {//显示
             if(liveSettingLayout!=null&&keyboardLayout!=null){
