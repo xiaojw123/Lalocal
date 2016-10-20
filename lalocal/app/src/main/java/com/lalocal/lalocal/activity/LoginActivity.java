@@ -89,6 +89,7 @@ public class LoginActivity extends BaseActivity {
     private CustomTitleView.onBackBtnClickListener backClicklistener = new CustomTitleView.onBackBtnClickListener() {
         @Override
         public void onBackClick() {
+            MobHelper.sendEevent(LoginActivity.this,MobEvent.LOGIN_EMAIL_BACK);
             if (KeyParams.SETTING.equals(setting)) {
                 setResult(SettingActivity.UN_LOGIN_OK);
             }

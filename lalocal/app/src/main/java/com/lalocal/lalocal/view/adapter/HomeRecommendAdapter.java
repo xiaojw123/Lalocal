@@ -106,7 +106,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int ARTICLE = 5;
 
     // 首页推荐列表子项数量
-    private static final int AMOUNT_HOME_RECOMMEND = 6;
+    private static final int AMOUNT_HOME_RECOMMEND = 5;
 
     private boolean adEmpty;
     private boolean liveEmpty;
@@ -257,7 +257,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        switch (position) {
+        switch (getItemViewType(position)) {
             case ADVERTISEMENT:
                 ((ADViewHolder) holder).initData(mAdList);
                 break;
@@ -308,9 +308,10 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         return AMOUNT_HOME_RECOMMEND;
     }
 
+    // 删除首页推荐广告栏
     @Override
     public int getItemViewType(int position) {
-        return position;
+        return position + 1;
     }
 
     /**

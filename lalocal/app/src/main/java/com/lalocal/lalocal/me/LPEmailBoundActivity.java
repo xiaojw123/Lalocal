@@ -11,6 +11,8 @@ import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -43,12 +45,14 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         if (v == skp_tv) {
+            MobHelper.sendEevent(this, MobEvent.BINDING_JUMP);
             String phone = getIntent().getStringExtra(KeyParams.PHONE);
             String code = getIntent().getStringExtra(KeyParams.CODE);
             AppLog.print("register phone="+phone+", code="+code);
             mContentloader.registerByPhone(phone, code, null, null);
 
         } else if (v == next_btn) {
+            MobHelper.sendEevent(this,MobEvent.BINDING_NEXT);
             String email = email_edit.getText();
             if (!CommonUtil.checkEmail(email)) {
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), null);

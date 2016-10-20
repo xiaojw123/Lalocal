@@ -218,7 +218,9 @@ public class RecommendNewFragment extends BaseFragment {
                 if (mPtrLayout != null && mAdapter != null) {
                     isRefreshing = true;
                     mPtrLayout.setLoadMoreEnable(true);
-                    mContentLoader.recommendAd();
+                    // 隐藏首页推荐广告栏
+//                    mContentLoader.recommendAd();
+                    mContentLoader.indexRecommentList();
                 } else {
                     mPtrLayout.refreshComplete();
                 }
@@ -253,8 +255,9 @@ public class RecommendNewFragment extends BaseFragment {
     private void initLoader() {
         mContentLoader = new ContentLoader(getActivity());
         mContentLoader.setCallBack(new MyCallBack());
-        mContentLoader.recommendAd();
-//        mContentLoader.indexRecommentList();
+        // 首页推荐隐藏广告栏
+//        mContentLoader.recommendAd();
+        mContentLoader.indexRecommentList();
 //        mContentLoader.articleList(10, 0);
     }
 

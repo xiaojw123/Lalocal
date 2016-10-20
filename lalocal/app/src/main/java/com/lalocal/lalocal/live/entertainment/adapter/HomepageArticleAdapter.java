@@ -44,6 +44,10 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
             mUserArticleList = new ArrayList<>();
         }
     }
+    public void updateItems(List<ArticleDetailsResultBean> userArticleList){
+        this.mUserArticleList = userArticleList;
+        notifyDataSetChanged();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -100,7 +104,7 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
             // 设置字体大小
             vtvArticleTitle.setTextSize(textSize);
             // 设置最大行号
-            vtvArticleTitle.setTextMaxLines(4);
+//            vtvArticleTitle.setTextMaxLines(4);
 
             // -标题括号对齐
             RelativeLayout.LayoutParams lpRight = (RelativeLayout.LayoutParams) imgArticleTitleUp.getLayoutParams();

@@ -519,7 +519,7 @@ public class AppConfig {
 
     // 获取用户文章列表
     public static String getUserArticles(int userid, int pageNum) {
-        String url = baseUrl + "articles/author?authorId=" + userid + "&pageSize=10&pageNumber=" + pageNum;
+        String url = baseUrl + "articles/author?authorId=" + 29 + "&pageSize=10&pageNumber=" + pageNum;
         AppLog.i("ussr", "the getUserArticles url is " + url);
         return url;
     }

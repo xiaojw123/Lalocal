@@ -37,7 +37,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import butterknife.BindDimen;
 import butterknife.BindString;
@@ -237,10 +236,14 @@ MeFragment extends BaseFragment {
             int role = user.getRole();
             if (role == 1) {
                 //专栏作者
+
                 userNameParams.topMargin = authorTop;
                 authorTag.setVisibility(View.VISIBLE);
                 if (verified_tv.getVisibility() == View.VISIBLE) {
                     verified_tv.setVisibility(View.GONE);
+                }
+                if (articleFl.getVisibility() != View.VISIBLE) {
+                    articleFl.setVisibility(View.VISIBLE);
                 }
 
             } else {
@@ -267,6 +270,9 @@ MeFragment extends BaseFragment {
                         verified_tv.setActivated(false);
                         verified_tv.setText(getResources().getString(R.string.user_forbiden));
                         break;
+                }
+                if (articleFl.getVisibility() == View.VISIBLE) {
+                    articleFl.setVisibility(View.GONE);
                 }
             }
 
@@ -297,7 +303,11 @@ MeFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_me_item_artice:
-                gotoMyItemPage(MyArticleActivity.class);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoMyItemPage(MyArticleActivity.class);
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_username:
             case R.id.home_me_headportrait_img:
@@ -313,32 +323,53 @@ MeFragment extends BaseFragment {
 
             case R.id.home_me_item_live:
                 //TODO：进入我的直播
-                gotoMyItemPage(MyLiveActivity.class);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoMyItemPage(MyLiveActivity.class);
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_fans_tab:
-                gotoLiveUserPage("1");
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoLiveUserPage("1");
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_flow_tab:
-                gotoLiveUserPage("0");
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoLiveUserPage("0");
+
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_item_message:
-                //TODO:待开发
+                if (UserHelper.isLogined(getActivity())) {
+                    //TODO:待开发
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_item_favoirte:
-                gotoMyItemPage(MyFavoriteActivity.class);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoMyItemPage(MyFavoriteActivity.class);
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_item_wallet:
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyWalletActivity.class);
                 } else {
-                    showLoginDialog();
+                    gotoLoginPage();
                 }
                 break;
             case R.id.home_me_item_order:
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyOrderActivity.class);
                 } else {
-                    showLoginDialog();
+                    gotoLoginPage();
                 }
                 break;
             case R.id.home_me_invitefriends:
@@ -354,19 +385,19 @@ MeFragment extends BaseFragment {
         startActivityForResult(intent, 100);
     }
 
-    private void showLoginDialog() {
-        CustomDialog dialog = new CustomDialog(getActivity());
-        dialog.setMessage("您还未登录，请登录");
-        dialog.setTitle("提示");
-        dialog.setCancelBtn("取消", null);
-        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
-            @Override
-            public void onDialogClickListener() {
-                gotoLoginPage();
-            }
-        });
-        dialog.show();
-    }
+//    private void showLoginDialog() {
+//        CustomDialog dialog = new CustomDialog(getActivity());
+//        dialog.setMessage("您还未登录，请登录");
+//        dialog.setTitle("提示");
+//        dialog.setCancelBtn("取消", null);
+//        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
+//            @Override
+//            public void onDialogClickListener() {
+//                gotoLoginPage();
+//            }
+//        });
+//        dialog.show();
+//    }
 
 
     private void gotoMyItemPage(Class<?> cls) {
