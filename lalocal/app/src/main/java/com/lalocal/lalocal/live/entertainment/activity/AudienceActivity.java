@@ -1146,14 +1146,13 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
         });
 
-        customLiveUserInfoDialog.show();
         customLiveUserInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 LiveConstant.USER_INFO_FIRST_CLICK=true;
             }
         });
-
+        customLiveUserInfoDialog.show();
     }
 
 
