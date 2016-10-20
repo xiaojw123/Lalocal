@@ -12,6 +12,8 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -85,6 +87,7 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
 
     @OnClick(R.id.my_ticket_exchargegold_tv)
     public void onClick() {
+        MobHelper.sendEevent(this, MobEvent.MY_WALLET_TICKET_EXCHANGE);
         Intent exchargeIntent = new Intent(this, ExchangeActivity.class);
         exchargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
         startActivityForResult(exchargeIntent, KeyParams.REQUEST_CODE);

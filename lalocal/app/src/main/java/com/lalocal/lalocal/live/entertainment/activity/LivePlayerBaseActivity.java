@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.ui.TActivity;
@@ -682,6 +684,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     finish();
                     break;
                 case R.id.audience_score_layout:
+                    MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_LIST);
 
                     if (firstClick) {
                         firstClick = false;

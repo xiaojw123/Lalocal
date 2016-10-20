@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
@@ -125,6 +127,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
         @Override
         public void onItemClickListener(View view, int position) {
+            MobHelper.sendEevent(MyLiveActivity.this, MobEvent.MY_LIVE_DETAIL);
             LiveRowsBean item = (LiveRowsBean) view.getTag();
             if (item != null) {
                 Intent intent = new Intent(MyLiveActivity.this, LiveDetailActivity.class);

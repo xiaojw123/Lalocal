@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -17,13 +19,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lalocal.lalocal.R.id.my_diamond_llt;
 import static com.lalocal.lalocal.activity.fragment.MeFragment.UPDAE_MY_WALLET;
 
 public class MyWalletActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
 
     @BindView(R.id.my_diamond_num)
     TextView myDiamondNum;
-    @BindView(R.id.my_diamond_llt)
+    @BindView(my_diamond_llt)
     LinearLayout myDiamondLlt;
     @BindView(R.id.my_travelticket_num)
     TextView myTravelticketNum;
@@ -55,16 +58,18 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
 
     }
 
-    @OnClick({R.id.my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt})
+    @OnClick({my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.my_diamond_llt:
+            case my_diamond_llt:
+                MobHelper.sendEevent(this, MobEvent.MY_WALLET_DIAMOND);
                 Intent diamondIntent = new Intent(this, MyDiamondActivity.class);
                 diamondIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(diamondIntent, KeyParams.REQUEST_CODE);
                 break;
 
             case R.id.my_travelticket_llt:
+                MobHelper.sendEevent(this,MobEvent.MY_WALLET_TICKET);
                 Intent scoreIntent = new Intent(this, MyTravelTicketActivity.class);
                 scoreIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(scoreIntent, KeyParams.REQUEST_CODE);
