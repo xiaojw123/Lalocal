@@ -29,10 +29,8 @@
             android:layout_marginLeft="@dimen/live_padding_124dp"
             android:drawableBottom="@drawable/tabselect_line"
             android:drawablePadding="@dimen/dimen_size_3_dp"
-            android:drawableRight="@drawable/tab_morefanction_unsel"
             android:text="热门"
             android:textSize="@dimen/live_text_16sp"
-
             android:textStyle="bold" />
 
         <TextView
@@ -60,7 +58,6 @@
                 android:layout_height="@dimen/live_make_icon_width"
                 android:layout_marginTop="@dimen/dimen_size_8_dp"
                 android:background="@drawable/letsmakelive_ic" />
-
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -30,6 +30,16 @@ public class MyEngineEventHandler {
 
     final IRtcEngineEventHandler mRtcEventHandler = new IRtcEngineEventHandler() {
 
+        @Override
+        public void onUserEnableVideo(int uid, boolean enabled) {
+            super.onUserEnableVideo(uid, enabled);
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onUserEnableVideo(uid,enabled);
+            }
+
+        }
 
         //远端视频接收解码回调
         @Override

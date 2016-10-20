@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:id="@+id/custom_dialog_home_layout"
     android:visibility="gone"
+    android:layout_alignParentBottom="true"
     >
     <TextView
         android:id="@+id/live_master_home"
@@ -13,6 +14,6 @@
         android:text="@string/live_master_home"
         android:gravity="center"
         android:textColor="#ffffff"
-        android:background="@color/color_ffaa2a"
+        android:background="@drawable/master_home_btn_bg"
         android:textSize="@dimen/text_size_18_sp" />
 </LinearLayout>

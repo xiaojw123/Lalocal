@@ -40,6 +40,7 @@ public class XRecyclerView extends RecyclerView {
     private View mFootView;
     private final RecyclerView.AdapterDataObserver mDataObserver = new DataObserver();
     private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
+    private Adapter mAdapter;
 
     public XRecyclerView(Context context) {
         this(context, null);
@@ -179,10 +180,17 @@ public class XRecyclerView extends RecyclerView {
 
     @Override
     public void setAdapter(Adapter adapter) {
+        mAdapter = adapter;
         mWrapAdapter = new WrapAdapter(adapter);
         super.setAdapter(mWrapAdapter);
-        adapter.registerAdapterDataObserver(mDataObserver);
-        mDataObserver.onChanged();
+        if (!adapter.hasObservers()) {
+            adapter.registerAdapterDataObserver(mDataObserver);
+            mDataObserver.onChanged();
+        }
+    }
+
+    public Adapter getAdapter() {
+        return mAdapter;
     }
 
     @Override

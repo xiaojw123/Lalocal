@@ -344,7 +344,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
             Map<String, Object> ext = new HashMap<>();
-
                 Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 if(selectorStatus){
 

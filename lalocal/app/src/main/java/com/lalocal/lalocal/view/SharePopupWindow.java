@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareListener;
@@ -37,9 +39,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private View cancelLayout;
     private  String  targetId;
 
-       // contentLoader.getShareStatistics(String.valueOf(shareVO.getType()), "12",share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
 
     private OnShareListener onShareListener;
+    private ContentLoader contentLoader;
 
     public interface OnShareListener {
         void getSharePlatform(SHARE_MEDIA share_media);
@@ -61,6 +63,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     }
 
     public void showShareWindow() {
+        boolean isInstallMm1 =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
+        boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(context, "com.sina.weibo");
+
+        if(!isInstallMm1&&!isInstallWeibo){
+            Toast.makeText(context,"您尚未安装微博和微信，无法分享!",Toast.LENGTH_SHORT).show();
+            dismiss();
+        }
         view = LayoutInflater.from(context).inflate(R.layout.share_layout, null);
         shareBlur = (BlurImageView) view.findViewById(R.id.share_blur);
         shareBlur.setBlurImageRes(R.drawable.citybg,11,20);
@@ -72,6 +81,16 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         shareWechat.setOnClickListener(this);
         shareWeibo.setOnClickListener(this);
         cancelLayout.setOnClickListener(this);
+
+
+        if(!isInstallMm1){
+            shareFriends.setVisibility(View.GONE);
+            shareWechat.setVisibility(View.GONE);
+        }
+        if(!isInstallWeibo){
+            shareWeibo.setVisibility(View.GONE);
+        }
+
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setContentView(view);
@@ -79,7 +98,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         this.setAnimationStyle(R.style.AnimBottom);
         ColorDrawable dw = new ColorDrawable();
         this.setBackgroundDrawable(dw);
-   //     contentLoader = new ContentLoader(context);
+        contentLoader = new ContentLoader(context);
+        contentLoader.setCallBack(new ICallBack() {
+            @Override
+            public void onShareStatistics(String json) {
+                super.onShareStatistics(json);
+            }
+        });
 
     }
 
@@ -91,12 +116,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                     boolean isInstallMm =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
                     if(isInstallMm){
                         shareFriends();
-
                     }else{
                         Toast.makeText(context,"没有安装微信客户端",Toast.LENGTH_SHORT).show();
                     }
-
-
                 }
 
                 break;
@@ -229,6 +251,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         @Override
         public void onResult(SHARE_MEDIA share_media) {
+            contentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()),share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
+
             if(onShareListener!=null){
                 onShareListener.getSharePlatform(share_media);
             }

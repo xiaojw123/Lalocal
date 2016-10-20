@@ -9,6 +9,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
@@ -40,11 +42,14 @@ import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomNotificationHelper;
 import com.lalocal.lalocal.live.entertainment.helper.GiftAnimations;
 import com.lalocal.lalocal.live.entertainment.helper.GiftPlaneAnimation;
+import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.helper.SimpleCallback;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
+import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.live.entertainment.module.ChatRoomMsgListPanel;
@@ -423,7 +428,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
-        chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
+      //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
 
         // 礼物动画展示
@@ -484,7 +489,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
 
         scoreLayout.setOnClickListener(clickListener);
-        chanllenge.setOnClickListener(clickListener);
+     //   chanllenge.setOnClickListener(clickListener);
 
         //软键盘输入框
         editTextInput = (EditText) findViewById(R.id.editTextMessage);
@@ -594,6 +599,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }
         }
 
+        @Override
+        public void onGetAudienceOnLineUserCount(String json) {
+            super.onGetAudienceOnLineUserCount(json);
+            OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
+            if(onLineUser!=null&&onLineUser.getResult()>0){
+                onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
+            }
+        }
     }
 
     int totalGold = 0;
@@ -686,10 +699,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case R.id.live_telecast_input_text:
 
                     break;
-                case R.id.live_telecast_challenge:
+               /* case R.id.live_telecast_challenge:
                     clickChallengeBtn();
-                    break;
-
+                    break;*/
             }
         }
     };
@@ -837,9 +849,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     //    AppLog.i("TAG","接受主播离开的消息");
                     break;
                 case MessageType.challenge:
-                    AppLog.i("TAG", "收到挑战信息");
+                 /*   AppLog.i("TAG", "收到挑战信息");
                     receiveChallengeMessage((ChatRoomMessage) message);
-                    messageListPanel.onIncomingMessage(messages);
+                    messageListPanel.onIncomingMessage(messages);*/
                     break;
 
             }
@@ -931,6 +943,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     chatRoomStatusRemind("登陆聊天室成功...");
                     LiveConstant.enterRoom=true;
                     initInputPanel(creatorAccount, channelId);
+                    testMessage();
 
                 }
 
@@ -967,6 +980,27 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }
 
         }
+    }
+    int count=0;
+    private void testMessage() {
+        new CountDownTimer(100000000, 200) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                LiveMessage liveMessage=new LiveMessage();
+                liveMessage.setStyle(MessageType.text);
+                liveMessage.setUserId(userId);
+                liveMessage.setCreatorAccount(creatorAccount);
+                liveMessage.setChannelId(channelId);
+                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
+                sendMessage(imMessage, MessageType.text);
+                count++;
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
     }
 
     protected void initInputPanel(String creatorAccount, String channelId) {
@@ -1028,7 +1062,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     AppLog.i("TAG", "拉取在线人数失败");
                     NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-                    isFirstEnrRoom=false;
+                    isFirstEnrRoom=true;
                     enterRoom();
 
                 }
@@ -1134,6 +1168,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void run() {
             handler.removeCallbacks(this);
             fetchOnlineCount();
+            if (onlineCounts > 0&&contentLoader!=null) {
+                contentLoader.getAudienceUserOnLine(onlineCounts,channelId);
+            }
             handler.postDelayed(this, 2000);
         }
     }
@@ -1144,8 +1181,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 @Override
                 public void onSuccess(final ChatRoomInfo param) {
                     onlineCounts = param.getOnlineUserCount();
-
-                    onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
+                  //  onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
                     AppLog.i("TAG", "基类获取在线人数:" + onlineCounts);
                     if (isScrollStop && mIsTouchUP) {
                         clearCache();

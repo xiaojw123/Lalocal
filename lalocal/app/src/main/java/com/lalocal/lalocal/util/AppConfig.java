@@ -8,8 +8,6 @@ import android.content.pm.PackageManager;
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
-
-
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
@@ -256,9 +254,9 @@ public class AppConfig {
         return  baseUrl+"system/share";
     }
 
-    //上传在线人数  http://dev.lalocal.cn:8080/api/system/numbs?number=1
-    public static final String getOnLineUserCount(){
-        return  baseUrl+"system/numbs?number=";
+    //上传在线人数 http://dev.lalocal.cn:8080/api/system/numbs?number=1&channelId=11
+    public static final String getOnLineUserCount(int number,String channelId ){
+        return  baseUrl+"system/numbs?number="+number+"&channelId="+channelId;
     }
 
     //发起挑战 http://dev.lalocal.cn:8080/api/challenges
