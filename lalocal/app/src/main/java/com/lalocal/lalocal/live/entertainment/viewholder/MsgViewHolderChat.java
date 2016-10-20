@@ -105,7 +105,7 @@ public class MsgViewHolderChat extends TViewHolder {
                         }
                     }
                 }
-                if("challengeModel".equals(key)){
+          /*      if("challengeModel".equals(key)){
                     String model = value.toString();
                     if(model!=null&&!"null".equals(model)){
                         Map<String, Object> map = (Map<String, Object>) value;
@@ -126,7 +126,7 @@ public class MsgViewHolderChat extends TViewHolder {
                             }
                         }
                     }
-                }
+                }*/
 
             }
         }
@@ -168,7 +168,7 @@ public class MsgViewHolderChat extends TViewHolder {
                 itenImage.setVisibility(View.VISIBLE);
                 DrawableUtils.displayImg(context,itenImage,messageToGiftBean.getGiftImage());
                 break;
-            case "4":
+    /*        case "4":
                 if(challengeStatus==0){
 
                 }
@@ -199,7 +199,7 @@ public class MsgViewHolderChat extends TViewHolder {
 
                 }
 
-                break;
+                break;*/
         }
 
 

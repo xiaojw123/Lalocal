@@ -283,7 +283,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     }
 
 
-    public static class VideoListBean implements Parcelable{
+    public static class VideoListBean implements Parcelable {
         private int id;
         private int size;
         private double duration;

@@ -225,9 +225,8 @@
                 android:cacheColorHint="@android:color/transparent"
                 android:divider="@null"
                 android:fadingEdge="none"
-
                 android:listSelector="@android:color/transparent"
-                android:scrollbars="vertical" />
+                android:scrollbars="none" />
 
             <include
                 android:id="@+id/gift_animation_view"

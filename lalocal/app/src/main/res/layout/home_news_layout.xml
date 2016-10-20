@@ -30,7 +30,6 @@
                    android:layout_marginLeft="@dimen/live_padding_124dp"
                    android:textStyle="bold"
                    android:drawablePadding="@dimen/dimen_size_3_dp"
-
                    android:drawableBottom="@drawable/tabselect_line"
                    android:text="热门"/>
             <TextView
@@ -71,8 +70,6 @@
         </FrameLayout>
 
     <!--搜索-->
-
-
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/xrecyclerview"

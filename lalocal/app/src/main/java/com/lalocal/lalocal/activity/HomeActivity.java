@@ -79,7 +79,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         home_news_tab.setOnClickListener(tabClickListener);
         home_me_tab.setOnClickListener(tabClickListener);
         fm = getFragmentManager();
-        showFragment(home_recommend_tab);
+        showFragment(home_news_tab);
     }
 
 

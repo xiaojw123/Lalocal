@@ -1107,7 +1107,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_ARTICLE);
         }
-
         ContentRequest contentRequest = new ContentRequest(AppConfig.getUserArticles(userid, pageNum), response, response);
         requestQueue.add(contentRequest);
     }

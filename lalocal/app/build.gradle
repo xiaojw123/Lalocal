@@ -107,7 +107,7 @@ android {
 apply plugin: 'com.bugtags.library.plugin'
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "cd0acb22bdec583c5b200902dd13b7e1"  //这里是你的 appKey
+    appKey "35af803b133278a8f97e4c5a692d1e71"  //这里是你的 appKey
     appSecret "597327c81f891d5314b67d0129f703b0"    //这里是你的 appSecret，管理员在设置页可以查看
 //    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
     mappingUploadEnabled true

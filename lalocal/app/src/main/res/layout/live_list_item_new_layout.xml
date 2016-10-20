@@ -32,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_12_sp"
-        android:padding="@dimen/live_padding_5dp"
         android:paddingLeft="@dimen/live_padding_5dp"
         android:paddingRight="@dimen/live_padding_5dp"
         android:paddingTop="@dimen/live_padding_2dp"

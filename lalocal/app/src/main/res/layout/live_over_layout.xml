@@ -161,6 +161,7 @@
 
 
     <TextView
+        android:id="@+id/over_share_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.5"
@@ -170,7 +171,6 @@
         android:layout_above="@+id/live_over_share_layout"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/live_padding_12dp"
-
         android:textSize="@dimen/text_size_12"/>
 
 </RelativeLayout>

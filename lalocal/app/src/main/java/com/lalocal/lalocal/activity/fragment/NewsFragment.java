@@ -166,7 +166,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         hotContent = (LinearLayout) view.findViewById(R.id.hot_content);
         gridView = (GridView) view.findViewById(R.id.live_classify);
         hotContent.bringToFront();
-
         initRecyclerView();
         return view;
     }
@@ -243,6 +242,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 if ( (scollDy < 10 || firstVisibleItemPosition > 1)) {
                     if(isVisible){
                         searchBar.setVisibility(View.VISIBLE);
+
                         isVisible = false;
                     }
                 } else  {
@@ -294,7 +294,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                AppLog.i("TAG", "轮播图显示page:" + position);
+
                 if (dotContainer.getChildAt(0) != null && dotContainer.getChildAt(position) != null) {
                     dotContainer.getChildAt(position).setBackgroundResource(
                             R.drawable.icon_dark_dot_selected);
@@ -398,6 +398,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
                 drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
                 titleAttention.setCompoundDrawables(null, null, drawable1, drawable2);*/
+
                 break;
             case R.id.live_search_bar:
                 Intent intent1 = new Intent(getActivity(), LiveSearchActivity.class);

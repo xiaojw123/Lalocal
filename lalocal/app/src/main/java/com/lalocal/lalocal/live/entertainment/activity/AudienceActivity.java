@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
@@ -464,6 +465,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     };
     boolean masterFirstEnter = true;
     boolean audienceOnLineCountsChange=true;
+    boolean masterComeBack=true;
     Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
 
         private String style;
@@ -491,7 +493,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
             if("11".equals(style)){
                 AppLog.i("TAG","用户端接受到主播结束的消息");
-                Toast.makeText(AudienceActivity.this,"用户端接受到主播结束的消息",Toast.LENGTH_SHORT).show();
                 showFinishLayout(true, 2);
             }
 
@@ -506,8 +507,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         MsgStatusEnum status = message.getStatus();
                         if(fromAccountIn!=null&&creatorAccount!=null){
                             if (creatorAccount.equals(fromAccountIn)) {
+                                masterComeBack=true;
                                 showFinishLayout(false, 2);
-                                AppLog.i("TAG", "主播回来了。。。。。。。。");
+
                             }
                         }
                         break;
@@ -518,11 +520,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         break;
                     case ChatRoomMemberExit://主播退出房间监听
                         audienceOnLineCountsChange=true;
-
-                     /*   String fromAccountExit = message.getFromAccount();
+                        String fromAccountExit = message.getFromAccount();
                         if (creatorAccount.equals(fromAccountExit)) {
-                            showFinishLayout(true, 2);
-                        }*/
+                           masterComeBack=false;
+                            masterLeaveTime();
+                        }
                         break;
                     case ChatRoomManagerRemove:
 
@@ -534,6 +536,22 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
         }
     };
+
+    //计算主播离开时间，若果超过25秒还未回来，就显示主播离开界面，masterComeBack：标记主播离开回来状态
+    public  void masterLeaveTime(){
+        new CountDownTimer(25000,1000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+            @Override
+            public void onFinish() {
+                if(!masterComeBack){
+                    showFinishLayout(true, 2);
+                }
+            }
+        }.start();
+    }
 
     @Override
     protected int getActivityLayout() {
@@ -1195,11 +1213,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "给主播点了个赞", roomId, AuthPreferences.getUserAccount(), liveMessage);
-
             sendMessage(imMessage, MessageType.like);
         }
     }
-
 
     // 发送爱心频率控制
     private boolean isFastClick() {
@@ -1441,7 +1457,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
         AppLog.i("TAG","用户端走了:onJoinChannelSuccess");
-
     }
 
     @Override
@@ -1481,13 +1496,18 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     @Override
     public void onVideoStopped() {
-
+        AppLog.i("TAG","用户端视频播停止回调:");
     }
 
     @Override
     public void onLeaveChannel(IRtcEngineEventHandler.RtcStats stats) {
         AppLog.i("TAG","用户离开直播间回调:"+stats.toString());
 
+    }
+
+    @Override
+    public void onUserEnableVideo(int uid, boolean enabled) {
+        AppLog.i("TAG","其他用户启用/关闭视频 :"+uid+"         "+enabled);
     }
 
 }

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +43,11 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         this.mContext=mContext;
     }
     public  void showCreateLiveRoomPopuwindow(){
+        boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(mContext,"com.tencent.mm");
+        boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(mContext, "com.sina.weibo");
+
+
+
         View view = View.inflate(mContext, R.layout.live_create_room_pop_layout, null);
         cancelCreateRoom = (ImageView) view.findViewById(R.id.live_create_room_close_iv);
         inputLiveRoom = (TextView) view.findViewById(R.id.input_start_live);
@@ -51,6 +57,20 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
         shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
         roomBg = (BlurImageView) view.findViewById(R.id.live_create_room_bg);
+        TextView shareTv= (TextView) view.findViewById(R.id.create_live_pop_share_title);
+
+        if(!isInstallMm1){
+            shareFriends.setVisibility(View.GONE);
+            shareWeixin.setVisibility(View.GONE);
+        }
+        if(!isInstallWeibo){
+            shareWeibo.setVisibility(View.GONE);
+        }
+        if(!isInstallMm1&&isInstallWeibo){
+            shareTv.setVisibility(View.GONE);
+        }
+
+
         String userAvatar = UserHelper.getUserAvatar(mContext);
         if(userAvatar!=null){
             roomBg.setBlurImageURL(userAvatar);
