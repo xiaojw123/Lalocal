@@ -50,7 +50,7 @@
                     android:layout_width="@dimen/item_my_live_img_width"
                     android:layout_height="@dimen/item_my_live_img_width"
                     android:scaleType="fitXY"
-                    android:src="@drawable/personhaednormal" />
+                    android:src="@drawable/home_me_personheadnormal" />
 
                 <TextView
                     android:id="@+id/live_detail_title"
@@ -80,7 +80,7 @@
                     android:id="@+id/live_detail_onlinenum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/live_detail_livelen"
+                    android:layout_above="@+id/live_detail_startat"
                     android:layout_alignLeft="@+id/live_detail_title"
                     android:layout_marginBottom="@dimen/dimen_size_4_dp"
                     android:drawableLeft="@drawable/manypeople_arkic"
@@ -90,7 +90,7 @@
                     android:textSize="@dimen/text_size_12_sp" />
 
                 <TextView
-                    android:id="@+id/live_detail_livelen"
+                    android:id="@+id/live_detail_startat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/live_detail_img"
@@ -99,16 +99,6 @@
                     android:drawableLeft="@drawable/manytime_light"
                     android:drawablePadding="@dimen/dimen_size_4_dp"
                     android:text="00:30:20"
-                    android:textColor="@color/color_b3"
-                    android:textSize="@dimen/text_size_12_sp" />
-
-                <TextView
-                    android:id="@+id/live_detail_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/live_detail_livelen"
-                    android:text="00-00-00"
                     android:textColor="@color/color_b3"
                     android:textSize="@dimen/text_size_12_sp" />
 
@@ -165,7 +155,7 @@
                     android:textSize="@dimen/text_size_16_sp" />
 
                 <TextView
-                    android:id="@+id/live_detail_livelen2"
+                    android:id="@+id/live_detail_livelen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/livelen_text"

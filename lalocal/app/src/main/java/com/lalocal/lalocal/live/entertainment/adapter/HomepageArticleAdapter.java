@@ -44,6 +44,10 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
             mUserArticleList = new ArrayList<>();
         }
     }
+    public void updateItems(List<ArticleDetailsResultBean> userArticleList){
+        this.mUserArticleList = userArticleList;
+        notifyDataSetChanged();
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

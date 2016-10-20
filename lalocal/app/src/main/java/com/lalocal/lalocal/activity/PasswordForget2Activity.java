@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -46,6 +48,7 @@ public class PasswordForget2Activity extends BaseActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v == sureBtn) {
+            MobHelper.sendEevent(this, MobEvent.LOGIN_FORGET_SURE);
             String veritiedcode = veritiedcode_edit.getText().toString();
             if (CommonUtil.isEmpty(veritiedcode)) {
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.veritied_code_no_empty), null);

@@ -16,6 +16,8 @@ import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -93,6 +95,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 finish();
                 break;
             case R.id.login_next_btn:
+                MobHelper.sendEevent(this, MobEvent.LOGIN_PHONE_NEXT);
                 String phone = getPhone();
                 String code = getCode();
                 if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(code)) {
@@ -102,10 +105,12 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 mContentloader.loginByPhone(getPhone(), getCode());
                 break;
             case R.id.login_get_password:
+                MobHelper.sendEevent(this, MobEvent.LOGIN_PHONE_VERIFICATOIN);
                 view.setEnabled(false);
                 mContentloader.getSMSCode(view, getPhone(), null);
                 break;
             case R.id.login_email_btn:
+                MobHelper.sendEevent(this, MobEvent.LOGIN_EMAIL);
                 Intent intent = new Intent(this, LEmailLoginActivity.class);
                 startActivityForResult(intent,KeyParams.REQUEST_CODE);
                 break;

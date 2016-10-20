@@ -14,6 +14,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -23,6 +24,8 @@ import com.lalocal.lalocal.view.decoration.LinearItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.lalocal.lalocal.view.MyLiveAdapter.FOMRAT_TIME;
 
 /**
  * Created by xiaojw on 2016/10/11.
@@ -40,16 +43,14 @@ public class LiveDetailActivity extends BaseActivity {
     TextView liveDetailLocation;
     @BindView(R.id.live_detail_onlinenum)
     TextView liveDetailOnlinenum;
-    @BindView(R.id.live_detail_livelen)
-    TextView liveDetailLivelen;
-    @BindView(R.id.live_detail_date)
-    TextView liveDetailDate;
+    @BindView(R.id.live_detail_startat)
+    TextView liveDetailLiveStartAt;
     @BindView(R.id.live_detail_toalscore_tv)
     TextView liveDetailToalScoreTv;
     @BindView(R.id.livelen_text)
     TextView livelenText;
-    @BindView(R.id.live_detail_livelen2)
-    TextView liveDetailLivelen2;
+    @BindView(R.id.live_detail_livelen)
+    TextView liveDetailLivelen;
     @BindView(R.id.live_detail_live_score)
     TextView liveDetailLiveScore;
     @BindView(R.id.live_detail_gift_score)
@@ -72,7 +73,9 @@ public class LiveDetailActivity extends BaseActivity {
         LiveRowsBean item = getUserLiveItem();
         intiView(item);
         setLoaderCallBack(new LiveDetailBack());
+        AppLog.print("item___" + item);
         if (item != null) {
+            AppLog.print("id__channelsRecords_____" + item.getId());
             mContentloader.getChannelRecords(item.getId());
         }
     }
@@ -84,11 +87,13 @@ public class LiveDetailActivity extends BaseActivity {
         liveDetailChallengeList.setLayoutManager(new LinearLayoutManager(this));
         liveDetailChallengeList.addItemDecoration(new LinearItemDecoration(this));
         if (item != null) {
-            DrawableUtils.displayImg(this, liveDetailImg, item.getPhoto());
+            DrawableUtils.displayImg(this, liveDetailImg, item.getPhoto(), R.drawable.home_me_personheadnormal);
             liveDetailTitle.setText(item.getTitle());
             String addres = item.getAddress();
             String onlineNum = String.valueOf(item.getOnlineNumber());
-            String liveLen = item.getLiveLen();
+            String startAt = item.getStartAt();
+            String endAt = item.getEndAt();
+            String liveLen = getLiveLen(startAt, endAt);
             if (!TextUtils.isEmpty(addres)) {
                 liveDetailLocation.setVisibility(View.VISIBLE);
                 liveDetailLocation.setText(addres);
@@ -97,17 +102,15 @@ public class LiveDetailActivity extends BaseActivity {
                 liveDetailOnlinenum.setVisibility(View.VISIBLE);
                 liveDetailOnlinenum.setText(onlineNum);
             }
-            if (!TextUtils.isEmpty(liveLen)) {
-                liveDetailLivelen2.setText(liveLen);
-                liveDetailLivelen.setText(liveLen);
-                liveDetailDate.setText(item.getDate());
-            }
+            liveDetailLiveStartAt.setText(startAt);
+            liveDetailLivelen.setText(liveLen);
         }
     }
 
     class LiveDetailBack extends ICallBack {
         @Override
         public void onGetChannelRecord(ChannelRecord record) {
+            AppLog.print("onGetChannelRecord____");
             updateDetailView(record);
         }
     }
@@ -127,7 +130,46 @@ public class LiveDetailActivity extends BaseActivity {
 
 
     public LiveRowsBean getUserLiveItem() {
+
         return getIntent().getParcelableExtra(LIVE_ITEM);
+    }
+
+    //年和月上有可能存在误差
+    public String getLiveLen(String startAt, String endAt) {
+//        "startAt": "2016-10-10 18:29:28",
+//                "endAt": "2016-10-10 18:30:51",
+        //   18:39:25  18:40:01  00:1:-24   60-24  36
+        try {
+            String[] startDate = startAt.substring(0, 10).split("-");
+            String[] endDate = endAt.substring(0, 10).split("-");
+            String[] startTime = startAt.substring(startAt.length() - 8, startAt.length()).split(":");
+            String[] endTime = endAt.substring(startAt.length() - 8, startAt.length()).split(":");
+            int reduceH = reducedArrayValue(endTime, startTime, 0);
+            int reduceM = reducedArrayValue(endTime, startTime, 1);
+            int reduceS = reducedArrayValue(endTime, startTime, 2);
+            int reduceYear = reducedArrayValue(endDate, startDate, 0);
+            int reduceMonth = reducedArrayValue(endDate, startDate, 1);
+            int reduceDay = reducedArrayValue(endDate, startDate, 2);
+            int len = reduceYear * 365 * 24 * 3600 + reduceMonth * 30 * 24 * 3600 + reduceDay * 24 * 3600 + reduceH * 3600 + reduceM * 60 + reduceS;
+            int h = len / 3600;
+            int m = (len - h * 3600) / 60;
+            int s = len - h * 3600 - m * 60;
+            h = Math.max(h, 0);
+            m = Math.max(m, 0);
+            s = Math.max(s, 0);
+            String fH = h < 10 ? "0" + h : String.valueOf(h);
+            String fM = m < 10 ? "0" + m : String.valueOf(m);
+            String fS = s < 10 ? "0" + s : String.valueOf(s);
+            return String.format(FOMRAT_TIME, fH, fM, fS);
+        } catch (Exception e) {
+            return "00:00:00";
+        }
+    }
+
+
+    public int reducedArrayValue(String[] array1, String[] array2, int index) {
+        return Integer.parseInt(array1[index]) - Integer.parseInt(array2[index]);
+
     }
 
 
