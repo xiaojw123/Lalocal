@@ -87,7 +87,6 @@ dependencies {
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-    //    compile 'com.lai.weavey:dialog:1.1'
     compile project(path: ':gifviewlibrary')
     compile project(':xrecyclerview')
     compile project(':selectordialog')
@@ -108,7 +107,7 @@ android {
 apply plugin: 'com.bugtags.library.plugin'
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "cd0acb22bdec583c5b200902dd13b7e1"  //这里是你的 appKey
+    appKey "35af803b133278a8f97e4c5a692d1e71"  //这里是你的 appKey
     appSecret "597327c81f891d5314b67d0129f703b0"    //这里是你的 appSecret，管理员在设置页可以查看
 //    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
     mappingUploadEnabled true

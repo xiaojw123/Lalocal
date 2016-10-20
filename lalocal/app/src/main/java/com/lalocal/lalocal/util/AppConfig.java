@@ -284,12 +284,14 @@ public class AppConfig {
         return baseUrl+"system/areas?channelFlag=true";
     }
     //直播首页 http://dev.lalocal.cn:8080/api/channels/index?area=2&attentionFlag=
-    public  static  final  String getLiveHotList(String areaId){
-        return  baseUrl+(areaId==null?"channels/index?area=":("channels/index?area="+areaId));
+    public  static  final  String getLiveHotList(String areaId,String attentionFlag){
+        return  baseUrl+"channels/index?area="+areaId+"&attentionFlag="+attentionFlag;
     }
     //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
-    public static final String getPlayBackLive(String areaId,int pageNumber){
-        return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+    public static final String getPlayBackLive(String areaId,int pageNumber,String attentionFlag){
+      //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+   return baseUrl+"channels/historys?area="+areaId+"&pageNumber="+pageNumber+"&attentionFlag="+attentionFlag;
+
     }
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public  static final String getPlayBackLiveDetails(int id){
@@ -493,6 +495,20 @@ public class AppConfig {
 
         return  baseUrl+"channels/records/"+id;
     }
+    //发送短信验证码
+    public static  String getSMSVerCode(){
+
+        return baseUrl+"users/phone/code";
+    }
+    //手机登录
+    public static  String getPhoneLoginUrl(){
+   return  baseUrl+"users/phone/login";
+    }
+    //手机注册
+    public static  String getPhoneRegisterUrl(){
+        return baseUrl+"users/phone/user";
+    }
+
 
     // 用户当前直播
     public static String getUserCurLive(int userid) {
@@ -503,7 +519,7 @@ public class AppConfig {
 
     // 获取用户文章列表
     public static String getUserArticles(int userid, int pageNum) {
-        String url = baseUrl + "articles/author?authorId=" + userid + "&pageSize=10&pageNumber=" + pageNum;
+        String url = baseUrl + "articles/author?authorId=" + 29 + "&pageSize=10&pageNumber=" + pageNum;
         AppLog.i("ussr", "the getUserArticles url is " + url);
         return url;
     }

@@ -6,20 +6,26 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.tedcoder.wkvideoplayer.view.PlayBackPlayer;
+import com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer;
+import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,7 +38,7 @@ public class PlayBackActivity extends AppCompatActivity {
 
 
     @BindView(R.id.video_player)
-    PlayBackPlayer videoPlayer;
+    TextureVideoPlayer videoPlayer;
     @BindView(R.id.playback_emcee_head)
     CircleImageView playbackEmceeHead;
     @BindView(R.id.playback_emcee_name)
@@ -43,9 +49,19 @@ public class PlayBackActivity extends AppCompatActivity {
     LinearLayout playbackMasterInfoLayout;
     @BindView(R.id.play_layout)
     LinearLayout playLayout;
+    @BindView(R.id.loading_page_bg)
+    BlurImageView loadingPageBg;
+    @BindView(R.id.loading_live_imag)
+    GifView loadingLiveImag;
+    @BindView(R.id.xlistview_header_anim)
+    LinearLayout xlistviewHeaderAnim;
+    @BindView(R.id.playback_loading_page)
+    RelativeLayout playbackLoadingPage;
     private LiveRowsBean liveRowsBean;
     private String videoUrl;
     private SpecialShareVOBean shareVO;
+    private int direction;
+    private List<LiveRowsBean.VideoListBean> videoList;
 
 
     @Override
@@ -54,9 +70,8 @@ public class PlayBackActivity extends AppCompatActivity {
         setContentView(R.layout.playback_activity);
         ButterKnife.bind(this);
         parseIntent();
-        startPlayer();
         initData();
-
+        startPlayer();
     }
 
 
@@ -73,46 +88,43 @@ public class PlayBackActivity extends AppCompatActivity {
 
     private void parseIntent() {
         liveRowsBean = getIntent().getParcelableExtra("LiveRowsBean");
-        videoUrl = liveRowsBean.getVideoUrl();
+        videoList = liveRowsBean.getVideoList();
         shareVO = liveRowsBean.getShareVO();
-        int direction = liveRowsBean.getDirection();
-        if(direction==0){//横屏
-            if(getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            }
-        }
-
-
+        direction = liveRowsBean.getDirection();
+        playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineUser()));
     }
 
     private boolean isPlayStatus = true;//视频播放状态
+    private int position = 0;
 
     private void startPlayer() {
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        videoPlayer.setLayoutParams(layoutParams);
+
         videoPlayer.setVideoPlayCallback(mVideoPlayCallback);
         videoPlayer.setAutoHideController(true);
-        Uri uri = Uri.parse(videoUrl);
-        videoPlayer.loadAndPlay(uri, 0);
+        if (videoList != null && videoList.size() > 0) {
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+            Toast.makeText(this,"共："+videoList.size()+"段视频",Toast.LENGTH_SHORT).show();
+        }
+        ++position;
 
     }
 
     private void initData() {
         LiveUserBean user = liveRowsBean.getUser();
+        loadingPageBg.setBlurImageURL(user.getAvatar());
+        loadingPageBg.setScaleRatio(20);
+        loadingPageBg.setBlurRadius(1);
+
         DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineUser()));
         playbackMasterInfoLayout.setOnClickListener(clickListener);
-
+        if (direction == 0) {//横屏
+            videoPlayer.setRotation(90f);
+        }
     }
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -124,7 +136,7 @@ public class PlayBackActivity extends AppCompatActivity {
     };
 
 
-    private PlayBackPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new PlayBackPlayer.VideoPlayCallbackImpl() {
+    private TextureVideoPlayer.VideoPlayCallbackImpl mVideoPlayCallback = new TextureVideoPlayer.VideoPlayCallbackImpl() {
         @Override
         public void onCloseVideo() {
             videoPlayer.close();//关闭VideoView
@@ -141,18 +153,29 @@ public class PlayBackActivity extends AppCompatActivity {
          */
         @Override
         public void onPlayFinish() {
+
+            Toast.makeText(PlayBackActivity.this,"哈哈哈播放完毕",Toast.LENGTH_SHORT).show();
+            if (videoList.size() == position) {
+                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
+                position = 0;
+            }
+            videoPlayer.close();
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+            ++position;
         }
 
         @Override
         public void onPlayStatus(boolean isPlay) {
             isPlayStatus = isPlay;
+            Log.i("TAG", " 播放状态:" + (isPlay == true ? "开始播放" : "没有播放"));
+            playbackLoadingPage.setVisibility(View.GONE);
         }
 
         @Override
         public void onClickQuit() {
             videoPlayer.close();
             finish();
-
         }
 
         @Override
@@ -165,6 +188,38 @@ public class PlayBackActivity extends AppCompatActivity {
             } else {
                 Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
             }
+
+        }
+
+        @Override
+        public void onClickBefore(ImageView view) {
+            if(videoList==null||videoList.size()==0){
+                return;
+            }
+            position=position-2;
+            if(videoList.size()==position||position<0){
+                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
+                position = 0;
+            }
+            videoPlayer.close();
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+        }
+
+        @Override
+        public void onClickNext(ImageView view) {
+            if(videoList==null||videoList.size()==0){
+                return;
+            }
+            if (videoList.size() == position) {
+                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
+                position = 0;
+            }
+
+            videoPlayer.close();
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri, 0);
+            ++position;
 
         }
 

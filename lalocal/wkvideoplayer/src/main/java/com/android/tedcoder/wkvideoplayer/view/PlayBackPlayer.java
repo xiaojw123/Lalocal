@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -60,7 +61,7 @@ public class PlayBackPlayer extends RelativeLayout {
 
     private float touchLastX;
     private int position;
-    private int touchStep = 1000*60;//快进的时间，1秒
+    private int touchStep = 1000*10;//快进的时间，1秒
     private int touchPosition = -111111111;
     private View.OnTouchListener mOnTouchVideoListener = new OnTouchListener() {
         @Override
@@ -68,7 +69,6 @@ public class PlayBackPlayer extends RelativeLayout {
 
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-                    Log.i("TAg", "ACTION_DOWN: "+touchPosition);
 
                     showOrHideController();
                     if (!mVideoView.isPlaying()){
@@ -77,6 +77,8 @@ public class PlayBackPlayer extends RelativeLayout {
                     float downX =  event.getRawX();
                     touchLastX = downX;
                     position = mVideoView.getCurrentPosition();
+                    touchPosition=position;
+                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);
                     break;
                 case MotionEvent.ACTION_MOVE:
                     Log.i("TAg", "ACTION_MOVE: "+touchPosition);
@@ -123,6 +125,7 @@ public class PlayBackPlayer extends RelativeLayout {
                     if (touchPosition!=-1){
                         mVideoView.seekTo(touchPosition);
                         touchPosition = -1;
+                        Log.i("TAg", "ACTION_UP: "+touchPosition+"哈哈哈哈哈哈哈哈");
                   /*  if (videoControllerShow){
                         return true;
                     }*/
@@ -150,11 +153,26 @@ public class PlayBackPlayer extends RelativeLayout {
         }
     };
     private TextView loadingTv;
+    private LinearLayout videoLayout;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return true;
     }
+
+    public void setAcross(){
+        final RotateAnimation animation =new RotateAnimation(0f,180f, Animation.RELATIVE_TO_SELF,
+                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        animation.setFillAfter(true);
+        animation.setDuration(0);
+        videoLayout.setAnimation(animation);
+       /* videoLayout.setRotation(90.0f);
+        if(((Activity)mContext).getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
+            ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }*/
+
+    }
+
 
     // 播放器控制条的回调函数
     private PlayBackMediaController.MediaControlImpl mMediaControl = new PlayBackMediaController.MediaControlImpl() {
@@ -201,7 +219,15 @@ public class PlayBackPlayer extends RelativeLayout {
             mVideoPlayCallback.onClickQuit();
         }
 
+        @Override
+        public void onClickBefore(ImageView imageView) {
+            mVideoPlayCallback.onClickBefore(imageView);
+        }
 
+        @Override
+        public void onClickNext(ImageView imageView) {
+        mVideoPlayCallback.onClickNext(imageView);
+        }
     };
 
     // 当MediaPlayer准备好后触发该回调
@@ -334,6 +360,7 @@ public class PlayBackPlayer extends RelativeLayout {
         mContext = context;
         View inflate = View.inflate(context, R.layout.live_playback_player_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
         mVideoView = (VideoView) findViewById(R.id.video_view);
+        videoLayout = (LinearLayout) findViewById(R.id.video_view_layout);
         mMediaController = (PlayBackMediaController) findViewById(R.id.controller);
         touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
         touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
@@ -547,5 +574,7 @@ public class PlayBackPlayer extends RelativeLayout {
 
         void onClickQuit();
         void onClickShare();
+        void  onClickBefore(ImageView view);
+        void onClickNext(ImageView view);
     }
 }

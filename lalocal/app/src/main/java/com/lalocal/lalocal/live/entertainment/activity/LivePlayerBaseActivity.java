@@ -1022,15 +1022,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     addMembers(result);
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
-
                         getMembers(MemberQueryType.GUEST, enterTime, result.size());
                     }
                 } else {
 
                     AppLog.i("TAG", "拉取在线人数失败");
-                 /*   NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                    NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                     isFirstEnrRoom=false;
-                    enterRoom();*/
+                    enterRoom();
 
                 }
             }
@@ -1123,7 +1122,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected void updateUI() {
         handler.postDelayed(new MyRunnable(), 2000);
-
     }
 
     boolean isOnLineUsersCountChange = true;
@@ -1146,6 +1144,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 @Override
                 public void onSuccess(final ChatRoomInfo param) {
                     onlineCounts = param.getOnlineUserCount();
+
+                    onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
                     AppLog.i("TAG", "基类获取在线人数:" + onlineCounts);
                     if (isScrollStop && mIsTouchUP) {
                         clearCache();
@@ -1156,9 +1156,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 @Override
                 public void onFailed(int code) {
                     AppLog.i("TAG", "定时拉去在线人数失败:" + code);
-                    if (timer != null) {
-                        timer.cancel();
-                    }
+
                     enterRoom();
                 }
 

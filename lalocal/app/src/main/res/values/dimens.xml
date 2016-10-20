@@ -24,14 +24,17 @@
     <dimen name="dimen_size_21_dp">21dp</dimen>
     <dimen name="dimen_size_22_dp">22dp</dimen>
     <dimen name="dimen_size_25_dp">25dp</dimen>
+    <dimen name="dimen_size_26_dp">26dp</dimen>
     <dimen name="dimen_size_29_dp">29dp</dimen>
     <dimen name="dimen_size_30_dp">30dp</dimen>
     <dimen name="dimen_size_35_dp">35dp</dimen>
     <dimen name="dimen_size_40_dp">40dp</dimen>
     <dimen name="dimen_size_44_dp">44dp</dimen>
+    <dimen name="dimen_size_45_dp">45dp</dimen>
     <dimen name="dimen_size_50_dp">50dp</dimen>
     <dimen name="dimen_size_36_dp">36dp</dimen>
     <dimen name="dimen_size_60_dp">60dp</dimen>
+    <dimen name="dimen_size_100_dp">100dp</dimen>
     <dimen name="dimen_size_130_dp">130dp</dimen>
     <dimen name="dimen_size_166_dp">166dp</dimen>
     <dimen name="custom_dialog_container_width">320dp</dimen>

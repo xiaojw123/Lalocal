@@ -66,7 +66,6 @@ import java.lang.reflect.Method;
 
 public class NEVideoView extends SurfaceView implements NEVideoController.MediaPlayerControl{
     private static final String TAG = "NEVideoView";
-    
     //states refer to MediaPlayer
     private static final int IDLE = 0;
     private static final int INITIALIZED = 1;
@@ -145,11 +144,11 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
             if ( mVideoWidth * height  > width * mVideoHeight ) {
 
             } else if ( mVideoWidth * height  < width * mVideoHeight ) {
-
             } else {
 
             }
         }
+        AppLog.i("TAF","  onMeasure: mVideoWidth："+mVideoWidth+"    mVideoHeight:"+mVideoHeight+"    width:"+width+"    height:"+height);
         setMeasuredDimension(width, height);
     }
 
@@ -161,7 +160,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
         Rect rect = new Rect();
         this.getWindowVisibleDisplayFrame(rect);//获取状态栏高度
         WindowManager wm = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay(); //获取屏幕分辨率
+        Display display = wm.getDefaultDisplay();//获取屏幕分辨率
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) { //new
             DisplayMetrics metrics = new DisplayMetrics();
             display.getRealMetrics(metrics);
@@ -222,7 +221,9 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                     layPara.height = (int) (winWidth / aspectRatio);
                 }
             }
+
             setLayoutParams(layPara);
+            AppLog.i("TAF","   mSurfaceWidth:"+mSurfaceWidth+"    mSurfaceHeight:"+mSurfaceHeight+"   layParaH:"+layPara.height+"     layParaW:"+layPara.width);
             getHolder().setFixedSize(mSurfaceWidth, mSurfaceHeight);
         }
 
@@ -307,7 +308,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                 mNextState = PREPARING;
             }
             mMediaPlayer.setDisplay(mSurfaceHolder);
-            mMediaPlayer.setScreenOnWhilePlaying(true);
+            mMediaPlayer.setScreenOnWhilePlaying(false);
              mMediaPlayer.prepareAsync(mContext);
             mCurrState = PREPARING;
             attachMediaController();

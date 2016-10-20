@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.lalocal.lalocal.activity.EmailBoundActivity">
+
+    <FrameLayout
+        android:id="@+id/email_bound_titleview_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/bound_email" />
+
+        <TextView
+            android:id="@+id/p1_emailbound_skip_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/skip"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="@dimen/dimen_size_15_dp"
+            />
+
+    </FrameLayout>
+
+    <com.lalocal.lalocal.view.CustomEditText
+        android:id="@+id/p1_emailbound_edit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_edit_height"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        app:text_hint="@string/input_email"
+        app:maxLen="50"
+        />
+
+
+    <Button
+        android:id="@+id/p1_next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/register_btn_height"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:background="@drawable/orange_corner_btn_bg"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18_sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email_bound_note"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:textColor="@color/color_b3"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        />
+
+
+</LinearLayout>

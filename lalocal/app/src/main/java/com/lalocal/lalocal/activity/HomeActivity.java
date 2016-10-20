@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
@@ -22,6 +23,7 @@ import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.umeng.analytics.MobclickAgent;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
@@ -204,7 +206,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         }
     }
 
-    private void showForceUpdateDialog(final String dowloadUrl, String contentText) {
+    private void showForceUpdateDialog(final String dowloadUrl, final String contentText) {
         NormalAlertDialog.Builder builder = new NormalAlertDialog.Builder(this);
         final NormalAlertDialog forceDailog = builder.setHeight(0.23f).setCancelable(false)  //屏幕高度*0.23
                 .setWidth(0.8f)  //屏幕宽度*0.65
@@ -221,6 +223,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             @Override
             public void clickLeftButton(View view) {
                 forceDailog.dismiss();
+                if (!MyApplication.isDebug) {
+                    MobclickAgent.onKillProcess(HomeActivity.this);
+                }
                 System.exit(0);
             }
 

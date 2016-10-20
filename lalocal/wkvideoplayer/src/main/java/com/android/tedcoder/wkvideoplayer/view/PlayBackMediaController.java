@@ -30,6 +30,8 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
     private MediaControlImpl mMediaControl;
     private ImageView quit;
     private ImageView share;
+    private ImageView videoBefore;
+    private ImageView videoNext;
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean isFromUser) {
@@ -72,6 +74,8 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         mMenuViewPlaceHolder = findViewById(R.id.view_menu_placeholder);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
         share = (ImageView) findViewById(R.id.live_telecast_share);
+        videoBefore = (ImageView)findViewById(R.id.video_before);
+        videoNext = (ImageView)findViewById(R.id.video_next);
         initData();
     }
 
@@ -81,11 +85,13 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         mPlayImg.setOnClickListener(this);
         quit.setOnClickListener(this);
         share.setOnClickListener(this);
+        videoBefore.setOnClickListener(this);
+        videoNext.setOnClickListener(this);
         setPlayState(PlayState.PAUSE);
 
     }
     public void setPlayState(PlayState playState) {
-        mPlayImg.setImageResource(playState.equals(PlayState.PLAY) ? R.drawable.biz_video_pause : R.drawable.biz_video_play);
+        mPlayImg.setImageResource(playState.equals(PlayState.PLAY) ? R.drawable.livingreplay_unplay : R.drawable.livingreplay_play);
     }
     @Override
     public void onClick(View view) {
@@ -101,6 +107,11 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
 
         }else if(view.getId()==R.id.live_telecast_share){
             mMediaControl.onClickShare();
+        }else if(view.getId()==R.id.video_before){
+            mMediaControl.onClickBefore((ImageView) view);
+
+        }else if(view.getId()==R.id.video_next){
+            mMediaControl.onClickNext((ImageView) view);
         }
     }
 
@@ -197,6 +208,9 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         void onClickShare();
 
         void onClickQuit();
+
+        void onClickBefore(ImageView imageView);
+        void onClickNext(ImageView imageView);
 
     }
 

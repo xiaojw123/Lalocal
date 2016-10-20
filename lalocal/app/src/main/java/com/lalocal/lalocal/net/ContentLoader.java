@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
@@ -73,7 +74,6 @@ import com.lalocal.lalocal.model.SiftModle;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
-import com.lalocal.lalocal.model.UserLiveDataResp;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
@@ -92,6 +92,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -101,6 +102,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * Created by xiaojw on 2016/6/1.
@@ -125,24 +127,82 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
-    public void getChannelRecords(int id){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.CHANNEL_RECORDS);
+
+    public void registerByPhone(String phone, String code, String email, String password) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.REGISTER_PHONE);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getChannelRecords(id),response,response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneRegisterUrl(), response, response);
+        JSONObject reqParams = new JSONObject();
+        try {
+            reqParams.put(RequestParams.PHONE, phone);
+            reqParams.put(RequestParams.CODE, code);
+            if (!TextUtils.isEmpty(email)) {
+                reqParams.put(RequestParams.EMAIL, email);
+            }
+            if (!TextUtils.isEmpty(password)) {
+                reqParams.put(RequestParams.PASSWORD, password);
+            }
+            request.setBodyParams(reqParams.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+    public void loginByPhone(String phone, String code) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LOGIN_PHEON);
+            response.setPLoginInfo(phone, code);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneLoginUrl(), response, response);
+        JSONObject reqBody = new JSONObject();
+        try {
+            reqBody.put(RequestParams.PHONE, phone);
+            reqBody.put(RequestParams.CODE, code);
+            request.setBodyParams(reqBody.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+
+    public void getSMSCode(View resView, String phoneNum, String type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SMS_VER_CODE);
+            response.setResponseView(resView);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSMSVerCode(), response, response);
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put(RequestParams.PHONE, phoneNum);
+            requestBody.put(RequestParams.TYPE, type);
+            request.setBodyParams(requestBody.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+
+    public void getChannelRecords(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CHANNEL_RECORDS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getChannelRecords(id), response, response);
         request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
-
 
 
     }
 
     //获取用户直播
-    public void getUserLive(int userid,int pageNum){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.USER_LIVE);
+    public void getUserLive(int userid, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.USER_LIVE);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUserLiveUrl(userid,pageNum),response, response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUserLiveUrl(userid, pageNum), response, response);
         request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
     }
@@ -887,36 +947,39 @@ public class ContentLoader {
     }
 
     //发起挑战
-    public void getChallenge(String content,int targetGold, String  channelId){
+    public void getChallenge(String content, int targetGold, String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_INITIATE);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getChallageInitiate(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getChallengeBodyParams(content,targetGold,channelId));
+        request.setBodyParams(getChallengeBodyParams(content, targetGold, channelId));
         requestQueue.add(request);
     }
+
     //挑战详情
-    public  void getChallengeDetails(String challengeId){
+    public void getChallengeDetails(String challengeId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_DEATILS);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails()+challengeId , response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeDetails() + challengeId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //挑战列表
-    public  void getChallengeList(String channelId,int status){
+    public void getChallengeList(String channelId, int status) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHALLENGE_LIST);
         }
-        String url=channelId+(status==-1?"":("&status="+status));
-        ContentRequest request = new ContentRequest(AppConfig.getChallengeList()+url , response, response);
+        String url = channelId + (status == -1 ? "" : ("&status=" + status));
+        ContentRequest request = new ContentRequest(AppConfig.getChallengeList() + url, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //主播操作挑战
-    public void getLiveChallengeStatus(int status,int challengeId){
+    public void getLiveChallengeStatus(int status, int challengeId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_CHALLENGE_STATUS);
         }
@@ -927,7 +990,7 @@ public class ContentLoader {
     }
 
     //直播地区列表
-    public  void getLiveArea(){
+    public void getLiveArea() {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_AREA);
         }
@@ -935,26 +998,29 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //直播首页
-    public void getLivelist(String areaId){
+        public void getLivelist(String areaId,String attentionFlag){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId,attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //历史直播
-    public  void getPlayBackLiveList(String areaId,int pageNumber){
+    public  void getPlayBackLiveList(String areaId,int pageNumber,String attentionFlag){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber,attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+
     //历史直播详情
-    public  void getPlayBackLiveDetails(int id){
+    public void getPlayBackLiveDetails(int id) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK_DETAILS);
         }
@@ -1055,12 +1121,6 @@ public class ContentLoader {
             this(Method.GET, url, listener, errorListener);
         }
 
-      /*  @Override
-        public void setRetryPolicy(RetryPolicy retryPolicy) {
-            super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        }*/
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
@@ -1129,10 +1189,17 @@ public class ContentLoader {
         private String key;
         private int pageType;
         private int collectionId;
+        private String phone, code;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
+
+        public void setPLoginInfo(String phone, String code) {
+            this.phone = phone;
+            this.code = code;
+        }
+
 
         public void setPassWord(String psw) {
             this.psw = psw;
@@ -1217,6 +1284,16 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.LOGIN_PHEON:
+                        responseLoginPhone(jsonObj);
+                        break;
+
+                    case RequestCode.REGISTER_PHONE:
+                        responeRegisterPhone(jsonObj);
+                        break;
+                    case RequestCode.SMS_VER_CODE:
+                        responseGetSMSVerCode();
+                        break;
                     case RequestCode.CHANNEL_RECORDS:
                         responseGetChannelRecords(jsonObj);
                         break;
@@ -1499,18 +1576,37 @@ public class ContentLoader {
 
         }
 
-        private void responseGetChannelRecords(JSONObject jsonObj) {
-            Gson gson=new Gson();
+        private void responseLoginPhone(JSONObject jsonObj) {
+            Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
-            ChannelRecord record=gson.fromJson(json,ChannelRecord.class);
+            User item = gson.fromJson(json, User.class);
+            saveUserInfo(item);
+            callBack.onLoginByPhone(item, phone, code);
+        }
+
+        private void responeRegisterPhone(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            User item = gson.fromJson(json, User.class);
+            saveUserInfo(item);
+            callBack.onRegisterByPhone(item);
+        }
+
+        private void responseGetSMSVerCode() {
+            callBack.onGetSmsCodeSuccess();
+        }
+
+        private void responseGetChannelRecords(JSONObject jsonObj) {
+            Gson gson = new Gson();
+            String json = jsonObj.optString(ResultParams.REULST);
+            ChannelRecord record = gson.fromJson(json, ChannelRecord.class);
             callBack.onGetChannelRecord(record);
         }
 
         private void responseGetUserLive(JSONObject jsonObj) {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
-            AppLog.i("ussr", "the hist user live data  is " + json);
-            UserLiveItem item=gson.fromJson(json,UserLiveItem.class);
+            UserLiveItem item = gson.fromJson(json, UserLiveItem.class);
             callBack.onGetUserLive(item);
         }
 
@@ -1918,23 +2014,32 @@ public class ContentLoader {
                 user = gson.fromJson(resutJson.toString(), User.class);
             }
             AppLog.i("TAG", "responseLogin" + jsonObject.toString());
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(KeyParams.IS_LOGIN, true);
-            bundle.putString(KeyParams.EMAIL, email);
-            bundle.putString(KeyParams.PASSWORD, psw);
-            bundle.putInt(KeyParams.USERID, user.getId());
-            bundle.putString(KeyParams.TOKEN, user.getToken());
-            bundle.putString(KeyParams.AVATAR, user.getAvatar());
-            bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
-            bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
-            bundle.putString(KeyParams.NICKNAME, user.getNickName());
-            UserHelper.saveLoginInfo(context, bundle);
-            DemoCache.clear();
-            AuthPreferences.clearUserInfo();
-            AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
-            AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-            loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+            saveUserInfo(user);
             callBack.onLoginSucess(user);
+        }
+
+        private void saveUserInfo(User user) {
+            if (user != null) {
+                if (!MyApplication.isDebug) {
+                    MobclickAgent.onProfileSignIn(String.valueOf(user.getId()));
+                }
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(KeyParams.IS_LOGIN, true);
+                bundle.putString(KeyParams.EMAIL, email);
+                bundle.putString(KeyParams.PASSWORD, psw);
+                bundle.putInt(KeyParams.USERID, user.getId());
+                bundle.putString(KeyParams.TOKEN, user.getToken());
+                bundle.putString(KeyParams.AVATAR, user.getAvatar());
+                bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
+                bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
+                bundle.putString(KeyParams.NICKNAME, user.getNickName());
+                UserHelper.saveLoginInfo(context, bundle);
+                DemoCache.clear();
+                AuthPreferences.clearUserInfo();
+                AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
+                AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
+                loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+            }
         }
 
         private void loginIMServer(final String imccId, String imToken) {
@@ -2145,12 +2250,13 @@ public class ContentLoader {
 
         //挑战详情
         private void responseChallengeDetails(String json) {
-            AppLog.i("TAG","挑战详情："+json);
+            AppLog.i("TAG", "挑战详情：" + json);
             callBack.onChallengeDetails(json);
         }
+
         //挑战列表
         private void responLiveChallengeList(String json) {
-            AppLog.i("TAG","挑战列表："+json);
+            AppLog.i("TAG", "挑战列表：" + json);
             callBack.onChallengeList(json);
         }
 
@@ -2160,13 +2266,15 @@ public class ContentLoader {
             ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
             callBack.onLiveChallengeStatus(resultBean);
         }
+
         //直播地区列表
         private void responLiveArea(String json) {
-            AppLog.i("TAG","直播地区列表:"+json);
+            AppLog.i("TAG", "直播地区列表:" + json);
             LiveHomeAreaResp liveHomeAreaResp = new Gson().fromJson(json, LiveHomeAreaResp.class);
             callBack.onLiveHomeArea(liveHomeAreaResp);
 
         }
+
         //直播首页列表
         private void responListHomeList(String json) {
             LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
@@ -2177,9 +2285,10 @@ public class ContentLoader {
 
         //历史直播
         private void responPlayBackLive(String json) {
-            AppLog.i("TAG","历史直播:"+json);
+            AppLog.i("TAG", "历史直播:" + json);
             callBack.onPlayBackList(json);
         }
+
         //历史直播详情
         private void responPlayBackDetails(JSONObject jsonObj) {
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
@@ -2227,7 +2336,7 @@ public class ContentLoader {
         }
 
         private void responseVersion(String json) {
-            AppLog.i("TAG", "responseVersion:" + json);
+            AppLog.print("TAG", "responseVersion:" + json);
             VersionInfo versionInfo = new Gson().fromJson(json, VersionInfo.class);
             if (versionInfo.getReturnCode() == 0) {
                 callBack.onVersionResult(versionInfo);
@@ -2369,11 +2478,12 @@ public class ContentLoader {
         }
         return jsonObject.toString();
     }
+
     //主播操作挑战
     private String getChallengeStatusBodyParams(int status) {
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("status",status);
+            jsonObject.put("status", status);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2429,7 +2539,7 @@ public class ContentLoader {
     }
 
     //发起挑战
-    private String getChallengeBodyParams(String content,int targetGold, String  channelId){
+    private String getChallengeBodyParams(String content, int targetGold, String channelId) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("content", content);
@@ -2522,6 +2632,14 @@ public class ContentLoader {
         String ROWS = "rows";
     }
 
+    interface RequestParams {
+        String PHONE = "phone";
+        String CODE = "code";
+        String TYPE = "type";
+        String EMAIL = "email";
+        String PASSWORD = "password";
+    }
+
     interface RequestCode {
         int REGISTER = 100;
         int LOGIN = 101;
@@ -2561,8 +2679,11 @@ public class ContentLoader {
         int EXCHARGE_GOLD = 137;
         int SEARCH_LIVE = 138;
         int EXCHARGE_COUPON = 139;
-        int USER_LIVE=140;
-        int CHANNEL_RECORDS=150;
+        int USER_LIVE = 140;
+        int CHANNEL_RECORDS = 150;
+        int SMS_VER_CODE = 151;
+        int LOGIN_PHEON = 152;
+        int REGISTER_PHONE = 153;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2595,16 +2716,16 @@ public class ContentLoader {
         int LIVE_CANCEL_MANAGET_ACCREIDT = 227;
         int LIVE_SEND_GIFTS = 228;
         int LIVE_GIFT_RANKS = 229;
-        int GET_ONLINE_COUNT=230;
-        int SHARE_STATISTICS=231;
-        int CHALLENGE_INITIATE=232;
-        int CHALLENGE_DEATILS=233;
-        int LIVE_CHALLENGE_STATUS=234;
-        int CHALLENGE_LIST=235;
-        int LIVE_AREA=236;
-        int LIVE_HOME_LIST=237;
-        int LIVE_PALY_BACK=238;
-        int LIVE_PALY_BACK_DETAILS=239;
+        int GET_ONLINE_COUNT = 230;
+        int SHARE_STATISTICS = 231;
+        int CHALLENGE_INITIATE = 232;
+        int CHALLENGE_DEATILS = 233;
+        int LIVE_CHALLENGE_STATUS = 234;
+        int CHALLENGE_LIST = 235;
+        int LIVE_AREA = 236;
+        int LIVE_HOME_LIST = 237;
+        int LIVE_PALY_BACK = 238;
+        int LIVE_PALY_BACK_DETAILS = 239;
 
 
         int GET_INDEX_RECOMMEND_LIST = 300;

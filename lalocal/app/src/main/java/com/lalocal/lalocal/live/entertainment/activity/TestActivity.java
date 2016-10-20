@@ -1,46 +1,33 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
-import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.VideoView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.live.im.ui.barrage.BarrageConfig;
-import com.lalocal.lalocal.live.im.ui.barrage.BarrageViewTest;
 
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by android on 2016/8/3.
  */
 public class TestActivity extends BaseActivity {
+    @BindView(R.id.video_view)
+    VideoView videoView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_test_activity);
+        ButterKnife.bind(this);
+        Uri uri = Uri.parse("http://vid-11812.vod.chinanetcenter.broadcastapp.agoraio.cn/live-dev-33-69--20161013102710.mp4");
+        videoView.setVideoURI(uri);
+        videoView.start();
+
 
     }
-    boolean isFirst=true;
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if(isFirst){
-            isFirst=false;
-            BarrageConfig barrageConfig = new BarrageConfig();
-            barrageConfig.setMaxTextSizeSp(18);
-            barrageConfig.setDuration(5000);
-            List<Integer> list=new ArrayList<>();
-            list.add(Color.CYAN);
-            list.add(Color.GREEN);
-            barrageConfig.setColors(list);
-            BarrageViewTest barrageView = (BarrageViewTest) findViewById(R.id.test_barrageView);
-            barrageView.init(barrageConfig);
-            barrageView.addTextBarrage("哈弗家哈金凤凰");
 
 
-
-        }
-
-    }
 }

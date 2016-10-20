@@ -14,6 +14,7 @@
     <dimen name="live_padding_24dp">24dp</dimen>
     <dimen name="live_padding_30dp">30dp</dimen>
     <dimen name="live_padding_48dp">48dp</dimen>
+    <dimen name="live_padding_50dp">50dp</dimen>
     <dimen name="live_padding_55dp">55dp</dimen>
     <dimen name="live_padding_124dp">124dp</dimen>
     <dimen name="live_over_padding_top">136dp</dimen>
@@ -73,4 +74,6 @@
     <dimen name="live_make_icon_width">22dp</dimen>
     <dimen name="audient_gift_plane_bg_height">40dp</dimen>
     <dimen name="audience_anchor_headportrait_width">40dp</dimen>
+    <dimen name="item_hightlists_photo_width">80dp</dimen>
+    <dimen name="item_hightlists_layout_height">170dp</dimen>
 </resources>

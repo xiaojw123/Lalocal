@@ -3,6 +3,9 @@ package com.lalocal.lalocal.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by android on 2016/7/19.
  */
@@ -31,11 +34,38 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     private String endAt;
     private int totalScore;
     private int onlineNumber;
-    private String videoUrl;
+    private List<VideoListBean> videoList;
     private int direction;
     private int channelId;
+
+    public String getLiveLen() {
+        return liveLen;
+    }
+
+    public void setLiveLen(String liveLen) {
+        this.liveLen = liveLen;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     private String liveLen;
     private String date;
+
+    public List<VideoListBean> getVideoList() {
+        return videoList;
+    }
+
+    public void setVideoList(List<VideoListBean> videoList) {
+        this.videoList = videoList;
+    }
+
+
 
     public int getChannelId() {
         return channelId;
@@ -77,13 +107,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.onlineNumber = onlineNumber;
     }
 
-    public String getVideoUrl() {
-        return videoUrl;
-    }
 
-    public void setVideoUrl(String videoUrl) {
-        this.videoUrl = videoUrl;
-    }
 
     public int getDirection() {
         return direction;
@@ -258,20 +282,101 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.cname = cname;
     }
 
-    public String getLiveLen() {
-        return liveLen;
-    }
 
-    public void setLiveLen(String liveLen) {
-        this.liveLen = liveLen;
-    }
+    public static class VideoListBean implements Parcelable {
+        private int id;
+        private int size;
+        private double duration;
+        private String startTime;
+        private String endTime;
+        private String url;
 
-    public String getDate() {
-        return date;
-    }
+        public int getId() {
+            return id;
+        }
 
-    public void setDate(String date) {
-        this.date = date;
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public int getSize() {
+            return size;
+        }
+
+        public void setSize(int size) {
+            this.size = size;
+        }
+
+        public double getDuration() {
+            return duration;
+        }
+
+        public void setDuration(double duration) {
+            this.duration = duration;
+        }
+
+        public String getStartTime() {
+            return startTime;
+        }
+
+        public void setStartTime(String startTime) {
+            this.startTime = startTime;
+        }
+
+        public String getEndTime() {
+            return endTime;
+        }
+
+        public void setEndTime(String endTime) {
+            this.endTime = endTime;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.id);
+            dest.writeInt(this.size);
+            dest.writeDouble(this.duration);
+            dest.writeString(this.startTime);
+            dest.writeString(this.endTime);
+            dest.writeString(this.url);
+        }
+
+        public VideoListBean() {
+        }
+
+        protected VideoListBean(Parcel in) {
+            this.id = in.readInt();
+            this.size = in.readInt();
+            this.duration = in.readDouble();
+            this.startTime = in.readString();
+            this.endTime = in.readString();
+            this.url = in.readString();
+        }
+
+        public static final Creator<VideoListBean> CREATOR = new Creator<VideoListBean>() {
+            @Override
+            public VideoListBean createFromParcel(Parcel source) {
+                return new VideoListBean(source);
+            }
+
+            @Override
+            public VideoListBean[] newArray(int size) {
+                return new VideoListBean[size];
+            }
+        };
     }
 
     @Override
@@ -313,7 +418,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         dest.writeString(this.endAt);
         dest.writeInt(this.totalScore);
         dest.writeInt(this.onlineNumber);
-        dest.writeString(this.videoUrl);
+        dest.writeList(this.videoList);
         dest.writeInt(this.direction);
         dest.writeInt(this.channelId);
         dest.writeString(this.liveLen);
@@ -345,11 +450,12 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
         this.endAt = in.readString();
         this.totalScore = in.readInt();
         this.onlineNumber = in.readInt();
-        this.videoUrl = in.readString();
+        this.videoList = new ArrayList<VideoListBean>();
+        in.readList(this.videoList, VideoListBean.class.getClassLoader());
         this.direction = in.readInt();
         this.channelId = in.readInt();
-        this.liveLen=in.readString();
-        this.date=in.readString();
+        this.liveLen = in.readString();
+        this.date = in.readString();
     }
 
     public static final Creator<LiveRowsBean> CREATOR = new Creator<LiveRowsBean>() {
