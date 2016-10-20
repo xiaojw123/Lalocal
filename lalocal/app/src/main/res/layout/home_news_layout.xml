@@ -6,7 +6,7 @@
     android:background="@color/color_fa"
     >
 
-
+  <!--  android:drawableRight="@drawable/tab_morefanction_unsel"-->
         <FrameLayout
             android:id="@+id/live_header_container"
             android:layout_width="match_parent"
@@ -29,10 +29,9 @@
                    android:layout_gravity="center_vertical"
                    android:layout_marginLeft="@dimen/live_padding_124dp"
                    android:textStyle="bold"
-                   android:drawableRight="@drawable/tab_morefanction_unsel"
                    android:drawablePadding="@dimen/dimen_size_3_dp"
-                   android:drawableBottom="@drawable/tabselect_line"
 
+                   android:drawableBottom="@drawable/tabselect_line"
                    android:text="热门"/>
             <TextView
                 android:id="@+id/live_fragment_title_attention"

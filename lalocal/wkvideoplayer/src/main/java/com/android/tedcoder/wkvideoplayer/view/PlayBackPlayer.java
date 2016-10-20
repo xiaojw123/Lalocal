@@ -11,15 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.android.tedcoder.wkvideoplayer.R;
+import com.android.tedcoder.wkvideoplayer.util.VideoPlayCallbackImpl;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,12 +31,12 @@ public class PlayBackPlayer extends RelativeLayout {
     private PlayBackMediaController.PageType mCurrPageType = PlayBackMediaController.PageType.SHRINK;//当前是横屏还是竖屏
 
     private Context mContext;
-    private VideoView mVideoView;//播放器
+    private CustomVideoView mVideoView;//播放器
     private PlayBackMediaController mMediaController;//控制器
     private Timer mUpdateTimer;
     private VideoPlayCallbackImpl mVideoPlayCallback;//回调函数
     private boolean isPlayerStatus;
-    //private View mProgressBarView;//加载中按钮
+    private View mProgressBarView;//加载中按钮
     // private View mCloseBtnView;//关闭按钮
     private Uri mUri;//网络视频路径
 
@@ -160,19 +158,6 @@ public class PlayBackPlayer extends RelativeLayout {
         return true;
     }
 
-    public void setAcross(){
-        final RotateAnimation animation =new RotateAnimation(0f,180f, Animation.RELATIVE_TO_SELF,
-                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
-        animation.setFillAfter(true);
-        animation.setDuration(0);
-        videoLayout.setAnimation(animation);
-       /* videoLayout.setRotation(90.0f);
-        if(((Activity)mContext).getRequestedOrientation()!=ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE){
-            ((Activity)mContext).setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }*/
-
-    }
-
 
     // 播放器控制条的回调函数
     private PlayBackMediaController.MediaControlImpl mMediaControl = new PlayBackMediaController.MediaControlImpl() {
@@ -238,7 +223,7 @@ public class PlayBackPlayer extends RelativeLayout {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                        //     mProgressBarView.setVisibility(View.GONE);
+                             mProgressBarView.setVisibility(View.GONE);
                         setCloseButton(true);
                         return true;
                     }
@@ -259,7 +244,7 @@ public class PlayBackPlayer extends RelativeLayout {
             stopHideTimer(true);
             mMediaController.playFinish(mVideoView.getDuration());
             mVideoPlayCallback.onPlayFinish();
-            Toast.makeText(mContext, "视频播放完成", Toast.LENGTH_SHORT).show();
+
         }
     };
     private int duration;
@@ -359,14 +344,15 @@ public class PlayBackPlayer extends RelativeLayout {
     private void initView(Context context) {
         mContext = context;
         View inflate = View.inflate(context, R.layout.live_playback_player_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
-        mVideoView = (VideoView) findViewById(R.id.video_view);
+        mVideoView = (CustomVideoView) findViewById(R.id.video_view);
         videoLayout = (LinearLayout) findViewById(R.id.video_view_layout);
         mMediaController = (PlayBackMediaController) findViewById(R.id.controller);
         touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
         touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
         touchStatusTime = (TextView) inflate.findViewById(R.id.touch_time);
-        loadingTv = (TextView) inflate.findViewById(R.id.loading_tv);
-        loadingTv.setVisibility(View.GONE);
+        mProgressBarView= findViewById(R.id.progressbar);
+       /* loadingTv = (TextView) inflate.findViewById(R.id.loading_tv);
+        loadingTv.setVisibility(View.GONE);*/
         mMediaController.setMediaControl(mMediaControl);
         mVideoView.setOnTouchListener(mOnTouchVideoListener);
 
@@ -406,9 +392,9 @@ public class PlayBackPlayer extends RelativeLayout {
         public void run() {
             int duration = mVideoView.getCurrentPosition();
             if (old_duration == duration && mVideoView.isPlaying()) {
-                loadingTv.setVisibility(View.VISIBLE);
+            //    loadingTv.setVisibility(View.VISIBLE);
             } else {
-                loadingTv.setVisibility(View.GONE);
+              //  loadingTv.setVisibility(View.GONE);
             }
             old_duration = duration;
             handler.postDelayed(runnable, 500);
@@ -464,11 +450,11 @@ public class PlayBackPlayer extends RelativeLayout {
      * @param isTransparentBg isTransparentBg
      */
     private void showProgressView(Boolean isTransparentBg) {
-        //  mProgressBarView.setVisibility(VISIBLE);
+          mProgressBarView.setVisibility(VISIBLE);
         if (!isTransparentBg) {
-            //   mProgressBarView.setBackgroundResource(android.R.color.black);
+               mProgressBarView.setBackgroundResource(android.R.color.black);
         } else {
-            // mProgressBarView.setBackgroundResource(android.R.color.transparent);
+             mProgressBarView.setBackgroundResource(android.R.color.transparent);
         }
     }
 
@@ -563,7 +549,7 @@ public class PlayBackPlayer extends RelativeLayout {
         }
     }
 
-    public interface VideoPlayCallbackImpl {
+   /* public interface VideoPlayCallbackImpl {
         void onCloseVideo();
 
         void onSwitchPageType();
@@ -576,5 +562,5 @@ public class PlayBackPlayer extends RelativeLayout {
         void onClickShare();
         void  onClickBefore(ImageView view);
         void onClickNext(ImageView view);
-    }
+    }*/
 }

@@ -139,7 +139,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-        contentService.getLiveArea();
+     //   contentService.getLiveArea();
         contentService.recommendAd();
         requestBasicPermission(); // 申请APP基本权限
 
@@ -240,8 +240,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 int scollYDistance = getScollYDistance();
                 int i = DensityUtil.dip2px(getActivity(), 10);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
-                AppLog.i("TAG", "recyclerviw滑动距离监听：" + top + "  scollYDistance:" + scollYDistance + "  scollDy:" + scollDy+"firstVisibleItemPosition"+firstVisibleItemPosition);
-
                 if ( (scollDy < 10 || firstVisibleItemPosition > 1)) {
                     if(isVisible){
                         searchBar.setVisibility(View.VISIBLE);
@@ -262,8 +260,13 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         LinearLayoutManager layoutManager = (LinearLayoutManager) xRecyclerView.getLayoutManager();
         firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
         View firstVisiableChildView = layoutManager.findViewByPosition(firstVisibleItemPosition);
-        int itemHeight = firstVisiableChildView.getHeight();
-        return (firstVisibleItemPosition) * itemHeight - firstVisiableChildView.getTop();
+        if(firstVisiableChildView!=null){
+            int itemHeight = firstVisiableChildView.getHeight();
+            return (firstVisibleItemPosition) * itemHeight - firstVisiableChildView.getTop();
+        }else {
+            return 0;
+        }
+
 
     }
 
@@ -374,27 +377,27 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.live_fragment_title_hot:
-                if (isClick) {
+               /* if (isClick) {
                     isClick = false;
                     showClassifyView(classflyHeight, isClick);
                 } else {
                     isClick = true;
                     showClassifyView(0, isClick);
-                }
+                }*/
               /*  paint2.setFakeBoldText(false);
                 paint1.setFakeBoldText(true);*/
                 break;
             case R.id.live_fragment_title_attention:
-                isClick = true;
+              /*  isClick = true;
                 showClassifyView(0, isClick);
-             /*   paint2.setFakeBoldText(true);
-                paint1.setFakeBoldText(false);*/
+             *//*   paint2.setFakeBoldText(true);
+                paint1.setFakeBoldText(false);*//*
                 titleHot.setCompoundDrawables(null, null, null, null);
                 Drawable drawable1 = getActivity().getResources().getDrawable(R.drawable.tab_morefanction_unsel);
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
                 Drawable drawable2 = getActivity().getResources().getDrawable(R.drawable.tabselect_line);
                 drawable2.setBounds(0, 0, drawable2.getMinimumWidth(), drawable2.getMinimumHeight());
-                titleAttention.setCompoundDrawables(null, null, drawable1, drawable2);
+                titleAttention.setCompoundDrawables(null, null, drawable1, drawable2);*/
                 break;
             case R.id.live_search_bar:
                 Intent intent1 = new Intent(getActivity(), LiveSearchActivity.class);
@@ -711,6 +714,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         public void onLoadMore() {
             isRefresh = false;
             if (lastPage) {
+
                 xRecyclerView.setNoMore(true);
             } else {
                 contentService.getPlayBackLiveList("", pageNumber,"");

@@ -776,11 +776,11 @@ public class ContentLoader {
     }
 
     //用户获取在线人数
-    public void getAudienceUserOnLine(int onLineUser) {
+    public void getAudienceUserOnLine(int onLineUser,String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount() + onLineUser, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount(onLineUser,channelId), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }

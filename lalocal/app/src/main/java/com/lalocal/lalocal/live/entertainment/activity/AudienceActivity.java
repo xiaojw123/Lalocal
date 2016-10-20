@@ -211,7 +211,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         contentLoaderAudience.setCallBack(audienceCallBack);
         contentLoaderAudience.liveGiftStore();
         loginIm();
-    //   handler.postDelayed(new MyRunnable(),2000);
+       handler.postDelayed(new MyRunnable(),2000);
 
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);
@@ -223,7 +223,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         public void run() {
             handler.removeCallbacks(this);
             if (onlineCounts > 0&&contentLoaderAudience!=null) {
-                contentLoaderAudience.getAudienceUserOnLine(onlineCounts);
+                contentLoaderAudience.getAudienceUserOnLine(onlineCounts,channelId);
             }
             handler.postDelayed(this, 2000);
         }
@@ -1128,14 +1128,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
         });
 
-
+        customLiveUserInfoDialog.show();
         customLiveUserInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 LiveConstant.USER_INFO_FIRST_CLICK=true;
             }
         });
-        customLiveUserInfoDialog.show();
+
     }
 
 

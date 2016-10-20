@@ -25,6 +25,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
@@ -45,6 +46,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
+import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.live.entertainment.module.ChatRoomMsgListPanel;
@@ -594,6 +596,16 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }
         }
 
+        @Override
+        public void onGetAudienceOnLineUserCount(String json) {
+            super.onGetAudienceOnLineUserCount(json);
+            OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
+            if(onLineUser!=null&&onLineUser.getResult()>0){
+                onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
+            }
+
+        }
+
     }
 
     int totalGold = 0;
@@ -1134,6 +1146,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void run() {
             handler.removeCallbacks(this);
             fetchOnlineCount();
+            if (onlineCounts > 0&&contentLoader!=null) {
+                contentLoader.getAudienceUserOnLine(onlineCounts,channelId);
+            }
             handler.postDelayed(this, 2000);
         }
     }
@@ -1145,7 +1160,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 public void onSuccess(final ChatRoomInfo param) {
                     onlineCounts = param.getOnlineUserCount();
 
-                    onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
+                  //  onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
                     AppLog.i("TAG", "基类获取在线人数:" + onlineCounts);
                     if (isScrollStop && mIsTouchUP) {
                         clearCache();
