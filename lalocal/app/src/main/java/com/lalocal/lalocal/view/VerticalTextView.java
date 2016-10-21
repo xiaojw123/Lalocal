@@ -1,14 +1,5 @@
 package com.lalocal.lalocal.view;
 
-/**************************
- * 作者：古月摇光
- * E-mail：45361251@qq.com
- * 更新日期：2012/02/28
- * 说明：本类实现了文字的竖直排版显示（中国古时的行文形式），
- * 		 虽然仍有许多特效及功能仍未实现，但基本的使用已经能满足。
- * 版权：尽管放心用吧，可以自行随意改进转载和使用，转载时请保留这段文字即可
- * 另特别感谢 老僧xp 提出的修改意见
- **************************/
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,12 +14,8 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
-
-import com.lalocal.lalocal.util.AppLog;
 
 public class VerticalTextView extends View {
-
 
     public static final int LAYOUT_CHANGED = 1;
     private Paint paint;
@@ -179,7 +166,7 @@ public class VerticalTextView extends View {
         if (mLineWidth == 0) {
             float[] widths = new float[1];
             paint.getTextWidths("正", widths);//获取单个汉字的宽度
-            mLineWidth = (int) Math.ceil(widths[0] * 1.3 + 2);
+            mLineWidth = (int) Math.ceil(widths[0] * 1.1 + 2);
         }
 
         FontMetrics fm = paint.getFontMetrics();
@@ -237,14 +224,14 @@ public class VerticalTextView extends View {
     }
     /*
     private int measureWidth(int measureSpec) {
-		int specMode = MeasureSpec.getMode(measureSpec);  
-		int specSize = MeasureSpec.getSize(measureSpec);  
-		int result = 500;  
-		if (specMode == MeasureSpec.AT_MOST){  
-			result = specSize;  
-		}else if (specMode == MeasureSpec.EXACTLY){  
-			result = specSize;  
-		}  
-		return result;  
+		int specMode = MeasureSpec.getMode(measureSpec);
+		int specSize = MeasureSpec.getSize(measureSpec);
+		int result = 500;
+		if (specMode == MeasureSpec.AT_MOST){
+			result = specSize;
+		}else if (specMode == MeasureSpec.EXACTLY){
+			result = specSize;
+		}
+		return result;
 	}  */
 }

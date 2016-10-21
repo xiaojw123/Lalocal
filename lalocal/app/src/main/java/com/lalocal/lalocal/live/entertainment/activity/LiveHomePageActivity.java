@@ -149,6 +149,7 @@ public class LiveHomePageActivity extends BaseActivity {
         } else {
             isSelf = true;
         }
+        AppLog.i("ttttt", "user id is " + userId);
         mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this, isSelf, mUserLiving, mUserLiveList, mUserArticleList);
         AppLog.i("ussr", "ViewPagerAdapter init");
 

@@ -19,6 +19,8 @@ import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -112,7 +114,10 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mUserLiveList.size() + 1;
+        if (mUserLiveList.size() > 0) {
+            return mUserLiveList.size() + 1;
+        }
+        return mLiving == null ? 0 : 1;
     }
 
     /**
@@ -353,16 +358,27 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             itemContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Object annoucement = bean.getAnnoucement();
-                    String ann = null;
-                    if (annoucement != null) {
-                        ann = annoucement.toString();
-                    } else {
-                        ann = "这是公告哈";
-                    }
-                    PlayBackActivity.start(mContext, bean);
+
+                    ContentLoader loader = new ContentLoader(mContext);
+                    loader.setCallBack(new MyCallBack());
+                    int id = bean.getId();
+                    loader.getPlayBackLiveDetails(id);
+//                    AppLog.i("ttttt", "LiveRowsBean:[id:" + bean.getId() + ";title:" + bean.getTitle()
+//                        +";photo:"+bean.getPhoto()+";userId:"+bean.getUser().getId()+";nickName:"+bean.getUser().getNickName());
+//                    PlayBackActivity.start(mContext, bean);
                 }
             });
+        }
+    }
+
+    private class MyCallBack extends ICallBack {
+
+        @Override
+        public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+            super.onPlayBackDetails(liveRowsBean);
+            if (liveRowsBean != null) {
+                PlayBackActivity.start(mContext, liveRowsBean);
+            }
         }
     }
 }
