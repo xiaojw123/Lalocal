@@ -521,8 +521,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             view.requestLayout();
         }
     }
-
-
+    
     private int liveUserId;
     private String createNickName;
     String createAnn = null;
