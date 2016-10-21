@@ -5,11 +5,14 @@
     android:gravity="center_vertical"
     android:layout_gravity="center"
     android:layout_height="120dp"
+
    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
         >
         <ImageView
             android:id="@+id/attention_list_item_head"

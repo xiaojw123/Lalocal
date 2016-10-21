@@ -211,7 +211,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         contentLoaderAudience.setCallBack(audienceCallBack);
         contentLoaderAudience.liveGiftStore();
         loginIm();
-       handler.postDelayed(new MyRunnable(),2000);
+  //     handler.postDelayed(new MyRunnable(),2000);
 
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);

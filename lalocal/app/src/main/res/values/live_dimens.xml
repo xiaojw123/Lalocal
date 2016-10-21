@@ -2,6 +2,7 @@
 <resources>
     <dimen name="live_padding_2dp">2dp</dimen>
     <dimen name="live_padding_3dp">3dp</dimen>
+    <dimen name="live_padding_4dp">4dp</dimen>
     <dimen name="live_padding_5dp">5dp</dimen>
     <dimen name="live_padding_6dp">6dp</dimen>
     <dimen name="live_padding_8dp">8dp</dimen>
