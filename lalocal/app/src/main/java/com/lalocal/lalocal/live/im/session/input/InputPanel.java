@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
@@ -298,8 +300,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 barrageAndChat.setSelected(!isSelector);
                 if(isSelector){
                     SPCUtils.put(mContext,IS_SELSCTOR,false);
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_EDIT);
                 }else {
                     SPCUtils.put(mContext,IS_SELSCTOR,true);
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_BARRAGE);
                 }
 
                 AppLog.i("TAG","isSelector:"+ (isSelector ==true?"开启": "关闭"));
@@ -344,7 +348,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
             Map<String, Object> ext = new HashMap<>();
-
                 Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 if(selectorStatus){
 

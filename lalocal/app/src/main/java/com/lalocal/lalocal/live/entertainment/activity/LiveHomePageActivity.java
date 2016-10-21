@@ -368,6 +368,21 @@ public class LiveHomePageActivity extends BaseActivity {
             } else {
                 masterAttentionLayout.setVisibility(View.VISIBLE);
             }
+
+
+            if(result.getRole()==4){
+                liveVerified.setText("专栏作者");
+                liveVerified.setTextColor(Color.WHITE);
+                liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
+            }else if(result.getRole()==-1){
+                liveVerified.setText("管理员");
+                liveVerified.setTextColor(Color.WHITE);
+                liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
+            }else {
+                liveVerified.setText("未验证");
+                liveVerified.setTextColor(Color.BLACK);
+                liveVerified.setBackgroundColor(Color.parseColor("#999999"));
+            }
             String s = new Gson().toJson(liveUserInfosDataResp);
             AppLog.i("TAG", "liveUserInfosDataResp:" + s);
             homepageAttentionCountTv.setText(String.valueOf(attentionNum));

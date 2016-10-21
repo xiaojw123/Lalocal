@@ -303,5 +303,6 @@
     <string name="reigister_new_account">注册新账户</string>
     <string name="set_your_password">设置你的密码</string>
     <string name="set_your_nickname">设置你的昵称</string>
+    <string name="you_no_login_no_atten">你还没有登录，无法查看关注</string>
 
 </resources>

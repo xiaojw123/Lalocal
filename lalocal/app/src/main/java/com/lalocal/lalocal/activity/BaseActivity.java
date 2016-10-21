@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.xlistview.XListView;
 import com.umeng.analytics.MobclickAgent;
 
 import butterknife.Unbinder;
@@ -39,9 +41,9 @@ public class BaseActivity extends AppCompatActivity {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
     }
+
+
 
     //页面全屏加载loading显示
     public void showLoadingAnimation() {

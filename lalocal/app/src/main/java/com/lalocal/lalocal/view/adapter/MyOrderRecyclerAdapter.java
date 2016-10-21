@@ -19,6 +19,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.OrderActivity;
 import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -156,15 +158,18 @@ public class MyOrderRecyclerAdapter extends BaseRecyclerAdapter implements View.
                     String attr= ((Button) v).getText().toString();
                     final int orderId= (int) v.getTag();
                     if (mRes.getString(R.string.pay_amount).equals(attr)){
+                        MobHelper.sendEevent(context,MobEvent.ORDER_LIST_PAY);
                         Intent intent=new Intent(context,PayActivity.class);
                         intent.putExtra(PayActivity.ORDER_ID,orderId);
                         intent.putExtra(KeyParams.ACTION_TYPE, KeyParams.ACTION_UPDATE_ORDER);
                         ((Activity)context).startActivityForResult(intent,100);
                     }else if (mRes.getString(R.string.evaluate).equals(attr)){
+                        MobHelper.sendEevent(context,MobEvent.ORDER_LIST_EVALUATION);
 
                     }
                     break;
                 case R.id.my_order_cancel_btn:
+                    MobHelper.sendEevent(context,MobEvent.ORDER_LIST_CANCEL);
                     final int cancelOrderId= (int) v.getTag();
                     AlertDialog.Builder builder=new AlertDialog.Builder(context);
                     builder.setMessage("确认要取消订单");

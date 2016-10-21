@@ -15,8 +15,11 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +45,9 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         this.mContext=mContext;
     }
     public  void showCreateLiveRoomPopuwindow(){
+        boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(mContext,"com.tencent.mm");
+        boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(mContext, "com.sina.weibo");
+
         View view = View.inflate(mContext, R.layout.live_create_room_pop_layout, null);
         cancelCreateRoom = (ImageView) view.findViewById(R.id.live_create_room_close_iv);
         inputLiveRoom = (TextView) view.findViewById(R.id.input_start_live);
@@ -51,6 +57,24 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         shareWeibo = (ImageView) view.findViewById(R.id.live_create_share_weibo);
         shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
         roomBg = (BlurImageView) view.findViewById(R.id.live_create_room_bg);
+        TextView shareTv= (TextView) view.findViewById(R.id.create_live_pop_share_title);
+
+        if(!isInstallMm1){
+            shareFriends.setVisibility(View.GONE);
+            shareWeixin.setVisibility(View.GONE);
+            isShareSelector=2;
+        }
+        if(!isInstallWeibo){
+            shareWeibo.setVisibility(View.GONE);
+
+
+        }
+        if(!isInstallMm1&&isInstallWeibo){
+            shareTv.setVisibility(View.GONE);
+            isShareSelector=-1;
+        }
+
+
         String userAvatar = UserHelper.getUserAvatar(mContext);
         if(userAvatar!=null){
             roomBg.setBlurImageURL(userAvatar);
@@ -121,6 +145,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.live_create_share_friends:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WECHAT1_SHARE);
                     if(isFirstFirendsClick){
                         isFirstFirendsClick=false;
                         shareFriends.setSelected(false);
@@ -133,18 +158,21 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
                     }
                     break;
                 case R.id.live_create_share_weibo:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WEIBO_SHARE);
                     shareWeibo.setSelected(true);
                     shareFriends.setSelected(false);
                     shareWeixin.setSelected(false);
                     isShareSelector = 1;
                     break;
                 case R.id.live_create_share_weixin:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WECHAT2_SHARE);
                     shareFriends.setSelected(false);
                     shareWeibo.setSelected(false);
                     shareWeixin.setSelected(true);
                     isShareSelector = 2;
                     break;
                 case R.id.start_live_layout:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_START);
                     roomName = liveRoomName.getText().toString().trim();
                     InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(startLiveScrollview.getWindowToken(), 0);
@@ -153,6 +181,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
                     }
                     break;
                 case R.id.live_create_room_close_iv:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_CANCEL);
                     inputLiveRoom.setVisibility(View.GONE);
                     if(onCreateLiveListener!=null){
                         onCreateLiveListener.closeLiveBtn();

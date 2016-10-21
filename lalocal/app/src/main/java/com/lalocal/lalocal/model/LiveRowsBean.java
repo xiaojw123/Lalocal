@@ -21,6 +21,15 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     private String cid;
     private String cname;
     private String pushUrl;
+
+    public LiveUserBean getUser() {
+        return user;
+    }
+
+    public void setUser(LiveUserBean user) {
+        this.user = user;
+    }
+
     private String pullUrl;
     private String hlsPullUrl;
     private Object annoucement;
@@ -56,6 +65,7 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
 
     private String liveLen;
     private String date;
+
 
     public List<VideoListBean> getVideoList() {
         return videoList;
@@ -168,14 +178,6 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
 
     public void setPhoto(String photo) {
         this.photo = photo;
-    }
-
-    public LiveUserBean getUser() {
-        return user;
-    }
-
-    public void setUser(LiveUserBean user) {
-        this.user = user;
     }
 
     public int getOnlineUser() {

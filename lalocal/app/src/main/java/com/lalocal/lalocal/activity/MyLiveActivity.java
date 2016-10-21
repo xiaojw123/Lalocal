@@ -9,6 +9,9 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -44,8 +47,8 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
     @Override
     public void onRefresh() {
         isRefresh = true;
-        mContentloader.getUserLive(9368, 1);
-//        mContentloader.getUserLive(UserHelper.getUserId(this), 1);
+//        mContentloader.getUserLive(8746, 1);
+        mContentloader.getUserLive(UserHelper.getUserId(this), 1);
     }
 
     @Override
@@ -53,8 +56,8 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         if (pageNum < pageSize) {
             isLoadMore = true;
             ++pageNum;
-//            mContentloader.getUserLive(UserHelper.getUserId(this),pageNum);
-            mContentloader.getUserLive(9368, pageNum);
+            mContentloader.getUserLive(UserHelper.getUserId(this),pageNum);
+//            mContentloader.getUserLive(8746, pageNum);
         } else {
             isLoadMore = false;
             mXRecyclerView.setNoMore(true);
@@ -124,6 +127,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
         @Override
         public void onItemClickListener(View view, int position) {
+            MobHelper.sendEevent(MyLiveActivity.this, MobEvent.MY_LIVE_DETAIL);
             LiveRowsBean item = (LiveRowsBean) view.getTag();
             if (item != null) {
                 Intent intent = new Intent(MyLiveActivity.this, LiveDetailActivity.class);

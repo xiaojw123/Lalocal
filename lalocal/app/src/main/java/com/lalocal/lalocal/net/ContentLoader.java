@@ -20,10 +20,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
@@ -92,7 +92,6 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.umeng.analytics.MobclickAgent;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -776,11 +775,11 @@ public class ContentLoader {
     }
 
     //用户获取在线人数
-    public void getAudienceUserOnLine(int onLineUser) {
+    public void getAudienceUserOnLine(int onLineUser,String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount() + onLineUser, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount(onLineUser,channelId), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -1000,21 +999,23 @@ public class ContentLoader {
     }
 
     //直播首页
-        public void getLivelist(String areaId,String attentionFlag){
+    public void getLivelist(String areaId, String attentionFlag) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HOME_LIST);
+            response.setAttentionFlag(attentionFlag);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId,attentionFlag), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveHotList(areaId, attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
     //历史直播
-    public  void getPlayBackLiveList(String areaId,int pageNumber,String attentionFlag){
+    public void getPlayBackLiveList(String areaId, int pageNumber, String attentionFlag) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_PALY_BACK);
+            response.setAttentionFlag(attentionFlag);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId,pageNumber,attentionFlag), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackLive(areaId, pageNumber, attentionFlag), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -1107,7 +1108,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_ARTICLE);
         }
-
         ContentRequest contentRequest = new ContentRequest(AppConfig.getUserArticles(userid, pageNum), response, response);
         requestQueue.add(contentRequest);
     }
@@ -1190,10 +1190,16 @@ public class ContentLoader {
         private int pageType;
         private int collectionId;
         private String phone, code;
+        private String attentionFlag;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
+
+        public void setAttentionFlag(String attentionFlag) {
+            this.attentionFlag = attentionFlag;
+        }
+
 
         public void setPLoginInfo(String phone, String code) {
             this.phone = phone;
@@ -2020,9 +2026,7 @@ public class ContentLoader {
 
         private void saveUserInfo(User user) {
             if (user != null) {
-                if (!MyApplication.isDebug) {
-                    MobclickAgent.onProfileSignIn(String.valueOf(user.getId()));
-                }
+                MobHelper.singIn(user.getId());
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(KeyParams.IS_LOGIN, true);
                 bundle.putString(KeyParams.EMAIL, email);
@@ -2279,14 +2283,14 @@ public class ContentLoader {
         private void responListHomeList(String json) {
             LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
             if (liveHomeListResp != null) {
-                callBack.onLiveHomeList(liveHomeListResp);
+                callBack.onLiveHomeList(liveHomeListResp, attentionFlag);
             }
         }
 
         //历史直播
         private void responPlayBackLive(String json) {
             AppLog.i("TAG", "历史直播:" + json);
-            callBack.onPlayBackList(json);
+            callBack.onPlayBackList(json, attentionFlag);
         }
 
         //历史直播详情
@@ -2594,9 +2598,9 @@ public class ContentLoader {
         headers.put("LONGITUDE", "104.08296");
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
-        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
+      /*  AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
                 "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
-                + DensityUtil.getWindowHeight((Activity) context) + "");
+                + DensityUtil.getWindowHeight((Activity) context) + "");*/
         return headers;
     }
 

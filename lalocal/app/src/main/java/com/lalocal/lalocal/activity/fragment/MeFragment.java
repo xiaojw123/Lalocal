@@ -15,7 +15,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -26,6 +25,8 @@ import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -37,14 +38,13 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
-import com.umeng.analytics.MobclickAgent;
 
 import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 
 /**
  * Created by xiaojw on 2016/6/3.
@@ -60,7 +60,7 @@ MeFragment extends BaseFragment {
     WalletContent walletContent;
     @BindView(R.id.home_me_fans_tab)
     LinearLayout homeMeFansTab;
-    @BindView(R.id.home_me_flow_tab)
+    @BindView(R.id.home_me_atten_tab)
     LinearLayout homeMeFlowTab;
     @BindView(R.id.home_me_item_message)
     RelativeLayout homeMeItemMessage;
@@ -214,9 +214,7 @@ MeFragment extends BaseFragment {
     }
 
     private void signOut() {
-        if (!MyApplication.isDebug) {
-            MobclickAgent.onProfileSignOff();
-        }
+        MobHelper.singOff();
         UserHelper.updateSignOutInfo(getActivity());
         updateFragmentView(false, null);
     }
@@ -240,10 +238,14 @@ MeFragment extends BaseFragment {
             int role = user.getRole();
             if (role == 1) {
                 //专栏作者
+
                 userNameParams.topMargin = authorTop;
                 authorTag.setVisibility(View.VISIBLE);
                 if (verified_tv.getVisibility() == View.VISIBLE) {
                     verified_tv.setVisibility(View.GONE);
+                }
+                if (articleFl.getVisibility() != View.VISIBLE) {
+                    articleFl.setVisibility(View.VISIBLE);
                 }
 
             } else {
@@ -271,6 +273,9 @@ MeFragment extends BaseFragment {
                         verified_tv.setText(getResources().getString(R.string.user_forbiden));
                         break;
                 }
+                if (articleFl.getVisibility() == View.VISIBLE) {
+                    articleFl.setVisibility(View.GONE);
+                }
             }
 
             String avatar = user.getAvatar();
@@ -295,15 +300,19 @@ MeFragment extends BaseFragment {
 
         }
     }
-
-    @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_flow_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
+    @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_atten_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_me_item_artice:
-                gotoMyItemPage(MyArticleActivity.class);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoMyItemPage(MyArticleActivity.class);
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_username:
             case R.id.home_me_headportrait_img:
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_AVATAR);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoEditPage();
                 } else {
@@ -315,36 +324,64 @@ MeFragment extends BaseFragment {
                 break;
 
             case R.id.home_me_item_live:
-                //TODO：进入我的直播
-                gotoMyItemPage(MyLiveActivity.class);
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_LIVE);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoMyItemPage(MyLiveActivity.class);
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_fans_tab:
-                gotoLiveUserPage("1");
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_FANS);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoLiveUserPage("1");
+                } else {
+                    gotoLoginPage();
+                }
                 break;
-            case R.id.home_me_flow_tab:
-                gotoLiveUserPage("0");
+            case R.id.home_me_atten_tab:
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_ATTENTION);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoLiveUserPage("0");
+
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_item_message:
-                //TODO:待开发
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_NOTICE);
+                if (UserHelper.isLogined(getActivity())) {
+                    //TODO:待开发
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_item_favoirte:
-                gotoMyItemPage(MyFavoriteActivity.class);
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_COLLECTION);
+                if (UserHelper.isLogined(getActivity())) {
+                    gotoMyItemPage(MyFavoriteActivity.class);
+                } else {
+                    gotoLoginPage();
+                }
                 break;
             case R.id.home_me_item_wallet:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_WALLET);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyWalletActivity.class);
                 } else {
-                    showLoginDialog();
+                    gotoLoginPage();
                 }
                 break;
             case R.id.home_me_item_order:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_ORDER);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyOrderActivity.class);
                 } else {
-                    showLoginDialog();
+                    gotoLoginPage();
                 }
                 break;
             case R.id.home_me_invitefriends:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_FIND);
                 //TODO:待开发
                 break;
         }
@@ -357,19 +394,19 @@ MeFragment extends BaseFragment {
         startActivityForResult(intent, 100);
     }
 
-    private void showLoginDialog() {
-        CustomDialog dialog = new CustomDialog(getActivity());
-        dialog.setMessage("您还未登录，请登录");
-        dialog.setTitle("提示");
-        dialog.setCancelBtn("取消", null);
-        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
-            @Override
-            public void onDialogClickListener() {
-                gotoLoginPage();
-            }
-        });
-        dialog.show();
-    }
+//    private void showLoginDialog() {
+//        CustomDialog dialog = new CustomDialog(getActivity());
+//        dialog.setMessage("您还未登录，请登录");
+//        dialog.setTitle("提示");
+//        dialog.setCancelBtn("取消", null);
+//        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
+//            @Override
+//            public void onDialogClickListener() {
+//                gotoLoginPage();
+//            }
+//        });
+//        dialog.show();
+//    }
 
 
     private void gotoMyItemPage(Class<?> cls) {

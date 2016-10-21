@@ -4,7 +4,10 @@
     android:layout_height="@dimen/item_hightlists_layout_height"
     android:paddingBottom="@dimen/dimen_size_15_dp"
     android:paddingLeft="@dimen/dimen_size_15_dp"
-    android:paddingTop="@dimen/dimen_size_12_dp">
+    android:paddingTop="@dimen/dimen_size_12_dp"
+    android:background="@color/white"
+    android:layout_marginTop="@dimen/dimen_size_10_dp"
+    >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/item_hightlists_avatar"
@@ -41,7 +44,8 @@
         android:layout_height="match_parent"
         android:layout_alignLeft="@+id/item_hightlists_location"
         android:layout_below="@+id/item_hightlists_location"
-        android:layout_marginTop="@dimen/dimen_size_12_dp">
+        android:layout_marginTop="@dimen/dimen_size_12_dp"
+        >
 
         <View style="@style/CommonDeLineTheme" />
 
@@ -52,6 +56,7 @@
             android:layout_marginRight="@dimen/dimen_size_15_dp"
             android:layout_toLeftOf="@+id/item_hightlists_photo"
             android:maxLines="3"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
             android:text="给你们直播我深爱的这片土地的风土人情和天高气爽"
             android:textColor="@color/color_1a"
             android:textSize="@dimen/dimen_size_16_dp" />
@@ -61,6 +66,7 @@
             android:layout_width="@dimen/item_hightlists_photo_width"
             android:layout_height="@dimen/item_hightlists_photo_width"
             android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/item_hightlists_title"
             android:layout_marginRight="@dimen/dimen_size_15_dp" />
 
         <TextView

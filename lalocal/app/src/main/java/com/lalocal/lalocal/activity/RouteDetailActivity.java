@@ -35,6 +35,8 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
@@ -144,6 +146,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     @OnClick(R.id.route_detail_service)
     public void chatToLalocalService() {
         // 进入主页面
+        MobHelper.sendEevent(this, MobEvent.DESTINATION_ROUTE_SERVICE);
         int messageToIndex = Constant.MESSAGE_TO_DEFAULT;
         Intent intent = new Intent(this, ChatActivity.class);
         intent.putExtra(
@@ -170,6 +173,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
     @OnClick({R.id.day_item_detail_buy_btn, R.id.route_detail_buy})
     public void openProductDetail(View view) {
+        MobHelper.sendEevent(this,MobEvent.DESTINATION_ROUTE_BUY);
         Object tag = view.getTag();
         if (tag != null) {
 
@@ -364,6 +368,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
     @OnClick(R.id.route_detail_collect_sbtn)
     public void collect() {
+        MobHelper.sendEevent(this,MobEvent.DESTINATION_ROUTE_LIKE);
         if (mRouteDetail != null) {
             //取消收藏
             int id = mRouteDetail.getId();

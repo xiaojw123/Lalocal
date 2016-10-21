@@ -318,10 +318,10 @@ public abstract class ICallBack {
     public void onChallengeList(String json) {
     }
     //直播首页列表
-    public void onLiveHomeList(LiveHomeListResp liveListDataResp) {
+    public void onLiveHomeList(LiveHomeListResp liveListDataResp,String attenFlag) {
     }
     //历史回放
-    public void onPlayBackList(String json) {
+    public void onPlayBackList(String json,String attentionFlag) {
     }
     //直播地区分类
     public void onLiveHomeArea(LiveHomeAreaResp liveHomeAreaResp) {
