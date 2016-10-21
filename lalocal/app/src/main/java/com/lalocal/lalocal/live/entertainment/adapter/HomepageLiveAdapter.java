@@ -1,5 +1,7 @@
 package com.lalocal.lalocal.live.entertainment.adapter;
 
+import android.app.Activity;
+import android.app.ActivityManager;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.CardView;
@@ -14,6 +16,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.util.AppLog;
@@ -42,11 +45,16 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
     // 历史直播
     private List<LiveRowsBean> mUserLiveList;
 
-    public HomepageLiveAdapter(Context context, LiveRowsBean living, List<LiveRowsBean> userLiveList) {
+    // 当前主页是否为自己的标记
+    private boolean mIsSelf = false;
+
+    public HomepageLiveAdapter(Context context, boolean isSelf, LiveRowsBean living, List<LiveRowsBean> userLiveList) {
         AppLog.i("ttt", "LIVE_init HomepageLiveAdapter");
         this.mContext = context;
+        this.mIsSelf = isSelf;
         this.mLiving = living;
         this.mUserLiveList = userLiveList;
+        this.mIsSelf = isSelf;
 
         if (mUserLiveList == null) {
             mUserLiveList = new ArrayList<>();
@@ -83,10 +91,12 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             case TYPE_LIVE_ING:
                 if (mLiving == null && mUserLiveList.size() > 0){
                     ((LivingViewHolder) holder).initView(false, null, true);
+                } else if (mLiving == null && mUserLiveList.size() == 0) {
+                    ((LivingViewHolder) holder).initView(false, null, false);
                 } else if (mLiving != null && mUserLiveList.size() == 0) {
                     ((LivingViewHolder) holder).initView(true, mLiving, false);
-                } else {
-                    ((LivingViewHolder) holder).initView(true, null, true);
+                } else if (mLiving != null && mUserLiveList.size() > 0){
+                    ((LivingViewHolder) holder).initView(true, mLiving, true);
                 }
                 break;
             case TYPE_LIVE_PLAYBACK:
@@ -160,12 +170,17 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                 // 设置当前直播视图可见
                 cardView.setVisibility(View.VISIBLE);
 
-                // 获取当前直播标题
-                String title = liveBean.getTitle();
-                // 获取定位信息
-                String location = liveBean.getAddress();
-                // 获取直播图片
-                String picUrl = liveBean.getPhoto();
+                String title = null;
+                String location = null;
+                String picUrl = null;
+                if (liveBean != null) {
+                    // 获取当前直播标题
+                    title = liveBean.getTitle();
+                    // 获取定位信息
+                    location = liveBean.getAddress();
+                    // 获取直播图片
+                    picUrl = liveBean.getPhoto();
+                }
 
                 // -空数据处理
                 // 标题
@@ -177,7 +192,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                     location = "定位失败";
                 }
                 // 直播图片
-                if (TextUtils.isEmpty(picUrl)) {
+                if (TextUtils.isEmpty(picUrl) && liveBean != null && liveBean.getUser() != null) {
                     picUrl = liveBean.getUser().getAvatarOrigin();
                 }
 
@@ -187,8 +202,10 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                 // 定位
                 tvLivingLocation.setText(location);
                 // 图片
-                DrawableUtils.displayRadiusImg(mContext, imgLiving, picUrl,
-                        DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                if (!TextUtils.isEmpty(picUrl)) {
+                    DrawableUtils.displayRadiusImg(mContext, imgLiving, picUrl,
+                            DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+                }
 
             } else {
                 cardView.setVisibility(View.GONE);
@@ -207,6 +224,12 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // 如果是自己在直播
+                    if (mIsSelf) {
+                        ((Activity)mContext).finish();
+                        return;
+                    }
+
                     Object annoucement = liveBean.getAnnoucement();
                     String ann = null;
                     if (annoucement != null) {
@@ -265,20 +288,30 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         }
 
         public void initView(final LiveRowsBean bean, boolean isBottom) {
-            // 获取直播预览图
-            String photo = bean.getPhoto();
-            // 获取直播标题
-            String title = bean.getTitle();
-            // 获取直播定位
-            String location = bean.getAddress();
-            // 获取在线人数
-            String people = String.valueOf(bean.getOnlineNumber());
-            // 获取开始时间
-            String startAt = bean.getStartAt();
-            // 获取结束时间
-            String endAt = bean.getEndAt();
+
+            String photo = null;
+            String title = null;
+            String location = null;
+            String people = null;
+            String startAt = null;
+            String endAt = null;
             // 直播时长
             String duration = "";
+
+            if (bean != null) {
+                // 获取直播预览图
+                photo = bean.getPhoto();
+                // 获取直播标题
+                title = bean.getTitle();
+                // 获取直播定位
+                location = bean.getAddress();
+                // 获取在线人数
+                people = String.valueOf(bean.getOnlineNumber());
+                // 获取开始时间
+                startAt = bean.getStartAt();
+                // 获取结束时间
+                endAt = bean.getEndAt();
+            }
 
             // -空数据处理
             if (TextUtils.isEmpty(photo)) {
@@ -327,7 +360,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                     } else {
                         ann = "这是公告哈";
                     }
-                    AudienceActivity.start(mContext, bean, ann);
+                    PlayBackActivity.start(mContext, bean);
                 }
             });
         }

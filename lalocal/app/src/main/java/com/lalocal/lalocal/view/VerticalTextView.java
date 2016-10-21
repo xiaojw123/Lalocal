@@ -179,7 +179,7 @@ public class VerticalTextView extends View {
         if (mLineWidth == 0) {
             float[] widths = new float[1];
             paint.getTextWidths("正", widths);//获取单个汉字的宽度
-            mLineWidth = (int) Math.ceil(widths[0] * 1.1 + 2);
+            mLineWidth = (int) Math.ceil(widths[0] * 1.3 + 2);
         }
 
         FontMetrics fm = paint.getFontMetrics();

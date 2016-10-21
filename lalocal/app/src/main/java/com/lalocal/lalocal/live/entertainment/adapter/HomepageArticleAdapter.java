@@ -135,10 +135,16 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
         }
 
         public void initData(final ArticleDetailsResultBean articleBean) {
-            // 获取图片路径
-            String picUrl = articleBean.getPhoto();
-            // 获取文章标题
-            String title = articleBean.getTitle();
+
+            String picUrl = null;
+            String title = null;
+
+            if (articleBean != null) {
+                // 获取图片路径
+                picUrl = articleBean.getPhoto();
+                // 获取文章标题
+                title = articleBean.getTitle();
+            }
 
             // 空数据处理
             if (TextUtils.isEmpty(title)) {
