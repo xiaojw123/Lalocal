@@ -143,36 +143,42 @@ public class LiveHomePageActivity extends BaseActivity {
         AppLog.i("ussr", "setLiveArticleData()");
         // 初始化数据
 //        if (mVPAdapter == null) {
-            mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this, mUserLiving, mUserLiveList, mUserArticleList);
-            AppLog.i("ussr", "ViewPagerAdapter init");
+        boolean isSelf = false;
+        if (masterAttentionLayout.getVisibility() == View.VISIBLE) {
+            isSelf = false;
+        } else {
+            isSelf = true;
+        }
+        mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this, isSelf, mUserLiving, mUserLiveList, mUserArticleList);
+        AppLog.i("ussr", "ViewPagerAdapter init");
 
-            // 设置适配器
-            mVpLiveArticle.setAdapter(mVPAdapter);
-            AppLog.i("ussr", "setAdapter()");
+        // 设置适配器
+        mVpLiveArticle.setAdapter(mVPAdapter);
+        AppLog.i("ussr", "setAdapter()");
 
-            // 默认显示第一页（下标为0）
-            selecteTab(0);
-            AppLog.i("ussr", "select tab 0");
+        // 默认显示第一页（下标为0）
+        selecteTab(0);
+        AppLog.i("ussr", "select tab 0");
 
-            // 设置vp滑动监听事件
-            mVpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+        // 设置vp滑动监听事件
+        mVpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                }
+            }
 
-                @Override
-                public void onPageSelected(int position) {
-                    selecteTab(position);
-                }
+            @Override
+            public void onPageSelected(int position) {
+                selecteTab(position);
+            }
 
-                @Override
-                public void onPageScrollStateChanged(int state) {
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-                }
-            });
+            }
+        });
 //        } else {
-             // 更新数据
+        // 更新数据
 //            mVPAdapter.notifyDataSetChanged();
 //            AppLog.i("ussr", "notifyDataSetChanged()");
 //        }
@@ -445,6 +451,7 @@ public class LiveHomePageActivity extends BaseActivity {
 
         /**
          * 获取用户历史直播列表
+         *
          * @param item
          */
         @Override
@@ -460,6 +467,7 @@ public class LiveHomePageActivity extends BaseActivity {
 
         /**
          * 获取用户当前直播
+         *
          * @param liveRowsBean
          */
         @Override
