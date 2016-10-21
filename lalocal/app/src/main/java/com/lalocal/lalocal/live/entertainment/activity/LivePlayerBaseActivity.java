@@ -236,6 +236,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private MyCallBack myCallBack;
     protected GiftsRankPopuWindow giftsRankPopuWindow;
     protected ImageView chanllenge;
+    private TextView massageTest;
 
     protected abstract void checkNetInfo(String netType, int reminder);
 
@@ -430,9 +431,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
+        massageTest = (TextView) findViewById(R.id.engling);
       //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
-
+        massageTest.setOnClickListener(clickListener);
         // 礼物动画展示
         findGiftLayout();
         // 点赞的爱心布局
@@ -704,7 +706,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         }
                     }
 
-
                     break;
                 case R.id.live_telecast_input_text:
 
@@ -712,6 +713,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                /* case R.id.live_telecast_challenge:
                     clickChallengeBtn();
                     break;*/
+                case R.id.engling:
+                    testMessage();
+                    break;
             }
         }
     };
@@ -991,25 +995,37 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
     int count=0;
+    boolean status=true;
+    CountDownTimer countDownTimer =null;
     private void testMessage() {
-        new CountDownTimer(100000000, 200) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                LiveMessage liveMessage=new LiveMessage();
-                liveMessage.setStyle(MessageType.text);
-                liveMessage.setUserId(userId);
-                liveMessage.setCreatorAccount(creatorAccount);
-                liveMessage.setChannelId(channelId);
-                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
-                sendMessage(imMessage, MessageType.text);
-                count++;
-            }
+        if(countDownTimer==null){
+            countDownTimer=new CountDownTimer(1000000000, 250) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    LiveMessage liveMessage=new LiveMessage();
+                    liveMessage.setStyle(MessageType.text);
+                    liveMessage.setUserId(userId);
+                    liveMessage.setCreatorAccount(creatorAccount);
+                    liveMessage.setChannelId(channelId);
+                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
+                    sendMessage(imMessage, MessageType.text);
+                    count++;
+                }
+                @Override
+                public void onFinish() {
+                }
+            };
+        }
 
-            @Override
-            public void onFinish() {
+        if(status){
+            countDownTimer.start();
+            status=false;
+        }else {
+            status=true;
+            countDownTimer.cancel();
+            countDownTimer.onFinish();
+        }
 
-            }
-        }.start();
     }
 
     protected void initInputPanel(String creatorAccount, String channelId) {

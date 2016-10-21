@@ -77,4 +77,15 @@
         android:src="@drawable/peopleliving_gift"
         />
 
+    <TextView
+        android:id="@+id/engling"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/live_gift_img"
+        android:background="#ffaa2a"
+        android:text="消息发动机"
+       android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/live_padding_20dp"
+        android:textColor="@android:color/white"/>
+
 </RelativeLayout>

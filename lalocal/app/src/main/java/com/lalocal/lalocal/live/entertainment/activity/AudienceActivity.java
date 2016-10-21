@@ -234,12 +234,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         @Override
         public void onGetAudienceOnLineUserCount(String json) {
             super.onGetAudienceOnLineUserCount(json);
-
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             if(onLineUser!=null&&onLineUser.getResult()>0){
                 onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
             }
-
         }
         @Override
         public void onGiftsStore(GiftDataResp giftDataResp) {
@@ -247,7 +245,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 AppLog.i("TAG", "请求成功");
                 giftSresult = giftDataResp.getResult();
             }
-
         }
         @Override
         public void onTouristInfo(String json) {
@@ -311,9 +308,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     }
                 });
                 customDialog.show();
-
-
-
         }
     }
 
@@ -388,7 +382,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveStatus=String.valueOf(liveRowsBean.getStatus());
          shareVO = liveRowsBean.getShareVO();
     }
-
 
 
     private void initView() {
