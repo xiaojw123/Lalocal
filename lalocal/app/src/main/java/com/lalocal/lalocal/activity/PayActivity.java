@@ -16,6 +16,8 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -118,6 +120,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 break;
             case R.id.pay_btn:
                 //TODO:支付流程
+                MobHelper.sendEevent(this,MobEvent.ORDER_LIST_PAY);
                 //微信
                 if (payMannerWeixinCb.isSelected()) {
                     mChannelStr = CHANNEL_WECHAT;
@@ -324,6 +327,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                             });
                             break;
                         default:
+                            MobHelper.sendEevent(PayActivity.this,MobEvent.PRODUCT_PAY_CANCEL);
                             CommonUtil.showPromptDialog(PayActivity.this, "支付失败", new CustomDialog.CustomDialogListener() {
                                 @Override
                                 public void onDialogClickListener() {

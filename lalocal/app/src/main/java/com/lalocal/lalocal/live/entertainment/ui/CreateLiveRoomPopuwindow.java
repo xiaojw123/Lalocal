@@ -15,6 +15,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
@@ -143,6 +145,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.live_create_share_friends:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WECHAT1_SHARE);
                     if(isFirstFirendsClick){
                         isFirstFirendsClick=false;
                         shareFriends.setSelected(false);
@@ -155,18 +158,21 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
                     }
                     break;
                 case R.id.live_create_share_weibo:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WEIBO_SHARE);
                     shareWeibo.setSelected(true);
                     shareFriends.setSelected(false);
                     shareWeixin.setSelected(false);
                     isShareSelector = 1;
                     break;
                 case R.id.live_create_share_weixin:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WECHAT2_SHARE);
                     shareFriends.setSelected(false);
                     shareWeibo.setSelected(false);
                     shareWeixin.setSelected(true);
                     isShareSelector = 2;
                     break;
                 case R.id.start_live_layout:
+                    MobHelper.sendEevent(mContext,MobEvent.LIVE_START_START);
                     roomName = liveRoomName.getText().toString().trim();
                     InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(startLiveScrollview.getWindowToken(), 0);
@@ -175,6 +181,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
                     }
                     break;
                 case R.id.live_create_room_close_iv:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_CANCEL);
                     inputLiveRoom.setVisibility(View.GONE);
                     if(onCreateLiveListener!=null){
                         onCreateLiveListener.closeLiveBtn();

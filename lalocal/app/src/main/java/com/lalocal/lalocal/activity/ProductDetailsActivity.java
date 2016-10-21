@@ -20,6 +20,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
@@ -223,11 +225,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 //去客服页面
                 break;
             case R.id.product_customer_service:
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
                 startOnlineService();
                 //去客服页面
                 break;
             case R.id.product_btn_like:
                 //TODO 收藏
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIKE);
                 if (result != null) {
                     //取消收藏
                     int targetId = specialToH5Bean.getTargetId();
@@ -240,6 +244,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_btn_share:
                 //TODO 分享
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_SHARE);
                 if (result != null) {
                     SpecialShareVOBean shareVO = result.shareVO;
                     showShare(shareVO);
@@ -247,6 +252,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_details_reserve:
                 //TODO 预定
+                MobHelper.sendEevent(this,MobEvent.PRODUCT_BOOKING);
                 if (UserHelper.isLogined(this)) {
                     contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
                 } else {

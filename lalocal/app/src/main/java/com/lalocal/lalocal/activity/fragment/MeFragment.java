@@ -25,6 +25,7 @@ import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
@@ -44,6 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
 /**
  * Created by xiaojw on 2016/6/3.
  */
@@ -58,7 +60,7 @@ MeFragment extends BaseFragment {
     WalletContent walletContent;
     @BindView(R.id.home_me_fans_tab)
     LinearLayout homeMeFansTab;
-    @BindView(R.id.home_me_flow_tab)
+    @BindView(R.id.home_me_atten_tab)
     LinearLayout homeMeFlowTab;
     @BindView(R.id.home_me_item_message)
     RelativeLayout homeMeItemMessage;
@@ -298,8 +300,7 @@ MeFragment extends BaseFragment {
 
         }
     }
-
-    @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_flow_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
+    @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_atten_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.home_me_item_artice:
@@ -311,6 +312,7 @@ MeFragment extends BaseFragment {
                 break;
             case R.id.home_me_username:
             case R.id.home_me_headportrait_img:
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_AVATAR);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoEditPage();
                 } else {
@@ -322,7 +324,7 @@ MeFragment extends BaseFragment {
                 break;
 
             case R.id.home_me_item_live:
-                //TODO：进入我的直播
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_LIVE);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyLiveActivity.class);
                 } else {
@@ -330,13 +332,15 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_fans_tab:
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_FANS);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoLiveUserPage("1");
                 } else {
                     gotoLoginPage();
                 }
                 break;
-            case R.id.home_me_flow_tab:
+            case R.id.home_me_atten_tab:
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_ATTENTION);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoLiveUserPage("0");
 
@@ -345,6 +349,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_message:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_NOTICE);
                 if (UserHelper.isLogined(getActivity())) {
                     //TODO:待开发
                 } else {
@@ -352,6 +357,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_favoirte:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_COLLECTION);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyFavoriteActivity.class);
                 } else {
@@ -359,6 +365,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_wallet:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_WALLET);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyWalletActivity.class);
                 } else {
@@ -366,6 +373,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_order:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_ORDER);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyOrderActivity.class);
                 } else {
@@ -373,6 +381,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_invitefriends:
+                MobHelper.sendEevent(getActivity(),MobEvent.MY_FIND);
                 //TODO:待开发
                 break;
         }

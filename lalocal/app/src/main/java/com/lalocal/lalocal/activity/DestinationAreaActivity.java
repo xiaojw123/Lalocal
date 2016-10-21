@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
@@ -458,6 +460,7 @@ public class DestinationAreaActivity extends BaseActivity {
 //        clearItems();
         switch (view.getId()) {
             case R.id.des_areanav_menu_lacoalplay:
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_LOCAL_LIST);
                 setSeletedMenu(desAreanavMenuLacoalplay);
                 if (poupWindow == null) {
                     View contentView = LayoutInflater.from(this).inflate(R.layout.sift_poupwidow, null);
@@ -469,6 +472,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 break;
 
             case R.id.des_areanav_menu_hot:
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuHot);
                 showLoadingView();
                 isHotLoading = true;
@@ -486,6 +490,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 loader.getHotRoutes(areaId);
                 break;
             case R.id.des_areanav_menu_strategy:
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuStrategy);
                 showLoadingView();
                 if (strategyAdpater != null) {
@@ -494,6 +499,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 loader.getDesAreaRoutes(10, 1, areaId, 2);
                 break;
             case R.id.des_areanav_menu_packagetour:
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuPackagetour);
                 showLoadingView();
                 if (packageAdpater != null) {
@@ -502,6 +508,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 loader.getAreaProducts(10, 1, areaId, 0, -1);
                 break;
             case R.id.des_areanav_menu_freewarker:
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuFreewarker);
                 showLoadingView();
                 if (freeAdpater != null) {

@@ -691,6 +691,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     finish();
                     break;
                 case R.id.audience_score_layout:
+                    MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_LIST);
 
                     if (firstClick) {
                         firstClick = false;

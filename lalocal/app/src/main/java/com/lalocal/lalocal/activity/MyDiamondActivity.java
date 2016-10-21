@@ -14,6 +14,8 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -30,8 +32,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.lalocal.lalocal.R.id.my_diamond_recharge_tv;
+
 public class MyDiamondActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
-    @BindView(R.id.my_diamond_recharge_tv)
+    @BindView(my_diamond_recharge_tv)
     TextView myDiamondRechargeTv;
     @BindView(R.id.my_diamond_num_tv)
     TextView myDiamondNumTv;
@@ -82,10 +86,11 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
     }
 
 
-    @OnClick({R.id.my_diamond_recharge_tv, R.id.consume_doubt_container})
+    @OnClick({my_diamond_recharge_tv, R.id.consume_doubt_container})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.my_diamond_recharge_tv:
+            case my_diamond_recharge_tv:
+                MobHelper.sendEevent(this, MobEvent.MY_WALLET_DIAMOND_RECHARGE);
                 Intent rechargeIntent = new Intent(this, RechargeActivity.class);
                 rechargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(rechargeIntent, KeyParams.REQUEST_CODE);

@@ -94,7 +94,7 @@ import java.util.List;
  * Created by xiaojw on 2016/6/3.
  */
 public class NewsFragment extends BaseFragment implements View.OnClickListener {
-    private final  int SCROLL_OFFSET=60;
+    private final int SCROLL_OFFSET = 60;
     private final int BASIC_PERMISSION_REQUEST_CODE = 100;
     public static final int RESQUEST_COD = 701;
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
@@ -137,6 +137,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private ImageView searchBar;
     private int lastScrollDy;
     private boolean isTabChange;
+    private TextView attenLoginText;
 
 
     @Override
@@ -166,6 +167,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         paint1 = titleHot.getPaint();*/
         xRecyclerView = (XRecyclerView) view.findViewById(R.id.xrecyclerview);
         //TODO:直播搜索 add by xiaojw
+        attenLoginText = (TextView) view.findViewById(R.id.live_no_login_atten);
         searchLayout = (LinearLayout) view.findViewById(R.id.live_search_layout);
         liveSeachFl = (FrameLayout) view.findViewById(R.id.live_search_fl);
         TextView liveSearchTv = (TextView) view.findViewById(R.id.live_search_textview);
@@ -244,8 +246,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if (isTabChange){
-                    isTabChange=false;
+                if (isTabChange) {
+                    isTabChange = false;
                     return;
                 }
                 int top = xRecyclerView.getChildAt(0).getTop();
@@ -394,7 +396,13 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.live_fragment_title_hot:
-                isTabChange=true;
+                isTabChange = true;
+                if (attenLoginText.getVisibility() == View.VISIBLE) {
+                    attenLoginText.setVisibility(View.GONE);
+                }
+                if (xRecyclerView.getVisibility() != View.VISIBLE) {
+                    xRecyclerView.setVisibility(View.VISIBLE);
+                }
                 xRecyclerView.addHeaderView(inflate);
                 xRecyclerView.setAdapter(liveMainAdapter);
                 showIndictorView(titleHot);
@@ -410,11 +418,26 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 paint1.setFakeBoldText(true);*/
                 break;
             case R.id.live_fragment_title_attention:
-                isTabChange=true;
+                isTabChange = true;
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_ATTENTION);
-                xRecyclerView.setHeaderVisible();
-                contentService.getLivelist("", "true");
                 showIndictorView(titleAttention);
+                xRecyclerView.setHeaderVisible();
+                if (UserHelper.isLogined(getActivity())) {
+                    if (attenLoginText.getVisibility() == View.VISIBLE) {
+                        attenLoginText.setVisibility(View.GONE);
+                    }
+                    if (xRecyclerView.getVisibility() != View.VISIBLE) {
+                        xRecyclerView.setVisibility(View.VISIBLE);
+                    }
+                    contentService.getLivelist("", "true");
+                } else {
+                    if (xRecyclerView.getVisibility() == View.VISIBLE) {
+                        xRecyclerView.setVisibility(View.INVISIBLE);
+                    }
+                    if (attenLoginText.getVisibility() != View.VISIBLE) {
+                        attenLoginText.setVisibility(View.VISIBLE);
+                    }
+                }
                 resetSearch();
                 break;
             case R.id.live_search_bar:
@@ -784,7 +807,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 AppLog.print("热门refrsh");
             } else if (adapter == attenAdapter) {
                 AppLog.print("关注refresh");
-                contentService.getPlayBackLiveList("", pageNumber, "true");
+                contentService.getLivelist("", "true");
             }
 
 
