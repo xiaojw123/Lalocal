@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_fa">
+    android:background="@color/color_fa"
+>
 
 
     <FrameLayout
@@ -108,7 +109,20 @@
         android:layout_below="@+id/live_search_layout"
         android:divider="@null"
         android:overScrollMode="never"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        />
+
+
+    <TextView
+        android:id="@+id/live_no_login_atten"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/you_no_login_no_atten"
+        android:textSize="@dimen/text_size_16_sp"
+        android:layout_centerInParent="true"
+        android:textColor="@color/color_8c"
+        android:visibility="gone"
+        />
 
     <LinearLayout
         android:id="@+id/hot_content"
