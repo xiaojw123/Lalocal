@@ -34,12 +34,12 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClickListener {
 
     private static final int VIEW_TYPE_HIGHT = 0x23;
+    private static final int VIEW_TYPE_HIGHT_TITILE = 0x24;
     private Context mContext;
     private LayoutInflater inflater;
     private List<LiveRowsBean> rowsBeen;
     private int attenIndex;
     private boolean isAtten;
-    private boolean isTitle = true;
 
     public LiveMainAdapter(Context context, List<LiveRowsBean> rowsBeen) {
         this.mContext = context;
@@ -63,7 +63,9 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     public int getItemViewType(int position) {
         AppLog.print("getItemViewType_____position___" + position);
         if (isAtten) {
-            if (position >= attenIndex) {
+            if (position == attenIndex) {
+                return VIEW_TYPE_HIGHT_TITILE;
+            } else if (position > attenIndex) {
                 return VIEW_TYPE_HIGHT;
             }
         }
@@ -74,11 +76,10 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
-        if (viewType == VIEW_TYPE_HIGHT) {
+        if (viewType == VIEW_TYPE_HIGHT || viewType == VIEW_TYPE_HIGHT_TITILE) {
             View hightView = inflater.inflate(R.layout.list_item_highlights, parent, false);
             hightView.setOnClickListener(this);
-            if (isTitle) {
-                isTitle = false;
+            if (viewType == VIEW_TYPE_HIGHT_TITILE) {
                 LinearLayout titleCotaner = new LinearLayout(mContext);
                 titleCotaner.setOrientation(LinearLayout.VERTICAL);
                 TextView titleView = getHightTitleView();
@@ -87,7 +88,6 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
                 holder = new LiveHightHolder(titleCotaner);
             } else {
                 holder = new LiveHightHolder(hightView);
-
             }
         } else {
             View view = inflater.inflate(R.layout.live_list_item_new_layout, parent, false);

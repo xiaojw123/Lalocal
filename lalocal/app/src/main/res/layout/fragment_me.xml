@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.lalocal.lalocal.view.ReboundScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_f8"
     android:scrollbars="none">
 
@@ -57,48 +57,43 @@
                 android:text="@string/please_login"
                 android:textColor="@drawable/home_me_username_textcolor"
                 android:textSize="@dimen/text_size_15_sp" />
+
             <TextView
                 android:id="@+id/home_me_login_prompt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_13_sp"
-                android:textColor="@color/color_b3"
                 android:layout_alignLeft="@+id/home_me_username"
                 android:layout_below="@+id/home_me_username"
                 android:layout_marginTop="@dimen/dimen_size_10_dp"
                 android:paddingRight="@dimen/dimen_size_15_dp"
                 android:text="@string/login_prompt"
-                />
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_13_sp" />
 
             <ImageView
                 android:id="@+id/home_me_author_tag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/certifiedwriter_tag"
                 android:layout_alignLeft="@+id/home_me_username"
                 android:layout_below="@+id/home_me_login_prompt"
                 android:layout_marginTop="@dimen/dimen_size_11_dp"
-                android:visibility="gone"
-                />
-
-
+                android:background="@drawable/certifiedwriter_tag"
+                android:visibility="gone" />
 
 
             <TextView
                 android:id="@+id/home_me_verified"
                 android:layout_width="@dimen/home_me_verified_wdith"
                 android:layout_height="@dimen/home_me_verified_height"
-                android:layout_alignLeft="@+id/home_me_username"
-                android:background="@drawable/home_me_verified_bg"
                 android:layout_alignBottom="@+id/home_me_divie"
+                android:layout_alignLeft="@+id/home_me_username"
                 android:layout_marginBottom="@dimen/dimen_size_10_dp"
+                android:background="@drawable/home_me_verified_bg"
                 android:gravity="center"
                 android:text="@string/verified"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_10_sp"
-                android:visibility="gone"
-                />
-
+                android:visibility="gone" />
 
 
             <LinearLayout
@@ -156,33 +151,32 @@
                 android:id="@+id/home_me_headportrait_img"
                 android:layout_width="@dimen/home_me_headportrait_img_width"
                 android:layout_height="@dimen/home_me_headportrait_img_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:background="@drawable/home_me_head_bg"
                 android:paddingBottom="@dimen/home_me_headportrait_img_bottom"
                 android:paddingLeft="@dimen/home_me_headportrait_img_left"
                 android:paddingRight="@dimen/home_me_headportrait_img_right"
                 android:paddingTop="@dimen/home_me_headportrait_img_top"
                 android:scaleType="fitXY"
-                android:src="@drawable/home_me_personheadnormal"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true" />
+                android:src="@drawable/home_me_personheadnormal" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_marginTop="@dimen/dimen_size_20_dp"
             android:background="@color/white"
-            >
+            android:orientation="vertical">
+
             <FrameLayout
                 android:id="@+id/home_me_item_artice"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_size_60_dp"
                 android:paddingLeft="@dimen/dimen_size_15_dp"
                 android:paddingRight="@dimen/dimen_size_15_dp"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <TextView
                     style="@style/HomeMeMyItemNameStyle"
@@ -196,9 +190,10 @@
                     android:background="@drawable/arrow_right" />
 
             </FrameLayout>
-            <View style="@style/CommonD9LineTheme"
-                android:visibility="gone"
-                />
+
+            <View
+                style="@style/CommonD9LineTheme"
+                android:visibility="gone" />
 
             <FrameLayout
                 android:id="@+id/home_me_item_live"
@@ -219,6 +214,7 @@
                     android:background="@drawable/arrow_right" />
 
             </FrameLayout>
+
             <View style="@style/CommonD9LineTheme" />
 
         </LinearLayout>
@@ -233,21 +229,19 @@
             >
 
 
-
             <RelativeLayout
                 android:id="@+id/home_me_item_message"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_size_60_dp"
                 android:paddingLeft="@dimen/dimen_size_15_dp"
                 android:paddingRight="@dimen/dimen_size_15_dp"
-                android:visibility="gone"
-                >
+                android:visibility="gone">
 
                 <TextView
                     style="@style/HomeMeMyItemNameStyle"
                     android:layout_centerVertical="true"
-                    android:text="@string/my_message"
-                    />
+                    android:text="@string/my_message" />
+
                 <com.lalocal.lalocal.view.ShapeTextView
                     android:id="@+id/home_me_message_num"
                     android:layout_width="20dp"
@@ -255,14 +249,13 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/dimen_size_8_dp"
                     android:layout_toLeftOf="@+id/my_message_arrow_right"
-                    app:corner_radius="20dp"
-                    app:solid_color="@color/color_ff6f6f"
                     android:gravity="center"
+                    android:text="12"
                     android:textColor="@color/white"
                     android:textSize="@dimen/text_size_11_sp"
-                    android:text="12"
                     android:visibility="gone"
-                    />
+                    app:corner_radius="20dp"
+                    app:solid_color="@color/color_ff6f6f" />
 
                 <ImageView
                     android:id="@+id/my_message_arrow_right"
@@ -275,9 +268,9 @@
 
             </RelativeLayout>
 
-            <View style="@style/CommonD9LineTheme"
-                android:visibility="gone"
-                />
+            <View
+                style="@style/CommonD9LineTheme"
+                android:visibility="gone" />
 
             <FrameLayout
                 android:id="@+id/home_me_item_favoirte"
@@ -348,6 +341,7 @@
                 android:paddingLeft="@dimen/dimen_size_15_dp"
                 android:paddingRight="@dimen/dimen_size_15_dp">
 
+
                 <TextView
                     style="@style/HomeMeMyItemNameStyle"
                     android:layout_gravity="center_vertical"
@@ -360,6 +354,7 @@
                     android:background="@drawable/arrow_right" />
 
             </FrameLayout>
+
             <View style="@style/CommonD9LineTheme" />
         </LinearLayout>
 
@@ -367,29 +362,27 @@
             android:id="@+id/home_me_invitefriends"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_size_60_dp"
+            android:layout_marginBottom="@dimen/dimen_size_20_dp"
             android:layout_marginTop="@dimen/dimen_size_20_dp"
             android:background="@color/white"
-            android:layout_marginBottom="@dimen/dimen_size_20_dp"
-            android:visibility="invisible"
-           >
+            android:visibility="invisible">
 
             <TextView
                 style="@style/HomeMeMyItemNameStyle"
                 android:layout_gravity="center_vertical"
-                android:text="@string/invite_friends"
                 android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                />
+                android:text="@string/invite_friends" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|right"
-                android:background="@drawable/arrow_right"
                 android:layout_marginRight="@dimen/dimen_size_15_dp"
-                />
-            <View style="@style/CommonD9LineTheme"
-                android:layout_gravity="bottom"
-                />
+                android:background="@drawable/arrow_right" />
+
+            <View
+                style="@style/CommonD9LineTheme"
+                android:layout_gravity="bottom" />
 
 
         </FrameLayout>
