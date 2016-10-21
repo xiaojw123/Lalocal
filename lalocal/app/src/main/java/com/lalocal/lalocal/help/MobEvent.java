@@ -44,6 +44,7 @@ public interface MobEvent {
     String LIVE_START_WECHAT2_SHARE = "217_live_start_wechat2_share";
     String LIVE_START_WEIBO_CANCEL = "217_live_start_weibo_cancel";
     String LIVE_START_WEIBO_SHARE = "217_live_start_weibo_share";
+
     String LIVE_START_START = "217_live_start_start";
     String LIVE_ANCHOR_LIST = "217_live_anchor_list";
     String LIVE_ANCHOR_LIST_THIS = "217_live_anchor_list_this";

@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
@@ -222,7 +224,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         AppLog.i("TAG", "onWindowFocusChanged");
-        if (hasFocus && !isshowPopu && isCancelCreama && CommonUtil.REMIND_BACK != -1) {
+        if (hasFocus && !isshowPopu&& CommonUtil.REMIND_BACK !=1) {
             isshowPopu = true;
             showCreateLiveRoomPopuwindow();
 
@@ -533,6 +535,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveQuit.setOnClickListener(buttonClickListener);
     }
 
+    boolean isCamera=true;
 
     OnClickListener buttonClickListener = new OnClickListener() {
 
@@ -542,7 +545,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 case R.id.BackBtn:
                     finishLive();
                     break;
-                case R.id.live_telecast_setting:
+                case R.id.live_telecast_setting://LIVE_ANCHOR_BEAUTY
+                    if(isCamera){
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_BEAUTY);
+                        isCamera=false;
+                    }else {
+                        isCamera=true;
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_CAMERA);
+                    }
+
                     worker().getRtcEngine().switchCamera();
                     break;
                 case R.id.live_telecast_input_text:
@@ -560,6 +571,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     finishLive();
                     break;
                 case R.id.live_quit:
+                    MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_CLOSE);
                     finishLive();
                     break;
                 case R.id.live_over_back_home:
@@ -799,13 +811,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-
+                    MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_CANCEL);
                 }
             });
 
             customLiveUserInfoDialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                    MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_AVATAR);
                     Intent intent = new Intent(LiveActivity.this, LiveHomePageActivity.class);
                     intent.putExtra("userId", String.valueOf(id));
                     startActivity(intent);
@@ -825,6 +838,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else {
                 LiveConstant.IDENTITY = LiveConstant.LIVEER_CHECK_ADMIN;
                 customLiveUserInfoDialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
+
+
                     int fansCounts = -2;
 
                     @Override
@@ -848,12 +863,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             status = 0;
                         }
                         //
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_ATTENTION);
                     }
                 });
                 customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                     @Override
                     public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_REPORT);
                         Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
                         // 进入举报界面
                         Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
@@ -868,6 +884,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         userInfoContentLoader.setCallBack(new ICallBack() {
                             @Override
                             public void onCheckManager(LiveManagerBean liveManagerBean) {
+                                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_PROHIBITION);
                                 super.onCheckManager(liveManagerBean);
                                 if (liveManagerBean.getResult() != 0) {
                                     Toast.makeText(LiveActivity.this, "对方为管理员!", Toast.LENGTH_SHORT).show();
@@ -920,6 +937,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 customLiveUserInfoDialog.setManagerBtn(isManager == true ? getString(R.string.live_cancel_manager_cancel) : getString(R.string.live_cancel_manager_cancel), new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                     @Override
                     public void onCustomLiveUserInfoDialogListener(final String id, final TextView textView, final ImageView managerMark) {
+
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_MANAGEMENT);
                         if (managerList != null && managerList.size() >= 3 && !isManager) {
                             final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
                             customDialog.setContent(getString(R.string.live_manager_count));
@@ -962,7 +981,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                     public void onDialogClickListener() {
                                         userInfoContentLoader.checkUserIdentity(channelId, String.valueOf(id));
                                         NIMClient.getService(ChatRoomService.class).markChatRoomManager(false, new MemberOption(roomId, meberAccount));
-
                                         String messageContent = "取消了" + result1.getNickName() + "的管理员权限";
                                         LiveMessage liveMessage = new LiveMessage();
                                         liveMessage.setStyle(MessageType.cancel);
@@ -976,7 +994,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                         sendMessage(imMessage, MessageType.cancel);
                                         textView.setText(getString(R.string.lvie_setting_manager));
                                         textView.setAlpha(1);
-
                                         managerMark.setVisibility(View.GONE);
                                         isManager = false;
                                     }
@@ -1338,10 +1355,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void initUIandEvent() {
         super.initUIandEvent();
-
         if (CommonUtil.REMIND_BACK == 1) {
             liveContentLoader.alterLive(createNickName, channelId, null, null, null, null);
-            CommonUtil.REMIND_BACK = -1;
         }
     }
 

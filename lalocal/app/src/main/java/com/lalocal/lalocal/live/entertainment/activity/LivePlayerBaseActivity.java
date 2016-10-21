@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.ui.TActivity;
@@ -604,6 +606,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             super.onGetAudienceOnLineUserCount(json);
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             if(onLineUser!=null&&onLineUser.getResult()>0){
+                AppLog.i("TAG","从服务器拉去人数:"+onLineUser.getResult());
                 onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
             }
         }
@@ -670,6 +673,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     break;
 
                 case R.id.live_telecast_share:
+                    if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                        MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_SHARE);
+                    }
+                    if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                        MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_SHARE);
+                    }
                     if (shareVO != null) {
                         SharePopupWindow shareActivity = new SharePopupWindow(LivePlayerBaseActivity.this, shareVO);
                         shareActivity.showShareWindow();
@@ -906,6 +915,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         } else {
             onDisconnected();
             enterRoom();
+        //    MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
         }
     }
 
@@ -943,7 +953,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     chatRoomStatusRemind("登陆聊天室成功...");
                     LiveConstant.enterRoom=true;
                     initInputPanel(creatorAccount, channelId);
-                    testMessage();
+                  //  testMessage();
                 }
                 @Override
                 public void onFailed(int code) {
@@ -973,9 +983,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 }
             });
             //查询在线成员列表
-            if (isFirstEnrRoom) {
+           /* if (isFirstEnrRoom) {
                 fetchData();
-            }
+            }*/
 
         }
     }
@@ -1060,7 +1070,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     AppLog.i("TAG", "拉取在线人数失败");
                     NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-                    isFirstEnrRoom=true;
+                    isFirstEnrRoom=false;
                     enterRoom();
 
                 }
@@ -1166,9 +1176,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void run() {
             handler.removeCallbacks(this);
             fetchOnlineCount();
-            if (contentLoader!=null) {
-                contentLoader.getAudienceUserOnLine(onlineCounts,channelId);
-            }
+
             handler.postDelayed(this, 2000);
         }
     }
@@ -1179,7 +1187,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 @Override
                 public void onSuccess(final ChatRoomInfo param) {
                     onlineCounts = param.getOnlineUserCount();
-                  //  onlineCountText.setText(String.format("%s人", String.valueOf(onlineCounts)));
+                    if (contentLoader!=null) {
+                        contentLoader.getAudienceUserOnLine(onlineCounts,channelId);
+                    }
                     AppLog.i("TAG", "基类获取在线人数:" + onlineCounts);
                     if (isScrollStop && mIsTouchUP) {
                         clearCache();
@@ -1190,8 +1200,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 @Override
                 public void onFailed(int code) {
                     AppLog.i("TAG", "定时拉去在线人数失败:" + code);
-
-                    enterRoom();
+                    isFirstEnrRoom=false;
+                  //  enterRoom();
                 }
 
                 @Override

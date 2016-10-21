@@ -46,8 +46,6 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(mContext,"com.tencent.mm");
         boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(mContext, "com.sina.weibo");
 
-
-
         View view = View.inflate(mContext, R.layout.live_create_room_pop_layout, null);
         cancelCreateRoom = (ImageView) view.findViewById(R.id.live_create_room_close_iv);
         inputLiveRoom = (TextView) view.findViewById(R.id.input_start_live);
@@ -62,12 +60,16 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         if(!isInstallMm1){
             shareFriends.setVisibility(View.GONE);
             shareWeixin.setVisibility(View.GONE);
+            isShareSelector=2;
         }
         if(!isInstallWeibo){
             shareWeibo.setVisibility(View.GONE);
+
+
         }
         if(!isInstallMm1&&isInstallWeibo){
             shareTv.setVisibility(View.GONE);
+            isShareSelector=-1;
         }
 
 

@@ -207,7 +207,7 @@ public class MsgViewHolderChat extends TViewHolder {
 
         //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
         //   bodyText.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+     }
 
     private SpannableStringBuilder textviewSetContent(String text,String textColor) {
         String[] textContent = text.split(":");

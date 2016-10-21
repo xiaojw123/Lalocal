@@ -14,6 +14,8 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
@@ -96,12 +98,14 @@ public class GiftsRankPopuWindow extends PopupWindow {
                    }
                     break;
                 case R.id.live_gifts_this_room_ranking:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_LIST_THIS);
                     thisRoomTv.setTextColor(Color.parseColor("#ffaa2a"));
                     allRoomTv.setTextColor(Color.WHITE);
                     currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                     giftRankingStatus(currentRanks);
                     break;
                 case R.id.live_gifts_all_room_ranking:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_LIST_TOTAL);
                     allRoomTv.setTextColor(Color.parseColor("#ffaa2a"));
                     thisRoomTv.setTextColor(Color.WHITE);
                     currentRanks = liveGiftRanksResp.getResult ().getTotalRanks();

@@ -31,6 +31,7 @@ import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 
@@ -125,6 +126,7 @@ public class PlayBackActivity extends BaseActivity {
         DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         playbackMasterInfoLayout.setOnClickListener(clickListener);
+        AppLog.i("TAG","视频回放:视频方向："+direction);
         if (direction == 0) {//横屏
             videoViewPlayer.setVisibility(View.GONE);
             videoPlayer.setRotation(90f);
@@ -133,7 +135,7 @@ public class PlayBackActivity extends BaseActivity {
             if (videoList != null && videoList.size() > 0) {
                 Uri uri = Uri.parse(videoList.get(position).getUrl());
                 videoPlayer.loadAndPlay(uri, 0);
-                Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
             }
         } else {
             videoPlayer.setVisibility(View.GONE);
@@ -141,9 +143,9 @@ public class PlayBackActivity extends BaseActivity {
             videoViewPlayer.setVideoPlayCallback(mVideoPlayCallback);
             videoViewPlayer.setAutoHideController(true);
             if (videoList != null && videoList.size() > 0) {
-                Uri uri = Uri.parse("http://video.lalocal.cn/video/mp4/201610131150.mp4");
+                Uri uri = Uri.parse(videoList.get(position).getUrl());
                 videoViewPlayer.loadAndPlay(uri, 0);
-                Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -302,6 +304,14 @@ public class PlayBackActivity extends BaseActivity {
                 }
                 CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
                 dialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+                    @Override
+                    public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                        Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
+                        intent.putExtra("userId", String.valueOf(id));
+                        startActivity(intent);
+                    }
+                });
+                dialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                     @Override
                     public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                         Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);

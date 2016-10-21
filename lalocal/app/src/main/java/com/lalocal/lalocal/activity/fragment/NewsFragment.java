@@ -147,7 +147,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         //   contentService.getLiveArea();
         contentService.recommendAd();
         requestBasicPermission(); // 申请APP基本权限
-
     }
 
     @Nullable
@@ -196,7 +195,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 LiveHomeAreaResp.ResultBean resultBean1 = result.get(position);
                 int id1 = resultBean1.getId();
                 titleHot.setText(resultBean1.getName());
-                //    paint1.setFakeBoldText(true);
                 liveClassifyGridViewAdapter.setSelectedPosition(position);
                 liveClassifyGridViewAdapter.notifyDataSetChanged();
                 if (allRows != null) {
@@ -254,7 +252,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 int scollYDistance = getScollYDistance();
                 int i = DensityUtil.dip2px(getActivity(), 10);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
-                AppLog.i("TAG", "recyclerviw滑动距离监听：" + top + "  scollYDistance:" + scollYDistance + "  scollDy:" + scollDy + "firstVisibleItemPosition" + firstVisibleItemPosition);
+               // AppLog.i("TAG", "recyclerviw滑动距离监听：" + top + "  scollYDistance:" + scollYDistance + "  scollDy:" + scollDy + "firstVisibleItemPosition" + firstVisibleItemPosition);
                 int offset = Math.abs(scollDy - lastScrollDy);
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
                     if (isVisible && offset > SCROLL_OFFSET) {

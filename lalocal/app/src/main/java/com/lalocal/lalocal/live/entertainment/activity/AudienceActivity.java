@@ -28,6 +28,8 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
@@ -864,9 +866,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
                     break;
                 case R.id.live_telecast_quit:
+                    MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
                     finishLive();
                     break;
                 case R.id.live_quit:
+                    MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
                     finishLive();
                     break;
                 case R.id.live_telecast_input_text:
@@ -895,6 +899,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     startActivity(intent);
                     break;
                 case R.id.live_gift_img:
+                    MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_GIFT);
 
                     if(giftStoreFirstClick){
                         giftStoreFirstClick=false;
@@ -1021,6 +1026,12 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         }
         customLiveUserInfoDialog = new CustomLiveUserInfoDialog(AudienceActivity.this, result, isManager, isMuted);
         customLiveUserInfoDialog.setCancelable(false);
+        customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+            @Override
+            public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CANCEL);
+            }
+        });
         Object statusa = result.getAttentionVO().getStatus();
         if (statusa != null) {
             double parseDouble = Double.parseDouble(String.valueOf(statusa));
@@ -1031,6 +1042,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         customLiveUserInfoDialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
             public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_AVATAR);
                 Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                 intent.putExtra("userId", String.valueOf(id));
                 startActivity(intent);
@@ -1039,6 +1051,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         customLiveUserInfoDialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
             @Override
             public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_REPORT);
                 Toast.makeText(AudienceActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
             }
         });
@@ -1065,6 +1078,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         customLiveUserInfoDialog.setBanBtn(isMuteds == true ? getString(R.string.live_relieve_ban) : getString(R.string.live_ban), new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                             @Override
                             public void onCustomLiveUserInfoDialogListener(String id, final TextView textView, ImageView managerMark) {
+                                MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_ANCHOR_PROHIBITION);
                                 if (isMuteds) {
                                    String messageContent="解除了"+result.getNickName()+"的禁言";
                                     LiveMessage liveMessage=new LiveMessage();
@@ -1120,7 +1134,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
             @Override
             public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
-
+                MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_ATTENTION);
                 if (fansCounts == -2) {
                     fansCounts = fansCount;
                 }
@@ -1140,6 +1154,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     status = 0;
                 }
             }
+
         });
 
         customLiveUserInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
