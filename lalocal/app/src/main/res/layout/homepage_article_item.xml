@@ -36,9 +36,8 @@
                 <com.lalocal.lalocal.view.VerticalTextView
                     android:id="@+id/vtv_article_title"
                     android:layout_width="wrap_content"
-                    android:layout_height="112.5dp"
-                    android:layout_centerInParent="true"
-                    android:paddingBottom="30dp"/>
+                    android:layout_height="118dp"
+                    android:layout_centerInParent="true"/>
                 
                 <ImageView
                     android:id="@+id/icon_article_title_up"

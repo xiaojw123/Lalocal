@@ -36,7 +36,10 @@ public class LiveArticleVPAdapter extends PagerAdapter {
     // 用户文章列表
     private List<ArticleDetailsResultBean> mUserArticleList;
 
-    public LiveArticleVPAdapter(Context context, LiveRowsBean living, List<LiveRowsBean> userLiveList, List<ArticleDetailsResultBean> userArticleList) {
+    // 判断个人主页是否为自己主页的标记
+    private boolean mIsSelf = false;
+
+    public LiveArticleVPAdapter(Context context, boolean isSelf, LiveRowsBean living, List<LiveRowsBean> userLiveList, List<ArticleDetailsResultBean> userArticleList) {
         // 上下文
         this.mContext = context;
         // 用户当前直播
@@ -45,6 +48,8 @@ public class LiveArticleVPAdapter extends PagerAdapter {
         this.mUserLiveList = userLiveList;
         // 用户文章列表
         this.mUserArticleList = userArticleList;
+        // 是否为自己的标记
+        this.mIsSelf = isSelf;
     }
 
     @Override
@@ -82,7 +87,7 @@ public class LiveArticleVPAdapter extends PagerAdapter {
                     holder.tvNoList.setVisibility(View.GONE);
 
                     // 初始化直播适配器
-                    adapter = new HomepageLiveAdapter(mContext, mLiving, mUserLiveList);
+                    adapter = new HomepageLiveAdapter(mContext, mIsSelf, mLiving, mUserLiveList);
                     AppLog.i("ttt", "LIVE_finish initing");
                     // 让recyclerview显示
                     holder.xrvList.setLayoutManager(new LinearLayoutManager(mContext));
