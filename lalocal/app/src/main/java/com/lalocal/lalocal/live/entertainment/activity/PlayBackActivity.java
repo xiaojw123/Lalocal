@@ -126,7 +126,7 @@ public class PlayBackActivity extends BaseActivity {
         DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         playbackMasterInfoLayout.setOnClickListener(clickListener);
-        AppLog.i("TAG","视频回放:视频方向："+direction);
+        AppLog.i("TAG","视频回放:视频方向："+direction+"    视频地址："+videoList.get(0).getUrl());
         if (direction == 0) {//横屏
             videoViewPlayer.setVisibility(View.GONE);
             videoPlayer.setRotation(90f);
