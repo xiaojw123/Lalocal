@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
@@ -40,12 +41,18 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     private List<LiveRowsBean> rowsBeen;
     private int attenIndex;
     private boolean isAtten;
+    private XRecyclerView mRecyclerView;
 
     public LiveMainAdapter(Context context, List<LiveRowsBean> rowsBeen) {
         this.mContext = context;
         this.rowsBeen = rowsBeen;
         inflater = LayoutInflater.from(mContext);
     }
+
+    public void setRecyclerView(XRecyclerView recyclerView) {
+        mRecyclerView = recyclerView;
+    }
+
 
     public void setHightPostion(boolean isAtten, int postion) {
         this.attenIndex = postion;
@@ -59,9 +66,9 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         AppLog.print("refresh____");
     }
 
+
     @Override
     public int getItemViewType(int position) {
-        AppLog.print("getItemViewType_____position___" + position);
         if (isAtten) {
             if (position == attenIndex) {
                 return VIEW_TYPE_HIGHT_TITILE;
@@ -113,22 +120,17 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         if (rowsBeen != null && rowsBeen.size() > 0) {
             final LiveRowsBean liveRowsBean = rowsBeen.get(position);
             if (holder instanceof LiveHightHolder) {
-                AppLog.print("onBindViewHolder  liveHolder  pos___" + position);
                 LiveHightHolder hightHolder = (LiveHightHolder) holder;
                 if (liveRowsBean != null) {
                     final LiveUserBean user = liveRowsBean.getUser();
                     if (user != null) {
-                        AppLog.print("imgurl___" + user.getAvatar());
                         DrawableUtils.displayImg(mContext, hightHolder.avatarImg, user.getAvatar());
                         hightHolder.nicknameTv.setText(user.getNickName());
-                        hightHolder.avatarImg.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(mContext, LiveHomePageActivity.class);
-                                intent.putExtra("userId", String.valueOf(user.getId()));
-                                mContext.startActivity(intent);
-                            }
-                        });
+                        String userId = String.valueOf(user.getId());
+                        hightHolder.avatarImg.setTag(userId);
+                        hightHolder.nicknameTv.setTag(userId);
+                        hightHolder.avatarImg.setOnClickListener(this);
+                        hightHolder.nicknameTv.setOnClickListener(this);
                     }
                     hightHolder.locTv.setText(liveRowsBean.getAddress());
                     hightHolder.titleTv.setText(liveRowsBean.getTitle());
@@ -180,6 +182,14 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         }
     }
 
+    public void gotoLiveHomePage(String userid) {
+        Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+        intent.putExtra("userId", userid);
+        mContext.startActivity(intent);
+
+
+    }
+
 
     @Override
     public int getItemCount() {
@@ -188,6 +198,15 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.item_hightlists_avatar:
+            case R.id.item_hightlists_nickname:
+                Object tag = v.getTag();
+                if (tag != null) {
+                    gotoLiveHomePage((String) tag);
+                }
+                break;
+        }
 
 
     }

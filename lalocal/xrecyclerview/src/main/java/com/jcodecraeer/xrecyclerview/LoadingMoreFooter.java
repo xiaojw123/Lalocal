@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.progressindicator.AVLoadingIndicatorView;
@@ -88,14 +87,22 @@ public class LoadingMoreFooter extends LinearLayout {
     }
 
     public void setProgressStyle(int style) {
+
         if(style == ProgressStyle.SysProgress){
-            progressCon.setView(new ProgressBar(getContext(), null, android.R.attr.progressBarStyle));
-        }else{
-            AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());
-            progressView.setIndicatorColor(0xffB5B5B5);
-            progressView.setIndicatorId(style);
-            progressCon.setView(progressView);
+//            progressCon.setView(new ProgressBar(getContext(), null, android.R.attr.progressBarStyle));
+//            progressCon.setView(new ProgressBar(getContext(), null, android.R.attr.progressBarStyle));
+            style=ProgressStyle.LineSpinFadeLoader;
         }
+//        else{
+//            AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());
+//            progressView.setIndicatorColor(0xffB5B5B5);
+//            progressView.setIndicatorId(style);
+//            progressCon.setView(progressView);
+//        }
+        AVLoadingIndicatorView progressView = new  AVLoadingIndicatorView(this.getContext());
+        progressView.setIndicatorColor(0xffB5B5B5);
+        progressView.setIndicatorId(style);
+        progressCon.setView(progressView);
     }
 
     public void  setState(int state) {
