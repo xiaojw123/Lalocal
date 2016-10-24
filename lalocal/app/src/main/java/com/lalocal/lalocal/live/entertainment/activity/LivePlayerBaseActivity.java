@@ -76,6 +76,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -236,6 +237,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private MyCallBack myCallBack;
     protected GiftsRankPopuWindow giftsRankPopuWindow;
     protected ImageView chanllenge;
+    private TextView massageTest;
+    private ImageView shareLiveImg;
 
     protected abstract void checkNetInfo(String netType, int reminder);
 
@@ -273,6 +276,24 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected void initUIandEvent() {
         event().addEventHandler(this);
     }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        int[] locations = new int[2];
+        if (shareLiveImg != null && periscopeLayout != null) {//计算点赞动画的位置
+            shareLiveImg.getLocationOnScreen(locations);
+            int x = locations[0];
+            int y = locations[1];
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
+            int i = DensityUtil.dip2px(LivePlayerBaseActivity.this, 70);
+            layoutParams.leftMargin = x - (i / 4);
+            periscopeLayout.setLayoutParams(layoutParams);
+        }
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -416,6 +437,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected void findViews() {
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
+
         barrageView = (BarrageView) findViewById(R.id.barrageView_test);
         masterName = (TextView) findViewById(R.id.live_emcee_name);
         maseterHead = (CircleImageView) findViewById(R.id.live_emcee_head);
@@ -430,9 +452,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftPlaneBg = (RelativeLayout) findViewById(R.id.audient_gift_plane_bg);
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
+        massageTest = (TextView) findViewById(R.id.engling);
       //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
-
+        massageTest.setOnClickListener(clickListener);
         // 礼物动画展示
         findGiftLayout();
         // 点赞的爱心布局
@@ -499,8 +522,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         masterInfoLayout = (LinearLayout) findViewById(R.id.live_master_info_layout);
         masterInfoLayout.setOnClickListener(clickListener);
         //分享
-        ImageView shareLiveIng = (ImageView) findViewById(R.id.live_telecast_share);
-        shareLiveIng.setOnClickListener(clickListener);
+        shareLiveImg = (ImageView) findViewById(R.id.live_telecast_share);
+        shareLiveImg.setOnClickListener(clickListener);
 
         drawerLayout = (DrawerLayout) findViewById(R.id.live_drawer_layout);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
@@ -704,7 +727,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         }
                     }
 
-
                     break;
                 case R.id.live_telecast_input_text:
 
@@ -712,6 +734,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                /* case R.id.live_telecast_challenge:
                     clickChallengeBtn();
                     break;*/
+                case R.id.engling:
+                    testMessage();
+                    break;
+
             }
         }
     };
@@ -801,6 +827,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     });
                     break;
                 case MessageType.like://点赞
+
                     periscopeLayout.addHeart();
                     messageListPanel.onIncomingMessage(messages);
 
@@ -920,7 +947,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
 
-
     // 进入聊天室
     protected void enterRoom() {
         if (DemoCache.getLoginStatus()) {
@@ -928,7 +954,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             data.setRoomId(roomId);
             Map<String, Object> map = new HashMap<>();
             int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
+            String userAvatar = UserHelper.getUserAvatar(LivePlayerBaseActivity.this);
             map.put("userId", String.valueOf(userId));
+            map.put("avatar",userAvatar);
             map.put("roomExt", String.valueOf(userId));
             data.setExtension(map);
             data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
@@ -991,25 +1019,37 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
     int count=0;
+    boolean status=true;
+    CountDownTimer countDownTimer =null;
     private void testMessage() {
-        new CountDownTimer(100000000, 200) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                LiveMessage liveMessage=new LiveMessage();
-                liveMessage.setStyle(MessageType.text);
-                liveMessage.setUserId(userId);
-                liveMessage.setCreatorAccount(creatorAccount);
-                liveMessage.setChannelId(channelId);
-                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
-                sendMessage(imMessage, MessageType.text);
-                count++;
-            }
+        if(countDownTimer==null){
+            countDownTimer=new CountDownTimer(1000000000, 250) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    LiveMessage liveMessage=new LiveMessage();
+                    liveMessage.setStyle(MessageType.text);
+                    liveMessage.setUserId(userId);
+                    liveMessage.setCreatorAccount(creatorAccount);
+                    liveMessage.setChannelId(channelId);
+                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
+                    sendMessage(imMessage, MessageType.text);
+                    count++;
+                }
+                @Override
+                public void onFinish() {
+                }
+            };
+        }
 
-            @Override
-            public void onFinish() {
+        if(status){
+            countDownTimer.start();
+            status=false;
+        }else {
+            status=true;
+            countDownTimer.cancel();
+            countDownTimer.onFinish();
+        }
 
-            }
-        }.start();
     }
 
     protected void initInputPanel(String creatorAccount, String channelId) {
@@ -1177,7 +1217,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void run() {
             handler.removeCallbacks(this);
             fetchOnlineCount();
-
             handler.postDelayed(this, 2000);
         }
     }
@@ -1188,9 +1227,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 @Override
                 public void onSuccess(final ChatRoomInfo param) {
                     onlineCounts = param.getOnlineUserCount();
-                    if (contentLoader!=null) {
+                  /*  if (contentLoader!=null) {
                         contentLoader.getAudienceUserOnLine(onlineCounts,channelId);
-                    }
+                    }*/
                     AppLog.i("TAG", "基类获取在线人数:" + onlineCounts);
                     if (isScrollStop && mIsTouchUP) {
                         clearCache();

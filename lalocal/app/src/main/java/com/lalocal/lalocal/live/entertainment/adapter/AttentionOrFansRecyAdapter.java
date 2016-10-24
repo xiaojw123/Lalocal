@@ -68,6 +68,9 @@ public class AttentionOrFansRecyAdapter extends RecyclerView.Adapter {
         }else if(status==1){
             viewHodler.attentionListItemAttention.setText("已关注");
             viewHodler.attentionListItemAttention.setTextColor(Color.parseColor("#666666"));
+        }else {
+            viewHodler.attentionListItemAttention.setText("关注");
+            viewHodler.attentionListItemAttention.setTextColor(Color.parseColor("#ffaa2a"));
         }
         if(description!=null&&description.length()>0){
             viewHodler.attentionListItemSingture.setText(description);

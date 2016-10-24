@@ -66,7 +66,6 @@ import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -121,7 +120,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     // state
     private boolean isStartLive = false; // 推流是否开始
-    private ImageView clickPraise;
+ //   protected ImageView clickPraise;
     private ImageView quit;
 
 
@@ -184,7 +183,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
 
 
-    @Override
+   /* @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         int[] locations = new int[2];
@@ -198,7 +197,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             periscopeLayout.setLayoutParams(layoutParams);
         }
 
-    }
+    }*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,13 +211,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         contentLoaderAudience.liveGiftStore();
         loginIm();
        handler.postDelayed(new MyRunnable(),2000);
-
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);
         }
     }
     private class MyRunnable implements Runnable {
-
         @Override
         public void run() {
             handler.removeCallbacks(this);
@@ -227,19 +224,16 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             }
             handler.postDelayed(this, 2000);
         }
-
     }
 
     private class AudienceCallBack extends ICallBack {
         @Override
         public void onGetAudienceOnLineUserCount(String json) {
             super.onGetAudienceOnLineUserCount(json);
-
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             if(onLineUser!=null&&onLineUser.getResult()>0){
                 onlineCountText.setText(String.valueOf(onLineUser.getResult())+"人");
             }
-
         }
         @Override
         public void onGiftsStore(GiftDataResp giftDataResp) {
@@ -247,7 +241,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 AppLog.i("TAG", "请求成功");
                 giftSresult = giftDataResp.getResult();
             }
-
         }
         @Override
         public void onTouristInfo(String json) {
@@ -282,7 +275,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
             SendGiftResp.ResultBean sendGiftResult = sendGiftResp.getResult();
             if (sendGiftResp.getReturnCode() == 0) {
-                startSendGiftsAnimation(itemPosition, sendTotal);
+                startSendGiftsAnimation(giftDataResultBean, sendTotal);
                 myGold=myGold-payBalance;
             } else {
                 Toast.makeText(AudienceActivity.this, getString(R.string.live_sendgift_fail), Toast.LENGTH_SHORT).show();
@@ -311,9 +304,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     }
                 });
                 customDialog.show();
-
-
-
         }
     }
 
@@ -390,9 +380,9 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     }
 
 
-
     private void initView() {
         viewById = findViewById(R.id.live_layout);
+        viewById.setOnClickListener(buttonClickListener);
         loadingPage = findViewById(R.id.live_loading_page);
         BlurImageView blurView= (BlurImageView) loadingPage.findViewById(R.id.loading_page_bg);
         blurView.setBlurImageURL(avatar);
@@ -541,7 +531,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         new CountDownTimer(25000,1000){
             @Override
             public void onTick(long millisUntilFinished) {
-
             }
             @Override
             public void onFinish() {
@@ -763,9 +752,8 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     protected void findViews() {
         super.findViews();
-
         liveQuit = (ImageView) findViewById(R.id.live_quit);
-        clickPraise = (ImageView) findViewById(R.id.live_telecast_like);
+      //  clickPraise = (ImageView) findViewById(R.id.live_telecast_like);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
         liveSettingLayout = findViewById(R.id.setting_bottom_layout);
         challengeHint = (TextView) findViewById(R.id.audience_hint_emcee_accept);
@@ -791,10 +779,11 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         liveGiftImg.setOnClickListener(buttonClickListener);
 
 
-        clickPraise.setOnClickListener(buttonClickListener);
+      //  clickPraise.setOnClickListener(buttonClickListener);
         quit.setOnClickListener(buttonClickListener);
         inputChar.setOnClickListener(buttonClickListener);
         liveQuit.setOnClickListener(buttonClickListener);
+
 
 
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
@@ -854,7 +843,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
             switch (v.getId()) {
 
 
-                case R.id.live_telecast_like:
+              /*  case R.id.live_telecast_like:
 
                     boolean logined = UserHelper.isLogined(AudienceActivity.this);
                     if (!logined) {
@@ -864,7 +853,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                         sendLike();
                     }
 
-                    break;
+                    break;*/
                 case R.id.live_telecast_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
                     finishLive();
@@ -933,7 +922,10 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     intent2.putExtra("userId", userId);
                     startActivity(intent2);
                     break;
-
+                case R.id.live_layout:
+                    periscopeLayout.addHeart();
+                    sendLike();
+                    break;
 
             }
         }
@@ -960,13 +952,14 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
 
     }
 
-    private int itemPosition;
+
     private int sendTotal;
     private int payBalance;
+    private  GiftDataResultBean giftDataResultBean;
     @Override
-    public void sendGiftMessage(int itemPosition, int sendTotal, int payBalance) {
-        final  int id = giftSresult.get(itemPosition).getId();
-        this.itemPosition=itemPosition;
+    public void sendGiftMessage(GiftDataResultBean giftDataResultBean, int sendTotal, int payBalance) {
+        final  int id =giftDataResultBean.getId();
+        this.giftDataResultBean=giftDataResultBean;
         this.sendTotal=sendTotal;
         this.payBalance=payBalance;
         if(payBalance>myGold){
@@ -978,18 +971,18 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
         }
     }
 
-    private void startSendGiftsAnimation(int itemPosition, int sendTotal) {
-        final String code = giftSresult.get(itemPosition).getCode();
+    private void startSendGiftsAnimation(GiftDataResultBean giftDataResultBean, int sendTotal) {
+        final String code =giftDataResultBean.getCode();
         AppLog.i("TAG", "startSendGiftsAnimation:" + code);
         String messageContent= "给主播送了" + ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : ("003".equals(code)?"飞机":"神秘礼物")));
         LiveMessage liveMessage=new LiveMessage();
         GiftBean giftBean=new GiftBean();
         giftBean.setUserName(UserHelper.getUserName(AudienceActivity.this));
         giftBean.setUserId(String.valueOf(UserHelper.getUserId(AudienceActivity.this)));
-        giftBean.setCode(giftSresult.get(itemPosition).getCode());
+        giftBean.setCode(giftDataResultBean.getCode());
         giftBean.setGiftCount(sendTotal);
-        giftBean.setGiftImage(giftSresult.get(itemPosition).getPhoto());
-        giftBean.setGiftName(giftSresult.get(itemPosition).getName());
+        giftBean.setGiftImage(giftDataResultBean.getPhoto());
+        giftBean.setGiftName(giftDataResultBean.getName());
        giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity.this));
         liveMessage.setGiftModel(giftBean);
         liveMessage.setChannelId(channelId);
@@ -1406,6 +1399,7 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                     rtcEngine().setupRemoteVideo(new VideoCanvas(surfaceV, VideoCanvas.RENDER_MODE_HIDDEN, uid));//设置远端视频属性
 
                 }*/
+                masterComeBack=true;
                 loadingPage.setVisibility(View.GONE);
                 if(audienceOver!=null){
                     isAudienceOver = true;
@@ -1431,16 +1425,25 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
         AppLog.i("TAG","用户端走了:onJoinChannelSuccess");
+        masterComeBack=false;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                masterLeaveTime();
+            }
+        });
+
     }
 
     @Override
     public void onUserOffline(int uid, int reason) {
 
+        AppLog.i("TAG","用户端：onUserOffline"+uid+"  reason:"+reason);
     }
 
     @Override
     public void onUserJoined(int uid, int elapsed) {
-
+        AppLog.i("TAG","用户端：onUserJoined"+uid+"  reason:"+elapsed);
     }
 
     @Override
@@ -1458,7 +1461,6 @@ public class AudienceActivity extends LivePlayerBaseActivity implements VideoPla
                 showFinishLayout(true,2);
             }
         });
-
 
     }
 

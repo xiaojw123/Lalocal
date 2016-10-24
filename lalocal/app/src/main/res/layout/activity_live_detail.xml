@@ -49,7 +49,7 @@
                     android:id="@+id/live_detail_img"
                     android:layout_width="@dimen/item_my_live_img_width"
                     android:layout_height="@dimen/item_my_live_img_width"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     android:src="@drawable/home_me_personheadnormal" />
 
                 <TextView

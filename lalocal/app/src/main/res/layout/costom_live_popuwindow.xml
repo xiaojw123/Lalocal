@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
-    android:layout_height="@dimen/live_height_355dp"
-    android:paddingLeft="@dimen/live_padding_48dp"
-    android:paddingRight="@dimen/live_padding_48dp">
+    android:layout_height="320dp"
+    android:paddingLeft="72dp"
+    android:paddingRight="72dp">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@drawable/auditend_over_bg"
         android:gravity="center"
         android:orientation="vertical">
         <LinearLayout
@@ -18,6 +18,7 @@
            android:layout_weight="1"
             android:layout_height="0dp"
             android:orientation="vertical"
+            android:layout_gravity="center"
             >
             <ImageView
                 android:id="@+id/custom_dialog_close_iv"
@@ -31,10 +32,11 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/master_info_head_iv"
-                android:layout_width="@dimen/live_height_60dp"
-                android:layout_height="@dimen/live_height_60dp"
+                android:layout_width="@dimen/live_height_50dp"
+                android:layout_height="@dimen/live_height_50dp"
                 android:layout_gravity="center"
                 android:background="@color/white"
+
                 android:src="@drawable/androidloading" />
             <TextView
                 android:id="@+id/master_info_nick_tv"
@@ -61,7 +63,7 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:gravity="center"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:paddingLeft="@dimen/author_padding_25dp"
                 android:paddingRight="@dimen/author_padding_25dp"
                 android:paddingTop="@dimen/live_padding_20dp"
@@ -73,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="@dimen/live_padding_20dp">
+                android:paddingTop="@dimen/live_padding_10dp">
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -108,30 +110,15 @@
                         android:layout_height="wrap_content"
                         android:text="0" />
                 </LinearLayout>
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/live_master_contribute" />
-                    <TextView
-                        android:id="@+id/live_contribute"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0" />
-                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
         <LinearLayout
             android:id="@+id/go_master_home"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_50dp"
+            android:layout_height="@dimen/live_height_45dp"
             android:clickable="true"
-            android:background="@color/color_ffaa2a"
+            android:background="@drawable/master_home_btn_bg"
             android:gravity="center">
             <TextView
                 android:id="@+id/live_master_home_over"

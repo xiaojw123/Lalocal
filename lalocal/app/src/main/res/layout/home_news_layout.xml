@@ -69,8 +69,9 @@
         </LinearLayout>
     </FrameLayout>
 
+<!--
 
-    <!--搜索-->
+    &lt;!&ndash;搜索&ndash;&gt;
     <LinearLayout
         android:id="@+id/live_search_layout"
         android:layout_width="match_parent"
@@ -88,7 +89,6 @@
             android:layout_marginRight="@dimen/dimen_size_15_dp"
             android:layout_marginTop="@dimen/dimen_size_10_dp"
             android:background="@drawable/live_search_bg">
-
             <TextView
                 android:id="@+id/live_search_textview"
                 android:layout_width="wrap_content"
@@ -99,19 +99,50 @@
                 android:textColor="@color/color_b3"
                 android:textSize="@dimen/text_size_15_sp" />
         </FrameLayout>
-    </LinearLayout>
+    </LinearLayout>-->
 
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+    <com.lalocal.lalocal.view.CustomXRecyclerView
         android:id="@+id/xrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/live_search_layout"
         android:divider="@null"
         android:overScrollMode="never"
         android:scrollbars="none"
+        android:layout_below="@+id/live_header_container"
         />
 
+    <!--&lt;!&ndash;搜索&ndash;&gt;-->
+    <!--<LinearLayout-->
+        <!--android:id="@+id/live_search_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/live_header_container"-->
+        <!--android:background="@color/white"-->
+        <!--android:animateLayoutChanges="true"-->
+        <!--app:layout_scrollFlags="scroll">-->
+
+        <!--<FrameLayout-->
+            <!--android:id="@+id/live_search_fl"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/live_height_30dp"-->
+            <!--android:layout_marginBottom="@dimen/dimen_size_10_dp"-->
+            <!--android:layout_marginLeft="@dimen/dimen_size_15_dp"-->
+            <!--android:layout_marginRight="@dimen/dimen_size_15_dp"-->
+            <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
+            <!--android:background="@drawable/live_search_bg">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/live_search_textview"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:gravity="center_vertical"-->
+                <!--android:text="@string/search"-->
+                <!--android:textColor="@color/color_b3"-->
+                <!--android:textSize="@dimen/text_size_15_sp" />-->
+        <!--</FrameLayout>-->
+    <!--</LinearLayout>-->
 
     <TextView
         android:id="@+id/live_no_login_atten"
@@ -123,7 +154,6 @@
         android:textColor="@color/color_8c"
         android:visibility="gone"
         />
-
     <LinearLayout
         android:id="@+id/hot_content"
         android:layout_width="match_parent"
@@ -131,7 +161,6 @@
         android:layout_below="@+id/live_header_container"
         android:background="@android:color/white"
         android:orientation="vertical">
-
         <GridView
             android:id="@+id/live_classify"
             android:layout_width="match_parent"

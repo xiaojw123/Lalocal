@@ -278,6 +278,29 @@ public class TextureVideoPlayer extends RelativeLayout {
         mVideoView.stopPlayback();
         mVideoView.setVisibility(GONE);
     }
+    public int  pause(){
+        if(mVideoView!=null){
+            Log.i("TAF","播放器player pause");
+            mVideoView.pause();
+        return getSeek();
+        }else {
+            return 0;
+        }
+
+
+    }
+
+    public  int  getSeek(){
+       return mVideoView.getCurrentPosition();
+    }
+    public void onResume(){
+        if(mVideoView!=null){
+            Log.i("TAF","播放器player onResume");
+            mVideoView.onResume();
+
+        }
+        Log.i("TAF","播放器player2  onResume");
+    }
 
     private PlayBackMediaController.MediaControlImpl mMediaControl = new PlayBackMediaController.MediaControlImpl() {
 
@@ -301,14 +324,14 @@ public class TextureVideoPlayer extends RelativeLayout {
         @Override
         public void onProgressTurn(PlayBackMediaController.ProgressState state, int progress) {
             if (state.equals(MediaController.ProgressState.START)) {
-                Log.i("TAG","查看进度条onProgressTurn1");
+                Log.i("TAF","查看进度条onProgressTurn1");
                 mHandler.removeMessages(MSG_HIDE_CONTROLLER);
             } else if (state.equals(PlayBackMediaController.ProgressState.STOP)) {
                 resetHideTimer();
             } else {
                 int time = progress * mVideoView.getDuration() / 100;
                 mVideoView.seekTo(time);
-                Log.i("TAG","查看进度条onProgressTurn2");
+                Log.i("TAF","查看进度条onProgressTurn2");
                 updatePlayTime();
             }
         }
@@ -393,6 +416,7 @@ public class TextureVideoPlayer extends RelativeLayout {
 
         }
     };
+
     private void stopUpdateTimer() {
         if (mUpdateTimer != null) {
             mUpdateTimer.cancel();
@@ -432,4 +456,6 @@ public class TextureVideoPlayer extends RelativeLayout {
         mMediaController.clearAnimation();
         mMediaController.setVisibility(isShowController ? View.VISIBLE : View.GONE);
     }
+
+
 }

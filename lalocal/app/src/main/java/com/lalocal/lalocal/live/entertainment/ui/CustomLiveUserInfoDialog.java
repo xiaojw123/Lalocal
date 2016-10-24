@@ -29,7 +29,7 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
     private TextView liveAttention;
     private LinearLayout masterInfoBack;
     private TextView liveFans;
-    private TextView liveContribute;
+
     private TextView liveMasterHome;
     CustomLiveUserInfoDialogListener sureDialogListener,cancelDialogListener,reportListener,settingManagerListener,banListener,userHomeListener;
     CustomLiveFansOrAttentionListener attentionListener;
@@ -84,7 +84,7 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
         liveAttention = (TextView)findViewById(R.id.live_attention);
         masterInfoBack = (LinearLayout)findViewById(R.id.master_info_back_home);
         liveFans = (TextView)findViewById(R.id.live_fans);
-        liveContribute = (TextView)findViewById(R.id.live_contribute);
+
         managerMark = (ImageView) findViewById(R.id.live_manager_mark);
         bottomReport = (TextView)findViewById(R.id.custom_dialog_report);
         attentionStatus = (TextView)findViewById(R.id.custom_dialog_attention);

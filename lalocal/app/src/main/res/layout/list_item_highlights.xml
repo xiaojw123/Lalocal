@@ -13,7 +13,9 @@
         android:id="@+id/item_hightlists_avatar"
         android:layout_width="@dimen/dimen_size_26_dp"
         android:layout_height="@dimen/dimen_size_26_dp"
-        android:layout_marginTop="@dimen/dimen_size_3_dp" />
+        android:layout_marginTop="@dimen/dimen_size_3_dp"
+        android:scaleType="centerCrop"
+        />
 
     <TextView
         android:id="@+id/item_hightlists_nickname"
@@ -21,7 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dimen_size_8_dp"
         android:layout_toRightOf="@+id/item_hightlists_avatar"
-        android:text="一位不愿意透露姓名的网友"
         android:textColor="@color/color_7babbd"
         android:textSize="@dimen/text_size_12_sp" />
 
@@ -34,7 +35,6 @@
         android:layout_marginTop="@dimen/dimen_size_2_dp"
         android:drawableLeft="@drawable/peopleliving_location_darkic"
         android:drawablePadding="@dimen/dimen_size_4_dp"
-        android:text="汉中"
         android:textColor="@color/color_b3"
         android:textSize="@dimen/text_size_12_sp" />
 
@@ -57,7 +57,6 @@
             android:layout_toLeftOf="@+id/item_hightlists_photo"
             android:maxLines="3"
             android:layout_marginTop="@dimen/dimen_size_15_dp"
-            android:text="给你们直播我深爱的这片土地的风土人情和天高气爽"
             android:textColor="@color/color_1a"
             android:textSize="@dimen/dimen_size_16_dp" />
 
@@ -66,6 +65,7 @@
             android:layout_width="@dimen/item_hightlists_photo_width"
             android:layout_height="@dimen/item_hightlists_photo_width"
             android:layout_alignParentRight="true"
+            android:scaleType="centerCrop"
             android:layout_alignTop="@+id/item_hightlists_title"
             android:layout_marginRight="@dimen/dimen_size_15_dp" />
 
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:drawableLeft="@drawable/many_people_light"
-            android:text="12"
+            android:text="0"
             android:textColor="@color/color_b3"
             android:textSize="@dimen/text_size_12_sp" />
 
@@ -86,9 +86,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:drawableLeft="@drawable/manytime_light"
-            android:text="12:00:00"
             android:textColor="@color/color_b3"
             android:layout_toRightOf="@+id/item_hightlists_onlinenum"
+            android:text="00:00:00"
             android:layout_marginLeft="@dimen/dimen_size_20_dp"
             android:layout_alignTop="@+id/item_hightlists_onlinenum"
             android:textSize="@dimen/text_size_12_sp" />

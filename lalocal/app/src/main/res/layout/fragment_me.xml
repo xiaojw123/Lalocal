@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_f8"
-    android:scrollbars="none">
+    android:scrollbars="none"
+    android:overScrollMode="never"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -159,7 +161,7 @@
                 android:paddingLeft="@dimen/home_me_headportrait_img_left"
                 android:paddingRight="@dimen/home_me_headportrait_img_right"
                 android:paddingTop="@dimen/home_me_headportrait_img_top"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/home_me_personheadnormal" />
         </RelativeLayout>
 

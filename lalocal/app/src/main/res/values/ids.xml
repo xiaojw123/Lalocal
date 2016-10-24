@@ -5,5 +5,9 @@
     <item type="id" name="moreSearchItemId">0x32</item>
     <item type="id" name="areaDetialItem">0x32</item>
     <item type="id" name="routeDateItem">0x32</item>
+   
     <item name="adapter_item_tag_key" type="id">0x0001</item>
+    
+    
+    <item type="id" name="giftdatabean">0x32</item>
 </resources>
