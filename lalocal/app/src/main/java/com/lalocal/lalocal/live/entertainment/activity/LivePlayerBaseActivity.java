@@ -947,7 +947,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
     }
 
-
     // 进入聊天室
     protected void enterRoom() {
         if (DemoCache.getLoginStatus()) {
@@ -955,7 +954,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             data.setRoomId(roomId);
             Map<String, Object> map = new HashMap<>();
             int userId = UserHelper.getUserId(LivePlayerBaseActivity.this);
+            String userAvatar = UserHelper.getUserAvatar(LivePlayerBaseActivity.this);
             map.put("userId", String.valueOf(userId));
+            map.put("avatar",userAvatar);
             map.put("roomExt", String.valueOf(userId));
             data.setExtension(map);
             data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));

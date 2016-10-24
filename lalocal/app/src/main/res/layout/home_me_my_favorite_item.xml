@@ -20,7 +20,7 @@
             android:id="@+id/my_favorite_item_img"
             android:layout_width="@dimen/my_favorite_item_img_width"
             android:layout_height="@dimen/my_favorite_item_img_width"
-            android:scaleType="fitXY" />
+            android:scaleType="centerCrop" />
 
 
         <TextView

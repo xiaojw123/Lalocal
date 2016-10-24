@@ -57,7 +57,7 @@
                 android:id="@+id/my_oder_img"
                 android:layout_width="@dimen/my_oder_img_width"
                 android:layout_height="@dimen/my_oder_img_height"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/my_oder_img_drawable" />
 
             <TextView

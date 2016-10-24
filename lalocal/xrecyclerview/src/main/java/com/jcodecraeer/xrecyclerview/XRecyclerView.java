@@ -71,9 +71,16 @@ public class XRecyclerView extends RecyclerView {
         mHeaderViews.add(view);
     }
 
+//
+//    public void setHeaderVisible() {
+//        mHeaderViews.clear();
+//    }
+
 
     public void setHeaderVisible() {
-        mHeaderViews.clear();
+        if (mHeaderViews.size() > 1) {
+            mHeaderViews.remove(mHeaderViews.size() - 1);
+        }
     }
 
     //根据header的ViewType判断是哪个header
