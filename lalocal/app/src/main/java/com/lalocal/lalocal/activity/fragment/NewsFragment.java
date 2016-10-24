@@ -77,6 +77,7 @@ import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.CustomLinearLayoutManger;
+import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.LiveMainAdapter;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -116,7 +117,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private String createAvatar;
     private SpecialShareVOBean shareVOCreate;
     private FrameLayout liveSeachFl;
-    private XRecyclerView xRecyclerView;
+    private CustomXRecyclerView xRecyclerView;
     private LiveMainAdapter liveMainAdapter, attenAdapter;
 
     private int totalPages;
@@ -165,7 +166,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         titleHot.setOnClickListener(this);
       /*  paint2 = titleAttention.getPaint();
         paint1 = titleHot.getPaint();*/
-        xRecyclerView = (XRecyclerView) view.findViewById(R.id.xrecyclerview);
+        xRecyclerView = (CustomXRecyclerView) view.findViewById(R.id.xrecyclerview);
         //TODO:直播搜索 add by xiaojw
         attenLoginText = (TextView) view.findViewById(R.id.live_no_login_atten);
         searchLayout = (LinearLayout) view.findViewById(R.id.live_search_layout);
@@ -732,7 +733,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     AppLog.i("addd", "产品--" + targetId);
                     // 跳转到商品详情界面
                     SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
-                    specialToH5Bean.setTargetId(71);
+                    specialToH5Bean.setTargetId(targetId);
 
                     intent = new Intent(getActivity(), ProductDetailsActivity.class);
                     intent.putExtra("productdetails", specialToH5Bean);

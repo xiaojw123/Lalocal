@@ -102,7 +102,7 @@
     </LinearLayout>
 
 
-    <com.jcodecraeer.xrecyclerview.XRecyclerView
+    <com.lalocal.lalocal.view.CustomXRecyclerView
         android:id="@+id/xrecyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

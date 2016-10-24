@@ -16,10 +16,10 @@
 
 package com.android.tedcoder.wkvideoplayer.view;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.graphics.SurfaceTexture;
@@ -45,8 +45,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.MediaController;
 import android.widget.MediaController.MediaPlayerControl;
-
-import com.android.tedcoder.wkvideoplayer.util.DensityUtil;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -113,7 +111,7 @@ public class TextureVideoView extends TextureView
     private OnErrorListener mOnErrorListener;
     private OnInfoListener mOnInfoListener;
     private int         mSeekWhenPrepared;  // recording the seek position while preparing
-    private boolean     mCanPause;
+    private boolean     mCanPause=true;
     private boolean     mCanSeekBack;
     private boolean     mCanSeekForward;
     private static Context mContext;
@@ -274,12 +272,16 @@ public class TextureVideoView extends TextureView
         // called start() previously
         release(false);
 
+        Intent i = new Intent("com.android.music.musicservicecommand");
+        i.putExtra("command", "pause");
+        mContext.sendBroadcast(i);
+
         AudioManager am = (AudioManager) getContext().getApplicationContext().getSystemService(Context.AUDIO_SERVICE);
         am.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
         try {
             mMediaPlayer = new MediaPlayer();
-
+            isResume=false;
             if (mAudioSession != 0) {
                 mMediaPlayer.setAudioSessionId(mAudioSession);
             } else {
@@ -432,12 +434,13 @@ public class TextureVideoView extends TextureView
     }
 
 
-
+    boolean isResume=false;
 
     MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
         public void onPrepared(MediaPlayer mp) {
-            mCurrentState = STATE_PREPARED;
 
+            mCurrentState = STATE_PREPARED;
+            isResume=true;
             mCanPause = mCanSeekBack = mCanSeekForward = true;
 
             if (mOnPreparedListener != null) {
@@ -448,19 +451,14 @@ public class TextureVideoView extends TextureView
             }
             mVideoWidth = mp.getVideoWidth();
             mVideoHeight = mp.getVideoHeight();
-            Log.i("TAG","OnPreparedListener:  mVideoWidth"+mVideoWidth+"  mVideoHeight:"+mVideoHeight);
             int seekToPosition = mSeekWhenPrepared;  // mSeekWhenPrepared may be changed after seekTo() call
             if (seekToPosition != 0) {
                 seekTo(seekToPosition);
             }
+
             if (mVideoWidth != 0 && mVideoHeight != 0) {
-               // setVideoScalingMode(mVideoScalingMode);
-                //Log.i("@@@@", "video size: " + mVideoWidth +"/"+ mVideoHeight);
-                Log.i("TAG","OnPreparedListener:  mVideoWidth"+mVideoWidth+"  mVideoHeight:"+mVideoHeight);
                 getSurfaceTexture().setDefaultBufferSize(mVideoWidth, mVideoHeight);
-            //    getSurfaceTexture().setDefaultBufferSize(DensityUtil.dip2px(mContext,720),DensityUtil.dip2px(mContext,1280) );
-                // We won't get a "surface changed" callback if the surface is already the right size, so
-                // start the video here instead of in the callback.
+
                 if (mTargetState == STATE_PLAYING) {
                     start();
                     if (mMediaController != null) {
@@ -469,13 +467,11 @@ public class TextureVideoView extends TextureView
                 } else if (!isPlaying() &&
                         (seekToPosition != 0 || getCurrentPosition() > 0)) {
                     if (mMediaController != null) {
-                        // Show the media controls when we're paused into a video and make 'em stick.
+
                         mMediaController.show(0);
                     }
                 }
             } else {
-                // We don't know the video size yet, but should start anyway.
-                // The video size might be reported to us later.
                 if (mTargetState == STATE_PLAYING) {
                     start();
                 }
@@ -734,6 +730,7 @@ public class TextureVideoView extends TextureView
 
     @Override
     public void start() {
+        Log.d("TAF","播放器走了这里了。。。start");
         if (isInPlaybackState()) {
             mMediaPlayer.start();
             mCurrentState = STATE_PLAYING;
@@ -743,12 +740,15 @@ public class TextureVideoView extends TextureView
 
     @Override
     public void pause() {
-        if (isInPlaybackState()) {
+        Log.d("TAF","播放器走了这里了。。。pause");
+
+           if(mMediaPlayer!=null&&isResume){
             if (mMediaPlayer.isPlaying()) {
+                Log.d("TAF","播放器走了这里了3。。。pause");
                 mMediaPlayer.pause();
                 mCurrentState = STATE_PAUSED;
             }
-        }
+           }
         mTargetState = STATE_PAUSED;
     }
 
@@ -758,6 +758,10 @@ public class TextureVideoView extends TextureView
 
     public void resume() {
         openVideo();
+    }
+
+    public void onResume(){
+        isResume=true;
     }
 
     @Override
@@ -801,6 +805,7 @@ public class TextureVideoView extends TextureView
     }
 
     private boolean isInPlaybackState() {
+        Log.i("TAF","mCurrentState:"+mCurrentState);
         return (mMediaPlayer != null &&
                 mCurrentState != STATE_ERROR &&
                 mCurrentState != STATE_IDLE &&

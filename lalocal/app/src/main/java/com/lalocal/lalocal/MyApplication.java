@@ -6,7 +6,6 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
-import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
 import com.easemob.chat.EMChat;
 import com.lalocal.lalocal.easemob.DemoHelper;
@@ -81,7 +80,7 @@ public class MyApplication extends Application {
         EMChat.getInstance().init(this);
         EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         if (isDebug) {
-            Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
+         //   Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
         }else{
             startFabric();
             startUmeng();
