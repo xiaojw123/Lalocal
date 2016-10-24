@@ -392,7 +392,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 AppLog.i("addd", "产品--" + targetId);
                                 // 跳转到商品详情界面
                                 SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
-                                specialToH5Bean.setTargetId(71);
+                                specialToH5Bean.setTargetId(targetId);
 
                                 intent = new Intent(mContext, ProductDetailsActivity.class);
                                 intent.putExtra("productdetails", specialToH5Bean);
