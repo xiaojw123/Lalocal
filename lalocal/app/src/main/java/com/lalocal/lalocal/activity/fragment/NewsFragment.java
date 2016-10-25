@@ -63,6 +63,7 @@ import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
+import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
@@ -632,6 +633,25 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
+        public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
+            super.onLiveDetails(liveDetailsDataResp);
+
+            if (liveDetailsDataResp != null) {
+                LiveRowsBean liveRowsBean = liveDetailsDataResp.getResult();
+                if (liveRowsBean != null) {
+                    Object annoucement = liveRowsBean.getAnnoucement();
+                    String ann = null;
+                    if (annoucement != null) {
+                        ann = annoucement.toString();
+                    } else {
+                        ann = "这是公告哈";
+                    }
+                    AudienceActivity.start(getActivity(), liveRowsBean, ann);
+                }
+            }
+        }
+
+        @Override
         public void onRecommendAd(RecommendAdResp recommendAdResp) {
             super.onRecommendAd(recommendAdResp);
             try {
@@ -719,7 +739,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     intent.putExtra("targetID", String.valueOf(targetId));
                     getActivity().startActivity(intent);
                     break;
-                case Constants.TARGET_TYPE_PRODUCT:
+                case Constants.TARGET_TYPE_PRODUCTION:
                     AppLog.i("addd", "产品--" + targetId);
                     // 跳转到商品详情界面
                     SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
@@ -741,9 +761,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     intent.putExtra("rowId", targetId + "");
                     getActivity().startActivity(intent);
                     break;
-                case Constants.TARGET_TYPE_LIVE:
-                    // 跳转播放界面 TODO: 暂时不用做
-//                                AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                case Constants.TARGET_TYPE_CHANNEL:
+                    ContentLoader loader = new ContentLoader(getActivity());
+                    loader.setCallBack(new MyCallBack());
+                    loader.liveDetails(targetId + "");
                     break;
             }
         }

@@ -38,6 +38,7 @@ import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.im.ui.widget.CircleImageView;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.Constants;
+import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
@@ -48,6 +49,8 @@ import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.model.SpecialAuthorBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -388,7 +391,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 intent.putExtra("targetID", String.valueOf(targetId));
                                 mContext.startActivity(intent);
                                 break;
-                            case Constants.TARGET_TYPE_PRODUCT:
+                            case Constants.TARGET_TYPE_PRODUCTION:
                                 AppLog.i("addd", "产品--" + targetId);
                                 // 跳转到商品详情界面
                                 SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
@@ -410,9 +413,10 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                                 intent.putExtra("rowId", targetId + "");
                                 mContext.startActivity(intent);
                                 break;
-                            case Constants.TARGET_TYPE_LIVE:
-                                // 跳转播放界面 TODO: 暂时不用做
-//                                AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                            case Constants.TARGET_TYPE_CHANNEL:
+                                ContentLoader loader = new ContentLoader(mContext);
+                                loader.setCallBack(new MyCallBack());
+                                loader.liveDetails(targetId + "");
                                 break;
                         }
 
@@ -444,6 +448,27 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             int size = sliderLayout.getChildCount();
             for (int i = size - 1; i >= 0; i++) {
                 sliderLayout.removeSliderAt(i);
+            }
+        }
+    }
+
+    private class MyCallBack extends ICallBack {
+        @Override
+        public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
+            super.onLiveDetails(liveDetailsDataResp);
+
+            if (liveDetailsDataResp != null) {
+                LiveRowsBean liveRowsBean = liveDetailsDataResp.getResult();
+                if (liveRowsBean != null) {
+                    Object annoucement = liveRowsBean.getAnnoucement();
+                    String ann = null;
+                    if (annoucement != null) {
+                        ann = annoucement.toString();
+                    } else {
+                        ann = "这是公告哈";
+                    }
+                    AudienceActivity.start(mContext, liveRowsBean, ann);
+                }
             }
         }
     }
@@ -590,25 +615,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 liveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
                 liveViewHolder.imgLiveAvatar = (CircleImageView) view.findViewById(R.id.img_live_avatar);
 
-//                liveViewHolder.cardView.setRadius(10.0f);  //设置CardView的圆角半径
-//                liveViewHolder.cardView.setCardElevation(10.0f); //设置CardView的阴影半径
-//                liveViewHolder.cardView.setContentPadding(5,5,5,5); //设置CardView的父控件与子控件的距离
-
                 // 设置直播用户头像
                 LiveUserBean user = liveRowsBean.getUser();
                 // 设置播放图片
                 String photo = user.getAvatarOrigin();
-                AppLog.i("TAG", "首頁直播頭像:" + liveRowsBean.getPhoto());
-//                if (isScrolling) {
-//                    DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, "", DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
-//                } else {
                 if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
-//                    DrawableUtils.displayImg(mContext, liveViewHolder.imgLivePic, photo);
                     DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                 } else if (!TextUtils.isEmpty(photo)) {
                     DrawableUtils.displayRadiusImg(mContext, liveViewHolder.imgLivePic, user.getAvatarOrigin(), DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                 }
-//                }
 
                 // 如果图片链接一致，说明是公告视频，下方显示地理位置
                 if (liveRowsBean.getType() == 1) { // 云信通过type来判断：1-系统，2-用户；声网通过cname来判断：null-系统，否则为用户

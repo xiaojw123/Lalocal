@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.lalocal.lalocal.R;
 
@@ -268,6 +269,10 @@ public class VerticalTextView extends View {
                 mTmpWidth = mGlobalWidth;
             }
         }
+
+        ViewGroup.LayoutParams lp = this.getLayoutParams();
+        lp.width = (int)mTmpWidth;
+        setLayoutParams(lp);
     }
 
     /**
