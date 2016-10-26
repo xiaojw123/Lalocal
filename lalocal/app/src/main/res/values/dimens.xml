@@ -93,7 +93,7 @@
     <dimen name="home_recommend_more_icon_size">12dp</dimen>
     <dimen name="home_recommend_more_icon_margin">15dp</dimen>
     <dimen name="home_recommend_live_height">336dp</dimen>
-    <dimen name="home_recommend_viewpager_margin">60dp</dimen>
+    <dimen name="home_recommend_viewpager_margin">95dp</dimen>
     <dimen name="home_recommend_viewpager_page_margin">25dp</dimen>
     <dimen name="home_recommend_hotlive_img_size">255dp</dimen>
     <dimen name="home_recommend_play_icon_size">70dp</dimen>

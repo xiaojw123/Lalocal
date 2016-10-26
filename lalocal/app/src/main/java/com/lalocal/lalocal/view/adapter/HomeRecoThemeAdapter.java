@@ -18,6 +18,7 @@ import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.viewholder.SubThemeViewHolder;
 import com.lalocal.lalocal.view.viewholder.ThemeViewHolder;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
@@ -51,15 +52,14 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
                 R.layout.home_recommend_theme_viewpager_item, null);
         RecommendRowsBean bean = mThemeList.get(position);
         SubThemeViewHolder holder = new SubThemeViewHolder();
-        holder.imgTheme = (ImageView) view.findViewById(R.id.img_theme);
+        holder.imgTheme = (RoundedImageView) view.findViewById(R.id.img_theme);
         holder.tvSpecialName = (TextView) view.findViewById(R.id.tv_theme_name);
         holder.tvSpecialSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
         holder.tvReadQuantity = (TextView) view.findViewById(R.id.tv_read_quantity);
         holder.tvSaveQuantity = (TextView) view.findViewById(R.id.tv_save_quantity);
 
         // 设置专题图片
-        DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
-                DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+        DrawableUtils.displayImg(mContext, holder.imgTheme, bean.getPhoto(), R.drawable.androidloading);
 
         // 设置名字
         String name = bean.getName();

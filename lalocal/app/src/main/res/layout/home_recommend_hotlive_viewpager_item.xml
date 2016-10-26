@@ -2,19 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
-    android:clickable="true"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:clickable="true">
 
-    <android.support.v7.widget.CardView
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:id="@+id/card_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@color/color_fa"
-        card_view:cardPreventCornerOverlap="false"
         app:cardCornerRadius="3dp"
-        >
+        card_view:cardBackgroundColor="@color/color_fa"
+        card_view:cardPreventCornerOverlap="false">
         <!--app:cardElevation="3dp"-->
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,18 +28,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
 
-                    <com.lalocal.lalocal.view.WrapContentImageView
+                    <com.makeramen.roundedimageview.RoundedImageView
                         android:id="@+id/img_live_pic"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="255dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/androidloading" />
+                        android:src="@drawable/androidloading"
+                        app:riv_corner_radius="3dp"/>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_size_3_dp"
-                        android:background="@color/color_fa"
-                        android:layout_alignBottom="@id/img_live_pic"/>
+                        android:layout_alignBottom="@id/img_live_pic"
+                        android:background="@color/color_fa" />
                 </RelativeLayout>
 
                 <ImageView
@@ -85,8 +84,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="3dp"
-                    android:singleLine="true"
                     android:layout_toRightOf="@id/icon"
+                    android:singleLine="true"
                     android:text="1,089" />
 
                 <com.lalocal.lalocal.live.im.ui.widget.CircleImageView
