@@ -34,7 +34,7 @@ public class ChannelRecord {
     private int number;
     private long giftScore;
     private long challengeScore;
-    private int timeScore;
+    private long timeScore;
     /**
      * id : 2
      * photo : http://media.lalocal.cn/Gift_TravellingCase@1.5x.png
@@ -132,11 +132,11 @@ public class ChannelRecord {
         this.challengeScore = challengeScore;
     }
 
-    public int getTimeScore() {
+    public long getTimeScore() {
         return timeScore;
     }
 
-    public void setTimeScore(int timeScore) {
+    public void setTimeScore(long timeScore) {
         this.timeScore = timeScore;
     }
 

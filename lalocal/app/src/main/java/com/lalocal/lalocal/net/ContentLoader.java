@@ -653,7 +653,7 @@ public class ContentLoader {
         }
 
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPraisesUrl(), response, response);
-        request.setHeaderParams(getHeaderParams(-1, null));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getParisesParams(id, type));
         requestQueue.add(request);
 
@@ -718,11 +718,11 @@ public class ContentLoader {
     }
 
     //直播详情
-    public void liveDetails(final String skipId) {
+    public void liveDetails(String skipId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_DETAILS);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveDetails() + skipId, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveDetails()+skipId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -1029,6 +1029,16 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    //历史直播详情
+    public void deleteLiveHistory(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_HISTORY_DELETE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE,AppConfig.getPlayBackLiveDetails(id), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
     //搜索关注粉丝
     public void getSearchUser(String nickName) {
         if (callBack != null) {
@@ -1045,6 +1055,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.RECOMMEND_AD);
         }
         ContentRequest request = new ContentRequest(AppConfig.getRecommendAD(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
 
@@ -1053,7 +1064,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SPECIAL_DETAIL);
         }
-
 
         ContentRequest request = new ContentRequest(AppConfig.getSepcailDetailUrl() + rowId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
@@ -1068,6 +1078,7 @@ public class ContentLoader {
         }
         AppLog.print("获取产品详情———url———" + AppConfig.getProductDetailsUrl() + targetId);
         ContentRequest contentRequest = new ContentRequest(AppConfig.getProductDetailsUrl() + targetId, response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
     }
 
@@ -1099,6 +1110,7 @@ public class ContentLoader {
         }
 
         ContentRequest contentRequest = new ContentRequest(AppConfig.getUserCurLive(userid), response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
     }
 
@@ -1289,6 +1301,10 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.LIVE_HISTORY_DELETE:
+                        responseDeleteLiveHisotry(jsonObj);
+                        break;
+
                     case RequestCode.LOGIN_PHEON:
                         responseLoginPhone(jsonObj);
                         break;
@@ -1579,6 +1595,10 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseDeleteLiveHisotry(JSONObject jsonObj) {
+            callBack.onDeleteLiveHistory();
         }
 
         private void responseLoginPhone(JSONObject jsonObj) {
@@ -2134,7 +2154,6 @@ public class ContentLoader {
 
         //直播详情
         private void responseLiveDetails(String json) {
-
             LiveDetailsDataResp liveDetailsDataResp = new Gson().fromJson(json, LiveDetailsDataResp.class);
             callBack.onLiveDetails(liveDetailsDataResp);
         }
@@ -2687,6 +2706,7 @@ public class ContentLoader {
         int SMS_VER_CODE = 151;
         int LOGIN_PHEON = 152;
         int REGISTER_PHONE = 153;
+        int LIVE_HISTORY_DELETE=154;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

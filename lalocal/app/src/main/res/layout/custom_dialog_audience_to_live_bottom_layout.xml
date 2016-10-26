@@ -23,6 +23,6 @@
         android:text="@string/live_master_home"
         android:gravity="center"
         android:textColor="#ffffff"
-        android:background="@color/color_ffaa2a"
+        android:background="@drawable/live_user_look_master_bg"
         android:textSize="@dimen/text_size_18_sp" />
 </LinearLayout>

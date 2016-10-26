@@ -144,7 +144,7 @@ public class TextureVideoPlayer extends RelativeLayout {
     }
     private Context mContext;
     private TextureVideoView mVideoView;//播放器
-    private View mProgressBarView;//加载中按钮
+  //  private View mProgressBarView;//加载中按钮
     private void initView(Context context) {
         mContext = context;
         View inflate = View.inflate(context, R.layout.texture_view_layout, this);//TODO 假如只是将java和Layout结合起来，可以直接这么写。
@@ -154,11 +154,11 @@ public class TextureVideoPlayer extends RelativeLayout {
         touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
         touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
         touchStatusTime = (TextView) inflate.findViewById(R.id.touch_time);
-        mProgressBarView= findViewById(R.id.progressbar);
+      //  mProgressBarView= findViewById(R.id.progressbar);
 
         mMediaController.setMediaControl(mMediaControl);
         mVideoView.setOnTouchListener(mOnTouchVideoListener);
-        showProgressView(false);
+      //  showProgressView(false);
     }
 
 
@@ -264,7 +264,12 @@ public class TextureVideoPlayer extends RelativeLayout {
     private boolean isPlayerStatus;
     private VideoPlayCallbackImpl mVideoPlayCallback;//回调函数
 
-
+    public  void setBefore(float alpha,boolean clickAble){
+        mMediaController.setBefore(alpha,clickAble);
+    }
+    public  void setNext(float alpha,boolean clickAble){
+        mMediaController.setNext(alpha,clickAble);
+    }
     //set回调方法，实现回调在本类中的实例化
     public void setVideoPlayCallback(VideoPlayCallbackImpl videoPlayCallback) {
         mVideoPlayCallback = videoPlayCallback;
@@ -355,6 +360,8 @@ public class TextureVideoPlayer extends RelativeLayout {
         public void onClickNext(ImageView view) {
             mVideoPlayCallback.onClickNext(view);
         }
+
+
     };
     private MediaPlayer.OnPreparedListener mOnPreparedListener = new MediaPlayer.OnPreparedListener() {
         @Override
@@ -363,8 +370,8 @@ public class TextureVideoPlayer extends RelativeLayout {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                             mProgressBarView.setVisibility(View.GONE);
-
+                           //  mProgressBarView.setVisibility(View.GONE);
+                        mVideoPlayCallback.showLoadingPage(false);
                         return true;
                     }
                     return false;
@@ -378,19 +385,19 @@ public class TextureVideoPlayer extends RelativeLayout {
     public void loadAndPlay(Uri uri, int seekTime) {
         mUri = uri;
         mVideoView.setOnPreparedListener(mOnPreparedListener);
-        showProgressView(seekTime > 0);
+      //  showProgressView(seekTime > 0);
         mVideoView.setVideoURI(uri);
         mVideoView.setVisibility(VISIBLE);
         startPlayVideo(seekTime);
     }
-    private void showProgressView(Boolean isTransparentBg) {
+  /*  private void showProgressView(Boolean isTransparentBg) {
         mProgressBarView.setVisibility(VISIBLE);
         if (!isTransparentBg) {
             mProgressBarView.setBackgroundResource(android.R.color.black);
         } else {
             mProgressBarView.setBackgroundResource(android.R.color.transparent);
         }
-    }
+    }*/
     public  void setRotation(float rotation){
         mVideoView.setRotation(rotation);
     }

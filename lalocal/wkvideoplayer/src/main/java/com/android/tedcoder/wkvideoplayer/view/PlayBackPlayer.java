@@ -223,7 +223,8 @@ public class PlayBackPlayer extends RelativeLayout {
                 @Override
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                             mProgressBarView.setVisibility(View.GONE);
+                           //  mProgressBarView.setVisibility(View.GONE);
+                        mVideoPlayCallback.showLoadingPage(false);
                         setCloseButton(true);
                         return true;
                     }
@@ -350,15 +351,14 @@ public class PlayBackPlayer extends RelativeLayout {
         touchStatusView = (LinearLayout) inflate.findViewById(R.id.touch_view);
         touchStatusImg = (ImageView) inflate.findViewById(R.id.touchStatusImg);
         touchStatusTime = (TextView) inflate.findViewById(R.id.touch_time);
-        mProgressBarView= findViewById(R.id.progressbar);
+       // mProgressBarView= findViewById(R.id.progressbar);
        /* loadingTv = (TextView) inflate.findViewById(R.id.loading_tv);
         loadingTv.setVisibility(View.GONE);*/
         mMediaController.setMediaControl(mMediaControl);
         mVideoView.setOnTouchListener(mOnTouchVideoListener);
 
         setCloseButton(false);
-        showProgressView(false);
-
+   //     showProgressView(false);
 
     }
 
@@ -370,13 +370,19 @@ public class PlayBackPlayer extends RelativeLayout {
     private void setCloseButton(boolean isShow) {
         ///  mCloseBtnView.setVisibility(isShow ? VISIBLE : INVISIBLE);
     }
+    public  void setBefore(float alpha,boolean clickAble){
+        mMediaController.setBefore(alpha,clickAble);
+    }
+    public  void setNext(float alpha,boolean clickAble){
+        mMediaController.setNext(alpha,clickAble);
+    }
 
     /**
      * 加载并开始播放视频
      */
     public void loadAndPlay(Uri uri, int seekTime) {
         mUri = uri;
-        showProgressView(seekTime > 0);
+      //  showProgressView(seekTime > 0);
         setCloseButton(true);
         mVideoView.setOnPreparedListener(mOnPreparedListener);
         mVideoView.setVideoURI(uri);
@@ -449,14 +455,14 @@ public class PlayBackPlayer extends RelativeLayout {
      *
      * @param isTransparentBg isTransparentBg
      */
-    private void showProgressView(Boolean isTransparentBg) {
+   /* private void showProgressView(Boolean isTransparentBg) {
           mProgressBarView.setVisibility(VISIBLE);
         if (!isTransparentBg) {
                mProgressBarView.setBackgroundResource(android.R.color.black);
         } else {
              mProgressBarView.setBackgroundResource(android.R.color.transparent);
         }
-    }
+    }*/
 
     /**
      * 控制器的显示与隐藏

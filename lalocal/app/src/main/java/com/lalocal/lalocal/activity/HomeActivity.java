@@ -68,6 +68,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     }
 
+
+
     private void initView() {
         home_tab_container = (LinearLayout) findViewById(R.id.home_tab_containner);
         home_recommend_tab = (LinearLayout) findViewById(R.id.home_tab_recommend);
@@ -322,4 +324,36 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             this.finish();
         }
     }
+
+
+/*   next only for test update
+* */
+//    private void testCheckUpdate(boolean focrce) {
+//        boolean checkUpdate =true;
+//        String downLoadUrl ="http://media.lalocal.cn/app/lalocal_2_1_2.apk";
+//        List<String> updateItems=new ArrayList<>();
+//        updateItems.add("直播首页改版");
+//        updateItems.add("礼物功能优化");
+//        updateItems.add("直播回放支持");
+//        String contentText = getUpdateContent(updateItems);
+//        if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
+//            if (focrce) {
+//                showForceUpdateDialog(downLoadUrl, contentText);
+//            } else {
+//                showUpdateDialog(downLoadUrl, contentText);
+//            }
+//        }
+//
+//
+//    }
+//
+//
+//    public void forceUpdate(View view){
+//        testCheckUpdate(true);
+//
+//    }
+//    public void normalUpdate(View view){
+//        testCheckUpdate(false);
+//    }
+
 }

@@ -12,7 +12,8 @@
         android:id="@+id/item_challenge_avatar"
         android:layout_width="@dimen/dimen_size_22_dp"
         android:layout_height="@dimen/dimen_size_22_dp"
-        android:src="@drawable/personhaednormal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home_me_personheadnormal"
         />
 
     <TextView

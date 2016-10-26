@@ -139,7 +139,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
         String url = AppConfig.getSepcailDetailUrl() + rowId;
-
         if (rowId != null) {
             contentService1 = new ContentLoader(this);
             contentService1.setCallBack(new MyCallBack());
@@ -524,6 +523,11 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                     case 4:
                         break;
                     case 5:
+                        break;
+                    case 13:
+                        Intent intent13 = new Intent(mContext, ArticleActivity.class);
+                        intent13.putExtra("targetID", specialToH5Bean.getTargetId() + "");
+                        startActivity(intent13);
                         break;
                 }
             }

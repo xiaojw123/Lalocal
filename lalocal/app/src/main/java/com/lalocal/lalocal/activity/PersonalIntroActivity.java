@@ -34,13 +34,13 @@ public class PersonalIntroActivity extends BaseActivity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_intro);
         ButterKnife.bind(this);
-//        String descripton = getDescriptoin();
-//        personalIntroEdit.setText(descripton);
-//        if (!TextUtils.isEmpty(descripton)) {
-//            int len=descripton.length();
-//            personalIntroInputlimt.setText(String.valueOf(len)+"/50");
-//            personalIntroEdit.setSelection(len);
-//        }
+        String descripton = getDescriptoin();
+        personalIntroEdit.setText(descripton);
+        if (!TextUtils.isEmpty(descripton)) {
+            int len=descripton.length();
+            personalIntroInputlimt.setText(String.valueOf(len)+"/50");
+            personalIntroEdit.setSelection(len);
+        }
         personalIntroEdit.addTextChangedListener(this);
         setLoaderCallBack(new PerCallBack());
     }

@@ -79,6 +79,14 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         initData();
     }
 
+    public  void setBefore(float alpha,boolean clickAble){
+        videoBefore.setAlpha(alpha);
+        videoBefore.setClickable(clickAble);
+    }
+    public void setNext(float alpha,boolean clickAble){
+        videoNext.setAlpha(alpha);
+        videoNext.setClickable(clickAble);
+    }
     private void initData() {
 
         mProgressSeekBar.setOnSeekBarChangeListener(this);
@@ -211,6 +219,9 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
 
         void onClickBefore(ImageView imageView);
         void onClickNext(ImageView imageView);
+
+
+
 
     }
 

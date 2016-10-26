@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/consume_record_item_height"
     android:background="@color/white">
@@ -11,29 +11,34 @@
     <View
         android:id="@+id/consume_record_item_line3"
         style="@style/CommonD9LineTheme"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
         android:layout_marginRight="@dimen/dimen_size_15_dp" />
 
     <View
         android:id="@+id/consume_record_item_line2"
         style="@style/CommonD9LineTheme"
-        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"
         android:visibility="gone" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
-        android:orientation="vertical">
-
+        android:layout_marginRight="@dimen/dimen_size_5_dp"
+        android:orientation="vertical"
+        android:layout_toLeftOf="@+id/cri_num_tv"
+        >
         <TextView
             android:id="@+id/cri_channel_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/color_1a"
-            android:textSize="@dimen/text_size_16_sp" />
+            android:textSize="@dimen/text_size_16_sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            />
 
         <TextView
             android:id="@+id/cri_date_tv"
@@ -41,7 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_2_dp"
             android:textColor="@color/color_b3"
-            android:textSize="@dimen/text_size_10_sp" />
+            android:textSize="@dimen/text_size_10_sp"
+            android:maxLines="1"
+            />
 
     </LinearLayout>
 
@@ -49,9 +56,12 @@
         android:id="@+id/cri_num_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|right"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="@dimen/dimen_size_15_dp"
         android:textColor="@drawable/cri_num_textcolor"
-        android:textSize="@dimen/text_size_16_sp" />
+        android:textSize="@dimen/text_size_16_sp"
+        android:maxLines="1"
+        />
 
-</FrameLayout>
+</RelativeLayout>

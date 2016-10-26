@@ -20,14 +20,14 @@
         android:layout_width="match_parent"
         android:layout_height="10dp"
         android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
         idv:indicatorInterval="10dp"
         android:gravity="center_horizontal"
-        idv:normalDrawable="@drawable/ic_page_indicator"
-        idv:selectDrawable="@drawable/ic_page_indicator_focused"
-        android:alpha="0"
+        idv:normalDrawable="@drawable/icon_white_dot_normal"
+        idv:selectDrawable="@drawable/icon_white_dot_selected"
+
       >
-<!--  idv:normalDrawable="@drawable/ic_page_indicator"
-        idv:selectDrawable="@drawable/ic_page_indicator_focused"-->
+
     </com.lalocal.lalocal.live.entertainment.ui.IndicatorView>
 
 

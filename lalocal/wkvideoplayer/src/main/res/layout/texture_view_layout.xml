@@ -59,7 +59,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
+   <!-- <LinearLayout
         android:id="@+id/progressbar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -83,5 +83,5 @@
             android:textColor="@android:color/white"
             android:textSize="10sp"
             android:text="正在加载中..."/>
-    </LinearLayout>
+    </LinearLayout>-->
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
@@ -48,7 +49,7 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(final ViewGroup container, int position) {
         View view = LayoutInflater.from(context).inflate(R.layout.home_recommend_hotlive_viewpager_item, null);
         final LiveRowsBean liveRowsBean = hotLiveList.get(position);
         SubLiveViewHolder liveViewHolder = new SubLiveViewHolder();
@@ -63,7 +64,7 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
         // 设置直播用户头像
         LiveUserBean user = liveRowsBean.getUser();
         // 设置播放图片
-        String photo = user.getAvatarOrigin();
+        String photo = user. getAvatarOrigin();
         if (!TextUtils.isEmpty(liveRowsBean.getPhoto())) {
             DrawableUtils.displayRadiusImg(context, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), DensityUtil.dip2px(context, 3), R.drawable.androidloading);
         } else if (!TextUtils.isEmpty(photo)) {
@@ -121,7 +122,10 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
             @Override
             public void onClick(View v) {
                 // 跳转播放界面
-                AudienceActivity.start(context, liveRowsBean, finalAnn1);
+               // AudienceActivity.start(context, liveRowsBean, finalAnn1);
+                Intent intent1=new Intent(context, AudienceActivity.class);
+                intent1.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                context.startActivity(intent1);
             }
         });
         container.addView(view);

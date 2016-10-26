@@ -20,12 +20,8 @@ import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.model.Constants;
-import com.lalocal.lalocal.model.LiveDetailsDataResp;
-import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
-import com.lalocal.lalocal.net.ContentLoader;
-import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.DisallowParentTouchSliderLayout;
@@ -128,9 +124,11 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
                             mContext.startActivity(intent);
                             break;
                         case Constants.TARGET_TYPE_CHANNEL:
-                            ContentLoader loader = new ContentLoader(mContext);
-                            loader.setCallBack(new MyCallBack());
-                            loader.liveDetails(targetId + "");
+
+                            Intent intent1=new Intent(mContext, AudienceActivity.class);
+                            intent1.putExtra("id",String.valueOf(targetId));
+                            mContext.startActivity(intent1);
+
                             break;
                     }
 
@@ -165,24 +163,4 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    private class MyCallBack extends ICallBack {
-        @Override
-        public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
-            super.onLiveDetails(liveDetailsDataResp);
-
-            if (liveDetailsDataResp != null) {
-                LiveRowsBean liveRowsBean = liveDetailsDataResp.getResult();
-                if (liveRowsBean != null) {
-                    Object annoucement = liveRowsBean.getAnnoucement();
-                    String ann = null;
-                    if (annoucement != null) {
-                        ann = annoucement.toString();
-                    } else {
-                        ann = "这是公告哈";
-                    }
-                    AudienceActivity.start(mContext, liveRowsBean, ann);
-                }
-            }
-        }
-    }
 }

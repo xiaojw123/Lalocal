@@ -52,7 +52,7 @@ public class GiftStorePopuWindow extends PopupWindow {
         int giftCountSize = giftSresult.size();
         int viewPageCount=(giftCountSize%6)==0?(giftCountSize/6):(giftCountSize/6)+1;
         for(int i=0;i<viewPageCount;i++){
-            GridView giftGridViews=new GridView(mContext);;
+            GridView giftGridViews=new GridView(mContext);
             int j=(i==0?0:(i*6));
             if(giftSresult.size()>=((i+1)*6)+1){
                 giftDataResultBeen = giftSresult.subList(j, (i+1)*6);
@@ -93,7 +93,7 @@ public class GiftStorePopuWindow extends PopupWindow {
                     Toast.makeText(mContext,"您还未选中礼物!",Toast.LENGTH_SHORT).show();
                 }
                 if (onSendClickListener != null&&payBalance!=0) {
-                    onSendClickListener.sendGiftMessage(giftDataResultBean, sendTotal, payBalance);
+                    onSendClickListener.sendGiftMessage(GiftStorePopuWindow.this.giftDataResultBean, sendTotal, payBalance);
                 }
             }
         });
