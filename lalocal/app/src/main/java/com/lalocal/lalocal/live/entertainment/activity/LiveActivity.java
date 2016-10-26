@@ -250,18 +250,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-    public static void start(Context context, LiveRowsBean result, String ann, String isSecond) {
-        Intent intent = new Intent();
-        Bundle mBundle = new Bundle();
-        mBundle.putParcelable("LiveRowsBean", result);
-        intent.putExtras(mBundle);
-        intent.setClass(context, LiveActivity.class);
-        intent.putExtra(ANNOUCEMENT, ann);
-        intent.putExtra(IS_SECOND, isSecond);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        context.startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

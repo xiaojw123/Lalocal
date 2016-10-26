@@ -553,7 +553,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     createAnn = "这是公告";
                 }
                 //初始化直播间
-                LiveActivity.start(getActivity(), result, createAnn, reminfBack);
+          //      LiveActivity.start(getActivity(), result, createAnn, reminfBack);
             }
         }
 
@@ -640,11 +640,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             }
         }
 
-        @Override
-        public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
-            super.onPlayBackDetails(liveRowsBean);
-
-        }
 
         @Override
         public void onRecommendAd(RecommendAdResp recommendAdResp) {
@@ -735,7 +730,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     intent.putExtra("targetID", String.valueOf(targetId));
                     getActivity().startActivity(intent);
                     break;
-                case Constants.TARGET_TYPE_PRODUCT:
+                case Constants.TARGET_TYPE_PRODUCTION:
                     AppLog.i("addd", "产品--" + targetId);
                     // 跳转到商品详情界面
                     SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
@@ -757,9 +752,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     intent.putExtra("rowId", targetId + "");
                     getActivity().startActivity(intent);
                     break;
-                case Constants.TARGET_TYPE_LIVE:
-                    // 跳转播放界面 TODO: 暂时不用做
-//                                AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                case Constants.TARGET_TYPE_CHANNEL:
+                    Intent intent1=new Intent(getActivity(), AudienceActivity.class);
+                    intent1.putExtra("id",String.valueOf(targetId));
+                    startActivity(intent1);
+
                     break;
             }
         }
@@ -842,9 +839,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         boolean isLogin = UserHelper.isLogined(getActivity());
         boolean loginStatus = DemoCache.getLoginStatus();
         if (isLogin && loginStatus) {
-
             startActivity(new Intent(getActivity(),LiveActivity.class));
-
         } else if (isLogin && !loginStatus) {
             String imccId = UserHelper.getImccId(getActivity());
             String imToken = UserHelper.getImToken(getActivity());

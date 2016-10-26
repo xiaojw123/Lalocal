@@ -43,6 +43,7 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
         if (mUserArticleList == null) {
             mUserArticleList = new ArrayList<>();
         }
+
     }
     public void updateItems(List<ArticleDetailsResultBean> userArticleList){
         this.mUserArticleList = userArticleList;
@@ -91,51 +92,6 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
             imgArticleTitleUp = (ImageView) itemView.findViewById(R.id.icon_article_title_up);
             imgArticleTitleBottom = (ImageView) itemView.findViewById(R.id.icon_article_title_bottom);
 
-            // 初始化VerticalTextView
-            vtvArticleTitle.setText("这是测试！这是测试！这是测试！这是测试！");
-            // 设置VerticalTextView字体颜色
-            vtvArticleTitle.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-            // 行宽
-            int lineWidth = DensityUtil.dip2px(mContext, 16);
-            // 文本字体大小
-            int textSize = DensityUtil.sp2px(mContext, 16);
-            // 设置行宽
-            vtvArticleTitle.setLineWidth(lineWidth);
-            // 设置字体大小
-            vtvArticleTitle.setTextSize(textSize);
-            // 设置最大行号
-//            vtvArticleTitle.setTextMaxLines(4);
-
-            // -标题括号对齐
-            RelativeLayout.LayoutParams lpRight = (RelativeLayout.LayoutParams) imgArticleTitleUp.getLayoutParams();
-            // 与标题右对齐
-            lpRight.addRule(RelativeLayout.ALIGN_RIGHT, R.id.vtv_article_title);
-            // 标题括号图标位置控制
-            imgArticleTitleUp.setLayoutParams(lpRight);
-
-            RelativeLayout.LayoutParams lpLeft = (RelativeLayout.LayoutParams) imgArticleTitleBottom.getLayoutParams();
-            AppLog.i("ttt", "icon width = " + lpLeft.width + "; height = " + lpLeft.height);
-            // 与标题左对齐
-            lpLeft.addRule(RelativeLayout.ALIGN_LEFT, R.id.vtv_article_title);
-            // 标题括号图标位置控制
-            imgArticleTitleBottom.setLayoutParams(lpLeft);
-
-            // -标题背景固定比例
-            // 宽高比例
-            float scale = 0.62f;
-            // CardView布局参数
-            LinearLayout.LayoutParams cardLp = (LinearLayout.LayoutParams) cardView.getLayoutParams();
-            // 标题容器布局参数
-            RelativeLayout.LayoutParams titleLp = (RelativeLayout.LayoutParams) titleContainer.getLayoutParams();
-            // CardView的高度与标题容器高度一致，标题容器高度为MATCH_PARENT，值为-1，通过CardView来获取
-            int height = cardLp.height;
-            // 得到呈比例后的宽度
-            int width = (int) (height * scale);
-            // 宽度放入标题容器的布局参数里面
-            titleLp.width = width;
-            // 配置标题容器的布局参数
-            titleContainer.setLayoutParams(titleLp);
-
         }
 
         public void initData(final ArticleDetailsResultBean articleBean) {
@@ -155,11 +111,56 @@ public class HomepageArticleAdapter extends RecyclerView.Adapter {
                 title = "标题获取失败";
             }
 
-            // 设置标题
-//            vtvArticleTitle.setText(title);
             // 设置图片
             DrawableUtils.displayRadiusImg(mContext, imgArticle, picUrl,
                     DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+
+            /* 布局处理 */
+
+            // -标题背景固定比例
+            // 宽高比例
+            float scale = 0.62f;
+            // CardView布局参数
+            LinearLayout.LayoutParams cardLp = (LinearLayout.LayoutParams) cardView.getLayoutParams();
+            // 标题容器布局参数
+            RelativeLayout.LayoutParams titleLp = (RelativeLayout.LayoutParams) titleContainer.getLayoutParams();
+            // CardView的高度与标题容器高度一致，标题容器高度为MATCH_PARENT，值为-1，通过CardView来获取
+            int height = cardLp.height;
+            // 得到呈比例后的宽度
+            int width = (int) (height * scale);
+            // 宽度放入标题容器的布局参数里面
+            titleLp.width = width;
+            // 配置标题容器的布局参数
+            titleContainer.setLayoutParams(titleLp);
+
+            // 设置标题
+            vtvArticleTitle.setText(title);
+            // 设置VerticalTextView字体颜色
+            vtvArticleTitle.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            // 文本字体大小
+            int textSize = DensityUtil.sp2px(mContext, 16);
+            // 设置行间距倍数
+            vtvArticleTitle.setLineSpacingMultiplier(0.4f);
+            // 设置字体大小
+            vtvArticleTitle.setTextSize(textSize);
+            // 设置高度
+            vtvArticleTitle.setHeight(height / 2);
+            // 设置最大行号
+            vtvArticleTitle.setMaxLines(3);
+
+            // -标题括号对齐
+            RelativeLayout.LayoutParams lpRight = (RelativeLayout.LayoutParams) imgArticleTitleUp.getLayoutParams();
+            // 与标题右对齐
+            lpRight.addRule(RelativeLayout.ALIGN_RIGHT, R.id.vtv_article_title);
+            // 标题括号图标位置控制
+            imgArticleTitleUp.setLayoutParams(lpRight);
+
+            RelativeLayout.LayoutParams lpLeft = (RelativeLayout.LayoutParams) imgArticleTitleBottom.getLayoutParams();
+            AppLog.i("ttt", "icon width = " + lpLeft.width + "; height = " + lpLeft.height);
+            // 与标题左对齐
+            lpLeft.addRule(RelativeLayout.ALIGN_LEFT, R.id.vtv_article_title);
+            // 标题括号图标位置控制
+            imgArticleTitleBottom.setLayoutParams(lpLeft);
 
             // 监听事件回调
             cardView.setOnClickListener(new View.OnClickListener() {

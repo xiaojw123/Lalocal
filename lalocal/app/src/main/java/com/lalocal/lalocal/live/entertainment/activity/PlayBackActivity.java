@@ -79,7 +79,6 @@ public class PlayBackActivity extends BaseActivity {
     private int position1;
     private LiveUserBean user;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
