@@ -666,7 +666,10 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                     @Override
                     public void onClick(View v) {
                         // 跳转播放界面
-                        AudienceActivity.start(mContext, liveRowsBean, finalAnn1);
+                        Intent intent=new Intent(mContext, AudienceActivity.class);
+                        intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                        mContext.startActivity(intent);
+
                     }
                 });
                 container.addView(view);

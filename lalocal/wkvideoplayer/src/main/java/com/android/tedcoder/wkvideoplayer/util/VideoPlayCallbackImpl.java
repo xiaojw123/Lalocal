@@ -18,4 +18,5 @@ public interface VideoPlayCallbackImpl {
     void onClickShare();
     void  onClickBefore(ImageView view);
     void onClickNext(ImageView view);
+    void showLoadingPage(boolean isShow);
 }

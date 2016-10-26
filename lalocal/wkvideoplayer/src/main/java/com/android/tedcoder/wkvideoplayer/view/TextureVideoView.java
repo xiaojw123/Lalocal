@@ -628,8 +628,11 @@ public class TextureVideoView extends TextureView
             openVideo();
         }
 
+
         @Override
         public boolean onSurfaceTextureDestroyed(final SurfaceTexture surface) {
+
+            Log.d("TAF","onSurfaceTextureDestroyed：销毁了");
             // after we return from this we can't use the surface any more
             if (mSurface != null) {
                 mSurface.release();

@@ -209,6 +209,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     boolean isFirstGetData = true;
     int endScollYDistance = 0;
     boolean isVisible = true;
+    boolean isStopAutoCycle=false;
 
     private void initRecyclerView() {
         CustomLinearLayoutManger layoutManager = new CustomLinearLayoutManger(getActivity());
@@ -230,7 +231,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     startScollYDistance = scollYDistance;
                     isFirstGetData = false;
                 }
-                AppLog.i("TAG", "scollYDistance:" + scollYDistance);
                 if (!isClick) {
                     isClick = true;
                     showClassifyView(0, isClick);
@@ -247,10 +247,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
                     if (isVisible) {
                         lastScrollDy = scollDy;
-
-
                         searchBar.setVisibility(View.VISIBLE);
-
                         isVisible = false;
                     }
                 } else {
@@ -258,6 +255,25 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                         lastScrollDy = scollDy;
                         isVisible = true;
                         searchBar.setVisibility(View.GONE);
+                    }
+                }
+
+                //设置只有轮播图显示时才滚动
+                if(firstVisibleItemPosition>1){
+                    if(!isStopAutoCycle){
+                        isStopAutoCycle=true;
+                        sliderLayout.stopAutoCycle();
+                        sliderLayout.setFocusable(false);
+                        xRecyclerView.setFocusable(true);
+                        xRecyclerView.requestFocus();
+
+                    }
+
+                }else {
+                    if(isStopAutoCycle){
+                        isStopAutoCycle=false;
+                        sliderLayout.startAutoCycle();
+                        sliderLayout.setFocusable(true);
                     }
                 }
             }
@@ -296,7 +312,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         dotContainer = (LinearLayout) inflate.findViewById(R.id.live_dot_container);
         sliderLayout = (SliderLayout) inflate.findViewById(R.id.live_ad_slider);
         sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
-
         // 轮播图页面改变
         sliderLayout.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
             @Override
@@ -628,7 +643,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         @Override
         public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            PlayBackActivity.start(getActivity(), liveRowsBean);
+
         }
 
         @Override
@@ -643,6 +658,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     for (int i = 0; i < adResultList.size(); i++) {
                         DefaultSliderView defaultSliderView = new DefaultSliderView(getActivity());
                         defaultSliderView.image(adResultList.get(i).photo);
+                       defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
                         defaultSliderView.setOnSliderClickListener(onSliderClickListener);
                         sliderLayout.addSlider(defaultSliderView);
                         View point = new View(getActivity());
@@ -753,29 +769,24 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private LiveMainAdapter.OnLiveItemClickListener liveItemClickListener = new LiveMainAdapter.OnLiveItemClickListener() {
         @Override
         public void goLiveRoom(LiveRowsBean liveRowsBean) {
-
             if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
-                contentService.getPlayBackLiveDetails(liveRowsBean.getId());
+              //  contentService.getPlayBackLiveDetails(liveRowsBean.getId());
+                Intent intent=new Intent(getActivity(),PlayBackActivity.class);
+                intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                startActivity(intent);
             } else {
                 roomId = liveRowsBean.getRoomId();
                 String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                 String s = String.valueOf(roomId);
                 if (createRoom != null && createRoom.equals(s)) {
-                    CommonUtil.REMIND_BACK = 1;
-                    SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
+                    CommonUtil.REMIND_BACK=1;
                     prepareLive();
                     return;
                 }
-                Object annoucement = liveRowsBean.getAnnoucement();
-                String ann = null;
-                if (annoucement != null) {
-                    ann = annoucement.toString();
-                } else {
-                    ann = "这是公告哈";
-                }
+                Intent intent=new Intent(getActivity(), AudienceActivity.class);
+                intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                startActivity(intent);
 
-                SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                AudienceActivity.start(getActivity(), liveRowsBean, ann);
             }
         }
     };
@@ -807,7 +818,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         public void onLoadMore() {
             isRefresh = false;
             if (lastPage) {
-
                 xRecyclerView.setNoMore(true);
             } else {
                 RecyclerView.Adapter adapter = xRecyclerView.getAdapter();
@@ -832,14 +842,15 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         boolean isLogin = UserHelper.isLogined(getActivity());
         boolean loginStatus = DemoCache.getLoginStatus();
         if (isLogin && loginStatus) {
-            contentService.createLiveRoom();//直播接口
+
+            startActivity(new Intent(getActivity(),LiveActivity.class));
+
         } else if (isLogin && !loginStatus) {
             String imccId = UserHelper.getImccId(getActivity());
             String imToken = UserHelper.getImToken(getActivity());
             if (imccId != null && imToken != null) {
                 loginIMServer(imccId, imToken);
             }
-
         } else {
             CustomChatDialog customDialog = new CustomChatDialog(getActivity());
             customDialog.setContent(getString(R.string.live_login_hint));
@@ -959,7 +970,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         super.onStart();
         //注册监听
         registerObservers(true);
-
+        if(sliderLayout!=null){
+            sliderLayout.startAutoCycle();
+        }
 
     }
 
@@ -1000,9 +1013,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public void onStop() {
         super.onStop();
         if (!isClick) {
-
             isClick = true;
             showClassifyView(0, isClick);
+        }
+        if(sliderLayout!=null){
+            sliderLayout.stopAutoCycle();
         }
         registerObservers(false);
         AppLog.i("TAG", "onStop");

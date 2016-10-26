@@ -1,9 +1,8 @@
 package com.lalocal.lalocal.live.entertainment.adapter;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
-import android.net.Uri;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,7 +17,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
-import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -28,7 +26,6 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.ScaleImageView;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -235,14 +232,10 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                         return;
                     }
 
-                    Object annoucement = liveBean.getAnnoucement();
-                    String ann = null;
-                    if (annoucement != null) {
-                        ann = annoucement.toString();
-                    } else {
-                        ann = "这是公告哈";
-                    }
-                    AudienceActivity.start(mContext, liveBean, ann);
+                    Intent intent=new Intent(mContext, AudienceActivity.class);
+                    intent.putExtra("id",String.valueOf(liveBean.getId()));
+                    mContext.startActivity(intent);
+
                 }
             });
         }
@@ -377,7 +370,9 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
             if (liveRowsBean != null) {
-                PlayBackActivity.start(mContext, liveRowsBean);
+                Intent intent=new Intent(mContext,PlayBackActivity.class);
+                intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                mContext.startActivity(intent);
             }
         }
     }

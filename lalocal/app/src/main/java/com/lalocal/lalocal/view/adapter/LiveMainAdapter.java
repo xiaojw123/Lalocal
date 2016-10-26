@@ -53,7 +53,6 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         mRecyclerView = recyclerView;
     }
 
-
     public void setHightPostion(boolean isAtten, int postion) {
         this.attenIndex = postion;
         this.isAtten = isAtten;
@@ -169,7 +168,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
                 liveViewHodler.itemLiveAdress.setText(liveRowsBean.getAddress());
                 DrawableUtils.displayImg(mContext, liveViewHodler.liveCompereHeadPortrait, liveRowsBean.getUser().getAvatar());
                 DrawableUtils.displayImg(mContext, liveViewHodler.itemLiveCoverIv, liveRowsBean.getPhoto());
-                liveViewHodler.itemLiveCoverIv.setOnClickListener(new View.OnClickListener() {
+                liveViewHodler.itemLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
@@ -186,8 +185,6 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         Intent intent = new Intent(mContext, LiveHomePageActivity.class);
         intent.putExtra("userId", userid);
         mContext.startActivity(intent);
-
-
     }
 
 
@@ -225,6 +222,8 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         TextView itemLiveName;
         @BindView(R.id.item_live_adress)
         TextView itemLiveAdress;
+        @BindView(R.id.item_layout)
+        LinearLayout itemLayout;
 
         public LiveViewHodler(View itemView) {
             super(itemView);

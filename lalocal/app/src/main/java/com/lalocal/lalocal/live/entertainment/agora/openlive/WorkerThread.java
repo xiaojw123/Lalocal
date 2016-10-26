@@ -9,7 +9,6 @@ import android.os.Message;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.SurfaceView;
 
 import com.lalocal.lalocal.help.UserHelper;
@@ -120,15 +119,24 @@ public class WorkerThread extends Thread {
         if (mEngineConfig.mClientRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER) {
             if (Constant.PRP_ENABLED) {
                 if (mVideoEnhancer == null) {
-                    Log.i("TAG","开启美颜功能........");
                     mVideoEnhancer = new AgoraYuvEnhancer(mContext);
                     mVideoEnhancer.SetLighteningFactor(Constant.PRP_USER_LIGHTNESS);
                     mVideoEnhancer.SetSmoothnessFactor(Constant.PRP_MAX_SMOOTHNESS);
                     mVideoEnhancer.StartPreProcess();
+                }else {
+                    mVideoEnhancer.SetLighteningFactor(Constant.PRP_USER_LIGHTNESS);
+                    mVideoEnhancer.SetSmoothnessFactor(Constant.PRP_MAX_SMOOTHNESS);
+                    mVideoEnhancer.StartPreProcess();
+                }
+            }else{
+                if(mVideoEnhancer!=null){
+                    mVideoEnhancer.StopPreProcess();
                 }
             }
         }
     }
+
+
 
     public final void setPreParameters(float lightness, int smoothness) {
         if (mEngineConfig.mClientRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER) {

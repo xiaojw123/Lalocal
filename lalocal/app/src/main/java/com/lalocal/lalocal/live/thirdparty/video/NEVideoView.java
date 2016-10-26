@@ -359,6 +359,8 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
 
     OnPreparedListener mPreparedListener = new OnPreparedListener() {
         public void onPrepared(NELivePlayer mp) {
+
+            Log.i("TAF","OnPreparedListener:播放器准备好了");
         	Log.d(TAG, "onPrepared");
         	mCurrState = PREPARED;
         	mNextState = STARTED;
@@ -379,6 +381,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                     if (mNextState == STARTED) {
                     	if (!isPaused()) {
                     		start();
+                            Log.i("TAF","播放器走了：mPreparedListener：start1");
                     	}
                         if (mMediaController != null)
                             mMediaController.show();
@@ -390,8 +393,10 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
             } else if (mNextState == STARTED) {
             	if (!isPaused()) {
             		start();
+                    Log.i("TAF","播放器走了：mPreparedListener：start2");
             	}else {
             		pause();
+                    Log.i("TAF","播放器走了：mPreparedListener：pause");
             	}
             }
             if (isFirstPrepared && mMediaController != null) {
@@ -428,7 +433,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
 
     private OnErrorListener mErrorListener = new OnErrorListener() {
         public boolean onError(NELivePlayer mp, int a, int b) {
-        	AppLog.i("TAG", "Error: " + a + "," + b);
+        	AppLog.i("TAF", "播放错误码：Error: " + a + "," + b);
         	mCurrState = ERROR;
             if (mMediaController != null) {
                 mMediaController.hide();
@@ -556,6 +561,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                 if (mSeekWhenPrepared != 0)
                     seekTo(mSeekWhenPrepared);
                 if (!isPaused()) {
+                    Log.i("TAF","播放器surfaceChanged,start");
                 	start();
                 }
                 if (mMediaController != null) {
@@ -573,24 +579,28 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
         	else {
         		if (mHardwareDecoder) {
         			openVideo();
+                    Log.i("TAF","播放器了：surfaceCreated :openVideo");
         			isBackground = false; //不在后台
         		}
         		else if (mPauseInBackground) {
         			//mMediaPlayer.setDisplay(mSurfaceHolder);
         			if (!isPaused())
         				start();
+                    Log.i("TAF","播放器了：surfaceCreated");
         			isBackground = false; //不在后台
         		}
         	}
         }
 
         public void surfaceDestroyed(SurfaceHolder holder) {
+            Log.i("TAF","surfaceDestroyed：surface销毁了");
             mSurfaceHolder = null;
             if (mMediaController != null) mMediaController.hide();
             if (mMediaPlayer != null) {
             	if(mHardwareDecoder) {
             		mSeekWhenPrepared = mMediaPlayer.getCurrentPosition();
             		if (mMediaPlayer != null) {
+                        Log.i("TAF","surfaceDestroyed：mMediaPlayer被销毁了");
                         mMediaPlayer.reset();
                         mMediaPlayer.release();
                         mMediaPlayer = null;
@@ -599,10 +609,12 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
             		isBackground = true;
             	}
             	else if (!mPauseInBackground) {
+                    Log.i("TAF","surfaceDestroyed：mMediaPlayerz执行display为null");
             		mMediaPlayer.setDisplay(null);
             		isBackground = true;
             	}
             	else {
+                    Log.i("TAF","surfaceDestroyed：mMediaPlayer执行暂停");
             		pause();
             		isBackground = true;
             	}
@@ -623,7 +635,9 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
 
     @Override
     public void start() {
+        Log.i("TAF","播放器走了1:start()");
     	if (mMediaPlayer != null && mIsPrepared) {
+            Log.i("TAF","播放器走了2:start()");
             mMediaPlayer.start();
             mCurrState = STARTED;
         }
@@ -632,8 +646,10 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
 
     @Override
     public void pause() {
+        Log.i("TAF","播放器走了pause1:  pause()");
     	if (mMediaPlayer != null && mIsPrepared) {
             if (mMediaPlayer.isPlaying()) {
+                Log.i("TAF","播放器走了pause2:  pause()");
                 mMediaPlayer.pause();
                 mCurrState = PAUSED;
             }

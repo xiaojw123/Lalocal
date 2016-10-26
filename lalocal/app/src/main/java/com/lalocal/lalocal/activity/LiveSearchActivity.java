@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,10 +24,8 @@ import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.KeyboardUtil;
-import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.adapter.LiveSearchAdapter;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
@@ -185,22 +184,9 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         @Override
         public void onItemClickListener(View view, int position) {
             LiveRowsBean liveRowsBean = (LiveRowsBean) view.getTag();
-            String roomId = String.valueOf(liveRowsBean.getRoomId());
-            String createRoom = SPCUtils.getString(LiveSearchActivity.this, CREATE_ROOMID);
-            String s = String.valueOf(roomId);
-            if (createRoom != null && createRoom.equals(s)) {
-                CommonUtil.REMIND_BACK = 1;
-                SPCUtils.put(LiveSearchActivity.this, CREATE_ROOMID, "fdfdad");
-                return;
-            }
-            Object annoucement = liveRowsBean.getAnnoucement();
-            String ann = null;
-            if (annoucement != null) {
-                ann = annoucement.toString();
-            } else {
-                ann = "这是公告哈";
-            }
-            AudienceActivity.start(LiveSearchActivity.this, liveRowsBean, ann);
+            Intent intent=new Intent(LiveSearchActivity.this, AudienceActivity.class);
+            intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+            startActivity(intent);
         }
     }
 

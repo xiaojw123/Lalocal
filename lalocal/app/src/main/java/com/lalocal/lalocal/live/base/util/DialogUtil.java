@@ -47,10 +47,12 @@ public class DialogUtil {
     }
 
     public static void clear() {
+        if(dialogStack.size()>0){
         for (Dialog dialog : dialogStack) {
             dialog.dismiss();
         }
         dialogStack.clear();
+        }
     }
 
 

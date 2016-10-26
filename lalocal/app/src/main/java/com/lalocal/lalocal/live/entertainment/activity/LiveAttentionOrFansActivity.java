@@ -3,7 +3,6 @@ package com.lalocal.lalocal.live.entertainment.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -18,6 +17,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.AttentionOrFansRecyAdapter;
+import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResultBean;
 import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
@@ -158,8 +158,8 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     };
 
     private void initXlistView() {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
+        layoutManager.setOrientation(CustomLinearLayoutManager.VERTICAL);
         liveAttentionListview.setLayoutManager(layoutManager);
         liveAttentionListview.setPullRefreshEnabled(true);
         liveAttentionListview.setLoadingMoreEnabled(true);
@@ -168,12 +168,11 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         liveAttentionListview.setLoadingListener(xRecyclerviewLoadingListener);
     }
 
-
+    int searchPages=1;
     @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel, R.id.live_search_layout_font, R.id.seach_clear_btn})
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.live_search_layout_font:
-
                 liveSearchLayoutFont.setVisibility(View.GONE);
                 liveSearchLayout.setVisibility(View.VISIBLE);
             case R.id.live_attention_search_et:
@@ -193,7 +192,6 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                                },
                         500);
 
-
                 liveAttentionSearchCancel.setVisibility(View.VISIBLE);
                 userAttentionTitle.setVisibility(View.GONE);
                 if(attentionOrFansRecyAdapter!=null){
@@ -202,10 +200,16 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 isSearchFansOrAttention = true;
                 allSearchRows.clear();
                 allRows.clear();
-                for (int i = 1; i <= totalPages; i++) {
-                    String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + i;
+                if(totalPages>0){
+                    String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + searchPages;
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
+
+              /*  for (int i = 1; i <= totalPages; i++) {
+                    String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + i;
+                    contentLoader.getAttentionOrFansList(typeIdTotal);
+
+                }*/
                 liveAttentionSearchEt.addTextChangedListener(watcher);
                 break;
             case R.id.live_attention_search_cancel:
@@ -244,10 +248,17 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         public void onLiveFansOrAttention(LiveFansOrAttentionResp liveFansOrAttentionResp, boolean isSecarch) {
             super.onLiveFansOrAttention(liveFansOrAttentionResp, isSecarch);
             if (isSearchFansOrAttention) {
+
                 LiveFansOrAttentionResultBean result = liveFansOrAttentionResp.getResult();
                 searchRows = result.getRows();
                 allSearchRows.addAll(allSearchRows.size(), searchRows);
                 Collections.sort(allSearchRows, comp);
+                ++searchPages;
+                if(searchPages<=totalPages){
+                    String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + searchPages;
+                    contentLoader.getAttentionOrFansList(typeIdTotal);
+                }
+
                 return;
             }
             if (liveFansOrAttentionResp.getReturnCode() == 0) {
@@ -304,18 +315,15 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
 
             }
         }
-
-
     }
 
     private void listItemAdapter() {
-
         attentionOrFansRecyAdapter.setOnAttentionToFansItemClickListener(new AttentionOrFansRecyAdapter.OnAttentionToFansItemClickListener() {
             @Override
             public void onItemClick(int id) {
                 Intent intent = new Intent(LiveAttentionOrFansActivity.this, LiveHomePageActivity.class);
                 intent.putExtra("userId",String.valueOf(id));
-                intent.putExtra("back","2");
+              //  intent.putExtra("back","2");
                 startActivity(intent);
                 finish();
             }

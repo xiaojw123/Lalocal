@@ -114,13 +114,14 @@ public class LiveHomePageActivity extends BaseActivity {
     // 用户文章列表
     private List<ArticleDetailsResultBean> mUserArticleList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_personal_homepage_layout);
         ButterKnife.bind(this);
         userId = getIntent().getStringExtra("userId");
-        back = getIntent().getStringExtra("back");
+      //  back = getIntent().getStringExtra("back");
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(userId);
@@ -203,18 +204,18 @@ public class LiveHomePageActivity extends BaseActivity {
                 intent.putExtra("liveType", "0");
                 intent.putExtra("userId", userId);
                 startActivity(intent);
-                if (back != null) {
+             /*   if (back != null) {
                     finish();
-                }
+                }*/
                 break;
             case R.id.homepage_fans_layout:
                 Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
                 startActivity(intent1);
-                if (back != null) {
+               /* if (back != null) {
                     finish();
-                }
+                }*/
                 break;
 
             case R.id.personal_home_page:
