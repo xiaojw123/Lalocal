@@ -34,6 +34,7 @@
                         android:id="@+id/img_live_pic"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
                         android:src="@drawable/androidloading" />
 
                     <View
