@@ -432,4 +432,14 @@ public class CommonUtil {
         return String.valueOf(num);
     }
 
+    /**
+     * 给数字加上","分隔符
+     *
+     * @param num
+     * @return
+     */
+    public static String formatNumWithComma(double num) {
+        NumberFormat nf = NumberFormat.getNumberInstance();
+        return nf.format(num);
+    }
 }

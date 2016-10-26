@@ -308,7 +308,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                 mNextState = PREPARING;
             }
             mMediaPlayer.setDisplay(mSurfaceHolder);
-            mMediaPlayer.setScreenOnWhilePlaying(false);
+            mMediaPlayer.setScreenOnWhilePlaying(true);
              mMediaPlayer.prepareAsync(mContext);
             mCurrState = PREPARING;
             attachMediaController();
@@ -421,11 +421,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                 } else {
                     builder = new AlertDialog.Builder(mContext);
                 }
-              /*  builder.setTitle("Completed!")
-                        .setMessage("播放结束！")
-                        .setPositiveButton("OK", null)
-                        .setCancelable(false)
-                        .show();*/
+
             }
         }
     };

@@ -141,7 +141,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private ImageView overLiveShareWeibo;
     private ImageView liveQuit;
     private ImageView quit;
-    private ImageView playLike;
+ //   private ImageView playLike;
     private ImageView overLiveShareWeixin;
     private ImageView switchBtn;
     private ImageView clickPraise;//点赞
@@ -314,10 +314,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         aucienceCount = (TextView) findViewById(R.id.live_over_audience_count);
         overTime = (TextView) findViewById(R.id.live_over_time_tv);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
-        playLike = (ImageView) findViewById(R.id.live_telecast_like);
+       // playLike = (ImageView) findViewById(R.id.live_telecast_like);
         blurImageView = (BlurImageView) findViewById(R.id.live_over_bg);
         TextView shareTv= (TextView) findViewById(R.id.over_share_title);
-        playLike.setVisibility(View.INVISIBLE);
+     //   playLike.setVisibility(View.INVISIBLE);
 
 
         //挑战
@@ -531,7 +531,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         switchBtn.setOnClickListener(buttonClickListener);
         inputChar.setOnClickListener(buttonClickListener);
         quit.setOnClickListener(buttonClickListener);
-        playLike.setOnClickListener(buttonClickListener);
+      //  playLike.setOnClickListener(buttonClickListener);
         liveQuit.setOnClickListener(buttonClickListener);
     }
 
@@ -565,8 +565,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         inputPanel.switchToTextLayout(true);
                     }
                     break;
-                case R.id.live_telecast_like:
-                    break;
+
                 case R.id.live_telecast_quit:
                     finishLive();
                     break;
@@ -1122,7 +1121,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
         if (isClickStartLiveBtn) {
-
             isStartLive = false;
             drawerLayout.closeDrawer(Gravity.RIGHT);
             if (inputPanel != null) {
@@ -1185,7 +1183,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         AppLog.i("TAG", "直播端接受到一帧视频");
     }
 
-    private int lastOnlineCounts=0;
+
     private  Handler handlerLine=new Handler();
     private class MyRunnable implements Runnable {
 
@@ -1194,8 +1192,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             handlerLine.removeCallbacks(this);
             if (!isCloseLive&&DemoCache.getLoginChatRoomStatus()) {
                 AppLog.i("TAG", "上传在线人数：" + onlineCounts);
-                if (onlineCounts > 0 && liveContentLoader != null&&lastOnlineCounts!=onlineCounts) {
-                    lastOnlineCounts=onlineCounts;
+                if (onlineCounts > 0 && liveContentLoader != null) {
+
                     liveContentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                 }
             }
@@ -1232,7 +1230,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 liveSettingLayout.setClickable(true);
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
-                //handlerLine.postDelayed(new MyRunnable(),2000);
+                handlerLine.postDelayed(new MyRunnable(),2000);
             }
         });
 

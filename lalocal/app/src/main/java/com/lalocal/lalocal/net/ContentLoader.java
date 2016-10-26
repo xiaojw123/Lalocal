@@ -767,7 +767,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_ON_LINE_COUNT);
         }
-
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getUserOnLine() + onLineUsers, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getUserOnLines(String.valueOf(onlinecount)));

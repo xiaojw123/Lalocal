@@ -38,8 +38,10 @@ public class LiveArticleVPAdapter extends PagerAdapter {
 
     // 判断个人主页是否为自己主页的标记
     private boolean mIsSelf = false;
+    // 判断是不是作者
+    private boolean mIsAuthor = false;
 
-    public LiveArticleVPAdapter(Context context, boolean isSelf, LiveRowsBean living, List<LiveRowsBean> userLiveList, List<ArticleDetailsResultBean> userArticleList) {
+    public LiveArticleVPAdapter(Context context, boolean isSelf, LiveRowsBean living, List<LiveRowsBean> userLiveList, List<ArticleDetailsResultBean> userArticleList, boolean isAuthor) {
         // 上下文
         this.mContext = context;
         // 用户当前直播
@@ -50,11 +52,16 @@ public class LiveArticleVPAdapter extends PagerAdapter {
         this.mUserArticleList = userArticleList;
         // 是否为自己的标记
         this.mIsSelf = isSelf;
+        // 是否为作者
+        this.mIsAuthor = isAuthor;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        if (mIsAuthor) {
+            return 2;
+        }
+        return 1;
     }
 
     @Override

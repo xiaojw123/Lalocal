@@ -183,9 +183,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         showFragment(home_recommend_tab);
     }
 
-    public static final int FRAGMENT_RECOMMEND = 0;
+    public static final int FRAGMENT_NEWS = 0;
     public static final int FRAGMENT_DESTINATION = 1;
-    public static final int FRAGMENT_NEWS = 2;
+    public static final int FRAGMENT_RECOMMEND = 2;
     public static final int FRAGMENT_ME = 3;
 
     public void goToFragment(int position) {

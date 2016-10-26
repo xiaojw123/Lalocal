@@ -78,6 +78,7 @@ public class PlayBackActivity extends BaseActivity {
     private MyCallBack myCallBack;
     private LiveUserInfoResultBean result;
     private LiveUserBean user;
+    private int position1;
 
 
     @Override
@@ -145,7 +146,7 @@ public class PlayBackActivity extends BaseActivity {
             if (videoList != null && videoList.size() > 0) {
                 Uri uri = Uri.parse(videoList.get(position).getUrl());
                 videoViewPlayer.loadAndPlay(uri, 0);
-              //  Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
+
             }
         }
     }
@@ -158,7 +159,6 @@ public class PlayBackActivity extends BaseActivity {
             switch (v.getId()) {
                 case R.id.playback_master_info_layout:
                     contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
-
                     break;
             }
         }
@@ -169,7 +169,6 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onCloseVideo() {
             videoPlayer.close();//关闭VideoView
-            resetPageToPortrait();
         }
 
         @Override
@@ -294,7 +293,6 @@ public class PlayBackActivity extends BaseActivity {
 
             if (liveUserInfosDataResp.getReturnCode() == 0) {
                 result = liveUserInfosDataResp.getResult();
-
                 LiveConstant.IDENTITY = LiveConstant.IS_LIVEER;
                 Object statusa = result.getAttentionVO().getStatus();
                 if (statusa != null) {
@@ -321,7 +319,6 @@ public class PlayBackActivity extends BaseActivity {
                 });
                 dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
                     int fansCounts = -2;
-
                     @Override
                     public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
 
@@ -352,9 +349,37 @@ public class PlayBackActivity extends BaseActivity {
                     }
                 });
                 dialog.show();
-
             }
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 恢复播放
+        if (videoPlayer != null) {
+            Log.i("TAF","播放器activityhhehh ");
+            Uri uri = Uri.parse(videoList.get(position).getUrl());
+            videoPlayer.loadAndPlay(uri,position1);
 
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // 暂停播放
+        if (videoPlayer != null) {
+            Log.i("TAF","播放器activityhhehh  onPause ");
+            position1 = videoPlayer.pause();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // 释放资源
+        if (videoPlayer != null) {
+            videoPlayer.close();
+        }
+        super.onDestroy();
+    }
 }

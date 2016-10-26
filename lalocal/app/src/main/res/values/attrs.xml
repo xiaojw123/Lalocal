@@ -74,4 +74,20 @@
             <enum name="solid_height" value="-2" />
         </attr>
     </declare-styleable>
+
+
+    <attr name="text" format="string" />
+    <attr name="textColor" format="color|reference" />
+    <attr name="textSize" format="dimension" />
+    <attr name="lineSpacingExtra" format="dimension" />
+    <attr name="lineSpacingMultiplier" format="float" />
+    <attr name="maxLines" format="integer" />
+    <declare-styleable name="VerticalTextView">
+        <attr name="text"/>
+        <attr name="textColor"/>
+        <attr name="textSize"/>
+        <attr name="lineSpacingExtra"/>
+        <attr name="lineSpacingMultiplier"/>
+        <attr name="maxLines"/>
+    </declare-styleable>
 </resources>
