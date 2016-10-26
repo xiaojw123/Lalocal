@@ -190,6 +190,8 @@
                 android:layout_toLeftOf="@+id/arrow_right4"
                 android:layout_centerVertical="true"
                 android:maxWidth="@dimen/acount_edit_description_text_max_width"
+                android:maxLines="2"
+                android:ellipsize="end"
             />
 
             <ImageView

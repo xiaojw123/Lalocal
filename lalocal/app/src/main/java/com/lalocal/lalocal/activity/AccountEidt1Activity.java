@@ -68,7 +68,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     RelativeLayout description_rlt;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,10 +94,10 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
 
 
     private void initView() {
-        description_tv= (TextView) findViewById(R.id.acount_edit_description_text);
-        description_rlt= (RelativeLayout) findViewById(R.id.account_edit_description);
-        editsex_rlt =(RelativeLayout) findViewById(R.id.account_edit_sex);
-        sex_tv= (TextView) findViewById(R.id.account_edit_sex_text);
+        description_tv = (TextView) findViewById(R.id.acount_edit_description_text);
+        description_rlt = (RelativeLayout) findViewById(R.id.account_edit_description);
+        editsex_rlt = (RelativeLayout) findViewById(R.id.account_edit_sex);
+        sex_tv = (TextView) findViewById(R.id.account_edit_sex_text);
         customTitleView = (CustomTitleView) findViewById(R.id.account_eidt1_titleview);
         personalheader_civ = (ImageView) findViewById(R.id.account_edit_personalheader);
         nickname_rlt = (RelativeLayout) findViewById(R.id.account_edit_nickname);
@@ -123,10 +122,13 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         int id = v.getId();
         switch (id) {
             case R.id.account_edit_description:
-                Intent desIntent=new Intent(this,PersonalIntroActivity.class);
-                String des=description_tv.getText().toString();
-                desIntent.putExtra(KeyParams.DESCRIPTON,des);
-                startActivityForResult(desIntent,MODIFY_USER_PROFILE);
+                Intent desIntent = new Intent(this, PersonalIntroActivity.class);
+                String des = description_tv.getText().toString();
+                if (getResources().getString(R.string.default_description).equals(des)) {
+                    des="";
+                }
+                desIntent.putExtra(KeyParams.DESCRIPTON, des);
+                startActivityForResult(desIntent, MODIFY_USER_PROFILE);
                 break;
 
             case R.id.account_edit_sex:
@@ -279,9 +281,9 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 String nickname = data.getStringExtra(KeyParams.NICKNAME);
                 backIntent.putExtra(KeyParams.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
-            }else  if (resultCode==PersonalIntroActivity.RESULT_CODE_PERINTRO){
-                String descripton=data.getStringExtra(KeyParams.DESCRIPTON);
-                if (!TextUtils.isEmpty(descripton)){
+            } else if (resultCode == PersonalIntroActivity.RESULT_CODE_PERINTRO) {
+                String descripton = data.getStringExtra(KeyParams.DESCRIPTON);
+                if (!TextUtils.isEmpty(descripton)) {
                     description_tv.setText(descripton);
                 }
             }
@@ -394,9 +396,11 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         } else {
             email_tv.setText(user.getEmail());
         }
-        String descripton=user.getDescription();
-        if (!TextUtils.isEmpty(descripton)){
+        String descripton = user.getDescription();
+        if (!TextUtils.isEmpty(descripton)) {
             description_tv.setText(descripton);
+        } else {
+            description_tv.setText(getResources().getString(R.string.default_description));
         }
         backIntent.putExtra(KeyParams.STATUS, status);
 
@@ -431,7 +435,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             TextView womanSelTv = (TextView) view.findViewById(R.id.sex_selector_woman_tv);
             manSelTv.setOnClickListener(this);
             womanSelTv.setOnClickListener(this);
-            sexSelecorDialog.setContentView(view,params);
+            sexSelecorDialog.setContentView(view, params);
             Window dialogWindow = sexSelecorDialog.getWindow();
             dialogWindow.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             dialogWindow.setGravity(Gravity.BOTTOM);

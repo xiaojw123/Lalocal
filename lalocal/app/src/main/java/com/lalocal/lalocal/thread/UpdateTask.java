@@ -104,9 +104,12 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
                 if (pkgName.equals(AppConfig.getPackageName(mContext))) {
                     if (verCode > AppConfig.getVersionCode(mContext)) {
                         Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.addCategory(Intent.CATEGORY_DEFAULT);
                         intent.setDataAndType(Uri.fromFile(apkFile),
                                 "application/vnd.android.package-archive");
                         mContext.startActivity(intent);
+                        android.os.Process.killProcess(android.os.Process.myPid());
                         return;
                     }
                 }

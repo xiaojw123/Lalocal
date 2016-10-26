@@ -753,32 +753,34 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private LiveMainAdapter.OnLiveItemClickListener liveItemClickListener = new LiveMainAdapter.OnLiveItemClickListener() {
         @Override
         public void goLiveRoom(LiveRowsBean liveRowsBean) {
-
-            if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
-                contentService.getPlayBackLiveDetails(liveRowsBean.getId());
-            } else {
-                roomId = liveRowsBean.getRoomId();
-                String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
-                String s = String.valueOf(roomId);
-                if (createRoom != null && createRoom.equals(s)) {
-                    CommonUtil.REMIND_BACK = 1;
-                    SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
-                    prepareLive();
-                    return;
-                }
-                Object annoucement = liveRowsBean.getAnnoucement();
-                String ann = null;
-                if (annoucement != null) {
-                    ann = annoucement.toString();
-                } else {
-                    ann = "这是公告哈";
-                }
-
-                SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
-                AudienceActivity.start(getActivity(), liveRowsBean, ann);
-            }
+            gotoLiveRoom(liveRowsBean);
         }
     };
+
+    private void gotoLiveRoom(LiveRowsBean liveRowsBean) {
+        if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
+            contentService.getPlayBackLiveDetails(liveRowsBean.getId());
+        } else {
+            roomId = liveRowsBean.getRoomId();
+            String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
+            String s = String.valueOf(roomId);
+            if (createRoom != null && createRoom.equals(s)) {
+                CommonUtil.REMIND_BACK = 1;
+                SPCUtils.put(getActivity(), CREATE_ROOMID, "fdfdad");
+                prepareLive();
+                return;
+            }
+            Object annoucement = liveRowsBean.getAnnoucement();
+            String ann = null;
+            if (annoucement != null) {
+                ann = annoucement.toString();
+            } else {
+                ann = "这是公告哈";
+            }
+            SpecialShareVOBean shareVO = liveRowsBean.getShareVO();
+            AudienceActivity.start(getActivity(), liveRowsBean, ann);
+        }
+    }
 
 
     private int pageCount = 2;

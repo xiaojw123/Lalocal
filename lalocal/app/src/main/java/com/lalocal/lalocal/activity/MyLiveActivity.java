@@ -1,22 +1,19 @@
 package com.lalocal.lalocal.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.MobEvent;
-import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.view.MyLiveAdapter;
-import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +44,6 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
     @Override
     public void onRefresh() {
         isRefresh = true;
-//        mContentloader.getUserLive(8746, 1);
         mContentloader.getUserLive(UserHelper.getUserId(this), 1);
     }
 
@@ -57,7 +53,6 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
             isLoadMore = true;
             ++pageNum;
             mContentloader.getUserLive(UserHelper.getUserId(this),pageNum);
-//            mContentloader.getUserLive(8746, pageNum);
         } else {
             isLoadMore = false;
             mXRecyclerView.setNoMore(true);
@@ -66,9 +61,14 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
     }
 
-    class LiveCallBack extends ICallBack implements OnItemClickListener {
+    class LiveCallBack extends ICallBack{
         List<LiveRowsBean> rowsList = new ArrayList<>();
         MyLiveAdapter adapter;
+
+        @Override
+        public void onDeleteLiveHistory() {
+            Toast.makeText(MyLiveActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
+        }
 
         @Override
         public void onGetUserLive(UserLiveItem item) {
@@ -90,8 +90,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
                     }
                     rowsList.addAll(item.getRows());
                     if (adapter == null) {
-                        adapter = new MyLiveAdapter(rowsList);
-                        adapter.setOnItemClickListener(this);
+                        adapter = new MyLiveAdapter(mXRecyclerView,mContentloader,rowsList);
                         mXRecyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateItems(rowsList);
@@ -125,16 +124,5 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
             resetLoad();
         }
 
-        @Override
-        public void onItemClickListener(View view, int position) {
-            MobHelper.sendEevent(MyLiveActivity.this, MobEvent.MY_LIVE_DETAIL);
-            LiveRowsBean item = (LiveRowsBean) view.getTag();
-            if (item != null) {
-                Intent intent = new Intent(MyLiveActivity.this, LiveDetailActivity.class);
-                intent.putExtra(LiveDetailActivity.LIVE_ITEM, item);
-                startActivity(intent);
-            }
-
-        }
     }
 }

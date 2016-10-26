@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/color_f8"
-    android:scrollbars="none"
     android:overScrollMode="never"
-    >
+    android:scrollbars="none">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,17 +69,9 @@
                 android:paddingRight="@dimen/dimen_size_15_dp"
                 android:text="@string/login_prompt"
                 android:textColor="@color/color_b3"
+                android:maxLines="2"
+                android:ellipsize="end"
                 android:textSize="@dimen/text_size_13_sp" />
-
-            <ImageView
-                android:id="@+id/home_me_author_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/home_me_username"
-                android:layout_below="@+id/home_me_login_prompt"
-                android:layout_marginTop="@dimen/dimen_size_11_dp"
-                android:background="@drawable/certifiedwriter_tag"
-                android:visibility="gone" />
 
 
             <TextView
@@ -97,6 +88,16 @@
                 android:textSize="@dimen/text_size_10_sp"
                 android:visibility="gone" />
 
+            <ImageView
+                android:id="@+id/home_me_author_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/home_me_divie"
+                android:layout_alignLeft="@+id/home_me_username"
+                android:layout_marginBottom="@dimen/dimen_size_10_dp"
+                android:background="@drawable/certifiedwriter_tag"
+                android:visibility="gone" />
+
 
             <LinearLayout
                 android:id="@+id/home_me_tab_container"
@@ -104,6 +105,30 @@
                 android:layout_height="@dimen/home_me_content_tab_height"
                 android:layout_below="@+id/home_me_headportrait_img"
                 android:background="@drawable/home_me_content_tab_container_border">
+
+                <LinearLayout
+                    android:id="@+id/home_me_atten_tab"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/HomeMeTabTitleTheme"
+                        android:text="@string/live_attention" />
+
+                    <TextView
+                        android:id="@+id/home_me_follow_num"
+                        style="@style/HomeMeTabItemNumTheme"
+                        android:text="0" />
+                </LinearLayout>
+
+                <View
+                    style="@style/CommonD9LineTheme"
+                    android:layout_width="0.5dp"
+                    android:layout_height="match_parent" />
+
 
                 <LinearLayout
                     android:id="@+id/home_me_fans_tab"
@@ -125,28 +150,6 @@
 
                 </LinearLayout>
 
-                <View
-                    style="@style/CommonD9LineTheme"
-                    android:layout_width="0.5dp"
-                    android:layout_height="match_parent" />
-
-                <LinearLayout
-                    android:id="@+id/home_me_atten_tab"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:orientation="vertical">
-
-                    <TextView
-                        style="@style/HomeMeTabTitleTheme"
-                        android:text="@string/live_attention" />
-
-                    <TextView
-                        android:id="@+id/home_me_follow_num"
-                        style="@style/HomeMeTabItemNumTheme"
-                        android:text="0" />
-                </LinearLayout>
             </LinearLayout>
 
             <ImageView
@@ -320,7 +323,7 @@
                     android:text="0"
                     android:textColor="@color/color_8c"
                     android:textSize="@dimen/text_size_16_sp"
-
+                    android:visibility="gone"
                     />
 
                 <ImageView
