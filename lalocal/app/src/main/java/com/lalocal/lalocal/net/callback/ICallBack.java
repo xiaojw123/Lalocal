@@ -352,4 +352,9 @@ public abstract class ICallBack {
     // 获取用户文章列表
     public void onGetUserArticles(HomepageUserArticlesResp articlesResp) {}
 
+
+    public void onDeleteLiveHistory(){
+
+    }
+
 }

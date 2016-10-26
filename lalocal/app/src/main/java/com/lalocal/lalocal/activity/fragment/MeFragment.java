@@ -102,7 +102,8 @@ MeFragment extends BaseFragment {
     int authorTop;
     @BindString(R.string.login_prompt)
     String loginPrmotText;
-    RelativeLayout.LayoutParams userNameParams;
+    @BindString(R.string.default_description)
+    String defaultDecription;
 
     @Override
     public void onAttach(Activity activity) {
@@ -117,7 +118,6 @@ MeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
         authorTop = userNameTop / 2;
-        userNameParams = (RelativeLayout.LayoutParams) username_tv.getLayoutParams();
         setLoaderCallBack(new MeCallBack());
         initLogin();
         return view;
@@ -224,7 +224,7 @@ MeFragment extends BaseFragment {
         if (isLogined && user != null) {
             String description = user.getDescription();
             if (TextUtils.isEmpty(description)) {
-                loginPrompt.setText("");
+                loginPrompt.setText(defaultDecription);
             } else {
                 loginPrompt.setText(description);
             }
@@ -238,22 +238,11 @@ MeFragment extends BaseFragment {
             int role = user.getRole();
             if (role == 1) {
                 //专栏作者
-
-                userNameParams.topMargin = authorTop;
-                authorTag.setVisibility(View.VISIBLE);
-                if (verified_tv.getVisibility() == View.VISIBLE) {
-                    verified_tv.setVisibility(View.GONE);
-                }
-                if (articleFl.getVisibility() != View.VISIBLE) {
-                    articleFl.setVisibility(View.VISIBLE);
-                }
-
+                verified_tv.setVisibility(View.GONE);
+                showArticleTag();
             } else {
-                userNameParams.topMargin = userNameTop;
-                authorTag.setVisibility(View.GONE);
-                if (verified_tv.getVisibility() != View.VISIBLE) {
-                    verified_tv.setVisibility(View.VISIBLE);
-                }
+
+                verified_tv.setVisibility(View.VISIBLE);
                 int status = user.getStatus();
                 switch (status) {
                     case 0:
@@ -273,21 +262,18 @@ MeFragment extends BaseFragment {
                         verified_tv.setText(getResources().getString(R.string.user_forbiden));
                         break;
                 }
-                if (articleFl.getVisibility() == View.VISIBLE) {
-                    articleFl.setVisibility(View.GONE);
-                }
-            }
+                hidenArticeTag();
 
+            }
             String avatar = user.getAvatar();
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 
             }
-
+            homeMeItemWallet.setVisibility(View.VISIBLE);
             mContentloader.getLiveUserInfo(String.valueOf(UserHelper.getUserId(getActivity())));
             mContentloader.getMyWallet();
         } else {
-            userNameParams.topMargin = userNameTop;
             AppLog.print("账号退出————————");
             loginPrompt.setText(loginPrmotText);
             homeMeItemWalletAmountTv.setText("0");
@@ -297,9 +283,22 @@ MeFragment extends BaseFragment {
             headImg.setImageResource(R.drawable.home_me_personheadnormal);
             homeMeFansNum.setText("0");
             homeMeFollowNum.setText("0");
-
+            hidenArticeTag();
+            homeMeItemWallet.setVisibility(View.GONE);
         }
     }
+
+    public void showArticleTag() {
+        authorTag.setVisibility(View.VISIBLE);
+        articleFl.setVisibility(View.VISIBLE);
+
+    }
+
+    public void hidenArticeTag() {
+        authorTag.setVisibility(View.GONE);
+        articleFl.setVisibility(View.GONE);
+    }
+
     @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_atten_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -349,7 +348,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_message:
-                MobHelper.sendEevent(getActivity(),MobEvent.MY_NOTICE);
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
                 if (UserHelper.isLogined(getActivity())) {
                     //TODO:待开发
                 } else {
@@ -357,7 +356,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_favoirte:
-                MobHelper.sendEevent(getActivity(),MobEvent.MY_COLLECTION);
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_COLLECTION);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyFavoriteActivity.class);
                 } else {
@@ -365,7 +364,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_wallet:
-                MobHelper.sendEevent(getActivity(),MobEvent.MY_WALLET);
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyWalletActivity.class);
                 } else {
@@ -373,7 +372,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_item_order:
-                MobHelper.sendEevent(getActivity(),MobEvent.MY_ORDER);
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_ORDER);
                 if (UserHelper.isLogined(getActivity())) {
                     gotoMyItemPage(MyOrderActivity.class);
                 } else {
@@ -381,7 +380,7 @@ MeFragment extends BaseFragment {
                 }
                 break;
             case R.id.home_me_invitefriends:
-                MobHelper.sendEevent(getActivity(),MobEvent.MY_FIND);
+                MobHelper.sendEevent(getActivity(), MobEvent.MY_FIND);
                 //TODO:待开发
                 break;
         }

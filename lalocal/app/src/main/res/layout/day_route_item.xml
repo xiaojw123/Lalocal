@@ -8,7 +8,7 @@
         android:id="@+id/day_route_item_img"
         android:layout_width="match_parent"
         android:layout_height="@dimen/day_route_item_img_height"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:src="@drawable/imgloading"
         />
     <TextView

@@ -134,6 +134,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_size_3_dp"
                     android:textColor="@color/color_1a"
+                    android:text="0"
                     android:textSize="@dimen/text_size_32_sp" />
             </LinearLayout>
 

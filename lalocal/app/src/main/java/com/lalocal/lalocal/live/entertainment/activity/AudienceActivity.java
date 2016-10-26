@@ -94,7 +94,8 @@ import io.agora.rtc.video.VideoCanvas;
  * 日志聚合系统kids
  */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlayerProxy, View.OnLayoutChangeListener,GiftStorePopuWindow.OnSendClickListener {
+public class
+AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlayerProxy, View.OnLayoutChangeListener,GiftStorePopuWindow.OnSendClickListener {
     public static final String LIVE_SEARCH_ITEM = "live_search_item";
     private static final String TAG = AudienceActivity.class.getSimpleName();
     private final int BASIC_PERMISSION_REQUEST_CODE = 110;

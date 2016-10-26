@@ -1029,6 +1029,16 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    //历史直播详情
+    public void deleteLiveHistory(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_HISTORY_DELETE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE,AppConfig.getPlayBackLiveDetails(id), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
     //搜索关注粉丝
     public void getSearchUser(String nickName) {
         if (callBack != null) {
@@ -1291,6 +1301,10 @@ public class ContentLoader {
                     return;
                 }
                 switch (resultCode) {
+                    case RequestCode.LIVE_HISTORY_DELETE:
+                        responseDeleteLiveHisotry(jsonObj);
+                        break;
+
                     case RequestCode.LOGIN_PHEON:
                         responseLoginPhone(jsonObj);
                         break;
@@ -1581,6 +1595,10 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseDeleteLiveHisotry(JSONObject jsonObj) {
+            callBack.onDeleteLiveHistory();
         }
 
         private void responseLoginPhone(JSONObject jsonObj) {
@@ -2688,6 +2706,7 @@ public class ContentLoader {
         int SMS_VER_CODE = 151;
         int LOGIN_PHEON = 152;
         int REGISTER_PHONE = 153;
+        int LIVE_HISTORY_DELETE=154;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

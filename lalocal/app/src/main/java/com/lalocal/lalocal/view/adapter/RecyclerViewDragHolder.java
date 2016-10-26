@@ -48,7 +48,7 @@ public abstract class RecyclerViewDragHolder {
     private Context context;
 
     private DragViewHolder dragViewHolder;
-
+    private int itemHeight;
 
 
     public RecyclerViewDragHolder(Context context, View bgView, View topView) {
@@ -66,10 +66,23 @@ public abstract class RecyclerViewDragHolder {
         init();
     }
 
+    public RecyclerViewDragHolder(Context context, View bgView, View topView, int mTrackingEdges, int height) {
+        this.mTrackingEdges = mTrackingEdges;
+        this.bgView = bgView;
+        this.topView = topView;
+        this.context = context;
+        this.itemHeight = height;
+        init();
+    }
+
+
     private void init() {
         itemView = new DragLinearLayout(context);
-//        itemView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        itemView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) context.getResources().getDimension(R.dimen.dimen_size_50_dp)));
+        if (itemHeight == 0) {
+            itemView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) context.getResources().getDimension(R.dimen.dimen_size_50_dp)));
+        } else {
+            itemView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, itemHeight));
+        }
         itemView.setmTrackingEdges(mTrackingEdges);
         itemView.initView(topView, bgView);
         dragViewHolder = new DragViewHolder(this, itemView);

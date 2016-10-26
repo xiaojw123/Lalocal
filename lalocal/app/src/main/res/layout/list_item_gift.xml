@@ -13,7 +13,8 @@
         android:id="@+id/item_gift_img"
         android:layout_width="@dimen/item_gift_img_width"
         android:layout_height="@dimen/item_gift_img_width"
-        android:background="@color/color_ffaa2a" />
+        android:scaleType="centerCrop"
+        />
 
     <com.lalocal.lalocal.view.ShapeTextView
         android:id="@+id/item_gift_num"
@@ -25,7 +26,7 @@
         android:gravity="center"
         android:paddingLeft="@dimen/dimen_size_2_dp"
         android:paddingRight="@dimen/dimen_size_2_dp"
-        android:text="12"
+        android:text="0"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_12_sp" />
 

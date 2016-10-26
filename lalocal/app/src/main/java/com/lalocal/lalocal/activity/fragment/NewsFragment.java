@@ -766,29 +766,26 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private LiveMainAdapter.OnLiveItemClickListener liveItemClickListener = new LiveMainAdapter.OnLiveItemClickListener() {
         @Override
         public void goLiveRoom(LiveRowsBean liveRowsBean) {
+
             if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
-              //  contentService.getPlayBackLiveDetails(liveRowsBean.getId());
-                Intent intent=new Intent(getActivity(),PlayBackActivity.class);
-                intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                Intent intent = new Intent(getActivity(), PlayBackActivity.class);
+                intent.putExtra("id", String.valueOf(liveRowsBean.getId()));
                 startActivity(intent);
             } else {
                 roomId = liveRowsBean.getRoomId();
                 String createRoom = SPCUtils.getString(getActivity(), CREATE_ROOMID);
                 String s = String.valueOf(roomId);
                 if (createRoom != null && createRoom.equals(s)) {
-                    CommonUtil.REMIND_BACK=1;
+                    CommonUtil.REMIND_BACK = 1;
                     prepareLive();
                     return;
                 }
-                Intent intent=new Intent(getActivity(), AudienceActivity.class);
-                intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+                Intent intent = new Intent(getActivity(), AudienceActivity.class);
+                intent.putExtra("id", String.valueOf(liveRowsBean.getId()));
                 startActivity(intent);
-
             }
         }
     };
-
-
     private int pageCount = 2;
     private boolean isLoading = false;
     private int pageSize = 9;
