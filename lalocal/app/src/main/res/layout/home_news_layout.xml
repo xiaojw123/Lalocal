@@ -19,8 +19,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="@dimen/live_padding_10dp"
-            android:src="@drawable/searchbar_searchicon"
             android:visibility="gone" />
+            <!--android:src="@drawable/searchbar_searchicon"-->
 
         <TextView
             android:id="@+id/live_fragment_title_hot"

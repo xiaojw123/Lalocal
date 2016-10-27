@@ -173,7 +173,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_20_dp"
             android:background="@color/white"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
 
             <FrameLayout
                 android:id="@+id/home_me_item_artice"
@@ -181,7 +182,8 @@
                 android:layout_height="@dimen/dimen_size_60_dp"
                 android:paddingLeft="@dimen/dimen_size_15_dp"
                 android:paddingRight="@dimen/dimen_size_15_dp"
-                android:visibility="gone">
+                android:visibility="gone"
+                >
 
                 <TextView
                     style="@style/HomeMeMyItemNameStyle"
@@ -197,8 +199,10 @@
             </FrameLayout>
 
             <View
+                android:id="@+id/home_me_item_artice_line"
                 style="@style/CommonD9LineTheme"
-                android:visibility="gone" />
+                android:visibility="gone"
+               />
 
             <FrameLayout
                 android:id="@+id/home_me_item_live"
@@ -275,7 +279,8 @@
 
             <View
                 style="@style/CommonD9LineTheme"
-                android:visibility="gone" />
+                android:visibility="gone"
+               />
 
             <FrameLayout
                 android:id="@+id/home_me_item_favoirte"

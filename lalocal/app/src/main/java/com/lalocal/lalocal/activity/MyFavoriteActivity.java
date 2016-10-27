@@ -15,6 +15,7 @@ import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.MyFavoriteRecyclerAdpater;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
@@ -31,6 +32,7 @@ public class MyFavoriteActivity extends BaseActivity implements XRecyclerView.Lo
     int toalPages;
     String token;
     boolean isRefresh, isLoadMore;
+    CustomTitleView favoriteTitleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class MyFavoriteActivity extends BaseActivity implements XRecyclerView.Lo
 
 
     private void initView() {
+        favoriteTitleView=(CustomTitleView) findViewById(R.id.my_favorite_ctv);
         mNoFavoriteView = findViewById(R.id.my_item_noting);
         mNoFavoriteContent = (TextView) findViewById(R.id.home_me_nothing_tv);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.my_favorite_xrlv);

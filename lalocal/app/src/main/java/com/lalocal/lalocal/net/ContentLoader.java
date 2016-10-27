@@ -722,7 +722,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_DETAILS);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getLiveDetails()+skipId, response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getLiveDetails() + skipId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -774,11 +774,11 @@ public class ContentLoader {
     }
 
     //用户获取在线人数
-    public void getAudienceUserOnLine(int onLineUser,String channelId) {
+    public void getAudienceUserOnLine(int onLineUser, String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ONLINE_COUNT);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount(onLineUser,channelId), response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getOnLineUserCount(onLineUser, channelId), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
@@ -1034,7 +1034,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HISTORY_DELETE);
         }
-        ContentRequest request = new ContentRequest(Request.Method.DELETE,AppConfig.getPlayBackLiveDetails(id), response, response);
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getPlayBackLiveDetails(id), response, response);
         request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
     }
@@ -1266,9 +1266,19 @@ public class ContentLoader {
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
-            String errorMsg = volleyError.toString();
-            if (!ErrorMessage.AUTHOR_FIALED.equals(errorMsg) || !ErrorMessage.CLIENT_ERROR.equals(errorMsg)) {
-                Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+            if (volleyError != null) {
+
+                String errorMsg = volleyError.toString();
+                if (volleyError.networkResponse != null) {
+                    int code = volleyError.networkResponse.statusCode;
+                    if (code == 401) {
+                        UserHelper.updateSignOutInfo(context);
+                        Toast.makeText(context,"你的账号已在其他设备登录,请重新登录",Toast.LENGTH_SHORT).show();
+                    }
+                }
+                if (!ErrorMessage.AUTHOR_FIALED.equals(errorMsg) && !ErrorMessage.CLIENT_ERROR.equals(errorMsg)) {
+                    Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
+                }
             }
             callBack.onError(volleyError);
         }
@@ -2616,9 +2626,9 @@ public class ContentLoader {
         headers.put("LONGITUDE", "104.08296");
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
-      /*  AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
-                "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
-                + DensityUtil.getWindowHeight((Activity) context) + "");*/
+//        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
+//                "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
+//                + DensityUtil.getWindowHeight((Activity) context) + "");
         return headers;
     }
 
@@ -2706,7 +2716,7 @@ public class ContentLoader {
         int SMS_VER_CODE = 151;
         int LOGIN_PHEON = 152;
         int REGISTER_PHONE = 153;
-        int LIVE_HISTORY_DELETE=154;
+        int LIVE_HISTORY_DELETE = 154;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

@@ -51,12 +51,13 @@ public class LoginActivity extends BaseActivity {
         isImLogin = intent.getBooleanExtra(KeyParams.IM_LOGIN, false);
         initContentService();
         initView();
-       claerImLoginInfo();//清除im登錄信息
+        claerImLoginInfo();//清除im登錄信息
 
     }
 
     private void claerImLoginInfo() {
-        DemoCache.clear();;
+        DemoCache.clear();
+        ;
         AuthPreferences.clearUserInfo();
         NIMClient.getService(AuthService.class).logout();
         DemoCache.setLoginStatus(false);
@@ -89,9 +90,11 @@ public class LoginActivity extends BaseActivity {
     private CustomTitleView.onBackBtnClickListener backClicklistener = new CustomTitleView.onBackBtnClickListener() {
         @Override
         public void onBackClick() {
-            MobHelper.sendEevent(LoginActivity.this,MobEvent.LOGIN_EMAIL_BACK);
+            MobHelper.sendEevent(LoginActivity.this, MobEvent.LOGIN_EMAIL_BACK);
             if (KeyParams.SETTING.equals(setting)) {
                 setResult(SettingActivity.UN_LOGIN_OK);
+            } else {
+                setResult(AccountEidt1Activity.UPDATE_ME_DATA);
             }
         }
     };
@@ -100,11 +103,11 @@ public class LoginActivity extends BaseActivity {
         @Override
         public void onClick(View v) {
             if (v == register_tv) {
-                MobHelper.sendEevent(LoginActivity.this,MobEvent.LOGIN_EMAIL_REGISTERED);
+                MobHelper.sendEevent(LoginActivity.this, MobEvent.LOGIN_EMAIL_REGISTERED);
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivityForResult(intent, 100);
             } else if (v == login_btn) {
-                MobHelper.sendEevent(LoginActivity.this,MobEvent.LOGIN_EMAIL_ENTER);
+                MobHelper.sendEevent(LoginActivity.this, MobEvent.LOGIN_EMAIL_ENTER);
                 String email = email_edit.getText().toString();
                 String psw = psw_edit.getText().toString();
                 login(email, psw);
@@ -119,14 +122,14 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (data == null) {
-            AppLog.i("TAG","data为空");
+            AppLog.i("TAG", "data为空");
             return;
         }
         if (isImLogin) {
             setResult(SettingActivity.IM_LOGIN, data);
-            AppLog.i("TAG","LoginActivity:走了这里1");
+            AppLog.i("TAG", "LoginActivity:走了这里1");
         } else {
-            AppLog.i("TAG","LoginActivity:走了这里2");
+            AppLog.i("TAG", "LoginActivity:走了这里2");
             setResult(REGISTER_OK, data);
         }
 
@@ -138,6 +141,8 @@ public class LoginActivity extends BaseActivity {
     public void onBackPressed() {
         if (KeyParams.SETTING.equals(setting)) {
             setResult(SettingActivity.UN_LOGIN_OK);
+        } else {
+            setResult(AccountEidt1Activity.UPDATE_ME_DATA);
         }
         super.onBackPressed();
     }
@@ -167,6 +172,7 @@ public class LoginActivity extends BaseActivity {
     }
 
     private AbortableFuture<LoginInfo> loginRequest;
+
     class CallBack extends ICallBack {
         @Override
         public void onLoginSucess(final User user) {
