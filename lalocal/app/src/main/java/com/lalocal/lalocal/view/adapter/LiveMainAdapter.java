@@ -3,6 +3,7 @@ package com.lalocal.lalocal.view.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -132,8 +133,12 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
                         hightHolder.nicknameTv.setOnClickListener(this);
                     }
                     hightHolder.locTv.setText(liveRowsBean.getAddress());
+                    Drawable[]  drawables=hightHolder.locTv.getCompoundDrawables();
+                    drawables[0].setAlpha(20);
                     hightHolder.titleTv.setText(liveRowsBean.getTitle());
                     hightHolder.onlineNumTv.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
+                    Drawable[] onlineNumDrawables=hightHolder.onlineNumTv.getCompoundDrawables();
+                    onlineNumDrawables[0].setAlpha(20);
                     hightHolder.timeTv.setText(liveRowsBean.getStartAt());
                     DrawableUtils.displayImg(mContext, hightHolder.photoImg, liveRowsBean.getPhoto());
                     hightHolder.liveRoomLayout.setOnClickListener(new View.OnClickListener() {
