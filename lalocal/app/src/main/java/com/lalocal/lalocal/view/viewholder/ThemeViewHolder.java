@@ -39,12 +39,13 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
     private int mSize = -1;
     private int mSelected = -1;
 
-    TextView  mTitleView;
+    TextView mTitleView;
     TextView mSubtitleView;
     FrameLayout mLayoutContainer;
     RelativeLayout mLayoutMore;
 
     DisallowParentTouchViewPager mVpTheme;
+    LinearLayout mVtvSeeMore;
     LinearLayout mDotContainer;
 
     List<Button> mDotBtns = new ArrayList<>();
@@ -60,7 +61,8 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
         this.isEmpty = isEmpty;
 
         mLayoutContainer = (FrameLayout) itemView.findViewById(R.id.theme_container);
-         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
+        mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
+        mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
         mSubtitleView = (TextView) itemView.findViewById(R.id.tv_subtitle);
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
         mVpTheme = (DisallowParentTouchViewPager) itemView.findViewById(R.id.vp_theme);
@@ -90,21 +92,21 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
             return;
         }
 
-         mTitleView.setText(title);
+        mTitleView.setText(title);
         mSubtitleView.setText(subtitle);
 
         // 改变大小透明度的工具类
         ScaleAlphaPageTransformer mScaleAlphaPageTransformer = new ScaleAlphaPageTransformer();
         // 初始化适配器
-        final HomeRecoThemeAdapter ThemeAdapter = new HomeRecoThemeAdapter(mContext, recommendSpecialList);
+        final HomeRecoThemeAdapter themeAdapter = new HomeRecoThemeAdapter(mContext, recommendSpecialList);
         // 配置适配器
-        mVpTheme.setAdapter(ThemeAdapter);
+        mVpTheme.setAdapter(themeAdapter);
         // 设置值改变透明度，不改变大小
         mScaleAlphaPageTransformer.setType(true, false);
         // 对ViewPager进行设置改变透明度
         mVpTheme.setPageTransformer(true, mScaleAlphaPageTransformer);
         // 如果当前子项个数大于等于3，则将ViewPager定位到第2项
-        if (ThemeAdapter.getCount() >= 3) {
+        if (themeAdapter.getCount() >= 3) {
             // 将当前ViewPager设置到第2项
             mVpTheme.setCurrentItem(1);
         }
@@ -125,6 +127,14 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPageSelected(int position) {
                 CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.DARK_DOT);
+                // 如果滑动至最后一页
+                if (position == mSize - 1) {
+                    // 查看更多字样显示
+                    mVtvSeeMore.setVisibility(View.VISIBLE);
+                } else { // 如果不是最后一页
+                    // 查看更多字样隐藏
+                    mVtvSeeMore.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -134,6 +144,14 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
         });
 
         mLayoutMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转专题界面
+                mContext.startActivity(new Intent(mContext, ThemeActivity.class));
+            }
+        });
+
+        mVtvSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 跳转专题界面
