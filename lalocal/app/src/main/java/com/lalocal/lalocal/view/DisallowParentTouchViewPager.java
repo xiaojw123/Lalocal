@@ -17,6 +17,7 @@ public class DisallowParentTouchViewPager extends ViewPager {
 
     private ViewGroup parent;
     private int height = 0;
+    private boolean enableWrapContent = false;
 
     public DisallowParentTouchViewPager(Context context) {
         super(context);
@@ -32,17 +33,19 @@ public class DisallowParentTouchViewPager extends ViewPager {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        for(int i = 0; i < getChildCount(); i++) {
-            View child = getChildAt(i);
+        if (enableWrapContent) {
+            for (int i = 0; i < getChildCount(); i++) {
+                View child = getChildAt(i);
 
-            child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-            int h = child.getMeasuredHeight();
-            if(h > height) height = h;
-        }
+                child.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+                int h = child.getMeasuredHeight();
+                if (h > height) height = h;
+            }
 
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.EXACTLY);
 //        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED);
 
+        }
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
@@ -52,6 +55,10 @@ public class DisallowParentTouchViewPager extends ViewPager {
      */
     public void setMinHeight(int height) {
         this.height = height;
+    }
+
+    public void enableWrapContent(boolean isEnable) {
+        this.enableWrapContent = isEnable;
     }
 
     @Override

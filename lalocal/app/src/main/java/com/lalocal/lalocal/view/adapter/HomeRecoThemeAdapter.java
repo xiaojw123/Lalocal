@@ -52,7 +52,7 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
                 R.layout.home_recommend_theme_viewpager_item, null);
         RecommendRowsBean bean = mThemeList.get(position);
         SubThemeViewHolder holder = new SubThemeViewHolder();
-        holder.imgTheme = (RoundedImageView) view.findViewById(R.id.img_theme);
+        holder.imgTheme = (ImageView) view.findViewById(R.id.img_theme);
         holder.tvSpecialName = (TextView) view.findViewById(R.id.tv_theme_name);
         holder.tvSpecialSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
         holder.tvReadQuantity = (TextView) view.findViewById(R.id.tv_read_quantity);

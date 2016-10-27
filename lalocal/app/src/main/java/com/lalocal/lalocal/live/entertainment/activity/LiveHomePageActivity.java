@@ -99,7 +99,7 @@ public class LiveHomePageActivity extends BaseActivity {
     ImageView mImgArticleSelected;
 
     @BindView(R.id.vp_live_article)
-    ViewPager mVpLiveArticle;
+    DisallowParentTouchViewPager mVpLiveArticle;
 
     @BindView(R.id.layout_article_part)
     LinearLayout mLayoutArticlePart;
@@ -154,8 +154,10 @@ public class LiveHomePageActivity extends BaseActivity {
         int minHeight = mNestedScrollView.getMeasuredHeight();
         AppLog.i("hhhh", "screenHeight is " + minHeight);
 
+        // 设置高度适应内容
+        mVpLiveArticle.enableWrapContent(true);
         // 设置ViewPager最小高度
-        ((DisallowParentTouchViewPager)mVpLiveArticle).setMinHeight(minHeight);
+        mVpLiveArticle.setMinHeight(minHeight);
 
         // 初始化数据
         boolean isSelf = false;

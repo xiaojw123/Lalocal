@@ -148,10 +148,6 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-//        // 设置查看更多
-//        mVtvSeeMore.setText("查看更多");
-//        // 设置可点击
-//        mVtvSeeMore.setClickable(true);
         // 设置点击监听
         mVtvSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override

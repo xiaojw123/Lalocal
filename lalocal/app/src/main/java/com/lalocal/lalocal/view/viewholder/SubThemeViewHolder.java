@@ -9,7 +9,7 @@ import com.makeramen.roundedimageview.RoundedImageView;
  * Created by wangjie on 2016/10/25.
  */
 public class SubThemeViewHolder {
-    public RoundedImageView imgTheme;
+    public ImageView imgTheme;
     public TextView tvSpecialName;
     public TextView tvSpecialSubTitle;
     public TextView tvReadQuantity;
