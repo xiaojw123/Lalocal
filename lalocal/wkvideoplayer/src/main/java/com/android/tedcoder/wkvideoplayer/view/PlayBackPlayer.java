@@ -196,22 +196,33 @@ public class PlayBackPlayer extends RelativeLayout {
 
         @Override
         public void onClickShare() {
-            mVideoPlayCallback.onClickShare();
+            if(mVideoPlayCallback!=null){
+                mVideoPlayCallback.onClickShare();
+            }
+
         }
 
         @Override
         public void onClickQuit() {
-            mVideoPlayCallback.onClickQuit();
+            if(mVideoPlayCallback!=null){
+                mVideoPlayCallback.onClickQuit();
+            }
+
         }
 
         @Override
         public void onClickBefore(ImageView imageView) {
-            mVideoPlayCallback.onClickBefore(imageView);
+            if(mVideoPlayCallback!=null){
+                mVideoPlayCallback.onClickBefore(imageView);
+            }
+
         }
 
         @Override
         public void onClickNext(ImageView imageView) {
-        mVideoPlayCallback.onClickNext(imageView);
+            if(mVideoPlayCallback!=null) {
+                mVideoPlayCallback.onClickNext(imageView);
+            }
         }
     };
 

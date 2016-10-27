@@ -90,7 +90,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         public void onClick(View v) {
             ViewGroup container = (ViewGroup) v;
             showFragment(container);
-
         }
     };
 

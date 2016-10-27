@@ -362,7 +362,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         SharePopupWindow sharePopupWindow = new SharePopupWindow(this, shareVO);
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(getWindow().getDecorView(),
-                Gravity.CENTER, 0, 0);
+                Gravity.BOTTOM, 0, 0);
 
     }
 

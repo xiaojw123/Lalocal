@@ -2,6 +2,9 @@ package com.lalocal.lalocal.live.base.util;
 
 import android.app.Activity;
 
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+
 import java.util.Stack;
 
 /**
@@ -9,7 +12,6 @@ import java.util.Stack;
  */
 public class ActivityManager {
     public static ActivityManager appManager = null;
-
     private ActivityManager() {
 
     }
@@ -21,19 +23,32 @@ public class ActivityManager {
         return appManager;
     }
 
-    private static Stack<Activity> activityStack = new Stack<Activity>();
+    private static Stack<PlayBackActivity> playBackActivityStack = new Stack<PlayBackActivity>();
+    private static Stack<AudienceActivity> audienceActivityStack =new Stack<AudienceActivity>();
 
 
-    public static void addActivity(Activity activity) {
-        activityStack.add(activity);
+    public static void addPlayBackActivity(PlayBackActivity activity) {
+        playBackActivityStack.add(activity);
     }
 
+    public static void audienceActivityStack(AudienceActivity activity) {
+        audienceActivityStack.add(activity);
+    }
 
-    public static void removeCurrent() {
-        if(activityStack.size()>0){
-            Activity lastElement = activityStack.lastElement();
+    public static void removePlayBackCurrent() {
+        if(playBackActivityStack.size()>0){
+            Activity lastElement = playBackActivityStack.lastElement();
             lastElement.finish();
-            activityStack.remove(lastElement);
+            playBackActivityStack.remove(lastElement);
+        }
+
+    }
+
+    public static void removeAudienceCurrent() {
+        if(audienceActivityStack.size()>0){
+            Activity lastElement = audienceActivityStack.lastElement();
+            lastElement.finish();
+            audienceActivityStack.remove(lastElement);
         }
 
     }
@@ -45,24 +60,24 @@ public class ActivityManager {
      * @param activity
      */
     public static void removeActivity(Activity activity) {
-        for (int i = activityStack.size() - 1; i >= 0; i--) {
-            if (activityStack.get(i).getClass().equals(activity.getClass())) {
+        for (int i = playBackActivityStack.size() - 1; i >= 0; i--) {
+            if (playBackActivityStack.get(i).getClass().equals(activity.getClass())) {
                 activity.finish();
-                activityStack.remove(activity);
+                playBackActivityStack.remove(activity);
                 break;
             }
         }
     }
 
     public static void clear() {
-        for (Activity activity : activityStack) {
+        for (Activity activity : playBackActivityStack) {
             activity.finish();
         }
-        activityStack.clear();
+        playBackActivityStack.clear();
     }
 
 
-    public static int getSize() {
-        return activityStack.size();
+    public static int getplayBackSize() {
+        return playBackActivityStack.size();
     }
 }

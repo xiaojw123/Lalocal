@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -80,7 +81,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO,String.valueOf(targetId));
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
-                Gravity.CENTER, 0, 0);
+                Gravity.BOTTOM, 0, 0);
     }
 
     @Override
@@ -123,6 +124,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
                 try {
                     JSONObject jsonObject = new JSONObject(jsonData);
                     String targetType = jsonObject.optString("targetType");
+                    String targetId = jsonObject.optString("targetId");
                     if (!TextUtils.isEmpty(targetType)) {
                         if ("19".equals(targetType)) {
                             if (UserHelper.isLogined(CarouselFigureActivity.this)) {
@@ -134,11 +136,13 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
                                 startActivityForResult(intent,KeyParams.REQUEST_CODE);
                             }
                             return true;
+                        }else if("15".equals(targetType)){
+                            Intent intent = new Intent(CarouselFigureActivity.this, AudienceActivity.class);
+                            intent.putExtra("id",targetId);
+                            startActivity(intent);
+                            return true;
                         }
-
-
                     }
-
 
                 } catch (JSONException e) {
                     e.printStackTrace();

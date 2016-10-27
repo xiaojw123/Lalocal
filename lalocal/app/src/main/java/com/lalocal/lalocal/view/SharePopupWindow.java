@@ -13,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -34,22 +33,16 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private SpecialShareVOBean shareVO;
     private TextView cancel;
     private static final int REQUEST_PERM = 151;
-    private BlurImageView shareBlur;
+  //  private BlurImageView shareBlur;
     private View view;
     private View cancelLayout;
     private  String  targetId;
 
 
-    private OnShareListener onShareListener;
+
     private ContentLoader contentLoader;
 
-    public interface OnShareListener {
-        void getSharePlatform(SHARE_MEDIA share_media);
-    }
 
-    public void setOnLiveItemClickListener(OnShareListener onShareListener) {
-        this.onShareListener = onShareListener;
-    }
 
     public SharePopupWindow(Context cx, SpecialShareVOBean shareVO) {
         this.context = cx;
@@ -65,14 +58,13 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     public void showShareWindow() {
         boolean isInstallMm1 =CheckWeixinAndWeibo.checkAPPInstall(context,"com.tencent.mm");
         boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(context, "com.sina.weibo");
-
         if(!isInstallMm1&&!isInstallWeibo){
             Toast.makeText(context,"您尚未安装微博和微信，无法分享!",Toast.LENGTH_SHORT).show();
             dismiss();
         }
         view = LayoutInflater.from(context).inflate(R.layout.share_layout, null);
-        shareBlur = (BlurImageView) view.findViewById(R.id.share_blur);
-        shareBlur.setBlurImageRes(R.drawable.citybg,11,20);
+      /*  shareBlur = (BlurImageView) view.findViewById(R.id.share_blur);
+        shareBlur.setBlurImageRes(R.drawable.citybg,11,20);*/
         shareFriends = (LinearLayout) view.findViewById(R.id.share_friends);
         shareWechat = (LinearLayout) view.findViewById(R.id.share_wechat);
         shareWeibo = (LinearLayout) view.findViewById(R.id.share_weibo);
@@ -92,7 +84,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         }
 
         this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        this.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setContentView(view);
         this.setFocusable(true);
         this.setAnimationStyle(R.style.AnimBottom);
@@ -253,8 +245,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         public void onResult(SHARE_MEDIA share_media) {
             contentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()),share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
 
-            if(onShareListener!=null){
-                onShareListener.getSharePlatform(share_media);
+            if(onSuccessShare!=null){
+                onSuccessShare.shareSuccess();
             }
            if(share_media.equals(SHARE_MEDIA.SINA)){
                Toast.makeText(context,"微博分享成功!",Toast.LENGTH_SHORT).show();
@@ -285,12 +277,15 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
             }
         }
 
-
-
-
-
-
     }
 
+    private  OnSuccessShareListener onSuccessShare;
+
+    public  interface OnSuccessShareListener{
+        void shareSuccess();
+    }
+    public void setOnSuccessShare(OnSuccessShareListener onSuccessShare) {
+        this.onSuccessShare = onSuccessShare;
+    }
 
 }

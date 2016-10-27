@@ -149,7 +149,6 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                     allRows.add(liveFansOrAttentionRowsBean);
                 }
             }
-
             Collections.sort(allRows, comp);
             if(attentionOrFansRecyAdapter!=null){
                 attentionOrFansRecyAdapter.refresh(allRows);
@@ -205,14 +204,10 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
 
-              /*  for (int i = 1; i <= totalPages; i++) {
-                    String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + i;
-                    contentLoader.getAttentionOrFansList(typeIdTotal);
-
-                }*/
                 liveAttentionSearchEt.addTextChangedListener(watcher);
                 break;
             case R.id.live_attention_search_cancel:
+                searchPages=1;
                 liveSearchLayoutFont.setVisibility(View.VISIBLE);
                 liveSearchLayout.setVisibility(View.GONE);
                 isSearchFansOrAttention = false;
@@ -276,10 +271,10 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                     } else {
                         searchResultNull.setText("暂时没有粉丝哦!");
                     }
-                    liveAttentionSearchEt.setEnabled(false);
+                 //   liveAttentionSearchEt.setEnabled(false);
 
                 } else {
-                    liveAttentionSearchEt.setEnabled(true);
+                  //  liveAttentionSearchEt.setEnabled(true);
                     searchResultNull.setVisibility(View.GONE);
                     liveAttentionListview.setVisibility(View.VISIBLE);
                     totalPages = result.getTotalPages();

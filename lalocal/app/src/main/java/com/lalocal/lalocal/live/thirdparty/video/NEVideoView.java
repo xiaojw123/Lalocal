@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -447,7 +446,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
 
             if (getWindowToken() != null) {
 
-                new AlertDialog.Builder(mContext)
+             /*   new AlertDialog.Builder(mContext)
                         .setTitle("温馨提示")
                         .setMessage("视频已结束！")
                         .setPositiveButton("Ok",
@@ -459,7 +458,7 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
                                     }
                                 })
                         .setCancelable(false)
-                        .show();
+                        .show();*/
             }
             return true;
         }
