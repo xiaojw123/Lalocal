@@ -116,6 +116,16 @@ public class GiftStorePopuWindow extends PopupWindow {
     private void onGridViewItemClick(GiftGridViewAdpter  giftGridViewAdpter, View view, int position, long id) {
         TextView sendCount = (TextView) view.findViewById(R.id.gift_send_count);
         giftDataResultBean= (GiftDataResultBean) view.getTag(R.id.giftdatabean);
+        String code = giftDataResultBean.getCode();
+        if("003".equals(code)){
+            giftGridViewAdpter.setSelectedPosition(position);
+            giftGridViewAdpter.notifyDataSetChanged();
+            sendCount.setText("1");
+            sendTotal = 1;
+            sendCount.setVisibility(View.VISIBLE);
+            payBalance = sendTotal * (giftDataResultBean.getGold());
+            return;
+        }
         giftGridViewAdpter.setSelectedPosition(position);
         giftGridViewAdpter.notifyDataSetChanged();
         if (itemPosition != position) {
@@ -147,9 +157,7 @@ public class GiftStorePopuWindow extends PopupWindow {
                 break;
         }
         payBalance = sendTotal * (giftDataResultBean.getGold());
-
         clickCount++;
-
     }
 
     private void login() {

@@ -631,7 +631,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO,String.valueOf(specialToH5Bean.getTargetId()));
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
-                Gravity.CENTER, 0, 0);
+                Gravity.BOTTOM, 0, 0);
 
     }
 

@@ -1305,7 +1305,7 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else {
+                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
                     return;
@@ -2170,7 +2170,7 @@ public class ContentLoader {
 
         //创建直播间
         private void responseCreateLiveRoom(String json) {
-
+            AppLog.i("TAG","打印创建直播间返回日志："+json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             int id = createLiveRoomDataResp.getResult().getId();
             callBack.onCreateLiveRoom(createLiveRoomDataResp);

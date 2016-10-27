@@ -130,7 +130,7 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		shareActivity.showShareWindow();
 		shareActivity.setCallBackListener(this);
 		shareActivity.showAtLocation(BigPictureActivity.this.findViewById(R.id.big_picture_main),
-				Gravity.CENTER, 0, 0);
+				Gravity.BOTTOM, 0, 0);
 
 	}
 

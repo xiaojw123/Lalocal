@@ -39,7 +39,6 @@ import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
@@ -85,6 +84,8 @@ public class LiveHomePageActivity extends BaseActivity {
     RelativeLayout lineLayout;
     @BindView(R.id.ffdffhfd)
     View ffdffhfd;
+    @BindView(R.id.live_user_type)
+    ImageView liveUserType;
 
     @BindView(R.id.live_attention_homepage)
     RelativeLayout liveAttentionHomepage;
@@ -122,7 +123,6 @@ public class LiveHomePageActivity extends BaseActivity {
     private LiveRowsBean mUserLiving;
     // 用户文章列表
     private List<ArticleDetailsResultBean> mUserArticleList;
-
 
     private boolean isAuthor = false;
 
@@ -387,8 +387,9 @@ public class LiveHomePageActivity extends BaseActivity {
                 liveVerified.setText("专栏作者");
                 liveVerified.setTextColor(Color.WHITE);
                 liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
-
                 isAuthor = true;
+                liveUserType.setVisibility(View.VISIBLE);
+                liveVerified.setVisibility(View.GONE);
                 // 显示文章
                 mLayoutArticlePart.setVisibility(View.VISIBLE);
             } else if (result.getRole() == -1) {
@@ -397,13 +398,16 @@ public class LiveHomePageActivity extends BaseActivity {
                 liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
 
                 isAuthor = false;
+                liveUserType.setVisibility(View.GONE);
+                liveVerified.setVisibility(View.VISIBLE);
                 // 隐藏文章
                 mLayoutArticlePart.setVisibility(View.GONE);
             } else {
                 liveVerified.setText("未验证");
                 liveVerified.setTextColor(Color.BLACK);
                 liveVerified.setBackgroundColor(Color.parseColor("#999999"));
-
+                liveUserType.setVisibility(View.GONE);
+                liveVerified.setVisibility(View.VISIBLE);
                 isAuthor = false;
                 // 隐藏文章
                 mLayoutArticlePart.setVisibility(View.GONE);

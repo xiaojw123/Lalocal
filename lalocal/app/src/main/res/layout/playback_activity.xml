@@ -58,7 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableLeft="@drawable/onlivelight"
-                    android:drawableRight="@drawable/onlive"
+                    android:drawableRight="@drawable/replay"
                     android:textColor="@android:color/white"
                     android:drawablePadding="@dimen/live_padding_5dp"
                     android:textSize="@dimen/live_text_12sp" />

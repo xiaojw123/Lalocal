@@ -169,7 +169,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO, targetID);
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
-                Gravity.CENTER, 0, 0);
+                Gravity.BOTTOM, 0, 0);
     }
 
     //判断二维码是否下载过

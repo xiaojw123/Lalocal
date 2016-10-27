@@ -40,14 +40,15 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
     private LinearLayout startLiveLayout1;
     private String roomName;//直播室名字
     private BlurImageView roomBg;
+    private boolean isInstallMm1;
+    private boolean isInstallWeibo;
 
     public CreateLiveRoomPopuwindow(Context mContext){
         this.mContext=mContext;
     }
     public  void showCreateLiveRoomPopuwindow(){
-        boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(mContext,"com.tencent.mm");
-        boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(mContext, "com.sina.weibo");
-
+        isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(mContext,"com.tencent.mm");
+        isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(mContext, "com.sina.weibo");
         View view = View.inflate(mContext, R.layout.live_create_room_pop_layout, null);
         cancelCreateRoom = (ImageView) view.findViewById(R.id.live_create_room_close_iv);
         inputLiveRoom = (TextView) view.findViewById(R.id.input_start_live);
@@ -58,18 +59,21 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
         shareWeixin = (ImageView) view.findViewById(R.id.live_create_share_weixin);
         roomBg = (BlurImageView) view.findViewById(R.id.live_create_room_bg);
         TextView shareTv= (TextView) view.findViewById(R.id.create_live_pop_share_title);
+        shareFriends.setSelected(true);
+        isShareSelector = 0;
 
         if(!isInstallMm1){
             shareFriends.setVisibility(View.GONE);
             shareWeixin.setVisibility(View.GONE);
-            isShareSelector=2;
+            isShareSelector=1;
+            shareWeibo.setSelected(true);
         }
         if(!isInstallWeibo){
             shareWeibo.setVisibility(View.GONE);
-
-
+            shareFriends.setSelected(true);
+            isShareSelector=0;
         }
-        if(!isInstallMm1&&isInstallWeibo){
+        if(!isInstallMm1 &&!isInstallWeibo){
             shareTv.setVisibility(View.GONE);
             isShareSelector=-1;
         }
@@ -77,15 +81,14 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
 
         String userAvatar = UserHelper.getUserAvatar(mContext);
         if(userAvatar!=null){
-            roomBg.setBlurImageURL(userAvatar);
+            roomBg.setBlurImageURL( userAvatar);
         }
 
         roomBg.setScaleRatio(20);
         roomBg.setBlurRadius(1);
 
 
-        shareFriends.setSelected(true);
-        isShareSelector = 0;
+
         shareFriends.setOnClickListener(buttonClickListener);
         shareWeibo.setOnClickListener(buttonClickListener);
         shareWeixin.setOnClickListener(buttonClickListener);
@@ -146,30 +149,20 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
             switch (v.getId()){
                 case R.id.live_create_share_friends:
                     MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WECHAT1_SHARE);
-                    if(isFirstFirendsClick){
-                        isFirstFirendsClick=false;
-                        shareFriends.setSelected(false);
-                        isShareSelector=-1;
-                    }else {
-                        shareWeibo.setSelected(false);
-                        shareFriends.setSelected(true);
-                        shareWeixin.setSelected(false);
-                        isShareSelector=0;
-                    }
+                    setSelected(0,!isFirstFirendsClick);
                     break;
                 case R.id.live_create_share_weibo:
                     MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WEIBO_SHARE);
-                    shareWeibo.setSelected(true);
-                    shareFriends.setSelected(false);
-                    shareWeixin.setSelected(false);
-                    isShareSelector = 1;
+                    if(!isInstallMm1){
+                        setSelected(1,!isFirstFirendsClick);
+                    }else{
+                        setSelected(1,isFirstFirendsClick);
+                    }
+
                     break;
                 case R.id.live_create_share_weixin:
                     MobHelper.sendEevent(mContext,MobEvent.LIVE_START_WECHAT2_SHARE);
-                    shareFriends.setSelected(false);
-                    shareWeibo.setSelected(false);
-                    shareWeixin.setSelected(true);
-                    isShareSelector = 2;
+                    setSelected(2,isFirstFirendsClick);
                     break;
                 case R.id.start_live_layout:
                     MobHelper.sendEevent(mContext,MobEvent.LIVE_START_START);
@@ -190,6 +183,51 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
             }
         }
     };
+
+    private void setSelected(int isShareSelectr, boolean isSelector) {
+        switch (isShareSelectr){
+            case 0:
+                shareWeibo.setSelected(false);
+                shareFriends.setSelected(isSelector);
+                shareWeixin.setSelected(false);
+                if(isSelector){
+                    isShareSelector=0;
+                }else{
+                    isShareSelector=-1;
+                }
+                isFirstFirendsClick=isSelector;
+                break;
+            case 1:
+                shareWeibo.setSelected(isSelector);
+                shareFriends.setSelected(false);
+                shareWeixin.setSelected(false);
+                if(isSelector){
+                    isShareSelector=1;
+                }else{
+                    isShareSelector=-1;
+                }
+                if(!isInstallMm1){
+                    isFirstFirendsClick=isSelector;
+                }else{
+                    isFirstFirendsClick=!isSelector;
+                }
+
+                break;
+            case 2:
+                shareWeibo.setSelected(false);
+                shareFriends.setSelected(false);
+                shareWeixin.setSelected(isSelector);
+                if(isSelector){
+                    isShareSelector=2;
+                }else{
+                    isShareSelector=-1;
+                }
+                isFirstFirendsClick=!isSelector;
+                break;
+        }
+
+    }
+
 
 
     private OnCreateLiveListener onCreateLiveListener;
