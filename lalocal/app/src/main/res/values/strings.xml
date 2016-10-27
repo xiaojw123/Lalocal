@@ -306,9 +306,16 @@
     <string name="you_no_login_no_atten">你还没有登录，无法查看关注</string>
     <string name="default_description">宝宝，写几句话介绍自己吧</string>
     <string name="delete">删除</string>
+
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>
     <string name="live_camera_jurisdiction">没有视频权限，无法开启直播</string>
     <string name="live_camera_start_failure">摄像头启动失败,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_frequency_start_failure">音频权限开启失败,请尝试在手机应用权限管理中打开权限!</string>
+
+    <string name="gold_instructions">乐钻使用说明</string>
+    <string name="currency_instruction">货币说明</string>
+    <string name="score_instructions">游票使用说明</string>
+    <string name="exchange_rule">游票100起兑换, 且要是100的倍数</string>
+    <string name="go_to_start_live_travel">快去开启属于自己的直播旅行</string>
 
 </resources>

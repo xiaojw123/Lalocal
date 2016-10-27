@@ -13,14 +13,16 @@ import com.lalocal.lalocal.live.entertainment.adapter.HomepageArticleAdapter;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.view.CustomTitleView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyArticleActivity extends BaseActivity implements XRecyclerView.LoadingListener {
+public class MyArticleActivity extends BaseActivity implements XRecyclerView.LoadingListener{
 
 
     XRecyclerView mXRecyclerView;
+    CustomTitleView mCustomTitleView;
     TextView totalNumTv;
     boolean isRefresh, isLoadMore;
     int pageNumb, toalPages;
@@ -35,6 +37,7 @@ public class MyArticleActivity extends BaseActivity implements XRecyclerView.Loa
     }
 
     private void initRecycerView() {
+        mCustomTitleView=(CustomTitleView) findViewById(R.id.my_article_ctv);
         totalNumTv = (TextView) findViewById(R.id.my_article_num);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.my_article_xrlv);
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -74,6 +77,8 @@ public class MyArticleActivity extends BaseActivity implements XRecyclerView.Loa
             mXRecyclerView.setNoMore(true);
         }
     }
+
+
 
     class MyArticelHolder extends ICallBack {
 

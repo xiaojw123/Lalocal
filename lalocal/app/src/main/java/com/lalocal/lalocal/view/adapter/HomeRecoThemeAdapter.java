@@ -18,6 +18,7 @@ import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.viewholder.SubThemeViewHolder;
 import com.lalocal.lalocal.view.viewholder.ThemeViewHolder;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
@@ -58,8 +59,7 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
         holder.tvSaveQuantity = (TextView) view.findViewById(R.id.tv_save_quantity);
 
         // 设置专题图片
-        DrawableUtils.displayRadiusImg(mContext, holder.imgTheme, bean.getPhoto(),
-                DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
+        DrawableUtils.displayImg(mContext, holder.imgTheme, bean.getPhoto(), R.drawable.androidloading);
 
         // 设置名字
         String name = bean.getName();

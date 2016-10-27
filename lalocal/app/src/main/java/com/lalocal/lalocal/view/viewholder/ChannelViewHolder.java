@@ -20,6 +20,7 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
+import com.lalocal.lalocal.view.VerticalTextView;
 import com.lalocal.lalocal.view.adapter.HomeRecoLiveAdapter;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     private TextView mTitleView;
     private TextView mSubTitleView;
     private DisallowParentTouchViewPager mVpHotLives;
+    private LinearLayout mVtvSeeMore;
     private RelativeLayout mLayoutMore;
     private LinearLayout mDotContainer;
     private FrameLayout mLiveContainer;
@@ -54,6 +56,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
         mVpHotLives = (DisallowParentTouchViewPager) itemView.findViewById(R.id.vp_hot_lives);
         mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
+        mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
 
         // 传入父容器
         mVpHotLives.setNestParent(mPtrLayout);
@@ -62,6 +65,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         // 设置热播视频间距
         mVpHotLives.setPageMargin(mContext.getResources().getDimensionPixelSize(
                 R.dimen.home_recommend_viewpager_page_margin));
+
     }
 
     /**
@@ -80,7 +84,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         }
 
         final List<LiveRowsBean> hotLiveList = list;
-        int size = (list == null ? 0 : list.size());
+        final int size = (list == null ? 0 : list.size());
 
         if (mLiveEmpty) {
             mLiveContainer.setVisibility(View.GONE);
@@ -120,6 +124,14 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPageSelected(int position) {
                 CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.DARK_DOT);
+                // 如果滑动至最后一页
+                if (position == size - 1) {
+                    // 查看更多字样显示
+                    mVtvSeeMore.setVisibility(View.VISIBLE);
+                } else { // 如果不是最后一页
+                    // 查看更多字样隐藏
+                    mVtvSeeMore.setVisibility(View.GONE);
+                }
             }
 
             @Override
@@ -129,6 +141,15 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         });
 
         mLayoutMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转直播界面
+                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_NEWS);
+            }
+        });
+
+        // 设置点击监听
+        mVtvSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 跳转直播界面

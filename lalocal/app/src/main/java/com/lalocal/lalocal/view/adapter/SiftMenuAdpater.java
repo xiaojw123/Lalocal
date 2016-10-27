@@ -44,6 +44,7 @@ public class SiftMenuAdpater extends BaseRecyclerAdapter {
         contianer.setGravity(Gravity.CENTER_HORIZONTAL);
         contianer.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         CircleImageView menuImg = new CircleImageView(mContext);
+        menuImg.setScaleType(ImageView.ScaleType.CENTER_CROP);
         menuImg.setLayoutParams(new LinearLayout.LayoutParams((int) res.getDimension(R.dimen.sift_menu_img_width), (int) res.getDimension(R.dimen.sift_menu_img_width)));
         TextView name = new TextView(mContext);
         name.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_size_12_sp));

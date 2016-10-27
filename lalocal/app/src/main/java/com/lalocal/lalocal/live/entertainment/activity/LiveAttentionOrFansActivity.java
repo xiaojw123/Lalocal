@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.AttentionOrFansRecyAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -41,7 +42,7 @@ import butterknife.OnClick;
 /**
  * Created by android on 2016/8/7.
  */
-public class LiveAttentionOrFansActivity extends BaseActivity implements XListView.IXListViewListener {
+public class LiveAttentionOrFansActivity extends BaseActivity implements XListView.IXListViewListener, CustomTitleView.onBackBtnClickListener {
     @BindView(R.id.user_attention_title)
     CustomTitleView userAttentionTitle;
     @BindView(R.id.live_attention_search_et)
@@ -85,6 +86,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         } else {
             userAttentionTitle.setTitle("粉丝(0)");
         }
+        userAttentionTitle.setOnBackClickListener(this);
         initXlistView();
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
@@ -237,6 +239,17 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     boolean isSearchFansOrAttention = false;
     List<LiveFansOrAttentionRowsBean> allSearchRows = new ArrayList<LiveFansOrAttentionRowsBean>();
 
+    @Override
+    public void onBackClick() {
+        setResult(AccountEidt1Activity.UPDATE_ME_DATA);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(AccountEidt1Activity.UPDATE_ME_DATA);
+        super.onBackPressed();
+
+    }
 
     public class MyCallBack extends ICallBack {
         @Override
