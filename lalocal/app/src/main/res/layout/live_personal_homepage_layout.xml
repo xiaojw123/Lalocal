@@ -6,13 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.lalocal.lalocal.view.CustomTitleView
-        android:id="@+id/homepage_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        attr:lineVisible="false" />
-
     <LinearLayout
         android:id="@+id/master_attention_layout"
         android:layout_width="match_parent"
@@ -43,8 +36,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/master_attention_layout"
-        android:layout_below="@id/homepage_head">
+        android:layout_above="@id/master_attention_layout">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -62,7 +54,8 @@
                 <RelativeLayout
                     android:id="@+id/homepage_info"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp">
 
                     <RelativeLayout
                         android:id="@+id/line_layout"
@@ -275,4 +268,10 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/homepage_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        attr:lineVisible="false" />
 </RelativeLayout>
