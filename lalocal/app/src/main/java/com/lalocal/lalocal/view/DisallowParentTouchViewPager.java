@@ -8,12 +8,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.lalocal.lalocal.util.AppLog;
+
 /**
  * Created by wangjie on 2016/9/23.
  */
 public class DisallowParentTouchViewPager extends ViewPager {
 
     private ViewGroup parent;
+    private int height = 0;
 
     public DisallowParentTouchViewPager(Context context) {
         super(context);
@@ -29,7 +32,6 @@ public class DisallowParentTouchViewPager extends ViewPager {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int height = 0;
         for(int i = 0; i < getChildCount(); i++) {
             View child = getChildAt(i);
 
@@ -42,6 +44,14 @@ public class DisallowParentTouchViewPager extends ViewPager {
 //        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height, MeasureSpec.UNSPECIFIED);
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    /**
+     * 设置高度
+     * @param height
+     */
+    public void setMinHeight(int height) {
+        this.height = height;
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -37,8 +38,11 @@ import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 
 import java.util.List;
 
@@ -100,6 +104,9 @@ public class LiveHomePageActivity extends BaseActivity {
     @BindView(R.id.layout_article_part)
     LinearLayout mLayoutArticlePart;
 
+    @BindView(R.id.nested_scroll_view)
+    NestedScrollView mNestedScrollView;
+
     private LiveArticleVPAdapter mVPAdapter;
 
     private ContentLoader contentLoader;
@@ -126,7 +133,7 @@ public class LiveHomePageActivity extends BaseActivity {
         setContentView(R.layout.live_personal_homepage_layout);
         ButterKnife.bind(this);
         userId = getIntent().getStringExtra("userId");
-      //  back = getIntent().getStringExtra("back");
+        //  back = getIntent().getStringExtra("back");
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(userId);
@@ -143,8 +150,14 @@ public class LiveHomePageActivity extends BaseActivity {
      * 设置直播、文章列表数据
      */
     private void setLiveArticleData() {
+        // 获取屏幕高度
+        int minHeight = mNestedScrollView.getMeasuredHeight();
+        AppLog.i("hhhh", "screenHeight is " + minHeight);
+
+        // 设置ViewPager最小高度
+        ((DisallowParentTouchViewPager)mVpLiveArticle).setMinHeight(minHeight);
+
         // 初始化数据
-//        if (mVPAdapter == null) {
         boolean isSelf = false;
         if (masterAttentionLayout.getVisibility() == View.VISIBLE) {
             isSelf = false;
@@ -368,7 +381,7 @@ public class LiveHomePageActivity extends BaseActivity {
             }
 
 
-            if(result.getRole()==1){
+            if (result.getRole() == 1) {
                 liveVerified.setText("专栏作者");
                 liveVerified.setTextColor(Color.WHITE);
                 liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
@@ -376,7 +389,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 isAuthor = true;
                 // 显示文章
                 mLayoutArticlePart.setVisibility(View.VISIBLE);
-            }else if(result.getRole()==-1){
+            } else if (result.getRole() == -1) {
                 liveVerified.setText("管理员");
                 liveVerified.setTextColor(Color.WHITE);
                 liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
@@ -384,7 +397,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 isAuthor = false;
                 // 隐藏文章
                 mLayoutArticlePart.setVisibility(View.GONE);
-            }else {
+            } else {
                 liveVerified.setText("未验证");
                 liveVerified.setTextColor(Color.BLACK);
                 liveVerified.setBackgroundColor(Color.parseColor("#999999"));
@@ -488,6 +501,7 @@ public class LiveHomePageActivity extends BaseActivity {
 
         /**
          * 获取用户文章
+         *
          * @param articlesResp
          */
         @Override
