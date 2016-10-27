@@ -69,6 +69,7 @@ import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.WrapContentImageView;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -225,11 +226,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         AppLog.i("TAG", "onWindowFocusChanged");
-        if (hasFocus && !isshowPopu && CommonUtil.REMIND_BACK != 1) {
+       /* if (hasFocus && !isshowPopu && CommonUtil.REMIND_BACK != 1) {
             isshowPopu = true;
             //  showCreateLiveRoomPopuwindow();
 
-        }
+        }*/
     }
 
     //判断软键盘显示与隐藏
@@ -249,7 +250,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -595,17 +595,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
             super.onCreateLiveRoom(createLiveRoomDataResp);
             if (createLiveRoomDataResp.getReturnCode() == 0) {
-
                 LiveRowsBean liveRowsBean = createLiveRoomDataResp.getResult();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
                 SPCUtils.put(getActivity(), CREATE_ROOMID, String.valueOf(roomId));
-                Object ann = liveRowsBean.getAnnoucement();
-                String annoucement = null;
-                if (annoucement != null) {
-                    annoucement = ann.toString();
-                } else {
-                    annoucement = "这是公告哈";
-                }
+
                 createNickName = liveRowsBean.getUser().getNickName();
                 avatar = liveRowsBean.getUser().getAvatar();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
@@ -613,11 +606,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 cname = liveRowsBean.getCname();
                 shareVO = liveRowsBean.getShareVO();
                 userId = String.valueOf(liveRowsBean.getUser().getId());
-                getParameter(roomId, url, userId, annoucement, shareVO, channelId);
+                getParameter(liveRowsBean);
                 initParam();
                 if (CommonUtil.REMIND_BACK !=1) {
+                    AppLog.i("TAG","开启直播走了这1");
                     showCreateLiveRoomPopuwindow();
                 }else {
+                    AppLog.i("TAG","开启直播走了这2");
+                    if(TextUtils.isEmpty(roomName)){
+                        roomName=liveRowsBean.getUser().getNickName();
+                    }
+                    AppLog.i("TAG","开启直播走了这3");
                         liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
                 }
             }
@@ -630,6 +629,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             int returnCode = onLineUser.getReturnCode();
             AppLog.i("TAG", "获取在线人数" + onLineUser.getResult() + "返回码:" + returnCode);
+            if(returnCode!=0){
+                CommonUtil.showPromptDialog(LiveActivity.this, onLineUser.getMessage(), new CustomDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
+                        finish();
+                    }
+                });
+            }
             if (onLineUser.getErrorCode() != null) {
                 errorCode = (int) onLineUser.getErrorCode();
             }

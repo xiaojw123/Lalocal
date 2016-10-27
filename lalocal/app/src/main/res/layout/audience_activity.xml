@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-
             >
         </RelativeLayout>
         <LinearLayout
@@ -81,9 +80,6 @@
             android:layout_marginTop="@dimen/live_padding_12dp"
             android:orientation="horizontal"
             android:paddingLeft="@dimen/live_padding_10dp">
-
-
-
             <LinearLayout
                 android:id="@+id/live_master_info_layout"
                 android:layout_width="@dimen/live_height_119dp"

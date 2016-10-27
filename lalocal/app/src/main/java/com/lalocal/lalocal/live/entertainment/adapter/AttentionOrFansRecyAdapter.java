@@ -63,7 +63,7 @@ public class AttentionOrFansRecyAdapter extends RecyclerView.Adapter {
         viewHodler.attentionListItemName.setText(liveFansOrAttentionRowsBean.getNickName());
         int status = liveFansOrAttentionRowsBean.getAttentionVO().getStatus();
         if(status==2){
-            viewHodler.attentionListItemAttention.setText("已相互关注");
+            viewHodler.attentionListItemAttention.setText("相互关注");
             viewHodler.attentionListItemAttention.setTextColor(Color.parseColor("#666666"));
         }else if(status==1){
             viewHodler.attentionListItemAttention.setText("已关注");

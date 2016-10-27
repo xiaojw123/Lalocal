@@ -168,6 +168,10 @@ public class MsgViewHolderChat extends TViewHolder {
                 itenImage.setVisibility(View.VISIBLE);
                 DrawableUtils.displayImg(context,itenImage,messageToGiftBean.getGiftImage());
                 break;
+            case "13":
+                itemContent="分享了直播!";
+                textColor="#97d3e9";
+                break;
     /*        case "4":
                 if(challengeStatus==0){
 

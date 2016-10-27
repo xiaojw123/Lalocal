@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.view.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
@@ -11,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -22,10 +19,7 @@ import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.SquareImageView;
-import com.lalocal.lalocal.view.WrapContentImageView;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
@@ -60,7 +54,9 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
         SubLiveViewHolder liveViewHolder = new SubLiveViewHolder();
         liveViewHolder.container = (FrameLayout) view.findViewById(R.id.container);
         liveViewHolder.cardView = (CardView) view.findViewById(R.id.card_view);
+
         liveViewHolder.imgLivePic = (RoundedImageView) view.findViewById(R.id.img_live_pic);
+
         liveViewHolder.imgIcon = (ImageView) view.findViewById(R.id.icon);
         liveViewHolder.tvLiveIconContent = (TextView) view.findViewById(R.id.tv_icon_content);
         liveViewHolder.tvLiveTitle = (TextView) view.findViewById(R.id.tv_live_title);
@@ -74,8 +70,9 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
             DrawableUtils.displayImg(context, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), R.drawable.androidloading);
         } else if (!TextUtils.isEmpty(photo)) {
             DrawableUtils.displayImg(context, liveViewHolder.imgLivePic, user.getAvatarOrigin(), R.drawable.androidloading);
-        }
 
+        }
+       // liveViewHolder.imgLivePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
         // 如果图片链接一致，说明是公告视频，下方显示地理位置
         if (liveRowsBean.getType() == 1) { // 云信通过type来判断：1-系统，2-用户；声网通过cname来判断：null-系统，否则为用户
             liveViewHolder.imgIcon.setImageResource(R.drawable.peopleliving_location_darkic);
@@ -145,7 +142,9 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
     class SubLiveViewHolder {
         FrameLayout container;
         CardView cardView;
+
         RoundedImageView imgLivePic;
+
         TextView tvLiveTitle;
         TextView tvLiveIconContent;
         CircleImageView imgLiveAvatar;

@@ -6,13 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.lalocal.lalocal.view.CustomTitleView
-        android:id="@+id/homepage_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        attr:lineVisible="false" />
-
     <LinearLayout
         android:id="@+id/master_attention_layout"
         android:layout_width="match_parent"
@@ -43,8 +36,7 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/master_attention_layout"
-        android:layout_below="@id/homepage_head">
+        android:layout_above="@id/master_attention_layout">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -62,7 +54,8 @@
                 <RelativeLayout
                     android:id="@+id/homepage_info"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp">
 
                     <RelativeLayout
                         android:id="@+id/line_layout"
@@ -76,6 +69,18 @@
                             android:layout_alignParentBottom="true"
                             android:background="@color/color_b3" />
 
+
+                        <ImageView
+                            android:id="@+id/live_user_type"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_above="@+id/line_heheh"
+                            android:layout_marginBottom="@dimen/live_padding_5dp"
+                            android:layout_marginLeft="155dp"
+                            android:paddingLeft="@dimen/live_padding_5dp"
+                            android:paddingRight="@dimen/live_padding_5dp"
+                            android:src="@drawable/certifiedwriter_tag"
+                            android:visibility="gone"/>
                         <TextView
                             android:id="@+id/live_verified"
                             android:layout_width="wrap_content"
@@ -275,4 +280,10 @@
 
     </android.support.design.widget.CoordinatorLayout>
 
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/homepage_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        attr:lineVisible="false" />
 </RelativeLayout>

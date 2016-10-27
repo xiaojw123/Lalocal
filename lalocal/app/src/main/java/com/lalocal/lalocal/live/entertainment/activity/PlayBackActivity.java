@@ -21,8 +21,12 @@ import com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer;
 import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
+import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.LiveRowsBean;
@@ -46,6 +50,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by android on 2016/10/12.
  */
 public class PlayBackActivity extends BaseActivity {
+    public static final int RESQUEST_COD = 101;
 
 
     @BindView(R.id.video_player)
@@ -78,15 +83,14 @@ public class PlayBackActivity extends BaseActivity {
     private LiveUserInfoResultBean result;
     private int position1;
     private LiveUserBean user;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.playback_activity);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
         ButterKnife.bind(this);
-        ActivityManager.removeCurrent();
-        ActivityManager.addActivity(this);
+        ActivityManager.removePlayBackCurrent();
+        ActivityManager.addPlayBackActivity(this);
         contentLoader = new ContentLoader(this);
         myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
@@ -94,6 +98,17 @@ public class PlayBackActivity extends BaseActivity {
         contentLoader.getPlayBackLiveDetails(Integer.parseInt(id));
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
+            if (data != null) {
+                String email = data.getStringExtra(LoginActivity.EMAIL);
+                String psw = data.getStringExtra(LoginActivity.PSW);
+                contentLoader.login(email, psw);
+            }
+        }
+    }
 
     private void parseIntent(LiveRowsBean liveRowsBean) {
         videoList = liveRowsBean.getVideoList();
@@ -109,16 +124,14 @@ public class PlayBackActivity extends BaseActivity {
 
     private void initData(LiveRowsBean liveRowsBean) {
 
-
         playLoadingPageBg.setBlurImageURL(user.getAvatar());
         playLoadingPageBg.setScaleRatio(20);
         playLoadingPageBg.setBlurRadius(1);
-
         DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         playbackMasterInfoLayout.setOnClickListener(clickListener);
         AppLog.i("TAG", "视频回放:视频方向：" + direction + "    视频地址：" + videoList.get(0).getUrl());
-
+        // 视频回放:视频方向：1    视频地址：http://vid-11812.vod.chinanetcenter.broadcastapp.agoraio.cn/live-dev-388-11--20161027115838.mp4
         if (direction == 0) {//横屏
             positionChangeListener(0);
             videoViewPlayer.setVisibility(View.GONE);
@@ -169,7 +182,28 @@ public class PlayBackActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.playback_master_info_layout:
-                    contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
+                    if(UserHelper.isLogined(PlayBackActivity.this)){
+                        contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
+                    }else{
+                        CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
+                        customDialog.setContent(getString(R.string.live_login_hint));
+                        customDialog.setCancelable(false);
+                        customDialog.setCancelable(false);
+                        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+                        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+
+                                Intent intent = new Intent(PlayBackActivity.this, LoginActivity.class);
+                                startActivityForResult(intent, RESQUEST_COD);
+
+                            }
+                        });
+                        customDialog.show();
+
+                        DialogUtil.addDialog(customDialog);
+                    }
+
                     break;
             }
         }
@@ -327,14 +361,14 @@ public class PlayBackActivity extends BaseActivity {
                     status = (int) parseDouble;
 
                 }
-                CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
+                final CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
                 dialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                     @Override
                     public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                         Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
                         intent.putExtra("userId", String.valueOf(id));
-                        intent.putExtra("playback", "playback");
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
                 dialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {

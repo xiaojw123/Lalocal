@@ -15,6 +15,7 @@
         android:id="@+id/img_live_playback"
         android:layout_width="@dimen/homepage_playback_img_dimen"
         android:layout_height="@dimen/homepage_playback_img_dimen"
+        android:scaleType="centerCrop"
         android:src="@drawable/androidloading" />
 
     <RelativeLayout
@@ -102,13 +103,13 @@
                     android:src="@drawable/manytime_light" />
 
                 <TextView
-                    android:id="@+id/tv_live_playback_duration"
+                    android:id="@+id/tv_live_playback_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/dimen_size_4_dp"
                     android:singleLine="true"
-                    android:text="00:00:00"
+                    android:text="0000-00-00 00:00"
                     android:textColor="@color/color_b3"
                     android:textSize="@dimen/text_size_12_sp" />
             </LinearLayout>

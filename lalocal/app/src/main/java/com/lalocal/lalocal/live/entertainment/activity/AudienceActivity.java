@@ -31,6 +31,7 @@ import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
@@ -60,12 +61,14 @@ import com.lalocal.lalocal.live.thirdparty.video.constant.VideoConstant;
 import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
+import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.TouristInfoResp;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.neliveplayer.NELivePlayer;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -173,11 +176,18 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     protected String roomId;
     private CountDownTimer countDownTimer;
     private ImageView headIv;
+    private TextView overNick;
+    private TextView overSignature;
+    private TextView overAttention;
+    private TextView overFans;
+    private BlurImageView blurView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        ActivityManager.removeAudienceCurrent();
+        ActivityManager.audienceActivityStack(this);
         audienceCallBack = new AudienceCallBack();
         contentLoaderAudience = new ContentLoader(this);
         contentLoaderAudience.setCallBack(audienceCallBack);
@@ -186,7 +196,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         contentLoaderAudience.liveGiftStore();
 
         loginIm();
-       handler.postDelayed(new MyRunnable(),2000);
+
         if("0".equals(liveStatus)){
             showFinishLayout(true,2);
         }
@@ -214,7 +224,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 playType=String.valueOf(liveRowsBean.getType());
                 Object ann = liveRowsBean.getAnnoucement();
                 String annoucement = null;
-                if (annoucement != null) {
+                if (ann != null) {
                     annoucement = ann.toString();
                 } else {
                     annoucement = "这是公告哈";
@@ -225,12 +235,23 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 liveStatus=String.valueOf(liveRowsBean.getStatus());
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
+                int onlineUser = liveRowsBean.getOnlineUser();
                 url = liveRowsBean.getPullUrl();
                 userId = String.valueOf(liveRowsBean.getUser().getId());
-                getParameter(roomId,url,userId,annoucement,shareVO,channelId);
+                if(avatar!=null){
+                    blurView.setBlurImageURL(avatar);
+                    blurView.setScaleRatio(20);
+                    blurView.setBlurRadius(1);
+                }
+                DrawableUtils.displayImg(AudienceActivity.this,headIv,liveRowsBean.getUser().getAvatar());
+                getParameter(liveRowsBean);
                 registerObservers(true);
                 initParam();
                 initUIandEvent();
+                handler.postDelayed(new MyRunnable(),2000);
+                if("1".equals(playType)){
+                    hideBtn(onlineUser);
+                }
             }
         }
 
@@ -312,6 +333,28 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 });
                 customDialog.show();
         }
+        @Override
+        public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
+            super.onLiveUserInfo(liveUserInfosDataResp);
+
+            if (liveUserInfosDataResp.getReturnCode() == 0) {
+                LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
+                overNick.setText(result.getNickName());
+                if(result.getDescription().length()<1){
+                    overSignature.setText(getString(R.string.live_default_signture));
+                }else{
+                    overSignature.setText(result.getDescription());
+                }
+
+                overAttention.setText(String.valueOf(result.getAttentionNum()));
+                overFans.setText(String.valueOf(result.getFansNum()));
+            }
+        }
+    }
+
+    private void hideBtn(int onlineUser) {
+        liveGiftImg.setVisibility(View.GONE);
+        onlineCountText.setText(String.valueOf(onlineUser));
     }
 
     @Override
@@ -325,7 +368,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 worker().joinChannel(cname, config().mUid);
             }
         }
-
     }
 
     @Override
@@ -363,7 +405,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         worker().configEngine(cRole, vProfile);
     }
 
-
     private void loginIm() {
         if (!DemoCache.getLoginStatus()) {
             String userAccount = AuthPreferences.getUserAccount();
@@ -376,19 +417,11 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
     }
 
-
-
-
     private void initView() {
         viewById = findViewById(R.id.live_layout);
         viewById.setOnClickListener(buttonClickListener);
         loadingPage = findViewById(R.id.live_loading_page);
-        BlurImageView blurView= (BlurImageView) loadingPage.findViewById(R.id.loading_page_bg);
-        if(UserHelper.getUserAvatar(this)!=null){
-            blurView.setBlurImageURL(UserHelper.getUserAvatar(this));
-            blurView.setScaleRatio(20);
-            blurView.setBlurRadius(1);
-        }
+        blurView = (BlurImageView) loadingPage.findViewById(R.id.loading_page_bg);
         audienceOver.setVisibility(View.GONE);
         andiuence = (TextView) loadingPage.findViewById(R.id.audience_over_layout);
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
@@ -396,8 +429,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
         //阀值设置为屏幕高度的1/3
         keyHeight = screenHeight / 3;
-
-
     }
 
     protected void registerObservers(boolean register) {
@@ -501,7 +532,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                             if (creatorAccount.equals(fromAccountIn)) {
                                 masterComeBack=true;
                                 showFinishLayout(false, 2);
-
                             }
                         }
                         break;
@@ -538,6 +568,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             @Override
             public void onFinish() {
                 if(!masterComeBack){
+                    AppLog.i("TAG","主播还没有回来弹框");
                     showFinishLayout(true, 2);
                 }
             }
@@ -680,7 +711,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             videoView.setBufferStrategy(bufferStrategy);
             mediaType = "videoondemand";
             videoPlayer = new VideoPlayer(AudienceActivity.this, videoView, null, url,
-                    bufferStrategy, this, VideoConstant.VIDEO_SCALING_MODE_FILL_BLACK, mediaType);
+                    bufferStrategy, this, VideoConstant.VIDEO_SCALING_MODE_FILL_SCALE, mediaType);
             RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(videoView.getLayoutParams());
             palyerLayout.setBackgroundColor(Color.BLACK);
             videoView.setLayoutParams(lp);
@@ -703,7 +734,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         if(videoView==null){
             return;
         }
-/*        videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
+        videoView.setOnErrorListener(new NELivePlayer.OnErrorListener() {
             @Override
             public boolean onError(NELivePlayer neLivePlayer, int i, int i1) {
                 if (reminder == 0) {
@@ -739,7 +770,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 }
                 return false;
             }
-        });*/
+        });
         videoView.setOnPreparedListener(new NELivePlayer.OnPreparedListener() {
             @Override
             public void onPrepared(NELivePlayer neLivePlayer) {
@@ -760,8 +791,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     protected void findViews() {
         super.findViews();
 
-
-
         liveQuit = (ImageView) findViewById(R.id.live_quit);
       //  clickPraise = (ImageView) findViewById(R.id.live_telecast_like);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
@@ -776,13 +805,19 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
         audienceOver = findViewById(R.id.audience_over);
+
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 
         liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
         headIv = (ImageView) audienceOver.findViewById(R.id.master_info_head_iv);
-        liveMasterHome.setOnClickListener(buttonClickListener);
+        headIv.setOnClickListener(buttonClickListener);
+        overNick = (TextView) audienceOver.findViewById(R.id.master_info_nick_tv);
+        overSignature = (TextView)audienceOver.findViewById(R.id.master_info_signature);
+        overAttention = (TextView)audienceOver.findViewById(R.id.live_attention);
+        overFans = (TextView)audienceOver.findViewById(R.id.live_fans);
 
+        liveMasterHome.setOnClickListener(buttonClickListener);
         backHome.setOnClickListener(buttonClickListener);
         keyboardLayout.setAlpha(0);
         keyboardLayout.setFocusable(false);
@@ -800,7 +835,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         drawerLayout.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-
             }
 
             @Override
@@ -811,6 +845,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             @Override
             public void onDrawerClosed(View drawerView) {
                 liveQuit.setVisibility(View.VISIBLE);
+
             }
 
             @Override
@@ -937,6 +972,11 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     periscopeLayout.addHeart();
                     sendLike();
                     break;
+                case R.id.master_info_head_iv:
+                    Intent intent3 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
+                    intent3.putExtra("userId", userId);
+                    startActivity(intent3);
+                    break;
 
             }
         }
@@ -946,7 +986,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private WalletContent content;
    //显示礼物布局
     private void showGiftPage(int gold) {
-
         liveSettingLayout.setVisibility(View.GONE);
         giftStorePopuWindow = new GiftStorePopuWindow(this, giftSresult);
         giftStorePopuWindow.showGiftStorePopuWindow(gold);
@@ -960,9 +999,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 giftStoreFirstClick=true;
             }
         });
-
     }
-
 
     private int sendTotal;
     private int payBalance;
@@ -1018,8 +1055,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     boolean isMuteds = false;
 
     protected void showMasterInfoPopuwindow(final LiveUserInfoResultBean result, boolean isMuted, final String meberAccount, int id, int managerId, List<LiveManagerListBean> managerList) {
-
-
         AppLog.i("TAG","用户端走了showMasterInfoPopuwindow");
         isMuteds = isMuted;
         if (managerId != 0) {
@@ -1047,6 +1082,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             @Override
             public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                 MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_AVATAR);
+                if("1".equals(playType)){
+                    return;
+                } 
                 Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                 intent.putExtra("userId", String.valueOf(id));
                 startActivity(intent);
@@ -1065,6 +1103,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             customLiveUserInfoDialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                    if("1".equals(playType)){
+                        return;
+                    }
                     Intent intent = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent.putExtra("userId", String.valueOf(id));
                     startActivity(intent);
@@ -1220,7 +1261,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     // 发送点赞爱心
     public void sendLike() {
-        if (!isFastClick()) {
+        if (!isFastClick()&&container!=null&&container.account!=null) {
             LiveMessage liveMessage=new LiveMessage();
             liveMessage.setStyle(MessageType.like);
             liveMessage.setUserId(userId);
@@ -1258,6 +1299,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     @Override
     public void onError() {
+        AppLog.i("TAG","用户端播放错误弹框");
         showFinishLayout(true, 2);
     }
 

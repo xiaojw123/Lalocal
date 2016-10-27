@@ -162,7 +162,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                     SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
                     shareActivity.showShareWindow();
                     shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
-                            Gravity.CENTER, 0, 0);
+                            Gravity.BOTTOM, 0, 0);
                 }
                 break;
             case R.id.play_btn:

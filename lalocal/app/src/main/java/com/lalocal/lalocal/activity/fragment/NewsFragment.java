@@ -291,12 +291,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         } else {
             return 0;
         }
-
-
     }
 
     private int prePosition = -1;
-
     private void initHeaderView() {
         AppLog.i("TAG", "给recycler添加头部");
         searchinfate = View.inflate(getActivity(), R.layout.header_search_layout, null);
@@ -311,6 +308,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         liveSeachFl.setOnClickListener(this);
         dotContainer = (LinearLayout) inflate.findViewById(R.id.live_dot_container);
         sliderLayout = (SliderLayout) inflate.findViewById(R.id.live_ad_slider);
+
         sliderLayout.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
         // 轮播图页面改变
         sliderLayout.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
@@ -346,7 +344,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
             if (data != null) {
                 isLogining = true;
@@ -356,9 +353,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     }
-
     boolean firstLoadData = true;
-
     @Override
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
         super.onHiddenChanged(hidden);
@@ -392,8 +387,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             case R.id.live_create_room:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
                 if (Build.VERSION.SDK_INT >= 23) {
+                    AppLog.i("TAG","点击直播按钮，版本大于23，权限判断");
                     reminderUserPermission();//创建直播间，判断权限
                 } else {
+                    AppLog.i("TAG","点击直播按钮，版本小于，权限判断");
                     prepareLive();
                 }
                 break;
@@ -553,7 +550,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     createAnn = "这是公告";
                 }
                 //初始化直播间
-          //      LiveActivity.start(getActivity(), result, createAnn, reminfBack);
+
             }
         }
 
@@ -652,6 +649,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     dotContainer.removeAllViews();
                     for (int i = 0; i < adResultList.size(); i++) {
                         DefaultSliderView defaultSliderView = new DefaultSliderView(getActivity());
+                       // CustomSliderView defaultSliderView=new CustomSliderView(getActivity());
                         defaultSliderView.image(adResultList.get(i).photo);
                        defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
                         defaultSliderView.setOnSliderClickListener(onSliderClickListener);
@@ -756,7 +754,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     Intent intent1=new Intent(getActivity(), AudienceActivity.class);
                     intent1.putExtra("id",String.valueOf(targetId));
                     startActivity(intent1);
-
                     break;
             }
         }
@@ -941,7 +938,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 prepareLive();
             } else {
-                Toast.makeText(getActivity(), "没有视频权限，无法开启直播", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.live_camera_jurisdiction), Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -971,25 +968,25 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        AppLog.i("TAG","直播首页走了onResume");
         if (CommonUtil.RESULT_DIALOG == 2) {
             CommonUtil.RESULT_DIALOG = 0;
             final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setContent("摄像头启动失败,请尝试在手机应用权限管理中打开权限");
+            customDialog.setContent(getString(R.string.live_camera_start_failure));
             customDialog.setCancelable(false);
-            customDialog.setOkBtn("确定", new CustomChatDialog.CustomDialogListener() {
+            customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
                 @Override
                 public void onDialogClickListener() {
                     customDialog.dismiss();
                 }
             });
-
             customDialog.show();
         } else if (CommonUtil.RESULT_DIALOG == 3) {
             CommonUtil.RESULT_DIALOG = 0;
             final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setContent("音频权限开启失败,请尝试在手机应用权限管理中打开权限");
+            customDialog.setContent(getString(R.string.live_frequency_start_failure));
             customDialog.setCancelable(false);
-            customDialog.setOkBtn("确定", new CustomChatDialog.CustomDialogListener() {
+            customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
                 @Override
                 public void onDialogClickListener() {
                     customDialog.dismiss();
