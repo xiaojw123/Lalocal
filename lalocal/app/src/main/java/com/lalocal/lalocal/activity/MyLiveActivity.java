@@ -13,16 +13,18 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyLiveAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyLiveActivity extends BaseActivity implements XRecyclerView.LoadingListener {
+public class MyLiveActivity extends BaseActivity implements XRecyclerView.LoadingListener{
     XRecyclerView mXRecyclerView;
-    TextView totalNumTv;
+    TextView hintTv;
     int pageNum, pageSize;
     boolean isRefresh, isLoadMore;
+    CustomTitleView titleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,8 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
     }
 
     private void initView() {
-        totalNumTv = (TextView) findViewById(R.id.my_live_toalnum_tv);
+        titleView=(CustomTitleView) findViewById(R.id.my_live_ctv);
+        hintTv= (TextView) findViewById(R.id.my_live_items_hint);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.my_live_items_xrlv);
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mXRecyclerView.setPullRefreshEnabled(true);
@@ -52,7 +55,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         if (pageNum < pageSize) {
             isLoadMore = true;
             ++pageNum;
-            mContentloader.getUserLive(UserHelper.getUserId(this),pageNum);
+            mContentloader.getUserLive(UserHelper.getUserId(this), pageNum);
         } else {
             isLoadMore = false;
             mXRecyclerView.setNoMore(true);
@@ -61,13 +64,13 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
     }
 
-    class LiveCallBack extends ICallBack{
+    class LiveCallBack extends ICallBack {
         List<LiveRowsBean> rowsList = new ArrayList<>();
         MyLiveAdapter adapter;
 
         @Override
         public void onDeleteLiveHistory() {
-            Toast.makeText(MyLiveActivity.this,"删除成功",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MyLiveActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -76,8 +79,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
                 int toalRows = item.getTotalRows();
                 if (toalRows > 0) {
                     pageNum = item.getPageNumber();
-                    pageSize = item.getPageSize();
-                    totalNumTv.setText("共" + item.getTotalRows() + "篇");
+                    pageSize = item.getTotalPages();
                     if (isRefresh) {
                         isRefresh = false;
                         mXRecyclerView.refreshComplete();
@@ -90,15 +92,19 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
                     }
                     rowsList.addAll(item.getRows());
                     if (adapter == null) {
-                        adapter = new MyLiveAdapter(mXRecyclerView,mContentloader,rowsList);
+                        adapter = new MyLiveAdapter(mXRecyclerView, mContentloader, rowsList);
                         mXRecyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateItems(rowsList);
                     }
                 } else {
                     mXRecyclerView.setVisibility(View.GONE);
+                    hintTv.setVisibility(View.VISIBLE);
                 }
 
+            }else{
+                mXRecyclerView.setVisibility(View.GONE);
+                hintTv.setVisibility(View.VISIBLE);
             }
         }
 

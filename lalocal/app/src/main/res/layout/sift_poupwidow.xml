@@ -20,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/sift_menu_rlv_top"
+        android:overScrollMode="never"
         />
 
 

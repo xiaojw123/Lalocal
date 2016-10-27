@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.LoginActivity;
@@ -24,6 +25,7 @@ import com.lalocal.lalocal.activity.MyLiveActivity;
 import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
+import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
@@ -96,6 +98,9 @@ MeFragment extends BaseFragment {
     ImageView authorTag;
     @BindView(R.id.home_me_item_artice)
     FrameLayout articleFl;
+    @BindView(R.id.home_me_item_artice_line)
+    View articleLine;
+
 
     @BindDimen(R.dimen.home_me_username_top)
     int userNameTop;
@@ -191,13 +196,18 @@ MeFragment extends BaseFragment {
         } else if (resultCode == SettingActivity.UN_LOGIN_OK) {
             signOut();
         } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
-            String nickname = data.getStringExtra(KeyParams.NICKNAME);
-            String avatar = data.getStringExtra(KeyParams.AVATAR);
-            if (user != null) {
-                user.setNickName(nickname);
-                user.setAvatar(avatar);
+            AppLog.print("UPDATE_ME_DATA_____islOgin___" + UserHelper.isLogined(getActivity()));
+            if (UserHelper.isLogined(getActivity())) {
+                String nickname = data.getStringExtra(KeyParams.NICKNAME);
+                String avatar = data.getStringExtra(KeyParams.AVATAR);
+                if (user != null) {
+                    user.setNickName(nickname);
+                    user.setAvatar(avatar);
 //                updateFragmentView(UserHelper.isLogined(getActivity()), user);
-                mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
+                    mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
+                }
+            } else {
+                updateFragmentView(false, null);
             }
         } else if (resultCode == SettingActivity.IM_LOGIN) {
             isImLogin = true;
@@ -209,7 +219,12 @@ MeFragment extends BaseFragment {
             String imtken = imLoginData.getStringExtra(KeyParams.IM_TOKEN);
             AppLog.i("TAG", "ccid:" + ccid + "token:" + imtken);
         } else if (resultCode == UPDAE_MY_WALLET) {
-            mContentloader.getMyWallet();
+            AppLog.print("UPDAE_MY_WALLET___islogin__" + UserHelper.isLogined(getActivity()));
+            if (UserHelper.isLogined(getActivity())) {
+                mContentloader.getMyWallet();
+            } else {
+                updateFragmentView(false, null);
+            }
         }
     }
 
@@ -270,7 +285,7 @@ MeFragment extends BaseFragment {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 
             }
-            homeMeItemWallet.setVisibility(View.VISIBLE);
+            homeMeItemWalletAmountTv.setVisibility(View.VISIBLE);
             mContentloader.getLiveUserInfo(String.valueOf(UserHelper.getUserId(getActivity())));
             mContentloader.getMyWallet();
         } else {
@@ -284,19 +299,21 @@ MeFragment extends BaseFragment {
             homeMeFansNum.setText("0");
             homeMeFollowNum.setText("0");
             hidenArticeTag();
-            homeMeItemWallet.setVisibility(View.GONE);
+            homeMeItemWalletAmountTv.setVisibility(View.GONE);
         }
     }
 
     public void showArticleTag() {
         authorTag.setVisibility(View.VISIBLE);
         articleFl.setVisibility(View.VISIBLE);
+        articleLine.setVisibility(View.VISIBLE);
 
     }
 
     public void hidenArticeTag() {
         authorTag.setVisibility(View.GONE);
         articleFl.setVisibility(View.GONE);
+        articleLine.setVisibility(View.GONE);
     }
 
     @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_atten_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
@@ -432,6 +449,16 @@ MeFragment extends BaseFragment {
         @Override
         public void onLoginSucess(User user) {
             updateFragmentView(true, user);
+        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
+                if (!UserHelper.isLogined(getActivity())) {
+                    updateFragmentView(false, null);
+                }
+            }
+
         }
 
         @Override

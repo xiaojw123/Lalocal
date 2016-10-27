@@ -22,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
@@ -364,7 +363,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         @Override
         public void onError(VolleyError volleyError) {
             if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
-                UserHelper.updateSignOutInfo(AccountEidt1Activity.this);
                 Intent intent = new Intent(AccountEidt1Activity.this, LoginActivity.class);
                 startActivityForResult(intent, LOGIN_RQEUST_CODE);
             }

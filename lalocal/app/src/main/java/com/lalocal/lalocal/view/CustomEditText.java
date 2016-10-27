@@ -176,7 +176,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         }
 
 
-        if (isFilterSpace) {
+//        if (isFilterSpace) {
             if (s.toString().contains(" ")) {
                 String[] str = s.toString().split(" ");
                 String str1 = "";
@@ -187,7 +187,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
                 editText.setSelection(start);
             }
 
-        }
+//        }
     }
 
     public static String filterPassword(String str) throws PatternSyntaxException {

@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context="com.lalocal.lalocal.activity.MyFavoriteActivity">
     <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/my_favorite_ctv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title_name="@string/my_favorite"

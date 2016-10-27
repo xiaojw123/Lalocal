@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,6 +40,10 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
     LinearLayout myCouponLlt;
     @BindView(R.id.my_wallet_ctv)
     CustomTitleView myWalletCtv;
+    @BindView(R.id.my_wallet_instructions)
+    TextView instructions_tv;
+    @BindString(R.string.gold_instructions)
+    String goldInstructions;
     WalletContent mWalletContent;
 
 
@@ -46,7 +52,9 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_wallet_layout);
         unbinder = ButterKnife.bind(this);
+        instructions_tv.setText(Html.fromHtml("<u>" + goldInstructions + "</u>"));
         myWalletCtv.setOnBackClickListener(this);
+
         setLoaderCallBack(new WalletCallBack());
         mWalletContent = getWalletContent();
         if (mWalletContent == null) {
@@ -58,7 +66,7 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
 
     }
 
-    @OnClick({my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt})
+    @OnClick({my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt,R.id.my_wallet_instructions})
     public void onClick(View view) {
         switch (view.getId()) {
             case my_diamond_llt:
@@ -79,6 +87,9 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
                 couponIntent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
                 couponIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(couponIntent, KeyParams.REQUEST_CODE);
+                break;
+            case R.id.my_wallet_instructions:
+                CurrencyInstructionActivity.start(this,mWalletContent);
                 break;
         }
     }

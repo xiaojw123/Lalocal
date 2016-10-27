@@ -57,6 +57,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -74,9 +75,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
-import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
-import com.lalocal.lalocal.view.CustomLinearLayoutManger;
 import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.LiveMainAdapter;
 import com.netease.nimlib.sdk.NIMClient;
@@ -90,6 +89,8 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.lalocal.lalocal.util.DrawableUtils.tintDrawable;
 
 /**
  * Created by xiaojw on 2016/6/3.
@@ -156,7 +157,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         createLiveRoom.setOnClickListener(this);
         searchBar = (ImageView) view.findViewById(R.id.live_search_bar);
         searchBar.setOnClickListener(this);
-
         titleAttention = (TextView) view.findViewById(R.id.live_fragment_title_attention);
         titleAttention.setOnClickListener(this);
         titleHot = (TextView) view.findViewById(R.id.live_fragment_title_hot);
@@ -212,7 +212,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     boolean isStopAutoCycle=false;
 
     private void initRecyclerView() {
-        CustomLinearLayoutManger layoutManager = new CustomLinearLayoutManger(getActivity());
+        CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         xRecyclerView.setLayoutManager(layoutManager);
         initHeaderView();
@@ -338,7 +338,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @NonNull
     private Drawable getTextColorDrawable(TextView liveSearchTv) {
         Drawable drawable = getResources().getDrawable(R.drawable.searchbar_searchicon);
-        Drawable colorDrawable = DrawableUtils.tintDrawable(drawable, liveSearchTv.getTextColors());
+        Drawable colorDrawable = tintDrawable(drawable, liveSearchTv.getTextColors());
         colorDrawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         return colorDrawable;
     }
@@ -433,8 +433,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     attenAdapter.setOnLiveItemClickListener(liveItemClickListener);
                 }
                 attenAdapter.setRecyclerView(xRecyclerView);
-                xRecyclerView.setAdapter(attenAdapter);
                 xRecyclerView.setHeaderVisible();
+                xRecyclerView.setAdapter(attenAdapter);
                 if (UserHelper.isLogined(getActivity())) {
                     if (attenLoginText.getVisibility() == View.VISIBLE) {
                         attenLoginText.setVisibility(View.GONE);

@@ -1,12 +1,17 @@
 package com.lalocal.lalocal.activity;
 
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,6 +19,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.KeyboardUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -25,8 +31,8 @@ import butterknife.OnClick;
 
 import static com.lalocal.lalocal.R.id.exchage_btn;
 
-public class ExchangeActivity extends BaseActivity implements TextWatcher, CustomTitleView.onBackBtnClickListener {
-    private static String FORMART_EXCHARGE_PROMPT = "%1$d优惠券马上要兑换成%2$s乐钻啦";
+public class ExchangeActivity extends BaseActivity implements TextWatcher, CustomTitleView.onBackBtnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
+    private static String FORMART_EXCHARGE_PROMPT = "%1$d游票马上要兑换成%2$s乐钻啦";
     @BindView(R.id.exchage_score_num_tv)
     TextView exchageScoreNumTv;
     @BindView(R.id.exchage_gold_num_tv)
@@ -39,8 +45,12 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     TextView unitTv;
     @BindView(R.id.exchange_title_ctv)
     CustomTitleView exchangeCtv;
+    @BindView(R.id.exchange_root_view)
+    RelativeLayout parentLayout;
+    RelativeLayout.LayoutParams exchargeBtnParams;
     int scale;
     WalletContent mWalletCont;
+    int lastHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +58,8 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
         setLoaderCallBack(new ExchangeCallBack());
+        exchargeBtnParams = (RelativeLayout.LayoutParams) exchageBtn.getLayoutParams();
+        parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(this);
         KeyboardUtil.showSoftKey(exchageScoreEdit);
         exchangeCtv.setOnBackClickListener(this);
         mWalletCont = getWalletContent();
@@ -126,6 +138,25 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
 
     }
 
+    @Override
+    public void onGlobalLayout() {
+        Rect r = new Rect();
+        // r will be populated with the coordinates of your view that area still visible.
+        parentLayout.getWindowVisibleDisplayFrame(r);
+        int screenHeight = parentLayout.getRootView().getHeight();
+        int height = screenHeight - r.bottom;
+        if (height == lastHeight) {
+            return;
+        }
+        if (height > 0) {
+            exchargeBtnParams.bottomMargin = height;
+        } else {
+            exchargeBtnParams.bottomMargin = 0;
+        }
+        exchageBtn.setLayoutParams(exchargeBtnParams);
+        lastHeight = height;
+    }
+
 
     class ExchangeCallBack extends ICallBack {
         @Override
@@ -140,6 +171,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
             mWalletCont = content;
             updateView();
         }
+
     }
 
     @Override
@@ -148,6 +180,19 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         KeyboardUtil.hidenSoftKey(exchageScoreEdit);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            WindowManager.LayoutParams params = getWindow().getAttributes();
+            AppLog.print("keySoft inputmode status___" + params.softInputMode);
+            if (KeyboardUtil.isShowSoftKey()) {
+                KeyboardUtil.hidenSoftKey(exchageScoreEdit);
+            } else {
+                KeyboardUtil.showSoftKey(exchageScoreEdit);
+            }
+        }
+        return super.onTouchEvent(event);
+    }
 
     @Override
     public void onBackClick() {
