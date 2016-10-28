@@ -17,6 +17,7 @@
     <dimen name="live_padding_48dp">48dp</dimen>
     <dimen name="live_padding_50dp">50dp</dimen>
     <dimen name="live_padding_55dp">55dp</dimen>
+    <dimen name="live_padding_109dp">109dp</dimen>
     <dimen name="live_padding_124dp">124dp</dimen>
     <dimen name="live_over_padding_top">136dp</dimen>
     <dimen name="live_over_padding_left">110dp</dimen>

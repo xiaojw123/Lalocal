@@ -77,6 +77,9 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
             final LiveRowsBean item = mItems.get(position);
             if (item != null) {
                 ItemLiveHolder itemHolder = (ItemLiveHolder) RecyclerViewDragHolder.getHolder(holder);
+                itemHolder.locationTv.getCompoundDrawables()[0].setAlpha(20);
+                itemHolder.onlineNumTv.getCompoundDrawables()[0].setAlpha(20);
+                itemHolder.liveLenTv.getCompoundDrawables()[0].setAlpha(20);
                 DrawableUtils.displayImg(mContext, itemHolder.postImg, item.getPhoto());
                 itemHolder.titleTv.setText(item.getTitle());
                 String adddres = item.getAddress();
@@ -84,13 +87,8 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
                 String startAt = item.getStartAt();
                 String endAt = item.getEndAt();
                 String toalScore = String.valueOf(item.getTotalScore());
-                if (!TextUtils.isEmpty(adddres)) {
-                    itemHolder.locationTv.setVisibility(View.VISIBLE);
-                    itemHolder.locationTv.setText(adddres);
-                }
-                if (!TextUtils.isEmpty(onlienNum)) {
-                    itemHolder.onlineNumTv.setText(onlienNum);
-                }
+                itemHolder.locationTv.setText(adddres);
+                itemHolder.onlineNumTv.setText(onlienNum);
                 itemHolder.liveLenTv.setText(startAt);
 //                String liveLen = "00:00:00";
 //                if (!TextUtils.isEmpty(startAt) && !TextUtils.isEmpty(endAt)) {
@@ -152,7 +150,7 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
 
     public void remove(int position) {
         LiveRowsBean item = mItems.get(position);
-        AppLog.print("liveAdapter remove___position___" + position+",id__"+item.getId());
+        AppLog.print("liveAdapter remove___position___" + position + ",id__" + item.getId());
         mContentLoader.deleteLiveHistory(item.getId());
         mItems.remove(position);
         notifyDataSetChanged();

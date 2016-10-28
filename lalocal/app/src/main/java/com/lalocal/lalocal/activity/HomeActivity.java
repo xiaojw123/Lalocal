@@ -178,8 +178,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     @Override
     public void onShowRecommendFragment() {
-        AppLog.print("Activity  onShowRecommendFragment");
-        showFragment(home_recommend_tab);
+//        showFragment(home_recommend_tab);
+        showFragment(home_news_tab);
     }
 
     public static final int FRAGMENT_NEWS = 0;

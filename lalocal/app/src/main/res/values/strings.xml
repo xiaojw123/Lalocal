@@ -317,5 +317,6 @@
     <string name="score_instructions">游票使用说明</string>
     <string name="exchange_rule">游票100起兑换, 且要是100的倍数</string>
     <string name="go_to_start_live_travel">快去开启属于自己的直播旅行</string>
+    <string name="got_to_atten_travel_talent">快去关注旅行达人，看遍世界的美...</string>
 
 </resources>
