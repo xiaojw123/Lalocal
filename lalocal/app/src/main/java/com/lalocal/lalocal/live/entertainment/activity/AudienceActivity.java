@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.RechargeActivity;
@@ -183,6 +184,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private TextView overFans;
     private BlurImageView blurView;
     private MyRunnable myRunnable;
+    private TextView masterAttentino;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,14 +208,35 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         @Override
         public void run() {
             handler.removeCallbacks(this);
-            if (onlineCounts > 0&&contentLoaderAudience!=null) {
+            if (onlineCounts > 0&&contentLoaderAudience!=null&&channelId!=null) {
                 contentLoaderAudience.getAudienceUserOnLine(onlineCounts,channelId);
             }
             handler.postDelayed(this, 2000);
         }
     }
     boolean firstWarning=true;
+    private int overAttentionStatus;
     private class AudienceCallBack extends ICallBack {
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+            if (volleyError != null) {
+                String errorMsg = volleyError.toString();
+                if (volleyError.networkResponse != null) {
+                    int code = volleyError.networkResponse.statusCode;
+                    if (code == 401) {
+                        if(handler!=null){
+                            handler.removeCallbacks(myRunnable);
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+
         @Override
         public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
             super.onLiveDetails(liveDetailsDataResp);
@@ -372,13 +395,19 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 }else{
                     overSignature.setText(result.getDescription());
                 }
-
-                overAttention.setText(String.valueOf(result.getAttentionNum()));
+                Object status = result.getAttentionVO().getStatus();
+                double parseDouble = Double.parseDouble(String.valueOf(status));
+                overAttentionStatus = (int) parseDouble;
+                if(overAttentionStatus==0){
+                    masterAttentino.setText("关注");
+                }else{
+                    masterAttentino.setText("已关注");
+                }
+                AudienceActivity.this.overAttention.setText(String.valueOf(result.getAttentionNum()));
                 overFans.setText(String.valueOf(result.getFansNum()));
             }
         }
     }
-
     private void hideBtn(int onlineUser) {
         liveGiftImg.setVisibility(View.GONE);
         onlineCountText.setText(String.valueOf(onlineUser));
@@ -855,15 +884,17 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 
-        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
+      /*  liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);*/
         headIv = (ImageView) audienceOver.findViewById(R.id.master_info_head_iv);
         headIv.setOnClickListener(buttonClickListener);
         overNick = (TextView) audienceOver.findViewById(R.id.master_info_nick_tv);
         overSignature = (TextView)audienceOver.findViewById(R.id.master_info_signature);
         overAttention = (TextView)audienceOver.findViewById(R.id.live_attention);
         overFans = (TextView)audienceOver.findViewById(R.id.live_fans);
-
-        liveMasterHome.setOnClickListener(buttonClickListener);
+        audienceOver.findViewById(R.id.master_dialog_report_audience);
+        masterAttentino = (TextView) audienceOver.findViewById(R.id.master_dialog_attention_audience);
+        masterAttentino.setOnClickListener(buttonClickListener);
+      //  liveMasterHome.setOnClickListener(buttonClickListener);
         backHome.setOnClickListener(buttonClickListener);
         keyboardLayout.setAlpha(0);
         keyboardLayout.setFocusable(false);
@@ -1006,12 +1037,12 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     CustomChallengeRaiseDialog  customChallengeRaiseDialog=new CustomChallengeRaiseDialog(AudienceActivity.this);
                     customChallengeRaiseDialog.show();
                     break;
-                case R.id.live_master_home_over:
+             /*   case R.id.live_master_home_over:
 
                     Intent intent2 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent2.putExtra("userId", userId);
                     startActivity(intent2);
-                    break;
+                    break;*/
                 case R.id.live_layout:
                     periscopeLayout.addHeart();
                     sendLike();
@@ -1020,6 +1051,16 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     Intent intent3 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent3.putExtra("userId", userId);
                     startActivity(intent3);
+                    break;
+                case R.id.master_dialog_attention_audience:
+                //    contentLoaderAudience.getLiveUserInfo(userId);
+                    if(overAttentionStatus==0){
+                        masterAttentino.setText("已关注");
+                        contentLoaderAudience.getAddAttention(userId);
+                    }else {
+                        contentLoaderAudience.getCancelAttention(userId);
+                        masterAttentino.setText("关注");
+                    }
                     break;
 
             }
@@ -1387,7 +1428,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             if(customLiveUserInfoDialog!=null){
                 customLiveUserInfoDialog.dismiss();
             }
-            contentLoaderAudience.getLiveUserInfo(userId);
+            if(userId!=null){
+                contentLoaderAudience.getLiveUserInfo(userId);
+            }
         }
         if (!liveEnd && !isAudienceOver) {
             AppLog.i("TAG","主播回来了隐藏主播信息界面");

@@ -482,11 +482,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
         sendPlaneName = (TextView) findViewById(R.id.audience_gift_send_plane);
-        massageTest = (TextView) findViewById(R.id.engling);
+
         aniView = (FrameAnimation) findViewById(R.id.ani_view);
       //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
-        massageTest.setOnClickListener(clickListener);
+
 
         // 点赞的爱心布局
         periscopeLayout = (PeriscopeLayout) findViewById(R.id.periscope);
@@ -768,9 +768,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                /* case R.id.live_telecast_challenge:
                     clickChallengeBtn();
                     break;*/
-                case R.id.engling:
-                    testMessage();
-                    break;
 
             }
         }
@@ -910,7 +907,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     messageListPanel.onIncomingMessage(messages);
                     break;
 
-
                 case MessageType.onlineNum:
                     //更新在綫人數
                     AppLog.i("TAG", "获取主播上传的人数:" + onlineNum);
@@ -1007,7 +1003,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     enterroomgetnick = member1.getNick();
                     masterAvatar = member1.getAvatar();
                     creatorAccount = roomInfo.getCreator();
-
                     member1.setRoomId(roomInfo.getRoomId());
                     ChatRoomMemberCache.getInstance().saveMyMember(member1);
                     DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
@@ -1018,7 +1013,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     chatRoomStatusRemind("登陆聊天室成功...");
                     LiveConstant.enterRoom=true;
                     initInputPanel(creatorAccount, channelId);
-                  //  testMessage();
+
                 }
                 @Override
                 public void onFailed(int code) {
@@ -1040,36 +1035,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     int count=0;
     boolean status=true;
     CountDownTimer countDownTimer =null;
-    private void testMessage() {
-        if(countDownTimer==null){
-            countDownTimer=new CountDownTimer(1000000000, 250) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    LiveMessage liveMessage=new LiveMessage();
-                    liveMessage.setStyle(MessageType.text);
-                    liveMessage.setUserId(userId);
-                    liveMessage.setCreatorAccount(creatorAccount);
-                    liveMessage.setChannelId(channelId);
-                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
-                    sendMessage(imMessage, MessageType.text);
-                    count++;
-                }
-                @Override
-                public void onFinish() {
-                }
-            };
-        }
 
-        if(status){
-            countDownTimer.start();
-            status=false;
-        }else {
-            status=true;
-            countDownTimer.cancel();
-            countDownTimer.onFinish();
-        }
-
-    }
 
     protected void initInputPanel(String creatorAccount, String channelId) {
 
@@ -1284,7 +1250,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         giftAnimationViewDown = findView(R.id.gift_animation_view);
         giftAnimationViewUp = findView(R.id.gift_animation_view_up);
         giftAnimation = new GiftAnimations(giftPlaneUp, giftAnimationViewDown, giftAnimationViewUp, this);
-        giftPlaneAnimation = new GiftPlaneAnimation(anchorHeadImg, userHeadImg, giftPlaneUp, giftPlaneBg, this, avatar,aniView);
+        giftPlaneAnimation = new GiftPlaneAnimation(anchorHeadImg, userHeadImg, giftPlaneUp, giftPlaneBg, this, avatar);
 
     }
 
@@ -1339,7 +1305,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         super.onDestroy();
         registerObservers(false);
         unregisterReceiver(myNetReceiver);
-
         AppLog.i("TAG","直播基类走了onDestroy");
 
         adapter = null;
@@ -1560,7 +1525,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onStop() {
         super.onStop();
-        DialogUtil.clear();
+
     }
 
 }

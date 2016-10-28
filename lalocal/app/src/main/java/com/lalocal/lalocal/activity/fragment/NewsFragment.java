@@ -6,9 +6,11 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -395,13 +397,14 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.live_create_room:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
-                if (Build.VERSION.SDK_INT >= 23) {
+               /* if (Build.VERSION.SDK_INT >= 23) {
                     AppLog.i("TAG", "点击直播按钮，版本大于23，权限判断");
                     reminderUserPermission();//创建直播间，判断权限
                 } else {
                     AppLog.i("TAG", "点击直播按钮，版本小于，权限判断");
                     prepareLive();
-                }
+                }*/
+                reminderUserPermission();
                 break;
             case R.id.live_search_fl:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_SEARCH);
@@ -1010,6 +1013,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        DialogUtil.clear();
         AppLog.i("TAG", "直播首页走了onResume");
         if (CommonUtil.RESULT_DIALOG == 2) {
             CommonUtil.RESULT_DIALOG = 0;
@@ -1020,6 +1024,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 @Override
                 public void onDialogClickListener() {
                     customDialog.dismiss();
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.fromParts("package", getActivity().getPackageName(), null));
+                    startActivity(intent);
                 }
             });
             customDialog.show();
@@ -1032,6 +1040,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 @Override
                 public void onDialogClickListener() {
                     customDialog.dismiss();
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.fromParts("package", getActivity().getPackageName(), null));
+                    startActivity(intent);
                 }
             });
             customDialog.show();

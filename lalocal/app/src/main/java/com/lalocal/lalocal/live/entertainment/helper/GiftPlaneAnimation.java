@@ -16,7 +16,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
-import com.lalocal.lalocal.live.entertainment.ui.FrameAnimation;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
@@ -40,26 +39,18 @@ public class GiftPlaneAnimation {
     private boolean isStartAnim=true;
     ImageView mAnchorHeadImg,mUserHeadImg;
     private String avatar;
-    FrameAnimation aniView;
-  /*  int[] srcId =
-            { R.drawable.plane1, R.drawable.plane2, R.drawable.plane3,
-                    R.drawable.plane4, R.drawable.plane5, R.drawable.plane6,
-                    R.drawable.plane7, R.drawable.plane8, R.drawable.plane9,
-                    R.drawable.plane10, R.drawable.plane11, R.drawable.plane12,
-                    R.drawable.plane13,  R.drawable.plane14,  R.drawable.plane15, R.drawable.plane16};*/
 
-    public GiftPlaneAnimation(ImageView anchorHeadImg, ImageView userHeadImg, ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext, String avatar, FrameAnimation aniView) {
+
+
+    public GiftPlaneAnimation(ImageView anchorHeadImg,ImageView userHeadImg,ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext,String avatar) {
         mAnchorHeadImg=anchorHeadImg;
         mUserHeadImg=userHeadImg;
         this.giftPlaneUp = giftPlaneUp;
         this.mContext = mContext;
         this.giftPlaneBg = giftPlanceBg;
         this.avatar=avatar;
-        this.aniView=aniView;
         gfitPlaneIndex = giftPlanceBg.getChildAt(0);
         giftPlaneText = (TextView) giftPlanceBg.getChildAt(1);
-
-     //   aniView.setBitmapResoursID(srcId);
         AppLog.i("TAG","飞机动画1:avatar"+avatar);
         DrawableUtils.displayImg(mContext,mAnchorHeadImg,avatar);
     }
@@ -67,10 +58,10 @@ public class GiftPlaneAnimation {
     public void showPlaneAnimation(ChatRoomMessage message) {
         GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
         cache.add(messageToGiftBean);
-        startAnimation(giftPlaneUp,giftPlaneBg,aniView);
+        startAnimation(giftPlaneUp,giftPlaneBg);
     }
 
-    private void startAnimation(ImageView target,RelativeLayout giftPlanceBg,FrameAnimation aniView) {
+    private void startAnimation(ImageView target,RelativeLayout giftPlanceBg) {
 
         if(isStartAnim){
             isStartAnim=false;
@@ -79,39 +70,23 @@ public class GiftPlaneAnimation {
                 isStartAnim=true;
                 return;
             }
-            updateView(giftBean, target,giftPlanceBg,aniView);
+            updateView(giftBean, target,giftPlanceBg);
         }
     }
 
-    private void updateView(final  GiftBean giftBean, final ImageView target,final RelativeLayout giftPlanceBg,final FrameAnimation aniView) {
-
+    private void updateView(final  GiftBean giftBean, final ImageView target,final RelativeLayout giftPlanceBg) {
+        mAnchorHeadImg.setVisibility(View.VISIBLE);
+        mUserHeadImg.setVisibility(View.VISIBLE);
         AppLog.i("TAG","飞机动画2："+giftBean.getHeadImage());
         DrawableUtils.displayImg(mContext,mUserHeadImg,giftBean.getHeadImage());
         target.setVisibility(View.VISIBLE);
-       target.setBackgroundResource(R.drawable.plane_rocket);
-    /*     aniView.setOnFrameFinisedListener(new FrameAnimation.OnFrameFinishedListener() {
-
-            @Override
-            public void onStop()
-            {
-                aniView.stop();
-            }
-
-            @Override
-            public void onStart()
-            {
-            }
-        });*/
-      //  aniView.start();
-        mAnchorHeadImg.bringToFront();
-        mAnchorHeadImg.setVisibility(View.VISIBLE);
-        mUserHeadImg.setVisibility(View.VISIBLE);
+        target.setBackgroundResource(R.drawable.plane_rocket);
         giftPlaneBg.setVisibility(View.VISIBLE);
         String s = giftBean.getUserName() + "  与主播同乘飞机旅行";
         TextView sendName= (TextView) giftPlanceBg.findViewById(R.id.audience_gift_send_plane);
         sendName.setText(s);
         giftPlaneBg.startAnimation(getTranslateAnim());
-       rocketAnimation = (AnimationDrawable) target.getBackground();
+        rocketAnimation = (AnimationDrawable) target.getBackground();
         rocketAnimation.start();
         handler.postDelayed(new Runnable() {
             @Override
@@ -159,14 +134,13 @@ public class GiftPlaneAnimation {
             super.handleMessage(msg);
             if (msg.what == 1 || msg.what == 2) {
                 rocketAnimation.stop();
-              //  aniView.setVisibility(View.GONE);
                 isStartAnim=true;
                 if (msg.what == 1) {
                     giftPlaneUp.setVisibility(View.GONE);
                     giftPlaneBg.setVisibility(View.GONE);
                     mAnchorHeadImg.setVisibility(View.GONE);
                     mUserHeadImg.setVisibility(View.GONE);
-                    startAnimation(giftPlaneUp,giftPlaneBg,aniView);
+                    startAnimation(giftPlaneUp,giftPlaneBg);
 
                 }
             }

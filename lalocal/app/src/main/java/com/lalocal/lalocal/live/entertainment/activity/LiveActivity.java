@@ -591,6 +591,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
         private int errorCode;
 
+
         @Override
         public void onResponseFailed(String message,int code) {
             //TODO:wcj add
@@ -771,7 +772,18 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
+            if (volleyError != null) {
+                String errorMsg = volleyError.toString();
+                if (volleyError.networkResponse != null) {
+                    int code = volleyError.networkResponse.statusCode;
+                    if (code == 401) {
+                        if(handler!=null){
+                            handlerLine.removeCallbacks(myRunnable);
+                        }
+                    }
+                }
 
+            }
         }
 
     }
@@ -1094,18 +1106,18 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 isClickStartLiveBtn = true;
                 //开始直播的时间
                 startTime = System.currentTimeMillis();
-                if (channelId != null) {
-                    liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
-                } else {
-                    finish();
-                }
+
                 if (isShareSelector == 0) {
                     liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
                 } else if (isShareSelector == 1) {
                     liveShare(SHARE_MEDIA.SINA);
                 } else if (isShareSelector == 2) {
                     liveShare(SHARE_MEDIA.WEIXIN);
+                }else{
+                 startShareLive(false);
                 }
+
+
             }
 
             @Override
@@ -1483,10 +1495,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     class MyUMListener implements UMShareListener {
 
-
         @Override
         public void onResult(SHARE_MEDIA share_media) {
             liveContentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()), share_media.equals(SHARE_MEDIA.SINA) ? "2" : (share_media.equals(SHARE_MEDIA.WEIXIN) ? "1" : "0"));
+
             if (share_media.equals(SHARE_MEDIA.SINA)) {
                 Toast.makeText(LiveActivity.this, "微博分享成功!", Toast.LENGTH_SHORT).show();
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
@@ -1494,6 +1506,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享成功!", Toast.LENGTH_SHORT).show();
             }
+            startShareLive(true);
         }
 
         @Override
@@ -1505,6 +1518,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享失败!", Toast.LENGTH_SHORT).show();
             }
+            startShareLive(true);
         }
 
         @Override
@@ -1516,7 +1530,38 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "已取消微信朋友圈分享!", Toast.LENGTH_SHORT).show();
             }
+            startShareLive(true);
         }
+
+    }
+
+    private void startShareLive(boolean isResult) {
+        if(!isResult){
+            if (channelId != null) {
+                liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
+            } else {
+                finish();
+            }
+        }else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (channelId != null) {
+                        liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
+                    } else {
+                        finish();
+                    }
+
+                }
+            }).start();
+        }
+
+
     }
 
 

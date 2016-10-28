@@ -47,7 +47,7 @@ public class FrameAnimation extends SurfaceView implements SurfaceHolder.Callbac
 		mSurfaceHolder.addCallback(this);// 注册回调方法
 
 		// 白色背景
-		setZOrderOnTop(true);
+	//	setZOrderOnTop(true);
 		mSurfaceHolder.setFormat(PixelFormat.TRANSLUCENT);
 	}
 
