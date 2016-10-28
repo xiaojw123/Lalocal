@@ -1304,10 +1304,10 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT) {
+                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
-                    callBack.onResponseFailed(message);
+                    callBack.onResponseFailed(message, resultCode);
                     return;
 
                 }

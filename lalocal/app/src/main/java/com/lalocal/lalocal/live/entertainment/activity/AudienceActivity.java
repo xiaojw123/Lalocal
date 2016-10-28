@@ -213,7 +213,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             handler.postDelayed(this, 2000);
         }
     }
-
+    boolean firstWarning=true;
     private class AudienceCallBack extends ICallBack {
         @Override
         public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
@@ -271,6 +271,27 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 giftSresult = giftDataResp.getResult();
             }
         }
+
+        @Override
+        public void onResponseFailed(String message, int code) {
+            super.onResponseFailed(message, code);
+            if(code==230&&firstWarning){
+                firstWarning = false;
+                final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+                customDialog.setContent(getString(R.string.audience_status_unsual));
+                customDialog.setCancelable(false);
+                customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
+                        firstWarning = true;
+                        customDialog.dismiss();
+                        finish();
+                    }
+                });
+                customDialog.show();
+            }
+        }
+
         @Override
         public void onTouristInfo(String json) {
             super.onTouristInfo(json);

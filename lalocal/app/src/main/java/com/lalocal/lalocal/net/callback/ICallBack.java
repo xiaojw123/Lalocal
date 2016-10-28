@@ -197,11 +197,8 @@ public abstract class ICallBack {
     }
 
     public void onError(VolleyError volleyError) {
-
-
     }
-    public void onResponseFailed(String message){
-
+    public void onResponseFailed(String message,int code ){
     }
     //推荐
     public void onRecommend(RecommendDataResp recommendDataResp){}
