@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.neenbedankt.android-apt'
+//apply plugin: 'newlens'
 def cfg = rootProject.ext.configuration
 def libs = rootProject.ext.libraries
 repositories {
@@ -93,6 +94,7 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:percent:22.2.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
+    compile files('libs/nbs.newlens.agent.jar')
 }
 
 

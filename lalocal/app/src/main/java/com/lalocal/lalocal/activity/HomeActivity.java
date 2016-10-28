@@ -49,6 +49,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         setContentView(R.layout.home_layout);
         initView();
         checkUpdate();
+        //听云SDK
+//        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
 
     private void checkUpdate() {
