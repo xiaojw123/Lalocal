@@ -550,7 +550,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
-        public void onResponseFailed(String message) {
+        public void onResponseFailed(int code,String message) {
 //            resetAdapterData();
         }
 

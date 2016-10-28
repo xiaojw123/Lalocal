@@ -591,7 +591,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         private int errorCode;
 
         @Override
-        public void onResponseFailed(String message) {
+        public void onResponseFailed(int code,String message) {
       //TODO:wcj add
         }
 

@@ -55,6 +55,8 @@ import com.lalocal.lalocal.model.WelcomeImg;
 
 import java.util.List;
 
+import static android.R.id.message;
+
 /**
  * Created by xiaojw on 2016/6/1.
  */
@@ -200,7 +202,7 @@ public abstract class ICallBack {
 
 
     }
-    public void onResponseFailed(String message){
+    public void onResponseFailed(int returnCode,String message){
 
     }
     //推荐
