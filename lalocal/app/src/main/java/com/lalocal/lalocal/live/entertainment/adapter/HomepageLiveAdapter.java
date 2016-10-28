@@ -257,7 +257,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         // 直播回放浏览人数
         TextView tvLivePlaybackPeople;
         // 直播回放时长
-        TextView tvLivePlaybackDuration;
+        TextView tvLivePlaybackTime;
         // 直播回放定位图标
         ImageView imgPlaybackLocation;
         // 直播回放浏览人数图标
@@ -274,7 +274,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             this.tvLivePlaybackTitle = (TextView) itemView.findViewById(R.id.tv_live_playback_title);
             this.tvLivePlaybackLocation = (TextView) itemView.findViewById(R.id.tv_live_playback_location);
             this.tvLivePlaybackPeople = (TextView) itemView.findViewById(R.id.tv_live_playback_people);
-            this.tvLivePlaybackDuration = (TextView) itemView.findViewById(R.id.tv_live_playback_duration);
+            this.tvLivePlaybackTime = (TextView) itemView.findViewById(R.id.tv_live_playback_time);
             this.imgPlaybackLocation = (ImageView) itemView.findViewById(R.id.icon_playback_location);
             this.imgPlaybackPeople = (ImageView) itemView.findViewById(R.id.icon_playback_people);
             this.imgPlaybackTime = (ImageView) itemView.findViewById(R.id.icon_playback_time);
@@ -292,9 +292,6 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             String location = null;
             String people = null;
             String startAt = null;
-            String endAt = null;
-            // 直播时长
-            String duration = "";
 
             if (bean != null) {
                 // 获取直播预览图
@@ -307,8 +304,6 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                 people = String.valueOf(bean.getOnlineNumber());
                 // 获取开始时间
                 startAt = bean.getStartAt();
-                // 获取结束时间
-                endAt = bean.getEndAt();
             }
 
             // -空数据处理
@@ -324,11 +319,11 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             if (TextUtils.isEmpty(people)) {
                 people = "0";
             }
-            if (TextUtils.isEmpty(startAt) || TextUtils.isEmpty(endAt)) {
-                duration = "00:00:00";
-            } else {
-                // 处理时长
-                duration = CommonUtil.calculateDuration(startAt, endAt);
+            if (TextUtils.isEmpty(startAt)) {
+                startAt = "获取播放时间失败";
+            } else if (startAt.contains(":") && startAt.substring(startAt.indexOf(":")).contains(":")) { // 如果开始时间包含两个“:”
+                // 去掉秒数
+                startAt = startAt.substring(0, startAt.lastIndexOf(":"));
             }
 
             // -数据填充
@@ -336,7 +331,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             tvLivePlaybackTitle.setText(title);
             tvLivePlaybackLocation.setText(location);
             tvLivePlaybackPeople.setText(people);
-            tvLivePlaybackDuration.setText(duration);
+            tvLivePlaybackTime.setText(startAt);
             if (isBottom) {
                 RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) itemContainer.getLayoutParams();
                 lp.setMargins(0, 0, 0, DensityUtil.dip2px(mContext, 15));
