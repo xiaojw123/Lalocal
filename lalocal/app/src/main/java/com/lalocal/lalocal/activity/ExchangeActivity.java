@@ -1,13 +1,19 @@
 package com.lalocal.lalocal.activity;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -52,12 +58,19 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     int scale;
     WalletContent mWalletCont;
     int lastHeight;
+    boolean hasNavigationBar;
+    int navigationBarHeight;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
+        hasNavigationBar = checkDeviceHasNavigationBar(this);
+        if (hasNavigationBar) {
+            navigationBarHeight = getNavigationBarHeight();
+        }
         setLoaderCallBack(new ExchangeCallBack());
         exchargeBtnParams = (RelativeLayout.LayoutParams) exchageBtn.getLayoutParams();
         parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -69,11 +82,11 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         } else {
             mContentloader.getMyWallet();
         }
-        AppLog.print("navigationBarheight_____"+getNavigationBarHeight());
     }
+
     private int getNavigationBarHeight() {
-        Resources resources =getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
+        Resources resources = getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         int height = resources.getDimensionPixelSize(resourceId);
         return height;
     }
@@ -146,6 +159,22 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
 
     }
 
+    @SuppressLint("NewApi")
+    public static boolean checkDeviceHasNavigationBar(Context activity) {
+
+        //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
+        boolean hasMenuKey = ViewConfiguration.get(activity)
+                .hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap
+                .deviceHasKey(KeyEvent.KEYCODE_BACK);
+
+        if (!hasMenuKey && !hasBackKey) {
+            // 做任何你需要做的,这个设备有一个导航栏
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public void onGlobalLayout() {
         Rect r = new Rect();
@@ -153,11 +182,13 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         parentLayout.getWindowVisibleDisplayFrame(r);
         int screenHeight = parentLayout.getRootView().getHeight();
         int height = screenHeight - r.bottom;
+        Log.i("xjw", "onGlobalLayout screenHeight___" + screenHeight + ", bottom___" + r.bottom + ", top__" + r.top);
+        //1920  1812  1011
         if (height == lastHeight) {
             return;
         }
-        if (height > 0) {
-            exchargeBtnParams.bottomMargin = height;
+        if (height > navigationBarHeight) {
+            exchargeBtnParams.bottomMargin = height-navigationBarHeight;
         } else {
             exchargeBtnParams.bottomMargin = 0;
         }

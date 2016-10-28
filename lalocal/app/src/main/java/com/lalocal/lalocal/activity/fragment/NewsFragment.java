@@ -248,8 +248,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 int scollYDistance = getScollYDistance();
                 int i = DensityUtil.dip2px(getActivity(), 10);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
+                AppLog.print("onScrolled firstVisibleItemPosition____"+firstVisibleItemPosition+"____scollDy____"+scollDy);
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
-                    if (isVisible) {
+                    if (isVisible&&scollDy!=0) {
                         lastScrollDy = scollDy;
                         searchBar.setVisibility(View.VISIBLE);
                         isVisible = false;

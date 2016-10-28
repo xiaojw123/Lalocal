@@ -40,7 +40,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class DestinationAreaActivity extends BaseActivity {
     public static final String AREA_ID = "area_id";
@@ -50,7 +49,6 @@ public class DestinationAreaActivity extends BaseActivity {
     CustomTitleView destinationAreaTitle;
     @BindView(R.id.search_view)
     FrameLayout searchView;
-    @BindView(R.id.des_areanav_menu_hot)
     TextView desAreanavMenuHot;
     @BindView(R.id.des_areanav_menu_strategy)
     TextView desAreanavMenuStrategy;
@@ -60,7 +58,6 @@ public class DestinationAreaActivity extends BaseActivity {
     TextView desAreanavMenuFreewarker;
     @BindView(R.id.des_areanav_menu_lacoalplay)
     TextView desAreanavMenuLacoalplay;
-    Unbinder unbinder;
     @BindView(R.id.des_area_menunav_container)
     LinearLayout desAreaMenunavContainer;
     @BindView(R.id.des_area_items_xlv)
@@ -87,7 +84,8 @@ public class DestinationAreaActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.destination_area_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
+        desAreanavMenuHot = (TextView) findViewById(R.id.des_areanav_menu_hot);
         String areaName = getIntent().getStringExtra(AREA_NAME);
         destinationAreaTitle.setTitle(String.format(areaTile, areaName));
         desAreaItemsXlv.setPullRefreshEnable(true);
@@ -145,8 +143,10 @@ public class DestinationAreaActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if (poupWindow!=null&&poupWindow.isShowing()) {
+            poupWindow.dismiss();
+        }
         super.onDestroy();
-        unbinder.unbind();
     }
 
 
@@ -239,7 +239,7 @@ public class DestinationAreaActivity extends BaseActivity {
         }
 
         @Override
-        public void onResponseFailed(int code,String message) {
+        public void onResponseFailed(int code, String message) {
             showEmptView();
         }
 
@@ -472,7 +472,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 break;
 
             case R.id.des_areanav_menu_hot:
-                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuHot);
                 showLoadingView();
                 isHotLoading = true;
@@ -490,7 +490,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 loader.getHotRoutes(areaId);
                 break;
             case R.id.des_areanav_menu_strategy:
-                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuStrategy);
                 showLoadingView();
                 if (strategyAdpater != null) {
@@ -499,7 +499,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 loader.getDesAreaRoutes(10, 1, areaId, 2);
                 break;
             case R.id.des_areanav_menu_packagetour:
-                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuPackagetour);
                 showLoadingView();
                 if (packageAdpater != null) {
@@ -508,7 +508,7 @@ public class DestinationAreaActivity extends BaseActivity {
                 loader.getAreaProducts(10, 1, areaId, 0, -1);
                 break;
             case R.id.des_areanav_menu_freewarker:
-                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIST);
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_LIST);
                 setSeletedMenu(desAreanavMenuFreewarker);
                 showLoadingView();
                 if (freeAdpater != null) {
