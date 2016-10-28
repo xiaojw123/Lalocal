@@ -340,7 +340,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             if (liveUserInfosDataResp.getReturnCode() == 0) {
                 LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
                 overNick.setText(result.getNickName());
-                if(result.getDescription().length()<1){
+                if(result.getDescription()==null||result.getDescription().toString().length()<1){
                     overSignature.setText(getString(R.string.live_default_signture));
                 }else{
                     overSignature.setText(result.getDescription());
@@ -395,6 +395,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         switch (LiveConstant.LIVE_DEFINITION) {
             case 1:
                 vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
+                AppLog.i("TAG","用戶端視頻分辨率為720p");
                 break;
             case 2:
                 vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
@@ -525,12 +526,19 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
                         audienceOnLineCountsChange=true;
-
                         String fromAccountIn = message.getFromAccount();
                         MsgStatusEnum status = message.getStatus();
                         if(fromAccountIn!=null&&creatorAccount!=null){
                             if (creatorAccount.equals(fromAccountIn)) {
                                 masterComeBack=true;
+                                //主播回来了
+                                LiveMessage liveMessage=new LiveMessage();
+                                liveMessage.setStyle(MessageType.masterIn);
+                                liveMessage.setUserId(userId);
+                                liveMessage.setCreatorAccount(creatorAccount);
+                                liveMessage.setChannelId(channelId);
+                                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "回来了", roomId, creatorAccount, liveMessage);
+                                sendMessage(imMessage, MessageType.masterIn);
                                 showFinishLayout(false, 2);
                             }
                         }
@@ -543,9 +551,17 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     case ChatRoomMemberExit://主播退出房间监听
                         audienceOnLineCountsChange=true;
                         String fromAccountExit = message.getFromAccount();
-                        if (creatorAccount.equals(fromAccountExit)) {
+                        if (creatorAccount!=null&&creatorAccount.equals(fromAccountExit)) {
                            masterComeBack=false;
                             masterLeaveTime();
+                            //主播离开了
+                            LiveMessage liveMessage=new LiveMessage();
+                            liveMessage.setStyle(MessageType.masterEixt);
+                            liveMessage.setUserId(userId);
+                            liveMessage.setCreatorAccount(creatorAccount);
+                            liveMessage.setChannelId(channelId);
+                            IMMessage imMessage = SendMessageUtil.sendMessage(container.account , "离开了", roomId,creatorAccount , liveMessage);
+                            sendMessage(imMessage, MessageType.masterEixt);
                         }
                         break;
                     case ChatRoomManagerRemove:
@@ -935,15 +951,14 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     break;
                 case R.id.live_gift_img:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_GIFT);
-
                     if(giftStoreFirstClick){
                         giftStoreFirstClick=false;
                     boolean loginedq = UserHelper.isLogined(AudienceActivity.this);
                     if (!loginedq) {
                         showLoginViewDialog();
                         giftStoreFirstClick=true;
-                    }else if(!DemoCache.getLoginChatRoomStatus()) {
-                       Toast.makeText(AudienceActivity.this,getString(R.string.live_unlogin_room),Toast.LENGTH_SHORT).show();
+                    }else if(!DemoCache.getLoginChatRoomStatus()||!DemoCache.getLoginStatus()) {
+                       Toast.makeText(AudienceActivity.this,getString(R.string.live_unlogin_channel_room),Toast.LENGTH_SHORT).show();
                         giftStoreFirstClick=true;
                     } else if(!"1".equals(playType)) {
                         if(LiveConstant.IS_FIRST_CLICK_PAGE){
@@ -1036,13 +1051,10 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         liveMessage.setChannelId(channelId);
         liveMessage.setStyle(MessageType.gift);
         IMMessage giftMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, AuthPreferences.getUserAccount(), liveMessage);
-
         if ("003".equals(code)) {
-
             giftPlaneAnimation.showPlaneAnimation((ChatRoomMessage) giftMessage);
 
         } else {
-
             giftAnimation.showGiftAnimation((ChatRoomMessage) giftMessage);
         }
         sendMessage(giftMessage, MessageType.gift);
@@ -1271,6 +1283,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             sendMessage(imMessage, MessageType.like);
         }
     }
+    //发送主播离开童子
 
     // 发送爱心频率控制
     private boolean isFastClick() {

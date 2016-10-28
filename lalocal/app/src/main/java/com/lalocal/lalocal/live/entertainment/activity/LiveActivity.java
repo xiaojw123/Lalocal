@@ -29,6 +29,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
@@ -69,7 +70,6 @@ import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.WrapContentImageView;
-import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -108,7 +108,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private final int LIVE_PERMISSION_REQUEST_CODE = 100;
     public static final String IS_SECOND = "IS_SECOND";
     public static final String CNAME = "CNAME";
-
     private int screenHeight;
     private int keyHeight;
 
@@ -264,7 +263,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
         //阀值设置为屏幕高度的1/3
         keyHeight = screenHeight / 3;
-
         setListener();
 
     }
@@ -581,6 +579,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     };
     public static final String CREATE_ROOMID = "createRoomId";
+    boolean firstWarning=true;
 
     @Override
     public boolean sendBarrageMessage(IMMessage msg) {
@@ -598,7 +597,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 LiveRowsBean liveRowsBean = createLiveRoomDataResp.getResult();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
                 SPCUtils.put(getActivity(), CREATE_ROOMID, String.valueOf(roomId));
-
                 createNickName = liveRowsBean.getUser().getNickName();
                 avatar = liveRowsBean.getUser().getAvatar();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
@@ -626,46 +624,53 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onOnLinesCount(String json) {
             super.onOnLinesCount(json);
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
-
             int returnCode = onLineUser.getReturnCode();
             AppLog.i("TAG", "获取在线人数" + onLineUser.getResult() + "返回码:" + returnCode);
-            if(returnCode!=0){
-                CommonUtil.showPromptDialog(LiveActivity.this, onLineUser.getMessage(), new CustomDialog.CustomDialogListener() {
+   if(onLineUser.getReturnCode()!=0 && firstWarning){
+                firstWarning=false;
+                final   CustomChatDialog customDialog = new CustomChatDialog(getActivity());
+                customDialog.setContent(getString(R.string.live_status_inusual));
+                customDialog.setCancelable(false);
+                customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
                     @Override
                     public void onDialogClickListener() {
+                        firstWarning=true;
+                        customDialog.dismiss();
                         finish();
                     }
                 });
-            }
-            if (onLineUser.getErrorCode() != null) {
-                errorCode = (int) onLineUser.getErrorCode();
-            }
-            if (errorCode == 13) {
-                AppLog.i("TAG", "收到服务器返回的直播间关闭的消息");
-                LiveMessage liveMessage = new LiveMessage();
-                liveMessage.setStyle(MessageType.leaveLive);
-                liveMessage.setUserId(userId);
-                liveMessage.setCreatorAccount(creatorAccount);
-                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播", roomId, AuthPreferences.getUserAccount(), liveMessage);
-                sendMessage(imMessage, MessageType.leaveLive);
-                finish();
-            }
+                customDialog.show();
+            }else{
+       if (onLineUser.getErrorCode() != null) {
+           errorCode = (int) onLineUser.getErrorCode();
+       }
+       if (errorCode == 13) {
+           AppLog.i("TAG", "收到服务器返回的直播间关闭的消息");
+           LiveMessage liveMessage = new LiveMessage();
+           liveMessage.setStyle(MessageType.leaveLive);
+           liveMessage.setUserId(userId);
+           liveMessage.setCreatorAccount(creatorAccount);
+           IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播", roomId, AuthPreferences.getUserAccount(), liveMessage);
+           sendMessage(imMessage, MessageType.leaveLive);
+           finish();
+       }
 
-            int result = onLineUser.getResult();
-            if (maxOnLineUserCount < result) {
-                maxOnLineUserCount = result;
-            }
-            if (onLineUser.getReturnCode() == 0 && onLineUser.getResult() != 0 && onLineUser.getResult() > 0) {
-                onlineCountText.setText(String.valueOf(onLineUser.getResult()) + "人");
-                LiveMessage liveMessage = new LiveMessage();
-                liveMessage.setStyle(MessageType.onlineNum);
-                liveMessage.setCreatorAccount(creatorAccount);
-                liveMessage.setUserId(userId);
-                liveMessage.setOnlineNum(String.valueOf(onLineUser.getResult()));
-                liveMessage.setChannelId(channelId);
-                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "上传在线人数", roomId, AuthPreferences.getUserAccount(), liveMessage);
-                sendMessage(imMessage, MessageType.onlineNum);
-            }
+       int result = onLineUser.getResult();
+       if (maxOnLineUserCount < result) {
+           maxOnLineUserCount = result;
+       }
+       if (onLineUser.getReturnCode() == 0 && onLineUser.getResult() != 0 && onLineUser.getResult() > 0) {
+           onlineCountText.setText(String.valueOf(onLineUser.getResult()) + "人");
+           LiveMessage liveMessage = new LiveMessage();
+           liveMessage.setStyle(MessageType.onlineNum);
+           liveMessage.setCreatorAccount(creatorAccount);
+           liveMessage.setUserId(userId);
+           liveMessage.setOnlineNum(String.valueOf(onLineUser.getResult()));
+           liveMessage.setChannelId(channelId);
+           IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "上传在线人数", roomId, AuthPreferences.getUserAccount(), liveMessage);
+           sendMessage(imMessage, MessageType.onlineNum);
+       }
+   }
         }
 
         @Override
@@ -676,6 +681,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 LiveRowsBean result = createLiveRoomDataResp.getResult();
                 startLive();
                 CommonUtil.REMIND_BACK = 0;
+
                 AppLog.i("TAG", "调用了修改直播间接口，并成功返回回调");
             }
         }
@@ -689,6 +695,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         }
 
+        @Override
+        public void onResponseFailed() {
+            super.onResponseFailed();
+
+        }
 
         @Override
         public void onImgToken(ImgTokenBean imgTokenBean) {
@@ -756,6 +767,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
         }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+
+        }
+
     }
 
     private void showHintDialog(final int status, final int challengeId) {
@@ -1211,7 +1229,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (!isCloseLive && DemoCache.getLoginChatRoomStatus()) {
                 AppLog.i("TAG", "上传在线人数：" + onlineCounts);
                 if (onlineCounts > 0 && liveContentLoader != null) {
-
                     liveContentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                 }
             }
@@ -1241,7 +1258,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         messageListPanel.setHeaderViewVisible();
                     }
                 }
-                registerObservers(true);
+
                 modelLayout.setVisibility(View.VISIBLE);
                 scoreLayout.setVisibility(View.VISIBLE);
                 liveSettingLayout.setVisibility(View.VISIBLE);
@@ -1380,6 +1397,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private void startLive() {
         int cRole = Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
         doConfigEngine(cRole);
+        registerObservers(true);
         if (isBroadcaster(cRole)) {
 
             //  主播播放器：1725    oldBottom:894
