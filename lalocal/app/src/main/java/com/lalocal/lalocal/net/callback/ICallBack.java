@@ -200,7 +200,7 @@ public abstract class ICallBack {
 
 
     }
-    public void onResponseFailed(){
+    public void onResponseFailed(String message){
 
     }
     //推荐
