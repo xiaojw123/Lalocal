@@ -626,7 +626,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             OnLineUser onLineUser = new Gson().fromJson(json, OnLineUser.class);
             int returnCode = onLineUser.getReturnCode();
             AppLog.i("TAG", "获取在线人数" + onLineUser.getResult() + "返回码:" + returnCode);
-   if(onLineUser.getReturnCode()!=0 && firstWarning){
+            if(onLineUser.getReturnCode()!=0 && firstWarning){
                 firstWarning=false;
                 final   CustomChatDialog customDialog = new CustomChatDialog(getActivity());
                 customDialog.setContent(getString(R.string.live_status_inusual));
@@ -642,7 +642,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 customDialog.show();
             }else{
        if (onLineUser.getErrorCode() != null) {
-           errorCode = (int) onLineUser.getErrorCode();
+           errorCode= Integer.parseInt(String.valueOf(onLineUser.getErrorCode()));
        }
        if (errorCode == 13) {
            AppLog.i("TAG", "收到服务器返回的直播间关闭的消息");
@@ -681,7 +681,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 LiveRowsBean result = createLiveRoomDataResp.getResult();
                 startLive();
                 CommonUtil.REMIND_BACK = 0;
-
                 AppLog.i("TAG", "调用了修改直播间接口，并成功返回回调");
             }
         }
@@ -690,7 +689,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onCloseLive(CloseLiveBean closeLiveBean) {
             super.onCloseLive(closeLiveBean);
             if (closeLiveBean.getReturnCode() == 0) {
-
                 overMoney.setText(String.valueOf(closeLiveBean.getResult().getScore()));
             }
         }
@@ -905,7 +903,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                     MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_REPORT);
-                    Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
+             //       Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
                     // 进入举报界面
                     Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
                     LiveActivity.this.startActivity(intent);
@@ -1313,8 +1311,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 DemoCache.setAccount(userAccount);
                 DemoCache.getRegUserInfo();
                 DemoCache.setLoginStatus(true);
-
-
             }
 
             @Override

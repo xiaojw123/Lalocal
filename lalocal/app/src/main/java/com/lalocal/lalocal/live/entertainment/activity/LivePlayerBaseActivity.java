@@ -755,14 +755,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             contentLoader.liveGiftRanks(channelId);
                             contentLoader.setCallBack(myCallBack);
                         } else {
-
                             showLoginViewDialog();
                         }
                     }
 
                     break;
                 case R.id.live_telecast_input_text:
-
                     break;
                /* case R.id.live_telecast_challenge:
                     clickChallengeBtn();
@@ -1021,18 +1019,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 public void onFailed(int code) {
                     AppLog.i("TAG", "登录聊天室失败：" + code);
                     DemoCache.setLoginChatRoomStatus(false);
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            enterRoom();
-                        }
-                    });
                     onLoginDone();
                 }
 
@@ -1044,11 +1030,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     finish();
                 }
             });
-            //查询在线成员列表
-           /* if (isFirstEnrRoom) {
-                fetchData();
-            }*/
-
         }
     }
     int count=0;
@@ -1135,6 +1116,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onResult(boolean success, List<ChatRoomMember> result) {
 
                 if (success) {
+                    AppLog.i("TAG", "拉取在线人数成功");
                     addMembers(result);
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
@@ -1143,9 +1125,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 } else {
 
                     AppLog.i("TAG", "拉取在线人数失败");
-                    NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                    Toast.makeText(LivePlayerBaseActivity.this,"拉去在线人数失败",Toast.LENGTH_SHORT).show();
+                   // NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                     isFirstEnrRoom=false;
-                    enterRoom();
+                  //  enterRoom();
                 }
             }
 
@@ -1337,8 +1320,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     @Override
     public void onBackPressed() {
-
-
+        DialogUtil.clear();
         if (inputPanel != null && inputPanel.collapse(true)) {
         }
         if (messageListPanel != null && messageListPanel.onBackPressed()) {
@@ -1351,7 +1333,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         super.onDestroy();
         registerObservers(false);
         unregisterReceiver(myNetReceiver);
-        DialogUtil.clear();
+
         AppLog.i("TAG","直播基类走了onDestroy");
 
         adapter = null;
@@ -1572,8 +1554,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onStop() {
         super.onStop();
-
-
+        DialogUtil.clear();
     }
 
 }

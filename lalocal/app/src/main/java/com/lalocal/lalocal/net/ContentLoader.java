@@ -1315,11 +1315,9 @@ public class ContentLoader {
                     case RequestCode.LIVE_HISTORY_DELETE:
                         responseDeleteLiveHisotry(jsonObj);
                         break;
-
                     case RequestCode.LOGIN_PHEON:
                         responseLoginPhone(jsonObj);
                         break;
-
                     case RequestCode.REGISTER_PHONE:
                         responeRegisterPhone(jsonObj);
                         break;
@@ -1339,7 +1337,6 @@ public class ContentLoader {
                         AppLog.print("result search JSON___" + json);
                         responseSearchLive(jsonObj);
                         break;
-
                     case RequestCode.EXCHARGE_GOLD:
                         AppLog.print("respose_excharge_gold__" + json);
                         responseExchargeGold(jsonObj);

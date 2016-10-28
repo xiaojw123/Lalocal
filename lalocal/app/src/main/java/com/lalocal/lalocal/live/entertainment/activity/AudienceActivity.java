@@ -32,6 +32,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
+import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
@@ -914,7 +915,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         periscopeLayout.addHeart();
                         sendLike();
                     }
-
                     break;*/
                 case R.id.live_telecast_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
@@ -922,6 +922,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     break;
                 case R.id.live_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
+                    DialogUtil.clear();
                     finishLive();
                     break;
                 case R.id.live_telecast_input_text:
@@ -965,7 +966,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                             LiveConstant.IS_FIRST_CLICK_PAGE=false;
                             isNeedRequestServerShowGiftStorePage=true;
                             contentLoaderAudience.getMyWallet();
-
                         }else {
                             isNeedRequestServerShowGiftStorePage=false;
                             showGiftPage(myGold);

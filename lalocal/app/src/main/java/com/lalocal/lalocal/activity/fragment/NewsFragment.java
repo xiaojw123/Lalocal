@@ -301,7 +301,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private void initHeaderView() {
         AppLog.i("TAG", "给recycler添加头部");
         searchinfate = View.inflate(getActivity(), R.layout.header_search_layout, null);
-
         inflate = View.inflate(getActivity(), R.layout.live_recommend_layout, null);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         inflate.setLayoutParams(params);
