@@ -126,7 +126,7 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         }
 
         @Override
-        public void onResponseFailed() {
+        public void onResponseFailed(String message) {
             resetLoad();
         }
 

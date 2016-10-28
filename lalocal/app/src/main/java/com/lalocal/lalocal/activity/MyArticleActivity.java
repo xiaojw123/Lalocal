@@ -90,7 +90,7 @@ public class MyArticleActivity extends BaseActivity implements XRecyclerView.Loa
         }
 
         @Override
-        public void onResponseFailed() {
+        public void onResponseFailed(String message) {
             resetLoad();
         }
 

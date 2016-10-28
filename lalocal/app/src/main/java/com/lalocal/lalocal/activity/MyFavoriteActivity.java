@@ -141,7 +141,7 @@ public class MyFavoriteActivity extends BaseActivity implements XRecyclerView.Lo
         }
 
         @Override
-        public void onResponseFailed() {
+        public void onResponseFailed(String message) {
             AppLog.print("onResponseFailed______");
             if (isRefresh) {
                 refreshComplete();

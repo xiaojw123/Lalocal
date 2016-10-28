@@ -149,7 +149,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
 
 
         @Override
-        public void onResponseFailed() {
+        public void onResponseFailed(String message) {
             hidenLoadingAnimation();
             loadMoreComplete();
         }

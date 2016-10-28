@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
@@ -68,6 +69,13 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         } else {
             mContentloader.getMyWallet();
         }
+        AppLog.print("navigationBarheight_____"+getNavigationBarHeight());
+    }
+    private int getNavigationBarHeight() {
+        Resources resources =getResources();
+        int resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
+        int height = resources.getDimensionPixelSize(resourceId);
+        return height;
     }
 
     private void updateView() {

@@ -239,7 +239,7 @@ public class DestinationAreaActivity extends BaseActivity {
         }
 
         @Override
-        public void onResponseFailed() {
+        public void onResponseFailed(String message) {
             showEmptView();
         }
 
