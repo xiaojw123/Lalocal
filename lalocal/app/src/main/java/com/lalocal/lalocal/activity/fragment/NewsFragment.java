@@ -395,13 +395,14 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.live_create_room:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
-                if (Build.VERSION.SDK_INT >= 23) {
+               /* if (Build.VERSION.SDK_INT >= 23) {
                     AppLog.i("TAG", "点击直播按钮，版本大于23，权限判断");
                     reminderUserPermission();//创建直播间，判断权限
                 } else {
                     AppLog.i("TAG", "点击直播按钮，版本小于，权限判断");
                     prepareLive();
-                }
+                }*/
+                reminderUserPermission();
                 break;
             case R.id.live_search_fl:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_SEARCH);
@@ -1010,6 +1011,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+        DialogUtil.clear();
         AppLog.i("TAG", "直播首页走了onResume");
         if (CommonUtil.RESULT_DIALOG == 2) {
             CommonUtil.RESULT_DIALOG = 0;

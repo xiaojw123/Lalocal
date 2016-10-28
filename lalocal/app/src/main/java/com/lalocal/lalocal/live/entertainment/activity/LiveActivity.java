@@ -557,19 +557,22 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     overLiveShareFriends.setSelected(true);
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(false);
-                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
+                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE,false);
+                    isStartLiveShare=false;
                     break;
                 case R.id.live_over_share_weibo:
                     overLiveShareFriends.setSelected(false);
                     overLiveShareWeibo.setSelected(true);
                     overLiveShareWeixin.setSelected(false);
-                    liveShare(SHARE_MEDIA.SINA);
+                    liveShare(SHARE_MEDIA.SINA,false);
+                    isStartLiveShare=false;
                     break;
                 case R.id.live_over_share_weixin:
                     overLiveShareFriends.setSelected(false);
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(true);
-                    liveShare(SHARE_MEDIA.WEIXIN);
+                    liveShare(SHARE_MEDIA.WEIXIN,false);
+                    isStartLiveShare=false;
                     break;
                 case R.id.challenge_new_task:
                     //TODO 挑战列表
@@ -590,6 +593,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public class LiveCallBack extends ICallBack {
 
         private int errorCode;
+
 
         @Override
         public void onResponseFailed(String message,int code) {
@@ -771,7 +775,18 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
+            if (volleyError != null) {
+                String errorMsg = volleyError.toString();
+                if (volleyError.networkResponse != null) {
+                    int code = volleyError.networkResponse.statusCode;
+                    if (code == 401) {
+                        if(handler!=null){
+                            handlerLine.removeCallbacks(myRunnable);
+                        }
+                    }
+                }
 
+            }
         }
 
     }
@@ -1036,9 +1051,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             customDialog.setSurceBtn(getString(R.string.live_not_cancel), null);
                             customDialog.show();
                         }
-
                     }
-
                     userInfoContentLoader.setCallBack(new ICallBack() {
                         @Override
                         public void onCheckManager(LiveManagerBean liveManagerBean) {
@@ -1049,8 +1062,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                 userInfoContentLoader.cancelManagerAccredit(String.valueOf(result));
                             }
                         }
-
-
                     });
                 }
             });
@@ -1065,7 +1076,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customLiveUserInfoDialog.show();
 
     }
-
+    boolean isStartLiveShare=true;
     private void showCreateLiveRoomPopuwindow() {
         createLiveRoomPopuwindow = new CreateLiveRoomPopuwindow(this);
         createLiveRoomPopuwindow.showCreateLiveRoomPopuwindow();
@@ -1094,18 +1105,18 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 isClickStartLiveBtn = true;
                 //开始直播的时间
                 startTime = System.currentTimeMillis();
-                if (channelId != null) {
-                    liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
-                } else {
-                    finish();
-                }
+
                 if (isShareSelector == 0) {
-                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
+                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE,true);
                 } else if (isShareSelector == 1) {
-                    liveShare(SHARE_MEDIA.SINA);
+                    liveShare(SHARE_MEDIA.SINA,true);
                 } else if (isShareSelector == 2) {
-                    liveShare(SHARE_MEDIA.WEIXIN);
+                    liveShare(SHARE_MEDIA.WEIXIN,true);
+                }else{
+                 startShareLive(false);
                 }
+
+
             }
 
             @Override
@@ -1469,7 +1480,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     //分享
-    private void liveShare(SHARE_MEDIA share_media) {
+    private void liveShare(SHARE_MEDIA share_media,boolean isStartLive) {
         ShareAction sp = new ShareAction(this);
         sp.setPlatform(share_media);
         sp.setCallback(new MyUMListener());
@@ -1483,10 +1494,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     class MyUMListener implements UMShareListener {
 
-
         @Override
         public void onResult(SHARE_MEDIA share_media) {
             liveContentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()), share_media.equals(SHARE_MEDIA.SINA) ? "2" : (share_media.equals(SHARE_MEDIA.WEIXIN) ? "1" : "0"));
+
             if (share_media.equals(SHARE_MEDIA.SINA)) {
                 Toast.makeText(LiveActivity.this, "微博分享成功!", Toast.LENGTH_SHORT).show();
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
@@ -1494,6 +1505,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享成功!", Toast.LENGTH_SHORT).show();
             }
+            startShareLive(true);
         }
 
         @Override
@@ -1505,6 +1517,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享失败!", Toast.LENGTH_SHORT).show();
             }
+            startShareLive(true);
         }
 
         @Override
@@ -1516,7 +1529,40 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "已取消微信朋友圈分享!", Toast.LENGTH_SHORT).show();
             }
+            startShareLive(true);
         }
+
+    }
+
+    private void startShareLive(boolean isResult) {
+        if(!isStartLiveShare){
+            return;
+        }
+        if(!isResult){
+            if (channelId != null) {
+                liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
+            } else {
+                finish();
+            }
+        }else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (channelId != null) {
+                        liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
+                    } else {
+                        finish();
+                    }
+
+                }
+            }).start();
+        }
+
     }
 
 
@@ -1556,6 +1602,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         viewById.addOnLayoutChangeListener(this);
         AppLog.i("TAG", "LiveActivity:onResume");
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLog.i("TAG", "LiveActivity:onStop");
     }
 
     protected void onPause() {

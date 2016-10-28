@@ -119,15 +119,33 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_45dp"
             android:clickable="true"
-            android:background="@drawable/master_home_btn_bg"
+
             android:gravity="center">
-            <TextView
+          <!--  <TextView
                 android:id="@+id/live_master_home_over"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/live_master_home"
                 android:textColor="#ffffff"
-                android:textSize="@dimen/text_size_18_sp" />
+                android:textSize="@dimen/text_size_18_sp" />-->
+            <TextView
+                android:id="@+id/master_dialog_report_audience"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_ffaa2a"
+                android:textSize="@dimen/text_size_14_sp"
+                android:gravity="center"
+                android:text="举报"/>
+            <TextView
+                android:id="@+id/master_dialog_attention_audience"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_ffaa2a"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_14_sp"
+                android:text="关注"/>
         </LinearLayout>
     </LinearLayout>
 

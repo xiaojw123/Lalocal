@@ -20,7 +20,11 @@ public class CustomLinearLayoutManager extends LinearLayoutManager {
 
     public CustomLinearLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+       // LinearLayoutManager.scrollHorizontallyBy(LinearLayoutManager.java:1031)
+
     }
+
+  
 
     @Override
     public boolean supportsPredictiveItemAnimations() {
@@ -32,7 +36,9 @@ public class CustomLinearLayoutManager extends LinearLayoutManager {
 
         try {
             super.onLayoutChildren(recycler, state);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     } }

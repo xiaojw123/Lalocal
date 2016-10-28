@@ -42,6 +42,8 @@
             android:text="@string/live_back"
             android:textColor="@color/live_start_tv"
             android:textSize="@dimen/text_size_16_sp" />
+
+
     </LinearLayout>
 
 </RelativeLayout>
