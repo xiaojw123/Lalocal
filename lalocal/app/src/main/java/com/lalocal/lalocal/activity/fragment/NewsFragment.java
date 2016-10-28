@@ -6,11 +6,9 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -1024,10 +1022,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 @Override
                 public void onDialogClickListener() {
                     customDialog.dismiss();
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    intent.setData(Uri.fromParts("package", getActivity().getPackageName(), null));
-                    startActivity(intent);
                 }
             });
             customDialog.show();
@@ -1040,10 +1034,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 @Override
                 public void onDialogClickListener() {
                     customDialog.dismiss();
-                    Intent intent = new Intent();
-                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                    intent.setData(Uri.fromParts("package", getActivity().getPackageName(), null));
-                    startActivity(intent);
                 }
             });
             customDialog.show();

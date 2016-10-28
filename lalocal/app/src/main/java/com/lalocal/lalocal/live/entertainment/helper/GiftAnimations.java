@@ -236,6 +236,9 @@ public class GiftAnimations {
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         sendGiftImg.setImageResource(0);
         String code = message.getCode();
+        if(code==null){
+            return;
+        }
         mHandler = new GiftHandler(sendGiftTotal);
         sendGiftMessage(mHandler, root, count, m, userId, code);
         switch (code) {

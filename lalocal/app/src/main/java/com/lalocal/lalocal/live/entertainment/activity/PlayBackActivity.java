@@ -427,7 +427,6 @@ public class PlayBackActivity extends BaseActivity {
             Log.i("TAF", "播放器activityhhehh ");
             Uri uri = Uri.parse(videoList.get(position).getUrl());
             videoPlayer.loadAndPlay(uri, position1);
-
         }
     }
 
@@ -448,5 +447,11 @@ public class PlayBackActivity extends BaseActivity {
             videoPlayer.close();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DialogUtil.clear();
     }
 }

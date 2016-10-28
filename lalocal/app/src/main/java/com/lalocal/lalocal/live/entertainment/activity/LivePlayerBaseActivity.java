@@ -1096,10 +1096,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 } else {
 
                     AppLog.i("TAG", "拉取在线人数失败");
-                    Toast.makeText(LivePlayerBaseActivity.this,"拉去在线人数失败",Toast.LENGTH_SHORT).show();
-                   // NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+
+                    NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                     isFirstEnrRoom=false;
-                  //  enterRoom();
+                    enterRoom();
                 }
             }
 

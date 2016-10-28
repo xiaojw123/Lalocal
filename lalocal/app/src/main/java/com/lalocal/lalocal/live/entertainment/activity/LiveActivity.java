@@ -557,19 +557,22 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     overLiveShareFriends.setSelected(true);
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(false);
-                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
+                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE,false);
+                    isStartLiveShare=false;
                     break;
                 case R.id.live_over_share_weibo:
                     overLiveShareFriends.setSelected(false);
                     overLiveShareWeibo.setSelected(true);
                     overLiveShareWeixin.setSelected(false);
-                    liveShare(SHARE_MEDIA.SINA);
+                    liveShare(SHARE_MEDIA.SINA,false);
+                    isStartLiveShare=false;
                     break;
                 case R.id.live_over_share_weixin:
                     overLiveShareFriends.setSelected(false);
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(true);
-                    liveShare(SHARE_MEDIA.WEIXIN);
+                    liveShare(SHARE_MEDIA.WEIXIN,false);
+                    isStartLiveShare=false;
                     break;
                 case R.id.challenge_new_task:
                     //TODO 挑战列表
@@ -1048,9 +1051,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             customDialog.setSurceBtn(getString(R.string.live_not_cancel), null);
                             customDialog.show();
                         }
-
                     }
-
                     userInfoContentLoader.setCallBack(new ICallBack() {
                         @Override
                         public void onCheckManager(LiveManagerBean liveManagerBean) {
@@ -1061,8 +1062,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                                 userInfoContentLoader.cancelManagerAccredit(String.valueOf(result));
                             }
                         }
-
-
                     });
                 }
             });
@@ -1077,7 +1076,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         customLiveUserInfoDialog.show();
 
     }
-
+    boolean isStartLiveShare=true;
     private void showCreateLiveRoomPopuwindow() {
         createLiveRoomPopuwindow = new CreateLiveRoomPopuwindow(this);
         createLiveRoomPopuwindow.showCreateLiveRoomPopuwindow();
@@ -1108,11 +1107,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 startTime = System.currentTimeMillis();
 
                 if (isShareSelector == 0) {
-                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE);
+                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE,true);
                 } else if (isShareSelector == 1) {
-                    liveShare(SHARE_MEDIA.SINA);
+                    liveShare(SHARE_MEDIA.SINA,true);
                 } else if (isShareSelector == 2) {
-                    liveShare(SHARE_MEDIA.WEIXIN);
+                    liveShare(SHARE_MEDIA.WEIXIN,true);
                 }else{
                  startShareLive(false);
                 }
@@ -1481,7 +1480,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     //分享
-    private void liveShare(SHARE_MEDIA share_media) {
+    private void liveShare(SHARE_MEDIA share_media,boolean isStartLive) {
         ShareAction sp = new ShareAction(this);
         sp.setPlatform(share_media);
         sp.setCallback(new MyUMListener());
@@ -1536,6 +1535,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     private void startShareLive(boolean isResult) {
+        if(!isStartLiveShare){
+            return;
+        }
         if(!isResult){
             if (channelId != null) {
                 liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
@@ -1547,7 +1549,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -1560,7 +1562,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 }
             }).start();
         }
-
 
     }
 
@@ -1601,6 +1602,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         viewById.addOnLayoutChangeListener(this);
         AppLog.i("TAG", "LiveActivity:onResume");
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLog.i("TAG", "LiveActivity:onStop");
     }
 
     protected void onPause() {

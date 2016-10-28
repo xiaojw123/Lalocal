@@ -355,4 +355,28 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //        testCheckUpdate(false);
 //    }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AppLog.i("TAG","HomeActivity:onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppLog.i("TAG","HomeActivity:onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLog.i("TAG","HomeActivity:onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppLog.i("TAG","HomeActivity:onDestroy");
+    }
 }

@@ -142,6 +142,7 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
 
     boolean isFirstFirendsClick=true;
     int isShareSelector = -1;//创建直播分享
+    boolean isFirstClick=true;
     View.OnClickListener buttonClickListener = new View.OnClickListener() {
 
         @Override
@@ -166,12 +167,16 @@ public class CreateLiveRoomPopuwindow extends PopupWindow {
                     break;
                 case R.id.start_live_layout:
                     MobHelper.sendEevent(mContext,MobEvent.LIVE_START_START);
-                    roomName = liveRoomName.getText().toString().trim();
-                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(startLiveScrollview.getWindowToken(), 0);
-                    if(onCreateLiveListener!=null){
-                        onCreateLiveListener.startLiveBtn(roomName,isShareSelector);
+                    if(isFirstClick){
+                        isFirstClick=false;
+                        roomName = liveRoomName.getText().toString().trim();
+                        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(startLiveScrollview.getWindowToken(), 0);
+                        if(onCreateLiveListener!=null){
+                            onCreateLiveListener.startLiveBtn(roomName,isShareSelector);
+                        }
                     }
+
                     break;
                 case R.id.live_create_room_close_iv:
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_CANCEL);
