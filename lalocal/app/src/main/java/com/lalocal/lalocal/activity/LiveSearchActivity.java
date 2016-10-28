@@ -157,10 +157,6 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         public void onRefresh() {
         }
 
-        @Override
-        public void onResponseFailed() {
-            super.onResponseFailed();
-        }
 
         @Override
         public void onError(VolleyError volleyError) {

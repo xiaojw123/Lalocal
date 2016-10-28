@@ -591,6 +591,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         private int errorCode;
 
         @Override
+        public void onResponseFailed(String message) {
+      //TODO:wcj add
+        }
+
+        @Override
         public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
             super.onCreateLiveRoom(createLiveRoomDataResp);
             if (createLiveRoomDataResp.getReturnCode() == 0) {
@@ -691,12 +696,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (closeLiveBean.getReturnCode() == 0) {
                 overMoney.setText(String.valueOf(closeLiveBean.getResult().getScore()));
             }
-        }
-
-        @Override
-        public void onResponseFailed() {
-            super.onResponseFailed();
-
         }
 
         @Override

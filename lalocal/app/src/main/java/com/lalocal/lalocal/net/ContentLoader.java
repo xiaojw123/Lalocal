@@ -1135,7 +1135,7 @@ public class ContentLoader {
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-            return super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+            return super.setRetryPolicy(new DefaultRetryPolicy(50000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
@@ -1297,7 +1297,6 @@ public class ContentLoader {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
-                    callBack.onResponseFailed();
                     if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
                         CustomDialog dialog = new CustomDialog(context);
                         dialog.setMessage(message);
@@ -1305,10 +1304,11 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                        return;
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
+                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
+                    callBack.onResponseFailed(message);
+                    return;
 
                 }
                 switch (resultCode) {

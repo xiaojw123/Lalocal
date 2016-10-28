@@ -27,6 +27,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -104,6 +105,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     //    private BlurImageView layoutBg;
     //   private LiveMainListAdapter liveMainListAdapter;
     private List<LiveRowsBean> allRows = new ArrayList<LiveRowsBean>();
+    private List<LiveRowsBean> allAttenRows = new ArrayList<LiveRowsBean>();
     private boolean isFirstLoad = true;//刷新列表
     boolean closeRegister = true;
     private int roomId = 0;
@@ -541,6 +543,31 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public class MyCallBack extends ICallBack {
         String reminfBack = "0";
 
+        @Override
+        public void onError(VolleyError volleyError) {
+//            resetAdapterData();
+        }
+
+        @Override
+        public void onResponseFailed(String message) {
+//            resetAdapterData();
+        }
+
+        private void resetAdapterData() {
+            allRows.clear();
+            if (titleHot.isSelected()) {
+                if (liveMainAdapter != null) {
+                    liveMainAdapter.refresh(allRows);
+                }
+            }
+            if (titleAttention.isSelected()) {
+                if (titleAttention.isSelected()) {
+                    if (titleAttention != null) {
+                        attenAdapter.refresh(allRows);
+                    }
+                }
+            }
+        }
 
         @Override
         public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
@@ -572,23 +599,29 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 }
                 if (isRefresh) {
                     allRows.clear();
+                    allAttenRows.clear();
                 }
                 if (allRows.size() == 0) {
                     allRows.addAll(0, rows);
                 } else {
                     allRows.addAll(allRows.size(), rows);
                 }
-
+                if (allAttenRows.size() == 0) {
+                    allAttenRows.addAll(0, rows);
+                } else {
+                    allAttenRows.addAll(allAttenRows.size(), rows);
+                }
                 Collections.sort(allRows);//排序
+                Collections.sort(allAttenRows);//排序
                 boolean isAttentionFlag = parseBoolean(attentionFlag);
                 if (isAttentionFlag) {
                     if (attenAdapter == null) {
-                        attenAdapter = new LiveMainAdapter(getActivity(), allRows);
+                        attenAdapter = new LiveMainAdapter(getActivity(), allAttenRows);
                         attenAdapter.setOnLiveItemClickListener(liveItemClickListener);
                     } else {
-                        attenAdapter.refresh(allRows);
+                        attenAdapter.refresh(allAttenRows);
                     }
-                    attenAdapter.setHightPostion(true, allRows.size());
+                    attenAdapter.setHightPostion(true, allAttenRows.size());
                     xRecyclerView.setAdapter(attenAdapter);
                 } else {
                     if (isFirstLoad) {
@@ -618,9 +651,10 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     return;
                 }
                 allRows.addAll(allRows.size(), rows);
+                allAttenRows.addAll(allAttenRows.size(), rows);
                 boolean isAttention = Boolean.parseBoolean(attentionFlag);
                 if (isAttention) {
-                    attenAdapter.refresh(allRows);
+                    attenAdapter.refresh(allAttenRows);
                 } else {
                     liveMainAdapter.refresh(allRows);
                 }
@@ -631,16 +665,12 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     xRecyclerView.loadMoreComplete();
                 }
-                if (allRows.size() < 1) {
+                if (allAttenRows.size() < 1) {
                     if (isAttention) {
                         attenLoginText.setVisibility(View.VISIBLE);
                         attenLoginText.setText(getResources().getString(R.string.got_to_atten_travel_talent));
-                    } else {
-                        attenLoginText.setVisibility(View.INVISIBLE);
-                        attenLoginText.setText("");
                     }
                 }
-
             }
 
         }
@@ -694,7 +724,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         public void onLoginSucess(User user) {
             super.onLoginSucess(user);
         }
-
 
 
     }
