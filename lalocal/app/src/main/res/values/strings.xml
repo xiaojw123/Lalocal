@@ -312,7 +312,8 @@
     <string name="live_camera_jurisdiction">没有视频权限，无法开启直播</string>
     <string name="live_camera_start_failure">摄像头启动失败,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_frequency_start_failure">音频权限开启失败,请尝试在手机应用权限管理中打开权限!</string>
-    <string name="live_status_inusual">直播间状态异常!</string>
+    <string name="live_status_inusual">直播间状态异常!请退出重进...</string>
+    <string name="audience_status_unsual">此直播间状态异常，请稍后再试!</string>
     <string name="no_attention">快去关注旅行达人，看遍世界的美。。。</string>
 
     <string name="gold_instructions">乐钻使用说明</string>

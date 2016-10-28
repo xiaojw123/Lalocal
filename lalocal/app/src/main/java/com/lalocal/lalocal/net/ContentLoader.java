@@ -1304,10 +1304,11 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT) {
+                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
                     callBack.onResponseFailed(code,message);
+                    callBack.onResponseFailed(message,RequestCode.LIVE_ON_LINE_COUNT);
                     return;
 
                 }
@@ -1315,11 +1316,9 @@ public class ContentLoader {
                     case RequestCode.LIVE_HISTORY_DELETE:
                         responseDeleteLiveHisotry(jsonObj);
                         break;
-
                     case RequestCode.LOGIN_PHEON:
                         responseLoginPhone(jsonObj);
                         break;
-
                     case RequestCode.REGISTER_PHONE:
                         responeRegisterPhone(jsonObj);
                         break;
@@ -1339,7 +1338,6 @@ public class ContentLoader {
                         AppLog.print("result search JSON___" + json);
                         responseSearchLive(jsonObj);
                         break;
-
                     case RequestCode.EXCHARGE_GOLD:
                         AppLog.print("respose_excharge_gold__" + json);
                         responseExchargeGold(jsonObj);

@@ -32,6 +32,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
+import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
@@ -162,7 +163,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     private NEVideoView videoView;
     private String cname;
-    private String liveStatus;
+    private String  liveStatus;
 
     private int myGold;
     private CustomLiveUserInfoDialog customLiveUserInfoDialog;
@@ -181,6 +182,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private TextView overAttention;
     private TextView overFans;
     private BlurImageView blurView;
+    private MyRunnable myRunnable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,9 +199,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
         loginIm();
 
-        if("0".equals(liveStatus)){
-            showFinishLayout(true,2);
-        }
+
     }
 
     private class MyRunnable implements Runnable {
@@ -212,7 +212,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             handler.postDelayed(this, 2000);
         }
     }
-
+    boolean firstWarning=true;
     private class AudienceCallBack extends ICallBack {
         @Override
         public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
@@ -222,6 +222,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 nickname= liveRowsBean.getUser().getNickName();
                 avatar= liveRowsBean.getUser().getAvatar();
                 playType=String.valueOf(liveRowsBean.getType());
+
+
                 Object ann = liveRowsBean.getAnnoucement();
                 String annoucement = null;
                 if (ann != null) {
@@ -233,6 +235,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 channelId=String.valueOf(liveRowsBean.getId());
                 cname= liveRowsBean.getCname();
                 liveStatus=String.valueOf(liveRowsBean.getStatus());
+                if("0".equals(liveStatus)){
+                    showFinishLayout(true,2);
+                }
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
                 int onlineUser = liveRowsBean.getOnlineUser();
@@ -248,7 +253,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 registerObservers(true);
                 initParam();
                 initUIandEvent();
-                handler.postDelayed(new MyRunnable(),2000);
+                myRunnable = new MyRunnable();
+                handler.postDelayed(myRunnable,2000);
                 if("1".equals(playType)){
                     hideBtn(onlineUser);
                 }
@@ -270,6 +276,27 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 giftSresult = giftDataResp.getResult();
             }
         }
+
+        @Override
+        public void onResponseFailed(String message ,int code) {
+            super.onResponseFailed(message,code);
+            if(code==230&&firstWarning){
+                firstWarning = false;
+                final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+                customDialog.setContent(getString(R.string.audience_status_unsual));
+                customDialog.setCancelable(false);
+                customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
+                        firstWarning = true;
+                        customDialog.dismiss();
+                        finish();
+                    }
+                });
+                customDialog.show();
+            }
+        }
+
         @Override
         public void onTouristInfo(String json) {
             super.onTouristInfo(json);
@@ -631,6 +658,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             countDownTimer.cancel();
             countDownTimer.onFinish();
         }
+        if(handler!=null){
+            handler.removeCallbacks(myRunnable);
+        }
         deInitUIandEvent();
         registerObservers(false);
         super.onDestroy();
@@ -914,7 +944,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         periscopeLayout.addHeart();
                         sendLike();
                     }
-
                     break;*/
                 case R.id.live_telecast_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
@@ -922,6 +951,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     break;
                 case R.id.live_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
+                    DialogUtil.clear();
                     finishLive();
                     break;
                 case R.id.live_telecast_input_text:
@@ -965,7 +995,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                             LiveConstant.IS_FIRST_CLICK_PAGE=false;
                             isNeedRequestServerShowGiftStorePage=true;
                             contentLoaderAudience.getMyWallet();
-
                         }else {
                             isNeedRequestServerShowGiftStorePage=false;
                             showGiftPage(myGold);
@@ -1002,6 +1031,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
    //显示礼物布局
     private void showGiftPage(int gold) {
         liveSettingLayout.setVisibility(View.GONE);
+
         giftStorePopuWindow = new GiftStorePopuWindow(this, giftSresult);
         giftStorePopuWindow.showGiftStorePopuWindow(gold);
         giftStorePopuWindow.showAtLocation(this.findViewById(R.id.live_layout),
@@ -1054,7 +1084,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         if ("003".equals(code)) {
             giftPlaneAnimation.showPlaneAnimation((ChatRoomMessage) giftMessage);
 
-        } else {
+        } else if(code!=null){
             giftAnimation.showGiftAnimation((ChatRoomMessage) giftMessage);
         }
         sendMessage(giftMessage, MessageType.gift);

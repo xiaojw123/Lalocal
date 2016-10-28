@@ -123,7 +123,6 @@ public class PlayBackActivity extends BaseActivity {
     private int position = 0;
 
     private void initData(LiveRowsBean liveRowsBean) {
-
         playLoadingPageBg.setBlurImageURL(user.getAvatar());
         playLoadingPageBg.setScaleRatio(20);
         playLoadingPageBg.setBlurRadius(1);

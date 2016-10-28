@@ -5,7 +5,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -20,7 +19,6 @@ import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
-import com.lalocal.lalocal.view.VerticalTextView;
 import com.lalocal.lalocal.view.adapter.HomeRecoLiveAdapter;
 
 import java.util.ArrayList;
@@ -65,6 +63,8 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         // 设置热播视频间距
         mVpHotLives.setPageMargin(mContext.getResources().getDimensionPixelSize(
                 R.dimen.home_recommend_viewpager_page_margin));
+        // 高度适应内容
+        mVpHotLives.enableWrapContent(true);
 
     }
 

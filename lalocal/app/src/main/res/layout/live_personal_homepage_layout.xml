@@ -91,7 +91,7 @@
                             android:background="#999999"
                             android:paddingLeft="@dimen/live_padding_5dp"
                             android:paddingRight="@dimen/live_padding_5dp"
-                            android:text="未验证" />
+                             />
                     </RelativeLayout>
 
                     <TextView
