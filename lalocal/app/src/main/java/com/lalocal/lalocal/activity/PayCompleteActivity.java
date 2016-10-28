@@ -51,7 +51,7 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_complete_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         setLoaderCallBack(new PayCompeteCallBack());
         int id = getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
         mContentloader.getOrderDetail(id);

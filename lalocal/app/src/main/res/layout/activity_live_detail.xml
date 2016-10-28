@@ -204,6 +204,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/live_detail_gift_rlv"
+                    android:overScrollMode="never"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/live_detail_gift_score" />
@@ -243,6 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
+                    android:overScrollMode="never"
                     android:layout_below="@+id/live_detial_challenge_score" />
             </RelativeLayout>
         </LinearLayout>

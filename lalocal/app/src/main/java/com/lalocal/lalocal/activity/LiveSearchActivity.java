@@ -63,7 +63,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_search_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         backImg.setImageDrawable(getColorDrawable(searchIconColor, R.drawable.common_back_btn_bg));
         liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
         liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor, R.drawable.searchbar_searchicon), null, null, null);

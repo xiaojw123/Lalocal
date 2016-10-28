@@ -39,7 +39,6 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
     TextView myDiamondRechargeTv;
     @BindView(R.id.my_diamond_num_tv)
     TextView myDiamondNumTv;
-    @BindView(R.id.my_diamond_cosume_xrv)
     XRecyclerView myDiamondCosumeXrv;
     @BindView(R.id.consume_doubt_tv)
     TextView consumeDoubtTv;
@@ -58,7 +57,8 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_diamond_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
+        myDiamondCosumeXrv= (XRecyclerView) findViewById(R.id.my_diamond_cosume_xrv);
         showLoadingAnimation();
         setLoaderCallBack(new DiamondCallBack());
         mWalletContent = getWallConent();

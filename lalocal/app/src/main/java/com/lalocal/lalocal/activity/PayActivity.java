@@ -92,7 +92,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         payTitleView.setOnBackClickListener(this);
         setLoaderCallBack(new PayCallBack());
         mOrderid = getIntent().getIntExtra(ORDER_ID, -1);

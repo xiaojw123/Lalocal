@@ -36,14 +36,14 @@
             android:id="@+id/des_areanav_menu_hot"
             style="@style/DesAreaNavMenuStye"
             android:text="@string/hot"
-            android:layout_marginStart="@dimen/des_area_nav_menu1_left"
+            android:layout_marginLeft="@dimen/des_area_nav_menu1_left"
             android:visibility="gone"
             />
         <TextView
             android:id="@+id/des_areanav_menu_strategy"
             style="@style/DesAreaNavMenuStye"
             android:text="@string/strategy"
-            android:layout_marginStart="@dimen/des_area_nav_menu2_left"
+            android:layout_marginLeft="@dimen/des_area_nav_menu2_left"
             android:visibility="gone"
              />
 
@@ -51,7 +51,7 @@
             android:id="@+id/des_areanav_menu_packagetour"
             style="@style/DesAreaNavMenuStye"
             android:text="@string/packagetour"
-            android:layout_marginStart="@dimen/des_area_nav_menu2_left"
+            android:layout_marginLeft="@dimen/des_area_nav_menu2_left"
             android:visibility="gone"
             />
 
@@ -59,7 +59,7 @@
             android:id="@+id/des_areanav_menu_freewarker"
             style="@style/DesAreaNavMenuStye"
             android:text="@string/freewarker"
-            android:layout_marginStart="@dimen/des_area_nav_menu2_left"
+            android:layout_marginLeft="@dimen/des_area_nav_menu2_left"
             android:visibility="gone"
             />
 

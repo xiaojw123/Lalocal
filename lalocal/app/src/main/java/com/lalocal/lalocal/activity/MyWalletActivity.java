@@ -51,7 +51,7 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.my_wallet_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         instructions_tv.setText(Html.fromHtml("<u>" + goldInstructions + "</u>"));
         myWalletCtv.setOnBackClickListener(this);
 
