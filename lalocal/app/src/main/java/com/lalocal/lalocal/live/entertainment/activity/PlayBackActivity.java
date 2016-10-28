@@ -344,8 +344,9 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            parseIntent(liveRowsBean);
-
+            if(liveRowsBean!=null){
+                parseIntent(liveRowsBean);
+            }
         }
 
         @Override
@@ -377,6 +378,7 @@ public class PlayBackActivity extends BaseActivity {
                         Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
                         intent.putExtra("userId", String.valueOf(id));
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
                 dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {

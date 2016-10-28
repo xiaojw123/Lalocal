@@ -170,7 +170,15 @@ public class MsgViewHolderChat extends TViewHolder {
                 break;
             case "13":
                 itemContent="分享了直播!";
-                textColor="#97d3e9";
+                textColor="#ffffff";
+                break;
+            case "100":
+                itemContent = "离开了";
+                textColor="#ffffff";
+                break;
+            case "101":
+                itemContent = "回来了";
+                textColor="#ffffff";
                 break;
     /*        case "4":
                 if(challengeStatus==0){
@@ -193,7 +201,6 @@ public class MsgViewHolderChat extends TViewHolder {
                         messageItem.setBackgroundResource(R.drawable.task_massage_lv_yellow);
                         break;
                     case 3:
-
                         break;
                     case 4:
                         itemContent="放弃挑战，所有金额返还!";
@@ -207,7 +214,7 @@ public class MsgViewHolderChat extends TViewHolder {
         }
 
 
-        setNameTextView(creatorAccount,itemContent,textColor);
+        setNameTextView(creatorAccount,itemContent,textColor,styles);
 
         //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
         //   bodyText.setMovementMethod(LinkMovementMethod.getInstance());
@@ -226,18 +233,23 @@ public class MsgViewHolderChat extends TViewHolder {
         return  style;
     }
 
-    public void setNameTextView(String creatorAccount,String itemContent,String textColor) {
+    public void setNameTextView(String creatorAccount,String itemContent,String textColor,String styles) {
         String contentItem=null;
         if (message.getMsgType() != MsgTypeEnum.notification) {
             if(message.getRemoteExtension() != null) {
-                String fromAccount = message.getFromAccount();
-                String account = DemoCache.getUserInfo().getAccount();
-                if(fromAccount!=null&&fromAccount.equals(account)){
-                    contentItem="我  :  "+itemContent;
-                }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
+
+                if(styles.equals("101")||styles.equals("100")){
                     contentItem="主播  :  "+itemContent;
-                } else{
-                    contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
+                }else {
+                    String fromAccount = message.getFromAccount();
+                    String account = DemoCache.getUserInfo().getAccount();
+                    if(fromAccount!=null&&fromAccount.equals(account)){
+                        contentItem="我  :  "+itemContent;
+                    }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
+                        contentItem="主播  :  "+itemContent;
+                    } else{
+                        contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
+                    }
                 }
 
             }

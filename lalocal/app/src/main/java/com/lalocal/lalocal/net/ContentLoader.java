@@ -1305,10 +1305,11 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT) {
+                        return;
+                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
-                    return;
+
                 }
                 switch (resultCode) {
                     case RequestCode.LIVE_HISTORY_DELETE:
@@ -1334,7 +1335,6 @@ public class ContentLoader {
                     case RequestCode.EXCHARGE_COUPON:
                         responseExchargeCoupon(jsonObj);
                         break;
-
                     case RequestCode.SEARCH_LIVE:
                         AppLog.print("result search JSON___" + json);
                         responseSearchLive(jsonObj);

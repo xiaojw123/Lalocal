@@ -114,7 +114,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -136,7 +135,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
     public static final String NIM_CHAT_MESSAGE_INFO = "nimlivesenfmessage";
-    private Timer timer;
+
     // 聊天室信息
     protected String roomId;
     protected ChatRoomInfo roomInfo;
@@ -395,6 +394,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
             if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
                 AppLog.i("TAG", "聊天室正在连接中");
+               if(messageListPanel!=null){
+                   TextView textView = new TextView(LivePlayerBaseActivity.this);
+                   textView.setText("   正在连接聊天室...");
+                   textView.setTextColor(Color.parseColor("#ffaa2a"));
+                   messageListPanel.setHead(textView);
+               }
 
             } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
                 onOnlineStatusChanged(false);
@@ -411,6 +416,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 AppLog.i("TAG", "聊天室wontAutoLogin");
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
                 onOnlineStatusChanged(false);
+                if(messageListPanel!=null){
+                    TextView textView = new TextView(LivePlayerBaseActivity.this);
+                    textView.setText("   聊天室登录失败，正在重新连接...");
+                    textView.setTextColor(Color.parseColor("#ffaa2a"));
+                    messageListPanel.setHead(textView);
+                }
 
             }
             AppLog.i("TAG", "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
@@ -622,6 +633,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
             if (liveGiftRanksResp.getReturnCode() == 0) {
+                firstClick = false;
                 List<TotalRanksBean> currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                 if (currentRanks != null && currentRanks.size() > 0) {
                     for (int i = 0; i < currentRanks.size(); i++) {
@@ -738,12 +750,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case R.id.audience_score_layout:
                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_LIST);
                     if (firstClick) {
-                        firstClick = false;
                         boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
                         if (logineds) {
                             contentLoader.liveGiftRanks(channelId);
                             contentLoader.setCallBack(myCallBack);
                         } else {
+
                             showLoginViewDialog();
                         }
                     }
@@ -897,6 +909,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     messageListPanel.onIncomingMessage(messages);
                     break;
 
+
                 case MessageType.onlineNum:
                     //更新在綫人數
                     AppLog.i("TAG", "获取主播上传的人数:" + onlineNum);
@@ -926,19 +939,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case ChatRoomMemberIn:
                         //发送进入直播间的通知
                         isOnLineUsersCountChange = true;
+                        String fromAccountIn = message.getFromAccount();
                         sendMessage(message, MessageType.text);
                         break;
 
                     case ChatRoomMemberExit:
                         isOnLineUsersCountChange = true;
-                        //退出直播间，解除禁言
-                       /* if (banListLive.size() > 0) {
-                            for (int i = 0; i < banListLive.size(); i++) {
-                                if (message.getFromAccount().equals(banListLive.get(i))) {
-                                    banListLive.remove(i);
-                                }
-                            }
-                        }*/
+                        String fromAccountExit = message.getFromAccount();
+
                         break;
                     case ChatRoomInfoUpdated:
                         sendMessage(message, MessageType.text);
@@ -1138,7 +1146,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                     isFirstEnrRoom=false;
                     enterRoom();
-
                 }
             }
 
@@ -1345,11 +1352,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         registerObservers(false);
         unregisterReceiver(myNetReceiver);
         DialogUtil.clear();
-        AppLog.i("TAG","直播基类走了stop");
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+        AppLog.i("TAG","直播基类走了onDestroy");
+
         adapter = null;
     }
 
@@ -1510,6 +1514,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.text:
+                    messageListPanel.onMsgSend(message);
+                    break;
+                case MessageType.masterIn:
+                    messageListPanel.onMsgSend(message);
+                    break;
+                case MessageType.masterEixt:
                     messageListPanel.onMsgSend(message);
                     break;
 

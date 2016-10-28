@@ -816,8 +816,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 AppLog.print("关注refresh");
                 contentService.getLivelist("", "true");
             }
-
-
         }
 
         @Override

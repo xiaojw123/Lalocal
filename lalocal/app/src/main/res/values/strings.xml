@@ -277,6 +277,7 @@
     <string name="live_video_conncet_fail">视频连接失败!</string>
     <string name="live_quit_room">退出直播间</string>
     <string name="live_again_conncet">重新连接</string>
+    <string name="live_unlogin_channel_room">未登录直播间</string>
     <string name="live_unlogin_room">未登录聊天室</string>
     <string name="live_recharge_hint">乐钻不足,请充值!</string>
     <string name="live_recharge">充值</string>
@@ -311,6 +312,8 @@
     <string name="live_camera_jurisdiction">没有视频权限，无法开启直播</string>
     <string name="live_camera_start_failure">摄像头启动失败,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_frequency_start_failure">音频权限开启失败,请尝试在手机应用权限管理中打开权限!</string>
+    <string name="live_status_inusual">直播间状态异常!</string>
+    <string name="no_attention">快去关注旅行达人，看遍世界的美。。。</string>
 
     <string name="gold_instructions">乐钻使用说明</string>
     <string name="currency_instruction">货币说明</string>

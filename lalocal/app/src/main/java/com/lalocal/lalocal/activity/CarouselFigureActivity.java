@@ -15,6 +15,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -141,6 +142,11 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
                             intent.putExtra("id",targetId);
                             startActivity(intent);
                             return true;
+                        }else if("20".equals(targetType)){
+                            Intent intent = new Intent(CarouselFigureActivity.this, PlayBackActivity.class);
+                            intent.putExtra("id",targetId);
+                            startActivity(intent);
+                            return  true;
                         }
                     }
 
