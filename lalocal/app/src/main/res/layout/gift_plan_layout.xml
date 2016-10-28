@@ -7,15 +7,20 @@
     <ImageView
         android:id="@+id/gift_plane_up"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+    <com.lalocal.lalocal.live.entertainment.ui.FrameAnimation
+        android:id="@+id/ani_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
     <RelativeLayout
         android:id="@+id/audient_gift_plane_bg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/audient_gift_plane_bg_height"
         android:layout_marginTop="120dp"
         android:background="@drawable/giftmassagebg"
-        android:visibility="gone">
+        android:visibility="gone" >
 
         <View
             android:layout_width="@dimen/dimen_size_10_dp"
@@ -56,4 +61,5 @@
         android:layout_marginTop="4dp"
         android:visibility="gone"
         />
+
 </RelativeLayout>

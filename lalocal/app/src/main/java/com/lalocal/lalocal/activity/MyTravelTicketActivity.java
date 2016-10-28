@@ -140,7 +140,7 @@ public class MyTravelTicketActivity extends BaseActivity implements CustomTitleV
         }
 
         @Override
-        public void onResponseFailed(String message) {
+        public void onResponseFailed(int code,String message) {
             loadMoreComplete();
         }
 

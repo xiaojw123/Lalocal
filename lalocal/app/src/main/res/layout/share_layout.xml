@@ -12,7 +12,6 @@
         android:layout_height="160dp"
         android:orientation="vertical"
         android:background="@android:color/white"
-        android:alpha="0.8"
         android:gravity="bottom"
         >
     <LinearLayout

@@ -594,8 +594,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public void onResponseFailed(String message,int code) {
             //TODO:wcj add
-            AppLog.i("TAG", "监听直播间状态异常:" + message);
-            if (code==222 && firstWarning) {
+            AppLog.i("TAG", "监听直播间状态异常:" + message+"    code:"+code);
+            if (code == 222 && firstWarning) {
                 firstWarning = false;
                 final CustomChatDialog customDialog = new CustomChatDialog(LiveActivity.this);
                 customDialog.setContent(getString(R.string.live_status_inusual));
@@ -1236,7 +1236,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
     }
-
+    private MyRunnable myRunnable;
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
 
@@ -1244,6 +1244,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         this.joinUid = uid;
         this.joinElapsed = elapsed;
         runOnUiThread(new Runnable() {
+
+
+
             @Override
             public void run() {
                 isShowPopuTo = true;
@@ -1265,6 +1268,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 liveSettingLayout.setClickable(true);
                 userOnLineCountParameter = channelId + "/onlineUsers";
                 //上传在线人数
+                myRunnable = new MyRunnable();
                 handlerLine.postDelayed(new MyRunnable(), 2000);
             }
         });
@@ -1564,7 +1568,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onDestroy() {
         AppLog.i("TAG", "直播端走了onDestroy");
         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-
+        handlerLine.removeCallbacks(myRunnable);
         if (isLeaveChannel) {
             deInitUIandEvent();
         }

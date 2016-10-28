@@ -80,7 +80,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/home_recommend_hot_live_view_pager_height"
+            android:layout_height="wrap_content"
             android:clipChildren="false"
             android:layerType="software">
 
@@ -134,7 +134,7 @@
             <com.lalocal.lalocal.view.DisallowParentTouchViewPager
                 android:id="@+id/vp_hot_lives"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/home_recommend_hot_live_view_pager_height"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/home_recommend_viewpager_page_margin"
                 android:layout_marginRight="@dimen/home_recommend_viewpager_margin"
                 android:clipChildren="false" />

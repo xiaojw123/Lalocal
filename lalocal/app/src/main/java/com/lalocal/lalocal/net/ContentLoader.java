@@ -1307,7 +1307,8 @@ public class ContentLoader {
                     } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
-                    callBack.onResponseFailed(message, resultCode);
+                    callBack.onResponseFailed(code,message);
+                    callBack.onResponseFailed(message,RequestCode.LIVE_ON_LINE_COUNT);
                     return;
 
                 }
