@@ -897,7 +897,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         overSignature = (TextView)audienceOver.findViewById(R.id.master_info_signature);
         overAttention = (TextView)audienceOver.findViewById(R.id.live_attention);
         overFans = (TextView)audienceOver.findViewById(R.id.live_fans);
-        audienceOver.findViewById(R.id.master_dialog_report_audience);
+
         masterAttentino = (TextView) audienceOver.findViewById(R.id.master_dialog_attention_audience);
         masterAttentino.setOnClickListener(buttonClickListener);
       //  liveMasterHome.setOnClickListener(buttonClickListener);

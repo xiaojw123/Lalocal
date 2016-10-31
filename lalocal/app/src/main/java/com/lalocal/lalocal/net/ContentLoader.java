@@ -1135,7 +1135,7 @@ public class ContentLoader {
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-            return super.setRetryPolicy(new DefaultRetryPolicy(50000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+            return super.setRetryPolicy(new DefaultRetryPolicy(10000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }

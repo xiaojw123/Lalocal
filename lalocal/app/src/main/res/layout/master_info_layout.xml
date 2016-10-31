@@ -64,22 +64,23 @@
                     android:textColor="@color/live_info_1a1a1a"
                     android:textSize="@dimen/live_text_16sp" />
 
-                <ImageView
+             <!--   <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingTop="@dimen/live_padding_5dp"
                     android:src="@drawable/playertag"
-                    android:visibility="invisible" />
+                    android:visibility="invisible" />-->
 
                 <TextView
                     android:id="@+id/master_info_signature"
                     android:layout_width="wrap_content"
-                    android:layout_height="62dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:layout_gravity="center"
                     android:ellipsize="end"
                     android:gravity="center"
-                    android:maxLines="3"
+                    android:maxLines="4"
                     android:paddingLeft="@dimen/author_padding_25dp"
                     android:paddingRight="@dimen/author_padding_25dp"
                     android:text="神秘人拒绝透露自己的个人简介"
