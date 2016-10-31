@@ -36,17 +36,17 @@ public class PullToRefreshGridView extends PullToRefreshAdapterViewBase<GridView
         super(context, attrs);
     }
 
-    public PullToRefreshGridView(Context context, Mode mode) {
+    public PullToRefreshGridView(Context context, PullToRefreshBase.Mode mode) {
         super(context, mode);
     }
 
-    public PullToRefreshGridView(Context context, Mode mode, AnimationStyle style) {
+    public PullToRefreshGridView(Context context, PullToRefreshBase.Mode mode, PullToRefreshBase.AnimationStyle style) {
         super(context, mode, style);
     }
 
     @Override
-    public final Orientation getPullToRefreshScrollDirection() {
-        return Orientation.VERTICAL;
+    public final PullToRefreshBase.Orientation getPullToRefreshScrollDirection() {
+        return PullToRefreshBase.Orientation.VERTICAL;
     }
 
     @Override

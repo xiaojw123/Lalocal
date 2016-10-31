@@ -3,13 +3,13 @@
     android:orientation="vertical"
     android:id="@+id/audience_over"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
     <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
         android:id="@+id/audience_over_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,6 @@
     android:layout_centerInParent="true">
     <include layout="@layout/costom_live_popuwindow"></include>
 </LinearLayout>
-
 
     <LinearLayout
         android:id="@+id/master_info_back_home"
@@ -43,6 +42,8 @@
             android:text="@string/live_back"
             android:textColor="@color/live_start_tv"
             android:textSize="@dimen/text_size_16_sp" />
+
+
     </LinearLayout>
 
 </RelativeLayout>

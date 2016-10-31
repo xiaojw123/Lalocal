@@ -27,7 +27,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.im.session.ModuleProxy;
 import com.lalocal.lalocal.live.thirdparty.video.constant.VideoConstant;
 
@@ -275,7 +274,7 @@ public class NEVideoController {
                 mVideoScalingMode = VideoConstant.VIDEO_SCALING_MODE_FIT;
                 mSetPlayerScaleButton.setImageResource(R.drawable.nemediacontroller_scale01);
                 mIsFullScreen = false;
-                videoLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, ScreenUtil.dip2px(217)));
+                videoLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
             } else {
                 moduleProxy.shouldCollapseInputPanel(); // 关闭输入区域
                 mVideoScalingMode = VideoConstant.VIDEO_SCALING_MODE_FILL_BLACK;

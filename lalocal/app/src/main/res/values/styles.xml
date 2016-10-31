@@ -29,6 +29,15 @@
         <item name="android:windowFrame">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
     </style>
+    <style name="custom_dialog" parent="test_dialog">
+        <item name="android:windowBackground">@color/thin_dark</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <!--<item name="android:background">@color/thin_dark</item>-->
+    </style>
 
 
     <style name="test_dialog" parent="@android:style/Theme.Dialog">
@@ -73,7 +82,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_12_sp</item>
-        <item name="android:textColor">@drawable/home_me_content_tab_textcolor</item>
+        <item name="android:textColor">@color/color_66</item>
         <item name="android:layout_marginTop">@dimen/home_me_tab_title_top</item>
     </style>
 
@@ -81,7 +90,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/home_me_tab_item_num_height</item>
         <item name="android:textSize">@dimen/text_size_18_sp</item>
-        <item name="android:textColor">@drawable/home_me_content_tab_textcolor</item>
+        <item name="android:textColor">@color/color_d9</item>
     </style>
 
     <style name="CommonDeLineTheme">
@@ -253,8 +262,8 @@
         <item name="android:textSize">@dimen/text_size_13_sp</item>
         <item name="android:textColor">@drawable/des_area_nav_menu_textcolor</item>
         <item name="android:drawablePadding">@dimen/dimen_size_4_dp</item>
-        <item name="android:paddingStart">@dimen/dimen_size_5_dp</item>
-        <item name="android:paddingEnd">@dimen/dimen_size_5_dp</item>
+        <item name="android:paddingLeft">@dimen/dimen_size_5_dp</item>
+        <item name="android:paddingRight">@dimen/dimen_size_5_dp</item>
         <item name="android:gravity">center</item>
     </style>
     <!--dialog-->
@@ -533,8 +542,19 @@
         <item name="android:textSize">@dimen/text_size_12_sp</item>
         <item name="android:textColor">@color/color_66</item>
     </style>
+    
+    <style name="HomeMeMyItemNameStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_16_sp</item>
+        <item name="android:textColor">@color/color_1a</item>
+    </style>
+    <style name="AuthorNameStyle">
+        <item name="android:textColor">@color/color_d9</item>
+    </style>
 
-
-
-
+    <style name="GuidePopupStyle">
+        <item name="android:windowEnterAnimation">@anim/guide_in</item>
+        <item name="android:windowExitAnimation">@anim/guide_out</item>
+    </style>
 </resources>

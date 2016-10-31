@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.base.ui;
 
+
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

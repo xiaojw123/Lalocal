@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -23,10 +24,8 @@ import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.KeyboardUtil;
-import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.adapter.LiveSearchAdapter;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
@@ -64,13 +63,13 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.live_search_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         backImg.setImageDrawable(getColorDrawable(searchIconColor, R.drawable.common_back_btn_bg));
         liveSearchEdt.setCompoundDrawablePadding(drawablePadding);
         liveSearchEdt.setCompoundDrawables(getColorDrawable(searchIconColor, R.drawable.searchbar_searchicon), null, null, null);
         liveSearchEdt.setOnEditorActionListener(this);
-        liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.setPullRefreshEnabled(false);
+        liveSearchXrlv.setLoadingMoreProgressStyle(ProgressStyle.LineSpinFadeLoader);
         liveSearchXrlv.addOnScrollListener(new LiveSearchScorllListener());
         setLoaderCallBack(new LiveSearchCallBack());
 
@@ -133,7 +132,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
             if (mPageNumb <= 1) {
                 mAllRows.clear();
             } else {
-                liveSearchXrlv.loadMoreComplete();
+                liveSearchXrlv.setNoMore(true);
             }
             AppLog.print("row size___" + item.getRows().size());
             mAllRows.addAll(item.getRows());
@@ -156,13 +155,8 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
 
         @Override
         public void onRefresh() {
-            liveSearchXrlv.refreshComplete();
         }
 
-        @Override
-        public void onResponseFailed() {
-            super.onResponseFailed();
-        }
 
         @Override
         public void onError(VolleyError volleyError) {
@@ -176,7 +170,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
                 ++mPageNumb;
                 mContentloader.searchLive(mPageNumb, mLastSearhText);
             } else {
-                liveSearchXrlv.loadMoreComplete();
+                liveSearchXrlv.setNoMore(true);
             }
 
         }
@@ -186,22 +180,9 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
         @Override
         public void onItemClickListener(View view, int position) {
             LiveRowsBean liveRowsBean = (LiveRowsBean) view.getTag();
-            String roomId = String.valueOf(liveRowsBean.getRoomId());
-            String createRoom = SPCUtils.getString(LiveSearchActivity.this, CREATE_ROOMID);
-            String s = String.valueOf(roomId);
-            if (createRoom != null && createRoom.equals(s)) {
-                CommonUtil.REMIND_BACK = 1;
-                SPCUtils.put(LiveSearchActivity.this, CREATE_ROOMID, "fdfdad");
-                return;
-            }
-            Object annoucement = liveRowsBean.getAnnoucement();
-            String ann = null;
-            if (annoucement != null) {
-                ann = annoucement.toString();
-            } else {
-                ann = "这是公告哈";
-            }
-            AudienceActivity.start(LiveSearchActivity.this, liveRowsBean, ann);
+            Intent intent=new Intent(LiveSearchActivity.this, AudienceActivity.class);
+            intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
+            startActivity(intent);
         }
     }
 
@@ -220,6 +201,7 @@ public class LiveSearchActivity extends BaseActivity implements TextView.OnEdito
                 KeyboardUtil.hidenSoftKey(liveSearchEdt);
             }
         }
+
     }
 
 

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.ui.TViewHolder;
-import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
+import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
@@ -34,6 +34,7 @@ public class MsgViewHolderChat extends TViewHolder {
     private LinearLayout messageItem;
     private String fromAccount;
     public static final String NIM_CHAT_MESSAGE_INFO="nimlivesenfmessage";
+
     @Override
     protected int getResId() {
         return R.layout.message_item_text;
@@ -58,9 +59,11 @@ public class MsgViewHolderChat extends TViewHolder {
         String content=null;
         String giftName=null;
         String textColor=null;
-
+        int challengeStatus=-1;
+        String challengeContent=null;
         message = (ChatRoomMessage) item;
         fromAccount = message.getFromAccount();
+        messageItem.setBackgroundResource(0);
         Map<String, Object> remoteExtension = message.getRemoteExtension();
         if (remoteExtension != null) {
             Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
@@ -102,6 +105,28 @@ public class MsgViewHolderChat extends TViewHolder {
                         }
                     }
                 }
+          /*      if("challengeModel".equals(key)){
+                    String model = value.toString();
+                    if(model!=null&&!"null".equals(model)){
+                        Map<String, Object> map = (Map<String, Object>) value;
+                        Iterator<Map.Entry<String, Object>> mapItem = map.entrySet().iterator();
+                        while (mapItem.hasNext()){
+                            Map.Entry<String, Object> next1 = mapItem.next();
+                            String key1 = next1.getKey();
+                            Object value1 = next1.getValue();
+                            if("content".equals(key1)){
+                                challengeContent = value1.toString();
+
+                            }
+                            if("targetgold".equals(key1)) {
+                                challengeContent = challengeContent + value1.toString();
+                            }
+                            if("status".equals(key1)){
+                                challengeStatus=(int)value1;
+                            }
+                        }
+                    }
+                }*/
 
             }
         }
@@ -112,53 +137,88 @@ public class MsgViewHolderChat extends TViewHolder {
             case "0":
                 itemContent = message.getContent();
                 textColor="#ffffff";
-                //  bodyText.setTextColor(Color.WHITE);
+
                 break;
             case "2"://点赞
                 itemContent="给主播点了个赞";
                 textColor="#97d3e9";
-                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
-               /* itenImage.setVisibility(View.VISIBLE);
-                itenImage.setImageResource(R.drawable.);*/
+
                 break;
             case "6"://禁言
                 itemContent="禁言了"+disableSendMsgNickName;
                 textColor="#97d3e9";
-                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
+
                 break;
             case "7":
                 itemContent="解除了"+disableSendMsgNickName+"的禁言";
                 textColor="#97d3e9";
-                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "8":
                 itemContent="将"+adminSendMsgNickName+"授权为管理员";
                 textColor="#97d3e9";
-                //  bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "9":
-
                 itemContent="取消了"+adminSendMsgNickName+"的管理员权限";
                 textColor="#97d3e9";
-                // setNameTextView("主播",);
-                //   bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 break;
             case "10":
-                GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
+                GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
                 itemContent="给主播送了"+giftCount+"个"+giftName;
                 textColor="#97d3e9";
-                //   bodyText.setTextColor(Color.parseColor("#97d3e9"));
                 itenImage.setVisibility(View.VISIBLE);
                 DrawableUtils.displayImg(context,itenImage,messageToGiftBean.getGiftImage());
                 break;
+            case "13":
+                itemContent="分享了直播!";
+                textColor="#ffffff";
+                break;
+            case "100":
+                itemContent = "离开了";
+                textColor="#ffffff";
+                break;
+            case "101":
+                itemContent = "回来了";
+                textColor="#ffffff";
+                break;
+    /*        case "4":
+                if(challengeStatus==0){
+
+                }
+                switch (challengeStatus){
+                    case 0:
+                        itemContent="发起挑战  "+challengeContent;
+                        textColor="#ffaa2a";
+                        messageItem.setBackgroundResource(R.drawable.task_message_lv);
+                        break;
+                    case 1:
+                        itemContent="开始挑战任务";
+                        textColor="#ffe400";
+                        messageItem.setBackgroundResource(R.drawable.task_massage_lv_yellow);
+                        break;
+                    case 2:
+                        itemContent="完成挑战任务";
+                        textColor="#ffe400";
+                        messageItem.setBackgroundResource(R.drawable.task_massage_lv_yellow);
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        itemContent="放弃挑战，所有金额返还!";
+                        textColor="#ffe400";
+                        messageItem.setBackgroundResource(R.drawable.task_massage_lv_yellow);
+                        break;
+
+                }
+
+                break;*/
         }
 
 
-        setNameTextView(creatorAccount,itemContent,textColor);
+        setNameTextView(creatorAccount,itemContent,textColor,styles);
 
         //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
         //   bodyText.setMovementMethod(LinkMovementMethod.getInstance());
-    }
+     }
 
     private SpannableStringBuilder textviewSetContent(String text,String textColor) {
         String[] textContent = text.split(":");
@@ -173,46 +233,23 @@ public class MsgViewHolderChat extends TViewHolder {
         return  style;
     }
 
-    public void setNameTextView(String creatorAccount,String itemContent,String textColor) {
+    public void setNameTextView(String creatorAccount,String itemContent,String textColor,String styles) {
         String contentItem=null;
         if (message.getMsgType() != MsgTypeEnum.notification) {
-            // 聊天室中显示姓名
-  /*          if (message.getChatRoomMessageExtension() != null) {
-                String senderNick = message.getChatRoomMessageExtension().getSenderNick();
-                String fromAccount = message.getFromAccount();
-                AppLog.i("TAG","fromAccount"+fromAccount+"   creatorAccount:"+creatorAccount);
-                String name = DemoCache.getUserInfo().getName();
-                if(senderNick!=null&&senderNick.equals(name)){
-                    contentItem="我  :"+itemContent;
-                  //  nameText.setText("我");
-                }else if(fromAccount.equals(creatorAccount)){
-                    nameText.setText("主播");
-                    contentItem="我  :"+itemContent;
-                } else{
-                    contentItem=message.getChatRoomMessageExtension().getSenderNick()+" :"+itemContent;
-                   // nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
-                }
-
-            } else {
-              //  nameText.setText(DemoCache.getUserInfo() == null ? DemoCache.getAccount() : DemoCache.getUserInfo().getName());
-                contentItem=( DemoCache.getUserInfo() == null ? DemoCache.getAccount() : DemoCache.getUserInfo().getName())+":"+itemContent;
-            }*/
-
-            //    nameText.setText(textviewSetContent(contentItem));
             if(message.getRemoteExtension() != null) {
-                String fromAccount = message.getFromAccount();
 
-                //   AppLog.i("TAG","fromAccount"+fromAccount+"   creatorAccount:"+creatorAccount);
-                String account = DemoCache.getUserInfo().getAccount();
-                if(fromAccount!=null&&fromAccount.equals(account)){
-                    contentItem="我  :  "+itemContent;
-                    //   nameText.setText("我");
-                }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
+                if(styles.equals("101")||styles.equals("100")){
                     contentItem="主播  :  "+itemContent;
-                    //  nameText.setText("主播");
-                } else{
-                    contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
-                    // nameText.setText(message.getChatRoomMessageExtension().getSenderNick());
+                }else {
+                    String fromAccount = message.getFromAccount();
+                    String account = DemoCache.getUserInfo().getAccount();
+                    if(fromAccount!=null&&fromAccount.equals(account)){
+                        contentItem="我  :  "+itemContent;
+                    }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
+                        contentItem="主播  :  "+itemContent;
+                    } else{
+                        contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
+                    }
                 }
 
             }

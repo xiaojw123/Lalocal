@@ -2,23 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    >
 
-    <com.cunoraz.gifview.library.GifView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/day_route_item_img_height"
-        app:gif="@drawable/imgloadingbg"
-        android:layout_centerHorizontal="true"
-        />
-
-    <ImageView
+    <pl.droidsonroids.gif.GifImageView
         android:id="@+id/day_route_item_img"
         android:layout_width="match_parent"
         android:layout_height="@dimen/day_route_item_img_height"
         android:scaleType="centerCrop"
+        android:src="@drawable/imgloading"
         />
-
-
     <TextView
         android:id="@+id/day_route_title"
         android:layout_width="wrap_content"

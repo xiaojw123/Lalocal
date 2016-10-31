@@ -27,5 +27,7 @@ public class Constant {
     public static final int PRP_MAX_SMOOTHNESS = 15;
     public static final float PRP_USER_LIGHTNESS=1.2f;
 
+    public static boolean CAMERABACK=false;
+
 
 }

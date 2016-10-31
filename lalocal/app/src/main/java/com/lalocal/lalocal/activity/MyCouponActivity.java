@@ -25,11 +25,14 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CouponItem;
+import com.lalocal.lalocal.model.JsCoupon;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.adapter.MyCouponRecyclerAdapter;
+
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,18 +118,28 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                     if (adapter != null) {
 //                        List<Coupon> selectedViews = adapter.getSelectedCoupons();
                         Map<Integer, Coupon> selelctedMap = adapter.getSelectedCouponMap();
-                        List<Coupon> selectedViews = new ArrayList<>();
+//                        List<Coupon> selectedViews = new ArrayList<>();
+                        JSONArray couponJarray=new JSONArray();
+                        List<JsCoupon> jsCouponList=new ArrayList<>();
                         for (Map.Entry<Integer, Coupon> entry : selelctedMap.entrySet()) {
                             Coupon coupon = entry.getValue();
-                            selectedViews.add(coupon);
+//                            selectedViews.add(coupon);
+                            JsCoupon jsCoupon=new JsCoupon();
+                            jsCoupon.setStatus(coupon.getStatus());
+                            jsCoupon.setMinFee(coupon.getMinFee());
+                            jsCoupon.setStatusName(coupon.getStatusName());
+                            jsCoupon.setDiscount(coupon.getDiscount());
+                            jsCoupon.setExpiredDateStr(coupon.getExpiredDateStr());
+                            jsCoupon.setType(coupon.getType());
+                            jsCoupon.setName(coupon.getName());
+                            jsCoupon.setCouponId(String.valueOf(coupon.getId()));
+                            jsCouponList.add(jsCoupon);
                         }
-                        if (selectedViews.size() > 0) {
                             Gson gson = new Gson();
-                            String json = gson.toJson(selectedViews);
+                            String json = gson.toJson(jsCouponList);
                             intent = new Intent();
                             AppLog.print("myCoupon____json___" + json);
                             intent.putExtra("selectedCoupons", json);
-                        }
                     }
                 }
                 setResult(BookActivity.RESULT_COUPON_SELECTED, intent);
@@ -221,9 +234,9 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
 
     @Override
     public void onBackPressed() {
+        setBackResult();
         super.onBackPressed();
         AppLog.print("onBackPressed_____");
-        setBackResult();
     }
 
     public void setBackResult() {

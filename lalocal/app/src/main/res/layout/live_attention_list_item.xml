@@ -5,11 +5,14 @@
     android:gravity="center_vertical"
     android:layout_gravity="center"
     android:layout_height="120dp"
+
    >
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:gravity="center"
         >
         <ImageView
             android:id="@+id/attention_list_item_head"
@@ -31,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
-                    android:maxLength="15"
+                    android:maxLength="10"
                     android:ellipsize="end"
                     android:text="lalocal"/>
             </LinearLayout>
@@ -39,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_weight="1"
                 android:layout_height="0dp"
+                android:paddingRight="@dimen/live_padding_10dp"
                 android:gravity="center_vertical">
                 <TextView
                     android:id="@+id/attention_list_item_singture"
@@ -46,6 +50,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="2"
                     android:ellipsize="end"
+
                     android:text="这家伙很懒啥也没写"/>
             </LinearLayout>
         </LinearLayout>

@@ -45,7 +45,7 @@ import java.util.List;
  * Created by huangjun on 2016/1/27.
  */
 public class ChatRoomMsgListPanel implements TAdapterDelegate {
-    private static final int MESSAGE_CAPACITY = 500;
+    private static final int MESSAGE_CAPACITY = 150;
     public static final String NIM_CHAT_MESSAGE_INFO="nimlivesenfmessage";
     // container
     private Container container;
@@ -58,6 +58,8 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private MsgAdapter adapter;
     private String content;
     private   Context context;
+    private TextView headInfos;
+
     public ChatRoomMsgListPanel(Container container, View rootView, String content, Context context) {
         this.container = container;
         this.rootView = rootView;
@@ -97,10 +99,11 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         adapter.setEventListener(new MsgItemEventListener());
 
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
-       View view= View.inflate(container.activity,R.layout.chat_head_items,null);
-       TextView headInfos= (TextView) view.findViewById(R.id.chat_info_head);
+       View view= View.inflate(container.activity, R.layout.chat_head_items,null);
+        headInfos = (TextView) view.findViewById(R.id.chat_info_head);
 
         headInfos.setText("公告： "+content);
+        headInfos.setVisibility(View.GONE);
         messageListView.addHeaderView(view);
         messageListView.requestDisallowInterceptTouchEvent(true);
 
@@ -119,8 +122,12 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
             }
         });
     }
-
-
+    public void setHeaderViewVisible(){
+        headInfos.setVisibility(View.VISIBLE);
+    }
+    public void setHead(TextView textView){
+        messageListView.addHeaderView(textView);
+    }
 
 
 

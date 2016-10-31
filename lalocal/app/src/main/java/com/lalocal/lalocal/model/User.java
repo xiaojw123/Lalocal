@@ -13,8 +13,30 @@ public class User implements Parcelable{
     String avatar;
     String token=null;
     int status=-1;
-    ImUserInfo imUserInfo;
 
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    ImUserInfo imUserInfo;
+    String description;
+    int role;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public static Creator<User> getCREATOR() {
+        return CREATOR;
+    }
 
     public int getId() {
         return id;
@@ -72,6 +94,9 @@ public class User implements Parcelable{
         this.imUserInfo = imUserInfo;
     }
 
+    public User() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -86,9 +111,8 @@ public class User implements Parcelable{
         dest.writeString(this.token);
         dest.writeInt(this.status);
         dest.writeParcelable(this.imUserInfo, flags);
-    }
-
-    public User() {
+        dest.writeString(this.description);
+        dest.writeInt(this.role);
     }
 
     protected User(Parcel in) {
@@ -99,6 +123,8 @@ public class User implements Parcelable{
         this.token = in.readString();
         this.status = in.readInt();
         this.imUserInfo = in.readParcelable(ImUserInfo.class.getClassLoader());
+        this.description = in.readString();
+        this.role = in.readInt();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

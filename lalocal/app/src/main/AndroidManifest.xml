@@ -38,7 +38,7 @@
     <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -63,11 +63,11 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:hardwareAccelerated="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.HomeActivity"
@@ -131,7 +131,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".live.entertainment.activity.TestActivity" />
+        <activity android:name=".live.entertainment.activity.TestActivity" >
+
+        </activity>
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -179,7 +181,11 @@
 
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="${CATEGORY}" />
+            android:value="releaseOrigin" />
+
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_CHANNEL" -->
+        <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="1e017a0e358e7dcc6793beda9888be87" />
@@ -290,24 +296,14 @@
         <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
-            android:hardwareAccelerated="false"
-
-            />
+            android:hardwareAccelerated="false" />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
-            android:hardwareAccelerated="false"
-
-
-            />
-
-        <activity android:name=".live.entertainment.activity.LiveHomePageActivity"
-            >
-
-        </activity>
+            android:hardwareAccelerated="false" />
+        <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
             android:hardwareAccelerated="false"
-
             android:windowSoftInputMode="adjustUnspecified|stateHidden" />
         <activity android:name=".activity.PayCompleteActivity" />
         <activity android:name=".activity.MyWalletActivity" />
@@ -317,9 +313,28 @@
         <activity android:name=".activity.ExchangeActivity" />
         <activity android:name=".activity.ChargePayActivity" />
         <activity android:name=".activity.LiveSearchActivity" />
-        <activity android:name=".activity.MyCouponActivity"></activity>
+        <activity android:name=".activity.MyCouponActivity" />
         <activity android:name=".activity.ThemeActivity" />
+        <activity android:name=".activity.MyFavoriteActivity" />
+        <activity android:name=".activity.MyOrderActivity" />
+        <activity android:name=".activity.PersonalIntroActivity" />
+        <activity android:name=".activity.MyLiveActivity" />
+        <activity android:name=".activity.LiveDetailActivity" />
+        <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
+        <activity android:name=".live.entertainment.activity.PlayBackActivity" />
+        <!-- GlideModule -->
+        <meta-data
+            android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
+            android:value="GlideModule" />
 
+        <activity android:name=".live.entertainment.activity.ReportActivity" />
+        <activity android:name=".activity.MyArticleActivity" />
+        <activity android:name=".me.LLoginActivity" />
+        <activity android:name=".me.LPEmailBound2Activity" />
+        <activity android:name=".me.LPEmailBoundActivity" />
+        <activity android:name=".me.LEmailLoginActivity" />
+        <activity android:name=".me.LRegisterActivity"></activity>
+        <activity android:name=".activity.CurrencyInstructionActivity"/>
     </application>
 
 </manifest>

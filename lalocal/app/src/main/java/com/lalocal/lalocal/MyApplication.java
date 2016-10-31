@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
+import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
 import com.easemob.chat.EMChat;
 import com.lalocal.lalocal.easemob.DemoHelper;
@@ -44,11 +45,32 @@ import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by xiaojw on 2016/6/30.
- * 线上版本 友盟日志关闭
+ * 【APP上线注意事项】
+ * <p>
+ * 1.为区分线上/线下版本，版本号定义如下
+ * 线下版本：版本号=版本名称数字
+ * 线下版本：版本号=版本名称数字+1
+ * eg:版本名称：2.1.3
+ * 线下版本号：213
+ * 线上版本号：214
+ * 此约定从2.1.3版本开始生效
+ * <p>
+ * 2.设置isDebug=false
+ * 日志关闭
+ * bugTag关闭
+ * 友盟统计开启
+ * fabric开启
+ * <p>
+ * 3.第三方加固
+ * meta-data选项选择UMENG_CHANNEL
+ * 根据不同市场设置对应value，生成
+ * 相应渠道包
+ * 此约定从2.1.3版本开始生效
  */
 public class MyApplication extends Application {
-    private static boolean isDebug = false;
+    public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -58,8 +80,12 @@ public class MyApplication extends Application {
         AppCrashHandler.getInstance(this);
         EMChat.getInstance().init(this);
         EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
-        startFabric();
-        startUmeng();
+        if (isDebug) {
+            Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
+        }else{
+            startFabric();
+            startUmeng();
+        }
         //数据库
         intCountryDB();
         //代码中设置环信IM的Appkey
@@ -67,9 +93,6 @@ public class MyApplication extends Application {
         EMChat.getInstance().setAppkey(appkey);
         // init demo helper
         DemoHelper.getInstance().init(this);
-        //TODO:bugtags online delete
-    //    Bugtags.start("cd0acb22bdec583c5b200902dd13b7e1", this, Bugtags.BTGInvocationEventBubble);
-
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());
         if (inMainProcess()) {
@@ -87,10 +110,10 @@ public class MyApplication extends Application {
     private static void initLogManager() {
         Log.LOG = isDebug;
         PingppLog.DEBUG = isDebug;
-        if (isDebug){
-            AppLog.debug_level=0;
-        }else{
-            AppLog.debug_level=8;
+        if (isDebug) {
+            AppLog.debug_level = 0;
+        } else {
+            AppLog.debug_level = 8;
         }
     }
 
@@ -199,7 +222,7 @@ public class MyApplication extends Application {
         MobclickAgent.setScenarioType(this, MobclickAgent.EScenarioType.E_UM_NORMAL);
         //设置是否对日志信息进行加密, 默认false(不加密)
         MobclickAgent.enableEncrypt(false);//6.0.0版本及以后
-        MobclickAgent.setDebugMode(true);
+//        MobclickAgent.setDebugMode(true);
     }
 
 
@@ -212,6 +235,7 @@ public class MyApplication extends Application {
             mWorkerThread.waitForReady();
         }
     }
+
     public synchronized WorkerThread getWorkerThread() {
         return mWorkerThread;
     }

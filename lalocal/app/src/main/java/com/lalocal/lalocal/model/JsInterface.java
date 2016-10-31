@@ -44,7 +44,7 @@ public class JsInterface {
         switch (callback){
             case BookActivity.PAGET_TO_COUPON:
                 //TODO:优惠券影响预定流程
-//                gotoMyCoupon();
+                gotoMyCoupon();
                 break;
 
         }

@@ -1,18 +1,16 @@
 package com.lalocal.lalocal.util;
-import java.util.ArrayList;
-import java.util.List;
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
 
-import android.content.Context;
-
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-
-import android.widget.ImageView;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -59,6 +57,7 @@ public class ViewFactory {
 	public static ImageView getImageView(Context context, String url) {
 		ImageView imageView = (ImageView)LayoutInflater.from(context).inflate(
 				R.layout.view_banner, null);
+		imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		DrawableUtils.displayImg(context, imageView, url);
 		return imageView;
 	}

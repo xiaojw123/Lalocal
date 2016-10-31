@@ -8,13 +8,13 @@ import android.content.pm.PackageManager;
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
-
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
-    //    private static String baseUrl = "http://api.lalocal.cn/api/";
+
+//        private static String baseUrl = "http://api.lalocal.cn/api/";
     // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
@@ -254,9 +254,47 @@ public class AppConfig {
         return  baseUrl+"system/share";
     }
 
-    //上传在线人数  http://dev.lalocal.cn:8080/api/system/numbs?number=1
-    public static final String getOnLineUserCount(){
-        return  baseUrl+"system/numbs?number=";
+    //上传在线人数 http://dev.lalocal.cn:8080/api/system/numbs?number=1&channelId=11
+    public static final String getOnLineUserCount(int number,String channelId ){
+        return  baseUrl+"system/numbs?number="+number+"&channelId="+channelId;
+    }
+
+    //发起挑战 http://dev.lalocal.cn:8080/api/challenges
+    public static final String getChallageInitiate(){
+        return  baseUrl+"challenges";
+    }
+
+    //挑战列表 http://dev.lalocal.cn:8080/api/challenges?channelId=1&status=0 getChallengeList
+    public static final String getChallengeList(){
+        return  baseUrl+"challenges?channelId=";
+    }
+    //主播操作挑战 http://dev.lalocal.cn:8080/api/challenges/6/status
+    public static final String getLiveChallengeStatus(int challengeId){
+        return  baseUrl+"challenges/"+challengeId+"/status";
+    }
+    //挑战详情
+    public static final String getChallengeDetails(){
+        return baseUrl+"challenges";
+    }
+
+    //直播地区列表
+    public  static  final String getLiveArea(){
+        return baseUrl+"system/areas?channelFlag=true";
+    }
+    //直播首页 http://dev.lalocal.cn:8080/api/channels/index?area=2&attentionFlag=
+    public  static  final  String getLiveHotList(String areaId,String attentionFlag){
+        return  baseUrl+"channels/index?area="+areaId+"&attentionFlag="+attentionFlag;
+    }
+    //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
+    public static final String getPlayBackLive(String areaId,int pageNumber,String attentionFlag){
+      //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+   return baseUrl+"channels/historys?area="+areaId+"&pageNumber="+pageNumber+"&attentionFlag="+attentionFlag;
+
+    }
+    //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
+    public  static final String getPlayBackLiveDetails(int id){
+
+        return baseUrl+"channels/historys/"+id;
     }
 
     public static String getBaseUrl() {
@@ -442,5 +480,46 @@ public class AppConfig {
         return baseUrl + "codes";
     }
 
+    //用户历史直播
+    public static  String getUserLiveUrl(int userid,int pageNum){
+        String url = baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+        AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
+        return url;
+
+    }
+
+    //用户明细
+    public static  String getChannelRecords(int id){
+
+        return  baseUrl+"channels/records/"+id;
+    }
+    //发送短信验证码
+    public static  String getSMSVerCode(){
+
+        return baseUrl+"users/phone/code";
+    }
+    //手机登录
+    public static  String getPhoneLoginUrl(){
+   return  baseUrl+"users/phone/login";
+    }
+    //手机注册
+    public static  String getPhoneRegisterUrl(){
+        return baseUrl+"users/phone/user";
+    }
+
+
+    // 用户当前直播
+    public static String getUserCurLive(int userid) {
+        String url = baseUrl + "channels/users/" + userid + "/detail";
+        AppLog.i("ussr", "the getUserCurLive url is " + url);
+        return url;
+    }
+
+    // 获取用户文章列表
+    public static String getUserArticles(int userid, int pageNum) {
+        String url = baseUrl + "articles/author?authorId=" + userid + "&pageSize=10&pageNumber=" + pageNum;
+        AppLog.i("ussr", "the getUserArticles url is " + url);
+        return url;
+    }
 
 }

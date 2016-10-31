@@ -21,7 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
@@ -100,7 +99,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_layout);
         ButterKnife.bind(this);
-        AppLog.print("OrderActivity___oncreateView____");
+        AppLog.print("OrderActivity___oncreateView___order__" + getOrderId());
         initParams();
         initView();
         setLoaderCallBack(new CallBack());
@@ -205,7 +204,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 String text = evalute_btn.getText().toString();
                 if (getResources().getString(R.string.pay_immediately).equals(text)) {
                     if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
-                        setResult(MeFragment.UPDATE_MY_ORDER);
+                        setResult(MyOrderActivity.UPDATE_MY_ORDER);
                     }
                     Intent intent = new Intent(this, PayActivity.class);
                     intent.putExtra(PayActivity.ORDER_ID, mOrderDetail.getId());
@@ -268,8 +267,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         setBackResult();
+        super.onBackPressed();
 
     }
 
@@ -279,7 +278,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             setResult(PayActivity.RESULT_BACK_PRODUCT);
         } else {
             Intent intent = new Intent();
-            intent.setAction(MeFragment.ACTION_UPDATE_DATA);
             sendBroadcast(intent);
         }
 
@@ -305,7 +303,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             }
             isCancelOrder = true;
             if (KeyParams.ACTION_UPDATE_ORDER.equals(getActionType())) {
-                setResult(MeFragment.UPDATE_MY_ORDER);
+                setResult(MyOrderActivity.UPDATE_MY_ORDER);
             }
             mContentloader.getOrderDetail(getOrderId());
         }
@@ -548,46 +546,43 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         FrameLayout phoneCotainer = (FrameLayout) itemView.findViewById(R.id.travelperson_phone_container);
                         FrameLayout emailCotainer = (FrameLayout) itemView.findViewById(R.id.travelperson_email_cotainer);
                         FrameLayout sexCotainer = (FrameLayout) itemView.findViewById(R.id.travelperson_sex_container);
-                        String fullname = "";
+                        String sName = "";
+                        String sValue = "";
                         for (OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean item : itemList) {
-                            String code = item.getCode();
+//                            String code = item.getCode();
+                            int type = item.getType();
                             String value = item.getValue();
-                            switch (code) {
-                                case "7": // isleader  1: true 0: false
-                                    if (!TextUtils.isEmpty(value)) {
-                                        sexCotainer.setVisibility(View.VISIBLE);
-                                        sex_tv.setText(value);
-                                    }
+
+                            switch (type) {
+                                case 1: // isleader  1: true 0: false
+                                    sexCotainer.setVisibility(View.VISIBLE);
+                                    sex_tv.setText(value);
                                     break;
-                                case "-1":
+                                case 8:
                                     if ("1".equals(value)) {
                                         fullname_tv.setTextColor(getResources().getColor(R.color.color_ffaa2a));
                                         leader_ic.setVisibility(View.VISIBLE);
                                     }
                                     break;
-                                case "2":
-                                    if (!TextUtils.isEmpty(value)) {
-                                        emailCotainer.setVisibility(View.VISIBLE);
-                                        email_tv.setText(value);
-                                    }
+                                case 0:
+                                    emailCotainer.setVisibility(View.VISIBLE);
+                                    email_tv.setText(value);
 
                                     break;
-                                case "12":
-                                    if (!TextUtils.isEmpty(value)) {
-                                        phoneCotainer.setVisibility(View.VISIBLE);
-                                        phone_tv.setText(value);
-                                    }
+                                case 3:
+                                    phoneCotainer.setVisibility(View.VISIBLE);
+                                    phone_tv.setText(value);
                                     break;
-                                case "0":
-                                    fullname += value;
+                                case 9:
+                                    sName = value;
                                     break;
-                                case "1":
-                                    fullname += "  " + value;
+                                case 5:
+                                    sValue = value;
                                     break;
-
                             }
 
                         }
+                        fullname_tv.setText(sName + "  " + sValue);
                         if (mPreViewContainer.getVisibility() != View.VISIBLE) {
                             mPreViewContainer.setVisibility(View.VISIBLE);
                         }
@@ -596,7 +591,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         } else {
                             mPreViewContainer.addView(itemView);
                         }
-                        fullname_tv.setText(fullname);
+
                     }
 
 
@@ -612,29 +607,34 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_15_sp));
                         textView.setSingleLine();
                         textView.setEllipsize(TextUtils.TruncateAt.END);
-                        String fullName = "";
+                        String sName="";
+                        String sValue="";
                         for (OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean item : itemList) {
                             String code = item.getCode();
-                            if ("-1".equals(code)) {
-                                container = new FrameLayout(this);
-                                container.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                                ImageView leadImg = new ImageView(this);
-                                leadImg.setBackgroundResource(R.drawable.teamleader_ic);
-                                FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                                params.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-                                params.rightMargin = (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
-                                leadImg.setLayoutParams(params);
-                                container.addView(textView);
-                                container.addView(leadImg);
+                            int type = item.getType();
+                            String value = item.getValue();
+                            if (type == 8) {
+                                if ("1".equals(value)) {
+                                    container = new FrameLayout(this);
+                                    container.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    ImageView leadImg = new ImageView(this);
+                                    leadImg.setBackgroundResource(R.drawable.teamleader_ic);
+                                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
+                                    params.rightMargin = (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
+                                    leadImg.setLayoutParams(params);
+                                    container.addView(textView);
+                                    container.addView(leadImg);
+                                }
                             } else {
-                                if ("0".equals(code)) {
-                                    fullName += item.getValue();
-                                } else if ("1".equals(code)) {
-                                    fullName += "  " + item.getValue();
+                                if (type==9) {
+                                    sName=item.getValue();
+                                } else if (type==5) {
+                                    sValue=item.getValue();
                                 }
                             }
                         }
-                        textView.setText(fullName);
+                        textView.setText(sName+"  "+sValue);
                         if (container != null) {
                             textView.setTextColor(getResources().getColor(R.color.color_ffaa2a));
                             travel_people_container.addView(container, 2);

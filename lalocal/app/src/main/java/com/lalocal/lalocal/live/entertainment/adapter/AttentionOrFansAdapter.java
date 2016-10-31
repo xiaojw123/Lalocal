@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.live.entertainment.adapter;
 
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;

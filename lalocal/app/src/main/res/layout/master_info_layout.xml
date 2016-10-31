@@ -1,38 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="280dp"
+    android:layout_width="240dp"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
     android:orientation="vertical"
 
     >
-
         <LinearLayout
             android:id="@+id/popu_bg"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_355dp"
+            android:layout_height="310dp"
            android:background="@drawable/popuwindow_bg"
             android:gravity="center"
             android:layout_gravity="center"
             android:orientation="vertical">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="305dp"
+                android:layout_height="270dp"
                 android:orientation="vertical"
                >
                 <FrameLayout
                     android:id="@+id/custom_info_header_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/live_height_50dp"
+                    android:layout_height="@dimen/live_height_45dp"
+                    android:layout_gravity="center"
                    >
                     <include layout="@layout/custom_dialog_audience_header_layout"></include>
                     <include layout="@layout/audience_custom_header_layout"></include>
                 </FrameLayout>
 
                 <RelativeLayout
-                    android:layout_width="@dimen/live_height_60dp"
-                    android:layout_height="@dimen/live_height_60dp"
+                    android:layout_width="@dimen/live_height_50dp"
+                    android:layout_height="@dimen/live_height_50dp"
                     android:layout_gravity="center">
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -64,26 +64,26 @@
                     android:textColor="@color/live_info_1a1a1a"
                     android:textSize="@dimen/live_text_16sp" />
 
-                <ImageView
+             <!--   <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:paddingTop="@dimen/live_padding_5dp"
                     android:src="@drawable/playertag"
-                    android:visibility="invisible" />
+                    android:visibility="invisible" />-->
 
                 <TextView
                     android:id="@+id/master_info_signature"
                     android:layout_width="wrap_content"
-                    android:layout_height="62dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:layout_gravity="center"
                     android:ellipsize="end"
                     android:gravity="center"
-                    android:maxLines="2"
+                    android:maxLines="4"
                     android:paddingLeft="@dimen/author_padding_25dp"
                     android:paddingRight="@dimen/author_padding_25dp"
-                    android:paddingTop="@dimen/live_padding_20dp"
-                    android:text="神秘人拒绝透露自己的个人简介！"
+                    android:text="神秘人拒绝透露自己的个人简介"
                     android:textColor="@color/color_b3b3b3"
                     android:textSize="@dimen/live_text_13sp" />
 
@@ -91,7 +91,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingTop="@dimen/live_padding_20dp">
+                   android:paddingTop="@dimen/live_padding_10dp">
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -126,7 +126,7 @@
                             android:layout_height="wrap_content"
                             android:text="0" />
                     </LinearLayout>
-                    <LinearLayout
+                   <!-- <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -141,13 +141,14 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0" />
-                    </LinearLayout>
+                    </LinearLayout>-->
                 </LinearLayout>
             </LinearLayout>
             <FrameLayout
                 android:id="@+id/go_main_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/live_height_50dp"
+                android:layout_height="@dimen/live_height_40dp"
+                android:layout_gravity="bottom"
               >
                 <include layout="@layout/audience_custom_bottom_layout"></include>
                 <include layout="@layout/live_custom_master_bottom_layout"></include>

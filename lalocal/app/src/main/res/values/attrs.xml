@@ -39,5 +39,55 @@
         <attr name="drawable_width" format="dimension"/>
         <attr name="drawable_height" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="ShapeTextView">
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="corner_radius" format="dimension"/>
+        <attr name="solid_color" format="color"/>
+        <attr name="stroke_color" format="color"/>
+    </declare-styleable>
 
+    <!-- 圆的颜色  弧形进度圈的颜色  圆的厚度  中间百分比文字的颜色 中间百分比文字的大小-->
+    <declare-styleable name="RoundProgress">
+        <attr name="roundColor" format="color"/>
+        <attr name="roundProgressColor" format="color"/>
+        <attr name="roundWidth" format="dimension"/>
+        <attr name="percentTextColor" format="color"/>
+        <attr name="percentTextSize" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="MyEditText">
+        <attr name="my_title" format="string"/>
+        <attr name="is_password" format="boolean"/>
+        <attr name="my_maxLen" format="integer"/>
+        <attr name="hint" format="string"/>
+    </declare-styleable>
+    <declare-styleable name="LCustomLayout">
+        <attr name="l_title" format="string"/>
+        <attr name="l_des" format="string"/>
+        <attr name="l_titleVisible" format="boolean"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="ScaleView">
+        <attr name="scale" format="float" />
+        <attr name="solid" format="integer">
+            <enum name="solid_width" value="-1" />
+            <enum name="solid_height" value="-2" />
+        </attr>
+    </declare-styleable>
+
+
+    <attr name="text" format="string" />
+    <attr name="textColor" format="color|reference" />
+    <attr name="textSize" format="dimension" />
+    <attr name="lineSpacingExtra" format="dimension" />
+    <attr name="lineSpacingMultiplier" format="float" />
+    <attr name="maxLines" format="integer" />
+    <declare-styleable name="VerticalTextView">
+        <attr name="text"/>
+        <attr name="textColor"/>
+        <attr name="textSize"/>
+        <attr name="lineSpacingExtra"/>
+        <attr name="lineSpacingMultiplier"/>
+        <attr name="maxLines"/>
+    </declare-styleable>
 </resources>

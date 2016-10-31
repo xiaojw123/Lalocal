@@ -55,7 +55,7 @@ public class RechargeActivity extends BaseActivity implements CustomTitleView.on
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.recharge_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         showLoadingAnimation();
         setLoaderCallBack(new RechargeCallBack());
         rechargeCtv.setOnBackClickListener(this);
@@ -67,7 +67,7 @@ public class RechargeActivity extends BaseActivity implements CustomTitleView.on
             mContentloader.getMyWallet();
         }
         rechargePackageRlv.setLayoutManager(new LinearLayoutManager(this));
-        rechargePackageRlv.addItemDecoration(new LinearItemDecoration());
+        rechargePackageRlv.addItemDecoration(new LinearItemDecoration(this));
         mContentloader.getRechargeProducts();
     }
 

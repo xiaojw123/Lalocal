@@ -2,6 +2,7 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="dimen_size_half_dp">0.5dp</dimen>
     <dimen name="dimen_size_1_dp">1dp</dimen>
     <dimen name="dimen_size_2_dp">2dp</dimen>
     <dimen name="dimen_size_3_dp">3dp</dimen>
@@ -17,14 +18,25 @@
     <dimen name="dimen_size_13_dp">13dp</dimen>
     <dimen name="dimen_size_14_dp">14dp</dimen>
     <dimen name="dimen_size_15_dp">15dp</dimen>
+    <dimen name="dimen_size_17_dp">17dp</dimen>
+    <dimen name="dimen_size_19_dp">19dp</dimen>
     <dimen name="dimen_size_20_dp">20dp</dimen>
+    <dimen name="dimen_size_21_dp">21dp</dimen>
+    <dimen name="dimen_size_22_dp">22dp</dimen>
     <dimen name="dimen_size_25_dp">25dp</dimen>
+    <dimen name="dimen_size_26_dp">26dp</dimen>
+    <dimen name="dimen_size_29_dp">29dp</dimen>
     <dimen name="dimen_size_30_dp">30dp</dimen>
     <dimen name="dimen_size_35_dp">35dp</dimen>
     <dimen name="dimen_size_40_dp">40dp</dimen>
+    <dimen name="dimen_size_44_dp">44dp</dimen>
+    <dimen name="dimen_size_45_dp">45dp</dimen>
     <dimen name="dimen_size_50_dp">50dp</dimen>
     <dimen name="dimen_size_36_dp">36dp</dimen>
     <dimen name="dimen_size_60_dp">60dp</dimen>
+    <dimen name="dimen_size_100_dp">100dp</dimen>
+    <dimen name="dimen_size_130_dp">130dp</dimen>
+    <dimen name="dimen_size_166_dp">166dp</dimen>
     <dimen name="custom_dialog_container_width">320dp</dimen>
     <dimen name="custom_dialog_container_padding">20dp</dimen>
     <dimen name="custom_dialog_message_top_margin">15dp</dimen>
@@ -81,7 +93,7 @@
     <dimen name="home_recommend_more_icon_size">12dp</dimen>
     <dimen name="home_recommend_more_icon_margin">15dp</dimen>
     <dimen name="home_recommend_live_height">336dp</dimen>
-    <dimen name="home_recommend_viewpager_margin">60dp</dimen>
+    <dimen name="home_recommend_viewpager_margin">95dp</dimen>
     <dimen name="home_recommend_viewpager_page_margin">25dp</dimen>
     <dimen name="home_recommend_hotlive_img_size">255dp</dimen>
     <dimen name="home_recommend_play_icon_size">70dp</dimen>
@@ -90,6 +102,8 @@
     <dimen name="home_recommend_hotlive_user_icon_size">12dp</dimen>
     <dimen name="hot_recommend_hotlive_circle_imgview_size">25dp</dimen>
     <dimen name="dot_size">6dp</dimen>
+    <dimen name="dot_rect_width">12dp</dimen>
+    <dimen name="dot_rect_height">3dp</dimen>
     <dimen name="home_recommend_commodity_gridview_spacing">15dp</dimen>
     <dimen name="home_recommend_commodity_gridview_item_price_margin_bottom">10dp</dimen>
     <dimen name="home_recommend_hot_live_view_pager_height">340dp</dimen>
@@ -98,4 +112,20 @@
     <dimen name="home_recommend_article_img_height">160dp</dimen>
     <dimen name="ptr_header_height">160dp</dimen>
     <dimen name="cardview_margin">0dp</dimen>
+    <dimen name="novice_guide_vp_margin">48dp</dimen>
+    <dimen name="guide_vp_height">320dp</dimen>
+    <dimen name="report_close_bar_height">50dp</dimen>
+    <dimen name="report_close_btn_dimen">50dp</dimen>
+    <dimen name="report_close_btn_padding">16dp</dimen>
+    <dimen name="report_item_line_height">50dp</dimen>
+    <dimen name="report_item_padding_left_15dp">15dp</dimen>
+    <dimen name="report_divider_margin_left">45dp</dimen>
+    <dimen name="report_et_height">160dp</dimen>
+    <dimen name="report_et_padding_left">45dp</dimen>
+    <dimen name="report_et_padding_top">10dp</dimen>
+    <dimen name="report_et_padding_right">15dp</dimen>
+    <dimen name="report_et_padding_bottom">10dp</dimen>
+    <dimen name="report_item_margni_left">15dp</dimen>
+    <dimen name="dimen_size_16_dp">16dp</dimen>
+    <dimen name="homepage_playback_img_dimen">120dp</dimen>
 </resources>

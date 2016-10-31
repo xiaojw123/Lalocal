@@ -30,7 +30,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 
 import com.lalocal.lalocal.R;
@@ -44,8 +43,8 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 		if (null != lp) {
 			newLp = new FrameLayout.LayoutParams(lp);
 
-			if (lp instanceof LinearLayout.LayoutParams) {
-				newLp.gravity = ((LinearLayout.LayoutParams) lp).gravity;
+			if (lp instanceof LayoutParams) {
+				newLp.gravity = ((LayoutParams) lp).gravity;
 			} else {
 				newLp.gravity = Gravity.CENTER;
 			}

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingTop="@dimen/dimen_size_15_dp"
+    android:paddingBottom="@dimen/dimen_size_15_dp"
+    android:paddingLeft="@dimen/dimen_size_15_dp"
+    android:paddingRight="@dimen/dimen_size_15_dp"
+    >
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/item_challenge_avatar"
+        android:layout_width="@dimen/dimen_size_22_dp"
+        android:layout_height="@dimen/dimen_size_22_dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/home_me_personheadnormal"
+        />
+
+    <TextView
+        android:id="@+id/item_challenge_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_12_sp"
+        android:textColor="@color/color_7babbd"
+        android:layout_toRightOf="@+id/item_challenge_avatar"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        />
+    <TextView
+        android:id="@+id/item_chllenge_timepoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_1_dp"
+        android:layout_alignLeft="@id/item_challenge_username"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_10_sp"
+        android:layout_below="@+id/item_challenge_username"
+        />
+    <TextView
+        android:id="@+id/item_chllenge_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_chllenge_descripton_height"
+        android:layout_alignLeft="@+id/item_challenge_username"
+        android:textColor="@color/color_8c"
+        android:textSize="@dimen/text_size_15_sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginTop="@dimen/dimen_size_11_dp"
+        android:layout_below="@+id/item_chllenge_timepoint"
+        />
+    <TextView
+        android:id="@+id/item_chllenge_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+0"
+        android:textSize="@dimen/text_size_16_sp"
+        android:textColor="@color/color_ffaa2a"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/item_challenge_avatar"
+        />
+
+
+</RelativeLayout>

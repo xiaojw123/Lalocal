@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.lalocal.lalocal.activity.MyWalletActivity">
 
     <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/my_wallet_ctv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title_name="@string/my_wallet"
         />
 
     <LinearLayout
+        android:id="@+id/my_diamond_item_cotaniner"
+        android:layout_below="@+id/my_wallet_ctv"
         android:layout_width="match_parent"
         android:layout_height="@dimen/my_wallet_item_height"
         android:orientation="horizontal"
@@ -119,8 +121,25 @@
 
     </LinearLayout>
     <View
+        android:layout_below="@+id/my_diamond_item_cotaniner"
         style="@style/CommonD9LineTheme"
         />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/my_wallet_instructions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="@dimen/text_size_14_sp"
+        android:textColor="@color/dark_link"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dimen_size_20_dp"
+        />
+
+
+</RelativeLayout>

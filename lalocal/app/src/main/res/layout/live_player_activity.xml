@@ -40,28 +40,19 @@
                 android:visibility="invisible" />
         </LinearLayout>
 
+
         <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
             android:id="@+id/barrageView_test"
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_125dp"
             android:layout_marginTop="80dp"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
 
-        <ImageButton
-            android:id="@+id/gift_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="200dp"
-            android:background="@drawable/gift_icon_selector"
-            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/live_finish_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone">
-
             <include layout="@layout/live_over_layout"></include>
         </RelativeLayout>
 
@@ -72,9 +63,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:layout_marginLeft="-65dp"
-       >
-
+        android:layout_marginLeft="-65dp">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/live_bg_gradient_top"></View>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/live_bg_gradient_bottom"
+            android:layout_alignParentBottom="true"></View>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -169,9 +167,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/onlivelight"
+                            android:drawablePadding="@dimen/live_padding_5dp"
                             android:drawableRight="@drawable/onlive"
                             android:textColor="@android:color/white"
-                            android:drawablePadding="@dimen/live_padding_5dp"
                             android:textSize="@dimen/live_text_12sp" />
 
                         <TextView
@@ -179,8 +177,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:drawableLeft="@drawable/manypeople_light"
-                            android:text="0"
                             android:drawablePadding="@dimen/live_padding_5dp"
+                            android:text="0"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/live_text_12sp" />
                     </LinearLayout>
@@ -231,10 +229,24 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:paddingRight="@dimen/live_padding_5dp"
+
                     android:src="@drawable/circlenext_ic" />
 
             </RelativeLayout>
+
+
+            <ImageView
+                android:id="@+id/challenge_new_task"
+                android:layout_width="@dimen/live_height_36dp"
+                android:layout_height="@dimen/live_height_51dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/live_telecast_model_layout"
+                android:paddingTop="@dimen/live_padding_15dp"
+                android:paddingRight="@dimen/live_padding_12dp"
+                android:visibility="gone"
+                android:src="@drawable/newtask"/>
         </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/setting_bottom_layout"
             android:layout_width="match_parent"
@@ -252,60 +264,12 @@
             android:layout_above="@id/setting_bottom_layout"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="143dp"
-
+            android:layout_marginRight="43dp"
+            android:paddingBottom="@dimen/live_padding_20dp"
             ></com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout>
+<!--143-->
 
-        <ImageView
-            android:id="@+id/gift_plane_up"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <RelativeLayout
-            android:id="@+id/audient_gift_plane_bg"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/audient_gift_plane_bg_height"
-            android:layout_marginTop="120dp"
-            android:background="@drawable/giftmassagebg"
-            android:visibility="gone">
-
-            <View
-                android:layout_width="@dimen/dimen_size_10_dp"
-                android:layout_height="match_parent"
-                android:background="#90ffffff" />
-
-            <TextView
-                android:id="@+id/audience_gift_send_plane"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dimen_size_30_dp"
-                android:text="一位不愿透露姓名的网友  与主播飞机旅行"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_16_sp" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/audience_anchor_headportrait"
-                android:layout_width="@dimen/audience_anchor_headportrait_width"
-                android:layout_height="@dimen/audience_anchor_headportrait_width"
-                android:layout_marginLeft="108dp"
-                android:layout_marginTop="225dp"
-                android:visibility="gone"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="@dimen/dimen_size_2_dp" />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/audience_user_headportrait"
-                android:layout_width="@dimen/audience_anchor_headportrait_width"
-                android:layout_height="@dimen/audience_anchor_headportrait_width"
-                android:layout_alignTop="@+id/audience_anchor_headportrait"
-                android:layout_marginLeft="-8dp"
-                android:layout_marginTop="4dp"
-                android:layout_toRightOf="@+id/audience_anchor_headportrait"
-                android:visibility="gone"
-                app:civ_border_color="@color/white"
-                app:civ_border_width="@dimen/dimen_size_2_dp" />
-        </RelativeLayout>
+        <include layout="@layout/gift_plan_layout"></include>
 
     </RelativeLayout>
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

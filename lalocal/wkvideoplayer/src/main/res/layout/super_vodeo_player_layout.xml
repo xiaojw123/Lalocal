@@ -18,12 +18,12 @@
 
 
 
+
     <com.android.tedcoder.wkvideoplayer.view.MediaController
         android:id="@+id/controller"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"/>
-
 
     <LinearLayout
         android:id="@+id/touch_view"

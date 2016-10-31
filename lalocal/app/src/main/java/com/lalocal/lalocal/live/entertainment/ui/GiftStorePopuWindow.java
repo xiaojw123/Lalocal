@@ -17,7 +17,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResultBean;
 
 import java.util.ArrayList;
@@ -33,44 +33,43 @@ public class GiftStorePopuWindow extends PopupWindow {
     int sendTotal = 1;
     int itemPosition = 0;
     TextView sendCount;
-    private GiftGridViewAdpter giftGridViewAdpter;
+ //   private GiftGridViewAdpter giftGridViewAdpter;
     private int payBalance = 0;
+    private GiftDataResultBean giftDataResultBean;
 
     public GiftStorePopuWindow(Context mContext, List<GiftDataResultBean> giftSresult) {
         this.mContext = mContext;
         this.giftSresult = giftSresult;
     }
-
+    List<GiftDataResultBean> giftDataResultBeen=null;
     public void showGiftStorePopuWindow(int gold) {
+
         View giftView = View.inflate(mContext, R.layout.audience_gift_page_layout, null);
         ViewPager audienceGiftVp = (ViewPager) giftView.findViewById(R.id.audience_gift_vp);
         IndicatorView mIndicatorView = (IndicatorView) giftView.findViewById(R.id.idv_banner);
         TextView giftSend = (TextView) giftView.findViewById(R.id.audience_gift_send);
         List<GridView> list = new ArrayList<>();
-        View inflate = View.inflate(mContext, R.layout.audience_gift_viewpager_layout, null);
-        GridView giftGridView = (GridView) inflate.findViewById(R.id.audience_gift_list);
-   /*     int size = giftSresult.size();
-        int i = size % 6;
-        int pages=0;
-        if(i!=0){
-            pages=1+(size/6);
-        }else {
-            pages=size/6;
+        int giftCountSize = giftSresult.size();
+        int viewPageCount=(giftCountSize%6)==0?(giftCountSize/6):(giftCountSize/6)+1;
+        for(int i=0;i<viewPageCount;i++){
+            GridView giftGridViews=new GridView(mContext);
+            int j=(i==0?0:(i*6));
+            if(giftSresult.size()>=((i+1)*6)+1){
+                giftDataResultBeen = giftSresult.subList(j, (i+1)*6);
+            }else {
+                giftDataResultBeen=giftSresult.subList(j,giftSresult.size());
+            }
+            giftGridViews.setNumColumns(3);
+            final GiftGridViewAdpter  giftGridViewAdpter = new GiftGridViewAdpter(mContext, giftDataResultBeen);
+            giftGridViews.setAdapter(giftGridViewAdpter);
+            giftGridViews.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    onGridViewItemClick(giftGridViewAdpter, view,position,id);
+                }
+            });
+            list.add(giftGridViews);
         }
-        AppLog.i("TAG","礼物种类数量:pages:"+pages);
-        for(int page=0;page<pages;page++){
-            List<GiftDataResultBean> giftDataResultBeen = giftSresult.subList(page, page*6);
-            giftGridViewAdpter = new GiftGridViewAdpter(mContext, giftDataResultBeen);
-            giftGridView.setAdapter(giftGridViewAdpter);
-            list.add(giftGridView);
-            page=page*6;
-            AppLog.i("TAG","礼物gridview 显示");
-        }
-      */
-
-          giftGridViewAdpter = new GiftGridViewAdpter(mContext, giftSresult);
-        giftGridView.setAdapter(giftGridViewAdpter);
-        list.add(giftGridView);
         final BannerPagerAdapter mBannerPagerAdapter = new BannerPagerAdapter(mContext, list);
         audienceGiftVp.setAdapter(mBannerPagerAdapter);
         mIndicatorView.setViewPager(audienceGiftVp);
@@ -94,7 +93,7 @@ public class GiftStorePopuWindow extends PopupWindow {
                     Toast.makeText(mContext,"您还未选中礼物!",Toast.LENGTH_SHORT).show();
                 }
                 if (onSendClickListener != null&&payBalance!=0) {
-                    onSendClickListener.sendGiftMessage(itemPosition, sendTotal, payBalance);
+                    onSendClickListener.sendGiftMessage(GiftStorePopuWindow.this.giftDataResultBean, sendTotal, payBalance);
                 }
             }
         });
@@ -103,7 +102,7 @@ public class GiftStorePopuWindow extends PopupWindow {
             @Override
             public void onClick(View v) {
                 if (UserHelper.isLogined(mContext)) {
-                    CustomDialogStyle.IS_FIRST_CLICK_PAGE=true;
+                    LiveConstant.IS_FIRST_CLICK_PAGE=true;
                     charge();//跳转充值页面
                     dismiss();
                 }else{
@@ -112,47 +111,53 @@ public class GiftStorePopuWindow extends PopupWindow {
             }
         });
 
-        giftGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView sendCount = (TextView) view.findViewById(R.id.gift_send_count);
-                GiftDataResultBean giftDataResultBean = giftSresult.get(position);
-                giftGridViewAdpter.setSelectedPosition(position);
-                giftGridViewAdpter.notifyDataSetChanged();
-                if (itemPosition != position) {
-                    clickCount = 1;
-                }
-                itemPosition = position;
-                clickCount=clickCount>=6?1:clickCount;
-                switch (clickCount) {
-                    case 1:
-                        sendCount.setText("1");
-                        sendTotal = 1;
-                        sendCount.setVisibility(View.VISIBLE);
-                        break;
-                    case 2:
-                        sendTotal = 9;
-                        sendCount.setText("9");
-                        break;
-                    case 3:
-                        sendTotal = 99;
-                        sendCount.setText("99");
-                        break;
-                    case 4:
-                        sendTotal = 520;
-                        sendCount.setText("520");
-                        break;
-                    case 5:
-                        sendTotal = 999;
-                        sendCount.setText("999");
-                        break;
-                }
-                payBalance = sendTotal * (giftDataResultBean.getGold());
+    }
 
-                clickCount++;
-            }
-        });
-
+    private void onGridViewItemClick(GiftGridViewAdpter  giftGridViewAdpter, View view, int position, long id) {
+        TextView sendCount = (TextView) view.findViewById(R.id.gift_send_count);
+        giftDataResultBean= (GiftDataResultBean) view.getTag(R.id.giftdatabean);
+        String code = giftDataResultBean.getCode();
+        if("003".equals(code)){
+            giftGridViewAdpter.setSelectedPosition(position);
+            giftGridViewAdpter.notifyDataSetChanged();
+            sendCount.setText("1");
+            sendTotal = 1;
+            sendCount.setVisibility(View.VISIBLE);
+            payBalance = sendTotal * (giftDataResultBean.getGold());
+            return;
+        }
+        giftGridViewAdpter.setSelectedPosition(position);
+        giftGridViewAdpter.notifyDataSetChanged();
+        if (itemPosition != position) {
+            clickCount = 1;
+        }
+        itemPosition = position;
+        clickCount=clickCount>=6?1:clickCount;
+        switch (clickCount) {
+            case 1:
+                sendCount.setText("1");
+                sendTotal = 1;
+                sendCount.setVisibility(View.VISIBLE);
+                break;
+            case 2:
+                sendTotal = 9;
+                sendCount.setText("9");
+                break;
+            case 3:
+                sendTotal = 99;
+                sendCount.setText("99");
+                break;
+            case 4:
+                sendTotal = 520;
+                sendCount.setText("520");
+                break;
+            case 5:
+                sendTotal = 999;
+                sendCount.setText("999");
+                break;
+        }
+        payBalance = sendTotal * (giftDataResultBean.getGold());
+        clickCount++;
     }
 
     private void login() {
@@ -169,7 +174,7 @@ public class GiftStorePopuWindow extends PopupWindow {
     private OnSendClickListener onSendClickListener;
 
     public interface OnSendClickListener {
-        void sendGiftMessage(int itemPosition, int sendTotal, int payBalance);
+        void sendGiftMessage(GiftDataResultBean giftDataResultBean, int sendTotal, int payBalance);
     }
 
     public void setOnSendClickListener(OnSendClickListener onSendClickListener) {

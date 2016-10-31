@@ -9,14 +9,21 @@
     <item android:id="@android:id/secondaryProgress">
         <clip>
             <shape android:shape="line">
-                <stroke android:width="2.0dip" android:color="@color/biz_audio_progress_second" />
+                <stroke android:width="2.0dip" android:color="#45ffaa2a" />
             </shape>
         </clip>
     </item>
     <item android:id="@android:id/progress">
         <clip>
             <shape android:shape="line">
-                <stroke android:width="2.0dip" android:color="@color/biz_audio_progress_bg" />
+
+                <stroke   android:width="2dp" android:color="#FFAA2A" />
+                <gradient
+                    android:startColor="#FFAA2A"
+                    android:endColor="#F8E71C"
+                    android:type="linear"
+                    android:angle="0"
+                    />
             </shape>
         </clip>
     </item>

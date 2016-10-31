@@ -46,7 +46,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class SearchActivity extends BaseActivity implements TextView.OnEditorActionListener, TextWatcher {
 
@@ -66,7 +65,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     RecyclerView searchResultRlv;
     @BindView(R.id.search_result_xlv)
     XListView searchResultMoreXlv;
-    Unbinder unbinder;
     ContentLoader loader;
     SearchTagAdapter tagAdapter;
     boolean isResultSearch;
@@ -78,7 +76,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         searchKeyCet.setOnEditorActionListener(this);
         searchKeyCet.addTextChangedListener(this);
         initLoader();
@@ -92,11 +90,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
 
     @OnClick(R.id.search_back_img)
     public void back() {
@@ -301,7 +294,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 resultAapter = new SearchResultAapter(SearchActivity.this, items);
                 resultAapter.setOnItemClickListener(resultItemClickListener);
                 searchResultRlv.setLayoutManager(new LinearLayoutManager(SearchActivity.this));
-                searchResultRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchResultRlv.addItemDecoration(new LinearItemDecoration(SearchActivity.this));
                 searchResultRlv.setAdapter(resultAapter);
             } else {
                 resultAapter.updateItems(items);
@@ -328,7 +321,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 tagAdapter = new SearchTagAdapter(SearchActivity.this, keys);
                 LinearLayoutManager lm = new LinearLayoutManager(SearchActivity.this);
                 searchTagRlv.setLayoutManager(lm);
-                searchTagRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchTagRlv.addItemDecoration(new LinearItemDecoration(SearchActivity.this));
                 tagAdapter.setOnItemClickListener(this);
                 searchTagRlv.setAdapter(tagAdapter);
             } else {
@@ -371,7 +364,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 hintAdapter.setOnItemClickListener(this);
                 LinearLayoutManager lm = new LinearLayoutManager(SearchActivity.this);
                 lm.setOrientation(LinearLayoutManager.VERTICAL);
-                searchHintRlv.addItemDecoration(new LinearItemDecoration(getResources().getColor(R.color.color_d9)));
+                searchHintRlv.addItemDecoration(new LinearItemDecoration(SearchActivity.this));
                 searchHintRlv.setLayoutManager(lm);
                 searchHintRlv.setHasFixedSize(true);
                 searchHintRlv.setAdapter(hintAdapter);

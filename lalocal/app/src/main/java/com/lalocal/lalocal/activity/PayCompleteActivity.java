@@ -14,6 +14,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -49,7 +51,7 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pay_complete_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         setLoaderCallBack(new PayCompeteCallBack());
         int id = getIntent().getIntExtra(KeyParams.ORDER_ID, -1);
         mContentloader.getOrderDetail(id);
@@ -118,6 +120,7 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
                 }
                 break;
             case R.id.pay_complete_vieworder_btn:
+                MobHelper.sendEevent(this,MobEvent.ORDER_DETAIL);
                 if (mOrderDetail != null) {
                     Intent intent = new Intent(this, OrderActivity.class);
                     intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());

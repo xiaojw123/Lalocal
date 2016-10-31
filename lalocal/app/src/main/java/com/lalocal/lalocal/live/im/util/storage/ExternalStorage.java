@@ -108,7 +108,7 @@ class ExternalStorage {
 	}
 
 	private String pathForName(String fileName, StorageType type, boolean dir,
-			boolean check) {
+							   boolean check) {
 		String directory = getDirectoryByDirType(type);
 		StringBuilder path = new StringBuilder(directory);
 

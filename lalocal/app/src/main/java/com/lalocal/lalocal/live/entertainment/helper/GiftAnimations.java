@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
+import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -64,7 +64,7 @@ public class GiftAnimations {
 
     // 收到礼物，等待显示动画
     public void showGiftAnimation(final ChatRoomMessage message) {
-        GiftBean giftBean = MessageToGiftBean.getMessageToGiftBean(message);
+        GiftBean giftBean = MessageToBean.getMessageToGiftBean(message);
         cache.add(giftBean);
         checkAndStart();
     }
@@ -236,6 +236,9 @@ public class GiftAnimations {
         DrawableUtils.displayImg(mContext, sendGiftAvatar, message.getHeadImage());
         sendGiftImg.setImageResource(0);
         String code = message.getCode();
+        if(code==null){
+            return;
+        }
         mHandler = new GiftHandler(sendGiftTotal);
         sendGiftMessage(mHandler, root, count, m, userId, code);
         switch (code) {

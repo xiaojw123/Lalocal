@@ -1,12 +1,9 @@
 package com.lalocal.lalocal.activity;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.text.Html;
@@ -25,7 +22,7 @@ import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
 import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
@@ -34,7 +31,6 @@ import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.model.WelcomeImg;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -55,15 +51,14 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     private static final int MSG_UPDATE_TIME = 0x001;
     private static final int MSG_DISPAY_IMG = 0x002;
     private static final int MSG_LOGIN_HUANXIN = 0x003;
-    public static final int MSG_ENTER_APP = 0x004;
     public static final int MSG_VERSION_UPDATE = 0x005;
-    public static  final  int MSG_START_HOME=0x006;
     ImageView welImg;
     TextView timeTv;
     int totalTime = 0;
     SplashHandler mHandler;
-    int splashDuration = 2200;
     VersionResult result;
+
+    private boolean isNotJumpt = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,32 +120,29 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
             mHandler.removeMessages(MSG_UPDATE_TIME);
         }
-        startHomePage();
+        if (isNotJumpt) {
+            startHomePage();
+        }
     }
 
     public class MyCallBack extends ICallBack {
 
         @Override
         public void onVersionResult(VersionInfo versionInfo) {
+            AppLog.print("onVersionResult______");
             result = versionInfo.getResult();
             if (result != null) {
-                boolean flag = result.isForceFlag();
-                boolean checkUpdate = result.isCheckUpdate();
-                String downLoadUrl = result.getDownloadUrl();
-                if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
-                    if (flag) {
-                        update(downLoadUrl);
-                    } else {
-                        showUpdateDialog(downLoadUrl);
-                    }
-                } else {
-                    mHandler.sendEmptyMessage(MSG_ENTER_APP);
-                }
+                String apiUrl = result.getApiUrl();
+                AppConfig.setBaseUrl(apiUrl);
+                mContentloader.getSystemConfigs();
+            }else{
+                Toast.makeText(SplashActivity.this,"系统服务异常",Toast.LENGTH_SHORT).show();
             }
         }
 
         @Override
         public void onGetSysConfigs(List<SysConfigItem> items) {
+            AppLog.print("onGetSysConfigs____");
             for (SysConfigItem item : items) {
                 int id = item.getId();
                 switch (id) {
@@ -170,7 +162,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         break;
                     case 21:
                         String enumValue = item.getEnumValue();
-                        CustomDialogStyle.LIVE_DEFINITION = Integer.parseInt(enumValue);
+                        LiveConstant.LIVE_DEFINITION = Integer.parseInt(enumValue);
                         break;
                 }
 
@@ -183,21 +175,24 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
             String photo = welcomeImg.getPhoto();
             if (TextUtils.isEmpty(photo)) {
-                startHomePage();
-                mHandler.sendEmptyMessageDelayed(MSG_START_HOME,splashDuration);
+                if (isNotJumpt) {
+                    startHomePage();
+                }
             } else {
                 totalTime = welcomeImg.getSecond();
                 Message message = mHandler.obtainMessage();
                 message.what = MSG_DISPAY_IMG;
                 message.obj = photo;
-                mHandler.sendMessageDelayed(message, splashDuration);
+                mHandler.sendMessage(message);
             }
         }
     }
 
 
     private void startHomePage() {
+        isNotJumpt = false;
         Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+        intent.putExtra(HomeActivity.VERSION_RESULT, result);
         startActivity(intent);
         finish();
     }
@@ -273,8 +268,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 try {
                     EMChatManager.getInstance().loadAllConversations();
                 } catch (Exception e) {
-                    e.printStackTrace();
-                    return;
+                    AppLog.print("环信账号登录异常");
                 }
                 updateVersion();
             }
@@ -309,7 +303,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         if (hasMessages(MSG_UPDATE_TIME)) {
                             removeMessages(MSG_UPDATE_TIME);
                         }
-                        startHomePage();
+                        if (isNotJumpt) {
+                            startHomePage();
+                        }
                     }
                     break;
                 case MSG_DISPAY_IMG:
@@ -318,18 +314,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 case MSG_LOGIN_HUANXIN:
                     loginChatService();
                     break;
-                case MSG_ENTER_APP:
-                    String apiUrl = result.getApiUrl();
-                    AppConfig.setBaseUrl(apiUrl);
-                    mContentloader.getSystemConfigs();
-                    break;
                 case MSG_VERSION_UPDATE:
                     mContentloader.versionUpdate(AppConfig.getVersionName(SplashActivity.this));
                     break;
-                case MSG_START_HOME:
-                    startHomePage();
-                    break;
-
             }
         }
 
@@ -343,7 +330,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
             AppLog.print("onLoadingFailed____");
-            startHomePage();
+            if (isNotJumpt) {
+                startHomePage();
+            }
 
         }
 
@@ -356,7 +345,9 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onLoadingCancelled(String imageUri, View view) {
             AppLog.print("onLoadingCancelled_____");
-            startHomePage();
+            if (isNotJumpt) {
+                startHomePage();
+            }
         }
     }
 
@@ -364,42 +355,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
-    }
-
-    private void showUpdateDialog(final String dowloadUrl) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(android.R.drawable.ic_dialog_info);
-        builder.setTitle("请更新至最新版本");
-        builder.setCancelable(false);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
-                    update(dowloadUrl);
-                } else {
-                    Toast.makeText(SplashActivity.this, "无可用存储空间",
-                            Toast.LENGTH_SHORT).show();
-                    mHandler.sendEmptyMessage(MSG_ENTER_APP);
-                }
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                mHandler.sendEmptyMessage(MSG_ENTER_APP);
-            }
-
-        });
-        builder.create().show();
-    }
-
-    private void update(String downLoadUrl) {
-        UpdateTask task = new UpdateTask(this, mHandler);
-        task.execute(downLoadUrl);
     }
 
 }

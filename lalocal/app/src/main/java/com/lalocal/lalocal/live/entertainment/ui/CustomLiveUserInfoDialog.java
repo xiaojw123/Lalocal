@@ -1,7 +1,5 @@
 package com.lalocal.lalocal.live.entertainment.ui;
-import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,7 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.entertainment.constant.CustomDialogStyle;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -19,7 +17,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by android on 2016/8/28.
  */
-public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickListener{
+public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClickListener{
     private Context context;
     private LiveUserInfoResultBean result;
     private boolean isLiveOver;
@@ -31,7 +29,7 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private TextView liveAttention;
     private LinearLayout masterInfoBack;
     private TextView liveFans;
-    private TextView liveContribute;
+
     private TextView liveMasterHome;
     CustomLiveUserInfoDialogListener sureDialogListener,cancelDialogListener,reportListener,settingManagerListener,banListener,userHomeListener;
     CustomLiveFansOrAttentionListener attentionListener;
@@ -59,32 +57,34 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     private boolean isMuted;
 
 
-    public CustomLiveUserInfoDialog(Context context,LiveUserInfoResultBean result,boolean isManager,boolean isMuted) {
-        super(context, R.style.prompt_dialog);
+
+    public CustomLiveUserInfoDialog(Context context, LiveUserInfoResultBean result, boolean isManager, boolean isMuted) {
+        super(context);
         this.context = context;
         this.result=result;
         this.isManager=isManager;
         this.isMuted=isMuted;
-
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.master_info_layout);
+    public void initView() {
         showLiveUserInfoPopuwindow();
     }
 
+    @Override
+    public int getLayoutId() {
+        return R.layout.master_info_layout;
+    }
+
     public void showLiveUserInfoPopuwindow(){
-        //    FrameLayout headerLayout = (FrameLayout) findViewById(R.id.custom_info_header_layout);
-        //   FrameLayout  goMainLayout = (FrameLayout) findViewById(R.id.go_main_layout);
+
         masterInfoHeadIv = (CircleImageView) findViewById(R.id.master_info_head_iv);
         masterInfoNickTv = (TextView)findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)findViewById(R.id.master_info_signature);
         liveAttention = (TextView)findViewById(R.id.live_attention);
         masterInfoBack = (LinearLayout)findViewById(R.id.master_info_back_home);
         liveFans = (TextView)findViewById(R.id.live_fans);
-        liveContribute = (TextView)findViewById(R.id.live_contribute);
+
         managerMark = (ImageView) findViewById(R.id.live_manager_mark);
         bottomReport = (TextView)findViewById(R.id.custom_dialog_report);
         attentionStatus = (TextView)findViewById(R.id.custom_dialog_attention);
@@ -107,8 +107,6 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
         audienceManagerReport = (TextView) findViewById(R.id.audience_manager_report);
         audienceManagerban = (TextView) findViewById(R.id.audience_manager_ban);
         audienceManagerAttention = (TextView) findViewById(R.id.audience_manager_attention);
-
-
 
         LinearLayout homeLayoutBtn = (LinearLayout) findViewById(R.id.custom_dialog_home_layout);
         LinearLayout liveBottomLayout= (LinearLayout) findViewById(R.id.custom_dialog_live_bottom_layout);
@@ -170,16 +168,16 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
 
 
 
-        if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_LIVEER){//主播
+        if(LiveConstant.IDENTITY== LiveConstant.IS_LIVEER){//主播
             setAttentionStatus(attentionStatus);
             headerLayout.setVisibility(View.VISIBLE);
             audienceToLiveToBottom.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.IS_ONESELF){//自己
+            LiveConstant.IDENTITY=-1;
+        }else if(LiveConstant.IDENTITY== LiveConstant.IS_ONESELF){//自己
             homeLayoutBtn.setVisibility(View.VISIBLE);
             claseLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.MANAGER_IS_ME){//我是管理员
+            LiveConstant.IDENTITY=-1;
+        }else if(LiveConstant.IDENTITY== LiveConstant.MANAGER_IS_ME){//我是管理员
             if(!TextUtils.isEmpty(ban)){
                 if(isMuted){
                     audienceManagerban.setText("解除禁言");
@@ -193,9 +191,9 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             setAttentionStatus(audienceManagerAttention);
             claseLayout.setVisibility(View.VISIBLE);
             audienceManagerLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
+            LiveConstant.IDENTITY=-1;
 
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.LIVEER_CHECK_ADMIN){//主播设置管理员
+        }else if(LiveConstant.IDENTITY== LiveConstant.LIVEER_CHECK_ADMIN){//主播设置管理员
             if(!TextUtils.isEmpty(ban)){
 
                 if(isMuted){
@@ -210,13 +208,13 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
             setAttentionStatus(dialogLiveAttention);
             headerLayout.setVisibility(View.VISIBLE);
             liveBottomLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
+            LiveConstant.IDENTITY=-1;
 
-        }else if(CustomDialogStyle.IDENTITY==CustomDialogStyle.ME_CHECK_OTHER){//我看别人
+        }else if(LiveConstant.IDENTITY== LiveConstant.ME_CHECK_OTHER){//我看别人
             setAttentionStatus(audienceAttention);
             claseLayout.setVisibility(View.VISIBLE);
             audienceBottomLayout.setVisibility(View.VISIBLE);
-            CustomDialogStyle.IDENTITY=-1;
+            LiveConstant.IDENTITY=-1;
         }
 
         setCanceledOnTouchOutside(true);
@@ -359,9 +357,9 @@ public class CustomLiveUserInfoDialog extends Dialog implements View.OnClickList
     }
 
     public static interface CustomLiveUserInfoDialogListener {
-        void onCustomLiveUserInfoDialogListener(String id,TextView textView,ImageView managerMark);
+        void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark);
     }
     public  static interface CustomLiveFansOrAttentionListener{
-        void onCustomLiveFansOrAttentionListener(String id,TextView fansView,TextView attentionView,int fansCount,int attentionCount,TextView attentionStatus);
+        void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus);
     }
 }

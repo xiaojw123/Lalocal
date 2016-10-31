@@ -13,9 +13,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.base.util.MessageToGiftBean;
+import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 
@@ -37,6 +38,7 @@ public class GiftPlaneAnimation {
     private Animation messageSliderAnimtion;
     private boolean isStartAnim=true;
     ImageView mAnchorHeadImg,mUserHeadImg;
+    private String avatar;
 
 
 
@@ -46,14 +48,15 @@ public class GiftPlaneAnimation {
         this.giftPlaneUp = giftPlaneUp;
         this.mContext = mContext;
         this.giftPlaneBg = giftPlanceBg;
+        this.avatar=avatar;
         gfitPlaneIndex = giftPlanceBg.getChildAt(0);
         giftPlaneText = (TextView) giftPlanceBg.getChildAt(1);
+        AppLog.i("TAG","飞机动画1:avatar"+avatar);
         DrawableUtils.displayImg(mContext,mAnchorHeadImg,avatar);
     }
 
     public void showPlaneAnimation(ChatRoomMessage message) {
-
-        GiftBean messageToGiftBean = MessageToGiftBean.getMessageToGiftBean(message);
+        GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
         cache.add(messageToGiftBean);
         startAnimation(giftPlaneUp,giftPlaneBg);
     }
@@ -74,6 +77,7 @@ public class GiftPlaneAnimation {
     private void updateView(final  GiftBean giftBean, final ImageView target,final RelativeLayout giftPlanceBg) {
         mAnchorHeadImg.setVisibility(View.VISIBLE);
         mUserHeadImg.setVisibility(View.VISIBLE);
+        AppLog.i("TAG","飞机动画2："+giftBean.getHeadImage());
         DrawableUtils.displayImg(mContext,mUserHeadImg,giftBean.getHeadImage());
         target.setVisibility(View.VISIBLE);
         target.setBackgroundResource(R.drawable.plane_rocket);

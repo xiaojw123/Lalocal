@@ -1,14 +1,15 @@
 package com.lalocal.lalocal.activity;
 
-import android.content.pm.ActivityInfo;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.bugtags.library.Bugtags;
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.live.permission.MPermission;
@@ -16,8 +17,6 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.umeng.analytics.MobclickAgent;
-
-import butterknife.Unbinder;
 /*
 *
 * Activity基类
@@ -27,19 +26,20 @@ import butterknife.Unbinder;
 
 public class BaseActivity extends AppCompatActivity {
     public static final int PERMISSION_STGAT_CODE = 1123;
-    Unbinder unbinder;
-    ContentLoader mContentloader;
+    public ContentLoader mContentloader;
     View mLoadingView;
+    boolean mBackResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
+
+
+
 
     //页面全屏加载loading显示
     public void showLoadingAnimation() {
@@ -52,9 +52,13 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public void setBackResult(boolean backResult) {
+        mBackResult = backResult;
+    }
+
     //页面全屏加载loading隐藏
     public void hidenLoadingAnimation() {
-        if (mLoadingView != null&&mLoadingView.getVisibility()==View.VISIBLE) {
+        if (mLoadingView != null && mLoadingView.getVisibility() == View.VISIBLE) {
             mLoadingView.setVisibility(View.GONE);
         }
     }
@@ -76,37 +80,37 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onDestroy() {
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
-        super.onDestroy();
-    }
 
-    //TODO:bugtags online delete
     @Override
     protected void onResume() {
         super.onResume();
         //注：回调 1
-     //   Bugtags.onResume(this);
-        MobclickAgent.onResume(this);
+        if (MyApplication.isDebug) {
+            Bugtags.onResume(this);
+        } else {
+            MobclickAgent.onPageStart(getClass().getName());
+            MobclickAgent.onResume(this);
+        }
     }
 
-    //TODO:bugtags online delete
     @Override
     protected void onPause() {
         super.onPause();
         //注：回调 2
-     //   Bugtags.onPause(this);
-        MobclickAgent.onPause(this);
+        if (MyApplication.isDebug) {
+            Bugtags.onPause(this);
+        } else {
+            MobclickAgent.onPageEnd(getClass().getName());
+            MobclickAgent.onPause(this);
+        }
     }
 
-    //TODO:bugtags online delete
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         //注：回调 3
-     //   Bugtags.onDispatchTouchEvent(this, event);
+        if (MyApplication.isDebug) {
+            Bugtags.onDispatchTouchEvent(this, event);
+        }
         return super.dispatchTouchEvent(event);
     }
 
@@ -114,14 +118,14 @@ public class BaseActivity extends AppCompatActivity {
         return getIntent().getIntExtra(KeyParams.PAGE_TYPE, 0);
     }
 
-    /**
-     * 通过xml查找相应的ID，通用方法
-     *
-     * @param id
-     * @param <T>
-     * @return
-     */
-    protected <T extends View> T $(@IdRes int id) {
-        return (T) findViewById(id);
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (mBackResult) {
+            setResult(resultCode, data);
+            finish();
+        }
+
     }
 }

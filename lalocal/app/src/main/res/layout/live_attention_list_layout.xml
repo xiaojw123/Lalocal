@@ -41,8 +41,6 @@
                 android:textSize="@dimen/text_size_14_sp"
                 android:paddingLeft="@dimen/live_padding_10dp"
                 android:paddingRight="@dimen/live_padding_5dp"
-
-
                 />
 
             <TextView
@@ -114,13 +112,12 @@
 
             />
 
-        <com.lalocal.lalocal.view.xlistview.XListView
-            android:layout_marginTop="@dimen/live_padding_5dp"
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/live_attention_listview"
+            android:layout_marginTop="@dimen/live_padding_5dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-        </com.lalocal.lalocal.view.xlistview.XListView>
+            android:layout_height="match_parent"></com.jcodecraeer.xrecyclerview.XRecyclerView>
 
     </RelativeLayout>
 

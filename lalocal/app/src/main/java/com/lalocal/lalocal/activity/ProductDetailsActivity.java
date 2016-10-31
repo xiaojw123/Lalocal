@@ -17,10 +17,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
@@ -43,6 +44,7 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ViewFactory;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.MyScrollView;
+import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.viewpager.CycleViewPager;
@@ -69,7 +71,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
     private LinearLayout checkDetails;
     private ShineButton btnLike;
     private ImageView btnShare;
-    private TextView productReserve;
+    private ShapeTextView productReserve;
     private ImageView customer;
     private TextView productService;
     private LinearLayout featureLayout;
@@ -115,7 +117,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         checkDetails = (LinearLayout) findViewById(R.id.product_check_detail);
         btnLike = (ShineButton) findViewById(R.id.product_btn_like);
         btnShare = (ImageView) findViewById(R.id.product_btn_share);
-        productReserve = (TextView) findViewById(R.id.product_details_reserve);
+        productReserve = (ShapeTextView) findViewById(R.id.product_details_reserve);
         customer = (ImageView) findViewById(R.id.product_customer_service);
         phones = (RelativeLayout) findViewById(R.id.product_details_phones);
         productService = (TextView) findViewById(R.id.product_service);
@@ -223,11 +225,13 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 //去客服页面
                 break;
             case R.id.product_customer_service:
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
                 startOnlineService();
                 //去客服页面
                 break;
             case R.id.product_btn_like:
                 //TODO 收藏
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIKE);
                 if (result != null) {
                     //取消收藏
                     int targetId = specialToH5Bean.getTargetId();
@@ -240,6 +244,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_btn_share:
                 //TODO 分享
+                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_SHARE);
                 if (result != null) {
                     SpecialShareVOBean shareVO = result.shareVO;
                     showShare(shareVO);
@@ -247,6 +252,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_details_reserve:
                 //TODO 预定
+                MobHelper.sendEevent(this,MobEvent.PRODUCT_BOOKING);
                 if (UserHelper.isLogined(this)) {
                     contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
                 } else {
@@ -311,10 +317,15 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
 
     public void onBackClick() {
-        setResult(MeFragment.UPDATE_MY_DATA);
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
 
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+        super.onBackPressed();
+    }
 
     public class MyCallBack extends ICallBack {
 
@@ -409,7 +420,6 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 praiseId = pariseResult.getResult();
                 praiseFlag = true;
             }
-
         }
     }
 
@@ -434,22 +444,26 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
             case 0:
                 productReserve.setText("预定");
                 productReserve.setEnabled(true);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_ffaa2a));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_ffaa2a));
+//                productReserve.setBackgroundColor();
                 break;
             case 1:
                 productReserve.setText("已售罄");
                 productReserve.setEnabled(false);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_b3));
+//                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 break;
             case 2:
                 productReserve.setText("已过期");
                 productReserve.setEnabled(false);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_b3));
+//                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 break;
             case -1:
                 productReserve.setText("已删除");
                 productReserve.setEnabled(false);
-                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
+                productReserve.setSolidColor(getResources().getColor(R.color.color_b3));
+//                productReserve.setBackgroundColor(getResources().getColor(R.color.color_b3));
                 break;
 
 
@@ -617,7 +631,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO,String.valueOf(specialToH5Bean.getTargetId()));
         sharePopupWindow.showShareWindow();
         sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
-                Gravity.CENTER, 0, 0);
+                Gravity.BOTTOM, 0, 0);
 
     }
 

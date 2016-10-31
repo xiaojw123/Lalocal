@@ -23,6 +23,8 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
@@ -95,6 +97,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private Context mContext;
     private String creatorAccount;
     private  int userId;
+    private String channelId;
 
     // state
     private boolean actionPanelBottomLayoutHasSetup = false;
@@ -109,7 +112,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private BarrageView barrageView;
 
 
-    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId) {
+    public InputPanel(Context mContext, Container container, View view, List<BaseAction> actions, InputConfig inputConfig,String creatorAccount,int userId, String channelId) {
         this.mContext=mContext;
         this.container = container;
         this.view = view;
@@ -118,11 +121,12 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         this.inputConfig = inputConfig;
         this.creatorAccount=creatorAccount;
         this.userId=userId;
+        this.channelId = channelId;
         init();
     }
 
-    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId) {
-        this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId);
+    public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId, String channelId) {
+        this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId, channelId);
     }
 
     public void onPause() {
@@ -296,8 +300,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 barrageAndChat.setSelected(!isSelector);
                 if(isSelector){
                     SPCUtils.put(mContext,IS_SELSCTOR,false);
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_EDIT);
                 }else {
                     SPCUtils.put(mContext,IS_SELSCTOR,true);
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_BARRAGE);
                 }
 
                 AppLog.i("TAG","isSelector:"+ (isSelector ==true?"开启": "关闭"));
@@ -309,7 +315,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     //弹幕开关状态监听
     private  OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener;
     public interface OnBarrageViewCheckStatusListener {
-        void getBarrageViewCheckStatus(boolean isCheck,String content);
+        void getBarrageViewCheckStatus(boolean isCheck, String content);
     }
 
     public void setOnBarrageViewCheckStatusListener(OnBarrageViewCheckStatusListener onBarrageViewCheckStatusListener) {
@@ -342,7 +348,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                 textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
             Map<String, Object> ext = new HashMap<>();
-
                 Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 if(selectorStatus){
 
@@ -359,6 +364,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId",userId);
                         ext.put("disableSendMsgUserId",userId);
+                        ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage, MessageType.barrage)) {
@@ -371,6 +377,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId",userId);
                         ext.put("disableSendMsgUserId",userId);
+                        ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
                     if (container.proxy.sendMessage(textMessage,MessageType.text)) {

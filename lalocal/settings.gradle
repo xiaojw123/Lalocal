@@ -1,1 +1,1 @@
-include ':app', ':shinebuttonlib', ':wkvideoplayer', ':easeui', ':pingpp', ':gifviewlibrary'
+include ':app', ':shinebuttonlib', ':wkvideoplayer', ':easeui', ':pingpp', ':gifviewlibrary', ':xrecyclerview', ':galleryfinal', ':selectordialog', ':sliderlayoutlibrary'

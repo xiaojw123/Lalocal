@@ -26,7 +26,6 @@ import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.PariseResult;
@@ -140,7 +139,6 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
         String url = AppConfig.getSepcailDetailUrl() + rowId;
-
         if (rowId != null) {
             contentService1 = new ContentLoader(this);
             contentService1.setCallBack(new MyCallBack());
@@ -164,7 +162,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                     SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
                     shareActivity.showShareWindow();
                     shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
-                            Gravity.CENTER, 0, 0);
+                            Gravity.BOTTOM, 0, 0);
                 }
                 break;
             case R.id.play_btn:
@@ -190,7 +188,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
     @Override
     public void onBackClick() {
-        setResult(MeFragment.UPDATE_MY_DATA);
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
     }
 
     @Override
@@ -526,6 +524,11 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                         break;
                     case 5:
                         break;
+                    case 13:
+                        Intent intent13 = new Intent(mContext, ArticleActivity.class);
+                        intent13.putExtra("targetID", specialToH5Bean.getTargetId() + "");
+                        startActivity(intent13);
+                        break;
                 }
             }
 
@@ -593,5 +596,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         return super.onKeyDown(keyCode, event);
     }
 
-
+    @Override
+    public void onBackPressed() {
+        AppLog.print("onBackPressed_____special__");
+        setResult(MyFavoriteActivity.UPDATE_MY_DATA);
+        super.onBackPressed();
+    }
 }

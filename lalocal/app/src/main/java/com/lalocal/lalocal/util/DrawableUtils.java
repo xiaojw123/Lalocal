@@ -7,6 +7,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.widget.ImageView;
 
+import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.nostra13.universalimageloader.cache.disc.DiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -33,6 +34,7 @@ public class DrawableUtils {
         DrawableCompat.setTintList(wrappedDrawable, colors);
         return wrappedDrawable;
     }
+
 
     public static void displayImg(Context context, ImageView img, String url) {
         displayImg(context, img, url, 0, DRAWABLE_NULL, null);
@@ -100,7 +102,9 @@ public class DrawableUtils {
         builder.diskCacheFileCount(100);
         builder.tasksProcessingOrder(QueueProcessingType.FIFO);
         builder.taskExecutor(Executors.newCachedThreadPool());
+        if(MyApplication.isDebug){
         builder.writeDebugLogs();
+        }
         return builder.build();
     }
 

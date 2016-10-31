@@ -70,6 +70,7 @@ public class GiftGridViewAdpter extends BaseAdapter {
             holder.giftSendCount.setVisibility(View.VISIBLE);
             holder.giftItemBg.setBackgroundResource(R.drawable.gift_sel);
         }
+        convertView.setTag(R.id.giftdatabean,giftDataResultBean);
         return convertView;
     }
 
