@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_adapter_photo_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_adapter_photo_list_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_activity_photo_preview.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_activity_photo_preview.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_adapter_preview_viewpgaer_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_adapter_preview_viewpgaer_item.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_adapter_edit_list.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_adapter_edit_list.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_activity_photo_edit.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_activity_photo_edit.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_activity_photo_select.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_activity_photo_select.xml"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\release\\layout\\gf_adapter_folder_list_item.xml",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\layout\\gf_adapter_folder_list_item.xml"
+    }
+]
