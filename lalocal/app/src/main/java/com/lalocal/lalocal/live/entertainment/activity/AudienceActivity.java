@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
@@ -500,6 +501,29 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
 
+    @Override
+    protected void accountKicout() {
+        final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+        customDialog.setContent(getString(R.string.account_kicout));
+        customDialog.setCancelable(false);
+        customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                if (videoPlayer != null) {
+                    videoPlayer.resetVideo();
+                }
+                NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+
+                startActivity(new Intent(AudienceActivity.this, LoginActivity.class));
+                customDialog.dismiss();
+                clearChatRoom();
+
+            }
+        });
+        customDialog.show();
+
+    }
+
     boolean isShowNetDialog = true;//监测网络的dialog显示标记
     int reminder = -1;//0:网络切换，1：连接error ，2：主播离开
     boolean isFirstCheckNet = true;//弹一次提示网络的dialog
@@ -686,7 +710,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     protected void onDestroy() {
         // 释放资源
         if (videoPlayer != null) {
-
             videoPlayer.resetVideo();
         }
         if(countDownTimer!=null){
@@ -897,7 +920,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         overSignature = (TextView)audienceOver.findViewById(R.id.master_info_signature);
         overAttention = (TextView)audienceOver.findViewById(R.id.live_attention);
         overFans = (TextView)audienceOver.findViewById(R.id.live_fans);
-        audienceOver.findViewById(R.id.master_dialog_report_audience);
+
         masterAttentino = (TextView) audienceOver.findViewById(R.id.master_dialog_attention_audience);
         masterAttentino.setOnClickListener(buttonClickListener);
       //  liveMasterHome.setOnClickListener(buttonClickListener);

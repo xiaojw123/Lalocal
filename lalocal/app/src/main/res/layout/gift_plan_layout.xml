@@ -9,12 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
-    <com.lalocal.lalocal.live.entertainment.ui.FrameAnimation
-        android:id="@+id/ani_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        />
+
     <RelativeLayout
         android:id="@+id/audient_gift_plane_bg"
         android:layout_width="match_parent"

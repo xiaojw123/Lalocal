@@ -273,6 +273,7 @@
     <string name="live_manager_setting_success">设置管理员成功</string>
     <string name="live_hint">提示</string>
     <string name="live_net_type_cmcc">当前网络为移动网络，是否继续直播？</string>
+    <string name="account_kicout">您的账号在其他设备登录,请重新登录!</string>
     <string name="live_continue_look">继续观看</string>
     <string name="live_video_conncet_fail">视频连接失败!</string>
     <string name="live_quit_room">退出直播间</string>

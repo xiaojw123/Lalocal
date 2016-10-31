@@ -57,7 +57,6 @@ import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
 import com.lalocal.lalocal.live.entertainment.module.ChatRoomMsgListPanel;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
-import com.lalocal.lalocal.live.entertainment.ui.FrameAnimation;
 import com.lalocal.lalocal.live.entertainment.ui.GiftsRankPopuWindow;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.im.session.BarrageViewBean;
@@ -233,7 +232,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private TextView massageTest;
     private ImageView shareLiveImg;
     private TextView sendPlaneName;
-    private FrameAnimation aniView;
+  
+
 
     protected abstract void checkNetInfo(String netType, int reminder);
 
@@ -357,12 +357,17 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
             if (statusCode != StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(false);
+                if(statusCode==StatusCode.KICKOUT){
+                 //   accountKicout();
+                }
             } else if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
                 enterRoom();
             }
         }
     };
+
+    protected abstract void accountKicout();
 
     //检测网络类型
     public static final String NET_TYPE_WIFI = "wifi";
@@ -482,8 +487,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
         sendPlaneName = (TextView) findViewById(R.id.audience_gift_send_plane);
+      
 
-        aniView = (FrameAnimation) findViewById(R.id.ani_view);
       //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
 

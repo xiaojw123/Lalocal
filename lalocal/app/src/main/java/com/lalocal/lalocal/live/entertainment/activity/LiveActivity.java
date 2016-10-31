@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
@@ -266,6 +267,26 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         keyHeight = screenHeight / 3;
         setListener();
 
+    }
+
+    @Override
+    protected void accountKicout() {
+        AppLog.i("TAG","主播端接受到账号挤掉提示");
+        final CustomChatDialog customDialog = new CustomChatDialog(this);
+        customDialog.setContent(getString(R.string.account_kicout));
+        customDialog.setCancelable(false);
+        customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                liveContentLoader.cancelLiveRoom(channelId);
+                NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                deInitUIandEvent();
+                startActivity(new Intent(LiveActivity.this, LoginActivity.class));
+                customDialog.dismiss();
+                finish();
+            }
+        });
+        customDialog.show();
     }
 
 
@@ -1531,6 +1552,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
             startShareLive(true);
         }
+
 
     }
 
