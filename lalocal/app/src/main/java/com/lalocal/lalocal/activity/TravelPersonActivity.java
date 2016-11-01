@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.activity;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -42,57 +41,53 @@ public class TravelPersonActivity extends BaseActivity {
             TextView mobileNumbTv = (TextView) itemView.findViewById(R.id.travel_person_mobile_numb);
             TextView emailTv = (TextView) itemView.findViewById(R.id.travel_person_email);
             TextView sexTv = (TextView) itemView.findViewById(R.id.travel_person_sex);
-            FrameLayout phoneCotainer= (FrameLayout) itemView.findViewById(R.id.travelperson_phone_container);
-            FrameLayout emailCotainer= (FrameLayout) itemView.findViewById(R.id.travelperson_email_cotainer);
-            FrameLayout sexCotainer= (FrameLayout) itemView.findViewById(R.id.travelperson_sex_container);
+            FrameLayout phoneCotainer = (FrameLayout) itemView.findViewById(R.id.travelperson_phone_container);
+            FrameLayout emailCotainer = (FrameLayout) itemView.findViewById(R.id.travelperson_email_cotainer);
+            FrameLayout sexCotainer = (FrameLayout) itemView.findViewById(R.id.travelperson_sex_container);
             List<OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean> contacts = bean.getItemList();
-            String enName = "";
+            String sName = "";
+            String sValue = "";
             for (OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean contact : contacts) {
                 String value = contact.getValue();
-                switch (contact.getCode()) {
-                    case "7": // isleader  1: true 0: false
-                        if (!TextUtils.isEmpty(value)){
-                            sexCotainer.setVisibility(View.VISIBLE);
+                int type = contact.getType();
+                switch (type) {
+                    case 1: // isleader  1: true 0: false
+                        sexCotainer.setVisibility(View.VISIBLE);
                         sexTv.setText(value);
+                        break;
+                    case 8:
+                        if ("1".equals(value)) {
+                            nameChTv.setTextColor(getResources().getColor(R.color.color_ffaa2a));
+                            leaderIc.setVisibility(View.VISIBLE);
                         }
                         break;
-                    case "-1":
-                        if ("1".equals(value)){
-                        nameChTv.setTextColor(getResources().getColor(R.color.color_ffaa2a));
-                        leaderIc.setVisibility(View.VISIBLE);
-                        }
-                        break;
-                    case "2":
-                        if (!TextUtils.isEmpty(value)){
-                            emailCotainer.setVisibility(View.VISIBLE);
+                    case 0:
+                        emailCotainer.setVisibility(View.VISIBLE);
                         emailTv.setText(value);
-                        }
                         break;
-                    case "12":
-                        if (!TextUtils.isEmpty(value)){
-                            phoneCotainer.setVisibility(View.VISIBLE);
+                    case 3:
+                        phoneCotainer.setVisibility(View.VISIBLE);
                         mobileNumbTv.setText(value);
-                        }
                         break;
-                    case "0":
-                        enName += value;
+                    case 9:
+                        sName += value;
                         break;
-                    case "1":
-                        enName += "  " + value;
+                    case 5:
+                        sValue+=value;
                         break;
                 }
 
-            }
-            nameChTv.setText(enName);
-            if (leaderIc.getVisibility()==View.VISIBLE){
-                persons_container.addView(itemView,0);
-            }else{
-                persons_container.addView(itemView);
-            }
-
+        }
+        nameChTv.setText(sName+"  "+sValue);
+        if (leaderIc.getVisibility() == View.VISIBLE) {
+            persons_container.addView(itemView, 0);
+        } else {
+            persons_container.addView(itemView);
         }
 
-
     }
+
+
+}
 
 }

@@ -202,7 +202,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         contentLoaderAudience.liveGiftStore();
 
         loginIm();
-
+        AppLog.i("TAG","用户端获取token:"+UserHelper.getToken(this));
 
     }
 
@@ -233,10 +233,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         }
                     }
                 }
-
             }
-
-
         }
 
         @Override
@@ -259,7 +256,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 channelId=String.valueOf(liveRowsBean.getId());
                 cname= liveRowsBean.getCname();
                 liveStatus=String.valueOf(liveRowsBean.getStatus());
-
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
                 int onlineUser = liveRowsBean.getOnlineUser();
@@ -307,18 +303,28 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             super.onResponseFailed(message,code);
             if(code==230&&firstWarning){
                 firstWarning = false;
-                final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
-                customDialog.setContent(getString(R.string.audience_status_unsual));
-                customDialog.setCancelable(false);
-                customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
-                    @Override
-                    public void onDialogClickListener() {
-                        firstWarning = true;
-                        customDialog.dismiss();
-                        finish();
-                    }
-                });
-                customDialog.show();
+                try{
+                    final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+                    customDialog.setContent(getString(R.string.audience_status_unsual));
+                    customDialog.setCancelable(false);
+                    customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            firstWarning = true;
+                        }
+                    });
+
+                    customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    });
+                    customDialog.show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }
         }
 
@@ -359,9 +365,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 myGold=myGold-payBalance;
             } else {
                 Toast.makeText(AudienceActivity.this, getString(R.string.live_sendgift_fail), Toast.LENGTH_SHORT).show();
-
             }
-
         }
 
         @Override
@@ -409,7 +413,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         masterAttentino.setText("已关注");
                     }
                 }
-
                 AudienceActivity.this.overAttention.setText(String.valueOf(result.getAttentionNum()));
                 overFans.setText(String.valueOf(result.getFansNum()));
             }

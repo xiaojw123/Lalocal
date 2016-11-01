@@ -48,7 +48,6 @@ public class GiftPlaneAnimation {
         this.mContext = mContext;
         this.giftPlaneBg = giftPlanceBg;
         this.avatar=avatar;
-
         gfitPlaneIndex = giftPlanceBg.getChildAt(0);
         giftPlaneText = (TextView) giftPlanceBg.getChildAt(1);
         AppLog.i("TAG","飞机动画1:avatar"+avatar);
@@ -134,7 +133,7 @@ public class GiftPlaneAnimation {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1 || msg.what == 2) {
-             //   rocketAnimation.stop();
+                rocketAnimation.stop();
                 isStartAnim=true;
                 if (msg.what == 1) {
                     giftPlaneUp.setVisibility(View.GONE);

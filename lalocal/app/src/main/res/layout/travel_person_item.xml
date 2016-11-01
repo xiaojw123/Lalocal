@@ -21,7 +21,8 @@
             android:ellipsize="end"
             android:layout_marginRight="@dimen/dimen_size_36_dp"
             android:textColor="@drawable/travel_person_nam_ch_textcolor"
-            android:textSize="@dimen/text_size_16_sp" />
+            android:textSize="@dimen/text_size_16_sp"
+            />
 
         <ImageView
             android:id="@+id/travel_person_leader_ic"

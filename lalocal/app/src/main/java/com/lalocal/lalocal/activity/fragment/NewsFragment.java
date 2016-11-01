@@ -145,7 +145,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         contentService = new ContentLoader(getActivity());
         contentService.setCallBack(new MyCallBack());
-        //   contentService.getLiveArea();
+        contentService.getLiveArea();
         contentService.recommendAd();
         requestBasicPermission(); // 申请APP基本权限
     }
@@ -937,7 +937,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
     // 权限控制
-
     private void requestBasicPermission() {
         MPermission.with(getActivity())
                 .addRequestCode(BASIC_PERMISSION_REQUEST_CODE)

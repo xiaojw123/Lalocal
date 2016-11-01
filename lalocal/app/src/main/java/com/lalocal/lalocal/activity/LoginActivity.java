@@ -57,7 +57,6 @@ public class LoginActivity extends BaseActivity {
 
     private void claerImLoginInfo() {
         DemoCache.clear();
-        ;
         AuthPreferences.clearUserInfo();
         NIMClient.getService(AuthService.class).logout();
         DemoCache.setLoginStatus(false);

@@ -253,9 +253,7 @@ public class LiveHomePageActivity extends BaseActivity {
                         showAttentionPopuwindow(userId);
                     }
                 } else {
-
                     showLoginViewDialog();
-
                 }
 
                 break;
