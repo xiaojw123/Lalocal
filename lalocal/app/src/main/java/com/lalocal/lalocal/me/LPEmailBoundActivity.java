@@ -8,11 +8,10 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -38,7 +37,7 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
         next_btn.setOnClickListener(this);
         skp_tv.setOnClickListener(this);
         setLoaderCallBack(new LPEmailBoundCallback());
-        setBackResult(true);
+        setLoginBackResult(true);
     }
 
 
@@ -68,10 +67,7 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
     class LPEmailBoundCallback extends ICallBack {
         @Override
         public void onRegisterByPhone(User user) {
-            Intent intent = new Intent();
-            intent.putExtra(MeFragment.USER, user);
-            setResult(LoginActivity.LOGIN_OK, intent);
-            finish();
+            UserHelper.setLoginSuccessResult(LPEmailBoundActivity.this,user);
         }
 
     }

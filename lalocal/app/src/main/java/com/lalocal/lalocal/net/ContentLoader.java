@@ -1088,7 +1088,6 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.VERSION_CODE);
         }
         ContentRequest contentRequest = new ContentRequest(AppConfig.VERSION_UPDATE + versionCode, response, response);
-        contentRequest.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(contentRequest);
     }
 
@@ -1134,7 +1133,7 @@ public class ContentLoader {
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-            return super.setRetryPolicy(new DefaultRetryPolicy(10000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+            return super.setRetryPolicy(new DefaultRetryPolicy(50000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
@@ -2050,6 +2049,7 @@ public class ContentLoader {
             callBack.onLoginSucess(user);
         }
 
+
         private void saveUserInfo(User user) {
             if (user != null) {
                 MobHelper.singIn(user.getId());
@@ -2066,6 +2066,8 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
+                NIMClient.getService(AuthService.class).logout();
+                DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
                 loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());

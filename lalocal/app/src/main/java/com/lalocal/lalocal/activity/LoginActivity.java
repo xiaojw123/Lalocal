@@ -84,11 +84,10 @@ public class LoginActivity extends BaseActivity {
         login_btn.setOnClickListener(loginClickListener);
 
 
-    }
-
-    private CustomTitleView.onBackBtnClickListener backClicklistener = new CustomTitleView.onBackBtnClickListener() {
+    } private CustomTitleView.onBackBtnClickListener backClicklistener = new CustomTitleView.onBackBtnClickListener() {
         @Override
         public void onBackClick() {
+
             MobHelper.sendEevent(LoginActivity.this, MobEvent.LOGIN_EMAIL_BACK);
             if (KeyParams.SETTING.equals(setting)) {
                 setResult(SettingActivity.UN_LOGIN_OK);
@@ -97,6 +96,8 @@ public class LoginActivity extends BaseActivity {
             }
         }
     };
+
+
 
     private View.OnClickListener loginClickListener = new View.OnClickListener() {
         @Override

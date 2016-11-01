@@ -1,17 +1,15 @@
 package com.lalocal.lalocal.me;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -31,6 +29,7 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
         pLalocalStart = (Button) findViewById(R.id.p_emailbound_startlalocal);
         pLalocalStart.setOnClickListener(this);
         setLoaderCallBack(new PemailBound2CallBack());
+        setLoginBackResult(true);
     }
 
     @Override
@@ -60,10 +59,7 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
         }
         @Override
         public void onDialogClickListener() {
-            Intent intent = new Intent();
-            intent.putExtra(MeFragment.USER, user);
-            setResult(LoginActivity.LOGIN_OK, intent);
-            finish();
+            UserHelper.setLoginSuccessResult(LPEmailBound2Activity.this,user);
         }
     }
 

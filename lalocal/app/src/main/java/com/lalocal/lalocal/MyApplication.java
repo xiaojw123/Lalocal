@@ -61,11 +61,15 @@ import io.fabric.sdk.android.Fabric;
  * 友盟统计开启
  * fabric开启
  * <p>
- * 3.第三方加固
+ * 3.baseUrl改为生产环境
+ * 解决app崩溃后退回开发环境问题
+ *
+ * 4第三方加固
  * meta-data选项选择UMENG_CHANNEL
  * 根据不同市场设置对应value，生成
  * 相应渠道包
  * 此约定从2.1.3版本开始生效
+ *
  */
 public class MyApplication extends Application {
     public static final boolean isDebug = true;

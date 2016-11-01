@@ -13,11 +13,10 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -62,16 +61,20 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     String pswGetStr;
     @BindColor(R.color.color_1a)
     int areaColor;
-
+    String setting;
+    boolean isImLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        setting = intent.getStringExtra(KeyParams.SETTING);
+        isImLogin = intent.getBooleanExtra(KeyParams.IM_LOGIN, false);
         phoneEdt.setOnFocusChangeListener(this);
         setLoaderCallBack(new LoginCallBack());
-        setBackResult(true);
+        setLoginBackResult(true);
     }
 
     @Override
@@ -118,6 +121,9 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
         }
     }
 
+
+
+
     public String getPhone() {
         return phoneEdt.getText().toString();
     }
@@ -144,10 +150,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 intent.putExtra(KeyParams.CODE, code);
                 startActivityForResult(intent,KeyParams.REQUEST_CODE);
             } else {
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra(MeFragment.USER, user);
-                setResult(LoginActivity.LOGIN_OK, resultIntent);
-                finish();
+                UserHelper.setLoginSuccessResult(LLoginActivity.this,user);
             }
         }
     }
@@ -188,5 +191,6 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
         }
     };
     public static final int MSG_UPDATE_TIMER = 0x11;
+
 
 }

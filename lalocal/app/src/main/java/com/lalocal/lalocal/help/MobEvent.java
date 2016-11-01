@@ -7,6 +7,7 @@ package com.lalocal.lalocal.help;
 public interface MobEvent {
     String LOGIN_PHONE_VERIFICATOIN = "217_login_phone_verification";
     String LOGIN_PHONE_NEXT = "217_login_phone_next";
+    String LOGIN_PHONE_BACK = "217_login_phone_back";
     String LOGIN_EMAIL = "217_login_email";
     String LOGIN_QQ = "217_login_qq";
     String LOGIN_WECHAT = "217_login_wechat";
