@@ -31,7 +31,6 @@ import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
-import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -56,6 +55,7 @@ public class
 MeFragment extends BaseFragment {
     public static final int UPDAE_MY_WALLET = 0x01323;
     public static final String USER = "user";
+    public static final int LOGIN_OK = 102;
     public boolean isImLogin;
     User user;
     OnMeFragmentListener fragmentListener;
@@ -177,10 +177,10 @@ MeFragment extends BaseFragment {
 
     private void gotoLoginPage() {
         //TODO:登录改版
-//        Intent intent = new Intent(getActivity(), LoginActivity.class);
-//        startActivityForResult(intent, 100);
-        Intent intent = new Intent(getActivity(), LLoginActivity.class);
-        startActivityForResult(intent, KeyParams.REQUEST_CODE);
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
+        startActivityForResult(intent, 100);
+//        Intent intent = new Intent(getActivity(), LLoginActivity.class);
+//        startActivityForResult(intent, KeyParams.REQUEST_CODE);
     }
 
 

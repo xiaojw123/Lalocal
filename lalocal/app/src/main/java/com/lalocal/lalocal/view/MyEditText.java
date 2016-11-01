@@ -6,11 +6,12 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -62,7 +63,9 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
             inputEdit.setHint(hintText);
         }
         if (isPsw){
-            inputEdit.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+            //隐藏
+            inputEdit.setSelected(false);
+            inputEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
             showPsswordBtn.setVisibility(VISIBLE);
         }else{
             showPsswordBtn.setVisibility(GONE);
@@ -156,7 +159,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
                 inputEdit.setSelection(str.length());
             }
         }
-        if (isFilterSpace) {
+//        if (isFilterSpace) {
             if (s.toString().contains(" ")) {
                 String[] str = s.toString().split(" ");
                 String str1 = "";
@@ -166,8 +169,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
                 inputEdit.setText(str1);
                 inputEdit.setSelection(start);
             }
-
-        }
+//        }
 
     }
 
@@ -190,10 +192,10 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
             case R.id.my_editext_showpassword_btn:
                 if (v.isSelected()){
                     v.setSelected(false);
-                    inputEdit.setInputType(EditorInfo.TYPE_TEXT_VARIATION_PASSWORD);
+                    inputEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
                 }else{
                     v.setSelected(true);
-                    inputEdit.setInputType(EditorInfo.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    inputEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }
 
                 break;

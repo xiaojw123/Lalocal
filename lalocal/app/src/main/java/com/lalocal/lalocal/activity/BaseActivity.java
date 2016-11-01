@@ -28,7 +28,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final int PERMISSION_STGAT_CODE = 1123;
     public ContentLoader mContentloader;
     View mLoadingView;
-    boolean mBackResult;
+    boolean mLoginBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +51,9 @@ public class BaseActivity extends AppCompatActivity {
             mLoadingView.setVisibility(View.VISIBLE);
         }
     }
-
-    public void setBackResult(boolean backResult) {
-        mBackResult = backResult;
+    //mLoginBack/true登录页面登录成功时，依次清空回退栈并将数据回传，规避resultcode重复情况
+    public void setLoginBackResult(boolean loginBack) {
+        mLoginBack = loginBack;
     }
 
     //页面全屏加载loading隐藏
@@ -122,7 +122,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mBackResult) {
+        if (mLoginBack&&resultCode==LoginActivity.LOGIN_OK) {
             setResult(resultCode, data);
             finish();
         }

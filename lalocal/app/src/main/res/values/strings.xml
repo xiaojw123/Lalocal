@@ -4,7 +4,7 @@
     <string name="write_email">填写邮箱</string>
     <string name="write_psw">填写密码</string>
     <string name="write_nickname">填写昵称</string>
-    <string name="input_email">输入邮箱</string>
+    <string name="input_email">请输入你的邮箱</string>
     <string name="input_psw">输入密码</string>
     <string name="input_verification_code">输入验证码</string>
     <string name="input_latest_psw">输入新密码</string>
@@ -322,5 +322,12 @@
     <string name="exchange_rule">游票100起兑换, 且要是100的倍数</string>
     <string name="go_to_start_live_travel">快去开启属于自己的直播旅行</string>
     <string name="got_to_atten_travel_talent">快去关注旅行达人，看遍世界的美...</string>
+    <string name="click_register_show_you_argee">点击注册表示您已同意</string>
+    <string name="nick_or_password">昵称或密码不能为空</string>
+    <string name="we_have_send_email_to_you">我们已发送一封邮件到你的邮箱,有空的时候记得去激活</string>
+    <string name="we_will_send_ver_code_to_your_email">我们将会发送验证码到您的邮箱</string>
+    <string name="set_password_by_ver_code">通过验证码完成重设</string>
+    <string name="forget_password">忘记密码?</string>
+    <string name="ver_code">验证码</string>
 
 </resources>
