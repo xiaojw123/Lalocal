@@ -628,7 +628,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 } else {
                     if (isFirstLoad) {
                         isFirstLoad = false;
-                        liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+                        if(getActivity()!=null){
+                            liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+                        }
                         AppLog.i("TAG", "给recycler   liveMainAdapter");
                         xRecyclerView.setAdapter(liveMainAdapter);
                         liveMainAdapter.setOnLiveItemClickListener(liveItemClickListener);
@@ -1010,34 +1012,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        DialogUtil.clear();
-        AppLog.i("TAG", "直播首页走了onResume");
-        if (CommonUtil.RESULT_DIALOG == 2) {
-            CommonUtil.RESULT_DIALOG = 0;
-            final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setContent(getString(R.string.live_camera_start_failure));
-            customDialog.setCancelable(false);
-            customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
-                @Override
-                public void onDialogClickListener() {
-                    customDialog.dismiss();
-                }
-            });
-            customDialog.show();
-        } else if (CommonUtil.RESULT_DIALOG == 3) {
-            CommonUtil.RESULT_DIALOG = 0;
-            final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
-            customDialog.setContent(getString(R.string.live_frequency_start_failure));
-            customDialog.setCancelable(false);
-            customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
-                @Override
-                public void onDialogClickListener() {
-                    customDialog.dismiss();
-                }
-            });
-            customDialog.show();
-        }
-        AppLog.i("TAG", "onResume");
+
     }
 
 

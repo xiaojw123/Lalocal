@@ -288,9 +288,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             layoutParams.leftMargin = x - (i / 4);
             periscopeLayout.setLayoutParams(layoutParams);
         }
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -359,9 +357,16 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 DemoCache.setLoginStatus(false);
                 if(statusCode==StatusCode.KICKOUT){
                  //   accountKicout();
+                }else if(statusCode==StatusCode.UNLOGIN){
+                    String userAccount = AuthPreferences.getUserAccount();
+                    String userToken = AuthPreferences.getUserToken();
+                    if (userAccount != null && userToken != null) {
+                        loginIMServer(userAccount, userToken);
+                    }
                 }
             } else if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
+                DemoCache.setAccount(AuthPreferences.getUserAccount());
                 enterRoom();
             }
         }
@@ -400,6 +405,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
             if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
+                DemoCache.setLoginChatRoomStatus(false);
                 AppLog.i("TAG", "聊天室正在连接中");
                if(messageListPanel!=null){
                    TextView textView = new TextView(LivePlayerBaseActivity.this);
@@ -414,6 +420,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
                 AppLog.i("TAG", "聊天室登录中。。。");
+                DemoCache.setLoginChatRoomStatus(false);
 
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
                 AppLog.i("TAG", "聊天室已经登录");
@@ -1472,6 +1479,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.text:
+                    AppLog.i("TAG","我发送了消息");
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.masterIn:

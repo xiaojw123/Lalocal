@@ -41,6 +41,8 @@ public class Constants {
     public static final int TARGET_TYPE_CHANNEL = 15;
     // 我的粉丝页面
     public static final int TARGET_TYPE_FANS_PAGE = 16;
+    //回放
+
 
     public static final String ADD_PIC = "empty for adding pic";
     public static final int REQUEST_CODE_GALLERY = 0x01;

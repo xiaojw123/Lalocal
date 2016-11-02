@@ -360,7 +360,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             super.onSendGiftsBack(result);
             SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
             SendGiftResp.ResultBean sendGiftResult = sendGiftResp.getResult();
-            if (sendGiftResp.getReturnCode() == 0) {
+            if (sendGiftResp.getReturnCode() == 0&&sendTotal>0) {
                 startSendGiftsAnimation(giftDataResultBean, sendTotal);
                 myGold=myGold-payBalance;
             } else {
@@ -1053,16 +1053,22 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     }else if(!DemoCache.getLoginChatRoomStatus()||!DemoCache.getLoginStatus()) {
                        Toast.makeText(AudienceActivity.this,getString(R.string.live_unlogin_channel_room),Toast.LENGTH_SHORT).show();
                         giftStoreFirstClick=true;
-                    } else if(!"1".equals(playType)) {
-                        if(LiveConstant.IS_FIRST_CLICK_PAGE){
-                            LiveConstant.IS_FIRST_CLICK_PAGE=false;
-                            isNeedRequestServerShowGiftStorePage=true;
-                            contentLoaderAudience.getMyWallet();
-                        }else {
-                            isNeedRequestServerShowGiftStorePage=false;
-                            showGiftPage(myGold);
+                    } else {
+                        if(!"1".equals(playType)) {
+                            if(LiveConstant.IS_FIRST_CLICK_PAGE){
+                                LiveConstant.IS_FIRST_CLICK_PAGE=false;
+                                isNeedRequestServerShowGiftStorePage=true;
+                                contentLoaderAudience.getMyWallet();
+                            }else {
+                                isNeedRequestServerShowGiftStorePage=false;
+                                showGiftPage(myGold);
+                            }
+
                         }
                     }
+
+
+
                     }
                     break;
                 case R.id.audience_challenge_raise_layout://显示任务众筹卡片
@@ -1145,7 +1151,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             //余额不足，充值dialog
             showRechargeDialog(content);
         }else {
-            contentLoaderAudience.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
+            if(sendTotal>0){
+                contentLoaderAudience.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
+            }
 
         }
     }
@@ -1162,11 +1170,14 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         giftBean.setGiftCount(sendTotal);
         giftBean.setGiftImage(giftDataResultBean.getPhoto());
         giftBean.setGiftName(giftDataResultBean.getName());
-       giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity.this));
+       giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity .this));
         liveMessage.setGiftModel(giftBean);
         liveMessage.setChannelId(channelId);
         liveMessage.setStyle(MessageType.gift);
         IMMessage giftMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, AuthPreferences.getUserAccount(), liveMessage);
+        if(giftDataResultBean==null||code==null||giftDataResultBean.getName()==null||sendTotal==0){
+            return;
+        }
         if ("003".equals(code)) {
             giftPlaneAnimation.showPlaneAnimation((ChatRoomMessage) giftMessage);
 
