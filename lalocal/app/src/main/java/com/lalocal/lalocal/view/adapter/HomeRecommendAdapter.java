@@ -21,6 +21,7 @@ import com.lalocal.lalocal.view.viewholder.ChannelViewHolder;
 import com.lalocal.lalocal.view.viewholder.ProductViewHolder;
 import com.lalocal.lalocal.view.viewholder.ThemeViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,9 +41,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecommendListBean mRecommendListBean;
     private List<ArticleDetailsResultBean> mArticleList;
 
-    //    private static final int MAX_HOT_LIVE = 10;
-//    private static final int MAX_PRODUCT = 4;
-//    private static final int MAX_THEME = 10;
+    private List<Integer> mItems = new ArrayList<>();
 
     private RecyclerView mRvRecommendList;
 
@@ -58,9 +57,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private static final int THEME = 3;
     // 旅行笔记
     private static final int ARTICLE = 4;
-
-    // 首页推荐列表子项数量
-    private static final int AMOUNT_HOME_RECOMMEND = 5;
 
     private boolean adEmpty;
     private boolean liveEmpty;
@@ -111,6 +107,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppLog.i("hehe", "article list null");
             articleEmpty = true;
         }
+
+        syncItems();
     }
 
     public void setAdData(List<RecommendAdResultBean> adList) {
@@ -121,6 +119,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else {
             adEmpty = false;
         }
+        syncItems();
         this.notifyDataSetChanged();
     }
 
@@ -151,6 +150,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 themeEmpty = false;
             }
         }
+        syncItems();
         this.notifyDataSetChanged();
     }
 
@@ -162,6 +162,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         } else {
             articleEmpty = false;
         }
+        syncItems();
         this.notifyDataSetChanged();
     }
 
@@ -249,14 +250,40 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return AMOUNT_HOME_RECOMMEND;
+        return mItems.size();
     }
 
     // 删除首页推荐广告栏
     @Override
     public int getItemViewType(int position) {
+        if (position >= 0 && position < mItems.size()) {
+            int type = mItems.get(position);
+            return type;
+        }
         return position;
     }
 
+    private void syncItems() {
+
+        if (mItems.size() > 0) {
+            mItems.clear();
+        }
+
+        liveEmpty = true;
+
+        mItems.add(CATEGORY);
+        if (!liveEmpty) {
+            mItems.add(LIVE);
+        }
+        if (!productEmpty) {
+            mItems.add(PRODUCT);
+        }
+        if (!themeEmpty) {
+            mItems.add(THEME);
+        }
+        if (!articleEmpty) {
+            mItems.add(ARTICLE);
+        }
+    }
 }
 
