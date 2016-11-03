@@ -31,22 +31,28 @@
         android:visibility="gone"
         />
 
-    <Button
+    <ImageView
         android:id="@+id/my_editext_clear"
-        android:layout_width="@dimen/dimen_size_14_dp"
-        android:layout_height="@dimen/dimen_size_14_dp"
-        android:background="@drawable/clear"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:paddingTop="18dp"
+        android:paddingBottom="18dp"
+        android:paddingLeft="@dimen/dimen_size_4_dp"
+        android:src="@drawable/clear"
         android:layout_gravity="center_vertical|right"
-        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:paddingRight="@dimen/dimen_size_12_dp"
         android:visibility="gone"
         />
 
-    <Button
+    <ImageView
         android:id="@+id/my_editext_showpassword_btn"
-        android:layout_width="@dimen/dimen_size_21_dp"
-        android:layout_height="@dimen/dimen_size_15_dp"
-        android:background="@drawable/myeditext_password_seletor"
-        android:layout_marginRight="@dimen/dimen_size_10_dp"
+        android:layout_width="32dp"
+        android:layout_height="match_parent"
+        android:paddingTop="17.5dp"
+        android:paddingBottom="17.5dp"
+        android:paddingLeft="@dimen/dimen_size_1_dp"
+        android:src="@drawable/myeditext_password_seletor"
+        android:paddingRight="@dimen/dimen_size_10_dp"
         android:layout_gravity="center_vertical|right"
         android:visibility="gone"
         />

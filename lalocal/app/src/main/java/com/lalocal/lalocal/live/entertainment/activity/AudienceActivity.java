@@ -258,6 +258,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 liveStatus=String.valueOf(liveRowsBean.getStatus());
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
+                ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
                 int onlineUser = liveRowsBean.getOnlineUser();
                 url = liveRowsBean.getPullUrl();
                 userId = String.valueOf(liveRowsBean.getUser().getId());

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
@@ -135,11 +136,15 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 String apiUrl = result.getApiUrl();
                 AppConfig.setBaseUrl(apiUrl);
                 mContentloader.getSystemConfigs();
-            }else{
-                Toast.makeText(SplashActivity.this,"系统服务异常",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(SplashActivity.this, "系统服务异常", Toast.LENGTH_SHORT).show();
             }
         }
 
+        @Override
+        public void onError(VolleyError volleyError) {
+            startHomePage();
+        }
         @Override
         public void onGetSysConfigs(List<SysConfigItem> items) {
             AppLog.print("onGetSysConfigs____");
@@ -243,7 +248,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void run() {
                 try {
-                    EMChatManager.getInstance().createAccountOnServer(uname, pwd);
+                    try {
+                        EMChatManager.getInstance().createAccountOnServer(uname, pwd);
+                    } catch (NullPointerException e) {
+                        updateVersion();
+                    }
                     if (callback != null) {
                         callback.onSuccess();
                     }
@@ -262,11 +271,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         EMChatManager.getInstance().login(uname, upwd, new EMCallBack() {
             @Override
             public void onSuccess() {
-                AppLog.print("环信账号登录成功。。。");
-                DemoHelper.getInstance().setCurrentUserName(uname);
-                DemoHelper.getInstance().setCurrentPassword(upwd);
                 try {
+                    DemoHelper.getInstance().setCurrentUserName(uname);
+                    DemoHelper.getInstance().setCurrentPassword(upwd);
                     EMChatManager.getInstance().loadAllConversations();
+                    AppLog.print("环信账号登录成功。。。");
                 } catch (Exception e) {
                     AppLog.print("环信账号登录异常");
                 }

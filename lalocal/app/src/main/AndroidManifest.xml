@@ -195,7 +195,7 @@
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".activity.DestinationAreaActivity" />
-        <activity android:name=".activity.RouteDetailActivity" />
+        <!--<activity android:name=".activity.RouteDetailActivity" />-->
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
@@ -271,7 +271,7 @@
 
         <meta-data
             android:name="com.netease.nim.appKey"
-            android:value="efc9614a32336704ec2577f2129929fb" />
+            android:value="4cbe3856032ad3755da23525e596405f" />
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"

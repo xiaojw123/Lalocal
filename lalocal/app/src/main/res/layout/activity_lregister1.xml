@@ -7,6 +7,7 @@
     <com.lalocal.lalocal.view.LCustomLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:l_titleVisible="true"
         app:l_des="@string/give_you_one_diferent_world"
         app:l_title="@string/reigister_new_account" />
 
@@ -21,6 +22,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/login_emial_custom_edit_top"
             app:hint="@string/input_email"
+            app:my_title="@string/email"
+            app:clearEanble="true"
             />
 
         <Button
@@ -51,9 +54,9 @@
                 android:textSize="@dimen/text_size_12_sp" />
 
             <TextView
+                android:id="@+id/lregister1_user_protocol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/user_protocol"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_12_sp" />
 

@@ -330,5 +330,8 @@
     <string name="set_password_by_ver_code">通过验证码完成重设</string>
     <string name="forget_password">忘记密码?</string>
     <string name="ver_code">验证码</string>
+    <string name="password">密码</string>
+    <string name="nickname">昵称</string>
+    <string name="please_input_password">请输入密码</string>
 
 </resources>

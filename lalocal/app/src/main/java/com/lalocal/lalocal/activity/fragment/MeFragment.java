@@ -130,6 +130,7 @@ MeFragment extends BaseFragment {
     }
 
     private void initLogin() {
+        AppLog.print("initLogin isLogin___"+UserHelper.isLogined(getActivity()));
         if (UserHelper.isLogined(getActivity())) {
             //恢复上一次登录的状态
             String email = UserHelper.getUserEmail(getActivity());

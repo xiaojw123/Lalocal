@@ -400,6 +400,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
             if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
+                DemoCache.setLoginChatRoomStatus(false);
                 AppLog.i("TAG", "聊天室正在连接中");
                if(messageListPanel!=null){
                    TextView textView = new TextView(LivePlayerBaseActivity.this);
@@ -414,7 +415,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
                 AppLog.i("TAG", "聊天室登录中。。。");
-
+                DemoCache.setLoginChatRoomStatus(false);
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
                 AppLog.i("TAG", "聊天室已经登录");
                 onOnlineStatusChanged(true);
@@ -875,7 +876,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     if ("003".equals(code)) {
                         giftPlaneAnimation.showPlaneAnimation((ChatRoomMessage) message);
-                    } else {
+                    } else if(code!=null){
                         giftAnimation.showGiftAnimation((ChatRoomMessage) message);
                     }
                     messageListPanel.onIncomingMessage(messages);

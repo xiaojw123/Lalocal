@@ -618,6 +618,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             AppLog.i("TAG", "监听直播间状态异常:" + message+"    code:"+code);
             if (code == 222 && firstWarning) {
                 firstWarning = false;
+                isCloseLive=true;
                 try{
                     final CustomChatDialog customDialog = new CustomChatDialog(LiveActivity.this);
                     customDialog.setContent(getString(R.string.live_status_inusual));

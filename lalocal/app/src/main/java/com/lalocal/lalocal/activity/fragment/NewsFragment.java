@@ -248,9 +248,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 int scollYDistance = getScollYDistance();
                 int i = DensityUtil.dip2px(getActivity(), 10);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
-                AppLog.print("onScrolled firstVisibleItemPosition____"+firstVisibleItemPosition+"____scollDy____"+scollDy);
+                AppLog.print("onScrolled firstVisibleItemPosition____" + firstVisibleItemPosition + "____scollDy____" + scollDy);
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
-                    if (isVisible&&scollDy!=0) {
+                    if (isVisible && scollDy != 0) {
                         lastScrollDy = scollDy;
                         searchBar.setVisibility(View.VISIBLE);
                         isVisible = false;
@@ -402,7 +402,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                     AppLog.i("TAG", "点击直播按钮，版本小于，权限判断");
                     prepareLive();
                 }*/
-                reminderUserPermission();
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    prepareLive();
+                } else {
+                    reminderUserPermission();
+                }
                 break;
             case R.id.live_search_fl:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_SEARCH);
@@ -551,7 +555,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
-        public void onResponseFailed(int code,String message) {
+        public void onResponseFailed(int code, String message) {
 //            resetAdapterData();
         }
 
@@ -591,52 +595,56 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         public void onLiveHomeList(LiveHomeListResp liveListDataResp, String attentionFlag) {
-            if (sliderLayout != null) {
-                sliderLayout.startAutoCycle();
-            }
-            if (liveListDataResp.getReturnCode() == 0) {
-                List<LiveRowsBean> rows = liveListDataResp.getResult();
-                if (rows == null) {
-                    return;
+            try {
+                if (sliderLayout != null) {
+                    sliderLayout.startAutoCycle();
                 }
-                if (isRefresh) {
-                    allRows.clear();
-                    allAttenRows.clear();
-                }
-                if (allRows.size() == 0) {
-                    allRows.addAll(0, rows);
-                } else {
-                    allRows.addAll(allRows.size(), rows);
-                }
-                if (allAttenRows.size() == 0) {
-                    allAttenRows.addAll(0, rows);
-                } else {
-                    allAttenRows.addAll(allAttenRows.size(), rows);
-                }
-                Collections.sort(allRows);//排序
-                Collections.sort(allAttenRows);//排序
-                boolean isAttentionFlag = parseBoolean(attentionFlag);
-                if (isAttentionFlag) {
-                    if (attenAdapter == null) {
-                        attenAdapter = new LiveMainAdapter(getActivity(), allAttenRows);
-                        attenAdapter.setOnLiveItemClickListener(liveItemClickListener);
-                    } else {
-                        attenAdapter.refresh(allAttenRows);
+                if (liveListDataResp.getReturnCode() == 0) {
+                    List<LiveRowsBean> rows = liveListDataResp.getResult();
+                    if (rows == null) {
+                        return;
                     }
-                    attenAdapter.setHightPostion(true, allAttenRows.size());
-                    xRecyclerView.setAdapter(attenAdapter);
-                } else {
-                    if (isFirstLoad) {
-                        isFirstLoad = false;
-                        liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
-                        AppLog.i("TAG", "给recycler   liveMainAdapter");
-                        xRecyclerView.setAdapter(liveMainAdapter);
-                        liveMainAdapter.setOnLiveItemClickListener(liveItemClickListener);
-                    } else {
-                        liveMainAdapter.refresh(allRows);
+                    if (isRefresh) {
+                        allRows.clear();
+                        allAttenRows.clear();
                     }
+                    if (allRows.size() == 0) {
+                        allRows.addAll(0, rows);
+                    } else {
+                        allRows.addAll(allRows.size(), rows);
+                    }
+                    if (allAttenRows.size() == 0) {
+                        allAttenRows.addAll(0, rows);
+                    } else {
+                        allAttenRows.addAll(allAttenRows.size(), rows);
+                    }
+                    Collections.sort(allRows);//排序
+                    Collections.sort(allAttenRows);//排序
+                    boolean isAttentionFlag = parseBoolean(attentionFlag);
+                    if (isAttentionFlag) {
+                        if (attenAdapter == null) {
+                            attenAdapter = new LiveMainAdapter(getActivity(), allAttenRows);
+                            attenAdapter.setOnLiveItemClickListener(liveItemClickListener);
+                        } else {
+                            attenAdapter.refresh(allAttenRows);
+                        }
+                        attenAdapter.setHightPostion(true, allAttenRows.size());
+                        xRecyclerView.setAdapter(attenAdapter);
+                    } else {
+                        if (isFirstLoad) {
+                            isFirstLoad = false;
+                            liveMainAdapter = new LiveMainAdapter(getActivity(), allRows);
+                            AppLog.i("TAG", "给recycler   liveMainAdapter");
+                            xRecyclerView.setAdapter(liveMainAdapter);
+                            liveMainAdapter.setOnLiveItemClickListener(liveItemClickListener);
+                        } else {
+                            liveMainAdapter.refresh(allRows);
+                        }
+                    }
+                    contentService.getPlayBackLiveList("", 1, attentionFlag);
                 }
-                contentService.getPlayBackLiveList("", 1, attentionFlag);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -761,6 +769,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             int targetId = recommendAdResultBean.targetId;
             Intent intent = null;
             switch (targetType) {
+                case Constants.PLAY_BACK_TYPE_URL:
+                    intent = new Intent(getActivity(), PlayBackActivity.class);
+                    intent.putExtra("id", String.valueOf(targetId));
+                    startActivity(intent);
+                    break;
                 case Constants.TARGET_TYPE_URL:
                     AppLog.i("addd", "链接");
                     intent = new Intent(getActivity(), CarouselFigureActivity.class);
@@ -808,7 +821,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private LiveMainAdapter.OnLiveItemClickListener liveItemClickListener = new LiveMainAdapter.OnLiveItemClickListener() {
         @Override
         public void goLiveRoom(LiveRowsBean liveRowsBean) {
-
             if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
                 Intent intent = new Intent(getActivity(), PlayBackActivity.class);
                 intent.putExtra("id", String.valueOf(liveRowsBean.getId()));

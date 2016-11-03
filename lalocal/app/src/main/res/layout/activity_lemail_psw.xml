@@ -19,8 +19,7 @@
         android:layout_marginRight="@dimen/dimen_size_12_dp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"
          app:maxLen="20"
-        app:isPsw="true"
-        app:text_hint="@string/set_pssword" />
+        app:isPsw="true" />
 
 
     <Button

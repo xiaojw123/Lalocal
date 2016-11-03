@@ -181,7 +181,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onCheckEmail(String email) {
+    public void onCheckEmail(String email,String result) {
 
 
     }
@@ -355,5 +355,18 @@ public abstract class ICallBack {
     public void onDeleteLiveHistory(){
 
     }
+
+    public void onSocialLogin(User user, String bodyParams){
+
+    }
+
+    public void onSocialRegisterSuccess(User user){
+
+
+    }
+
+
+
+
 
 }

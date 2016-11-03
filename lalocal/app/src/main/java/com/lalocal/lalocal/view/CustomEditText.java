@@ -62,12 +62,15 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         }
 
         if (!TextUtils.isEmpty(hintText)) {
-            editText.setHint(" " + hintText);
+            editText.setHint(hintText);
         }
         clearBtn.setOnClickListener(this);
         editText.setOnClickListener(this);
         editText.addTextChangedListener(this);
         editText.setOnFocusChangeListener(this);
+    }
+    public void setHint(String text){
+        editText.setHint(text);
     }
 
     public void setDefaultSelectionEnd(boolean isEnd) {

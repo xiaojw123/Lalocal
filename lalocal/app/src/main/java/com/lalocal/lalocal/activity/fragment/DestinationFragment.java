@@ -61,13 +61,17 @@ public class DestinationFragment extends BaseFragment implements View.OnClickLis
 
         @Override
         public void onGetDestinationAreas(List<AreaItem> items) {
-            DesAreaAdapter adapter = new DesAreaAdapter(getActivity(), items);
-            adapter.setOnItemClickListener(this);
-            LinearLayoutManager lm=new LinearLayoutManager(getActivity());
-            lm.setOrientation(LinearLayoutManager.VERTICAL);
-            mRecyclerView.addItemDecoration(new SpaceItemDecoration((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
-            mRecyclerView.setLayoutManager(lm);
-            mRecyclerView.setAdapter(adapter);
+            try {
+                DesAreaAdapter adapter = new DesAreaAdapter(getActivity(), items);
+                adapter.setOnItemClickListener(this);
+                LinearLayoutManager lm=new LinearLayoutManager(getActivity());
+                lm.setOrientation(LinearLayoutManager.VERTICAL);
+                mRecyclerView.addItemDecoration(new SpaceItemDecoration((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
+                mRecyclerView.setLayoutManager(lm);
+                mRecyclerView.setAdapter(adapter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

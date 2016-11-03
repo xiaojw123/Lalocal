@@ -63,6 +63,9 @@ public class RecommendNewFragment extends BaseFragment {
 
     private boolean mScrolled = false;
 
+//    private int mLastPosition = 0;
+//    private int mOffset = 0;
+
     // 是否在刷新
     private boolean isRefreshing = false;
     // 是否在加载
@@ -124,6 +127,7 @@ public class RecommendNewFragment extends BaseFragment {
         }
     };
 
+
     /**
      * 设置适配器
      */
@@ -168,6 +172,18 @@ public class RecommendNewFragment extends BaseFragment {
         // 初始化视图
         initView();
     }
+
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        View topView = mRecyclerView.getChildAt(0);
+//        if (hidden) {
+//            mOffset = topView.getTop();
+//            mLastPosition = mRecyclerView.getLayoutManager().getPosition(topView);
+//        } else {
+//            ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mLastPosition, mOffset);
+//        }
+//        super.onHiddenChanged(hidden);
+//    }
 
     /**
      * 初始化视图
