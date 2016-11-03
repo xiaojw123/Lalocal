@@ -626,6 +626,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
                         @Override
                         public void onDialogClickListener() {
+                            handlerLine.removeCallbacks(myRunnable);
                             firstWarning = true;
                         }
                     });
@@ -1264,10 +1265,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (!isCloseLive && DemoCache.getLoginChatRoomStatus()) {
                 AppLog.i("TAG", "上传在线人数：" + onlineCounts);
                 if (onlineCounts > 0 && liveContentLoader != null) {
+                    AppLog.i("TAG","主播端上传在线人数。。。。。。。");
                     liveContentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                 }
+                handlerLine.postDelayed(this, 2000);
             }
-            handlerLine.postDelayed(this, 2000);
+
         }
 
     }
@@ -1395,15 +1398,41 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     @Override
-    public void onError(int err) {
+    public void onError(final int err) {
         AppLog.i("TAG", "直播发生错误:" + err);
-        if (err == 1003) {
-            CommonUtil.RESULT_DIALOG = 2;
-            finish();
-        } else if (err == 1018) {
-            CommonUtil.RESULT_DIALOG = 3;
-            finish();
-        }
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (err == 1003) {
+                    final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
+                    customDialog.setContent(getString(R.string.live_camera_start_failure));
+                    customDialog.setCancelable(false);
+                    customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            finish();
+                        }
+                    });
+
+                    customDialog.show();
+
+                } else if (err == 1018) {
+                    CommonUtil.RESULT_DIALOG = 0;
+                    final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
+                    customDialog.setContent(getString(R.string.live_frequency_start_failure));
+                    customDialog.setCancelable(false);
+                    customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                         finish();
+                        }
+                    });
+                    customDialog.show();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -1632,6 +1661,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void onStop() {
         super.onStop();
+        DialogUtil.clear();
         AppLog.i("TAG", "LiveActivity:onStop");
     }
 

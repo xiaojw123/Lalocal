@@ -25,7 +25,7 @@ public class DemoCache {
     // 图片加载、缓存与管理组件
     private static ImageLoaderKit imageLoaderKit;
 
-    public static void    clear() {
+    public static void  clear() {
         account = null;
         userInfo = null;
     }
