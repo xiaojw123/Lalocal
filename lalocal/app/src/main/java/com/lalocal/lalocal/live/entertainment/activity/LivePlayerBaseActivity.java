@@ -232,7 +232,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private TextView massageTest;
     private ImageView shareLiveImg;
     private TextView sendPlaneName;
-  
+    private EnterChatRoomRequestCallback enterChatRoomRequestCallback;
 
 
     protected abstract void checkNetInfo(String netType, int reminder);
@@ -294,7 +294,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getActivityLayout());
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);  //应用运行时，保持屏幕高亮，不锁屏
         contentLoader = new ContentLoader(this);
         myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
@@ -360,12 +360,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 }else if(statusCode==StatusCode.UNLOGIN){
                     String userAccount = AuthPreferences.getUserAccount();
                     String userToken = AuthPreferences.getUserToken();
+                    AppLog.i("TAG","LivePlayerBaseActivity監聽用戶登錄狀態愛："+userAccount+"    userToken:"+userToken);
                     if (userAccount != null && userToken != null) {
                         loginIMServer(userAccount, userToken);
                     }
                 }
             } else if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
+                AppLog.i("TAG","用户登录成功的监听:"+AuthPreferences.getUserAccount());
                 DemoCache.setAccount(AuthPreferences.getUserAccount());
                 enterRoom();
             }
@@ -415,15 +417,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                }
 
             } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
+                int enterErrorCode = NIMClient.getService(ChatRoomService.class).getEnterErrorCode(roomId);
+                AppLog.i("TAG","进入聊天室失败，获取enterErrorCode："+enterErrorCode);
                 onOnlineStatusChanged(false);
-                AppLog.i("TAG", "聊天室没有登录");
-
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
                 AppLog.i("TAG", "聊天室登录中。。。");
                 DemoCache.setLoginChatRoomStatus(false);
 
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
-                AppLog.i("TAG", "聊天室已经登录");
                 onOnlineStatusChanged(true);
 
             } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
@@ -983,17 +984,39 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             onConnected();
             DemoCache.setLoginChatRoomStatus(true);
         } else {
-            onDisconnected();
+            getHandler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if(enterRequest!=null){
+                        enterRequest=null;
+                    }
+                    NIMClient.getService(AuthService.class).logout();
+                }
+            },500);
+
+
             DemoCache.setLoginChatRoomStatus(false);
-            enterRoom();
+            onDisconnected();
+
         //    MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
         }
     }
 
+    private static Handler enterRoomhandler;
+    protected final Handler getHandler() {
+        if (enterRoomhandler == null) {
+            enterRoomhandler = new Handler(getMainLooper());
+        }
+        return enterRoomhandler;
+    }
+
+
+
     // 进入聊天室
     protected void enterRoom() {
-        AppLog.i("TAG","走了登录聊天室的方法");
+
         if (DemoCache.getLoginStatus()) {
+            AppLog.i("TAG","走了登录聊天室的方法:"+roomId);
             EnterChatRoomData data = new EnterChatRoomData(roomId);
             data.setRoomId(roomId);
             Map<String, Object> map = new HashMap<>();
@@ -1006,44 +1029,53 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
             data.setNick(UserHelper.getUserName(LivePlayerBaseActivity.this));
             enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
-            enterRequest.setCallback(new RequestCallback<EnterChatRoomResultData>() {
-                @Override
-                public void onSuccess(EnterChatRoomResultData result) {
-                    onLoginDone();
-                    roomInfo = result.getRoomInfo();
-                    member1 = result.getMember();
-                    enterroomgetnick = member1.getNick();
-                    masterAvatar = member1.getAvatar();
-                    creatorAccount = roomInfo.getCreator();
-                    member1.setRoomId(roomInfo.getRoomId());
-                    ChatRoomMemberCache.getInstance().saveMyMember(member1);
-                    DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
-                    if (isFirstEnrRoom) {
-                        updateUI();
-                    }
-
-                    chatRoomStatusRemind("登陆聊天室成功...");
-                    LiveConstant.enterRoom=true;
-                    initInputPanel(creatorAccount, channelId);
-
-                }
-                @Override
-                public void onFailed(int code) {
-                    AppLog.i("TAG", "登录聊天室失败：" + code);
-                    DemoCache.setLoginChatRoomStatus(false);
-                    onLoginDone();
-                }
-
-                @Override
-                public void onException(Throwable exception) {
-                    DemoCache.setLoginChatRoomStatus(false);
-                    onLoginDone();
-
-                    finish();
-                }
-            });
+            AppLog.i("TAG","走了登录聊天室的方法:"+roomId);
+            enterChatRoomRequestCallback = new  EnterChatRoomRequestCallback();
+            enterRequest.setCallback(enterChatRoomRequestCallback);
         }
     }
+
+
+    public  class  EnterChatRoomRequestCallback implements RequestCallback<EnterChatRoomResultData>{
+
+        @Override
+        public void onSuccess(EnterChatRoomResultData result) {
+            onLoginDone();
+            roomInfo = result.getRoomInfo();
+            member1 = result.getMember();
+            enterroomgetnick = member1.getNick();
+            masterAvatar = member1.getAvatar();
+            creatorAccount = roomInfo.getCreator();
+            member1.setRoomId(roomInfo.getRoomId());
+            ChatRoomMemberCache.getInstance().saveMyMember(member1);
+            DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
+            if (isFirstEnrRoom) {
+                updateUI();
+            }
+
+            chatRoomStatusRemind("登陆聊天室成功...");
+            LiveConstant.enterRoom=true;
+            initInputPanel(creatorAccount, channelId);
+        }
+
+        @Override
+        public void onFailed(int i) {
+            AppLog.i("TAG", "登录聊天室失败：" + code);
+            DemoCache.setLoginChatRoomStatus(false);
+            onLoginDone();
+        }
+
+        @Override
+        public void onException(Throwable throwable) {
+            DemoCache.setLoginChatRoomStatus(false);
+            onLoginDone();
+            finish();
+        }
+    }
+
+
+
+
     int count=0;
     boolean status=true;
     CountDownTimer countDownTimer =null;
@@ -1316,6 +1348,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected void onDestroy() {
         super.onDestroy();
         registerObservers(false);
+        DemoCache.setLoginChatRoomStatus(false);
         unregisterReceiver(myNetReceiver);
         AppLog.i("TAG","直播基类走了onDestroy");
 

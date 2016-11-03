@@ -2163,6 +2163,7 @@ public class ContentLoader {
 
         //直播详情
         private void responseLiveDetails(String json) {
+            AppLog.i("TAG","直播详情："+json);
             LiveDetailsDataResp liveDetailsDataResp = new Gson().fromJson(json, LiveDetailsDataResp.class);
             callBack.onLiveDetails(liveDetailsDataResp);
         }

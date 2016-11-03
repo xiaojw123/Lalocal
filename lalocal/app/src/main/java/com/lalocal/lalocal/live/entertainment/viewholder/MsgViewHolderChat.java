@@ -14,6 +14,7 @@ import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.ui.TViewHolder;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
@@ -213,7 +214,7 @@ public class MsgViewHolderChat extends TViewHolder {
                 break;*/
         }
 
-
+        AppLog.i("TAG","creatorAccount:"+creatorAccount+"    itemContent:"+itemContent);
         setNameTextView(creatorAccount,itemContent,textColor,styles);
 
         //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
@@ -237,12 +238,12 @@ public class MsgViewHolderChat extends TViewHolder {
         String contentItem=null;
         if (message.getMsgType() != MsgTypeEnum.notification) {
             if(message.getRemoteExtension() != null) {
-
                 if(styles.equals("101")||styles.equals("100")){
                     contentItem="主播  :  "+itemContent;
                 }else {
                     String fromAccount = message.getFromAccount();
-                    String account = DemoCache.getUserInfo().getAccount();
+                    AppLog.i("TAG","我发消息的账号:"+fromAccount);
+                    String account = DemoCache.getAccount();
                     if(fromAccount!=null&&fromAccount.equals(account)){
                         contentItem="我  :  "+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
@@ -253,6 +254,7 @@ public class MsgViewHolderChat extends TViewHolder {
                 }
 
             }
+            AppLog.i("TAG","检测用户发消息内容:"+contentItem);
             nameText.setText(textviewSetContent(contentItem,textColor));
         }
     }

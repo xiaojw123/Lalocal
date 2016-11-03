@@ -244,7 +244,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 nickname= liveRowsBean.getUser().getNickName();
                 avatar= liveRowsBean.getUser().getAvatar();
                 playType=String.valueOf(liveRowsBean.getType());
-
                 Object ann = liveRowsBean.getAnnoucement();
                 String annoucement = null;
                 if (ann != null) {
@@ -258,6 +257,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 liveStatus=String.valueOf(liveRowsBean.getStatus());
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
+                ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
                 int onlineUser = liveRowsBean.getOnlineUser();
                 url = liveRowsBean.getPullUrl();
                 userId = String.valueOf(liveRowsBean.getUser().getId());
@@ -1029,7 +1029,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         if(inputPanel!=null){
                             inputPanel.switchToTextLayout(true);
                         }
-
                     }else {
                         Toast.makeText(AudienceActivity.this,"没有登录聊天室，请退出重进!",Toast.LENGTH_SHORT).show();
                     }

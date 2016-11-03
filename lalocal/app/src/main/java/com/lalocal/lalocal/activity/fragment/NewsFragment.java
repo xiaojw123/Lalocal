@@ -148,6 +148,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         contentService.getLiveArea();
         contentService.recommendAd();
         requestBasicPermission(); // 申请APP基本权限
+        AppLog.i("TAG","NewsFragment:走了onCreate");
     }
 
     @Nullable
@@ -352,6 +353,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
+
             if (data != null) {
                 isLogining = true;
                 String email = data.getStringExtra(LoginActivity.EMAIL);
@@ -997,15 +999,19 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public void onBasicPermissionFailed() {
         //  Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
     }
-
+    boolean isFirstStart=true;
     @Override
     public void onStart() {
         super.onStart();
         //注册监听
         registerObservers(true);
+
+
         if (sliderLayout != null) {
             sliderLayout.startAutoCycle();
         }
+
+        AppLog.i("TAG","fragment走了onStart方法");
 
     }
 
@@ -1019,6 +1025,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onStop() {
         super.onStop();
+        registerObservers(false);
         if (!isClick) {
             isClick = true;
             showClassifyView(0, isClick);
@@ -1026,7 +1033,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         if (sliderLayout != null) {
             sliderLayout.stopAutoCycle();
         }
-        registerObservers(false);
+
         AppLog.i("TAG", "onStop");
     }
 

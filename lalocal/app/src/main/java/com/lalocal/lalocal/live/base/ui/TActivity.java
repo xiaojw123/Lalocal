@@ -149,7 +149,7 @@ public abstract class TActivity extends BaseActivity {
         }
     }
 
-    protected final Handler getHandler() {
+    protected Handler getHandler() {
         if (handler == null) {
             handler = new Handler(getMainLooper());
         }
