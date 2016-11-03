@@ -80,9 +80,10 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/home_recommend_hot_live_view_pager_height"
+            android:layout_height="wrap_content"
             android:clipChildren="false"
             android:layerType="software">
+            android:layout_height="@dimen/home_recommend_hot_live_view_pager_height"
 
             <RelativeLayout
                 android:layout_width="60dp"
@@ -131,13 +132,14 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <com.lalocal.lalocal.view.DisallowParentTouchViewPager
+            <com.lalocal.lalocal.view.WrapContentViewPager
                 android:id="@+id/vp_hot_lives"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/home_recommend_hot_live_view_pager_height"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/home_recommend_viewpager_page_margin"
                 android:layout_marginRight="@dimen/home_recommend_viewpager_margin"
                 android:clipChildren="false" />
+            <!--android:layout_height="@dimen/home_recommend_hot_live_view_pager_height"-->
 
         </RelativeLayout>
 

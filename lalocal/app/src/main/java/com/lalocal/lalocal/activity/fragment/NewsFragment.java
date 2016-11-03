@@ -807,6 +807,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         public void onLoadMore() {
+            AppLog.i("xrv", "onLoadMore()-" + allRows.size());
             isRefresh = false;
             if (lastPage) {
                 xRecyclerView.setNoMore(true);

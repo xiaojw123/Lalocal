@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -15,7 +17,9 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.SpecialAuthorBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.WrapContentListView;
 import com.lalocal.lalocal.view.adapter.CommonAdapter;
 import com.lalocal.lalocal.view.adapter.CommonViewHolder;
@@ -57,13 +61,23 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
         mTvTitle.setText(title);
         mTvSubTitle.setText(subtitle);
 
+        mLvArticle.setFocusable(false);
         mLvArticle.setAdapter(new CommonAdapter<ArticleDetailsResultBean>(mContext, articleList, R.layout.home_recommend_article_list_item) {
             @Override
             public void convert(CommonViewHolder holder, ArticleDetailsResultBean bean) {
                 // 设置图片
                 ImageView imgArticle = holder.getView(R.id.img_article);
+                // 获取图片链接
+                String photoUrl = bean.getPhoto();
+                // 获取控件宽高
+                LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) imgArticle.getLayoutParams();
+                int width = lp.width;
+                int height = lp.height;
+                // 传入七牛云居中裁剪参数
+                photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
+                AppLog.i("urll", "the link is -- " + photoUrl);
                 Glide.with(mContext)
-                        .load(bean.getPhoto())
+                        .load(photoUrl)
                         .centerCrop()
                         .crossFade()
                         // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存

@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
+import com.lalocal.lalocal.util.AppLog;
 
 /**
  * Created by wangjie on 2016/10/25.
@@ -43,6 +44,11 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         this.mLayoutArticle = (LinearLayout) itemView.findViewById(R.id.layout_article);
         this.mLayoutShop = (LinearLayout) itemView.findViewById(R.id.layout_shop);
 
+        // 取消焦点
+        this.mLayoutLive.setFocusable(false);
+        this.mLayoutTheme.setFocusable(false);
+        this.mLayoutArticle.setFocusable(false);
+        this.mLayoutShop.setFocusable(false);
         this.mRvRecommendList = recyclerView;
 
         // 监听事件回调
@@ -65,7 +71,9 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         mLayoutArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(ARTICLE, 0);
+                int lastPosition = mRvRecommendList.getAdapter().getItemCount();
+                AppLog.i("recc", "jump the position is " + lastPosition);
+                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(lastPosition, 0);
             }
         });
 

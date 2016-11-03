@@ -65,6 +65,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         mSubTitleView.setText(subtitle);
 
         // 设置适配器
+        mGvCommodities.setFocusable(false);
         mGvCommodities.setAdapter(new CommonAdapter<ProductDetailsResultBean>(mContext, commodityList, R.layout.home_recommend_product_gridview_item, MAX_PRODUCT) {
 
             @Override

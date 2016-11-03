@@ -34,7 +34,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     private TextView mTitleView;
     private TextView mSubTitleView;
-    private DisallowParentTouchViewPager mVpHotLives;
+    private ViewPager mVpHotLives;
     private LinearLayout mVtvSeeMore;
     private RelativeLayout mLayoutMore;
     private LinearLayout mDotContainer;
@@ -54,12 +54,10 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
         mSubTitleView = (TextView) itemView.findViewById(R.id.tv_subtitle);
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
-        mVpHotLives = (DisallowParentTouchViewPager) itemView.findViewById(R.id.vp_hot_lives);
+        mVpHotLives = (ViewPager) itemView.findViewById(R.id.vp_hot_lives);
         mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
         mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
 
-        // 传入父容器
-        mVpHotLives.setNestParent(mPtrLayout);
         // 设置一个屏幕最多显示视频的个数
         mVpHotLives.setOffscreenPageLimit(4);
         // 设置热播视频间距
@@ -113,6 +111,12 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
 
         // 初始化小圆点
         mDotBtns = CommonUtil.initDot(mContext, mVpHotLives, mDotContainer, size, mSelected, CommonUtil.DARK_DOT);
+
+        // 如果只有一项，显示查看更多
+        if (size == 1) {
+            // 查看更多字样显示
+            mVtvSeeMore.setVisibility(View.VISIBLE);
+        }
 
         // ViewPager添加滑动事件
         mVpHotLives.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {

@@ -14,6 +14,7 @@ import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendListBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
 import com.lalocal.lalocal.view.viewholder.ArticleViewHolder;
 import com.lalocal.lalocal.view.viewholder.CategoryViewHolder;
@@ -21,6 +22,7 @@ import com.lalocal.lalocal.view.viewholder.ChannelViewHolder;
 import com.lalocal.lalocal.view.viewholder.ProductViewHolder;
 import com.lalocal.lalocal.view.viewholder.ThemeViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,11 +42,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecommendListBean mRecommendListBean;
     private List<ArticleDetailsResultBean> mArticleList;
 
-    //    private static final int MAX_HOT_LIVE = 10;
-//    private static final int MAX_PRODUCT = 4;
-//    private static final int MAX_THEME = 10;
-
-    private RecyclerView mRvRecommendList;
+    private List<Integer> mItems = new ArrayList<Integer>();
 
     // 广告
 //    private static final int ADVERTISEMENT = 0;
@@ -59,51 +57,52 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     // 旅行笔记
     private static final int ARTICLE = 4;
 
-    // 首页推荐列表子项数量
-    private static final int AMOUNT_HOME_RECOMMEND = 5;
-
     private boolean adEmpty;
     private boolean liveEmpty;
     private boolean productEmpty;
     private boolean themeEmpty;
     private boolean articleEmpty;
 
-    private MyPtrClassicFrameLayout mPtrLayout;
+//    private CustomXRecyclerView mXRecyclerView;
 
     public HomeRecommendAdapter(Context context) {
         this.mContext = context;
     }
 
     public HomeRecommendAdapter(Context context, List<RecommendAdResultBean> adList, RecommendListBean recommendListBean,
-                                List<ArticleDetailsResultBean> articleList, MyPtrClassicFrameLayout ptrLayout) {
+                                List<ArticleDetailsResultBean> articleList, CustomXRecyclerView recyclerView) {
         this.mContext = context;
         this.mAdList = adList;
         this.mRecommendListBean = recommendListBean;
         this.mArticleList = articleList;
-        this.mPtrLayout = ptrLayout;
+//        this.mXRecyclerView = recyclerView;
 
-        if (adList == null || adList.size() == 0) {
-            AppLog.i("hehe", "ad null");
-            adEmpty = true;
-        }
+//        if (adList == null || adList.size() == 0) {
+//            AppLog.i("hehe", "ad null");
+//            adEmpty = true;
+//        }
 
         if (recommendListBean == null) {
             AppLog.e("hehe", "recommendListBean is null");
             liveEmpty = true;
             productEmpty = true;
             themeEmpty = true;
+
         } else {
             if (recommendListBean.getChannelList() == null || recommendListBean.getChannelList().size() == 0) {
                 AppLog.e("hehe", "channel list null");
                 liveEmpty = true;
+
             }
             if (recommendListBean.getProduList() == null || recommendListBean.getProduList().size() == 0) {
                 AppLog.e("hehe", "product list null");
                 productEmpty = true;
+
             }
             if (recommendListBean.getThemeList() == null || recommendListBean.getThemeList().size() == 0) {
                 AppLog.e("hehe", "theme list null");
                 themeEmpty = true;
+
             }
         }
 
@@ -111,73 +110,43 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppLog.i("hehe", "article list null");
             articleEmpty = true;
         }
-    }
 
-    public void setAdData(List<RecommendAdResultBean> adList) {
-        this.mAdList = adList;
-        if (adList == null || adList.size() == 0) {
-            AppLog.i("hehe", "ad null");
-            adEmpty = true;
-        } else {
-            adEmpty = false;
-        }
-        this.notifyDataSetChanged();
-    }
+        AppLog.i("recc", liveEmpty + "-" + productEmpty + "-" + themeEmpty + "-" + articleEmpty);
 
-    public void setListData(RecommendListBean recommendListBean) {
-        this.mRecommendListBean = recommendListBean;
-        if (recommendListBean == null) {
-            AppLog.e("hehe", "recommendListBean is null");
-            liveEmpty = true;
-            productEmpty = true;
-            themeEmpty = true;
-        } else {
-            if (recommendListBean.getChannelList() == null || recommendListBean.getChannelList().size() == 0) {
-                AppLog.e("hehe", "channel list null");
-                liveEmpty = true;
-            } else {
-                liveEmpty = false;
-            }
-            if (recommendListBean.getProduList() == null || recommendListBean.getProduList().size() == 0) {
-                AppLog.e("hehe", "product list null");
-                productEmpty = true;
-            } else {
-                productEmpty = false;
-            }
-            if (recommendListBean.getThemeList() == null || recommendListBean.getThemeList().size() == 0) {
-                AppLog.e("hehe", "theme list null");
-                themeEmpty = true;
-            } else {
-                themeEmpty = false;
-            }
-        }
-        this.notifyDataSetChanged();
+        syncItems();
     }
 
     public void setArticleData(List<ArticleDetailsResultBean> articleList) {
         this.mArticleList = articleList;
         if (articleList == null || articleList.size() == 0) {
             AppLog.i("hehe", "article list null");
-            articleEmpty = true;
+
+            // 如果原来存在文章列表
+            if (articleEmpty == false) {
+                articleEmpty = true;
+            }
         } else {
-            articleEmpty = false;
+            // 如果原来没有文章列表
+            if (articleEmpty == true) {
+                articleEmpty = false;
+            }
         }
+
+        syncItems();
         this.notifyDataSetChanged();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        AppLog.i("recc", "viewType " + viewType);
         RecyclerView.ViewHolder holder = null;
-        this.mRvRecommendList = (RecyclerView) parent;
-        View view = null;
+
+        AppLog.i("recc", "onCreateViewHolder viewwtype " + viewType);
+         View view = null;
         switch (viewType) {
-//            case ADVERTISEMENT: // 广告
-//                view = LayoutInflater.from(mContext).inflate(R.layout.home_recommend_advertisement_item, parent, false);
-//                holder = new ADViewHolder(mContext, view, mPtrLayout);
-//                break;
             case CATEGORY: // 分类
                 view = LayoutInflater.from(mContext).inflate(R.layout.home_recommend_category_item, parent, false);
-                holder = new CategoryViewHolder(mContext, view, mRvRecommendList);
+                holder = new CategoryViewHolder(mContext, view, (RecyclerView)parent);
                 break;
             case LIVE: // 热门直播
                 view = View.inflate(mContext, R.layout.home_recommend_hotlive_item, null);
@@ -189,7 +158,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case THEME: // 精彩专题
                 view = View.inflate(mContext, R.layout.home_recommend_theme_item, null);
-                holder = new ThemeViewHolder(mContext, view, mPtrLayout, themeEmpty);
+                holder = new ThemeViewHolder(mContext, view, themeEmpty);
                 break;
             case ARTICLE: // 旅行笔记
                 view = View.inflate(mContext, R.layout.home_recommend_article_item, null);
@@ -201,10 +170,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        AppLog.i("recc", "onBindViewHolder viewwtype " + getItemViewType(position));
         switch (getItemViewType(position)) {
-//            case ADVERTISEMENT:
-//                ((ADViewHolder) holder).initData(mAdList);
-//                break;
             case LIVE:
                 if (liveEmpty) {
                     ((ChannelViewHolder) holder).initData(null, null, null);
@@ -249,13 +216,41 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return AMOUNT_HOME_RECOMMEND;
+        AppLog.i("recc", "1 the size is " + mItems.size());
+        return mItems.size();
     }
 
-    // 删除首页推荐广告栏
     @Override
     public int getItemViewType(int position) {
+        if (position >= 0 && position < mItems.size()) {
+            int type = mItems.get(position);
+            return type;
+        }
         return position;
+    }
+
+    private void syncItems() {
+
+        if (mItems.size() > 0) {
+            mItems.clear();
+        }
+
+        liveEmpty = true;
+
+        mItems.add(CATEGORY);
+        if (!liveEmpty) {
+            mItems.add(LIVE);
+        }
+        if (!productEmpty) {
+            mItems.add(PRODUCT);
+        }
+        if (!themeEmpty) {
+            mItems.add(THEME);
+        }
+        if (!articleEmpty) {
+            mItems.add(ARTICLE);
+        }
+        AppLog.i("recc", "the size is " + mItems.size());
     }
 
 }

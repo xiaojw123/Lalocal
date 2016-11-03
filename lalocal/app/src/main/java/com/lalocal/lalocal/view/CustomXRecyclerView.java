@@ -1,8 +1,10 @@
 package com.lalocal.lalocal.view;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 
@@ -43,5 +45,34 @@ public class CustomXRecyclerView extends XRecyclerView {
                 break;
         }
         return super.onInterceptTouchEvent(ev);
+    }
+
+
+    public int getDistance() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) getLayoutManager();
+        View firstVisibleItem = this.getChildAt(0);
+        int firstItemPosition = layoutManager.findFirstVisibleItemPosition();
+        int itemCount = layoutManager.getItemCount();
+        int recyclerViewHeight = this.getHeight();
+        int itemHeight = firstVisibleItem.getHeight();
+        int firstItemBottom = layoutManager.getDecoratedBottom(firstVisibleItem);
+        return (itemCount - firstItemPosition - 1) * itemHeight - recyclerViewHeight + firstItemBottom;
+    }
+
+    public int getScrolledDistance() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) getLayoutManager();
+        View firstVisibleItem = this.getChildAt(0);
+        int firstItemPosition = layoutManager.findFirstVisibleItemPosition();
+        int itemHeight = firstVisibleItem.getHeight();
+        int firstItemBottom = layoutManager.getDecoratedBottom(firstVisibleItem);
+        return (firstItemPosition + 1) * itemHeight - firstItemBottom;
+    }
+
+    public int getScollYDistance() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) this.getLayoutManager();
+        int position = layoutManager.findFirstVisibleItemPosition();
+        View firstVisiableChildView = layoutManager.findViewByPosition(position);
+        int itemHeight = firstVisiableChildView.getHeight();
+        return (position) * itemHeight - firstVisiableChildView.getTop();
     }
 }
