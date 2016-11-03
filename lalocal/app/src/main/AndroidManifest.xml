@@ -195,7 +195,7 @@
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".activity.DestinationAreaActivity" />
-        <!--<activity android:name=".activity.RouteDetailActivity" />-->
+        <activity android:name=".activity.RouteDetailActivity" />
         <!-- 设置环信应用的AppKey -->
         <meta-data
             android:name="EASEMOB_APPKEY"
