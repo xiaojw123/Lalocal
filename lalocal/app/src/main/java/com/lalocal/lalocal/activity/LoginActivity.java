@@ -19,11 +19,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.CustomTitleView;
-import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.netease.nimlib.sdk.AbortableFuture;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import static com.lalocal.lalocal.R.id.login_forget_psw_tv;
@@ -51,15 +47,6 @@ public class LoginActivity extends BaseActivity {
         isImLogin = intent.getBooleanExtra(KeyParams.IM_LOGIN, false);
         initContentService();
         initView();
-        claerImLoginInfo();//清除im登錄信息
-
-    }
-
-    private void claerImLoginInfo() {
-        DemoCache.clear();
-        AuthPreferences.clearUserInfo();
-        NIMClient.getService(AuthService.class).logout();
-        DemoCache.setLoginStatus(false);
     }
 
     private void initContentService() {

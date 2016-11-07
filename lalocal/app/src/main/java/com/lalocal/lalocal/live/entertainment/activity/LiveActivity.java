@@ -373,6 +373,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     @Override
+    protected void masterOnLineStatus(boolean b) {
+
+    }
+
+    @Override
+    protected void showFinishLayout(boolean b, int i) {
+    }
+
+    @Override
     protected void receiveChallengeMessage(ChatRoomMessage message) {
 
         challengeNewTask.setVisibility(View.VISIBLE);
@@ -663,7 +672,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 initParam();
                 if (CommonUtil.REMIND_BACK != 1) {
                     AppLog.i("TAG", "开启直播走了这1");
-                    showCreateLiveRoomPopuwindow();
+                    if(hasWindowFocus()){
+                        showCreateLiveRoomPopuwindow();
+                    }
+
                 } else {
                     AppLog.i("TAG", "开启直播走了这2");
                     if (TextUtils.isEmpty(roomName)) {
@@ -762,7 +774,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         }
 
-
         @Override
         public void onChallengeList(String json) {
             super.onChallengeDetails(json);
@@ -797,7 +808,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             liveMessage.setChallengeModel(resultBean);
             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "挑战", roomId, AuthPreferences.getUserAccount(), liveMessage);
             sendMessage(imMessage, MessageType.challenge);
-
 
         }
 
@@ -1244,7 +1254,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     private boolean isBroadcaster(int cRole) {
-        return cRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
+        return cRole == Constants.CLIENT_ROLE_BROADCASTER;
     }
 
     boolean isCloseLive = false;//结束直播状态
@@ -1461,7 +1471,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     private void startLive() {
-        int cRole = Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER;
+        int cRole = Constants.CLIENT_ROLE_BROADCASTER;
         doConfigEngine(cRole);
         registerObservers(true);
         if (isBroadcaster(cRole)) {

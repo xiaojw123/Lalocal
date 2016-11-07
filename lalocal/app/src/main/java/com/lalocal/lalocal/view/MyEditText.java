@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -29,8 +30,8 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
     EditText inputEdit;
     TextView titleTv;
     String title;
-    boolean isClearBtnVisible = true;
-    Button clearBtn,showPsswordBtn;
+    boolean clearEable;
+    ImageView clearBtn,showPsswordBtn;
     Button selecedBtn;
     boolean isFilterSpace;
     boolean isPsw;
@@ -50,12 +51,13 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
         isPsw = a.getBoolean(R.styleable.MyEditText_is_password, false);
         String hintText = a.getString(R.styleable.MyEditText_hint);
         int maxLen = a.getInt(R.styleable.MyEditText_my_maxLen, -1);
+        clearEable=a.getBoolean(R.styleable.MyEditText_clearEanble,false);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.my_editext_layout, this, true);
         titleTv = (TextView) findViewById(R.id.my_editext_title);
         inputEdit = (EditText) findViewById(R.id.my_editext_edit);
-        clearBtn= (Button) findViewById(R.id.my_editext_clear);
-        showPsswordBtn=(Button) findViewById(R.id.my_editext_showpassword_btn);
+        clearBtn= (ImageView) findViewById(R.id.my_editext_clear);
+        showPsswordBtn=(ImageView) findViewById(R.id.my_editext_showpassword_btn);
         if (maxLen != -1) {
             inputEdit.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLen)});
         }
@@ -93,10 +95,6 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
     public void setFilterSpace(boolean isFilterSpace) {
         this.isFilterSpace = isFilterSpace;
     }
-    public void setClearButtonVisible(boolean isClearBtnVisible) {
-        this.isClearBtnVisible = isClearBtnVisible;
-
-    }
     public void setSelectedButton(Button button) {
         selecedBtn = button;
     }
@@ -116,7 +114,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
                 inputEdit.setGravity(Gravity.BOTTOM);
                 inputEdit.setPadding(inputEdit.getPaddingLeft(), inputEdit.getPaddingTop(), inputEdit.getPaddingRight(), (int) getResources().getDimension(R.dimen.dimen_size_10_dp));
             }
-            if (!isClearBtnVisible && !isEidtTextEmpty()) {
+            if (clearEable && !isEidtTextEmpty()) {
                 if (clearBtn.getVisibility() != VISIBLE) {
                     clearBtn.setVisibility(VISIBLE);
                 }
@@ -176,7 +174,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
     @Override
     public void afterTextChanged(Editable s) {
         if (inputEdit.hasFocus()) {
-            if (!isClearBtnVisible && !TextUtils.isEmpty(s.toString())) {
+            if (clearEable && !TextUtils.isEmpty(s.toString())) {
                 clearBtn.setVisibility(VISIBLE);
             } else {
                 clearBtn.setVisibility(GONE);

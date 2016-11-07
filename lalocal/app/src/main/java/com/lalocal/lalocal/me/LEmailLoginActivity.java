@@ -44,7 +44,6 @@ public class LEmailLoginActivity extends BaseActivity {
         forgetpsw_tv.setText(Html.fromHtml("<u>"+getResources().getString(R.string.forget_password)+"</u>"));
         email_edit.setSelectedButton(login_btn);
         psw_edit.setSelectedButton(login_btn);
-        email_edit.setClearButtonVisible(false);
         register_tv.setOnClickListener(loginClickListener);
         forgetpsw_tv.setOnClickListener(loginClickListener);
         login_btn.setOnClickListener(loginClickListener);

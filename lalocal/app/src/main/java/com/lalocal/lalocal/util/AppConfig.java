@@ -14,9 +14,11 @@ public class AppConfig {
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
 
-    //    private static String baseUrl = "http://api.lalocal.cn/api/";
-    // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
-    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+
+     //   private static String baseUrl = "http://api.lalocal.cn/api/";
+     private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+  //  private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {
@@ -521,5 +523,18 @@ public class AppConfig {
         AppLog.i("ussr", "the getUserArticles url is " + url);
         return url;
     }
+    //三方登录url
+    public static String getSocialLoginUrl(){
+        return  baseUrl+"users/social/login";
+    }
+    //三方注册
+    public static String getSocialReigsterUrl(){
+        return  baseUrl+"users/social/register";
+    }
+    //三方绑定
+    public static String getSocialBindurl(){
+        return baseUrl+"users/social/bind";
+    }
+
 
 }

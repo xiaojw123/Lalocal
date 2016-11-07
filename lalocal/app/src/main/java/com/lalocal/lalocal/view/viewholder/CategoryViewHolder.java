@@ -45,6 +45,11 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         this.mRvRecommendList = recyclerView;
 
+        this.mLayoutLive.setFocusable(false);
+        this.mLayoutTheme.setFocusable(false);
+        this.mLayoutArticle.setFocusable(false);
+        this.mLayoutShop.setFocusable(false);
+
         // 监听事件回调
         mLayoutLive.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +70,8 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         mLayoutArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(ARTICLE, 0);
+                int lastPosition = mRvRecommendList.getAdapter().getItemCount();
+                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(lastPosition, 0);
             }
         });
 

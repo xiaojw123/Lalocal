@@ -40,6 +40,8 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.auth.AuthService;
 
 import butterknife.BindDimen;
 import butterknife.BindString;
@@ -130,6 +132,7 @@ MeFragment extends BaseFragment {
     }
 
     private void initLogin() {
+        AppLog.print("initLogin isLogin___"+UserHelper.isLogined(getActivity()));
         if (UserHelper.isLogined(getActivity())) {
             //恢复上一次登录的状态
             String email = UserHelper.getUserEmail(getActivity());
@@ -233,6 +236,7 @@ MeFragment extends BaseFragment {
         MobHelper.singOff();
         UserHelper.updateSignOutInfo(getActivity());
         updateFragmentView(false, null);
+        NIMClient.getService(AuthService.class).logout();
     }
 
     private void updateFragmentView(boolean isLogined, User user) {

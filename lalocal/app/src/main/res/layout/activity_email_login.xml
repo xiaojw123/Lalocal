@@ -24,6 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:my_title="@string/email"
+            app:clearEanble="true"
             android:layout_marginTop="@dimen/login_emial_custom_edit_top"
             app:hint="@string/input_email" />
 
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_half_dp"
             app:my_maxLen="20"
+            app:my_title="@string/password"
             app:is_password="true"
             app:hint="@string/input_psw" />
         <FrameLayout

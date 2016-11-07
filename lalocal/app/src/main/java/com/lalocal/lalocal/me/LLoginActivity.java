@@ -10,18 +10,25 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.MyEditText;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.Map;
 
 import butterknife.BindColor;
 import butterknife.BindString;
@@ -29,7 +36,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LLoginActivity extends BaseActivity implements View.OnFocusChangeListener {
+import static com.lalocal.lalocal.R.id.login_wechat_btn;
+
+public class LLoginActivity extends BaseActivity implements View.OnFocusChangeListener{
 
     @BindView(R.id.login_areacode_tv)
     TextView areaCodeTv;
@@ -43,7 +52,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     Button loginEmailBtn;
     @BindView(R.id.login_qq_btn)
     Button loginQqBtn;
-    @BindView(R.id.login_wechat_btn)
+    @BindView(login_wechat_btn)
     Button loginWechatBtn;
     @BindView(R.id.login_weibo_btn)
     Button loginWeiboBtn;
@@ -63,6 +72,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     int areaColor;
     String setting;
     boolean isImLogin;
+    UMShareAPI   umShareAPI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +101,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
 
     }
 
-    @OnClick({R.id.login_close_btn, R.id.login_next_btn, R.id.login_get_password, R.id.login_email_btn})
+    @OnClick({R.id.login_close_btn, R.id.login_next_btn, R.id.login_get_password, R.id.login_email_btn,R.id.login_wechat_btn,R.id.login_weibo_btn,R.id.login_qq_btn})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_close_btn:
@@ -117,6 +127,22 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 Intent intent = new Intent(this, LEmailLoginActivity.class);
                 startActivityForResult(intent,KeyParams.REQUEST_CODE);
                 break;
+            case R.id.login_qq_btn:
+                AppLog.print("qq__click__");
+                umShareAPI = UMShareAPI.get(this);
+                umShareAPI.doOauthVerify(this, SHARE_MEDIA.QQ, authListener);
+                break;
+            case R.id.login_wechat_btn:
+                AppLog.print("wechat__click__");
+                umShareAPI = UMShareAPI.get(this);
+                umShareAPI.doOauthVerify(this, SHARE_MEDIA.WEIXIN, authListener);
+                break;
+            case R.id.login_weibo_btn:
+                AppLog.print("weibo__click__");
+                umShareAPI = UMShareAPI.get(this);
+                UMShareAPI weboShare = UMShareAPI.get(this);
+                weboShare.doOauthVerify(this, SHARE_MEDIA.SINA, authListener);
+                break;
 
         }
     }
@@ -133,7 +159,62 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
         return vercodeMedt.getText();
     }
 
+    private UMAuthListener  authListener=new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            Toast.makeText(LLoginActivity.this,"授权成功",Toast.LENGTH_LONG).show();
+            umShareAPI.getPlatformInfo(LLoginActivity.this, share_media, infoGetListener);
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            Toast.makeText(LLoginActivity.this,"授权失败",Toast.LENGTH_LONG).show();
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+            Toast.makeText(LLoginActivity.this,"取消授权",Toast.LENGTH_LONG).show();
+
+        }
+    };
+
+
+    private  UMAuthListener infoGetListener=new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            AppLog.print("onComplete  loginBySocial__");
+            mContentloader.loginBySocial(map,share_media);
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+
+        }
+    };
+
+
+
     class LoginCallBack extends ICallBack {
+
+        @Override
+        public void onSocialLogin(User user,String bodyPrams) {
+              if (user==null){
+                  //注册
+                  Intent intent=new Intent(LLoginActivity.this,LPEmailBoundActivity.class);
+                  intent.putExtra(KeyParams.PAGE_TYPE, PageType.Page_BIND_EMAIL_SOCIAL);
+                  intent.putExtra(KeyParams.SOCIAL_PARAMS,bodyPrams);
+                  startActivityForResult(intent,KeyParams.REQUEST_CODE);
+              }else{
+                  UserHelper.setLoginSuccessResult(LLoginActivity.this,user);
+              }
+
+        }
 
         @Override
         public void onGetSmsCodeSuccess() {

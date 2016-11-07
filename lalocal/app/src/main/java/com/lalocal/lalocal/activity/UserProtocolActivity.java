@@ -1,6 +1,8 @@
 package com.lalocal.lalocal.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -56,5 +58,11 @@ public class UserProtocolActivity extends BaseActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public static  void start(Context context){
+        Intent intent = new Intent(context, UserProtocolActivity.class);
+        context.startActivity(intent);
+
     }
 }

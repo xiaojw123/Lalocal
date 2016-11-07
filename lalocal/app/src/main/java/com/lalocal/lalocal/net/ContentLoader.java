@@ -26,6 +26,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
@@ -92,6 +93,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,7 +125,71 @@ public class ContentLoader {
     }
 
     public void setCallBack(ICallBack callBack) {
+
+
         this.callBack = callBack;
+    }
+
+
+
+    public void loginBySocial(Map<String, String> map, SHARE_MEDIA share_media) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LOGIN_BY_SOCIAL);
+            response.setSocialParams(getSocialBodyParams(map, share_media).toString());
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialLoginUrl(), response, response);
+//         Set<Map.Entry<String,String>> entrySet=map.entrySet();
+//        for (Map.Entry<String,String> entry:entrySet){
+//            AppLog.print("key:"+entry.getKey()+", value:"+entry.getValue()+"\n");
+        request.setBodyParams(getSocialLoginPrarams(map, share_media).toString());
+        requestQueue.add(request);
+    }
+
+    public JSONObject getSocialBodyParams(Map<String, String> map, SHARE_MEDIA share_media) {
+        JSONObject jsonObject = getSocialLoginPrarams(map, share_media);
+        try {
+            jsonObject.put("nickName", map.get("nickname"));
+            jsonObject.put("avatar", map.get("headimgurl"));
+            jsonObject.put("sex", "1".equals(map.get("sex")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public JSONObject getSocialLoginPrarams(Map<String, String> map, SHARE_MEDIA share_media) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            if (share_media == SHARE_MEDIA.SINA) {
+                jsonObject.put("weiboUid", map.get("uid"));
+            } else if (share_media == SHARE_MEDIA.QQ) {
+                jsonObject.put("qqUid", map.get("uid"));
+            } else if (share_media == SHARE_MEDIA.WEIXIN) {
+                jsonObject.put("wechatUid ", map.get("unionid"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public void socialBind(String socialParams) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SOCIAL_BIND);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialBindurl(), response, response);
+        request.setBodyParams(socialParams);
+        requestQueue.add(request);
+    }
+
+
+    public void registerBySocial(String socialParams) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.REGISTER_BY_SOCIAL);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialReigsterUrl(), response, response);
+        request.setBodyParams(socialParams);
+        requestQueue.add(request);
     }
 
 
@@ -624,6 +690,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.LOGIN);
             response.setUserInfo(email, password);
         }
+        AppLog.print("login____loginURL___" + AppConfig.getLoginUrl() + "__email_:" + email + ", password:" + password);
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getLoginUrl(), response, response);
         request.setBodyParams(getLoginParams(email, password));
 
@@ -1200,10 +1267,17 @@ public class ContentLoader {
         private int collectionId;
         private String phone, code;
         private String attentionFlag;
+        private String socialParams;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
+
+        //三方账号用户信息
+        public void setSocialParams(String json) {
+            socialParams = json;
+        }
+
 
         public void setAttentionFlag(String attentionFlag) {
             this.attentionFlag = attentionFlag;
@@ -1271,14 +1345,16 @@ public class ContentLoader {
                     int code = volleyError.networkResponse.statusCode;
                     if (code == 401) {
                         UserHelper.updateSignOutInfo(context);
-                        Toast.makeText(context,"你的账号已在其他设备登录,请重新登录",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "你的账号已在其他设备登录,请重新登录", Toast.LENGTH_SHORT).show();
                     }
                 }
                 if (!ErrorMessage.AUTHOR_FIALED.equals(errorMsg) && !ErrorMessage.CLIENT_ERROR.equals(errorMsg)) {
                     Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
                 }
             }
-            callBack.onError(volleyError);
+            if (resultCode != RequestCode.VERSION_CODE) {
+                callBack.onError(volleyError);
+            }
         }
 
         @Override
@@ -1302,15 +1378,28 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
+                    } else if (resultCode != RequestCode.LIVE_ON_LINE_COUNT && resultCode != RequestCode.GET_ONLINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
-                    callBack.onResponseFailed(code,message);
-                    callBack.onResponseFailed(message,RequestCode.LIVE_ON_LINE_COUNT);
+                    callBack.onResponseFailed(code, message);
+                    callBack.onResponseFailed(message, RequestCode.LIVE_ON_LINE_COUNT);
                     return;
 
                 }
                 switch (resultCode) {
+                    case RequestCode.SOCIAL_BIND:
+                        AppLog.print("三方绑定----result---" + json);
+                        responseSocialBind(jsonObj);
+                        break;
+
+                    case RequestCode.LOGIN_BY_SOCIAL:
+                        AppLog.print("三方登录结果————result__" + json);
+                        responseLoginBySocial(jsonObj);
+                        break;
+                    case RequestCode.REGISTER_BY_SOCIAL:
+                        AppLog.print("“三方注册————re”");
+                        responseRegisterBySocial(jsonObj);
+                        break;
                     case RequestCode.LIVE_HISTORY_DELETE:
                         responseDeleteLiveHisotry(jsonObj);
                         break;
@@ -1441,7 +1530,7 @@ public class ContentLoader {
                         responseLogin(jsonObj);
                         break;
                     case RequestCode.CHECK_EMAIL:
-                        responseCheckMail();
+                        responseCheckMail(jsonObj);
                         break;
                     case RequestCode.SEND_VERIFICATION_CODE:
                         responseSendVerCode();
@@ -1601,6 +1690,24 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseSocialBind(JSONObject jsonObj) {
+            responseRegisterBySocial(jsonObj);
+        }
+
+        private void responseRegisterBySocial(JSONObject jsonObj) {
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            Gson gson = new Gson();
+            User user = gson.fromJson(resultJson, User.class);
+            callBack.onSocialRegisterSuccess(user);
+        }
+
+        private void responseLoginBySocial(JSONObject jsonObj) {
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            Gson gson = new Gson();
+            User item = gson.fromJson(resultJson, User.class);
+            callBack.onSocialLogin(item, socialParams);
         }
 
         private void responseDeleteLiveHisotry(JSONObject jsonObj) {
@@ -2032,9 +2139,9 @@ public class ContentLoader {
             callBack.onSendVerCode(email);
         }
 
-        private void responseCheckMail() {
-
-            callBack.onCheckEmail(email);
+        private void responseCheckMail(JSONObject jsonObject) {
+            String resutJson = jsonObject.optString(ResultParams.REULST);
+            callBack.onCheckEmail(email, resutJson);
         }
 
         private void responseLogin(JSONObject jsonObject) {
@@ -2170,10 +2277,14 @@ public class ContentLoader {
 
         //创建直播间
         private void responseCreateLiveRoom(String json) {
-            AppLog.i("TAG","打印创建直播间返回日志："+json);
+            AppLog.i("TAG", "打印创建直播间返回日志：" + json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             int id = createLiveRoomDataResp.getResult().getId();
             callBack.onCreateLiveRoom(createLiveRoomDataResp);
+
+
+
+
         }
 
         //修改直播间
@@ -2504,7 +2615,7 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("style", 0);
-
+            jsonObject.put("direction", LiveConstant.DEFAULT_DIRECTION);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -2717,6 +2828,9 @@ public class ContentLoader {
         int LOGIN_PHEON = 152;
         int REGISTER_PHONE = 153;
         int LIVE_HISTORY_DELETE = 154;
+        int LOGIN_BY_SOCIAL = 155;
+        int REGISTER_BY_SOCIAL = 156;
+        int SOCIAL_BIND = 157;
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

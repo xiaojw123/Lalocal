@@ -8,6 +8,7 @@
         android:id="@+id/gift_plane_up"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
         android:visibility="gone"/>
 
     <RelativeLayout
@@ -33,29 +34,44 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16_sp" />
     </RelativeLayout>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/audience_anchor_headportrait"
-        android:layout_width="@dimen/audience_anchor_headportrait_width"
-        android:layout_height="@dimen/audience_anchor_headportrait_width"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="@dimen/dimen_size_2_dp"
-        android:layout_marginTop="225dp"
+    <!--    android:layout_marginTop="225dp"
         android:layout_marginLeft="108dp"
-        android:visibility="gone"
-        />
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/audience_user_headportrait"
-        android:layout_width="@dimen/audience_anchor_headportrait_width"
-        android:layout_height="@dimen/audience_anchor_headportrait_width"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="@dimen/dimen_size_2_dp"
-        android:layout_toRightOf="@+id/audience_anchor_headportrait"
         android:layout_marginLeft="-8dp"
-        android:layout_alignTop="@+id/audience_anchor_headportrait"
-        android:layout_marginTop="4dp"
-        android:visibility="gone"
-        />
+        android:layout_marginTop="4dp"-->
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_marginTopPercent="35%"
+            app:layout_marginLeftPercent="27%"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/audience_anchor_headportrait"
+                android:layout_width="@dimen/audience_anchor_headportrait_width"
+                android:layout_height="@dimen/audience_anchor_headportrait_width"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/dimen_size_2_dp"
+                android:visibility="gone"
+                />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/audience_user_headportrait"
+                android:layout_width="@dimen/audience_anchor_headportrait_width"
+                android:layout_height="@dimen/audience_anchor_headportrait_width"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="@dimen/dimen_size_2_dp"
+                android:layout_toRightOf="@+id/audience_anchor_headportrait"
+                android:layout_alignTop="@+id/audience_anchor_headportrait"
+                android:visibility="gone"
+                />
+
+        </RelativeLayout>
+
+    </android.support.percent.PercentRelativeLayout>
+
+
 
 </RelativeLayout>

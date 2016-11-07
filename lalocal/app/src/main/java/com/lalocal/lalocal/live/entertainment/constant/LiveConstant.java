@@ -27,5 +27,7 @@ public class LiveConstant {
 
     //用户信息dialog
     public static  boolean USER_INFO_FIRST_CLICK=true;
+    //视频方向
+    public  static int DEFAULT_DIRECTION=1;
 
 }
