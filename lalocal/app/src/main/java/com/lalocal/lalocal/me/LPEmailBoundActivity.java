@@ -27,6 +27,7 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
 
     int mPagetType;
     String mSocialUserPramas;
+    String uidPrams;
 
 
     @Override
@@ -48,7 +49,9 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
 
     private void initParams() {
         mPagetType = getPageType();
+        uidPrams=getUidPrams();
         mSocialUserPramas = getSocialPramas();
+
     }
 
 
@@ -60,8 +63,10 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
             String code = getIntent().getStringExtra(KeyParams.CODE);
             AppLog.print("register phone=" + phone + ", code=" + code);
             if (getPageType() == PageType.Page_BIND_EMAIL_SOCIAL) {
+                AppLog.print("pageType_socila__bindEmail___");
                 mContentloader.registerBySocial(mSocialUserPramas);
             } else {
+                AppLog.print("pageType phono_bindEmail___");
                 mContentloader.registerByPhone(phone, code, null, null);
             }
 
@@ -72,12 +77,18 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), null);
                 return;
             }
-            mContentloader.checkEmail(email);
+            mContentloader.checkEmail(email,uidPrams);
 
         }
     }
 
     class LPEmailBoundCallback extends ICallBack {
+        @Override
+        public void onSocialRegisterSuccess(User user) {
+            AppLog.print("onSocialRegisterSuccess__user_name_"+user.getNickName()+", id="+user.getId());
+            UserHelper.setLoginSuccessResult(LPEmailBoundActivity.this, user);
+        }
+
         @Override
         public void onRegisterByPhone(User user) {
             UserHelper.setLoginSuccessResult(LPEmailBoundActivity.this, user);
@@ -85,10 +96,11 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
 
         @Override
         public void onCheckEmail(String email, String result) {
+            AppLog.print("onCheckEmail——————reuslt___"+result);
             Intent intent = getIntent();
             intent.setClass(LPEmailBoundActivity.this, LPEmailBound2Activity.class);
             intent.putExtra(KeyParams.EMAIL, email);
-            intent.putExtra(LPEmailBound2Activity.IS_REGISTERED, TextUtils.isEmpty(result));
+            intent.putExtra(LPEmailBound2Activity.IS_REGISTERED, !TextUtils.isEmpty(result));
             startActivityForResult(intent, KeyParams.REQUEST_CODE);
 
         }
@@ -96,6 +108,9 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
 
     public String getSocialPramas() {
         return getIntent().getStringExtra(KeyParams.SOCIAL_PARAMS);
+    }
+    public String getUidPrams(){
+        return getIntent().getStringExtra(KeyParams.UID_PARAMS);
     }
 
 

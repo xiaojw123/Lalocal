@@ -77,7 +77,7 @@ public class LoginActivity extends BaseActivity {
 
             MobHelper.sendEevent(LoginActivity.this, MobEvent.LOGIN_EMAIL_BACK);
             if (KeyParams.SETTING.equals(setting)) {
-                setResult(SettingActivity.UN_LOGIN_OK);
+                setResult(MeFragment.UN_LOGIN_OK);
             } else {
                 setResult(AccountEidt1Activity.UPDATE_ME_DATA);
             }
@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity {
             return;
         }
         if (isImLogin) {
-            setResult(SettingActivity.IM_LOGIN, data);
+            setResult(MeFragment.IM_LOGIN, data);
             AppLog.i("TAG", "LoginActivity:走了这里1");
         } else {
             AppLog.i("TAG", "LoginActivity:走了这里2");
@@ -127,7 +127,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if (KeyParams.SETTING.equals(setting)) {
-            setResult(SettingActivity.UN_LOGIN_OK);
+            setResult(MeFragment.UN_LOGIN_OK);
         } else {
             setResult(AccountEidt1Activity.UPDATE_ME_DATA);
         }
@@ -166,10 +166,10 @@ public class LoginActivity extends BaseActivity {
             Intent intent = new Intent();
             intent.putExtra(MeFragment.USER, user);
             if (isImLogin) {
-                setResult(SettingActivity.IM_LOGIN, intent);
+                setResult(MeFragment.IM_LOGIN, intent);
             } else {
                 if (KeyParams.SETTING.equals(setting)) {
-                    setResult(SettingActivity.IM_LOGIN, intent);
+                    setResult(MeFragment.IM_LOGIN, intent);
                 } else {
                     setResult(LOGIN_OK, intent);
                 }

@@ -3,12 +3,19 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <stroke android:width="1dp" android:color="@color/color_8fe6ff" />
+            <stroke android:width="1dp" android:color="@color/color_ffaa2a" />
             <corners android:radius="4dp" />
             <solid android:color="@color/white" />
 
         </shape>
     </item>
-    <item android:drawable="@drawable/common_edittext_normal"/>
+    <item>
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="@color/color_b3" />
+            <corners android:radius="4dp" />
+            <solid android:color="@color/white" />
+        </shape>
+
+    </item>
 
 </selector>

@@ -356,7 +356,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onSocialLogin(User user, String bodyParams){
+    public void onSocialLogin(User user, String bodyParams, String uidParams){
 
     }
 

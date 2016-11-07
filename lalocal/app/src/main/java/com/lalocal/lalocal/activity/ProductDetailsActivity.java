@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -58,7 +57,7 @@ import java.util.List;
  * Created by lenovo on 2016/6/22.
  */
 
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
+public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
         View.OnClickListener, CustomTitleView.onBackBtnClickListener {
 
     private static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
@@ -637,6 +636,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == LoginActivity.REGISTER_OK) {
             String email = data.getStringExtra(LoginActivity.EMAIL);
             String psw = data.getStringExtra(LoginActivity.PSW);

@@ -31,6 +31,7 @@ import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
@@ -58,6 +59,10 @@ MeFragment extends BaseFragment {
     public static final int UPDAE_MY_WALLET = 0x01323;
     public static final String USER = "user";
     public static final int LOGIN_OK = 102;
+    public static final int UN_LOGIN_OK = 103;
+    public static final int REGISTER_OK = 101;
+    public static final int UPDATE_ME_DATA = 301;
+    public static final int IM_LOGIN = 105;
     public boolean isImLogin;
     User user;
     OnMeFragmentListener fragmentListener;
@@ -180,26 +185,26 @@ MeFragment extends BaseFragment {
 
     private void gotoLoginPage() {
         //TODO:登录改版
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivityForResult(intent, 100);
-//        Intent intent = new Intent(getActivity(), LLoginActivity.class);
-//        startActivityForResult(intent, KeyParams.REQUEST_CODE);
+//        Intent intent = new Intent(getActivity(), LoginActivity.class);
+//        startActivityForResult(intent, 100);
+        Intent intent = new Intent(getActivity(), LLoginActivity.class);
+        startActivityForResult(intent, KeyParams.REQUEST_CODE);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("onActivityResult  resCode___" + resultCode);
-        if (resultCode == LoginActivity.REGISTER_OK) {
+        if (resultCode == REGISTER_OK) {
             String email = data.getStringExtra(LoginActivity.EMAIL);
             String psw = data.getStringExtra(LoginActivity.PSW);
             mContentloader.login(email, psw);
-        } else if (resultCode == LoginActivity.LOGIN_OK) {
+        } else if (resultCode == LOGIN_OK) {
             User user = data.getParcelableExtra(USER);
             updateFragmentView(true, user);
-        } else if (resultCode == SettingActivity.UN_LOGIN_OK) {
+        } else if (resultCode ==UN_LOGIN_OK) {
             signOut();
-        } else if (resultCode == AccountEidt1Activity.UPDATE_ME_DATA) {
+        } else if (resultCode == UPDATE_ME_DATA) {
             AppLog.print("UPDATE_ME_DATA_____islOgin___" + UserHelper.isLogined(getActivity()));
             if (UserHelper.isLogined(getActivity())) {
                 String nickname = data.getStringExtra(KeyParams.NICKNAME);
@@ -213,7 +218,7 @@ MeFragment extends BaseFragment {
             } else {
                 updateFragmentView(false, null);
             }
-        } else if (resultCode == SettingActivity.IM_LOGIN) {
+        } else if (resultCode == IM_LOGIN) {
             isImLogin = true;
             imLoginData = data;
             if (fragmentListener != null) {
@@ -248,8 +253,8 @@ MeFragment extends BaseFragment {
             } else {
                 loginPrompt.setText(description);
             }
-            AppLog.print("账号登录————————");
             String nickname = user.getNickName();
+            AppLog.print("账号登录———————nickName—"+nickname);
             if (!TextUtils.isEmpty(nickname)) {
                 username_tv.setActivated(true);
                 username_tv.setText(nickname);

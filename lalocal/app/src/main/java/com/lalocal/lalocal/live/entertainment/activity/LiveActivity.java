@@ -1697,5 +1697,4 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         finishLive();
     }
 
-
 }

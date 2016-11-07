@@ -438,5 +438,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         setResult(MyFavoriteActivity.UPDATE_MY_DATA);
         super.onBackPressed();
     }
+
 }
 

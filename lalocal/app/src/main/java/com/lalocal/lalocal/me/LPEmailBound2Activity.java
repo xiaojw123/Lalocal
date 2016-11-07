@@ -15,6 +15,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.MD5Util;
 import com.lalocal.lalocal.view.CustomEditText;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
@@ -36,9 +37,9 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
         pLalocalStart.setOnClickListener(this);
         isRegistered = getIntent().getBooleanExtra(IS_REGISTERED, false);
         if (isRegistered) {
-            pEmailBoundEdit.setHint(getResources().getString(R.string.set_pssword));
-        } else {
             pEmailBoundEdit.setHint(getResources().getString(R.string.please_input_password));
+        } else {
+            pEmailBoundEdit.setHint(getResources().getString(R.string.set_pssword));
         }
         setLoaderCallBack(new PemailBound2CallBack());
     }
@@ -55,14 +56,12 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
             return;
         }
         AppLog.print("register phone=" + phone + ", code=" + code + ", email=" + email + ", psw=" + psw);
-
         if (getPageType() == PageType.Page_BIND_EMAIL_SOCIAL) {
-            //TODO：注册三方账号 p e
             String bodyParams = getIntent().getStringExtra(KeyParams.SOCIAL_PARAMS);
             try {
                 JSONObject body = new JSONObject(bodyParams);
                 body.put("email", email);
-                body.put("password", psw);
+                body.put("password", MD5Util.getMD5String(psw));
                 if (isRegistered) {
                     mContentloader.socialBind(body.toString());
                 } else {

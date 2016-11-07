@@ -602,4 +602,5 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         setResult(MyFavoriteActivity.UPDATE_MY_DATA);
         super.onBackPressed();
     }
+
 }

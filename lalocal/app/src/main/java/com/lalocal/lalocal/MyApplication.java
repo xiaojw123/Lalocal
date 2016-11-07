@@ -25,8 +25,11 @@ import com.lalocal.lalocal.model.Country;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.pingplusplus.android.PingppLog;
@@ -52,7 +55,7 @@ import io.fabric.sdk.android.Fabric;
  * <p>
  * 1.为区分线上/线下版本，版本号定义如下
  * 线下版本：版本号=版本名称数字
- * 线下版本：版本号=版本名称数字+1
+ * 线上版本：版本号=版本名称数字+1
  * eg:版本名称：2.1.3
  * 线下版本号：213
  * 线上版本号：214
@@ -113,6 +116,10 @@ public class MyApplication extends Application {
             FlavorDependent.getInstance().onApplicationCreate();
         }
     }
+
+
+
+
 
     private static void initLogManager() {
         Log.LOG = isDebug;
@@ -210,6 +217,7 @@ public class MyApplication extends Application {
         //微信 appid appsecret
         PlatformConfig.setSinaWeibo("2849578775", "3b3bce66ae4671ae755fa11c2ba0ad5d");
         //新浪微博 appkey appsecret
+        PlatformConfig.setQQZone("1105529194", "XONwXa348plDFJGf");
 
 
     }
