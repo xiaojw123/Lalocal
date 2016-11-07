@@ -2194,11 +2194,11 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
-                NIMClient.getService(AuthService.class).logout();
+             //   NIMClient.getService(AuthService.class).logout();
                 DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-                loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+            //    loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
             }
         }
 

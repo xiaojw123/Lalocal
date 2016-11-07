@@ -260,7 +260,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 DrawableUtils.displayImg(AudienceActivity.this,headIv,liveRowsBean.getUser().getAvatar());
                 getParameter(liveRowsBean);
                 registerObservers(true);
-
                 initParam();
                 initUIandEvent();
                 if("0".equals(liveStatus)){
@@ -1308,7 +1307,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     // 发送点赞爱心
     public void sendLike() {
-        if (!isFastClick()&&container!=null&&container.account!=null) {
+        if (!isFastClick()&&container!=null&&container.account!=null&&creatorAccount!=null) {
+            AppLog.i("TAG","用户端给主播店点赞那就多喝点"+creatorAccount);
             LiveMessage liveMessage=new LiveMessage();
             liveMessage.setStyle(MessageType.like);
             liveMessage.setUserId(userId);

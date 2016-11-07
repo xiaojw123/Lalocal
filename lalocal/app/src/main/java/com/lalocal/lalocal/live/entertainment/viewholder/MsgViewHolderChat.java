@@ -132,7 +132,6 @@ public class MsgViewHolderChat extends TViewHolder {
             }
         }
 
-
         itenImage.setVisibility(View.GONE);
         switch (styles){
             case "0":
@@ -208,15 +207,12 @@ public class MsgViewHolderChat extends TViewHolder {
                         textColor="#ffe400";
                         messageItem.setBackgroundResource(R.drawable.task_massage_lv_yellow);
                         break;
-
                 }
-
                 break;*/
         }
 
         AppLog.i("TAG","creatorAccount:"+creatorAccount+"    itemContent:"+itemContent);
         setNameTextView(creatorAccount,itemContent,textColor,styles);
-
         //   MoonUtil.identifyFaceExpression(DemoCache.getContext(), bodyText,content , ImageSpan.ALIGN_BASELINE);
         //   bodyText.setMovementMethod(LinkMovementMethod.getInstance());
      }
@@ -252,7 +248,6 @@ public class MsgViewHolderChat extends TViewHolder {
                         contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
                     }
                 }
-
             }
             AppLog.i("TAG","检测用户发消息内容:"+contentItem);
             nameText.setText(textviewSetContent(contentItem,textColor));

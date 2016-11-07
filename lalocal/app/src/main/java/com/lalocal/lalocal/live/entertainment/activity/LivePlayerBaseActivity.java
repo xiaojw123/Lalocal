@@ -28,7 +28,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
@@ -69,12 +69,12 @@ import com.lalocal.lalocal.live.im.ui.barrage.BarrageConfig;
 import com.lalocal.lalocal.live.im.ui.barrage.BarrageView;
 import com.lalocal.lalocal.live.im.ui.dialog.DialogMaker;
 import com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.TouristInfoResp;
-import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -308,14 +308,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == LIVE_BASE_RESQUEST_CODE && (resultCode == 101 || resultCode == 105)) {
+        AppLog.i("TAG","直播基类登录回调："+resultCode);
+        if (requestCode == LIVE_BASE_RESQUEST_CODE && resultCode== MeFragment.LOGIN_OK) {
             if (data != null) {
-                String email = data.getStringExtra(LoginActivity.EMAIL);
-                String psw = data.getStringExtra(LoginActivity.PSW);
-                contentLoader.login(email, psw);
+                AppLog.i("TAG","直播基类登录回调rere："+resultCode);
+                ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+                 NIMClient.getService(AuthService.class).logout();
             }
         }
-
     }
 
     private  String  playType;
@@ -359,20 +359,34 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 if(statusCode==StatusCode.KICKOUT){
                  //   accountKicout();
                 }else if(statusCode==StatusCode.UNLOGIN){
-                    String userAccount = AuthPreferences.getUserAccount();
-                    String userToken = AuthPreferences.getUserToken();
-                    AppLog.i("TAG","LivePlayerBaseActivity監聽用戶登錄狀態愛："+userAccount+"    userToken:"+userToken);
-                    if (userAccount != null && userToken != null) {
-                        loginIMServer(userAccount, userToken);
-                    }else{
-                        contentLoader.getTouristInfo();
-                    }
+
+                    getHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String userAccount = AuthPreferences.getUserAccount();
+                            String userToken = AuthPreferences.getUserToken();
+                            AppLog.i("TAG","LivePlayerBaseActivity監聽用戶登錄狀態愛："+userAccount+"    userToken:"+userToken);
+                            if (userAccount != null && userToken != null) {
+                                loginIMServer(userAccount, userToken);
+                            }else{
+                                contentLoader.getTouristInfo();
+                            }
+                        }
+                    },1500);
+
+
                 }
             } else if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
                 AppLog.i("TAG","用户登录成功的监听:"+AuthPreferences.getUserAccount());
                 DemoCache.setAccount(AuthPreferences.getUserAccount());
-                enterRoom();
+                getHandler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        enterRoom();
+                    }
+                },1500);
+
             }
 
         }
@@ -485,7 +499,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
         sendPlaneName = (TextView) findViewById(R.id.audience_gift_send_plane);
-      
+
 
       //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
@@ -627,14 +641,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             showMasterInfoPopuwindow(result, isMuted, meberAccount, dialogId, manageResult, managerList);
 
         }
-
-        @Override
-        public void onLoginSucess(User user) {
-            super.onLoginSucess(user);
-
-        }
-
-
         @Override
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
@@ -684,8 +690,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     int totalGold = 0;
-
-
     protected void loginIMServer(final String imccId, String imToken) {
 
         NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
@@ -805,10 +809,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
         private String onlineNum;
         private String messageUserId;
-
         @Override
         public void onEvent(List<ChatRoomMessage> messages) {
-
             int styles = 0;
             if (messages == null || messages.isEmpty()) {
                 return;
@@ -821,7 +823,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
-
                     if ("barrag".equals(key)) {
                         barrageContent = value.toString();
                     }
@@ -886,6 +887,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     });
                     break;
                 case MessageType.like://点赞
+                    AppLog.i("TAG","接收到点赞信息");
                     periscopeLayout.addHeart();
                     messageListPanel.onIncomingMessage(messages);
                     break;
@@ -943,11 +945,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
             }
 
-
             if (message != null && message.getAttachment() instanceof ChatRoomNotificationAttachment) {
                 // 通知类消息
                 ChatRoomNotificationAttachment notificationAttachment = (ChatRoomNotificationAttachment) message.getAttachment();
-
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
                         //发送进入直播间的通知
@@ -961,8 +961,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                                 masterOnLineStatus(true);
                             }
                         }
-                        
-                        
+
                         break;
 
                     case ChatRoomMemberExit:
@@ -1005,16 +1004,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             onConnected();
             DemoCache.setLoginChatRoomStatus(true);
         } else {
-            getHandler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if(enterRequest!=null){
-                        enterRequest=null;
-                    }
-                    NIMClient.getService(AuthService.class).logout();
-                }
-            },500);
 
+            NIMClient.getService(AuthService.class).logout();
             DemoCache.setLoginChatRoomStatus(false);
             onDisconnected();
 
@@ -1030,11 +1021,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         return enterRoomhandler;
     }
 
-
-
     // 进入聊天室
     protected void enterRoom() {
-
         if (DemoCache.getLoginStatus()) {
             AppLog.i("TAG","走了登录聊天室的方法:"+roomId);
             EnterChatRoomData data = new EnterChatRoomData(roomId);
@@ -1072,8 +1060,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             if (isFirstEnrRoom) {
                 updateUI();
             }
-
             chatRoomStatusRemind("登陆聊天室成功...");
+            AppLog.i("TAG", "登陆聊天室成功：" + code);
             LiveConstant.enterRoom=true;
             initInputPanel(creatorAccount, channelId);
         }
@@ -1484,7 +1472,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             }
                         }
                     }
-
                     barrageView.init(new BarrageConfig());
                     if (content != null) {
                         BarrageViewBean barrageViewBean = new BarrageViewBean();
@@ -1502,6 +1489,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     break;
 
                 case MessageType.like:
+                    AppLog.i("TAG","直播基类接受到用户点赞");
                     messageListPanel.onMsgSend(message);
                     break;
 
@@ -1555,7 +1543,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                         @Override
                         public void onException(Throwable exception) {
-
                         }
                     });
         }
@@ -1574,7 +1561,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onDialogClickListener() {
                 DemoCache.setLoginStatus(false);
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-                startActivityForResult(new Intent(LivePlayerBaseActivity.this, LoginActivity.class), LIVE_BASE_RESQUEST_CODE);
+                startActivityForResult(new Intent(LivePlayerBaseActivity.this, LLoginActivity.class), LIVE_BASE_RESQUEST_CODE);
             }
         });
         customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
