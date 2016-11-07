@@ -11,63 +11,57 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.MyEditText;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import butterknife.BindString;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static com.lalocal.lalocal.R.id.login_qq_btn;
 
 public class LEmailLoginActivity extends BaseActivity {
-    MyEditText email_edit, psw_edit;
-    TextView register_tv, forgetpsw_tv;
+    @BindView(R.id.login_emial_custom_edit)
+    MyEditText email_edit;
+    @BindView(R.id.login_psw_custom_edit)
+    MyEditText psw_edit;
+    @BindView(R.id.login_register_tv)
+    TextView register_tv;
+    @BindView(R.id.login_forget_psw_tv)
+    TextView forgetpsw_tv;
+    @BindView(R.id.login_btn)
     Button login_btn;
+    @BindView(login_qq_btn)
+    Button loginQqBtn;
+    @BindView(R.id.login_wechat_btn)
+    Button loginWechatBtn;
+    @BindView(R.id.login_weibo_btn)
+    Button loginWeiboBtn;
+    @BindString(R.string.forget_password)
+    String forgetPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_login);
-        initContentService();
-        initView();
         setLoginBackResult(true);
-    }
-
-
-    private void initContentService() {
+        ButterKnife.bind(this);
+        initView();
         setLoaderCallBack(new CallBack());
     }
 
+
     private void initView() {
-        register_tv = (TextView) findViewById(R.id.login_register_tv);
-        forgetpsw_tv = (TextView) findViewById(R.id.login_forget_psw_tv);
-        email_edit = (MyEditText) findViewById(R.id.login_emial_custom_edit);
-        psw_edit = (MyEditText) findViewById(R.id.login_psw_custom_edit);
-        login_btn = (Button) findViewById(R.id.login_btn);
-        forgetpsw_tv.setText(Html.fromHtml("<u>"+getResources().getString(R.string.forget_password)+"</u>"));
+        forgetpsw_tv.setText(Html.fromHtml("<u>" + forgetPassword + "</u>"));
         email_edit.setSelectedButton(login_btn);
         psw_edit.setSelectedButton(login_btn);
-        register_tv.setOnClickListener(loginClickListener);
-        forgetpsw_tv.setOnClickListener(loginClickListener);
-        login_btn.setOnClickListener(loginClickListener);
-
-
     }
-
-
-    private View.OnClickListener loginClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            if (v == register_tv) {
-                Intent intent = new Intent(LEmailLoginActivity.this, LRegister1Activity.class);
-                startActivityForResult(intent, KeyParams.REQUEST_CODE);
-            } else if (v == login_btn) {
-                String email = email_edit.getText().toString();
-                String psw = psw_edit.getText().toString();
-                login(email, psw);
-            } else if (v == forgetpsw_tv) {
-                Intent intent = new Intent(LEmailLoginActivity.this, LPasswordForget1Activity.class);
-                startActivity(intent);
-            }
-        }
-    };
 
 
     public void login(String email, String psw) {
@@ -94,11 +88,39 @@ public class LEmailLoginActivity extends BaseActivity {
         mContentloader.login(email, psw);
     }
 
+    @OnClick({login_qq_btn, R.id.login_wechat_btn, R.id.login_weibo_btn, R.id.login_register_tv, R.id.login_btn, R.id.login_forget_psw_tv})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case login_qq_btn:
+                MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.QQ);
+                break;
+            case R.id.login_wechat_btn:
+                MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.WEIXIN);
+                break;
+            case R.id.login_weibo_btn:
+                MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.SINA);
+                break;
+            case R.id.login_register_tv:
+                Intent registerIntent = new Intent(LEmailLoginActivity.this, LRegister1Activity.class);
+                startActivityForResult(registerIntent, KeyParams.REQUEST_CODE);
+                break;
+            case R.id.login_btn:
+                String email = email_edit.getText();
+                String psw = psw_edit.getText();
+                login(email, psw);
+                break;
+            case R.id.login_forget_psw_tv:
+                Intent forgetPswIntent = new Intent(LEmailLoginActivity.this, LPasswordForget1Activity.class);
+                startActivity(forgetPswIntent);
+                break;
+        }
+    }
+
 
     class CallBack extends ICallBack {
         @Override
         public void onLoginSucess(User user) {
-            UserHelper.setLoginSuccessResult(LEmailLoginActivity.this,user);
+            UserHelper.setLoginSuccessResult(LEmailLoginActivity.this, user);
         }
 
     }

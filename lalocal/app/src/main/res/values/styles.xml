@@ -55,7 +55,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/register_edit_height</item>
         <item name="android:background">@drawable/register_edit_bg</item>
-        <item name="android:textColorHint">@color/color_ee</item>
+        <item name="android:textColorHint">@color/color_b3</item>
         <item name="android:textColor">@color/color_66</item>
         <item name="android:textSize">@dimen/text_size_18_sp</item>
         <item name="android:textCursorDrawable">@drawable/custom_edit_cursor</item>

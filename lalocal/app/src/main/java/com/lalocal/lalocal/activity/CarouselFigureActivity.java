@@ -79,7 +79,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO,String.valueOf(targetId));
+        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO, String.valueOf(targetId));
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.BOTTOM, 0, 0);
@@ -134,19 +134,19 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
                                 startActivity(intent);
                             } else {
                                 Intent intent = new Intent(CarouselFigureActivity.this, LoginActivity.class);
-                                startActivityForResult(intent,KeyParams.REQUEST_CODE);
+                                startActivityForResult(intent, KeyParams.REQUEST_CODE);
                             }
                             return true;
-                        }else if("15".equals(targetType)){
+                        } else if ("15".equals(targetType)) {
                             Intent intent = new Intent(CarouselFigureActivity.this, AudienceActivity.class);
-                            intent.putExtra("id",targetId);
+                            intent.putExtra("id", targetId);
                             startActivity(intent);
                             return true;
-                        }else if("20".equals(targetType)){
+                        } else if ("20".equals(targetType)) {
                             Intent intent = new Intent(CarouselFigureActivity.this, PlayBackActivity.class);
-                            intent.putExtra("id",targetId);
+                            intent.putExtra("id", targetId);
                             startActivity(intent);
-                            return  true;
+                            return true;
                         }
                     }
 
@@ -162,6 +162,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == LoginActivity.REGISTER_OK) {
             String email = data.getStringExtra(LoginActivity.EMAIL);
             String psw = data.getStringExtra(LoginActivity.PSW);

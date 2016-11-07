@@ -333,5 +333,11 @@
     <string name="password">密码</string>
     <string name="nickname">昵称</string>
     <string name="please_input_password">请输入密码</string>
+    <string name="umeng_socialize_comment" translatable="false">评论</string>
+    <string name="umeng_socialize_near_At" translatable="false">最近\@的好友</string>
+    <string name="umeng_socialize_friends" translatable="false">关注的好友</string>
+    <string name="umeng_socialize_text_comment_hint">说点什么吧&#8230;</string>
+    <string name="please_input_vercode_email">请输入验证码(在邮件里查看)</string>
+    <string name="sure_modify">确认修改</string>
 
 </resources>

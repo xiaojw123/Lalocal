@@ -50,6 +50,7 @@ import com.lalocal.lalocal.view.adapter.DayRouteApater;
 import com.lalocal.lalocal.view.adapter.DayRouteItemAdpater;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 import com.sackcentury.shinebuttonlib.ShineButton;
+import com.umeng.socialize.UMShareAPI;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -697,6 +698,5 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             return view;
         }
     }
-
 
 }

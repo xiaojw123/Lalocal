@@ -4,6 +4,7 @@ package com.lalocal.lalocal.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -20,9 +21,15 @@ import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.umeng.analytics.MobclickAgent;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
@@ -41,6 +48,24 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     // 记录第一次点击back的时间
     private long clickTime = 0;
+    Observer<StatusCode> userStatusObserver=new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode statusCode) {
+            AppLog.print("onEvent___触发——————");
+            if (statusCode != StatusCode.LOGINED) {
+                DemoCache.setLoginStatus(false);
+                if (statusCode == StatusCode.KICKOUT) {
+                    AppLog.print("kickout____");
+                    //   accountKicout();
+                    Toast.makeText(HomeActivity.this, "你的账号已在其他设备登录,请重新登录", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(HomeActivity.this, LLoginActivity.class);
+                    startActivity(intent);
+                }
+            } else if (statusCode == StatusCode.LOGINED) {
+                DemoCache.setLoginStatus(true);
+            }
+        }
+    };;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +74,13 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         setContentView(R.layout.home_layout);
         initView();
         checkUpdate();
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
         //听云SDK
 //        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
+
+
+
 
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
@@ -69,7 +98,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
 
     }
-
 
 
     private void initView() {
@@ -361,24 +389,28 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     @Override
     protected void onStart() {
         super.onStart();
-        AppLog.i("TAG","HomeActivity:onStart");
+        AppLog.i("TAG", "HomeActivity:onStart");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        AppLog.i("TAG","HomeActivity:onResume");
+        AppLog.i("TAG", "HomeActivity:onResume");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        AppLog.i("TAG","HomeActivity:onStop");
+        AppLog.i("TAG", "HomeActivity:onStop");
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AppLog.i("TAG","HomeActivity:onDestroy");
+        if (userStatusObserver != null) {
+            NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
+        }
+        AppLog.i("TAG", "HomeActivity:onDestroy");
     }
+
 }

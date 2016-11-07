@@ -17,6 +17,7 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.UMShareAPI;
 /*
 *
 * Activity基类
@@ -39,8 +40,6 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
-
     //页面全屏加载loading显示
     public void showLoadingAnimation() {
         if (mLoadingView == null) {
@@ -51,6 +50,7 @@ public class BaseActivity extends AppCompatActivity {
             mLoadingView.setVisibility(View.VISIBLE);
         }
     }
+
     //mLoginBack/true登录页面登录成功时，依次清空回退栈并将数据回传，规避resultcode重复情况
     public void setLoginBackResult(boolean loginBack) {
         mLoginBack = loginBack;
@@ -78,7 +78,6 @@ public class BaseActivity extends AppCompatActivity {
                 .permissions(permissions)
                 .request();
     }
-
 
 
     @Override
@@ -122,9 +121,14 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (mLoginBack&&resultCode==LoginActivity.LOGIN_OK) {
-            setResult(resultCode, data);
-            finish();
+        try {
+            UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
+            if (mLoginBack && resultCode == LoginActivity.LOGIN_OK) {
+                setResult(resultCode, data);
+                finish();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

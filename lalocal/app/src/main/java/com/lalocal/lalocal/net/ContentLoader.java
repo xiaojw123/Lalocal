@@ -102,6 +102,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -130,26 +131,37 @@ public class ContentLoader {
     }
 
 
-
     public void loginBySocial(Map<String, String> map, SHARE_MEDIA share_media) {
+        String loginParams = getSocialLoginPrarams(map, share_media).toString();
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN_BY_SOCIAL);
-            response.setSocialParams(getSocialBodyParams(map, share_media).toString());
+            response.setSocialParams(getSocialBodyParams(map, share_media).toString(), loginParams);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialLoginUrl(), response, response);
-//         Set<Map.Entry<String,String>> entrySet=map.entrySet();
-//        for (Map.Entry<String,String> entry:entrySet){
-//            AppLog.print("key:"+entry.getKey()+", value:"+entry.getValue()+"\n");
-        request.setBodyParams(getSocialLoginPrarams(map, share_media).toString());
+        Set<Map.Entry<String, String>> entrySet = map.entrySet();
+        for (Map.Entry<String, String> entry : entrySet) {
+            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
+        }
+        AppLog.print("rquestUrl__" + AppConfig.getSocialLoginUrl() + ", id____" + getSocialLoginPrarams(map, share_media).toString());
+        request.setBodyParams(loginParams);
         requestQueue.add(request);
     }
 
     public JSONObject getSocialBodyParams(Map<String, String> map, SHARE_MEDIA share_media) {
         JSONObject jsonObject = getSocialLoginPrarams(map, share_media);
         try {
-            jsonObject.put("nickName", map.get("nickname"));
-            jsonObject.put("avatar", map.get("headimgurl"));
-            jsonObject.put("sex", "1".equals(map.get("sex")));
+            boolean isM = true;
+            String gender = map.get("gender");
+            if (share_media == SHARE_MEDIA.WEIXIN) {
+                isM = "1".equals(gender);
+            } else if (share_media == SHARE_MEDIA.QQ) {
+                isM = "男".equals(gender);
+            } else if (share_media == SHARE_MEDIA.SINA) {
+                isM = "m".equals(gender);
+            }
+            jsonObject.put("nickName", map.get("screen_name"));
+            jsonObject.put("avatar", map.get("profile_image_url"));
+            jsonObject.put("sex", isM);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -160,11 +172,13 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             if (share_media == SHARE_MEDIA.SINA) {
+
+                //uid
                 jsonObject.put("weiboUid", map.get("uid"));
             } else if (share_media == SHARE_MEDIA.QQ) {
                 jsonObject.put("qqUid", map.get("uid"));
             } else if (share_media == SHARE_MEDIA.WEIXIN) {
-                jsonObject.put("wechatUid ", map.get("unionid"));
+                jsonObject.put("unionId", map.get("unionid"));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -176,6 +190,7 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SOCIAL_BIND);
         }
+        AppLog.print("三方绑定邮箱bodyPrams___" + socialParams);
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialBindurl(), response, response);
         request.setBodyParams(socialParams);
         requestQueue.add(request);
@@ -187,6 +202,7 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.REGISTER_BY_SOCIAL);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialReigsterUrl(), response, response);
+        AppLog.print("三方注册___socialParams_" + socialParams);
         request.setBodyParams(socialParams);
         requestQueue.add(request);
     }
@@ -205,7 +221,7 @@ public class ContentLoader {
                 reqParams.put(RequestParams.EMAIL, email);
             }
             if (!TextUtils.isEmpty(password)) {
-                reqParams.put(RequestParams.PASSWORD, password);
+                reqParams.put(RequestParams.PASSWORD, MD5Util.getMD5String(password));
             }
             request.setBodyParams(reqParams.toString());
         } catch (JSONException e) {
@@ -672,13 +688,14 @@ public class ContentLoader {
     }
 
     //判断邮箱是否被注册过
-    public void checkEmail(String email) {
+    public void checkEmail(String email, String uidprams) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
             response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCheckMailUrl(), response, response);
-        request.setBodyParams(getCheckParams(email));
+        AppLog.print("checkPrams___" + getCheckParams(email, uidprams));
+        request.setBodyParams(getCheckParams(email, uidprams));
         requestQueue.add(request);
     }
 
@@ -1267,14 +1284,16 @@ public class ContentLoader {
         private String phone, code;
         private String attentionFlag;
         private String socialParams;
+        private String uidPramas;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
 
         //三方账号用户信息
-        public void setSocialParams(String json) {
+        public void setSocialParams(String json, String pramas) {
             socialParams = json;
+            uidPramas = pramas;
         }
 
 
@@ -1396,7 +1415,7 @@ public class ContentLoader {
                         responseLoginBySocial(jsonObj);
                         break;
                     case RequestCode.REGISTER_BY_SOCIAL:
-                        AppLog.print("“三方注册————re”");
+                        AppLog.print("“三方注册————”" + json);
                         responseRegisterBySocial(jsonObj);
                         break;
                     case RequestCode.LIVE_HISTORY_DELETE:
@@ -1699,6 +1718,7 @@ public class ContentLoader {
             String resultJson = jsonObj.optString(ResultParams.REULST);
             Gson gson = new Gson();
             User user = gson.fromJson(resultJson, User.class);
+            saveUserInfo(user);
             callBack.onSocialRegisterSuccess(user);
         }
 
@@ -1706,7 +1726,8 @@ public class ContentLoader {
             String resultJson = jsonObj.optString(ResultParams.REULST);
             Gson gson = new Gson();
             User item = gson.fromJson(resultJson, User.class);
-            callBack.onSocialLogin(item, socialParams);
+            saveUserInfo(item);
+            callBack.onSocialLogin(item, socialParams, uidPramas);
         }
 
         private void responseDeleteLiveHisotry(JSONObject jsonObj) {
@@ -2564,6 +2585,23 @@ public class ContentLoader {
             e.printStackTrace();
         }
         return jsonObj.toString();
+
+    }
+
+    public String getCheckParams(String email, String uidPrams) {
+        JSONObject jsonObj = null;
+        try {
+            if (!TextUtils.isEmpty(uidPrams)) {
+                jsonObj = new JSONObject(uidPrams);
+            } else {
+                jsonObj = new JSONObject();
+            }
+            jsonObj.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObj == null ? "" : jsonObj.toString();
+
 
     }
 
