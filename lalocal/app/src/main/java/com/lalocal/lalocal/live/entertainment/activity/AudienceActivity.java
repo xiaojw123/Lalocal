@@ -1157,60 +1157,61 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     startActivity(intent);
                 }
             });
-
-
         } else {
             if (managerList != null && managerList.size() > 0) {
                 for (LiveManagerListBean bean : managerList) {
 
                     if (bean.getId() == UserHelper.getUserId(AudienceActivity.this)) {
+                        if(userId.equals(String.valueOf(id))){
+                            LiveConstant.IDENTITY = LiveConstant.ME_CHECK_OTHER;
 
-                        LiveConstant.IDENTITY = LiveConstant.MANAGER_IS_ME;
-                        customLiveUserInfoDialog.setBanBtn(isMuteds == true ? getString(R.string.live_relieve_ban) : getString(R.string.live_ban), new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                            @Override
-                            public void onCustomLiveUserInfoDialogListener(String id, final TextView textView, ImageView managerMark) {
-                                MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_ANCHOR_PROHIBITION);
-                                if (isMuteds) {
-                                   String messageContent="解除了"+result.getNickName()+"的禁言";
-                                    LiveMessage liveMessage=new LiveMessage();
-                                    liveMessage.setStyle(MessageType.relieveBan);
-                                    liveMessage.setDisableSendMsgNickName(result.getNickName());
-                                    liveMessage.setDisableSendMsgUserId(String.valueOf(result.getId()));
-                                    liveMessage.setUserId(userId);
-                                    liveMessage.setCreatorAccount(creatorAccount);
-                                    liveMessage.setChannelId(channelId);
-                                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
-
-                                    if (banListLive.size() > 0) {
-                                        for (int i = 0; i < banListLive.size(); i++) {
-                                            if (meberAccount.equals(banListLive.get(i))) {
-                                                banListLive.remove(i);
+                        }else{
+                            LiveConstant.IDENTITY = LiveConstant.MANAGER_IS_ME;
+                            customLiveUserInfoDialog.setBanBtn(isMuteds == true ? getString(R.string.live_relieve_ban) : getString(R.string.live_ban), new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+                                @Override
+                                public void onCustomLiveUserInfoDialogListener(String id, final TextView textView, ImageView managerMark) {
+                                    MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_ANCHOR_PROHIBITION);
+                                    if (isMuteds) {
+                                        String messageContent="解除了"+result.getNickName()+"的禁言";
+                                        LiveMessage liveMessage=new LiveMessage();
+                                        liveMessage.setStyle(MessageType.relieveBan);
+                                        liveMessage.setDisableSendMsgNickName(result.getNickName());
+                                        liveMessage.setDisableSendMsgUserId(String.valueOf(result.getId()));
+                                        liveMessage.setUserId(userId);
+                                        liveMessage.setCreatorAccount(creatorAccount);
+                                        liveMessage.setChannelId(channelId);
+                                        IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
+                                        if (banListLive.size() > 0) {
+                                            for (int i = 0; i < banListLive.size(); i++) {
+                                                if (meberAccount.equals(banListLive.get(i))) {
+                                                    banListLive.remove(i);
+                                                }
                                             }
                                         }
+                                        sendMessage(imMessage, MessageType.relieveBan);
+                                        textView.setText(getString(R.string.live_ban));
+                                        isMuteds = false;
+                                    } else {
+
+                                        String messageContent="禁言了"+result.getNickName();
+                                        LiveMessage liveMessage=new LiveMessage();
+                                        liveMessage.setStyle(MessageType.ban);
+                                        liveMessage.setDisableSendMsgNickName(result.getNickName());
+                                        liveMessage.setDisableSendMsgUserId(String.valueOf(result.getId()));
+                                        liveMessage.setUserId(userId);
+                                        liveMessage.setCreatorAccount(creatorAccount);
+                                        liveMessage.setChannelId(channelId);
+                                        IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
+                                        banListLive.add(meberAccount);
+                                        sendMessage(imMessage, MessageType.ban);
+                                        textView.setText(getString(R.string.live_relieve_ban));
+                                        isMuteds = true;
                                     }
-                                    sendMessage(imMessage, MessageType.relieveBan);
-                                    textView.setText(getString(R.string.live_ban));
-                                    isMuteds = false;
-                                } else {
-
-                                    String messageContent="禁言了"+result.getNickName();
-                                    LiveMessage liveMessage=new LiveMessage();
-                                    liveMessage.setStyle(MessageType.ban);
-                                    liveMessage.setDisableSendMsgNickName(result.getNickName());
-                                    liveMessage.setDisableSendMsgUserId(String.valueOf(result.getId()));
-                                    liveMessage.setUserId(userId);
-                                    liveMessage.setCreatorAccount(creatorAccount);
-                                    liveMessage.setChannelId(channelId);
-                                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, meberAccount, liveMessage);
-
-                                    banListLive.add(meberAccount);
-                                    sendMessage(imMessage, MessageType.ban);
-                                    textView.setText(getString(R.string.live_relieve_ban));
-                                    isMuteds = true;
                                 }
-                            }
-                        });
-                        break;
+                            });
+                            break;
+                        }
+
                     } else {
                         LiveConstant.IDENTITY = LiveConstant.ME_CHECK_OTHER;
                     }
@@ -1271,9 +1272,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
             clearChatRoom();
         }
-
     }
-
     /**
      * 基本权限管理
      */
@@ -1292,7 +1291,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     @OnMPermissionGranted(BASIC_PERMISSION_REQUEST_CODE)
     public void onBasicPermissionSuccess() {
-
         initAudienceParam();
     }
 

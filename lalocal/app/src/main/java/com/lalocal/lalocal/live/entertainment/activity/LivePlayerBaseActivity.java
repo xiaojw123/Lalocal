@@ -1008,7 +1008,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             NIMClient.getService(AuthService.class).logout();
             DemoCache.setLoginChatRoomStatus(false);
             onDisconnected();
-
         //    MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
         }
     }
