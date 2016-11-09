@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +72,7 @@ import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
+import com.lalocal.lalocal.model.SocialUser;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
@@ -104,6 +106,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.BIND_SOCIAL_ACCOUNT;
+
 
 /**
  * Created by xiaojw on 2016/6/1.
@@ -128,6 +132,58 @@ public class ContentLoader {
 
 
         this.callBack = callBack;
+    }
+
+    public void bindPhone(String phone, String code) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.BIDN_PHONE);
+            response.setPLoginInfo(phone,code);
+        }
+        JSONObject jobj = new JSONObject();
+        try {
+            jobj.put("phone", phone);
+            jobj.put("code", code);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getBindPhoneUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        request.setBodyParams(jobj.toString());
+        requestQueue.add(request);
+    }
+
+
+    //获取三方账户列表
+    public void getSocialUsers() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SOCIAL_USES);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUsersSocialUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+    //绑定三方账户
+    public void bindSocialAccount(CompoundButton switchBtn,Map<String, String> map,SHARE_MEDIA share_media) {
+        if (callBack != null) {
+            response = new ContentResponse(BIND_SOCIAL_ACCOUNT);
+            response.setSwitchButton(switchBtn);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getUsersSocialUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        request.setBodyParams(getSocialBodyParams(map,share_media).toString());
+        requestQueue.add(request);
+    }
+
+    //解绑三方账号
+    public void unBindSocialAccount(CompoundButton switchBtn,int uid) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.UNBIND_SOCIAL_ACCOUNT);
+            response.setSwitchButton(switchBtn);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getUnBindSocialUrl(uid), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
     }
 
 
@@ -1285,9 +1341,14 @@ public class ContentLoader {
         private String attentionFlag;
         private String socialParams;
         private String uidPramas;
+        private CompoundButton switchBtn;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
+        }
+
+        public void setSwitchButton(CompoundButton switchBtn){
+            this.switchBtn=switchBtn;
         }
 
         //三方账号用户信息
@@ -1375,6 +1436,7 @@ public class ContentLoader {
             }
         }
 
+
         @Override
         public void onResponse(String json) {
             if (responseView != null) {
@@ -1405,6 +1467,24 @@ public class ContentLoader {
 
                 }
                 switch (resultCode) {
+                    case RequestCode.BIDN_PHONE:
+                        AppLog.print("bind_phone_result___" + json);
+                        callBack.onBindPhoneSuccess(phone);
+                        break;
+                    case RequestCode.GET_SOCIAL_USES:
+                        AppLog.print("get__");
+                        responGetSocialUsers(jsonObj);
+                        break;
+                    case RequestCode.BIND_SOCIAL_ACCOUNT:
+                        AppLog.print("bind__social__acount__"+json);
+                        responBindSocialUser(jsonObj);
+                        break;
+                    case RequestCode.UNBIND_SOCIAL_ACCOUNT:
+                        AppLog.print("unbind__social__acount__"+json);
+                        jsonObj.optString(ResultParams.REULST);
+                        callBack.onUnBindSocialUser(switchBtn);
+                        break;
+
                     case RequestCode.SOCIAL_BIND:
                         AppLog.print("三方绑定----result---" + json);
                         responseSocialBind(jsonObj);
@@ -1545,6 +1625,7 @@ public class ContentLoader {
                         responseRegister(jsonObj);
                         break;
                     case RequestCode.LOGIN:
+                        AppLog.print("邮箱登录___json___"+json);
                         responseLogin(jsonObj);
                         break;
                     case RequestCode.CHECK_EMAIL:
@@ -1707,6 +1788,43 @@ public class ContentLoader {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+        }
+
+        private void responBindSocialUser(JSONObject jsonObj) {
+            String resultJson=jsonObj.optString(ResultParams.REULST);
+            try {
+                Gson gson=new Gson();
+                JSONObject resultJobj=new JSONObject(resultJson);
+                String wechatJson=resultJobj.optString("wechat");
+                String qqJson=resultJobj.optString("qq");
+                String weiboJson=resultJobj.optString("weibo");
+                SocialUser wechatUser=gson.fromJson(wechatJson,SocialUser.class);
+                SocialUser qqUser=gson.fromJson(qqJson,SocialUser.class);
+                SocialUser weiboUser=gson.fromJson(weiboJson,SocialUser.class);
+                callBack.onBindSocialUser(switchBtn,wechatUser,qqUser,weiboUser);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        private void responGetSocialUsers(JSONObject jsonObj) {
+            String resultJson=jsonObj.optString(ResultParams.REULST);
+            try {
+                Gson gson=new Gson();
+                JSONObject resultJobj=new JSONObject(resultJson);
+                String wechatJson=resultJobj.optString("wechat");
+                String qqJson=resultJobj.optString("qq");
+                String weiboJson=resultJobj.optString("weibo");
+                SocialUser wechatUser=gson.fromJson(wechatJson,SocialUser.class);
+                SocialUser qqUser=gson.fromJson(qqJson,SocialUser.class);
+                SocialUser weiboUser=gson.fromJson(weiboJson,SocialUser.class);
+                callBack.onGetSocialUsers(wechatUser,qqUser,weiboUser);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
 
         }
 
@@ -2183,6 +2301,7 @@ public class ContentLoader {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(KeyParams.IS_LOGIN, true);
                 bundle.putString(KeyParams.EMAIL, email);
+                bundle.putInt(KeyParams.STATUS, user.getStatus());
                 bundle.putString(KeyParams.PASSWORD, psw);
                 bundle.putInt(KeyParams.USERID, user.getId());
                 bundle.putString(KeyParams.TOKEN, user.getToken());
@@ -2206,6 +2325,7 @@ public class ContentLoader {
 
                 @Override
                 public void onSuccess(Object o) {
+                    AppLog.print("imccid");
                     DemoCache.setAccount(imccId);
                     DemoCache.getRegUserInfo();
                     DemoCache.setLoginStatus(true);
@@ -2772,6 +2892,7 @@ public class ContentLoader {
 //        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
 //                "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
 //                + DensityUtil.getWindowHeight((Activity) context) + "");
+        AppLog.print("headerPramas1---version:" + AppConfig.getVersionName(context) + "\nuuid:" + CommonUtil.getUUID(context));
         return headers;
     }
 
@@ -2791,8 +2912,15 @@ public class ContentLoader {
 
     public Map<String, String> getLoginHeaderParams() {
         Map<String, String> map = getHeaderParams();
-        map.put("USER_ID", String.valueOf(UserHelper.getUserId(context)));
-        map.put("TOKEN", UserHelper.getToken(context));
+        String userid = String.valueOf(UserHelper.getUserId(context));
+        String token = UserHelper.getToken(context);
+        if (!TextUtils.isEmpty(userid)) {
+            map.put("USER_ID", userid);
+        }
+        if (!TextUtils.isEmpty(token)) {
+            map.put("TOKEN", token);
+        }
+        AppLog.print("headPrams2----userid:" + String.valueOf(UserHelper.getUserId(context)) + "\ntoken:" + UserHelper.getToken(context));
         return map;
 
     }
@@ -2863,6 +2991,11 @@ public class ContentLoader {
         int LOGIN_BY_SOCIAL = 155;
         int REGISTER_BY_SOCIAL = 156;
         int SOCIAL_BIND = 157;
+        int GET_SOCIAL_USES = 158;
+        int BIND_SOCIAL_ACCOUNT = 159;
+        int UNBIND_SOCIAL_ACCOUNT = 160;
+        int BIDN_PHONE = 161;
+
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;

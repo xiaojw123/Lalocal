@@ -14,6 +14,7 @@
         android:background="@color/white">
 
         <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/account_edit2_ctv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:title_name="@string/edit_account" />

@@ -95,6 +95,10 @@ public class UserHelper {
         initSPref(context);
         return sp.getString(KeyParams.EMAIL, null);
     }
+    public  static int getStatus(Context context){
+        initSPref(context);
+        return sp.getInt(KeyParams.STATUS,-1);
+    }
 
     public static String getPassword(Context context) {
         initSPref(context);

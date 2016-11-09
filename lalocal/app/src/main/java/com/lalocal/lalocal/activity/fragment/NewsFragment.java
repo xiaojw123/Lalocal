@@ -78,11 +78,8 @@ import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.LiveMainAdapter;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
 import java.util.ArrayList;
@@ -147,6 +144,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         contentService.setCallBack(new MyCallBack());
         contentService.getLiveArea();
         contentService.recommendAd();
+//        registerObservers(true);
         requestBasicPermission(); // 申请APP基本权限
     }
 
@@ -376,16 +374,20 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
 
     //监听IM账号登录状态
-    private void registerObservers(boolean register) {
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-    }
-
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG", "newsfragment監聽用戶登錄狀態：" + statusCode);
-        }
-    };
+//    private void registerObservers(boolean register) {
+//        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
+//    }
+//
+//    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+//        @Override
+//        public void onEvent(StatusCode statusCode) {
+//            AppLog.print("news login____"+statusCode);
+//            if (statusCode==StatusCode.LOGINED){
+//
+//            }
+//
+//        }
+//    };
 
     boolean isClick = true;
     int classflyHeight = 0;
@@ -1014,7 +1016,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         //注册监听
-        registerObservers(true);
+
         if (sliderLayout != null) {
             sliderLayout.startAutoCycle();
         }
@@ -1038,7 +1040,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         if (sliderLayout != null) {
             sliderLayout.stopAutoCycle();
         }
-        registerObservers(false);
         AppLog.i("TAG", "onStop");
     }
 
@@ -1050,6 +1051,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
     @Override
     public void onDestroy() {
+//        registerObservers(false);
         super.onDestroy();
         AppLog.i("TAG", "onDestroy");
 

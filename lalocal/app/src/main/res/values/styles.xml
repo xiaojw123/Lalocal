@@ -565,6 +565,12 @@
         <item name="android:background">@color/black_99</item>
         <item name="android:textColor">@color/color_f0a028</item>
         <item name="android:textSize">@dimen/text_size_18_sp</item>
+    </style>
+    <style name="AccoutSecurityNameStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_12_sp</item>
+        <item name="android:textColor">@color/color_b3</item>
 
     </style>
 </resources>

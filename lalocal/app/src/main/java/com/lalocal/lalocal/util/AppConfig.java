@@ -532,6 +532,22 @@ public class AppConfig {
     public static String getSocialBindurl(){
         return baseUrl+"users/social/bind";
     }
+    //三方账号列表
+    public static String getUsersSocialUrl(){
+        return  baseUrl+"users/social";
+    }
+    //解除绑定
+    public static String getUnBindSocialUrl(int uid){
+        return  baseUrl+"users/social/"+uid;
+    }
+    //绑定手机号
+    public static String getBindPhoneUrl(){
+//        http://dev.lalocal.cn:8080/api/users/phone/bind
+        return  baseUrl+"users/phone/bind";
+    }
+
+
+
 
 
 }

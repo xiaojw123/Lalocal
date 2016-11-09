@@ -15,11 +15,33 @@
         app:title_name="@string/setting" />
 
     <FrameLayout
-        android:id="@+id/setting_about_us"
+        android:id="@+id/setting_accout_security"
         android:layout_width="match_parent"
         android:layout_height="@dimen/setting_about_us_height"
         android:layout_below="@+id/setting_title_view"
         android:background="@color/white">
+
+        <TextView
+            style="@style/SettingItemTextTheme"
+            android:layout_marginLeft="@dimen/setting_item_left"
+            android:text="@string/account_security" />
+
+        <ImageView
+            style="@style/SettingItemArrowTheme"
+            android:layout_marginRight="@dimen/setting_item_right" />
+
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/setting_about_us"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/setting_about_us_height"
+        android:layout_below="@+id/setting_accout_security"
+        android:background="@color/white">
+
+        <TextView style="@style/CommonDeLineTheme" />
+
 
         <TextView
             style="@style/SettingItemTextTheme"

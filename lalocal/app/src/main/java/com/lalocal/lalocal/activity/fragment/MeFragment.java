@@ -42,7 +42,6 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
-import butterknife.BindDimen;
 import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -106,11 +105,6 @@ MeFragment extends BaseFragment {
     FrameLayout articleFl;
     @BindView(R.id.home_me_item_artice_line)
     View articleLine;
-
-
-    @BindDimen(R.dimen.home_me_username_top)
-    int userNameTop;
-    int authorTop;
     @BindString(R.string.login_prompt)
     String loginPrmotText;
     @BindString(R.string.default_description)
@@ -128,7 +122,6 @@ MeFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
-        authorTop = userNameTop / 2;
         setLoaderCallBack(new MeCallBack());
         initLogin();
         return view;
@@ -239,6 +232,7 @@ MeFragment extends BaseFragment {
         MobHelper.singOff();
         UserHelper.updateSignOutInfo(getActivity());
         updateFragmentView(false, null);
+
     }
 
     private void updateFragmentView(boolean isLogined, User user) {

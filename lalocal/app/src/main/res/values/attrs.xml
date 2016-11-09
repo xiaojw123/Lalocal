@@ -60,6 +60,8 @@
         <attr name="my_maxLen" format="integer"/>
         <attr name="hint" format="string"/>
         <attr name="clearEanble" format="boolean"/>
+        <attr name="my_background" format="reference"/>
+        <attr name="my_width" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="LCustomLayout">
         <attr name="l_title" format="string"/>

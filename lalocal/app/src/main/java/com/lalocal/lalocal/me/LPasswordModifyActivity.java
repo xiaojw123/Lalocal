@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.me;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +10,9 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.SettingActivity;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -46,6 +49,7 @@ public class LPasswordModifyActivity extends BaseActivity implements CustomTitle
         ButterKnife.bind(this);
         setLoaderCallBack(new PswModifyCallBack());
         lpswModifyCtv.setOnBackClickListener(this);
+        setLoginBackResult(true);
     }
 
     @OnClick({R.id.lpswmodify_sendver_btn, R.id.lpswmodify_sure_btn})
@@ -86,8 +90,11 @@ public class LPasswordModifyActivity extends BaseActivity implements CustomTitle
         public void onResetPasswordComplete(String psw) {
             UserHelper.updatePassword(LPasswordModifyActivity.this, psw);
             CommonUtil.showToast(LPasswordModifyActivity.this, "密码修改成功!", Toast.LENGTH_LONG);
-            setResult(SettingActivity.LOGIN);
-            finish();
+            MobHelper.singOff();
+            UserHelper.updateSignOutInfo(LPasswordModifyActivity.this);
+            setResult(MeFragment.UPDATE_ME_DATA);
+            Intent intent=new Intent(LPasswordModifyActivity.this,LLoginActivity.class);
+            startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
 
         @Override

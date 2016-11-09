@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 
@@ -27,8 +28,14 @@ public class EmailBoundActivity extends BaseActivity implements View.OnClickList
         initService();
         email_edit = (CustomEditText) findViewById(R.id.emailbound_email_edit);
         change_email_btn = (Button) findViewById(R.id.emailbound_change_email_btn);
+        String email=getUserEmail();
+        if (TextUtils.isEmpty(email)){
+            change_email_btn.setText(getResources().getString(R.string.send_email_vercode));
+        }else{
+            change_email_btn.setText(getResources().getString(R.string.change_email));
+        }
         email_edit.setEidtType(CustomEditText.TYPE_1);
-        email_edit.setText(getUserEmail());
+        email_edit.setText(email);
         email_edit.setDefaultSelectionEnd(true);
         email_edit.setClearButtonVisible(false);
         change_email_btn.setOnClickListener(this);

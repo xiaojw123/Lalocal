@@ -22,7 +22,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
-import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -35,10 +34,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
@@ -69,7 +64,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
         timeTv.setOnClickListener(this);
         mHandler = new SplashHandler();
-        registerObservers(true);
         requestUserPermission(Manifest.permission.READ_PHONE_STATE);
     }
 
@@ -98,21 +92,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
-    private void registerObservers(boolean register) {
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-    }
-
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG", "SplashActivity監聽自動登錄狀態：" + statusCode);
-            if (statusCode == StatusCode.LOGINED) {
-                DemoCache.setLoginStatus(true);
-            }
-
-        }
-    };
 
 
     @Override
@@ -358,12 +337,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 startHomePage();
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        registerObservers(false);
     }
 
 }

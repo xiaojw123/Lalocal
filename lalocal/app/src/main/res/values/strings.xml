@@ -339,5 +339,10 @@
     <string name="umeng_socialize_text_comment_hint">说点什么吧&#8230;</string>
     <string name="please_input_vercode_email">请输入验证码(在邮件里查看)</string>
     <string name="sure_modify">确认修改</string>
+    <string name="account_security">账户安全</string>
+    <string name="recommend_login_way">推荐登录方式</string>
+    <string name="sure_bind">确认绑定</string>
+    <string name="bind_phone">绑定手机</string>
+    <string name="no_bind">未绑定</string>
 
 </resources>
