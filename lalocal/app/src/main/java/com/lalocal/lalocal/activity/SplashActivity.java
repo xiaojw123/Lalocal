@@ -69,7 +69,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
         timeTv.setOnClickListener(this);
         mHandler = new SplashHandler();
-        registerObservers(true);
+      //  registerObservers(true);
         requestUserPermission(Manifest.permission.READ_PHONE_STATE);
     }
 
@@ -369,7 +369,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        registerObservers(false);
+      //  registerObservers(false);
     }
 
 }

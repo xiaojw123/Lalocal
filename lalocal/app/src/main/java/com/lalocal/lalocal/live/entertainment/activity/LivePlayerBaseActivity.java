@@ -136,6 +136,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
     public static final String NIM_CHAT_MESSAGE_INFO = "nimlivesenfmessage";
+    public  boolean isUnDestory=true;
 
     // 聊天室信息
     protected String roomId;
@@ -373,8 +374,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             }
                         }
                     },1500);
-
-
                 }
             } else if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
@@ -454,7 +453,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     textView.setTextColor(Color.parseColor("#ffaa2a"));
                     messageListPanel.setHead(textView);
                 }
-
             }
             AppLog.i("TAG", "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
         }
@@ -652,7 +650,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         totalGold = totalGold + currentRanks.get(i).getGold();
                     }
                 }
-                if(hasWindowFocus()){
+                if(isUnDestory){
                     showGiftRanksPopuWindow(liveGiftRanksResp);
                 }
 
@@ -757,7 +755,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     if(LivePlayerBaseActivity.this instanceof LiveActivity){
                         MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_SHARE);
                     }
-                    if (shareVO != null) {
+                    if (shareVO != null&&isUnDestory) {
                         SharePopupWindow shareActivity = new SharePopupWindow(LivePlayerBaseActivity.this, shareVO);
                         shareActivity.showShareWindow();
                         shareActivity.showAtLocation(LivePlayerBaseActivity.this.findViewById(R.id.live_layout),
@@ -954,6 +952,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         isOnLineUsersCountChange = true;
                         audienceOnLineCountsChange=true;
                         String fromAccountIn = message.getFromAccount();
+
                         sendMessage(message, MessageType.text);
                         if(fromAccountIn!=null&&creatorAccount!=null){
                             if (creatorAccount.equals(fromAccountIn)) {
@@ -1354,6 +1353,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isUnDestory=false;
         registerObservers(false);
         DemoCache.setLoginChatRoomStatus(false);
         unregisterReceiver(myNetReceiver);
@@ -1551,25 +1551,28 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     //登录界面
     public void showLoginViewDialog() {
-        final CustomChatDialog customDialog = new CustomChatDialog(this);
-        customDialog.setContent(getString(R.string.live_login_hint));
-        customDialog.setCancelable(false);
-        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
-        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
-            @Override
-            public void onDialogClickListener() {
-                DemoCache.setLoginStatus(false);
-                ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-                startActivityForResult(new Intent(LivePlayerBaseActivity.this, LLoginActivity.class), LIVE_BASE_RESQUEST_CODE);
-            }
-        });
-        customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialog) {
-                LiveConstant.USER_INFO_FIRST_CLICK = true;
-            }
-        });
-        customDialog.show();
+        if(isUnDestory){
+            final CustomChatDialog customDialog = new CustomChatDialog(this);
+            customDialog.setContent(getString(R.string.live_login_hint));
+            customDialog.setCancelable(false);
+            customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+            customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                @Override
+                public void onDialogClickListener() {
+                    DemoCache.setLoginStatus(false);
+                    ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+                    startActivityForResult(new Intent(LivePlayerBaseActivity.this, LLoginActivity.class), LIVE_BASE_RESQUEST_CODE);
+                }
+            });
+            customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    LiveConstant.USER_INFO_FIRST_CLICK = true;
+                }
+            });
+            customDialog.show();
+        }
+
     }
 
     @Override

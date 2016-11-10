@@ -2194,11 +2194,11 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
-             //   NIMClient.getService(AuthService.class).logout();
+                NIMClient.getService(AuthService.class).logout();
                 DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-            //    loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+              //   loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
             }
         }
 
@@ -2207,18 +2207,20 @@ public class ContentLoader {
 
                 @Override
                 public void onSuccess(Object o) {
+                    AppLog.i("TAG","ContentLoader,登录云信成功");
                     DemoCache.setAccount(imccId);
                     DemoCache.getRegUserInfo();
                     DemoCache.setLoginStatus(true);
                 }
-
                 @Override
                 public void onFailed(int i) {
+                    AppLog.i("TAG","ContentLoader,登录云信失败"+i);
                     DemoCache.setLoginStatus(false);
                 }
 
                 @Override
                 public void onException(Throwable throwable) {
+                    AppLog.i("TAG","ContentLoader,登录云信异常");
                     DemoCache.setLoginStatus(false);
                 }
             });

@@ -12,10 +12,19 @@ import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
+import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMShareAPI;
 /*
@@ -30,6 +39,7 @@ public class BaseActivity extends AppCompatActivity {
     public ContentLoader mContentloader;
     View mLoadingView;
     boolean mLoginBack;
+    boolean isOnResume;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +47,68 @@ public class BaseActivity extends AppCompatActivity {
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isOnResume=false;
+        registerObservers(false);
+    }
+
+    //监听IM账号登录状态
+    private void registerObservers(boolean register) {
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
+
+    }
+
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode statusCode) {
+            AppLog.i("TAG", "BaseActivity 監聽用戶登錄狀態：" + statusCode);
+            if(statusCode==StatusCode.UNLOGIN){
+                String userAccount = AuthPreferences.getUserAccount();
+                String userToken = AuthPreferences.getUserToken();
+                if(userAccount!=null&&userToken!=null&&isOnResume){
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    loginIMServer(userAccount,userToken);
+                }
+            }
+            if(statusCode==StatusCode.KICKOUT){
+                //TODO 账号被踢出
+            }
+        }
+    };
+
+    private void loginIMServer(final String imccId, String imToken) {
+        NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
+
+            @Override
+            public void onSuccess(Object o) {
+                AppLog.i("TAG","BaseActivity,登录云信成功");
+                DemoCache.setAccount(imccId);
+                DemoCache.getRegUserInfo();
+                DemoCache.setLoginStatus(true);
+            }
+            @Override
+            public void onFailed(int i) {
+                AppLog.i("TAG","BaseActivity,登录云信失败"+i);
+                DemoCache.setLoginStatus(false);
+            }
+
+            @Override
+            public void onException(Throwable throwable) {
+                AppLog.i("TAG","BaseActivity,登录云信异常");
+                DemoCache.setLoginStatus(false);
+            }
+        });
+    }
 
     //页面全屏加载loading显示
     public void showLoadingAnimation() {
@@ -83,6 +153,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isOnResume=true;
+        registerObservers(true);
         //注：回调 1
         if (MyApplication.isDebug) {
             Bugtags.onResume(this);

@@ -29,7 +29,9 @@ import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
+import com.netease.nimlib.sdk.auth.OnlineClient;
 import com.umeng.analytics.MobclickAgent;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
@@ -43,20 +45,30 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     ViewGroup lastSelectedTab;
     FragmentManager fm;
     Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
-
     private int selected = 0;
-
     // 记录第一次点击back的时间
     private long clickTime = 0;
+    Observer<List<OnlineClient>> onlineclient= new Observer<List<OnlineClient>>(){
+        @Override
+        public void onEvent(List<OnlineClient> onlineClients) {
+            if(onlineClients!=null&&onlineClients.size()>0){
+                for (OnlineClient online :onlineClients){
+                    AppLog.i("TAG","监听其他登录状态，踢掉其他端用户");
+                    NIMClient.getService(AuthService.class).kickOtherClient(online);
+                }
+            }
+        }
+    };
+
     Observer<StatusCode> userStatusObserver=new Observer<StatusCode>() {
         @Override
         public void onEvent(StatusCode statusCode) {
             AppLog.print("onEvent___触发——————");
+            AppLog.i("TAG","HomeActivity监听账号登录状态哈哈哈哈哈哈哈哈哈哈哈："+statusCode);
             if (statusCode != StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(false);
                 if (statusCode == StatusCode.KICKOUT) {
-                    AppLog.print("kickout____");
-                    //   accountKicout();
+                    AppLog.i("TAG","HomeActivity账号被剔除了哈哈哈哈哈哈哈哈哈哈哈");
                     Toast.makeText(HomeActivity.this, "你的账号已在其他设备登录,请重新登录", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(HomeActivity.this, LLoginActivity.class);
                     startActivity(intent);
@@ -65,23 +77,25 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 DemoCache.setLoginStatus(true);
             }
         }
-    };;
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
+    //    registerObservers(true);
         initView();
         checkUpdate();
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
+        //   NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
         //听云SDK
 //        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
 
-
-
-
+    private void registerObservers(boolean register) {
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
+        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(onlineclient,register );
+    }
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
         boolean forceFlag = result.isForceFlag();
@@ -95,8 +109,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showUpdateDialog(downLoadUrl, contentText);
             }
         }
-
-
     }
 
 
@@ -407,9 +419,10 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (userStatusObserver != null) {
+      //  registerObservers(true);
+      /*  if (userStatusObserver != null) {
             NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
-        }
+        }*/
         AppLog.i("TAG", "HomeActivity:onDestroy");
     }
 
