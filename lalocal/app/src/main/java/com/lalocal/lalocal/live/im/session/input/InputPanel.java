@@ -448,6 +448,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
     }
 
+
     // 隐藏语音布局
     private void hideAudioLayout() {
 
@@ -489,7 +490,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editTextMessage, 0);
-
         container.proxy.onInputPanelExpand();
     }
 

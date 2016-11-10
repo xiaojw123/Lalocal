@@ -1554,6 +1554,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                rtcEngine().setEnableSpeakerphone(true);
+                rtcEngine().setPreferHeadset(true);
                 masterLeaveTime();
             }
         });

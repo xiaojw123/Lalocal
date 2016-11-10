@@ -365,7 +365,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                            //  mProgressBarView.setVisibility(View.GONE);
-                        mVideoPlayCallback.showLoadingPage(false);
+                        if(mVideoPlayCallback!=null){
+                            mVideoPlayCallback.showLoadingPage(false);
+                        }
+
                         return true;
                     }
                     return false;

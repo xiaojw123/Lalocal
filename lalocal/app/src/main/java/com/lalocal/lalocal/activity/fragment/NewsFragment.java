@@ -269,9 +269,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int top = xRecyclerView.getChildAt(0).getTop();
                 int scollYDistance = getScollYDistance();
-                int i = DensityUtil.dip2px(getActivity(), 10);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
                 AppLog.print("onScrolled firstVisibleItemPosition____" + firstVisibleItemPosition + "____scollDy____" + scollDy);
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
@@ -361,17 +359,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         xRecyclerView.addHeaderView(searchinfate);
         xRecyclerView.addHeaderView(inflate);
 
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESQUEST_COD && resultCode== MeFragment.LOGIN_OK) {
-            if (data != null) {
-                AppLog.i("TAG","登录账号反馈机房环境好好的");
-            }
-        }
     }
 
     boolean firstLoadData = true;

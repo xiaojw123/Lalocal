@@ -818,9 +818,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             if (remoteExtension != null) {
                 Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
                 while (iterator.hasNext()) {
+
                     Map.Entry<String, Object> next = iterator.next();
                     String key = next.getKey();
                     Object value = next.getValue();
+
                     if ("barrag".equals(key)) {
                         barrageContent = value.toString();
                     }
@@ -863,6 +865,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     break;
                 case MessageType.barrage://弹幕
                     ChatRoomMessage barrageMessage = (ChatRoomMessage) message;
+
                     String senderNick = barrageMessage.getChatRoomMessageExtension().getSenderNick();
                     String content = barrageMessage.getContent();
 
@@ -1491,7 +1494,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     AppLog.i("TAG","直播基类接受到用户点赞");
                     messageListPanel.onMsgSend(message);
                     break;
-
                 case MessageType.gift:
                     messageListPanel.onMsgSend(message);
                     break;

@@ -368,7 +368,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 productDetail(result);
                 List<PhotosVosBean> photoVOs = result.photoVOs;
                 List<RecommendAdResultBean> list = new ArrayList<>();
-                if (photoVOs.size() > 0) {
+                if (photoVOs!=null&&photoVOs.size() > 0) {
                     //显示轮播图
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoVOs.size(); i++) {
@@ -380,7 +380,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                         list.add(recommendAdResultBean);
                     }
                     showphotos(list);
-                } else if (photoList.size() > 0) {
+                } else if (photoList!=null&&photoList.size() > 0) {
                     detailsPhoto1.setVisibility(View.GONE);
 
                     for (int i = 0; i < photoList.size(); i++) {

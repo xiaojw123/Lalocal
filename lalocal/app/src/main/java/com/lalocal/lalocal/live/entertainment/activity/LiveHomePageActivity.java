@@ -224,9 +224,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
                 startActivity(intent1);
-               /* if (back != null) {
-                    finish();
-                }*/
+
                 break;
 
             case R.id.personal_home_page:

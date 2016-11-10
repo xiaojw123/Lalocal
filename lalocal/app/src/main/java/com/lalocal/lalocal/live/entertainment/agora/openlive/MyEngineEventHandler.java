@@ -66,8 +66,6 @@ public class MyEngineEventHandler {
             }
 
         }
-
-
         //其他用户离开当前频道回调
         @Override
         public void onUserOffline(int uid, int reason) {

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
@@ -31,7 +32,7 @@ import java.util.Set;
 /**
  * 弹幕容器
  */
-public class BarrageView extends RelativeLayout {
+public class BarrageView extends RelativeLayout implements View.OnClickListener {
 
     private static final String TAG = "BarrageView";
 
@@ -283,6 +284,11 @@ public class BarrageView extends RelativeLayout {
     }
 
     private OnBarrageClickListener onBarrageClickListener;
+
+    @Override
+    public void onClick(View v) {
+        Toast.makeText(getContext(),"弹幕被点击了",Toast.LENGTH_SHORT).show();
+    }
 
     public interface OnBarrageClickListener {
        void getUserId(String userId);

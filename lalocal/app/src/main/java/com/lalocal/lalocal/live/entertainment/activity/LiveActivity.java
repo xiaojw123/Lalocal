@@ -313,11 +313,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         aucienceCount = (TextView) findViewById(R.id.live_over_audience_count);
         overTime = (TextView) findViewById(R.id.live_over_time_tv);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
-        // playLike = (ImageView) findViewById(R.id.live_telecast_like);
         blurImageView = (BlurImageView) findViewById(R.id.live_over_bg);
         TextView shareTv = (TextView) findViewById(R.id.over_share_title);
-        //   playLike.setVisibility(View.INVISIBLE);
-
 
         //挑战
         challengeNewTask = (ImageView) findViewById(R.id.challenge_new_task);
@@ -1214,16 +1211,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveMessage.setStyle(MessageType.leaveLive);
         liveMessage.setCreatorAccount(creatorAccount);
         liveMessage.setUserId(userId);
-        if(container.account!=null){
+        if(container!=null&&container.account!=null){
             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播了哈哈哈哈哈哈", roomId, AuthPreferences.getUserAccount(), liveMessage);
             sendMessage(imMessage, MessageType.leaveLive);
         }
-
         if (isLeaveChannel) {
             deInitUIandEvent();
             isLeaveChannel = false;
         }
-
         if (isClickStartLiveBtn) {
             isStartLive = false;
             drawerLayout.closeDrawer(Gravity.RIGHT);
