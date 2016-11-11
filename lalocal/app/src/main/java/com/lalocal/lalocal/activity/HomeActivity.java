@@ -4,6 +4,8 @@ package com.lalocal.lalocal.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -14,16 +16,16 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.umeng.analytics.MobclickAgent;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
@@ -41,6 +43,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     // 记录第一次点击back的时间
     private long clickTime = 0;
+    int mPageType;
 
 
     @Override
@@ -53,7 +56,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         //听云SDK
 //        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
-
 
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
@@ -227,10 +229,11 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             @Override
             public void clickLeftButton(View view) {
                 forceDailog.dismiss();
-                if (!MyApplication.isDebug) {
-                    MobclickAgent.onKillProcess(HomeActivity.this);
-                }
-                System.exit(0);
+                finish();
+//                if (!MyApplication.isDebug) {
+//                    MobclickAgent.onKillProcess(HomeActivity.this);
+//                }
+//                System.exit(0);
             }
 
             @Override
@@ -360,22 +363,43 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPageType = getPageType();
+        AppLog.print("onRestart___mPageType_" + mPageType);
+        if (mPageType == PageType.PAGE_ME_FRAGMENT) {
+            showFragment(home_me_tab);
+        } else if (mPageType == PageType.PAGE_HOME_FRAMENT) {
+            showFragment(home_news_tab);
+        }
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
-        AppLog.i("TAG", "HomeActivity:onStart");
+        AppLog.print("onStart___");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppLog.print("onPause___");
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        AppLog.i("TAG", "HomeActivity:onResume");
+        AppLog.print("onResume___");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        AppLog.i("TAG", "HomeActivity:onStop");
+        AppLog.print("onStop____");
+        setIntent(new Intent());
     }
+
 
     @Override
     protected void onDestroy() {
@@ -383,4 +407,22 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         AppLog.i("TAG", "HomeActivity:onDestroy");
     }
 
+    //立即登录----home  其他---me
+    public static void start(Context context, boolean imLogin) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        AppLog.print("start imlOGIN__"+imLogin);
+        if (imLogin) {
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_HOME_FRAMENT);
+        } else {
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_ME_FRAGMENT);
+        }
+        context.startActivity(intent);
+    }
+    //确保intent可以传递数据
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        AppLog.print("onNewIntent____");
+        setIntent(intent);
+    }
 }

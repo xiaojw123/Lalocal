@@ -39,7 +39,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.activity.LiveSearchActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
@@ -61,6 +60,7 @@ import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
@@ -144,9 +144,12 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         contentService.setCallBack(new MyCallBack());
         contentService.getLiveArea();
         contentService.recommendAd();
-//        registerObservers(true);
         requestBasicPermission(); // 申请APP基本权限
+        AppLog.i("TAG","NewsFragment:走了onCreate");
     }
+
+
+
 
     @Nullable
     @Override
@@ -346,20 +349,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 //        return colorDrawable;
 //    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
-            if (data != null) {
-                isLogining = true;
-                String email = data.getStringExtra(LoginActivity.EMAIL);
-                String psw = data.getStringExtra(LoginActivity.PSW);
-                contentService.login(email, psw);
-            }
-        }
-    }
-
-    boolean firstLoadData = true;
 
     @Override
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
@@ -373,22 +362,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    //监听IM账号登录状态
-//    private void registerObservers(boolean register) {
-//        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-//    }
-//
-//    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-//        @Override
-//        public void onEvent(StatusCode statusCode) {
-//            AppLog.print("news login____"+statusCode);
-//            if (statusCode==StatusCode.LOGINED){
-//
-//            }
-//
-//        }
-//    };
-
     boolean isClick = true;
     int classflyHeight = 0;
 
@@ -397,13 +370,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.live_create_room:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
-               /* if (Build.VERSION.SDK_INT >= 23) {
-                    AppLog.i("TAG", "点击直播按钮，版本大于23，权限判断");
-                    reminderUserPermission();//创建直播间，判断权限
-                } else {
-                    AppLog.i("TAG", "点击直播按钮，版本小于，权限判断");
-                    prepareLive();
-                }*/
+
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                     prepareLive();
                 } else {
@@ -886,7 +853,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    boolean isLogining = false;
 
     private void prepareLive() {
         boolean isLogin = UserHelper.isLogined(getActivity());
@@ -908,9 +874,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
                 @Override
                 public void onDialogClickListener() {
-
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(intent, RESQUEST_COD);
+                    LLoginActivity.start(getActivity());
 
                 }
             });
@@ -1011,15 +975,15 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     public void onBasicPermissionFailed() {
         //  Toast.makeText(getActivity(), "授权失败", Toast.LENGTH_SHORT).show();
     }
-
+    boolean isFirstStart=true;
     @Override
     public void onStart() {
         super.onStart();
-        //注册监听
-
         if (sliderLayout != null) {
             sliderLayout.startAutoCycle();
         }
+
+        AppLog.i("TAG","fragment走了onStart方法");
 
     }
 
@@ -1040,7 +1004,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         if (sliderLayout != null) {
             sliderLayout.stopAutoCycle();
         }
-        AppLog.i("TAG", "onStop");
     }
 
     @Override

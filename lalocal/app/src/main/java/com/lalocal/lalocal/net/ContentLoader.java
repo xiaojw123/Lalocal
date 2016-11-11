@@ -6,9 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -21,12 +19,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.lalocal.lalocal.activity.RegisterActivity;
 import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
@@ -35,6 +33,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.me.LRegister1Activity;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
@@ -86,6 +85,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.MD5Util;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
@@ -104,7 +104,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.lalocal.lalocal.net.ContentLoader.RequestCode.BIND_SOCIAL_ACCOUNT;
 
@@ -134,10 +133,11 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
-    public void bindPhone(String phone, String code) {
+    public void bindPhone(String phone, String code,ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.BIDN_PHONE);
-            response.setPLoginInfo(phone,code);
+            response.setProgressButton(pb);
+            response.setPLoginInfo(phone, code);
         }
         JSONObject jobj = new JSONObject();
         try {
@@ -164,19 +164,19 @@ public class ContentLoader {
     }
 
     //绑定三方账户
-    public void bindSocialAccount(CompoundButton switchBtn,Map<String, String> map,SHARE_MEDIA share_media) {
+    public void bindSocialAccount(CompoundButton switchBtn, Map<String, String> map, SHARE_MEDIA share_media) {
         if (callBack != null) {
             response = new ContentResponse(BIND_SOCIAL_ACCOUNT);
             response.setSwitchButton(switchBtn);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getUsersSocialUrl(), response, response);
         request.setHeaderParams(getLoginHeaderParams());
-        request.setBodyParams(getSocialBodyParams(map,share_media).toString());
+        request.setBodyParams(getSocialBodyParams(map, share_media).toString());
         requestQueue.add(request);
     }
 
     //解绑三方账号
-    public void unBindSocialAccount(CompoundButton switchBtn,int uid) {
+    public void unBindSocialAccount(CompoundButton switchBtn, int uid) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.UNBIND_SOCIAL_ACCOUNT);
             response.setSwitchButton(switchBtn);
@@ -194,10 +194,10 @@ public class ContentLoader {
             response.setSocialParams(getSocialBodyParams(map, share_media).toString(), loginParams);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialLoginUrl(), response, response);
-        Set<Map.Entry<String, String>> entrySet = map.entrySet();
-        for (Map.Entry<String, String> entry : entrySet) {
-            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
-        }
+//        Set<Map.Entry<String, String>> entrySet = map.entrySet();
+//        for (Map.Entry<String, String> entry : entrySet) {
+//            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
+//        }
         AppLog.print("rquestUrl__" + AppConfig.getSocialLoginUrl() + ", id____" + getSocialLoginPrarams(map, share_media).toString());
         request.setBodyParams(loginParams);
         requestQueue.add(request);
@@ -242,9 +242,10 @@ public class ContentLoader {
         return jsonObject;
     }
 
-    public void socialBind(String socialParams) {
+    public void socialBind(String socialParams, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SOCIAL_BIND);
+            response.setProgressButton(pb);
         }
         AppLog.print("三方绑定邮箱bodyPrams___" + socialParams);
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialBindurl(), response, response);
@@ -253,9 +254,10 @@ public class ContentLoader {
     }
 
 
-    public void registerBySocial(String socialParams) {
+    public void registerBySocial(String socialParams, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER_BY_SOCIAL);
+            response.setProgressButton(pb);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialReigsterUrl(), response, response);
         AppLog.print("三方注册___socialParams_" + socialParams);
@@ -264,9 +266,10 @@ public class ContentLoader {
     }
 
 
-    public void registerByPhone(String phone, String code, String email, String password) {
+    public void registerByPhone(String phone, String code, String email, String password, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER_PHONE);
+            response.setProgressButton(pb);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneRegisterUrl(), response, response);
         JSONObject reqParams = new JSONObject();
@@ -280,6 +283,24 @@ public class ContentLoader {
                 reqParams.put(RequestParams.PASSWORD, MD5Util.getMD5String(password));
             }
             request.setBodyParams(reqParams.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+    public void loginByPhone(String phone, String code, ProgressButton pb) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LOGIN_PHEON);
+            response.setProgressButton(pb);
+            response.setPLoginInfo(phone, code);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneLoginUrl(), response, response);
+        JSONObject reqBody = new JSONObject();
+        try {
+            reqBody.put(RequestParams.PHONE, phone);
+            reqBody.put(RequestParams.CODE, code);
+            request.setBodyParams(reqBody.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -304,9 +325,10 @@ public class ContentLoader {
     }
 
 
-    public void getSMSCode(View resView, String phoneNum, String type) {
+    public void getSMSCode(View resView, String phoneNum, String type,ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SMS_VER_CODE);
+            response.setProgressButton(pb);
             response.setResponseView(resView);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSMSVerCode(), response, response);
@@ -700,9 +722,10 @@ public class ContentLoader {
     }
 
 
-    public void resetPasword(String email, String vercode, String newpsw) {
+    public void resetPasword(String email, String vercode, String newpsw, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RESET_PASSWORD);
+            response.setProgressButton(pb);
             response.setPassWord(newpsw);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getPasswordResetUrl(), response, response);
@@ -711,9 +734,11 @@ public class ContentLoader {
 
     }
 
-    public void boundEmail(String email, int userid, String token) {
+    public void boundEmail(String email, int userid, String token, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
+            response.setProgressButton(pb);
+            response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getEmailBoundUrl(), response, response);
         request.setHeaderParams(getHeaderParams(userid, token));
@@ -732,10 +757,10 @@ public class ContentLoader {
     }
 
     //发送验证码
-    public void sendVerificationCode(String email, TextView textView) {
+    public void sendVerificationCode(String email, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SEND_VERIFICATION_CODE);
-            response.setResponseView(textView);
+            response.setProgressButton(pb);
             response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getVerCodeSendUrl(), response, response);
@@ -744,9 +769,10 @@ public class ContentLoader {
     }
 
     //判断邮箱是否被注册过
-    public void checkEmail(String email, String uidprams) {
+    public void checkEmail(String email, String uidprams, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
+            response.setProgressButton(pb);
             response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCheckMailUrl(), response, response);
@@ -757,9 +783,10 @@ public class ContentLoader {
 
 
     //登录
-    public void login(final String email, final String password) {
+    public void login(final String email, final String password, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN);
+            response.setProgressButton(pb);
             response.setUserInfo(email, password);
         }
         AppLog.print("login____loginURL___" + AppConfig.getLoginUrl() + "__email_:" + email + ", password:" + password);
@@ -771,10 +798,10 @@ public class ContentLoader {
     }
 
     //注册
-    public void register(final String email, final String password, final String nickname, Button regitsterBtn) {
+    public void register(final String email, final String password, final String nickname, ProgressButton regitsterBtn) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER);
-            response.setResponseView(regitsterBtn);
+            response.setProgressButton(regitsterBtn);
             response.setUserInfo(email, password);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getRegisterUrl(), response, response);
@@ -1342,13 +1369,14 @@ public class ContentLoader {
         private String socialParams;
         private String uidPramas;
         private CompoundButton switchBtn;
+        private ProgressButton mProgressButton;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
 
-        public void setSwitchButton(CompoundButton switchBtn){
-            this.switchBtn=switchBtn;
+        public void setSwitchButton(CompoundButton switchBtn) {
+            this.switchBtn = switchBtn;
         }
 
         //三方账号用户信息
@@ -1405,6 +1433,15 @@ public class ContentLoader {
             this.responseView = responseView;
         }
 
+        public void setProgressButton(ProgressButton pb) {
+            if (pb != null) {
+                pb.startLoadingAnimation();
+                pb.setEnabled(false);
+                mProgressButton = pb;
+            }
+        }
+
+
         public void setRecommend(int pageSize, int pageNumber) {
             this.pageSize = pageSize;
             this.pageNumber = pageNumber;
@@ -1414,9 +1451,7 @@ public class ContentLoader {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             AppLog.print("volley error——————" + volleyError);
-            if (responseView != null) {
-                responseView.setEnabled(true);
-            }
+            resetResponseView();
             if (volleyError != null) {
 
                 String errorMsg = volleyError.toString();
@@ -1436,12 +1471,20 @@ public class ContentLoader {
             }
         }
 
-
-        @Override
-        public void onResponse(String json) {
+        private void resetResponseView() {
+            if (mProgressButton != null) {
+                mProgressButton.setEnabled(true);
+                mProgressButton.stopLoadingAnimation();
+            }
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
+        }
+
+
+        @Override
+        public void onResponse(String json) {
+            resetResponseView();
             JSONObject jsonObj;
             try {
                 if (TextUtils.isEmpty(json)) {
@@ -1476,11 +1519,11 @@ public class ContentLoader {
                         responGetSocialUsers(jsonObj);
                         break;
                     case RequestCode.BIND_SOCIAL_ACCOUNT:
-                        AppLog.print("bind__social__acount__"+json);
+                        AppLog.print("bind__social__acount__" + json);
                         responBindSocialUser(jsonObj);
                         break;
                     case RequestCode.UNBIND_SOCIAL_ACCOUNT:
-                        AppLog.print("unbind__social__acount__"+json);
+                        AppLog.print("unbind__social__acount__" + json);
                         jsonObj.optString(ResultParams.REULST);
                         callBack.onUnBindSocialUser(switchBtn);
                         break;
@@ -1625,7 +1668,7 @@ public class ContentLoader {
                         responseRegister(jsonObj);
                         break;
                     case RequestCode.LOGIN:
-                        AppLog.print("邮箱登录___json___"+json);
+                        AppLog.print("邮箱登录___json___" + json);
                         responseLogin(jsonObj);
                         break;
                     case RequestCode.CHECK_EMAIL:
@@ -1792,17 +1835,17 @@ public class ContentLoader {
         }
 
         private void responBindSocialUser(JSONObject jsonObj) {
-            String resultJson=jsonObj.optString(ResultParams.REULST);
+            String resultJson = jsonObj.optString(ResultParams.REULST);
             try {
-                Gson gson=new Gson();
-                JSONObject resultJobj=new JSONObject(resultJson);
-                String wechatJson=resultJobj.optString("wechat");
-                String qqJson=resultJobj.optString("qq");
-                String weiboJson=resultJobj.optString("weibo");
-                SocialUser wechatUser=gson.fromJson(wechatJson,SocialUser.class);
-                SocialUser qqUser=gson.fromJson(qqJson,SocialUser.class);
-                SocialUser weiboUser=gson.fromJson(weiboJson,SocialUser.class);
-                callBack.onBindSocialUser(switchBtn,wechatUser,qqUser,weiboUser);
+                Gson gson = new Gson();
+                JSONObject resultJobj = new JSONObject(resultJson);
+                String wechatJson = resultJobj.optString("wechat");
+                String qqJson = resultJobj.optString("qq");
+                String weiboJson = resultJobj.optString("weibo");
+                SocialUser wechatUser = gson.fromJson(wechatJson, SocialUser.class);
+                SocialUser qqUser = gson.fromJson(qqJson, SocialUser.class);
+                SocialUser weiboUser = gson.fromJson(weiboJson, SocialUser.class);
+                callBack.onBindSocialUser(switchBtn, wechatUser, qqUser, weiboUser);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -1810,17 +1853,17 @@ public class ContentLoader {
 
 
         private void responGetSocialUsers(JSONObject jsonObj) {
-            String resultJson=jsonObj.optString(ResultParams.REULST);
+            String resultJson = jsonObj.optString(ResultParams.REULST);
             try {
-                Gson gson=new Gson();
-                JSONObject resultJobj=new JSONObject(resultJson);
-                String wechatJson=resultJobj.optString("wechat");
-                String qqJson=resultJobj.optString("qq");
-                String weiboJson=resultJobj.optString("weibo");
-                SocialUser wechatUser=gson.fromJson(wechatJson,SocialUser.class);
-                SocialUser qqUser=gson.fromJson(qqJson,SocialUser.class);
-                SocialUser weiboUser=gson.fromJson(weiboJson,SocialUser.class);
-                callBack.onGetSocialUsers(wechatUser,qqUser,weiboUser);
+                Gson gson = new Gson();
+                JSONObject resultJobj = new JSONObject(resultJson);
+                String wechatJson = resultJobj.optString("wechat");
+                String qqJson = resultJobj.optString("qq");
+                String weiboJson = resultJobj.optString("weibo");
+                SocialUser wechatUser = gson.fromJson(wechatJson, SocialUser.class);
+                SocialUser qqUser = gson.fromJson(qqJson, SocialUser.class);
+                SocialUser weiboUser = gson.fromJson(weiboJson, SocialUser.class);
+                callBack.onGetSocialUsers(wechatUser, qqUser, weiboUser);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -2250,6 +2293,7 @@ public class ContentLoader {
         }
 
         private void responseBoundEmail() {
+            UserHelper.updateEmail(context,email);
             callBack.onSendActivateEmmailComplete();
 
         }
@@ -2279,7 +2323,16 @@ public class ContentLoader {
 
         private void responseCheckMail(JSONObject jsonObject) {
             String resutJson = jsonObject.optString(ResultParams.REULST);
-            callBack.onCheckEmail(email, resutJson);
+            String userId = null;
+            if (resutJson != null) {
+                try {
+                    JSONObject resJobj = new JSONObject(resutJson);
+                    userId = resJobj.optString("userId");
+                } catch (JSONException e) {
+                }
+
+            }
+            callBack.onCheckEmail(email, userId);
         }
 
         private void responseLogin(JSONObject jsonObject) {
@@ -2300,9 +2353,8 @@ public class ContentLoader {
                 MobHelper.singIn(user.getId());
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(KeyParams.IS_LOGIN, true);
-                bundle.putString(KeyParams.EMAIL, email);
+                bundle.putString(KeyParams.EMAIL, user.getEmail());
                 bundle.putInt(KeyParams.STATUS, user.getStatus());
-                bundle.putString(KeyParams.PASSWORD, psw);
                 bundle.putInt(KeyParams.USERID, user.getId());
                 bundle.putString(KeyParams.TOKEN, user.getToken());
                 bundle.putString(KeyParams.AVATAR, user.getAvatar());
@@ -2312,11 +2364,11 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
-                NIMClient.getService(AuthService.class).logout();
+                //   NIMClient.getService(AuthService.class).logout();
                 DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-                loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
+                //    loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
             }
         }
 
@@ -2410,6 +2462,7 @@ public class ContentLoader {
 
         //直播详情
         private void responseLiveDetails(String json) {
+            AppLog.i("TAG", "直播详情：" + json);
             LiveDetailsDataResp liveDetailsDataResp = new Gson().fromJson(json, LiveDetailsDataResp.class);
             callBack.onLiveDetails(liveDetailsDataResp);
         }
@@ -2420,6 +2473,8 @@ public class ContentLoader {
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             int id = createLiveRoomDataResp.getResult().getId();
             callBack.onCreateLiveRoom(createLiveRoomDataResp);
+
+
         }
 
         //修改直播间
@@ -2640,9 +2695,9 @@ public class ContentLoader {
 
         @Override
         public void onDialogClickListener() {
-            Intent intent = new Intent(context, RegisterActivity.class);
+            Intent intent = new Intent(context, LRegister1Activity.class);
             intent.putExtra(KeyParams.EMAIL, email);
-            ((Activity) context).startActivityForResult(intent, 100);
+            ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
 
@@ -2767,7 +2822,7 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("style", 0);
-
+            jsonObject.put("direction", LiveConstant.DEFAULT_DIRECTION);
         } catch (JSONException e) {
             e.printStackTrace();
         }

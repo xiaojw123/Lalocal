@@ -21,6 +21,7 @@ public interface KeyParams {
     public static  final  String TRAVEL_PERSONS_CONCACT="concact";
     public static  final String SETTING="setting";
     public static  final  String IM_LOGIN="im_login";
+    public static  final  String NORMAIL_BACK="normal_back";
     public static  final  String PASSWORD="psw";
     public static  final  String IS_LOGIN="isLogin";
     public static final String IM_TOKEN="imtoken";

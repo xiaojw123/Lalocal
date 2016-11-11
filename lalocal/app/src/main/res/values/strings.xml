@@ -50,7 +50,7 @@
     <string name="grade">去评分</string>
     <string name="use_clauses">使用条款</string>
     <string name="publisher">©2015杭州目的地科技有限公司</string>
-    <string name="reserved">Copyright（c）2015 HangZhou Destionation Technology Ltd. All rights reserved.</string>
+    <string name="reserved">Copyright（c）2015 HangZhou Destionation Technology Co., Ltd. All rights reserved.</string>
     <string name="edit_account">编辑资料</string>
     <string name="sex">性别</string>
     <string name="phone">电话</string>
@@ -344,5 +344,8 @@
     <string name="sure_bind">确认绑定</string>
     <string name="bind_phone">绑定手机</string>
     <string name="no_bind">未绑定</string>
+    <string name="information_feedback">信息反馈</string>
+    <string name="login_success">登录成功</string>
+    <string name="register_success">注册成功</string>
 
 </resources>

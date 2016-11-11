@@ -17,10 +17,10 @@ public class ConstantApp {
             IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_240P,
             IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_360P,
             IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P,
-            IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P_2,
+
             IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P};
 
-    public static final int DEFAULT_PROFILE_IDX = 2; // default use 240P
+    public static final int DEFAULT_PROFILE_IDX = 5; // default use 240P
 
     public static class PrefManager {
         public static final String PREF_PROPERTY_PROFILE_IDX = "pref_profile_index";

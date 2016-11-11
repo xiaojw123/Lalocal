@@ -148,6 +148,10 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         String enumValue = item.getEnumValue();
                         LiveConstant.LIVE_DEFINITION = Integer.parseInt(enumValue);
                         break;
+                    case 23://视频方向
+                        String defaultDirection = item.getEnumValue();
+                        LiveConstant.DEFAULT_DIRECTION=Integer.parseInt(defaultDirection);
+                        break;
                 }
 
             }

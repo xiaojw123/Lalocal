@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.MyArticleActivity;
 import com.lalocal.lalocal.activity.MyFavoriteActivity;
 import com.lalocal.lalocal.activity.MyLiveActivity;
@@ -57,13 +56,9 @@ MeFragment extends BaseFragment {
     public static final String USER = "user";
     public static final int LOGIN_OK = 102;
     public static final int UN_LOGIN_OK = 103;
-    public static final int REGISTER_OK = 101;
     public static final int UPDATE_ME_DATA = 301;
-    public static final int IM_LOGIN = 105;
-    public boolean isImLogin;
-    User user;
+    public static final int IM_LOGIN_OK = 105;
     OnMeFragmentListener fragmentListener;
-    Intent imLoginData;
     WalletContent walletContent;
     @BindView(R.id.home_me_fans_tab)
     LinearLayout homeMeFansTab;
@@ -113,27 +108,26 @@ MeFragment extends BaseFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        AppLog.print("onAttach(Activity)___");
+        AppLog.print("meFragment_onAttach(Activity)___");
         fragmentListener = (OnMeFragmentListener) activity;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        AppLog.print("meFragment_onCreateView____");
         View view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
         setLoaderCallBack(new MeCallBack());
-        initLogin();
         return view;
     }
 
     private void initLogin() {
-        AppLog.print("initLogin isLogin___"+UserHelper.isLogined(getActivity()));
         if (UserHelper.isLogined(getActivity())) {
             //恢复上一次登录的状态
-            String email = UserHelper.getUserEmail(getActivity());
-            String psw = UserHelper.getPassword(getActivity());
-            mContentloader.login(email, psw);
+            mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
+        } else {
+            updateFragmentView(false, null);
         }
     }
 
@@ -142,31 +136,41 @@ MeFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        AppLog.print("onHiddenChanged____" + hidden);
-        if (isImLogin) {
-            //立即登录
-            isImLogin = false;
-            if (imLoginData != null) {
-                User user = imLoginData.getParcelableExtra(USER);
-                if (user != null) {
-                    updateFragmentView(true, user);
-                } else {
-                    String email = imLoginData.getStringExtra(LoginActivity.EMAIL);
-                    String psw = imLoginData.getStringExtra(LoginActivity.PSW);
-                    mContentloader.login(email, psw);
-                }
-            }
-        } else {
-            //正常登录方式  刷新邮箱验证状态 刷新我的收藏状态(我的收藏没被选中时更新我的收藏适配器)
-            if (!hidden) {
-                AppLog.print("onHiddenChanged__showFrament____");
-                if (UserHelper.isLogined(getActivity())) {
-                    mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
-                }
-            }
+        AppLog.print("meFragment_onHiddenChanged____" + hidden);
+        if (!hidden) {
+            initLogin();
         }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        AppLog.print("meFragment____onStart");
+        initLogin();
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppLog.print("meFragment____onResume");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppLog.print("meFragment____onPause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        AppLog.print("meFragment____onStop");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AppLog.print("meFragment____onDestry__");
     }
 
     private void gotoSettingPage() {
@@ -183,60 +187,7 @@ MeFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        AppLog.print("onActivityResult  resCode___" + resultCode);
-        if (resultCode == REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            mContentloader.login(email, psw);
-        } else if (resultCode == LOGIN_OK) {
-            User user = data.getParcelableExtra(USER);
-            updateFragmentView(true, user);
-        } else if (resultCode ==UN_LOGIN_OK) {
-            signOut();
-        } else if (resultCode == UPDATE_ME_DATA) {
-            AppLog.print("UPDATE_ME_DATA_____islOgin___" + UserHelper.isLogined(getActivity()));
-            if (UserHelper.isLogined(getActivity())) {
-                String nickname = data.getStringExtra(KeyParams.NICKNAME);
-                String avatar = data.getStringExtra(KeyParams.AVATAR);
-                if (user != null) {
-                    user.setNickName(nickname);
-                    user.setAvatar(avatar);
-//                updateFragmentView(UserHelper.isLogined(getActivity()), user);
-                    mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
-                }
-            } else {
-                updateFragmentView(false, null);
-            }
-        } else if (resultCode == IM_LOGIN) {
-            isImLogin = true;
-            imLoginData = data;
-            if (fragmentListener != null) {
-                fragmentListener.onShowRecommendFragment();
-            }
-            String ccid = imLoginData.getStringExtra(KeyParams.IM_CCID);
-            String imtken = imLoginData.getStringExtra(KeyParams.IM_TOKEN);
-            AppLog.i("TAG", "ccid:" + ccid + "token:" + imtken);
-        } else if (resultCode == UPDAE_MY_WALLET) {
-            AppLog.print("UPDAE_MY_WALLET___islogin__" + UserHelper.isLogined(getActivity()));
-            if (UserHelper.isLogined(getActivity())) {
-                mContentloader.getMyWallet();
-            } else {
-                updateFragmentView(false, null);
-            }
-        }
-    }
-
-    private void signOut() {
-        MobHelper.singOff();
-        UserHelper.updateSignOutInfo(getActivity());
-        updateFragmentView(false, null);
-
-    }
-
     private void updateFragmentView(boolean isLogined, User user) {
-        this.user = user;
         if (isLogined && user != null) {
             String description = user.getDescription();
             if (TextUtils.isEmpty(description)) {
@@ -245,7 +196,7 @@ MeFragment extends BaseFragment {
                 loginPrompt.setText(description);
             }
             String nickname = user.getNickName();
-            AppLog.print("账号登录———————nickName—"+nickname);
+            AppLog.print("账号登录———————nickName—" + nickname);
             if (!TextUtils.isEmpty(nickname)) {
                 username_tv.setActivated(true);
                 username_tv.setText(nickname);
@@ -279,15 +230,18 @@ MeFragment extends BaseFragment {
                         break;
                 }
                 hidenArticeTag();
-
+            }
+            String email = user.getEmail();
+            if (TextUtils.isEmpty(email)) {
+                verified_tv.setText("未绑定");
             }
             String avatar = user.getAvatar();
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
-
             }
+            homeMeFollowNum.setText(user.getAttentionNum());
+            homeMeFansNum.setText(user.getFansNum());
             homeMeItemWalletAmountTv.setVisibility(View.VISIBLE);
-            mContentloader.getLiveUserInfo(String.valueOf(UserHelper.getUserId(getActivity())));
             mContentloader.getMyWallet();
         } else {
             AppLog.print("账号退出————————");
@@ -411,21 +365,6 @@ MeFragment extends BaseFragment {
         startActivityForResult(intent, 100);
     }
 
-//    private void showLoginDialog() {
-//        CustomDialog dialog = new CustomDialog(getActivity());
-//        dialog.setMessage("您还未登录，请登录");
-//        dialog.setTitle("提示");
-//        dialog.setCancelBtn("取消", null);
-//        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
-//            @Override
-//            public void onDialogClickListener() {
-//                gotoLoginPage();
-//            }
-//        });
-//        dialog.show();
-//    }
-
-
     private void gotoMyItemPage(Class<?> cls) {
         Intent intent = new Intent(getActivity(), cls);
         if (cls == MyWalletActivity.class) {
@@ -448,11 +387,6 @@ MeFragment extends BaseFragment {
 
 
         @Override
-        public void onLoginSucess(User user) {
-            updateFragmentView(true, user);
-        }
-
-        @Override
         public void onError(VolleyError volleyError) {
             if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
                 if (!UserHelper.isLogined(getActivity())) {
@@ -465,8 +399,7 @@ MeFragment extends BaseFragment {
         @Override
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
-            homeMeFollowNum.setText(String.valueOf(result.getAttentionNum()));
-            homeMeFansNum.setText(String.valueOf(result.getFansNum()));
+
         }
 
 
@@ -491,6 +424,42 @@ MeFragment extends BaseFragment {
     public interface OnMeFragmentListener {
         void onShowRecommendFragment();
 
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        AppLog.print("onActivityResult___");
+        switch (resultCode) {
+
+            case LOGIN_OK: //登录成功
+                User user = data.getParcelableExtra(USER);
+                updateFragmentView(true, user);
+                break;
+            case UN_LOGIN_OK://退出成功
+                UserHelper.updateSignOutInfo(getActivity());
+                updateFragmentView(false, null);
+                break;
+            case UPDATE_ME_DATA://更新我的页面
+                if (UserHelper.isLogined(getActivity())) {
+                    mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
+                } else {
+                    updateFragmentView(false, null);
+                }
+                break;
+            case IM_LOGIN_OK://立即登录
+                if (fragmentListener != null) {
+                    fragmentListener.onShowRecommendFragment();
+                }
+                break;
+            case UPDAE_MY_WALLET://更新我的钱包
+                if (UserHelper.isLogined(getActivity())) {
+                    mContentloader.getMyWallet();
+                } else {
+                    updateFragmentView(false, null);
+                }
+                break;
+        }
     }
 
 

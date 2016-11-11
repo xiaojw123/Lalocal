@@ -21,6 +21,7 @@
         <attr name="maxLen" format="integer"/>
         <attr name="dights" format="string"/>
         <attr name="isPsw" format="boolean"/>
+        <attr name="clearVisible" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="CustomTitleView">
         <attr name="title_name" format="string"/>
@@ -93,4 +94,23 @@
         <attr name="lineSpacingMultiplier"/>
         <attr name="maxLines"/>
     </declare-styleable>
+    <attr name="progressButtonStyle" format="reference" />
+
+    <declare-styleable name="ProgressButton">
+        <attr name="pb_background" format="reference" />
+        <attr name="pb_BackgroundColor" format="color" />
+        <attr name="pb_TextSize" format="dimension" />
+        <attr name="pb_TextColor" format="color" />
+        <attr name="pb_text" format="string" />
+        <attr name="isOrangeBg" format="boolean"/>
+    </declare-styleable>
+
+    <!--<style name="ProgressButton" />-->
+
+    <!--&lt;!&ndash; Base theme for the Progress button. &ndash;&gt;-->
+    <!--<style name="ProgressButton.attrs">-->
+        <!--<item name="android:clickable">false</item>-->
+        <!--<item name="android:focusable">false</item>-->
+    <!--</style>-->
+
 </resources>

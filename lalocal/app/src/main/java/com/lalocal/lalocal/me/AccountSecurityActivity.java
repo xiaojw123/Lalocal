@@ -14,7 +14,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt2Activity;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.EmailBoundActivity;
-import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LoginUser;
@@ -34,8 +33,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class AccountSecurityActivity extends BaseActivity {
-    public static final int RESULT_BIND_PHONE = 0x81;
-    private static final int MODIFY_USER_PROFILE = 4;
+    //    public static final int RESULT_BIND_PHONE = 0x81;
+//    private static final int MODIFY_USER_PROFILE = 4;
     @BindView(R.id.account_security_phone_layout)
     FrameLayout accountSecurityPhoneLayout;
     @BindView(R.id.account_security_email_layout)
@@ -95,35 +94,38 @@ public class AccountSecurityActivity extends BaseActivity {
             case R.id.account_security_email_layout:
                 if (mUser != null) {
                     String email = mUser.getEmail();
+                    int userId = mUser.getId();
                     if (!TextUtils.isEmpty(email)) {
                         if (mUser != null && mUser.getStatus() == 0) {
                             Intent intent = new Intent(this, EmailBoundActivity.class);
-                            intent.putExtra(KeyParams.EMAIL, mUser.getEmail());
-                            intent.putExtra(KeyParams.USERID, mUser.getId());
+                            intent.putExtra(KeyParams.EMAIL, email);
+                            intent.putExtra(KeyParams.USERID, userId);
                             intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(this));
-                            startActivityForResult(intent, MODIFY_USER_PROFILE);
+                            startActivityForResult(intent, KeyParams.REQUEST_CODE);
                         } else {
                             Intent intent = new Intent(this, AccountEidt2Activity.class);
                             intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
                             intent.putExtra("emailtext", email);
-                            intent.putExtra(KeyParams.USERID, mUser.getId());
+                            intent.putExtra(KeyParams.USERID, userId);
                             intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(this));
-                            startActivityForResult(intent, MODIFY_USER_PROFILE);
+                            startActivityForResult(intent, KeyParams.REQUEST_CODE);
                         }
                     } else {
                         Intent intent = new Intent(this, EmailBoundActivity.class);
-                        intent.putExtra(KeyParams.USERID, mUser.getId());
+                        intent.putExtra(KeyParams.USERID, userId);
                         intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(this));
-                        startActivityForResult(intent, MODIFY_USER_PROFILE);
+                        startActivityForResult(intent, KeyParams.REQUEST_CODE);
                     }
-
                 }
 
 
                 break;
             case R.id.account_security_modifypsw:
-                Intent pswIntent = new Intent(this, LPasswordModifyActivity.class);
-                startActivityForResult(pswIntent, KeyParams.REQUEST_CODE);
+                if (mUser != null) {
+                    Intent pswIntent = new Intent(this, LPasswordModifyActivity.class);
+                    pswIntent.putExtra(KeyParams.EMAIL, mUser.getEmail());
+                    startActivityForResult(pswIntent, KeyParams.REQUEST_CODE);
+                }
                 break;
             case R.id.accout_security_weixin_cb:
             case R.id.accout_security_qq_cb:
@@ -152,7 +154,7 @@ public class AccountSecurityActivity extends BaseActivity {
                 share_media = SHARE_MEDIA.SINA;
             }
             mUmShareAPI.doOauthVerify(this, share_media, authListener);
-        } else if (!button.isChecked()&&tag!=null){
+        } else if (!button.isChecked() && tag != null) {
             button.setChecked(true);
             CustomDialog dialog = new CustomDialog(this);
             dialog.setTitle("解除绑定");
@@ -166,8 +168,8 @@ public class AccountSecurityActivity extends BaseActivity {
             dialog.setSurceBtn("我意已决", new CustomDialog.CustomDialogListener() {
                 @Override
                 public void onDialogClickListener() {
-                        SocialUser user = (SocialUser) tag;
-                        mContentloader.unBindSocialAccount(button, user.getId());
+                    SocialUser user = (SocialUser) tag;
+                    mContentloader.unBindSocialAccount(button, user.getId());
                 }
             });
             dialog.show();
@@ -231,31 +233,34 @@ public class AccountSecurityActivity extends BaseActivity {
 
         @Override
         public void onGetUserProfile(LoginUser user) {
-            mUser = user;
-            String phone = user.getPhone();
-            String email = user.getEmail();
-            int status = user.getStatus();
-            if (!TextUtils.isEmpty(phone)) {
-                phoneTv.setText(phone);
-                phoneTv.setVisibility(View.VISIBLE);
-                phoneUnBindTv.setVisibility(View.GONE);
-            } else {
-                phoneTv.setVisibility(View.GONE);
-                phoneUnBindTv.setText("");
-                phoneUnBindTv.setVisibility(View.VISIBLE);
-            }
-            if (!TextUtils.isEmpty(email)) {
-                emailTv.setVisibility(View.VISIBLE);
-                emailTv.setText(email);
-                if (status == 0) {
-                    emailStatusTv.setVisibility(View.GONE);
+            if (user != null) {
+                mUser = user;
+                String phone = user.getPhone();
+                String email = user.getEmail();
+                int status = user.getStatus();
+                if (!TextUtils.isEmpty(phone)) {
+                    phoneTv.setText(phone);
+                    phoneTv.setVisibility(View.VISIBLE);
+                    phoneUnBindTv.setVisibility(View.GONE);
                 } else {
-                    emailStatusTv.setText(noVerifedText);
-                    emailStatusTv.setVisibility(View.VISIBLE);
+                    phoneTv.setVisibility(View.GONE);
+                    phoneUnBindTv.setVisibility(View.VISIBLE);
                 }
-            } else {
-                emailStatusTv.setText(noBindText);
-                emailStatusTv.setVisibility(View.GONE);
+                if (!TextUtils.isEmpty(email)) {
+                    emailTv.setVisibility(View.VISIBLE);
+                    emailTv.setText(email);
+                    if (status == 0) {
+                        emailStatusTv.setVisibility(View.GONE);
+                    } else {
+                        emailStatusTv.setText(noVerifedText);
+                        emailStatusTv.setVisibility(View.VISIBLE);
+                    }
+                    accountSecurityModifypsw.setVisibility(View.VISIBLE);
+                } else {
+                    emailStatusTv.setText(noBindText);
+                    emailStatusTv.setVisibility(View.VISIBLE);
+                    accountSecurityModifypsw.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -329,15 +334,8 @@ public class AccountSecurityActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("onActivityResult__resultCode___" + resultCode);
-        if (resultCode != MeFragment.LOGIN_OK) {
-            if (resultCode == MeFragment.UPDATE_ME_DATA) {
-                setResult(resultCode);
-            } else {
-                mContentloader.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
-            }
-        }
         super.onActivityResult(requestCode, resultCode, data);
-
+        mContentloader.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
     }
 
 }

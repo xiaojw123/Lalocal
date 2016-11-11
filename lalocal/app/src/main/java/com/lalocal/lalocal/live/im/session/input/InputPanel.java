@@ -184,7 +184,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
     private void initInputBarListener() {
 
-
         emojiButtonInInputBar.setOnClickListener(clickListener);
         sendMessageButtonInInputBar.setOnClickListener(clickListener);
         moreFuntionButtonInInputBar.setOnClickListener(clickListener);
@@ -356,7 +355,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         Toast.makeText(container.activity,"弹幕做多发送20个字",Toast.LENGTH_SHORT).show();
                         return;
                     }
-
 
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());

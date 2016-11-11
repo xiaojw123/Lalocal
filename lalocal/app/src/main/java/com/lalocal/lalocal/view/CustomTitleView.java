@@ -11,12 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.PasswordForget1Activity;
-import com.lalocal.lalocal.activity.PasswordForget2Activity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.me.LPEmailBound2Activity;
 import com.lalocal.lalocal.me.LPEmailBoundActivity;
+import com.lalocal.lalocal.me.LPasswordForget1Activity;
+import com.lalocal.lalocal.me.LPasswordForget2Activity;
 
 /**
  * Created by xiaojw on 2016/7/4.
@@ -85,9 +85,9 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
                     MobHelper.sendEevent(context, MobEvent.BINDING_BACK_01);
                 }else if (a instanceof LPEmailBound2Activity){
                     MobHelper.sendEevent(context, MobEvent.BINDING_BACK_02);
-                }else if (a instanceof PasswordForget1Activity){
+                }else if (a instanceof LPasswordForget1Activity){
                     MobHelper.sendEevent(context,MobEvent.LOGIN_FORGET_BACK_01);
-                }else  if (a instanceof PasswordForget2Activity){
+                }else  if (a instanceof LPasswordForget2Activity){
                     MobHelper.sendEevent(context,MobEvent.LOGIN_FORGET_BACK_02);
                 }
                 a.finish();

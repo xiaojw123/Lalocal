@@ -573,4 +573,61 @@
         <item name="android:textColor">@color/color_b3</item>
 
     </style>
+    <!--<style name="ProgressButton" />-->
+
+    <!--&lt;!&ndash; Base theme for the Progress button. &ndash;&gt;-->
+    <!--<style name="ProgressButton.attrs">-->
+        <!--<item name="pb_background">@drawable/orange_corner_btn_bg</item>-->
+        <!--<item name="android:clickable">false</item>-->
+        <!--<item name="android:focusable">false</item>-->
+        <!--<item name="pb_fontSize">@dimen/text_size_18_sp</item>-->
+        <!--<item name="pb_fontColor">@color/black_color</item>-->
+    <!--</style>-->
+
+
+    <!--<declare-styleable name="ProgressButton">-->
+        <!--<attr name="android:clickable" />-->
+        <!--<attr name="android:focusable" />-->
+        <!--<attr name="pb_background" format="reference" />-->
+        <!--<attr name="pb_fontSize" format="integer" />-->
+        <!--<attr name="pb_fontColor" format="color" />-->
+        <!--<attr name="pb_text" format="string" />-->
+    <!--</declare-styleable>-->
+
+    <!--<style name="PbStyle">-->
+        <!--&lt;!&ndash;<com.lalocal.lalocal.view.ProgressButton&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/progressView"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width=""&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="50dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:clickable="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:src=""&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding=""&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;/>&ndash;&gt;-->
+        <!--<item name="android:layout_width">match_parent</item>-->
+        <!--<item name="android:layout_height">@dimen/dimen_size_50_dp</item>-->
+        <!--<item name="android:clickable">true</item>-->
+        <!--<item name="android:src">@drawable/progress_view</item>-->
+        <!--<item name="android:padding">@dimen/text_size_16_sp</item>-->
+
+
+
+
+
+    <!--</style>-->
+
+    <style name="PbStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dimen_size_50_dp</item>
+    </style>
+    <style name="PbNextStyle">
+        <item name="android:layout_width">@dimen/login_phone_edit_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dimen_size_10_dp</item>
+    </style>
+
 </resources>

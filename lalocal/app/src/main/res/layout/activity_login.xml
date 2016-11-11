@@ -11,7 +11,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
 
 
         <Button
@@ -83,6 +84,7 @@
                     android:hint="@string/input_phone"
                     android:inputType="number"
                     android:maxLines="1"
+                    android:maxLength="15"
                     android:paddingLeft="@dimen/dimen_size_10_dp"
                     android:paddingRight="@dimen/dimen_size_2_dp"
                     android:textColor="@color/color_1a"
@@ -105,29 +107,46 @@
                     app:hint="@string/input_dynamic_password"
                     app:my_title="@string/dynamic_password" />
 
-                <Button
+                <!--<Button-->
+                    <!--android:id="@+id/login_get_password"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_marginLeft="@dimen/dimen_size_half_dp"-->
+                    <!--android:background="@color/color_ffaa2a"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/get_password"-->
+                    <!--android:textColor="@drawable/login_password_get_textcolor"-->
+                    <!--android:textSize="@dimen/dimen_size_14_dp" />-->
+
+                <com.lalocal.lalocal.view.ProgressButton
                     android:id="@+id/login_get_password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dimen_size_half_dp"
-                    android:background="@color/color_ffaa2a"
-                    android:gravity="center"
-                    android:text="@string/get_password"
-                    android:textColor="@drawable/login_password_get_textcolor"
-                    android:textSize="@dimen/dimen_size_14_dp" />
-
+                    app:pb_text="@string/get_password"
+                    app:pb_BackgroundColor="@color/color_ffaa2a"
+                    app:pb_TextSize="@dimen/dimen_size_14_dp" />
 
             </LinearLayout>
 
-            <Button
+            <!--<Button-->
+                <!--android:id="@+id/login_next_btn"-->
+                <!--android:layout_width="@dimen/login_phone_edit_width"-->
+                <!--android:layout_height="@dimen/login_phone_edit_height"-->
+                <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
+                <!--android:background="@color/black_99"-->
+                <!--android:text="@string/next"-->
+                <!--android:textColor="@color/color_f0a028"-->
+                <!--android:textSize="@dimen/text_size_18_sp" />-->
+            <com.lalocal.lalocal.view.ProgressButton
                 android:id="@+id/login_next_btn"
                 android:layout_width="@dimen/login_phone_edit_width"
                 android:layout_height="@dimen/login_phone_edit_height"
                 android:layout_marginTop="@dimen/dimen_size_10_dp"
-                android:background="@color/black_99"
-                android:text="@string/next"
-                android:textColor="@color/color_f0a028"
-                android:textSize="@dimen/text_size_18_sp" />
+                app:pb_text="@string/next"
+                app:isOrangeBg="false"
+                />
+
         </LinearLayout>
 
         <LinearLayout

@@ -33,13 +33,14 @@ public class UserHelper {
     }
 
     public static void updateSignOutInfo(Context context) {
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(KeyParams.IS_LOGIN, false);
-        UserHelper.saveLoginInfo(context, bundle);
+        MobHelper.singOff();
         AuthPreferences.clearUserInfo();
         DemoCache.clear();
         NIMClient.getService(AuthService.class).logout();
         DemoCache.setLoginStatus(false);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KeyParams.IS_LOGIN, false);
+        UserHelper.saveLoginInfo(context, bundle);
     }
 
 
@@ -48,19 +49,12 @@ public class UserHelper {
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(KeyParams.IS_LOGIN, bundle.getBoolean(KeyParams.IS_LOGIN));
         editor.putString(KeyParams.EMAIL, bundle.getString(KeyParams.EMAIL));
-        editor.putString(KeyParams.PASSWORD, bundle.getString(KeyParams.PASSWORD));
         editor.putInt(KeyParams.USERID, bundle.getInt(KeyParams.USERID, -1));
         editor.putString(KeyParams.TOKEN, bundle.getString(KeyParams.TOKEN));
         editor.putString(KeyParams.AVATAR, bundle.getString(KeyParams.AVATAR));
         editor.putString(KeyParams.IM_TOKEN, bundle.getString(KeyParams.IM_TOKEN));
         editor.putString(KeyParams.IM_CCID, bundle.getString(KeyParams.IM_CCID));
         editor.putString(KeyParams.NICKNAME, bundle.getString(KeyParams.NICKNAME));
-        editor.commit();
-    }
-    public static void updatePassword(Context context, String psw){
-        initSPref(context);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString(KeyParams.PASSWORD, psw);
         editor.commit();
     }
 
@@ -100,10 +94,6 @@ public class UserHelper {
         return sp.getInt(KeyParams.STATUS,-1);
     }
 
-    public static String getPassword(Context context) {
-        initSPref(context);
-        return sp.getString(KeyParams.PASSWORD, null);
-    }
 
     public static int getUserId(Context context) {
         initSPref(context);

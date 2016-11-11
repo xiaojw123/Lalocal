@@ -5,7 +5,7 @@ package com.lalocal.lalocal.model;
  */
 public class Constants {
 
-
+    //回放
     public static final int PLAY_BACK_TYPE_URL =20;
 
     // url

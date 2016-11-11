@@ -184,7 +184,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onCheckEmail(String email,String result) {
+    public void onCheckEmail(String email,String userid) {
 
 
     }

@@ -293,7 +293,20 @@ public class PlayBackPlayer extends RelativeLayout {
         stopHideTimer(isShowController);
         return isShowController;
     }
+    public int  pause(){
+        if(mVideoView!=null){
+            Log.i("TAF","播放器player pause");
+            mVideoView.pause();
+            return getSeek();
+        }else {
+            return 0;
+        }
 
+
+    }
+    public  int  getSeek(){
+        return mVideoView.getCurrentPosition();
+    }
 
     /***
      * 继续播放

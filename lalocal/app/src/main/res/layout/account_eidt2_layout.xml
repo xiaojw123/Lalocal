@@ -101,18 +101,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
-        <Button
+        <!--<Button-->
+            <!--android:id="@+id/account_eidt2_sendagain_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/register_btn_height"-->
+            <!--android:layout_marginLeft="@dimen/dimen_size_12_dp"-->
+            <!--android:layout_marginRight="@dimen/dimen_size_12_dp"-->
+            <!--android:layout_marginTop="@dimen/dimen_size_15_dp"-->
+            <!--android:background="@drawable/orange_corner_btn_bg"-->
+            <!--android:padding="0dp"-->
+            <!--android:text="@string/send_again"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="@dimen/text_size_18_sp" />-->
+
+
+        <com.lalocal.lalocal.view.ProgressButton
             android:id="@+id/account_eidt2_sendagain_btn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/register_btn_height"
             android:layout_marginLeft="@dimen/dimen_size_12_dp"
             android:layout_marginRight="@dimen/dimen_size_12_dp"
             android:layout_marginTop="@dimen/dimen_size_15_dp"
-            android:background="@drawable/orange_corner_btn_bg"
-            android:padding="0dp"
-            android:text="@string/send_again"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_18_sp" />
+            app:pb_text="@string/send_again"
+            />
 
         <Button
             android:id="@+id/account_eidt2_changeemail_btn"

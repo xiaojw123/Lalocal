@@ -19,6 +19,7 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.dialog.WheelDialog;
 
@@ -36,7 +37,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     int userid;
     String token;
     String email, emailText;
-    Button sendagain_btn;
+    ProgressButton sendagain_btn;
     boolean isEnd=true;
 
     @Override
@@ -78,7 +79,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         TextView save_tv = (TextView) findViewById(R.id.account_edit_save);
         LinearLayout phone_modify_view = (LinearLayout) findViewById(R.id.phone_modify_view);
         LinearLayout email_modify_view = (LinearLayout) findViewById(R.id.email_modify_view);
-         sendagain_btn = (Button) findViewById(R.id.account_eidt2_sendagain_btn);
+         sendagain_btn = (ProgressButton) findViewById(R.id.account_eidt2_sendagain_btn);
         Button changeemail_btn = (Button) findViewById(R.id.account_eidt2_changeemail_btn);
         nickname_modfiy_edit.setText(getNickname());
         email_tv.setText(getEmailText());
@@ -160,7 +161,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
                     CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), null);
                     return;
                 }
-                contentService.boundEmail(email, userid, token);
+                contentService.boundEmail(email, userid, token,sendagain_btn);
                 break;
             case R.id.account_eidt2_changeemail_btn:
                 changeEmail();

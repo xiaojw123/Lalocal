@@ -13,6 +13,7 @@ import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -116,7 +117,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public int getPageType() {
-        return getIntent().getIntExtra(KeyParams.PAGE_TYPE, 0);
+        return getIntent().getIntExtra(KeyParams.PAGE_TYPE, PageType.PAGE_DEFAULT);
     }
 
 

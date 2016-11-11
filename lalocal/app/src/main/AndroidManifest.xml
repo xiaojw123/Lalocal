@@ -39,7 +39,6 @@
     <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -194,7 +193,13 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".test.TestActivity" />
+        <activity android:name=".test.TestActivity" >
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
         <activity android:name=".activity.DestinationAreaActivity" />
         <activity android:name=".activity.RouteDetailActivity" />
         <!-- 设置环信应用的AppKey -->
@@ -295,7 +300,6 @@
         <meta-data
             android:name="com.netease.nim.appKey"
             android:value="efc9614a32336704ec2577f2129929fb" />
-
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"

@@ -5,7 +5,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,6 +17,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.MyEditText;
+import com.lalocal.lalocal.view.ProgressButton;
 
 import butterknife.BindColor;
 import butterknife.BindString;
@@ -29,9 +29,9 @@ public class PhoneBindActivity extends BaseActivity implements View.OnFocusChang
     @BindView(R.id.pbind_phone_layout)
     LinearLayout phoneLayout;
     @BindView(R.id.pbind_psw_get_btn)
-    Button pbindPswGetBtn;
+    ProgressButton pbindPswGetBtn;
     @BindView(R.id.pbind_sure_btn)
-    Button pbindSureBtn;
+    ProgressButton pbindSureBtn;
     @BindView(R.id.pbind_phone_text)
     TextView pbindPhoneText;
     @BindView(R.id.pbind_phone_edt)
@@ -68,7 +68,7 @@ public class PhoneBindActivity extends BaseActivity implements View.OnFocusChang
                     CommonUtil.showPromptDialog(this, "手机号不能为空", null);
                     return;
                 }
-                mContentloader.getSMSCode(view, phone, null);
+                mContentloader.getSMSCode(view, phone, null,pbindPswGetBtn);
                 break;
             case R.id.pbind_sure_btn:
                 String code = getCode();
@@ -76,7 +76,7 @@ public class PhoneBindActivity extends BaseActivity implements View.OnFocusChang
                     CommonUtil.showPromptDialog(this, "手机号或密码为空", null);
                     return;
                 }
-                mContentloader.bindPhone(phone,code);
+                mContentloader.bindPhone(phone,code,pbindSureBtn);
                 break;
         }
     }
@@ -105,7 +105,6 @@ public class PhoneBindActivity extends BaseActivity implements View.OnFocusChang
 
         @Override
         public void onBindPhoneSuccess(String phone) {
-            setResult(AccountSecurityActivity.RESULT_BIND_PHONE);
             finish();
         }
     }

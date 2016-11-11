@@ -14,106 +14,133 @@
         android:layout_height="wrap_content"
         app:title_name="@string/setting" />
 
-    <FrameLayout
-        android:id="@+id/setting_accout_security"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_height"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
         android:layout_below="@+id/setting_title_view"
-        android:background="@color/white">
+        >
+        <FrameLayout
+            android:id="@+id/setting_accout_security"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_height">
 
-        <TextView
-            style="@style/SettingItemTextTheme"
-            android:layout_marginLeft="@dimen/setting_item_left"
-            android:text="@string/account_security" />
+            <TextView
+                style="@style/SettingItemTextTheme"
+                android:layout_marginLeft="@dimen/setting_item_left"
+                android:text="@string/account_security" />
 
-        <ImageView
-            style="@style/SettingItemArrowTheme"
-            android:layout_marginRight="@dimen/setting_item_right" />
-
-
-    </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/setting_about_us"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_height"
-        android:layout_below="@+id/setting_accout_security"
-        android:background="@color/white">
-
-        <TextView style="@style/CommonDeLineTheme" />
+            <ImageView
+                style="@style/SettingItemArrowTheme"
+                android:layout_marginRight="@dimen/setting_item_right" />
 
 
-        <TextView
-            style="@style/SettingItemTextTheme"
-            android:layout_marginLeft="@dimen/setting_item_left"
-            android:text="@string/about_us" />
+        </FrameLayout>
+        <View style="@style/CommonDeLineTheme" />
 
-        <ImageView
-            style="@style/SettingItemArrowTheme"
-            android:layout_marginRight="@dimen/setting_item_right" />
-
-
-    </FrameLayout>
+        <FrameLayout
+            android:id="@+id/setting_clear_cache"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_height">
 
 
-    <FrameLayout
-        android:id="@+id/setting_clear_cache"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_height"
-        android:layout_below="@+id/setting_about_us"
-        android:background="@drawable/setting_item_bg">
+            <TextView
+                style="@style/SettingItemTextTheme"
+                android:layout_marginLeft="@dimen/setting_item_left"
+                android:text="@string/clear_cache" />
 
-        <TextView style="@style/CommonDeLineTheme" />
+            <TextView
+                android:id="@+id/setting_cache_size"
+                style="@style/SettingItemTextTheme"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/setting_item_cahe_size_left" />
 
-        <TextView
-            style="@style/SettingItemTextTheme"
-            android:layout_marginLeft="@dimen/setting_item_left"
-            android:text="@string/clear_cache" />
+            <ImageView
+                style="@style/SettingItemArrowTheme"
+                android:layout_marginRight="@dimen/setting_item_right" />
 
-        <TextView
-            android:id="@+id/setting_cache_size"
-            style="@style/SettingItemTextTheme"
-            android:layout_gravity="center_vertical|right"
-            android:layout_marginRight="@dimen/setting_item_cahe_size_left" />
-
-        <ImageView
-            style="@style/SettingItemArrowTheme"
-            android:layout_marginRight="@dimen/setting_item_right" />
-
-        <TextView
-            style="@style/CommonDeLineTheme"
-            android:layout_gravity="bottom" />
+            <TextView
+                style="@style/CommonDeLineTheme"
+                android:layout_gravity="bottom" />
 
 
-    </FrameLayout>
+        </FrameLayout>
 
 
-    <FrameLayout
-        android:id="@+id/setting_modify_password"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/setting_about_us_height"
-        android:layout_below="@+id/setting_clear_cache"
-        android:layout_marginTop="@dimen/setting_modify_password_top"
-        android:background="@drawable/setting_item_bg"
-        android:visibility="gone">
-
-        <TextView style="@style/CommonDeLineTheme" />
+        <FrameLayout
+            android:id="@+id/setting_about_us"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_height"
+           >
 
 
-        <TextView
-            style="@style/SettingItemTextTheme"
-            android:layout_marginLeft="@dimen/setting_item_left"
-            android:text="@string/modify_psw" />
 
-        <ImageView
-            style="@style/SettingItemArrowTheme"
-            android:layout_marginRight="@dimen/setting_item_right" />
 
-        <TextView
-            style="@style/CommonDeLineTheme"
-            android:layout_gravity="bottom" />
+            <TextView
+                style="@style/SettingItemTextTheme"
+                android:layout_marginLeft="@dimen/setting_item_left"
+                android:text="@string/about_us" />
 
-    </FrameLayout>
+            <ImageView
+                style="@style/SettingItemArrowTheme"
+                android:layout_marginRight="@dimen/setting_item_right" />
+
+
+        </FrameLayout>
+
+        <View style="@style/CommonDeLineTheme" />
+
+
+        <FrameLayout
+            android:id="@+id/setting_info_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_height"
+            >
+
+            <TextView
+                style="@style/SettingItemTextTheme"
+                android:layout_marginLeft="@dimen/setting_item_left"
+                android:text="@string/information_feedback" />
+
+            <ImageView
+                style="@style/SettingItemArrowTheme"
+                android:layout_marginRight="@dimen/setting_item_right" />
+
+
+        </FrameLayout>
+
+        <View style="@style/CommonDeLineTheme" />
+
+        <FrameLayout
+            android:id="@+id/setting_grade"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/setting_about_us_height"
+            >
+
+            <TextView
+                style="@style/SettingItemTextTheme"
+                android:layout_marginLeft="@dimen/setting_item_left"
+                android:text="@string/grade" />
+            <ImageView
+                style="@style/SettingItemArrowTheme"
+                android:layout_marginRight="@dimen/setting_item_right" />
+
+
+        </FrameLayout>
+        <View style="@style/CommonDeLineTheme" />
+
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
 
 
     <Button

@@ -94,12 +94,14 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:percent:22.2.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
+
     compile files('libs/SocialSDK_umengqq.jar')
     compile files('libs/umeng_social_api.jar')
     compile files('libs/SocialSDK_umengsina.jar')
     compile files('libs/SocialSDK_umengwx.jar')
     compile files('libs/SocialSDK_Sina.jar')
     compile files('libs/SocialSDK_WeiXin_1.jar')
+
 }
 
 

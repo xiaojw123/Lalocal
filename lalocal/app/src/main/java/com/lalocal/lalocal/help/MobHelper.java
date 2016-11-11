@@ -61,7 +61,7 @@ public class MobHelper {
     private UMAuthListener authListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            Toast.makeText(mActivity, "授权成功", Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, "授权成功", Toast.LENGTH_SHORT).show();
             if (mUmShareAPI != null) {
                 mUmShareAPI.getPlatformInfo(mActivity, share_media, infoGetListener);
             }
@@ -69,14 +69,13 @@ public class MobHelper {
 
         @Override
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
-            Toast.makeText(mActivity, "授权失败", Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, "授权失败", Toast.LENGTH_SHORT).show();
 
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
-            Toast.makeText(mActivity, "取消授权", Toast.LENGTH_LONG).show();
-
+            Toast.makeText(mActivity, "取消授权", Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -84,7 +83,7 @@ public class MobHelper {
     private UMAuthListener infoGetListener = new UMAuthListener() {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
-            AppLog.print("onComplete  loginBySocial__");
+            AppLog.print("获取三方信息成功——————");
             if (mLoader != null) {
                 mLoader.loginBySocial(map, share_media);
             }
@@ -92,11 +91,13 @@ public class MobHelper {
 
         @Override
         public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            AppLog.print("获取三方信息错误——————");
 
         }
 
         @Override
         public void onCancel(SHARE_MEDIA share_media, int i) {
+            AppLog.print("获取三方信息失败——————");
 
         }
     };

@@ -21,7 +21,6 @@ import com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer;
 import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.base.util.DialogUtil;
@@ -29,6 +28,7 @@ import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -103,13 +103,7 @@ public class PlayBackActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
-            if (data != null) {
-                String email = data.getStringExtra(LoginActivity.EMAIL);
-                String psw = data.getStringExtra(LoginActivity.PSW);
-                contentLoader.login(email, psw);
-            }
-        }
+
     }
 
     private void parseIntent(LiveRowsBean liveRowsBean) {
@@ -142,7 +136,6 @@ public class PlayBackActivity extends BaseActivity {
             if (videoList != null && videoList.size() > 0) {
                 Uri uri = Uri.parse(videoList.get(position).getUrl());
                 videoPlayer.loadAndPlay(uri, 0);
-                //   Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
             }
         } else {
             videoPlayer.setVisibility(View.GONE);
@@ -158,24 +151,52 @@ public class PlayBackActivity extends BaseActivity {
 
 
     private void positionChangeListener(int position){
-        if (videoList.size() == 1) {
-            videoPlayer.setBefore(0.4f, false);
-            videoPlayer.setNext(0.4f, false);
-        } else {
-            if (videoList.size() == position + 1) {
-                videoPlayer.setBefore(1.0f, true);
-                videoPlayer.setNext(0.4f, false);
-            } else if (position == 0) {
-                videoPlayer.setNext(1.0f, true);
+
+        if((videoPlayer.getVisibility())==0){
+            if (videoList.size() == 1) {
                 videoPlayer.setBefore(0.4f, false);
+                videoPlayer.setNext(0.4f, false);
             } else {
-                videoPlayer.setNext(1.0f, true);
-                videoPlayer.setBefore(1.0f, true);
+                if (videoList.size() == position + 1) {
+                    videoPlayer.setBefore(1.0f, true);
+                    videoPlayer.setNext(0.4f, false);
+                } else if (position == 0) {
+                    videoPlayer.setNext(1.0f, true);
+                    videoPlayer.setBefore(0.4f, false);
+                } else {
+                    videoPlayer.setNext(1.0f, true);
+                    videoPlayer.setBefore(1.0f, true);
+                }
+
+            }
+        }else if((videoViewPlayer.getVisibility())==0){
+            if (videoList.size() == 1) {
+                videoViewPlayer.setBefore(0.4f, false);
+                videoViewPlayer.setNext(0.4f, false);
+            } else {
+                if (videoList.size() == position + 1) {
+                    videoViewPlayer.setBefore(1.0f, true);
+                    videoViewPlayer.setNext(0.4f, false);
+                } else if (position == 0) {
+                    videoViewPlayer.setNext(1.0f, true);
+                    videoViewPlayer.setBefore(0.4f, false);
+                } else {
+                    videoViewPlayer.setNext(1.0f, true);
+                    videoViewPlayer.setBefore(1.0f, true);
+                }
+
             }
 
         }
 
+
+
+
+
+
     }
+
+
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
 
@@ -194,9 +215,7 @@ public class PlayBackActivity extends BaseActivity {
                         customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
-
-                                Intent intent = new Intent(PlayBackActivity.this, LoginActivity.class);
-                                startActivityForResult(intent, RESQUEST_COD);
+                                LLoginActivity.startForResult(PlayBackActivity.this,RESQUEST_COD);
 
                             }
                         });
@@ -214,7 +233,12 @@ public class PlayBackActivity extends BaseActivity {
     private VideoPlayCallbackImpl mVideoPlayCallback = new VideoPlayCallbackImpl() {
         @Override
         public void onCloseVideo() {
-            videoPlayer.close();//关闭VideoView
+            if((videoPlayer.getVisibility())==0){
+                videoPlayer.close();//关闭VideoView
+            }else if((videoViewPlayer.getVisibility())==0){
+                videoViewPlayer.close();
+            }
+
         }
 
         @Override
@@ -238,11 +262,18 @@ public class PlayBackActivity extends BaseActivity {
                 return;
             } else {
                 Toast.makeText(PlayBackActivity.this, "视频播放完毕，正加载下一段视频...", Toast.LENGTH_SHORT).show();
-                videoPlayer.close();
+
                 ++position;
                 positionChangeListener(position);
                 Uri uri = Uri.parse(videoList.get(position).getUrl());
-                videoPlayer.loadAndPlay(uri, 0);
+                if((videoPlayer.getVisibility())==0){
+                    videoPlayer.close();
+                    videoPlayer.loadAndPlay(uri, 0);
+                }else if((videoViewPlayer.getVisibility())==0){
+                    videoViewPlayer.close();
+                    videoViewPlayer.loadAndPlay(uri, 0);
+                }
+
             }
         }
 
@@ -255,7 +286,12 @@ public class PlayBackActivity extends BaseActivity {
 
         @Override
         public void onClickQuit() {
-            videoPlayer.close();
+            if((videoPlayer.getVisibility())==0){
+                videoPlayer.close();
+            }else if((videoViewPlayer.getVisibility())==0){
+                videoViewPlayer.close();
+            }
+
             finish();
         }
 
@@ -264,8 +300,7 @@ public class PlayBackActivity extends BaseActivity {
             if (shareVO != null) {
                 SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this, shareVO);
                 shareActivity.showShareWindow();
-//                shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
-//                        Gravity.CENTER, 0, 0);
+
                 shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
                         Gravity.BOTTOM, 0, 0);
             } else {
@@ -296,9 +331,16 @@ public class PlayBackActivity extends BaseActivity {
                 Toast.makeText(PlayBackActivity.this, "正在加载上一段视频....", Toast.LENGTH_SHORT).show();
             }
             positionChangeListener(position);
-            videoPlayer.close();
+
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            videoPlayer.loadAndPlay(uri, 0);
+            if((videoPlayer.getVisibility())==0){
+                videoPlayer.close();
+                videoPlayer.loadAndPlay(uri, 0);
+            }else if((videoViewPlayer.getVisibility())==0) {
+                videoViewPlayer.close();
+                videoViewPlayer.loadAndPlay(uri, 0);
+            }
+
         }
 
         @Override
@@ -319,9 +361,18 @@ public class PlayBackActivity extends BaseActivity {
                 Toast.makeText(PlayBackActivity.this, "正在加载下一段视频....", Toast.LENGTH_SHORT).show();
             }
             positionChangeListener(position);
-            videoPlayer.close();
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            videoPlayer.loadAndPlay(uri, 0);
+            if((videoPlayer.getVisibility())==0){
+                videoPlayer.close();
+                videoPlayer.loadAndPlay(uri, 0);
+            }else if((videoViewPlayer.getVisibility())==0){
+                videoViewPlayer.close();
+                videoViewPlayer.loadAndPlay(uri, 0);
+            }
+
+
+
+
         }
 
         @Override
@@ -358,7 +409,7 @@ public class PlayBackActivity extends BaseActivity {
 
             if (liveUserInfosDataResp.getReturnCode() == 0) {
                 result = liveUserInfosDataResp.getResult();
-                LiveConstant.IDENTITY = LiveConstant.IS_LIVEER;
+                LiveConstant.IDENTITY = LiveConstant.ME_CHECK_OTHER;
                 Object statusa = result.getAttentionVO().getStatus();
                 if (statusa != null) {
                     double parseDouble = Double.parseDouble(String.valueOf(statusa));
@@ -425,10 +476,16 @@ public class PlayBackActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         // 恢复播放
-        if (videoPlayer != null && videoList != null && videoList.size() > 0) {
+        if (videoList != null && videoList.size() > 0) {
             Log.i("TAF", "播放器activityhhehh ");
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            videoPlayer.loadAndPlay(uri, position1);
+            if((videoPlayer.getVisibility())==0){
+                videoPlayer.loadAndPlay(uri, position1);
+            }else if((videoViewPlayer.getVisibility())==0){
+                videoViewPlayer.loadAndPlay(uri, position1);
+            }
+
+
         }
     }
 
@@ -436,17 +493,23 @@ public class PlayBackActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         // 暂停播放
-        if (videoPlayer != null) {
+        if ((videoPlayer.getVisibility())==0) {
             Log.i("TAF", "播放器activityhhehh  onPause ");
             position1 = videoPlayer.pause();
+        }else if((videoViewPlayer.getVisibility())==0){
+            position1 = videoViewPlayer.pause();
         }
     }
 
     @Override
     protected void onDestroy() {
         // 释放资源
-        if (videoPlayer != null) {
+        if ((videoPlayer.getVisibility())==0) {
             videoPlayer.close();
+        }else{
+            if((videoViewPlayer.getVisibility())==0){
+                videoViewPlayer.close();
+            }
         }
         super.onDestroy();
     }
