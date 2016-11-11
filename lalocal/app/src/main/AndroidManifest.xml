@@ -73,19 +73,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.RegisterActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.PasswordForget2Activity"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".activity.UserProtocolActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.PasswordForget1Activity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
@@ -193,14 +181,8 @@
         <service android:name="com.amap.api.location.APSService" />
 
         <activity android:name=".activity.SearchActivity" />
-        <activity android:name=".test.TestActivity" >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".activity.DestinationAreaActivity" />
+        <activity android:name=".test.TestActivity" />
+        <activity android:name=".activity.DestinationAreaActivity"/>
         <activity android:name=".activity.RouteDetailActivity" />
         <!-- 设置环信应用的AppKey -->
         <meta-data

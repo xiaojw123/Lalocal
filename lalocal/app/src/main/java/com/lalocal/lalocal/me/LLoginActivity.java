@@ -187,7 +187,6 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
 
 
     class LoginCallBack extends ICallBack {
-
         @Override
         public void onSocialLogin(User user, String bodyPrams, String uidParams) {
             if (user == null) {

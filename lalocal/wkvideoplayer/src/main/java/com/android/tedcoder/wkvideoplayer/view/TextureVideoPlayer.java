@@ -44,13 +44,9 @@ public class TextureVideoPlayer extends RelativeLayout {
     private ImageView touchStatusImg;
     private TextView touchStatusTime;
 
-
-
     public void setAutoHideController(boolean autoHideController) {
         mAutoHideController = autoHideController;
     }
-
-
     private void showOrHideController() {
         if (mMediaController.getVisibility() == View.VISIBLE) {
             Animation animation = AnimationUtils.loadAnimation(mContext,
@@ -86,7 +82,6 @@ public class TextureVideoPlayer extends RelativeLayout {
 
         @Override
         public void onAnimationEnd(Animation animation) {
-
         }
 
         @Override
@@ -172,7 +167,6 @@ public class TextureVideoPlayer extends RelativeLayout {
 
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-
                     showOrHideController();
                     if (!mVideoView.isPlaying()){
                         return false;
@@ -371,7 +365,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                            //  mProgressBarView.setVisibility(View.GONE);
-                        mVideoPlayCallback.showLoadingPage(false);
+                        if(mVideoPlayCallback!=null){
+                            mVideoPlayCallback.showLoadingPage(false);
+                        }
+
                         return true;
                     }
                     return false;
@@ -390,14 +387,7 @@ public class TextureVideoPlayer extends RelativeLayout {
         mVideoView.setVisibility(VISIBLE);
         startPlayVideo(seekTime);
     }
-  /*  private void showProgressView(Boolean isTransparentBg) {
-        mProgressBarView.setVisibility(VISIBLE);
-        if (!isTransparentBg) {
-            mProgressBarView.setBackgroundResource(android.R.color.black);
-        } else {
-            mProgressBarView.setBackgroundResource(android.R.color.transparent);
-        }
-    }*/
+
     public  void setRotation(float rotation){
         mVideoView.setRotation(rotation);
     }
@@ -411,7 +401,7 @@ public class TextureVideoPlayer extends RelativeLayout {
             mVideoView.seekTo(seekTime);
         }
         mMediaController.setPlayState(PlayBackMediaController.PlayState.PLAY);
-      //  handler.postDelayed(runnable, 500);
+
     }
     private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override

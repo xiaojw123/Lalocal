@@ -262,9 +262,9 @@ public class WorkerThread extends Thread {
     private RtcEngine ensureRtcEngineReadyLock() {
         if (mRtcEngine == null) {
             //TODO 直播key
-            // c02e6c21f6b14672a90b06f4217e10a5   测试环境
-            // 2ca334d72fde41d38278c57878b29bc4   生产环境
-            String vendorKey ="c02e6c21f6b14672a90b06f4217e10a5";
+
+          //  String vendorKey ="2ca334d72fde41d38278c57878b29bc4";//生产环境
+            String vendorKey ="c02e6c21f6b14672a90b06f4217e10a5";//测试环境
             if (TextUtils.isEmpty(vendorKey)) {
                 throw new RuntimeException("NEED TO use your vendor key, get your own key at https://dashboard.agora.io/");
             }

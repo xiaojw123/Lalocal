@@ -91,9 +91,7 @@ import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONArray;
@@ -2364,36 +2362,13 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
-                //   NIMClient.getService(AuthService.class).logout();
+                NIMClient.getService(AuthService.class).logout();
                 DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-                //    loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
             }
         }
 
-        private void loginIMServer(final String imccId, String imToken) {
-            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
-
-                @Override
-                public void onSuccess(Object o) {
-                    AppLog.print("imccid");
-                    DemoCache.setAccount(imccId);
-                    DemoCache.getRegUserInfo();
-                    DemoCache.setLoginStatus(true);
-                }
-
-                @Override
-                public void onFailed(int i) {
-                    DemoCache.setLoginStatus(false);
-                }
-
-                @Override
-                public void onException(Throwable throwable) {
-                    DemoCache.setLoginStatus(false);
-                }
-            });
-        }
 
         private void responseRegister(JSONObject jsonObject) {
             JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);

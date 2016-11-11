@@ -23,9 +23,16 @@ import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
+import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthService;
+import com.netease.nimlib.sdk.auth.OnlineClient;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
@@ -38,14 +45,40 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     ViewGroup lastSelectedTab;
     FragmentManager fm;
     Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
-
     private int selected = 0;
-
     // 记录第一次点击back的时间
     private long clickTime = 0;
     int mPageType;
+    Observer<List<OnlineClient>> onlineclient= new Observer<List<OnlineClient>>(){
+        @Override
+        public void onEvent(List<OnlineClient> onlineClients) {
+            if(onlineClients!=null&&onlineClients.size()>0){
+                for (OnlineClient online :onlineClients){
+                    AppLog.i("TAG","监听其他登录状态，踢掉其他端用户");
+                    NIMClient.getService(AuthService.class).kickOtherClient(online);
+                }
+            }
+        }
+    };
 
-
+    Observer<StatusCode> userStatusObserver=new Observer<StatusCode>() {
+        @Override
+        public void onEvent(StatusCode statusCode) {
+            AppLog.print("onEvent___触发——————");
+            AppLog.i("TAG","HomeActivity监听账号登录状态哈哈哈哈哈哈哈哈哈哈哈："+statusCode);
+            if (statusCode != StatusCode.LOGINED) {
+                DemoCache.setLoginStatus(false);
+                if (statusCode == StatusCode.KICKOUT) {
+                    AppLog.i("TAG","HomeActivity账号被剔除了哈哈哈哈哈哈哈哈哈哈哈");
+                    Toast.makeText(HomeActivity.this, "你的账号已在其他设备登录,请重新登录", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(HomeActivity.this, LLoginActivity.class);
+                    startActivity(intent);
+                }
+            } else if (statusCode == StatusCode.LOGINED) {
+                DemoCache.setLoginStatus(true);
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +86,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         setContentView(R.layout.home_layout);
         initView();
         checkUpdate();
-        //听云SDK
-//        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
 
     private void checkUpdate() {
@@ -70,8 +101,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showUpdateDialog(downLoadUrl, contentText);
             }
         }
-
-
     }
 
 

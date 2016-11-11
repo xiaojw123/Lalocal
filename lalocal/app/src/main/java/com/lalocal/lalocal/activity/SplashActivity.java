@@ -343,4 +343,10 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+      //  registerObservers(false);
+    }
+
 }
