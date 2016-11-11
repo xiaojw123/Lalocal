@@ -25,7 +25,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +39,9 @@ public class CommonUtil {
 
     public static int RESULT_DIALOG = 0;
     public static int REMIND_BACK = 0;
+
+    public  static  String LONGITUDE="";
+    public static   String LATITUDE="";
 
     public static String getProcessName(Context cxt, int pid) {
         ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
@@ -442,4 +444,6 @@ public class CommonUtil {
         NumberFormat nf = NumberFormat.getNumberInstance();
         return nf.format(num);
     }
+
+
 }

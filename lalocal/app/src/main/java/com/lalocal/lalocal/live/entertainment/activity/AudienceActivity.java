@@ -22,10 +22,10 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
@@ -257,6 +257,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     blurView.setScaleRatio(20);
                     blurView.setBlurRadius(1);
                 }
+                contentLoaderAudience.getUploadLogs(new Gson().toJson(liveRowsBean));
                 DrawableUtils.displayImg(AudienceActivity.this,headIv,liveRowsBean.getUser().getAvatar());
                 getParameter(liveRowsBean);
                 registerObservers(true);
@@ -474,34 +475,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();
         //阀值设置为屏幕高度的1/3
         keyHeight = screenHeight / 3;
-    }
-
-
-
-    @Override
-    protected void accountKicout() {
-        if(isUnDestory){
-            final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
-            customDialog.setContent(getString(R.string.account_kicout));
-            customDialog.setCancelable(false);
-            customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
-                @Override
-                public void onDialogClickListener() {
-                    if (videoPlayer != null) {
-                        videoPlayer.resetVideo();
-                    }
-                    NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-
-                    startActivity(new Intent(AudienceActivity.this, LoginActivity.class));
-                    customDialog.dismiss();
-                    clearChatRoom();
-
-                }
-            });
-            customDialog.show();
-        }
-
-
     }
 
     boolean isShowNetDialog = true;//监测网络的dialog显示标记
@@ -1005,8 +978,10 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     startActivity(intent2);
                     break;*/
                 case R.id.live_layout:
-                    periscopeLayout.addHeart();
-                    sendLike();
+                   if(UserHelper.isLogined(AudienceActivity.this)&&DemoCache.getLoginStatus()){
+                       periscopeLayout.addHeart();
+                       sendLike();
+                   }
                     break;
                 case R.id.master_info_head_iv:
                     Intent intent3 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);

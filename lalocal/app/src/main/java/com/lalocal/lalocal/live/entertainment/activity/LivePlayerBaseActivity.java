@@ -358,7 +358,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             if (statusCode != StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(false);
                 if(statusCode==StatusCode.KICKOUT){
-                 //   accountKicout();
+
                 }else if(statusCode==StatusCode.UNLOGIN){
 
                     getHandler().postDelayed(new Runnable() {
@@ -384,14 +384,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     public void run() {
                         enterRoom();
                     }
-                },1500);
+                },2000);
 
             }
 
         }
     };
 
-    protected abstract void accountKicout();
+
 
     //检测网络类型
     public static final String NET_TYPE_WIFI = "wifi";

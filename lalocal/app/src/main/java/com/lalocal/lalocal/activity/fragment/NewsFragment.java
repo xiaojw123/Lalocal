@@ -77,13 +77,9 @@ import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.LiveMainAdapter;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
-import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.auth.OnlineClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -149,33 +145,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         contentService.recommendAd();
         requestBasicPermission(); // 申请APP基本权限
         AppLog.i("TAG","NewsFragment:走了onCreate");
-     //   registerObservers(true);
+
     }
-
-    //监听IM账号登录状态
-    private void registerObservers(boolean register) {
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(onlineclient,register );
-    }
-    Observer<List<OnlineClient>> onlineclient= new Observer<List<OnlineClient>>(){
-        @Override
-        public void onEvent(List<OnlineClient> onlineClients) {
-            if(onlineClients!=null&&onlineClients.size()>0){
-                for (OnlineClient online :onlineClients){
-                    AppLog.i("TAG","监听其他登录状态，踢掉其他端用户");
-                    NIMClient.getService(AuthService.class).kickOtherClient(online);
-                }
-            }
-        }
-    };
-
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG", "newsfragment監聽用戶登錄狀態：" + statusCode);
-        }
-    };
-
 
     @Nullable
     @Override

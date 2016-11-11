@@ -1038,6 +1038,18 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    //上传日志
+    public void getUploadLogs(String log){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.APP_LOG);
+        }
+        String logContent="手机型号："+android.os.Build.MODEL+"   /版本号："+android.os.Build.VERSION.RELEASE+"  /日志信息："+log;
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.uploadLogs(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getLogBodyParams(logContent));
+        requestQueue.add(request);
+    }
+
     //挑战详情
     public void getChallengeDetails(String challengeId) {
         if (callBack != null) {
@@ -1479,6 +1491,7 @@ public class ContentLoader {
                         responseGetWelcomeImgs(jsonObj);
                         break;
                     case RequestCode.GET_SYSTM_CONFIG:
+                        AppLog.i("TAG","获取系统配置信息："+json);
                         responseGetSystemConfig(jsonObj);
                         break;
                     case RequestCode.GET_PAY_RESULT:
@@ -1704,6 +1717,9 @@ public class ContentLoader {
                     case RequestCode.GET_USER_ARTICLE:
                         responseUserArticle(json);
                         break;
+                    case RequestCode.APP_LOG:
+                        responseAppLog(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1836,8 +1852,10 @@ public class ContentLoader {
             for (int i = 0; i < resultJarray.length(); i++) {
                 JSONObject itemJobj = resultJarray.optJSONObject(i);
                 SysConfigItem item = gson.fromJson(itemJobj.toString(), SysConfigItem.class);
+
                 items.add(item);
             }
+
             callBack.onGetSysConfigs(items);
         }
 
@@ -2272,7 +2290,6 @@ public class ContentLoader {
         public void responseRecommendAd(String json) {
             RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
             callBack.onRecommendAd(recommendAdResp);
-
         }
 
         //直播列表
@@ -2448,7 +2465,10 @@ public class ContentLoader {
                 callBack.onLiveHomeList(liveHomeListResp, attentionFlag);
             }
         }
-
+        //上传日志
+        private void responseAppLog(String json) {
+            callBack.onResponseLog(json);
+        }
         //历史直播
         private void responPlayBackLive(String json) {
             AppLog.i("TAG", "历史直播:" + json);
@@ -2494,6 +2514,8 @@ public class ContentLoader {
 
         }
 
+
+
         private void responseArticle(String json) {
             ArticleDetailsResp articleDetailsResp = new Gson().fromJson(json, ArticleDetailsResp.class);
             if (articleDetailsResp.getReturnCode() == 0) {
@@ -2533,6 +2555,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, 100);
         }
     }
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -2735,6 +2758,18 @@ public class ContentLoader {
         return jsonObject.toString();
     }
 
+    //日志信息
+    private String getLogBodyParams(String log){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("log", log);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+
 
     //上传在线人数
     public String getUserOnLines(String onLinesUser) {
@@ -2773,13 +2808,14 @@ public class ContentLoader {
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        headers.put("LATITUDE", "38.65777");
-        headers.put("LONGITUDE", "104.08296");
+        headers.put("LATITUDE", CommonUtil.LATITUDE);
+        headers.put("LONGITUDE", CommonUtil.LONGITUDE);
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
 //        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
 //                "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
 //                + DensityUtil.getWindowHeight((Activity) context) + "");
+        AppLog.i("TAG","LATITUDE:"+CommonUtil.LATITUDE+"   LONGITUDE；"+CommonUtil.LONGITUDE);
         return headers;
     }
 
@@ -2913,6 +2949,7 @@ public class ContentLoader {
         int LIVE_HOME_LIST = 237;
         int LIVE_PALY_BACK = 238;
         int LIVE_PALY_BACK_DETAILS = 239;
+        int APP_LOG=240;
 
 
         int GET_INDEX_RECOMMEND_LIST = 300;

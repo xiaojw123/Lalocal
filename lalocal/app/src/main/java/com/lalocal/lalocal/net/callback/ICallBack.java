@@ -366,7 +366,7 @@ public abstract class ICallBack {
     }
 
 
+    public void onResponseLog(String json) {
 
-
-
+    }
 }

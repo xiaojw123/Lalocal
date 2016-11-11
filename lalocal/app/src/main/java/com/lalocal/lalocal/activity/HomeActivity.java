@@ -1,12 +1,21 @@
 package com.lalocal.lalocal.activity;
 
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -21,17 +30,10 @@ import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
-import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
-import com.netease.nimlib.sdk.auth.OnlineClient;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.umeng.analytics.MobclickAgent;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
@@ -48,54 +50,26 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     private int selected = 0;
     // 记录第一次点击back的时间
     private long clickTime = 0;
-    Observer<List<OnlineClient>> onlineclient= new Observer<List<OnlineClient>>(){
-        @Override
-        public void onEvent(List<OnlineClient> onlineClients) {
-            if(onlineClients!=null&&onlineClients.size()>0){
-                for (OnlineClient online :onlineClients){
-                    AppLog.i("TAG","监听其他登录状态，踢掉其他端用户");
-                    NIMClient.getService(AuthService.class).kickOtherClient(online);
-                }
-            }
-        }
-    };
+    private LocationManager locationManager;
+    private String locationProvider;
 
-    Observer<StatusCode> userStatusObserver=new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode statusCode) {
-            AppLog.print("onEvent___触发——————");
-            AppLog.i("TAG","HomeActivity监听账号登录状态哈哈哈哈哈哈哈哈哈哈哈："+statusCode);
-            if (statusCode != StatusCode.LOGINED) {
-                DemoCache.setLoginStatus(false);
-                if (statusCode == StatusCode.KICKOUT) {
-                    AppLog.i("TAG","HomeActivity账号被剔除了哈哈哈哈哈哈哈哈哈哈哈");
-                    Toast.makeText(HomeActivity.this, "你的账号已在其他设备登录,请重新登录", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(HomeActivity.this, LLoginActivity.class);
-                    startActivity(intent);
-                }
-            } else if (statusCode == StatusCode.LOGINED) {
-                DemoCache.setLoginStatus(true);
-            }
-        }
-    };
-
+    private String provider;
+    private Location location;
+    protected MyLocationListener locationListener = new MyLocationListener();//定位监听器
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
-    //    registerObservers(true);
+
+        getLocation();
         initView();
         checkUpdate();
-        //   NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, true);
-        //听云SDK
-//        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
+
+
     }
 
-    private void registerObservers(boolean register) {
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-        NIMClient.getService(AuthServiceObserver.class).observeOtherClients(onlineclient,register );
-    }
+
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
         boolean forceFlag = result.isForceFlag();
@@ -396,6 +370,133 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //    public void normalUpdate(View view){
 //        testCheckUpdate(false);
 //    }
+private String judgeProvider(LocationManager locationManager) {
+    Criteria criteria = new Criteria();
+    criteria.setAccuracy(Criteria.ACCURACY_FINE);
+    criteria.setAltitudeRequired(false);
+    criteria.setBearingRequired(false);
+    criteria.setCostAllowed(true);
+    criteria.setPowerRequirement(Criteria.POWER_LOW);
+    String provider =this.locationManager.getBestProvider(criteria, false);
+
+    return provider;
+}
+    protected static final int REQUEST_CODE = 1;
+    protected static int denyCount = 0; //记录拒绝次数  
+    private void getLocation() {
+        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Log.d("MQL", "alert里有不再询问的checkBox");
+                }else{
+                    Log.d("MQL", "alert里没有不再询问的checkBox, 如果是第二次以后出现这种情况下, 则需要提示用户去打开");
+                   /* if (denyCount >= 2){
+                        Log.d("MQL", "亲爱的用户,请到您的权限管理中打开");
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", "com.analysys.locationdemo", null);
+                        intent.setData(uri);
+                       startActivity(intent);
+                    }*/
+                }
+
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+
+            } else {
+
+               AppLog.i("MQL","系统版小于23");
+            }
+
+        } else {
+            AppLog.i("MQL","系统版小于23，哈哈哈哈哈");
+            this.locationManager.requestLocationUpdates("network", 1000*30*60, 5000,locationListener);
+        }
+
+    }
+
+    private String getBestProvider() {
+        //获取最合适的provider
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        String provider =locationManager.getBestProvider(criteria, false);
+
+        //检查位置提供者是否启用
+        //在设置里，一些位置提供者比如GPS可以被关闭。良好的做法就是通过检测你想要的位置提供者是否打开。
+        //如果位置提供者被关闭了，你可以在设置里通过启动Intent来让用户打开。
+       /* if (locationManager.isProviderEnabled(provider) == false) {
+
+            Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivity(settingsIntent);
+            Log.d("MQL", "没有有效的提供者");
+            return null;
+        }*/
+
+
+        return provider;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (REQUEST_CODE == requestCode) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+              /*  String provider = this.getBestProvider();
+                if (provider != null){
+                    this.locationManager.requestLocationUpdates("network", 1000*60*30, 5000,locationListener);
+                }*/
+                this.locationManager.requestLocationUpdates("network", 1000*30*60, 5000,locationListener);
+            }else{
+                denyCount++;
+            }
+        }
+        Log.d("MQL", "onRequestPermissionsResult");
+    }
+
+    class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            Log.d("MQL", "onLocationChanged");
+            String longitude = location.getLongitude() + "";
+            String latitude = location.getLatitude() + "";
+            CommonUtil.LATITUDE=latitude;
+            CommonUtil.LONGITUDE=longitude;
+            Log.d("MQL", longitude + ":" + latitude);
+
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+            Log.d("MQL", "onStatusChanged" + s);
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+            Log.d("MQL", "onProviderEnabled" + s);
+
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+            Log.d("MQL", "onProviderDisabled" + s);
+
+        }
+    }
+
+
+
 
 
     @Override
@@ -419,10 +520,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-      //  registerObservers(true);
-      /*  if (userStatusObserver != null) {
-            NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, false);
-        }*/
+
+
         AppLog.i("TAG", "HomeActivity:onDestroy");
     }
 

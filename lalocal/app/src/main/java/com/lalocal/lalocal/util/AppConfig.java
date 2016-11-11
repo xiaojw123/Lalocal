@@ -297,6 +297,11 @@ public class AppConfig {
         return baseUrl+"channels/historys/"+id;
     }
 
+    //上报日志 http://dev.lalocal.cn/api/system/logs/app
+    public  static  final  String uploadLogs(){
+        return baseUrl+"system/logs/app";
+    }
+
     public static String getBaseUrl() {
         return baseUrl;
     }

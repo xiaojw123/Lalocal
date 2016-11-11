@@ -32,7 +32,6 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
@@ -118,6 +117,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private String createNickName;
     public String annoucement;//公告
     private String roomName;//直播室名字
+
 
 
     boolean isshowPopu = false;
@@ -226,11 +226,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         AppLog.i("TAG", "onWindowFocusChanged");
-       /* if (hasFocus && !isshowPopu && CommonUtil.REMIND_BACK != 1) {
-            isshowPopu = true;
-            //  showCreateLiveRoomPopuwindow();
 
-        }*/
     }
 
     //判断软键盘显示与隐藏
@@ -267,26 +263,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         keyHeight = screenHeight / 3;
         setListener();
 
-    }
-
-    @Override
-    protected void accountKicout() {
-        AppLog.i("TAG","主播端接受到账号挤掉提示");
-        final CustomChatDialog customDialog = new CustomChatDialog(this);
-        customDialog.setContent(getString(R.string.account_kicout));
-        customDialog.setCancelable(false);
-        customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
-            @Override
-            public void onDialogClickListener() {
-                liveContentLoader.cancelLiveRoom(channelId);
-                NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
-                deInitUIandEvent();
-                startActivity(new Intent(LiveActivity.this, LoginActivity.class));
-                customDialog.dismiss();
-                finish();
-            }
-        });
-        customDialog.show();
     }
 
 
@@ -620,13 +596,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         private int errorCode;
         @Override
         public void onResponseFailed(String message,int code) {
-            //TODO:wcj add
+
             AppLog.i("TAG", "监听直播间状态异常:" + message+"    code:"+code);
             if (code == 222 && firstWarning) {
                 firstWarning = false;
                 isCloseLive=true;
                 try{
                     if(isUnDestory){
+
                         final CustomChatDialog customDialog = new CustomChatDialog(LiveActivity.this);
                         customDialog.setContent(getString(R.string.live_status_inusual));
                         customDialog.setCancelable(false);
@@ -645,12 +622,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         });
                         customDialog.show();
                     }
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }
-
-
             }
         }
 
@@ -668,14 +642,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 cname = liveRowsBean.getCname();
                 shareVO = liveRowsBean.getShareVO();
                 userId = String.valueOf(liveRowsBean.getUser().getId());
+                 String log=  TAG+"  / "+Thread.currentThread().getStackTrace()[2].getMethodName()+" REMIND_BACK:"+CommonUtil.REMIND_BACK;
+                liveContentLoader.getUploadLogs(log);
                 getParameter(liveRowsBean);
                 initParam();
+
                 if (CommonUtil.REMIND_BACK != 1) {
                     AppLog.i("TAG", "开启直播走了这1");
                     if(isUnDestory){
                         showCreateLiveRoomPopuwindow();
                     }
-
                 } else {
                     AppLog.i("TAG", "开启直播走了这2");
                     if (TextUtils.isEmpty(roomName)) {
@@ -685,6 +661,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
                 }
             }
+        }
+
+        @Override
+        public void onResponseLog(String json) {
+            super.onResponseLog(json);
+            AppLog.i("TAG","获取日志信息："+json);
         }
 
         @Override
@@ -1485,9 +1467,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void initUIandEvent() {
         super.initUIandEvent();
-     /*   if(CommonUtil.REMIND_BACK!=1){
-            liveContentLoader.alterLive(createNickName, channelId, null, null, null, null);
-        }*/
 
     }
 
