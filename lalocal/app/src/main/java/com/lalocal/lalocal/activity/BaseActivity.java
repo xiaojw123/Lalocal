@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.MyApplication;
@@ -14,9 +15,11 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -84,6 +87,10 @@ public class BaseActivity extends AppCompatActivity {
             }
             if(statusCode==StatusCode.KICKOUT){
                 //TODO 账号被踢出
+                AppLog.print("baseActivity kiktout____");
+                UserHelper.updateSignOutInfo(BaseActivity.this);
+                Toast.makeText(BaseActivity.this,"您的账号在其他设备上登录,请重新登录",Toast.LENGTH_SHORT).show();
+                LLoginActivity.start(BaseActivity.this);
             }
         }
     };
