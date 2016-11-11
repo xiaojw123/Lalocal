@@ -84,6 +84,7 @@ public class BaseActivity extends AppCompatActivity {
             }
             if(statusCode==StatusCode.KICKOUT){
                 //TODO 账号被踢出
+                AppLog.i("TAG","账号被踢出哈哈哈哈哈哈哈哈或或或");
             }
         }
     };

@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,12 +50,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     private long clickTime = 0;
 
     private LocationManager locationManager;
-    private String locationProvider;
-
-    private String provider;
-    private Location location;
-    protected MyLocationListener locationListener = new MyLocationListener();//定位监听器
-
     int mPageType;
 
     @Override
@@ -395,66 +388,44 @@ private String judgeProvider(LocationManager locationManager) {
 
                 }else{
 
-                   /* if (denyCount >= 2){
-                        Log.d("MQL", "亲爱的用户,请到您的权限管理中打开");
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", "com.analysys.locationdemo", null);
-                        intent.setData(uri);
-                       startActivity(intent);
-                    }*/
                 }
 
                 this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
 
             } else {
 
-               AppLog.i("MQL","系统版小于23");
             }
 
         } else {
-            AppLog.i("MQL","系统版小于23，哈哈哈哈哈");
-            this.locationManager.requestLocationUpdates("network", 1000*10*60, 3000,locationListener);
+            Location location = locationManager.getLastKnownLocation("network");
+            if(location!=null){
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                CommonUtil.LATITUDE=String.valueOf(latitude);
+                CommonUtil.LONGITUDE=String.valueOf(longitude);
+            }
+
         }
 
     }
 
-    private String getBestProvider() {
-        //获取最合适的provider
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        String provider =locationManager.getBestProvider(criteria, false);
 
-        //检查位置提供者是否启用
-        //在设置里，一些位置提供者比如GPS可以被关闭。良好的做法就是通过检测你想要的位置提供者是否打开。
-        //如果位置提供者被关闭了，你可以在设置里通过启动Intent来让用户打开。
-     /*   if (locationManager.isProviderEnabled(provider) == false) {
-
-            return null;
-        }*/
-
-
-        return provider;
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
         if (REQUEST_CODE == requestCode) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     return;
                 }
-              /*  String provider = this.getBestProvider();
-                if (provider != null){
-                    this.locationManager.requestLocationUpdates("network", 1000*60*30, 5000,locationListener);
-                }*/
-                this.locationManager.requestLocationUpdates("network", 1000*60*10, 5000,locationListener);
+                Location location = locationManager.getLastKnownLocation("network");
+                if(location!=null){
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    CommonUtil.LATITUDE=String.valueOf(latitude);
+                    CommonUtil.LONGITUDE=String.valueOf(longitude);
+                }
 
             }else{
                 denyCount++;
@@ -462,38 +433,6 @@ private String judgeProvider(LocationManager locationManager) {
         }
 
     }
-
-    class MyLocationListener implements LocationListener {
-
-        @Override
-        public void onLocationChanged(Location location) {
-
-            String longitude = location.getLongitude() + "";
-            String latitude = location.getLatitude() + "";
-            CommonUtil.LATITUDE=latitude;
-            CommonUtil.LONGITUDE=longitude;
-
-
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
-    }
-
-
-
 
 
     @Override

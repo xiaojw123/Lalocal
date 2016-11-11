@@ -2817,7 +2817,7 @@ public class ContentLoader {
 
     //创建直播间
     public String getCreateLiveRoom() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = new JSONObject();  
         try {
             jsonObject.put("style", 0);
             jsonObject.put("direction", LiveConstant.DEFAULT_DIRECTION);
