@@ -1563,7 +1563,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 public void onDialogClickListener() {
                     DemoCache.setLoginStatus(false);
                     ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-                    startActivityForResult(new Intent(LivePlayerBaseActivity.this, LLoginActivity.class), LIVE_BASE_RESQUEST_CODE);
+                    LLoginActivity.startForResult(LivePlayerBaseActivity.this,LIVE_BASE_RESQUEST_CODE);
                 }
             });
             customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {

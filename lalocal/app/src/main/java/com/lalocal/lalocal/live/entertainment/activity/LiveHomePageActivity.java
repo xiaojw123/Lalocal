@@ -23,10 +23,10 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.BigPictureActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.LiveArticleVPAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
@@ -197,16 +197,6 @@ public class LiveHomePageActivity extends BaseActivity {
 //        }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LoginActivity.REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            contentLoader.login(email, psw);
-        }
-
-    }
-
     @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page, R.id.master_attention_layout, R.id.tv_article, R.id.tv_live})
     public void clickButton(View view) {
         switch (view.getId()) {
@@ -275,8 +265,7 @@ public class LiveHomePageActivity extends BaseActivity {
         customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
-                Intent intent = new Intent(LiveHomePageActivity.this, LoginActivity.class);
-                startActivityForResult(intent, LoginActivity.REGISTER_OK);
+                LLoginActivity.start(LiveHomePageActivity.this);
             }
         });
         customDialog.show();

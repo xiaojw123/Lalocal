@@ -1,8 +1,8 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -11,14 +11,17 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
+import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.me.AccountSecurityActivity;
 import com.lalocal.lalocal.me.LLoginActivity;
-import com.lalocal.lalocal.me.LPasswordModifyActivity;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DataCleanManager;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
+import static com.lalocal.lalocal.R.id.setting_accout_security;
 import static com.lalocal.lalocal.activity.fragment.MeFragment.UN_LOGIN_OK;
 
 
@@ -26,7 +29,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     public static final int LOGIN = 104;
     Button signOUtBtn;
     TextView chacheSizeTv;
-    FrameLayout aboutUsContainer, clearCacheContainer, modifyPswContianer;
+    FrameLayout accountSecurityCotainer, aboutUsContainer, clearCacheContainer, gradeCotainer, infoFbCotainer;
 
 
     @Override
@@ -38,34 +41,59 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initView() {
+        gradeCotainer = (FrameLayout) findViewById(R.id.setting_grade);
+        infoFbCotainer = (FrameLayout) findViewById(R.id.setting_info_feedback);
+        accountSecurityCotainer = (FrameLayout) findViewById(R.id.setting_accout_security);
         aboutUsContainer = (FrameLayout) findViewById(R.id.setting_about_us);
         clearCacheContainer = (FrameLayout) findViewById(R.id.setting_clear_cache);
-        modifyPswContianer = (FrameLayout) findViewById(R.id.setting_modify_password);
         chacheSizeTv = (TextView) findViewById(R.id.setting_cache_size);
         signOUtBtn = (Button) findViewById(R.id.setting_sign_out);
         chacheSizeTv.setText(DataCleanManager.getTotalCacheSize(this));
         if (UserHelper.isLogined(this)) {
-            if (!TextUtils.isEmpty(UserHelper.getUserEmail(this))) {
-                modifyPswContianer.setVisibility(View.VISIBLE);
-            }else{
-                modifyPswContianer.setVisibility(View.GONE);
-            }
+            accountSecurityCotainer.setVisibility(View.VISIBLE);
             signOUtBtn.setText(getResources().getString(R.string.sign_out));
         } else {
-            modifyPswContianer.setVisibility(View.GONE);
+            accountSecurityCotainer.setVisibility(View.GONE);
             signOUtBtn.setText(getResources().getString(R.string.immediately_login));
         }
+        gradeCotainer.setOnClickListener(this);
+        infoFbCotainer.setOnClickListener(this);
+        accountSecurityCotainer.setOnClickListener(this);
         aboutUsContainer.setOnClickListener(this);
         clearCacheContainer.setOnClickListener(this);
-        modifyPswContianer.setOnClickListener(this);
         signOUtBtn.setOnClickListener(this);
     }
+
+    public void grade() {
+        try {
+            Uri uri = Uri.parse("market://details?id=" + getPackageName());
+            Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(this, "未发现安装该应用的市场", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
 
         switch (id) {
+            case R.id.setting_grade:
+                grade();
+                break;
+            case R.id.setting_info_feedback:
+                Intent fbIntent = new Intent(this, ChatActivity.class);
+                startActivity(fbIntent);
+                break;
+
+            case setting_accout_security:
+                Intent asIntent = new Intent(this, AccountSecurityActivity.class);
+                startActivityForResult(asIntent, KeyParams.REQUEST_CODE);
+                break;
+
             case R.id.setting_about_us:
                 Intent aboutUsIntent = new Intent(this, AboutUsActivity.class);
                 startActivity(aboutUsIntent);
@@ -92,15 +120,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     dialog.show();
                 }
                 break;
-            case R.id.setting_modify_password:
-                Intent intent1 = new Intent(this, LPasswordModifyActivity.class);
-                startActivityForResult(intent1, KeyParams.REQUEST_CODE);
-                break;
             case R.id.setting_sign_out:
                 String text = signOUtBtn.getText().toString();
                 if (getResources().getString(R.string.immediately_login).equals(text)) {
                     Intent intent = new Intent(this, LLoginActivity.class);
                     intent.putExtra(KeyParams.IM_LOGIN, true);
+                    intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_SETTING);
                     startActivityForResult(intent, 100);
                 } else {
                     CustomDialog dialog2 = new CustomDialog(this);
@@ -124,20 +149,21 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 100 && resultCode == MeFragment.LOGIN_OK) {
+        if (resultCode == MeFragment.LOGIN_OK) {
             setResult(MeFragment.LOGIN_OK, data);
             finish();
         } else if (resultCode == UN_LOGIN_OK) {
             unLogin();
+        } else if (resultCode == MeFragment.IM_LOGIN_OK) {
+            setResult(MeFragment.IM_LOGIN_OK, data);
+            finish();
+        } else if (resultCode == MeFragment.UPDATE_ME_DATA) {
+            setResult(resultCode);
         } else if (resultCode == LOGIN) {
             Intent intent = new Intent(this, LLoginActivity.class);
             intent.putExtra(KeyParams.SETTING, KeyParams.SETTING);
             startActivityForResult(intent, 100);
-        } else if (resultCode == MeFragment.IM_LOGIN) {
-            setResult(MeFragment.IM_LOGIN, data);
-            finish();
         }
-
     }
 
     private void unLogin() {

@@ -215,9 +215,7 @@ public class PlayBackActivity extends BaseActivity {
                         customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
-
-                                Intent intent = new Intent(PlayBackActivity.this, LLoginActivity.class);
-                                startActivityForResult(intent, RESQUEST_COD);
+                                LLoginActivity.startForResult(PlayBackActivity.this,RESQUEST_COD);
 
                             }
                         });

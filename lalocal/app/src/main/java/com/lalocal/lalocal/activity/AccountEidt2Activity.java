@@ -18,6 +18,8 @@ import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.lalocal.lalocal.view.dialog.WheelDialog;
 
@@ -35,7 +37,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
     int userid;
     String token;
     String email, emailText;
-    Button sendagain_btn;
+    ProgressButton sendagain_btn;
     boolean isEnd=true;
 
     @Override
@@ -72,11 +74,12 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         nickname_modfiy_edit = (EditText) findViewById(R.id.nickname_modify_edit);
         countrycode_tv = (TextView) findViewById(R.id.account_edit2_countrycode);
         phone_modify_edit = (EditText) findViewById(R.id.account_edit2_phone);
+        CustomTitleView aeCtv= (CustomTitleView) findViewById(R.id.account_edit2_ctv);
         TextView email_tv = (TextView) findViewById(R.id.account_eidt2_email_tv);
         TextView save_tv = (TextView) findViewById(R.id.account_edit_save);
         LinearLayout phone_modify_view = (LinearLayout) findViewById(R.id.phone_modify_view);
         LinearLayout email_modify_view = (LinearLayout) findViewById(R.id.email_modify_view);
-         sendagain_btn = (Button) findViewById(R.id.account_eidt2_sendagain_btn);
+         sendagain_btn = (ProgressButton) findViewById(R.id.account_eidt2_sendagain_btn);
         Button changeemail_btn = (Button) findViewById(R.id.account_eidt2_changeemail_btn);
         nickname_modfiy_edit.setText(getNickname());
         email_tv.setText(getEmailText());
@@ -94,6 +97,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
         } else if (actionType == ACTION_EMAIL_MODIFY) {
             save_tv.setVisibility(View.GONE);
             email_modify_view.setVisibility(View.VISIBLE);
+            aeCtv.setTitle(getResources().getString(R.string.bound_email));
 
         }
 
@@ -157,7 +161,7 @@ public class AccountEidt2Activity extends BaseActivity implements View.OnClickLi
                     CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_empty), null);
                     return;
                 }
-                contentService.boundEmail(email, userid, token);
+                contentService.boundEmail(email, userid, token,sendagain_btn);
                 break;
             case R.id.account_eidt2_changeemail_btn:
                 changeEmail();

@@ -197,6 +197,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     }
 
+
+
     private class MyRunnable implements Runnable {
         @Override
         public void run() {

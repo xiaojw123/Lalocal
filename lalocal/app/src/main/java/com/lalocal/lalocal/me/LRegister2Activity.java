@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
@@ -14,6 +13,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.MyEditText;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import butterknife.BindView;
@@ -27,7 +27,7 @@ public class LRegister2Activity extends BaseActivity {
     @BindView(R.id.lregister_set_nickname)
     MyEditText lregisterSetNickname;
     @BindView(R.id.lregister_next)
-    Button lregisterNext;
+    ProgressButton lregisterNext;
     String loginEmail,loginPsw;
 
     @Override
@@ -81,7 +81,7 @@ public class LRegister2Activity extends BaseActivity {
         }
         @Override
         public void onDialogClickListener() {
-            mContentloader.login(loginEmail, loginPsw);
+            mContentloader.login(loginEmail, loginPsw,null);
         }
 
     }

@@ -32,7 +32,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     EditText editText;
     Button clearBtn;
     Button selecedBtn;
-    boolean isClearBtnVisible = true;
+    boolean isClearBtnVisible;
     boolean isFilterSpace;
     TextView lightText;
     boolean isEnd;
@@ -53,6 +53,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
         String hintText = a.getString(R.styleable.CustomEditText_text_hint);
         int maxLen = a.getInt(R.styleable.CustomEditText_maxLen, -1);
         isPsw = a.getBoolean(R.styleable.CustomEditText_isPsw, false);
+        isClearBtnVisible=a.getBoolean(R.styleable.CustomEditText_clearVisible,false);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_edit_layout, this);
         editText = (EditText) findViewById(R.id.input_edit);
@@ -205,7 +206,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
     @Override
     public void afterTextChanged(Editable s) {
         if (editText.hasFocus()) {
-            if (!isClearBtnVisible && !TextUtils.isEmpty(s.toString())) {
+            if (isClearBtnVisible && !TextUtils.isEmpty(s.toString())) {
                 clearBtn.setVisibility(VISIBLE);
             } else {
                 clearBtn.setVisibility(GONE);
@@ -220,7 +221,7 @@ public class CustomEditText extends FrameLayout implements View.OnClickListener,
             if (selecedBtn != null) {
                 selecedBtn.setSelected(true);
             }
-            if (!isClearBtnVisible && !isEidtTextEmpty()) {
+            if (isClearBtnVisible && !isEidtTextEmpty()) {
                 if (clearBtn.getVisibility() != VISIBLE) {
                     clearBtn.setVisibility(VISIBLE);
                 }

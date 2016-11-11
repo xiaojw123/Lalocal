@@ -8,15 +8,19 @@ import android.content.pm.PackageManager;
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
+    /*上报日志接口
+    *method:post
+    * params:log
+    * ur:http://dev.lalocal.cn/api/system/logs/app
+    * */
+
+
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
-
-        private static String baseUrl = "http://api.lalocal.cn/api/";
-    // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
-  //  private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
-
+    //   private static String baseUrl = "http://api.lalocal.cn/api/";
+    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {
@@ -148,7 +152,6 @@ public class AppConfig {
     }
 
 
-
     //直播列表
     public static String getLiveListUrl() {
         return baseUrl + "channels?";
@@ -250,51 +253,56 @@ public class AppConfig {
     }
 
     //分享统计
-    public static final String getShareStatistics(){
-        return  baseUrl+"system/share";
+    public static final String getShareStatistics() {
+        return baseUrl + "system/share";
     }
 
     //上传在线人数 http://dev.lalocal.cn:8080/api/system/numbs?number=1&channelId=11
-    public static final String getOnLineUserCount(int number,String channelId ){
-        return  baseUrl+"system/numbs?number="+number+"&channelId="+channelId;
+    public static final String getOnLineUserCount(int number, String channelId) {
+        return baseUrl + "system/numbs?number=" + number + "&channelId=" + channelId;
     }
 
     //发起挑战 http://dev.lalocal.cn:8080/api/challenges
-    public static final String getChallageInitiate(){
-        return  baseUrl+"challenges";
+    public static final String getChallageInitiate() {
+        return baseUrl + "challenges";
     }
 
     //挑战列表 http://dev.lalocal.cn:8080/api/challenges?channelId=1&status=0 getChallengeList
-    public static final String getChallengeList(){
-        return  baseUrl+"challenges?channelId=";
+    public static final String getChallengeList() {
+        return baseUrl + "challenges?channelId=";
     }
+
     //主播操作挑战 http://dev.lalocal.cn:8080/api/challenges/6/status
-    public static final String getLiveChallengeStatus(int challengeId){
-        return  baseUrl+"challenges/"+challengeId+"/status";
+    public static final String getLiveChallengeStatus(int challengeId) {
+        return baseUrl + "challenges/" + challengeId + "/status";
     }
+
     //挑战详情
-    public static final String getChallengeDetails(){
-        return baseUrl+"challenges";
+    public static final String getChallengeDetails() {
+        return baseUrl + "challenges";
     }
 
     //直播地区列表
-    public  static  final String getLiveArea(){
-        return baseUrl+"system/areas?channelFlag=true";
+    public static final String getLiveArea() {
+        return baseUrl + "system/areas?channelFlag=true";
     }
+
     //直播首页 http://dev.lalocal.cn:8080/api/channels/index?area=2&attentionFlag=
-    public  static  final  String getLiveHotList(String areaId,String attentionFlag){
-        return  baseUrl+"channels/index?area="+areaId+"&attentionFlag="+attentionFlag;
+    public static final String getLiveHotList(String areaId, String attentionFlag) {
+        return baseUrl + "channels/index?area=" + areaId + "&attentionFlag=" + attentionFlag;
     }
+
     //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
-    public static final String getPlayBackLive(String areaId,int pageNumber,String attentionFlag){
-      //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
-   return baseUrl+"channels/historys?area="+areaId+"&pageNumber="+pageNumber+"&attentionFlag="+attentionFlag;
+    public static final String getPlayBackLive(String areaId, int pageNumber, String attentionFlag) {
+        //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+        return baseUrl + "channels/historys?area=" + areaId + "&pageNumber=" + pageNumber + "&attentionFlag=" + attentionFlag;
 
     }
-    //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
-    public  static final String getPlayBackLiveDetails(int id){
 
-        return baseUrl+"channels/historys/"+id;
+    //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
+    public static final String getPlayBackLiveDetails(int id) {
+
+        return baseUrl + "channels/historys/" + id;
     }
 
     //上报日志 http://dev.lalocal.cn/api/system/logs/app
@@ -486,30 +494,33 @@ public class AppConfig {
     }
 
     //用户历史直播
-    public static  String getUserLiveUrl(int userid,int pageNum){
-        String url = baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
+    public static String getUserLiveUrl(int userid, int pageNum) {
+        String url = baseUrl + "channels/users/" + userid + "/historys?pageNum=" + pageNum + "&pageSize=10";
         AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
         return url;
 
     }
 
     //用户明细
-    public static  String getChannelRecords(int id){
+    public static String getChannelRecords(int id) {
 
-        return  baseUrl+"channels/records/"+id;
+        return baseUrl + "channels/records/" + id;
     }
+
     //发送短信验证码
-    public static  String getSMSVerCode(){
+    public static String getSMSVerCode() {
 
-        return baseUrl+"users/phone/code";
+        return baseUrl + "users/phone/code";
     }
+
     //手机登录
-    public static  String getPhoneLoginUrl(){
-   return  baseUrl+"users/phone/login";
+    public static String getPhoneLoginUrl() {
+        return baseUrl + "users/phone/login";
     }
+
     //手机注册
-    public static  String getPhoneRegisterUrl(){
-        return baseUrl+"users/phone/user";
+    public static String getPhoneRegisterUrl() {
+        return baseUrl + "users/phone/user";
     }
 
 
@@ -526,17 +537,36 @@ public class AppConfig {
         AppLog.i("ussr", "the getUserArticles url is " + url);
         return url;
     }
+
     //三方登录url
-    public static String getSocialLoginUrl(){
-        return  baseUrl+"users/social/login";
+    public static String getSocialLoginUrl() {
+        return baseUrl + "users/social/login";
     }
+
     //三方注册
-    public static String getSocialReigsterUrl(){
-        return  baseUrl+"users/social/register";
+    public static String getSocialReigsterUrl() {
+        return baseUrl + "users/social/register";
     }
+
     //三方绑定
-    public static String getSocialBindurl(){
-        return baseUrl+"users/social/bind";
+    public static String getSocialBindurl() {
+        return baseUrl + "users/social/bind";
+    }
+
+    //三方账号列表
+    public static String getUsersSocialUrl() {
+        return baseUrl + "users/social";
+    }
+
+    //解除绑定
+    public static String getUnBindSocialUrl(int uid) {
+        return baseUrl + "users/social/" + uid;
+    }
+
+    //绑定手机号
+    public static String getBindPhoneUrl() {
+//        http://dev.lalocal.cn:8080/api/users/phone/bind
+        return baseUrl + "users/phone/bind";
     }
 
 

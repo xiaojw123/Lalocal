@@ -22,6 +22,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
@@ -255,12 +256,8 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 if (UserHelper.isLogined(this)) {
                     contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
                 } else {
-                    Intent preIntent = new Intent();
-                    preIntent.setClass(this, LoginActivity.class);
-                    startActivityForResult(preIntent, 100);
+                    LLoginActivity.start(this);
                 }
-
-
                 break;
             case R.id.product_check_detail:
                 //TODO 查看详情
@@ -634,15 +631,5 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == LoginActivity.REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            contentService.login(email, psw);
-        }
-
-    }
 
 }

@@ -1,6 +1,8 @@
 package com.lalocal.lalocal.net.callback;
 
 
+import android.widget.CompoundButton;
+
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
@@ -45,6 +47,7 @@ import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
+import com.lalocal.lalocal.model.SocialUser;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
@@ -181,7 +184,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onCheckEmail(String email,String result) {
+    public void onCheckEmail(String email,String userid) {
 
 
     }
@@ -364,6 +367,24 @@ public abstract class ICallBack {
 
 
     }
+    public  void onBindPhoneSuccess(String phone){}
+
+    public void onGetSocialUsers(SocialUser wexinUser,SocialUser qqUser,SocialUser weiboUser){
+
+
+
+    }
+
+    public void onBindSocialUser(CompoundButton switchBtn,SocialUser wexinUser, SocialUser qqUser, SocialUser weiboUser){}
+
+    public void onUnBindSocialUser(CompoundButton switchBtn){
+
+
+    }
+
+
+
+
 
 
     public void onResponseLog(String json) {

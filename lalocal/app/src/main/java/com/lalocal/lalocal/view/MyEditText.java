@@ -2,6 +2,7 @@ package com.lalocal.lalocal.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -9,7 +10,6 @@ import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +31,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
     TextView titleTv;
     String title;
     boolean clearEable;
-    ImageView clearBtn,showPsswordBtn;
+    ImageView clearBtn, showPsswordBtn;
     Button selecedBtn;
     boolean isFilterSpace;
     boolean isPsw;
@@ -51,25 +51,34 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
         isPsw = a.getBoolean(R.styleable.MyEditText_is_password, false);
         String hintText = a.getString(R.styleable.MyEditText_hint);
         int maxLen = a.getInt(R.styleable.MyEditText_my_maxLen, -1);
-        clearEable=a.getBoolean(R.styleable.MyEditText_clearEanble,false);
+        clearEable = a.getBoolean(R.styleable.MyEditText_clearEanble, false);
+        Drawable drawable = a.getDrawable(R.styleable.MyEditText_my_background);
+        int width = (int) a.getDimension(R.styleable.MyEditText_my_width, -1);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.my_editext_layout, this, true);
         titleTv = (TextView) findViewById(R.id.my_editext_title);
         inputEdit = (EditText) findViewById(R.id.my_editext_edit);
-        clearBtn= (ImageView) findViewById(R.id.my_editext_clear);
-        showPsswordBtn=(ImageView) findViewById(R.id.my_editext_showpassword_btn);
+        clearBtn = (ImageView) findViewById(R.id.my_editext_clear);
+        showPsswordBtn = (ImageView) findViewById(R.id.my_editext_showpassword_btn);
+        if (width != -1) {
+            FrameLayout.LayoutParams params = (LayoutParams) inputEdit.getLayoutParams();
+            params.width = width;
+        }
+        if (drawable != null) {
+            inputEdit.setBackgroundDrawable(drawable);
+        }
         if (maxLen != -1) {
             inputEdit.setFilters(new InputFilter[]{new InputFilter.LengthFilter(maxLen)});
         }
         if (!TextUtils.isEmpty(hintText)) {
             inputEdit.setHint(hintText);
         }
-        if (isPsw){
+        if (isPsw) {
             //隐藏
             inputEdit.setSelected(false);
             inputEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
             showPsswordBtn.setVisibility(VISIBLE);
-        }else{
+        } else {
             showPsswordBtn.setVisibility(GONE);
         }
         titleTv.setText(title);
@@ -77,8 +86,6 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
         clearBtn.setOnClickListener(this);
         inputEdit.setOnFocusChangeListener(this);
         inputEdit.addTextChangedListener(this);
-        inputEdit.setGravity(Gravity.CENTER_VERTICAL);
-        inputEdit.setPadding(inputEdit.getPaddingLeft(), inputEdit.getPaddingTop(), inputEdit.getPaddingRight(), 0);
     }
 
 
@@ -91,10 +98,10 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
     }
 
 
-
     public void setFilterSpace(boolean isFilterSpace) {
         this.isFilterSpace = isFilterSpace;
     }
+
     public void setSelectedButton(Button button) {
         selecedBtn = button;
     }
@@ -107,13 +114,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
             if (selecedBtn != null) {
                 selecedBtn.setSelected(true);
             }
-            if (titleTv.getVisibility() != VISIBLE) {
-                titleTv.setVisibility(VISIBLE);
-            }
-            if (!TextUtils.isEmpty(title)) {
-                inputEdit.setGravity(Gravity.BOTTOM);
-                inputEdit.setPadding(inputEdit.getPaddingLeft(), inputEdit.getPaddingTop(), inputEdit.getPaddingRight(), (int) getResources().getDimension(R.dimen.dimen_size_10_dp));
-            }
+            titleTv.setVisibility(VISIBLE);
             if (clearEable && !isEidtTextEmpty()) {
                 if (clearBtn.getVisibility() != VISIBLE) {
                     clearBtn.setVisibility(VISIBLE);
@@ -124,13 +125,7 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
             if (selecedBtn != null) {
                 selecedBtn.setSelected(false);
             }
-            if (titleTv.getVisibility() == VISIBLE) {
-                titleTv.setVisibility(GONE);
-            }
-            if (!TextUtils.isEmpty(title)) {
-                inputEdit.setGravity(Gravity.CENTER_VERTICAL);
-                inputEdit.setPadding(inputEdit.getPaddingLeft(), inputEdit.getPaddingTop(), inputEdit.getPaddingRight(), 0);
-            }
+            titleTv.setVisibility(INVISIBLE);
         }
 
     }
@@ -148,9 +143,16 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
 
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
+        String editable = inputEdit.getText().toString();
+        String inputText = editable.toString();
+        if (inputText.length() > 0) {
+            titleTv.setVisibility(VISIBLE);
+        } else {
+            titleTv.setVisibility(INVISIBLE);
+        }
         if (isPsw) {
-            String editable = inputEdit.getText().toString();
-            String str = filterPassword(editable.toString());
+
+            String str = filterPassword(inputText);
             if (!editable.equals(str)) {
                 inputEdit.setText(str);
                 //设置新的光标所在位置
@@ -158,15 +160,15 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
             }
         }
 //        if (isFilterSpace) {
-            if (s.toString().contains(" ")) {
-                String[] str = s.toString().split(" ");
-                String str1 = "";
-                for (int i = 0; i < str.length; i++) {
-                    str1 += str[i];
-                }
-                inputEdit.setText(str1);
-                inputEdit.setSelection(start);
+        if (s.toString().contains(" ")) {
+            String[] str = s.toString().split(" ");
+            String str1 = "";
+            for (int i = 0; i < str.length; i++) {
+                str1 += str[i];
             }
+            inputEdit.setText(str1);
+            inputEdit.setSelection(start);
+        }
 //        }
 
     }
@@ -185,13 +187,13 @@ public class MyEditText extends FrameLayout implements View.OnFocusChangeListene
 
     @Override
     public void onClick(View v) {
-        int id=v.getId();
-        switch (id){
+        int id = v.getId();
+        switch (id) {
             case R.id.my_editext_showpassword_btn:
-                if (v.isSelected()){
+                if (v.isSelected()) {
                     v.setSelected(false);
                     inputEdit.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                }else{
+                } else {
                     v.setSelected(true);
                     inputEdit.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                 }

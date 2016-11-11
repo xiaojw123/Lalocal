@@ -266,6 +266,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
 
+
     protected void findViews() {
         super.findViews();
         backBtn = findView(R.id.BackBtn);

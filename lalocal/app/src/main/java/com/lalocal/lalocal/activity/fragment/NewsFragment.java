@@ -8,12 +8,10 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +20,6 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +61,6 @@ import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
-import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
@@ -93,46 +88,28 @@ import static java.lang.Boolean.parseBoolean;
  */
 public class NewsFragment extends BaseFragment implements View.OnClickListener {
     private final int BASIC_PERMISSION_REQUEST_CODE = 100;
-    public static final int RESQUEST_COD = 701;
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 100;
     public static final String CREATE_ROOMID = "createRoomId";
     private ContentLoader contentService;
-    private ListView liveRecyclearView;
-    //    private BlurImageView layoutBg;
-    //   private LiveMainListAdapter liveMainListAdapter;
     private List<LiveRowsBean> allRows = new ArrayList<LiveRowsBean>();
     private List<LiveRowsBean> allAttenRows = new ArrayList<LiveRowsBean>();
     private boolean isFirstLoad = true;//刷新列表
-    boolean closeRegister = true;
     private int roomId = 0;
-    Handler handler = new Handler();
     private int createRoomId;
-    private String mliveStreamingURL;
-    private String pullUrl;
-    private int userCreateId;
-    private String createAvatar;
-    private SpecialShareVOBean shareVOCreate;
     private FrameLayout liveSeachFl;
     private CustomXRecyclerView xRecyclerView;
     private LiveMainAdapter liveMainAdapter, attenAdapter;
 
-    private int totalPages;
     private TextView titleHot;
     private LinearLayout hotContent;
     private GridView gridView;
     private LiveClassifyGridViewAdapter liveClassifyGridViewAdapter;
-    private LinearLayout searchLayout;
-    private RelativeLayout.LayoutParams lp;
-    private View viewCover;
     private View inflate, searchinfate;
     private SliderLayout sliderLayout;
     private TextView titleAttention;
-    private TextPaint paint2;
-    private TextPaint paint1;
     private LinearLayout dotContainer;
     private int firstVisibleItemPosition;
     private ImageView searchBar;
-    private int lastScrollDy;
     private TextView attenLoginText;
 
 
@@ -146,7 +123,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         requestBasicPermission(); // 申请APP基本权限
         AppLog.i("TAG","NewsFragment:走了onCreate");
 
+
     }
+
 
     @Nullable
     @Override
@@ -245,13 +224,11 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 AppLog.print("onScrolled firstVisibleItemPosition____" + firstVisibleItemPosition + "____scollDy____" + scollDy);
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
                     if (isVisible && scollDy != 0) {
-                        lastScrollDy = scollDy;
                         searchBar.setVisibility(View.VISIBLE);
                         isVisible = false;
                     }
                 } else {
                     if (!isVisible) {
-                        lastScrollDy = scollDy;
                         isVisible = true;
                         AppLog.print("onScrolled—————scrollbar——invisible———");
                         searchBar.setVisibility(View.INVISIBLE);
@@ -333,7 +310,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
     boolean firstLoadData = true;
-
     @Override
     public void onHiddenChanged(boolean hidden) {//切换fragment刷新fragment
         super.onHiddenChanged(hidden);
@@ -341,7 +317,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
         }
     }
-
 
 
     boolean isClick = true;
@@ -823,7 +798,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    boolean isLogining = false;
 
     private void prepareLive() {
         boolean isLogin = UserHelper.isLogined(getActivity());
@@ -831,10 +805,8 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             AppLog.i("TAG","登录成功，去开启直播页面");
             startActivity(new Intent(getActivity(), LiveActivity.class));
         } else {
-            showLoginDialog();
-        }
+            showLoginDialog();}
     }
-
 
     private  void  showLoginDialog(){
         CustomChatDialog customDialog = new CustomChatDialog(getActivity());
@@ -845,9 +817,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
             @Override
             public void onDialogClickListener() {
-                Intent intent = new Intent(getActivity(), LLoginActivity.class);
-                startActivityForResult(intent, RESQUEST_COD);
-
+                LLoginActivity.start(getActivity());
             }
         });
         customDialog.show();
@@ -950,7 +920,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-
         if (sliderLayout != null) {
             sliderLayout.startAutoCycle();
         }
@@ -976,8 +945,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         if (sliderLayout != null) {
             sliderLayout.stopAutoCycle();
         }
-
-        AppLog.i("TAG", "onStop");
     }
 
     @Override
@@ -989,7 +956,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    //    registerObservers(false);
         AppLog.i("TAG", "onDestroy");
 
     }

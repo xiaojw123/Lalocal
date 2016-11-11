@@ -3,7 +3,6 @@ package com.lalocal.lalocal.me;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
@@ -15,11 +14,11 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.MyEditText;
+import com.lalocal.lalocal.view.ProgressButton;
 
 public class LPasswordForget1Activity extends BaseActivity implements View.OnClickListener {
-    public static final String Email = "email";
     MyEditText email_edit;
-    Button next_btn;
+    ProgressButton next_btn;
     ContentLoader contentService;
 
     @Override
@@ -37,7 +36,7 @@ public class LPasswordForget1Activity extends BaseActivity implements View.OnCli
 
     private void initView() {
         email_edit = (MyEditText) findViewById(R.id.forgetpsw_email_custom_edit);
-        next_btn = (Button) findViewById(R.id.forgetpsw_next_btn);
+        next_btn = (ProgressButton) findViewById(R.id.forgetpsw_next_btn);
         next_btn.setOnClickListener(this);
     }
 
@@ -55,7 +54,7 @@ public class LPasswordForget1Activity extends BaseActivity implements View.OnCli
                 return;
             }
             next_btn.setEnabled(false);
-            contentService.sendVerificationCode(email, next_btn);
+            contentService.sendVerificationCode(email,next_btn);
         }
     }
 
@@ -64,7 +63,7 @@ public class LPasswordForget1Activity extends BaseActivity implements View.OnCli
         @Override
         public void onSendVerCode(String email) {
             Intent intent = new Intent(LPasswordForget1Activity.this, LPasswordForget2Activity.class);
-            intent.putExtra(Email, email);
+            intent.putExtra(KeyParams.EMAIL, email);
             startActivityForResult(intent, 100);
         }
     }

@@ -2,7 +2,8 @@ package com.lalocal.lalocal.me;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
@@ -17,6 +18,8 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.MD5Util;
 import com.lalocal.lalocal.view.CustomEditText;
+import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import org.json.JSONException;
@@ -25,21 +28,31 @@ import org.json.JSONObject;
 public class LPEmailBound2Activity extends BaseActivity implements View.OnClickListener {
     public static String IS_REGISTERED = "is_registered";
     CustomEditText pEmailBoundEdit;
-    Button pLalocalStart;
+    CustomTitleView pEmailCtv;
+    TextView reminderTv;
+
+    ProgressButton pLalocalStart;
     boolean isRegistered;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lemail_psw);
+        pEmailCtv= (CustomTitleView) findViewById(R.id.p_emailbound_ctv);
+        reminderTv= (TextView) findViewById(R.id.p_emailbound_reminder);
         pEmailBoundEdit = (CustomEditText) findViewById(R.id.p_emailbound_edit);
-        pLalocalStart = (Button) findViewById(R.id.p_emailbound_startlalocal);
+        pLalocalStart = (ProgressButton) findViewById(R.id.p_emailbound_startlalocal);
         pLalocalStart.setOnClickListener(this);
         isRegistered = getIntent().getBooleanExtra(IS_REGISTERED, false);
         if (isRegistered) {
             pEmailBoundEdit.setHint(getResources().getString(R.string.please_input_password));
+            pEmailCtv.setTitle("绑定已有账号");
+            reminderTv.setText("该邮箱已绑定，请输入对应密码进行绑定");
         } else {
+            pEmailCtv.setTitle("绑定新账号");
             pEmailBoundEdit.setHint(getResources().getString(R.string.set_pssword));
+            reminderTv.setText("该邮箱未被注册，请直接设置密码注册绑定");
+
         }
         setLoaderCallBack(new PemailBound2CallBack());
     }
@@ -63,15 +76,15 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
                 body.put("email", email);
                 body.put("password", MD5Util.getMD5String(psw));
                 if (isRegistered) {
-                    mContentloader.socialBind(body.toString());
+                    mContentloader.socialBind(body.toString(),pLalocalStart);
                 } else {
-                    mContentloader.registerBySocial(body.toString());
+                    mContentloader.registerBySocial(body.toString(),pLalocalStart);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
-            mContentloader.registerByPhone(phone, code, email, psw);
+            mContentloader.registerByPhone(phone, code, email, psw,pLalocalStart);
         }
     }
 
@@ -93,6 +106,7 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
 
         @Override
         public void onSocialRegisterSuccess(User user) {
+            Toast.makeText(LPEmailBound2Activity.this,getResources().getString(R.string.register_success),Toast.LENGTH_SHORT).show();
             UserHelper.setLoginSuccessResult(LPEmailBound2Activity.this,user);
         }
     }

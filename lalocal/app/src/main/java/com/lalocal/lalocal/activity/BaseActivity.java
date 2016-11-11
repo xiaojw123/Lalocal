@@ -11,7 +11,9 @@ import android.widget.FrameLayout;
 import com.bugtags.library.Bugtags;
 import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
@@ -176,6 +178,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         //注：回调 3
@@ -186,7 +189,7 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public int getPageType() {
-        return getIntent().getIntExtra(KeyParams.PAGE_TYPE, 0);
+        return getIntent().getIntExtra(KeyParams.PAGE_TYPE, PageType.PAGE_DEFAULT);
     }
 
 
@@ -195,7 +198,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         try {
             UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-            if (mLoginBack && resultCode == LoginActivity.LOGIN_OK) {
+            if (mLoginBack && resultCode == MeFragment.LOGIN_OK) {
+                AppLog.print("onActivityResult loginOk result_code___");
                 setResult(resultCode, data);
                 finish();
             }

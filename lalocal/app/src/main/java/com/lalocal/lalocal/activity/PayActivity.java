@@ -18,6 +18,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
@@ -300,8 +301,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
         public void onError(VolleyError volleyError) {
             int code = volleyError.networkResponse.statusCode;
             if (code == 401) {
-                Intent intent = new Intent(PayActivity.this, LoginActivity.class);
-                startActivity(intent);
+                LLoginActivity.start(PayActivity.this);
             }
         }
 
