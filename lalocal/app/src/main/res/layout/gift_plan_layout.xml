@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/gift_plane_up"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/audient_gift_plane_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/audient_gift_plane_bg_height"
+        android:layout_marginTop="120dp"
+        android:background="@drawable/giftmassagebg"
+        android:visibility="gone" >
+
+        <View
+            android:layout_width="@dimen/dimen_size_10_dp"
+            android:layout_height="match_parent"
+            android:background="#90ffffff" />
+
+        <TextView
+            android:id="@+id/audience_gift_send_plane"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_size_30_dp"
+            android:text="一位不愿透露姓名的网友  与主播飞机旅行"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_16_sp" />
+    </RelativeLayout>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/audience_anchor_headportrait"
+        android:layout_width="@dimen/audience_anchor_headportrait_width"
+        android:layout_height="@dimen/audience_anchor_headportrait_width"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="@dimen/dimen_size_2_dp"
+        android:layout_marginTop="225dp"
+        android:layout_marginLeft="108dp"
+        android:visibility="gone"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/audience_user_headportrait"
+        android:layout_width="@dimen/audience_anchor_headportrait_width"
+        android:layout_height="@dimen/audience_anchor_headportrait_width"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="@dimen/dimen_size_2_dp"
+        android:layout_toRightOf="@+id/audience_anchor_headportrait"
+        android:layout_marginLeft="-8dp"
+        android:layout_alignTop="@+id/audience_anchor_headportrait"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"
+        />
+
+</RelativeLayout>

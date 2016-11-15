@@ -604,7 +604,6 @@ public class ContentLoader {
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getVerCodeSendUrl(), response, response);
         request.setBodyParams(getVerParams(email));
         requestQueue.add(request);
-
     }
 
     //判断邮箱是否被注册过
@@ -1089,7 +1088,6 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.VERSION_CODE);
         }
         ContentRequest contentRequest = new ContentRequest(AppConfig.VERSION_UPDATE + versionCode, response, response);
-        contentRequest.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(contentRequest);
     }
 
@@ -1135,7 +1133,7 @@ public class ContentLoader {
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-            return super.setRetryPolicy(new DefaultRetryPolicy(8000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+            return super.setRetryPolicy(new DefaultRetryPolicy(50000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
@@ -1297,7 +1295,6 @@ public class ContentLoader {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
-                    callBack.onResponseFailed();
                     if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
                         CustomDialog dialog = new CustomDialog(context);
                         dialog.setMessage(message);
@@ -1305,20 +1302,21 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT) {
+                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
+                    callBack.onResponseFailed(code,message);
+                    callBack.onResponseFailed(message,RequestCode.LIVE_ON_LINE_COUNT);
                     return;
+
                 }
                 switch (resultCode) {
                     case RequestCode.LIVE_HISTORY_DELETE:
                         responseDeleteLiveHisotry(jsonObj);
                         break;
-
                     case RequestCode.LOGIN_PHEON:
                         responseLoginPhone(jsonObj);
                         break;
-
                     case RequestCode.REGISTER_PHONE:
                         responeRegisterPhone(jsonObj);
                         break;
@@ -1334,12 +1332,10 @@ public class ContentLoader {
                     case RequestCode.EXCHARGE_COUPON:
                         responseExchargeCoupon(jsonObj);
                         break;
-
                     case RequestCode.SEARCH_LIVE:
                         AppLog.print("result search JSON___" + json);
                         responseSearchLive(jsonObj);
                         break;
-
                     case RequestCode.EXCHARGE_GOLD:
                         AppLog.print("respose_excharge_gold__" + json);
                         responseExchargeGold(jsonObj);
@@ -2053,6 +2049,7 @@ public class ContentLoader {
             callBack.onLoginSucess(user);
         }
 
+
         private void saveUserInfo(User user) {
             if (user != null) {
                 MobHelper.singIn(user.getId());
@@ -2069,6 +2066,8 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
+                NIMClient.getService(AuthService.class).logout();
+                DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
                 loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());

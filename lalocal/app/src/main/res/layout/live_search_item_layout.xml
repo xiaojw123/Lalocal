@@ -70,7 +70,7 @@
             android:layout_alignLeft="@+id/live_search_item_title"
             android:layout_below="@+id/live_search_item_title"
             android:layout_marginTop="@dimen/live_search_onlinUser_num_top"
-            android:drawableLeft="@drawable/manypeople_arkic"
+            android:drawableLeft="@drawable/manypeople_dark"
             android:drawablePadding="@dimen/dimen_size_5_dp"
             android:ellipsize="end"
             android:singleLine="true"
@@ -87,6 +87,7 @@
             android:drawableLeft="@drawable/peopleliving_location_darkic"
             android:ellipsize="end"
             android:singleLine="true"
+            android:drawablePadding="@dimen/dimen_size_5_dp"
             android:textColor="@color/color_b3"
             android:textSize="@dimen/text_size_12_sp" />
 

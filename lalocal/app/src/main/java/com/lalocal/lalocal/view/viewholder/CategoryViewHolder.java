@@ -2,15 +2,18 @@ package com.lalocal.lalocal.view.viewholder;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
 
 /**
  * Created by wangjie on 2016/10/25.
@@ -19,7 +22,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     private Context mContext;
 
-    private LinearLayout mLayoutLive;
+    private CardView mCardView;
     private LinearLayout mLayoutTheme;
     private LinearLayout mLayoutArticle;
     private LinearLayout mLayoutShop;
@@ -39,27 +42,18 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         this.mContext = context;
         // 关联控件
-        this.mLayoutLive = (LinearLayout) itemView.findViewById(R.id.layout_live);
+        this.mCardView = (CardView) itemView.findViewById(R.id.cv_category);
         this.mLayoutTheme = (LinearLayout) itemView.findViewById(R.id.layout_theme);
         this.mLayoutArticle = (LinearLayout) itemView.findViewById(R.id.layout_article);
         this.mLayoutShop = (LinearLayout) itemView.findViewById(R.id.layout_shop);
 
         // 取消焦点
-        this.mLayoutLive.setFocusable(false);
         this.mLayoutTheme.setFocusable(false);
         this.mLayoutArticle.setFocusable(false);
         this.mLayoutShop.setFocusable(false);
         this.mRvRecommendList = recyclerView;
 
         // 监听事件回调
-        mLayoutLive.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 跳转直播界面
-                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_NEWS);
-            }
-        });
-
         mLayoutTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

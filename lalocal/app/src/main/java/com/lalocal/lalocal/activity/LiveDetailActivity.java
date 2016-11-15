@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -81,6 +79,9 @@ public class LiveDetailActivity extends BaseActivity {
     }
 
     private void intiView(LiveRowsBean item) {
+        liveDetailLocation.getCompoundDrawables()[0].setAlpha(20);
+        liveDetailOnlinenum.getCompoundDrawables()[0].setAlpha(20);
+        liveDetailLiveStartAt.getCompoundDrawables()[0].setAlpha(20);
         liveDetailGiftRlv.setNestedScrollingEnabled(false);
         liveDetailGiftRlv.setLayoutManager(new GridLayoutManager(this, 4));
         liveDetailChallengeList.setNestedScrollingEnabled(false);
@@ -94,14 +95,8 @@ public class LiveDetailActivity extends BaseActivity {
             String startAt = item.getStartAt();
             String endAt = item.getEndAt();
             String liveLen = getLiveLen(startAt, endAt);
-            if (!TextUtils.isEmpty(addres)) {
-                liveDetailLocation.setVisibility(View.VISIBLE);
-                liveDetailLocation.setText(addres);
-            }
-            if (!TextUtils.isEmpty(onlineNum)) {
-                liveDetailOnlinenum.setVisibility(View.VISIBLE);
-                liveDetailOnlinenum.setText(onlineNum);
-            }
+            liveDetailLocation.setText(addres);
+            liveDetailOnlinenum.setText(onlineNum);
             liveDetailLiveStartAt.setText(startAt);
             liveDetailLivelen.setText(liveLen);
         }

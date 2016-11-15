@@ -84,6 +84,17 @@ public class XRecyclerView extends RecyclerView {
         }
     }
 
+    /**
+     * 设置默认刷新头部文本
+     * @param charSequence
+     */
+    public void setDefaultHeaderText(CharSequence charSequence) {
+        if (mRefreshHeader != null) {
+            mRefreshHeader.setTipText(charSequence);
+            mRefreshHeader.setTipVisibility(View.VISIBLE);
+        }
+    }
+
     //根据header的ViewType判断是哪个header
     private View getHeaderViewByType(int itemType) {
         if (!isHeaderType(itemType)) {

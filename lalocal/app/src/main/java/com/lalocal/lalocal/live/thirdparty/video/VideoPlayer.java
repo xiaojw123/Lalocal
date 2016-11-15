@@ -64,7 +64,6 @@ public class VideoPlayer {
 
     public void resetVideo() {
         clearReopenVideoTask();
-
         if (videoView != null) {
             videoView.release_resource();
         }

@@ -116,7 +116,7 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
         mSelected = mVpTheme.getCurrentItem();
 
         // 初始化小圆点
-        mDotBtns = CommonUtil.initDot(mContext, mVpTheme, mDotContainer, mSize, mSelected, CommonUtil.DARK_DOT);
+        mDotBtns = CommonUtil.initDot(mContext, mVpTheme, mDotContainer, mSize, mSelected, CommonUtil.ROUND_LIGHT_DOT);
 
         // 如果只有一项，显示查看更多字样
         if (mSize == 1) {
@@ -133,7 +133,7 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onPageSelected(int position) {
-                CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.DARK_DOT);
+                CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.ROUND_LIGHT_DOT);
                 // 如果滑动至最后一页
                 if (position == mSize - 1) {
                     // 查看更多字样显示

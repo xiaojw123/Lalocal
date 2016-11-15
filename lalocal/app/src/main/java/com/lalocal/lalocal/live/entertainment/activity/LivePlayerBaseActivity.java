@@ -114,7 +114,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -136,7 +135,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private static final int LIMIT = 30;
     public static final int REFRESH = 101;
     public static final String NIM_CHAT_MESSAGE_INFO = "nimlivesenfmessage";
-    private Timer timer;
+
     // 聊天室信息
     protected String roomId;
     protected ChatRoomInfo roomInfo;
@@ -233,6 +232,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private TextView massageTest;
     private ImageView shareLiveImg;
     private TextView sendPlaneName;
+  
+
 
     protected abstract void checkNetInfo(String netType, int reminder);
 
@@ -287,9 +288,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             layoutParams.leftMargin = x - (i / 4);
             periscopeLayout.setLayoutParams(layoutParams);
         }
-
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,12 +355,24 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
             if (statusCode != StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(false);
+                if(statusCode==StatusCode.KICKOUT){
+                 //   accountKicout();
+                }else if(statusCode==StatusCode.UNLOGIN){
+                    String userAccount = AuthPreferences.getUserAccount();
+                    String userToken = AuthPreferences.getUserToken();
+                    if (userAccount != null && userToken != null) {
+                        loginIMServer(userAccount, userToken);
+                    }
+                }
             } else if (statusCode == StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(true);
+                DemoCache.setAccount(AuthPreferences.getUserAccount());
                 enterRoom();
             }
         }
     };
+
+    protected abstract void accountKicout();
 
     //检测网络类型
     public static final String NET_TYPE_WIFI = "wifi";
@@ -394,7 +405,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         @Override
         public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
             if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
+                DemoCache.setLoginChatRoomStatus(false);
                 AppLog.i("TAG", "聊天室正在连接中");
+               if(messageListPanel!=null){
+                   TextView textView = new TextView(LivePlayerBaseActivity.this);
+                   textView.setText("   正在连接聊天室...");
+                   textView.setTextColor(Color.parseColor("#ffaa2a"));
+                   messageListPanel.setHead(textView);
+               }
 
             } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
                 onOnlineStatusChanged(false);
@@ -402,6 +420,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
                 AppLog.i("TAG", "聊天室登录中。。。");
+                DemoCache.setLoginChatRoomStatus(false);
 
             } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
                 AppLog.i("TAG", "聊天室已经登录");
@@ -411,6 +430,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 AppLog.i("TAG", "聊天室wontAutoLogin");
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
                 onOnlineStatusChanged(false);
+                if(messageListPanel!=null){
+                    TextView textView = new TextView(LivePlayerBaseActivity.this);
+                    textView.setText("   聊天室登录失败，正在重新连接...");
+                    textView.setTextColor(Color.parseColor("#ffaa2a"));
+                    messageListPanel.setHead(textView);
+                }
 
             }
             AppLog.i("TAG", "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
@@ -469,10 +494,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         anchorHeadImg = (ImageView) findViewById(R.id.audience_anchor_headportrait);
         userHeadImg = (ImageView) findViewById(R.id.audience_user_headportrait);
         sendPlaneName = (TextView) findViewById(R.id.audience_gift_send_plane);
-        massageTest = (TextView) findViewById(R.id.engling);
+      
+
       //  chanllenge = (ImageView) findViewById(R.id.live_telecast_challenge);
 
-        massageTest.setOnClickListener(clickListener);
+
 
         // 点赞的爱心布局
         periscopeLayout = (PeriscopeLayout) findViewById(R.id.periscope);
@@ -622,6 +648,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
             if (liveGiftRanksResp.getReturnCode() == 0) {
+                firstClick = false;
                 List<TotalRanksBean> currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                 if (currentRanks != null && currentRanks.size() > 0) {
                     for (int i = 0; i < currentRanks.size(); i++) {
@@ -692,8 +719,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         }
                         contentLoader.getLiveUserInfo(userId);
                         contentLoader.setCallBack(myCallBack);
-                        if (userId.equals(UserHelper.getUserId(LivePlayerBaseActivity.this))) {
 
+                        if (userId!=null&&userId.equals(UserHelper.getUserId(LivePlayerBaseActivity.this))) {
                             LiveConstant.IDENTITY = LiveConstant.IS_ONESELF;
                         } else {
                             LiveConstant.IDENTITY = LiveConstant.ME_CHECK_OTHER;
@@ -738,7 +765,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case R.id.audience_score_layout:
                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_LIST);
                     if (firstClick) {
-                        firstClick = false;
                         boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
                         if (logineds) {
                             contentLoader.liveGiftRanks(channelId);
@@ -750,14 +776,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     break;
                 case R.id.live_telecast_input_text:
-
                     break;
                /* case R.id.live_telecast_challenge:
                     clickChallengeBtn();
                     break;*/
-                case R.id.engling:
-                    testMessage();
-                    break;
 
             }
         }
@@ -926,19 +948,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case ChatRoomMemberIn:
                         //发送进入直播间的通知
                         isOnLineUsersCountChange = true;
+                        String fromAccountIn = message.getFromAccount();
                         sendMessage(message, MessageType.text);
                         break;
 
                     case ChatRoomMemberExit:
                         isOnLineUsersCountChange = true;
-                        //退出直播间，解除禁言
-                       /* if (banListLive.size() > 0) {
-                            for (int i = 0; i < banListLive.size(); i++) {
-                                if (message.getFromAccount().equals(banListLive.get(i))) {
-                                    banListLive.remove(i);
-                                }
-                            }
-                        }*/
+                        String fromAccountExit = message.getFromAccount();
+
                         break;
                     case ChatRoomInfoUpdated:
                         sendMessage(message, MessageType.text);
@@ -964,8 +981,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected void onOnlineStatusChanged(boolean isOnline) {
         if (isOnline) {
             onConnected();
+            DemoCache.setLoginChatRoomStatus(true);
         } else {
             onDisconnected();
+            DemoCache.setLoginChatRoomStatus(false);
             enterRoom();
         //    MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
         }
@@ -996,35 +1015,22 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     enterroomgetnick = member1.getNick();
                     masterAvatar = member1.getAvatar();
                     creatorAccount = roomInfo.getCreator();
-                    DemoCache.setLoginChatRoomStatus(true);
                     member1.setRoomId(roomInfo.getRoomId());
                     ChatRoomMemberCache.getInstance().saveMyMember(member1);
                     DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, avatar);
                     if (isFirstEnrRoom) {
                         updateUI();
                     }
-                    DemoCache.setLoginChatRoomStatus(true);
+
                     chatRoomStatusRemind("登陆聊天室成功...");
                     LiveConstant.enterRoom=true;
                     initInputPanel(creatorAccount, channelId);
-                  //  testMessage();
+
                 }
                 @Override
                 public void onFailed(int code) {
                     AppLog.i("TAG", "登录聊天室失败：" + code);
                     DemoCache.setLoginChatRoomStatus(false);
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            enterRoom();
-                        }
-                    });
                     onLoginDone();
                 }
 
@@ -1036,46 +1042,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     finish();
                 }
             });
-            //查询在线成员列表
-           /* if (isFirstEnrRoom) {
-                fetchData();
-            }*/
-
         }
     }
     int count=0;
     boolean status=true;
     CountDownTimer countDownTimer =null;
-    private void testMessage() {
-        if(countDownTimer==null){
-            countDownTimer=new CountDownTimer(1000000000, 250) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    LiveMessage liveMessage=new LiveMessage();
-                    liveMessage.setStyle(MessageType.text);
-                    liveMessage.setUserId(userId);
-                    liveMessage.setCreatorAccount(creatorAccount);
-                    liveMessage.setChannelId(channelId);
-                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "哈哈哈哈："+count, roomId, AuthPreferences.getUserAccount(), liveMessage);
-                    sendMessage(imMessage, MessageType.text);
-                    count++;
-                }
-                @Override
-                public void onFinish() {
-                }
-            };
-        }
 
-        if(status){
-            countDownTimer.start();
-            status=false;
-        }else {
-            status=true;
-            countDownTimer.cancel();
-            countDownTimer.onFinish();
-        }
-
-    }
 
     protected void initInputPanel(String creatorAccount, String channelId) {
 
@@ -1127,6 +1099,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onResult(boolean success, List<ChatRoomMember> result) {
 
                 if (success) {
+                    AppLog.i("TAG", "拉取在线人数成功");
                     addMembers(result);
                     if (memberQueryType == MemberQueryType.ONLINE_NORMAL && result.size() < LIMIT) {
                         isNormalEmpty = true; // 固定成员已经拉完
@@ -1135,10 +1108,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 } else {
 
                     AppLog.i("TAG", "拉取在线人数失败");
+
                     NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                     isFirstEnrRoom=false;
                     enterRoom();
-
                 }
             }
 
@@ -1194,6 +1167,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                                 userIdItem = String.valueOf(userId);
                             }
                             if ("-1".equals(userIdItem) || userIdItem == null || userIdItem.length() == 0) {
+                                LiveConstant.USER_INFO_FIRST_CLICK = true;
                                 Toast.makeText(LivePlayerBaseActivity.this, "该用户为游客!", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -1330,8 +1304,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     @Override
     public void onBackPressed() {
-
-
+        DialogUtil.clear();
         if (inputPanel != null && inputPanel.collapse(true)) {
         }
         if (messageListPanel != null && messageListPanel.onBackPressed()) {
@@ -1344,12 +1317,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         super.onDestroy();
         registerObservers(false);
         unregisterReceiver(myNetReceiver);
-        DialogUtil.clear();
-        AppLog.i("TAG","直播基类走了stop");
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
-        }
+        AppLog.i("TAG","直播基类走了onDestroy");
+
         adapter = null;
     }
 
@@ -1510,6 +1479,13 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.text:
+                    AppLog.i("TAG","我发送了消息");
+                    messageListPanel.onMsgSend(message);
+                    break;
+                case MessageType.masterIn:
+                    messageListPanel.onMsgSend(message);
+                    break;
+                case MessageType.masterEixt:
                     messageListPanel.onMsgSend(message);
                     break;
 
@@ -1562,7 +1538,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onStop() {
         super.onStop();
-
 
     }
 

@@ -69,11 +69,10 @@
                     android:layout_above="@+id/live_detail_onlinenum"
                     android:layout_alignLeft="@+id/live_detail_title"
                     android:layout_marginBottom="@dimen/dimen_size_4_dp"
-                    android:drawableLeft="@drawable/pl_location_darkic"
+                    android:drawableLeft="@drawable/peopleliving_location_darkic"
                     android:drawablePadding="@dimen/dimen_size_4_dp"
                     android:textColor="@color/color_b3"
                     android:textSize="@dimen/text_size_12_sp"
-                    android:visibility="gone"
                     />
 
                 <TextView
@@ -83,7 +82,7 @@
                     android:layout_above="@+id/live_detail_startat"
                     android:layout_alignLeft="@+id/live_detail_title"
                     android:layout_marginBottom="@dimen/dimen_size_4_dp"
-                    android:drawableLeft="@drawable/manypeople_arkic"
+                    android:drawableLeft="@drawable/manypeople_dark"
                     android:drawablePadding="@dimen/dimen_size_4_dp"
                     android:text="0"
                     android:textColor="@color/color_b3"
@@ -205,6 +204,7 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/live_detail_gift_rlv"
+                    android:overScrollMode="never"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/live_detail_gift_score" />
@@ -244,6 +244,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:focusable="false"
+                    android:overScrollMode="never"
                     android:layout_below="@+id/live_detial_challenge_score" />
             </RelativeLayout>
         </LinearLayout>

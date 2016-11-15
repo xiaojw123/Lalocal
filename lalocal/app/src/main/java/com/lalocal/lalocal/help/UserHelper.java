@@ -1,11 +1,15 @@
 package com.lalocal.lalocal.help;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.model.User;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.auth.AuthService;
 
@@ -20,6 +24,12 @@ public class UserHelper {
         if (sp == null && context != null) {
             sp = context.getSharedPreferences("userparams", Context.MODE_PRIVATE);
         }
+    }
+    public static void setLoginSuccessResult(Activity activity, User user){
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(MeFragment.USER, user);
+        activity.setResult(MeFragment.LOGIN_OK, resultIntent);
+        activity.finish();
     }
 
     public static void updateSignOutInfo(Context context) {

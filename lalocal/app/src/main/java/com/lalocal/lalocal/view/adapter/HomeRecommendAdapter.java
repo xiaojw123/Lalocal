@@ -42,7 +42,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private RecommendListBean mRecommendListBean;
     private List<ArticleDetailsResultBean> mArticleList;
 
-    private List<Integer> mItems = new ArrayList<Integer>();
+    private List<Integer> mItems = new ArrayList<>();
 
     // 广告
 //    private static final int ADVERTISEMENT = 0;
@@ -110,10 +110,50 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             AppLog.i("hehe", "article list null");
             articleEmpty = true;
         }
-
-        AppLog.i("recc", liveEmpty + "-" + productEmpty + "-" + themeEmpty + "-" + articleEmpty);
-
         syncItems();
+    }
+
+    public void setAdData(List<RecommendAdResultBean> adList) {
+        this.mAdList = adList;
+        if (adList == null || adList.size() == 0) {
+            AppLog.i("hehe", "ad null");
+            adEmpty = true;
+        } else {
+            adEmpty = false;
+        }
+        syncItems();
+        this.notifyDataSetChanged();
+    }
+
+    public void setListData(RecommendListBean recommendListBean) {
+        this.mRecommendListBean = recommendListBean;
+        if (recommendListBean == null) {
+            AppLog.e("hehe", "recommendListBean is null");
+            liveEmpty = true;
+            productEmpty = true;
+            themeEmpty = true;
+        } else {
+            if (recommendListBean.getChannelList() == null || recommendListBean.getChannelList().size() == 0) {
+                AppLog.e("hehe", "channel list null");
+                liveEmpty = true;
+            } else {
+                liveEmpty = false;
+            }
+            if (recommendListBean.getProduList() == null || recommendListBean.getProduList().size() == 0) {
+                AppLog.e("hehe", "product list null");
+                productEmpty = true;
+            } else {
+                productEmpty = false;
+            }
+            if (recommendListBean.getThemeList() == null || recommendListBean.getThemeList().size() == 0) {
+                AppLog.e("hehe", "theme list null");
+                themeEmpty = true;
+            } else {
+                themeEmpty = false;
+            }
+        }
+        syncItems();
+        this.notifyDataSetChanged();
     }
 
     public void setArticleData(List<ArticleDetailsResultBean> articleList) {
@@ -131,7 +171,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 articleEmpty = false;
             }
         }
-
         syncItems();
         this.notifyDataSetChanged();
     }
@@ -216,7 +255,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        AppLog.i("recc", "1 the size is " + mItems.size());
         return mItems.size();
     }
 
@@ -250,8 +288,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (!articleEmpty) {
             mItems.add(ARTICLE);
         }
-        AppLog.i("recc", "the size is " + mItems.size());
     }
-
 }
 

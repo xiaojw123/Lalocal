@@ -45,7 +45,6 @@ public class DialogUtil {
             }
         }
     }
-
     public static void clear() {
         if(dialogStack.size()>0){
         for (Dialog dialog : dialogStack) {
@@ -54,7 +53,6 @@ public class DialogUtil {
         dialogStack.clear();
         }
     }
-
 
     public static int getSize() {
         return dialogStack.size();

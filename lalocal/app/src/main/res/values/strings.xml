@@ -4,7 +4,7 @@
     <string name="write_email">填写邮箱</string>
     <string name="write_psw">填写密码</string>
     <string name="write_nickname">填写昵称</string>
-    <string name="input_email">输入邮箱</string>
+    <string name="input_email">请输入你的邮箱</string>
     <string name="input_psw">输入密码</string>
     <string name="input_verification_code">输入验证码</string>
     <string name="input_latest_psw">输入新密码</string>
@@ -273,10 +273,12 @@
     <string name="live_manager_setting_success">设置管理员成功</string>
     <string name="live_hint">提示</string>
     <string name="live_net_type_cmcc">当前网络为移动网络，是否继续直播？</string>
+    <string name="account_kicout">您的账号在其他设备登录,请重新登录!</string>
     <string name="live_continue_look">继续观看</string>
     <string name="live_video_conncet_fail">视频连接失败!</string>
     <string name="live_quit_room">退出直播间</string>
     <string name="live_again_conncet">重新连接</string>
+    <string name="live_unlogin_channel_room">未登录直播间</string>
     <string name="live_unlogin_room">未登录聊天室</string>
     <string name="live_recharge_hint">乐钻不足,请充值!</string>
     <string name="live_recharge">充值</string>
@@ -311,11 +313,25 @@
     <string name="live_camera_jurisdiction">没有视频权限，无法开启直播</string>
     <string name="live_camera_start_failure">摄像头启动失败,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_frequency_start_failure">音频权限开启失败,请尝试在手机应用权限管理中打开权限!</string>
+    <string name="live_status_inusual">直播间状态异常!请退出重进...</string>
+    <string name="audience_status_unsual">此直播间状态异常，请稍后再试!</string>
+    <string name="no_attention">快去关注旅行达人，看遍世界的美。。。</string>
 
     <string name="gold_instructions">乐钻使用说明</string>
     <string name="currency_instruction">货币说明</string>
     <string name="score_instructions">游票使用说明</string>
     <string name="exchange_rule">游票100起兑换, 且要是100的倍数</string>
     <string name="go_to_start_live_travel">快去开启属于自己的直播旅行</string>
+    <string name="got_to_atten_travel_talent">快去关注旅行达人，看遍世界的美...</string>
+    <string name="click_register_show_you_argee">点击注册表示您已同意</string>
+    <string name="nick_or_password">昵称或密码不能为空</string>
+    <string name="we_have_send_email_to_you">我们已发送一封邮件到你的邮箱,有空的时候记得去激活</string>
+    <string name="we_will_send_ver_code_to_your_email">我们将会发送验证码到您的邮箱</string>
+    <string name="set_password_by_ver_code">通过验证码完成重设</string>
+    <string name="forget_password">忘记密码?</string>
+    <string name="ver_code">验证码</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

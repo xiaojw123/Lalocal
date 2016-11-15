@@ -55,6 +55,7 @@ public class
 MeFragment extends BaseFragment {
     public static final int UPDAE_MY_WALLET = 0x01323;
     public static final String USER = "user";
+    public static final int LOGIN_OK = 102;
     public boolean isImLogin;
     User user;
     OnMeFragmentListener fragmentListener;

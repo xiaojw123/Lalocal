@@ -46,7 +46,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 public class SearchActivity extends BaseActivity implements TextView.OnEditorActionListener, TextWatcher {
 
@@ -66,7 +65,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     RecyclerView searchResultRlv;
     @BindView(R.id.search_result_xlv)
     XListView searchResultMoreXlv;
-    Unbinder unbinder;
     ContentLoader loader;
     SearchTagAdapter tagAdapter;
     boolean isResultSearch;
@@ -78,7 +76,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_layout);
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         searchKeyCet.setOnEditorActionListener(this);
         searchKeyCet.addTextChangedListener(this);
         initLoader();
@@ -92,11 +90,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
 
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
 
     @OnClick(R.id.search_back_img)
     public void back() {

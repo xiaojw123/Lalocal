@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_attention"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.activity.AttentionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_44_dp">
+        
+        <ImageView
+            android:layout_width="@dimen/dimen_size_22_dp"
+            android:layout_height="@dimen/dimen_size_22_dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_size_12_dp"
+            android:src=""/>
+    </RelativeLayout>
+    
+    
+</LinearLayout>

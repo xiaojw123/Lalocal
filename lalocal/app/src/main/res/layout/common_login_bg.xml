@@ -5,13 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/ic_login_bg">
 
-    <Button
-        android:id="@+id/common_back_btn"
-        android:layout_width="9.5dp"
-        android:layout_height="17dp"
-        android:layout_marginLeft="@dimen/dimen_size_13_dp"
-        android:layout_marginTop="@dimen/dimen_size_25_dp"
-        android:background="@drawable/ic_yellowback" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,20 +26,30 @@
             android:layout_height="@dimen/dimen_size_29_dp"
             android:layout_marginTop="@dimen/dimen_size_15_dp"
             android:gravity="center"
-            android:text="@string/welcome"
             android:textColor="@color/color_f1"
             android:textScaleX="1.25"
             android:textSize="@dimen/text_size_24_sp" />
 
         <TextView
             android:id="@+id/common_des_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="201.5dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_6_dp"
-            android:text="@string/give_you_one_diferent_world"
             android:textColor="@color/white"
+            android:gravity="center_horizontal"
             android:textScaleX="1.1"
             android:textSize="@dimen/text_size_12_sp" />
 
     </LinearLayout>
+    <ImageView
+        android:id="@+id/common_back_img"
+        android:layout_width="19.5dp"
+        android:layout_height="27dp"
+        android:layout_marginLeft="@dimen/dimen_size_8_dp"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:scaleType="fitXY"
+        android:padding="@dimen/dimen_size_5_dp"
+        android:src="@drawable/ic_yellowback"
+        android:visibility="gone"
+        />
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -192,8 +193,8 @@ public class ThemeActivity extends AppCompatActivity {
 
             AppLog.i("hehe", "recommendresult bean is " + recommendDataResp);
 
+            // 如果返回结果为空
             if (result == null) {
-                AppLog.i("cannotload", "result is null");
 //                mHandler.sendEmptyMessage(GET_DATA_ERROR);
 
                 isRefreshing = false;
@@ -203,12 +204,13 @@ public class ThemeActivity extends AppCompatActivity {
                 return;
             }
 
-            List<RecommendRowsBean> themeList = result.getRows();
-
-
+            // 如果返回结果正常
             if (recommendDataResp.getReturnCode() == 0) {
+                // 获取专题列表
+                List<RecommendRowsBean> themeList = result.getRows();
                 // 如果是加载更多
                 if (isLoadingMore) {
+                    // 如果不再有数据
                     if (themeList == null || themeList.size() == 0) {
 //                        mHandler.sendEmptyMessage(NO_MORE_DATA);
 
@@ -217,7 +219,7 @@ public class ThemeActivity extends AppCompatActivity {
                         Toast.makeText(ThemeActivity.this, "没有更多专题咯~", Toast.LENGTH_SHORT).show();
                         mXrvTheme.setNoMore(true);
                         return;
-                    } else {
+                    } else { // 如果有数据
                         mThemeList.addAll(themeList);
                     }
 //                    mHandler.sendEmptyMessage(GET_THEME_SUCCESS);
@@ -225,7 +227,6 @@ public class ThemeActivity extends AppCompatActivity {
                     isLoadingMore = false;
                     isRefreshing = false;
                     mThemeAdapter.notifyDataSetChanged();
-                    ((LinearLayoutManager)mXrvTheme.getLayoutManager()).scrollToPositionWithOffset(mThemeList.size() - 1, 0);
                     mXrvTheme.loadMoreComplete();
                     return;
                 }

@@ -114,7 +114,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_detail_layout);
         showLoadingAnimation();
-        unbinder = ButterKnife.bind(this);
+        ButterKnife.bind(this);
         likeBtn=(ShineButton)findViewById(R.id.route_detail_collect_sbtn);
         routeDetailTitle.setOnBackClickListener(this);
         this.savedInstanceState = savedInstanceState;

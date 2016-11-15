@@ -23,8 +23,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
@@ -32,6 +34,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
+import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
@@ -162,7 +165,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     private NEVideoView videoView;
     private String cname;
-    private String liveStatus;
+    private String  liveStatus;
 
     private int myGold;
     private CustomLiveUserInfoDialog customLiveUserInfoDialog;
@@ -181,6 +184,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private TextView overAttention;
     private TextView overFans;
     private BlurImageView blurView;
+    private MyRunnable myRunnable;
+    private TextView masterAttentino;
+    private int fansNumMaster;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,24 +202,40 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         contentLoaderAudience.liveGiftStore();
 
         loginIm();
+        AppLog.i("TAG","用户端获取token:"+UserHelper.getToken(this));
 
-        if("0".equals(liveStatus)){
-            showFinishLayout(true,2);
-        }
     }
 
     private class MyRunnable implements Runnable {
         @Override
         public void run() {
             handler.removeCallbacks(this);
-            if (onlineCounts > 0&&contentLoaderAudience!=null) {
+            if (onlineCounts > 0&&contentLoaderAudience!=null&&channelId!=null) {
                 contentLoaderAudience.getAudienceUserOnLine(onlineCounts,channelId);
             }
             handler.postDelayed(this, 2000);
         }
     }
-
+    boolean firstWarning=true;
+    private int overAttentionStatus;
     private class AudienceCallBack extends ICallBack {
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+            if (volleyError != null) {
+                String errorMsg = volleyError.toString();
+                if (volleyError.networkResponse != null) {
+                    int code = volleyError.networkResponse.statusCode;
+                    if (code == 401) {
+                        if(handler!=null){
+                            handler.removeCallbacks(myRunnable);
+                        }
+                    }
+                }
+            }
+        }
+
         @Override
         public void onLiveDetails(LiveDetailsDataResp liveDetailsDataResp) {
             super.onLiveDetails(liveDetailsDataResp);
@@ -222,6 +244,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 nickname= liveRowsBean.getUser().getNickName();
                 avatar= liveRowsBean.getUser().getAvatar();
                 playType=String.valueOf(liveRowsBean.getType());
+
                 Object ann = liveRowsBean.getAnnoucement();
                 String annoucement = null;
                 if (ann != null) {
@@ -248,7 +271,11 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 registerObservers(true);
                 initParam();
                 initUIandEvent();
-                handler.postDelayed(new MyRunnable(),2000);
+                if("0".equals(liveStatus)){
+                    showFinishLayout(true,2);
+                }
+                myRunnable = new MyRunnable();
+                handler.postDelayed(myRunnable,2000);
                 if("1".equals(playType)){
                     hideBtn(onlineUser);
                 }
@@ -270,6 +297,37 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 giftSresult = giftDataResp.getResult();
             }
         }
+
+        @Override
+        public void onResponseFailed(String message ,int code) {
+            super.onResponseFailed(message,code);
+            if(code==230&&firstWarning){
+                firstWarning = false;
+                try{
+                    final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+                    customDialog.setContent(getString(R.string.audience_status_unsual));
+                    customDialog.setCancelable(false);
+                    customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            firstWarning = true;
+                        }
+                    });
+
+                    customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            finish();
+                        }
+                    });
+                    customDialog.show();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
         @Override
         public void onTouristInfo(String json) {
             super.onTouristInfo(json);
@@ -302,14 +360,12 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             super.onSendGiftsBack(result);
             SendGiftResp sendGiftResp = new Gson().fromJson(result, SendGiftResp.class);
             SendGiftResp.ResultBean sendGiftResult = sendGiftResp.getResult();
-            if (sendGiftResp.getReturnCode() == 0) {
+            if (sendGiftResp.getReturnCode() == 0&&sendTotal>0) {
                 startSendGiftsAnimation(giftDataResultBean, sendTotal);
                 myGold=myGold-payBalance;
             } else {
                 Toast.makeText(AudienceActivity.this, getString(R.string.live_sendgift_fail), Toast.LENGTH_SHORT).show();
-
             }
-
         }
 
         @Override
@@ -340,18 +396,28 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             if (liveUserInfosDataResp.getReturnCode() == 0) {
                 LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
                 overNick.setText(result.getNickName());
-                if(result.getDescription().length()<1){
+                fansNumMaster = result.getFansNum();
+                if(result.getDescription()==null||result.getDescription().toString().length()<1){
                     overSignature.setText(getString(R.string.live_default_signture));
                 }else{
                     overSignature.setText(result.getDescription());
                 }
 
-                overAttention.setText(String.valueOf(result.getAttentionNum()));
+                Object status = result.getAttentionVO().getStatus();
+                if(status!=null){
+                    double parseDouble = Double.parseDouble(String.valueOf(status));
+                    overAttentionStatus = (int) parseDouble;
+                    if(overAttentionStatus==0){
+                        masterAttentino.setText("关注");
+                    }else{
+                        masterAttentino.setText("已关注");
+                    }
+                }
+                AudienceActivity.this.overAttention.setText(String.valueOf(result.getAttentionNum()));
                 overFans.setText(String.valueOf(result.getFansNum()));
             }
         }
     }
-
     private void hideBtn(int onlineUser) {
         liveGiftImg.setVisibility(View.GONE);
         onlineCountText.setText(String.valueOf(onlineUser));
@@ -395,6 +461,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         switch (LiveConstant.LIVE_DEFINITION) {
             case 1:
                 vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
+                AppLog.i("TAG","用戶端視頻分辨率為720p");
                 break;
             case 2:
                 vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_480P;
@@ -435,6 +502,29 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         super.registerObservers(register);
         NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
+    }
+
+    @Override
+    protected void accountKicout() {
+        final CustomChatDialog customDialog = new CustomChatDialog(AudienceActivity.this);
+        customDialog.setContent(getString(R.string.account_kicout));
+        customDialog.setCancelable(false);
+        customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                if (videoPlayer != null) {
+                    videoPlayer.resetVideo();
+                }
+                NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+
+                startActivity(new Intent(AudienceActivity.this, LoginActivity.class));
+                customDialog.dismiss();
+                clearChatRoom();
+
+            }
+        });
+        customDialog.show();
+
     }
 
     boolean isShowNetDialog = true;//监测网络的dialog显示标记
@@ -525,12 +615,19 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 switch (notificationAttachment.getType()) {
                     case ChatRoomMemberIn:
                         audienceOnLineCountsChange=true;
-
                         String fromAccountIn = message.getFromAccount();
                         MsgStatusEnum status = message.getStatus();
                         if(fromAccountIn!=null&&creatorAccount!=null){
                             if (creatorAccount.equals(fromAccountIn)) {
                                 masterComeBack=true;
+                                //主播回来了
+                                LiveMessage liveMessage=new LiveMessage();
+                                liveMessage.setStyle(MessageType.masterIn);
+                                liveMessage.setUserId(userId);
+                                liveMessage.setCreatorAccount(creatorAccount);
+                                liveMessage.setChannelId(channelId);
+                                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "回来了", roomId, creatorAccount, liveMessage);
+                                sendMessage(imMessage, MessageType.masterIn);
                                 showFinishLayout(false, 2);
                             }
                         }
@@ -543,9 +640,17 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     case ChatRoomMemberExit://主播退出房间监听
                         audienceOnLineCountsChange=true;
                         String fromAccountExit = message.getFromAccount();
-                        if (creatorAccount.equals(fromAccountExit)) {
+                        if (creatorAccount!=null&&creatorAccount.equals(fromAccountExit)) {
                            masterComeBack=false;
                             masterLeaveTime();
+                            //主播离开了
+                            LiveMessage liveMessage=new LiveMessage();
+                            liveMessage.setStyle(MessageType.masterEixt);
+                            liveMessage.setUserId(userId);
+                            liveMessage.setCreatorAccount(creatorAccount);
+                            liveMessage.setChannelId(channelId);
+                            IMMessage imMessage = SendMessageUtil.sendMessage(container.account , "离开了", roomId,creatorAccount , liveMessage);
+                            sendMessage(imMessage, MessageType.masterEixt);
                         }
                         break;
                     case ChatRoomManagerRemove:
@@ -608,12 +713,14 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     protected void onDestroy() {
         // 释放资源
         if (videoPlayer != null) {
-
             videoPlayer.resetVideo();
         }
         if(countDownTimer!=null){
             countDownTimer.cancel();
             countDownTimer.onFinish();
+        }
+        if(handler!=null){
+            handler.removeCallbacks(myRunnable);
         }
         deInitUIandEvent();
         registerObservers(false);
@@ -809,7 +916,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         backHome = (LinearLayout) findViewById(R.id.master_info_back_home);
         blurImageView = (BlurImageView) audienceOver.findViewById(R.id.audience_over_bg);
 
-        liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);
+      /*  liveMasterHome = (TextView) audienceOver.findViewById(R.id.live_master_home_over);*/
         headIv = (ImageView) audienceOver.findViewById(R.id.master_info_head_iv);
         headIv.setOnClickListener(buttonClickListener);
         overNick = (TextView) audienceOver.findViewById(R.id.master_info_nick_tv);
@@ -817,7 +924,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         overAttention = (TextView)audienceOver.findViewById(R.id.live_attention);
         overFans = (TextView)audienceOver.findViewById(R.id.live_fans);
 
-        liveMasterHome.setOnClickListener(buttonClickListener);
+        masterAttentino = (TextView) audienceOver.findViewById(R.id.master_dialog_attention_audience);
+        masterAttentino.setOnClickListener(buttonClickListener);
+      //  liveMasterHome.setOnClickListener(buttonClickListener);
         backHome.setOnClickListener(buttonClickListener);
         keyboardLayout.setAlpha(0);
         keyboardLayout.setFocusable(false);
@@ -898,7 +1007,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         periscopeLayout.addHeart();
                         sendLike();
                     }
-
                     break;*/
                 case R.id.live_telecast_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
@@ -906,6 +1014,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     break;
                 case R.id.live_quit:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_CLOSE);
+                    DialogUtil.clear();
                     finishLive();
                     break;
                 case R.id.live_telecast_input_text:
@@ -935,39 +1044,43 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     break;
                 case R.id.live_gift_img:
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_GIFT);
-
                     if(giftStoreFirstClick){
                         giftStoreFirstClick=false;
                     boolean loginedq = UserHelper.isLogined(AudienceActivity.this);
                     if (!loginedq) {
                         showLoginViewDialog();
                         giftStoreFirstClick=true;
-                    }else if(!DemoCache.getLoginChatRoomStatus()) {
-                       Toast.makeText(AudienceActivity.this,getString(R.string.live_unlogin_room),Toast.LENGTH_SHORT).show();
+                    }else if(!DemoCache.getLoginChatRoomStatus()||!DemoCache.getLoginStatus()) {
+                       Toast.makeText(AudienceActivity.this,getString(R.string.live_unlogin_channel_room),Toast.LENGTH_SHORT).show();
                         giftStoreFirstClick=true;
-                    } else if(!"1".equals(playType)) {
-                        if(LiveConstant.IS_FIRST_CLICK_PAGE){
-                            LiveConstant.IS_FIRST_CLICK_PAGE=false;
-                            isNeedRequestServerShowGiftStorePage=true;
-                            contentLoaderAudience.getMyWallet();
+                    } else {
+                        if(!"1".equals(playType)) {
+                            if(LiveConstant.IS_FIRST_CLICK_PAGE){
+                                LiveConstant.IS_FIRST_CLICK_PAGE=false;
+                                isNeedRequestServerShowGiftStorePage=true;
+                                contentLoaderAudience.getMyWallet();
+                            }else {
+                                isNeedRequestServerShowGiftStorePage=false;
+                                showGiftPage(myGold);
+                            }
 
-                        }else {
-                            isNeedRequestServerShowGiftStorePage=false;
-                            showGiftPage(myGold);
                         }
                     }
+
+
+
                     }
                     break;
                 case R.id.audience_challenge_raise_layout://显示任务众筹卡片
                     CustomChallengeRaiseDialog  customChallengeRaiseDialog=new CustomChallengeRaiseDialog(AudienceActivity.this);
                     customChallengeRaiseDialog.show();
                     break;
-                case R.id.live_master_home_over:
+             /*   case R.id.live_master_home_over:
 
                     Intent intent2 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent2.putExtra("userId", userId);
                     startActivity(intent2);
-                    break;
+                    break;*/
                 case R.id.live_layout:
                     periscopeLayout.addHeart();
                     sendLike();
@@ -976,6 +1089,29 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     Intent intent3 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
                     intent3.putExtra("userId", userId);
                     startActivity(intent3);
+                    break;
+                case R.id.master_dialog_attention_audience:
+
+                    if(UserHelper.isLogined(AudienceActivity.this)){
+                        if(overAttentionStatus==0){
+                            masterAttentino.setText("已关注");
+                            contentLoaderAudience.getAddAttention(userId);
+                            ++fansNumMaster;
+                            overFans.setText(String.valueOf(fansNumMaster));
+                            overAttentionStatus=1;
+                        }else {
+                            overAttentionStatus=0;
+                            contentLoaderAudience.getCancelAttention(userId);
+                            --fansNumMaster;
+                            masterAttentino.setText("关注");
+
+                            overFans.setText(String.valueOf(fansNumMaster));
+                        }
+                    }else {
+                        showLoginViewDialog();
+                    }
+                //    contentLoaderAudience.getLiveUserInfo(userId);
+
                     break;
 
             }
@@ -987,6 +1123,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
    //显示礼物布局
     private void showGiftPage(int gold) {
         liveSettingLayout.setVisibility(View.GONE);
+
         giftStorePopuWindow = new GiftStorePopuWindow(this, giftSresult);
         giftStorePopuWindow.showGiftStorePopuWindow(gold);
         giftStorePopuWindow.showAtLocation(this.findViewById(R.id.live_layout),
@@ -1014,7 +1151,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             //余额不足，充值dialog
             showRechargeDialog(content);
         }else {
-            contentLoaderAudience.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
+            if(sendTotal>0){
+                contentLoaderAudience.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
+            }
 
         }
     }
@@ -1031,18 +1170,18 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         giftBean.setGiftCount(sendTotal);
         giftBean.setGiftImage(giftDataResultBean.getPhoto());
         giftBean.setGiftName(giftDataResultBean.getName());
-       giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity.this));
+       giftBean.setHeadImage(UserHelper.getUserAvatar(AudienceActivity .this));
         liveMessage.setGiftModel(giftBean);
         liveMessage.setChannelId(channelId);
         liveMessage.setStyle(MessageType.gift);
         IMMessage giftMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, AuthPreferences.getUserAccount(), liveMessage);
-
+        if(giftDataResultBean==null||code==null||giftDataResultBean.getName()==null||sendTotal==0){
+            return;
+        }
         if ("003".equals(code)) {
-
             giftPlaneAnimation.showPlaneAnimation((ChatRoomMessage) giftMessage);
 
-        } else {
-
+        } else if(code!=null){
             giftAnimation.showGiftAnimation((ChatRoomMessage) giftMessage);
         }
         sendMessage(giftMessage, MessageType.gift);
@@ -1271,6 +1410,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             sendMessage(imMessage, MessageType.like);
         }
     }
+    //发送主播离开童子
 
     // 发送爱心频率控制
     private boolean isFastClick() {
@@ -1344,7 +1484,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             if(customLiveUserInfoDialog!=null){
                 customLiveUserInfoDialog.dismiss();
             }
-            contentLoaderAudience.getLiveUserInfo(userId);
+            if(userId!=null){
+                contentLoaderAudience.getLiveUserInfo(userId);
+            }
         }
         if (!liveEnd && !isAudienceOver) {
             AppLog.i("TAG","主播回来了隐藏主播信息界面");
@@ -1467,6 +1609,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     @Override
     protected void onStop() {
         super.onStop();
+        DialogUtil.clear();
         if(giftStorePopuWindow!=null){
             giftStorePopuWindow.dismiss();
         }

@@ -81,13 +81,9 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
                 if (!TextUtils.isEmpty(onlinUserNumb)) {
                     itemHolder.onlinUserNumTv.setText(onlinUserNumb);
                 }
-                String address = item.getAddress();
-                if (!TextUtils.isEmpty(address)) {
-                    itemHolder.locTv.setVisibility(View.VISIBLE);
-                    itemHolder.locTv.setText(address);
-                } else {
-                    itemHolder.locTv.setVisibility(View.INVISIBLE);
-                }
+                itemHolder.onlinUserNumTv.getCompoundDrawables()[0].setAlpha(20);
+                itemHolder.locTv.setText(item.getAddress());
+                itemHolder.locTv.getCompoundDrawables()[0].setAlpha(20);
                 LiveUserBean userBean = item.getUser();
                 if (userBean != null) {
                     DrawableUtils.displayImg(mContext, itemHolder.avatarImg, userBean.getAvatar(), -1);

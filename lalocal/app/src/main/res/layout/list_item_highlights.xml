@@ -51,14 +51,16 @@
 
         <TextView
             android:id="@+id/item_hightlists_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/dimen_size_15_dp"
             android:layout_toLeftOf="@+id/item_hightlists_photo"
             android:maxLines="3"
             android:layout_marginTop="@dimen/dimen_size_15_dp"
             android:textColor="@color/color_1a"
-            android:textSize="@dimen/dimen_size_16_dp" />
+            android:textSize="@dimen/dimen_size_16_dp"
+            android:gravity="left"
+            />
 
         <ImageView
             android:id="@+id/item_hightlists_photo"
@@ -74,8 +76,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:drawableLeft="@drawable/many_people_light"
+            android:drawableLeft="@drawable/manypeople_dark"
             android:text="0"
+            android:drawablePadding="@dimen/dimen_size_4_dp"
             android:textColor="@color/color_b3"
             android:textSize="@dimen/text_size_12_sp" />
 
@@ -89,6 +92,7 @@
             android:textColor="@color/color_b3"
             android:layout_toRightOf="@+id/item_hightlists_onlinenum"
             android:text="00:00:00"
+            android:drawablePadding="@dimen/dimen_size_4_dp"
             android:layout_marginLeft="@dimen/dimen_size_20_dp"
             android:layout_alignTop="@+id/item_hightlists_onlinenum"
             android:textSize="@dimen/text_size_12_sp" />

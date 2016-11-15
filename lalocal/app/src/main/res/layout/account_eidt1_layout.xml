@@ -109,11 +109,9 @@
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:visibility="gone"
             />
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/account_edit_phone"
             style="@style/AccoutEditItemTheme">
 
@@ -142,11 +140,9 @@
 
         <TextView
             style="@style/CommonDeLineTheme"
-            android:visibility="gone"
             />
 
         <RelativeLayout
-            android:visibility="gone"
             android:id="@+id/account_edit_email"
             style="@style/AccoutEditItemTheme">
 

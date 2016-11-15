@@ -262,8 +262,8 @@
         <item name="android:textSize">@dimen/text_size_13_sp</item>
         <item name="android:textColor">@drawable/des_area_nav_menu_textcolor</item>
         <item name="android:drawablePadding">@dimen/dimen_size_4_dp</item>
-        <item name="android:paddingStart">@dimen/dimen_size_5_dp</item>
-        <item name="android:paddingEnd">@dimen/dimen_size_5_dp</item>
+        <item name="android:paddingLeft">@dimen/dimen_size_5_dp</item>
+        <item name="android:paddingRight">@dimen/dimen_size_5_dp</item>
         <item name="android:gravity">center</item>
     </style>
     <!--dialog-->
@@ -556,5 +556,15 @@
     <style name="GuidePopupStyle">
         <item name="android:windowEnterAnimation">@anim/guide_in</item>
         <item name="android:windowExitAnimation">@anim/guide_out</item>
+    </style>
+
+    <style name="LoginNextStyle">
+        <item name="android:layout_width">@dimen/login_phone_edit_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dimen_size_10_dp</item>
+        <item name="android:background">@color/black_99</item>
+        <item name="android:textColor">@color/color_f0a028</item>
+        <item name="android:textSize">@dimen/text_size_18_sp</item>
+
     </style>
 </resources>

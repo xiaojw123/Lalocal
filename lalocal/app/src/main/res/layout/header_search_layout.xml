@@ -23,6 +23,7 @@
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
                 android:text="@string/search"
+                android:drawableLeft="@drawable/searchbar_searchicon"
                 android:textColor="@color/color_b3"
                 android:textSize="@dimen/text_size_15_sp" />
         </FrameLayout>

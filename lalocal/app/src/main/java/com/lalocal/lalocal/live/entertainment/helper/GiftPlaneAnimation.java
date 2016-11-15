@@ -41,7 +41,6 @@ public class GiftPlaneAnimation {
     private String avatar;
 
 
-
     public GiftPlaneAnimation(ImageView anchorHeadImg,ImageView userHeadImg,ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext,String avatar) {
         mAnchorHeadImg=anchorHeadImg;
         mUserHeadImg=userHeadImg;
@@ -88,6 +87,7 @@ public class GiftPlaneAnimation {
         giftPlaneBg.startAnimation(getTranslateAnim());
         rocketAnimation = (AnimationDrawable) target.getBackground();
         rocketAnimation.start();
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

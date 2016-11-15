@@ -123,7 +123,6 @@ public class PlayBackActivity extends BaseActivity {
     private int position = 0;
 
     private void initData(LiveRowsBean liveRowsBean) {
-
         playLoadingPageBg.setBlurImageURL(user.getAvatar());
         playLoadingPageBg.setScaleRatio(20);
         playLoadingPageBg.setBlurRadius(1);
@@ -263,8 +262,10 @@ public class PlayBackActivity extends BaseActivity {
             if (shareVO != null) {
                 SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this, shareVO);
                 shareActivity.showShareWindow();
+//                shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
+//                        Gravity.CENTER, 0, 0);
                 shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
-                        Gravity.CENTER, 0, 0);
+                        Gravity.BOTTOM, 0, 0);
             } else {
                 Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
             }
@@ -344,8 +345,9 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            parseIntent(liveRowsBean);
-
+            if(liveRowsBean!=null){
+                parseIntent(liveRowsBean);
+            }
         }
 
         @Override
@@ -377,6 +379,7 @@ public class PlayBackActivity extends BaseActivity {
                         Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
                         intent.putExtra("userId", String.valueOf(id));
                         startActivity(intent);
+                        dialog.dismiss();
                     }
                 });
                 dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
@@ -424,7 +427,6 @@ public class PlayBackActivity extends BaseActivity {
             Log.i("TAF", "播放器activityhhehh ");
             Uri uri = Uri.parse(videoList.get(position).getUrl());
             videoPlayer.loadAndPlay(uri, position1);
-
         }
     }
 
@@ -445,5 +447,11 @@ public class PlayBackActivity extends BaseActivity {
             videoPlayer.close();
         }
         super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        DialogUtil.clear();
     }
 }

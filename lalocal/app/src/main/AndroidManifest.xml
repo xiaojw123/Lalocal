@@ -131,9 +131,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".live.entertainment.activity.TestActivity" >
-
-        </activity>
+        <activity android:name=".live.entertainment.activity.TestActivity"></activity>
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -333,8 +331,12 @@
         <activity android:name=".me.LPEmailBound2Activity" />
         <activity android:name=".me.LPEmailBoundActivity" />
         <activity android:name=".me.LEmailLoginActivity" />
-        <activity android:name=".me.LRegisterActivity"></activity>
-        <activity android:name=".activity.CurrencyInstructionActivity"/>
+        <activity android:name=".me.LRegister2Activity" />
+        <activity android:name=".activity.CurrencyInstructionActivity" />
+        <activity android:name=".me.LRegister1Activity" />
+        <activity android:name=".me.LPasswordForget2Activity" />
+        <activity android:name=".me.LPasswordForget1Activity" />
+        <activity android:name=".activity.AttentionActivity"></activity>
     </application>
 
 </manifest>

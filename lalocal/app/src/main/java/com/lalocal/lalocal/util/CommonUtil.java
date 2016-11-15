@@ -182,6 +182,7 @@ public class CommonUtil {
     public static final int AD_DOT = 0x01;
     public static final int DARK_DOT = 0x02;
     public static final int WHITE_DOT = 0x03;
+    public static final int ROUND_LIGHT_DOT = 0X04;
 
     /**
      * 初始化小点
@@ -215,26 +216,23 @@ public class CommonUtil {
 
                 selectedResId = R.color.black;
                 normalResId = R.color.color_761a1a1a;
-            } else if (type == DARK_DOT) {
+            } else if (type == DARK_DOT || type == WHITE_DOT || type == ROUND_LIGHT_DOT) {
                 width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
                 height = width;
 
                 marginHorizontal = DensityUtil.dip2px(context, 4);
                 marginVertical = DensityUtil.dip2px(context, 15);
 
-                selectedResId = R.drawable.icon_dark_dot_selected;
-                normalResId = R.drawable.icon_dark_dot_normal;
-            } else if (type == WHITE_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_white_dot_selected;
-                normalResId = R.drawable.icon_white_dot_normal;
+                if (type == DARK_DOT) {
+                    selectedResId = R.drawable.icon_dark_dot_selected;
+                    normalResId = R.drawable.icon_dark_dot_normal;
+                } else if (type == WHITE_DOT) {
+                    selectedResId = R.drawable.icon_white_dot_selected;
+                    normalResId = R.drawable.icon_white_dot_normal;
+                } else if (type == ROUND_LIGHT_DOT) {
+                    selectedResId = R.drawable.icon_round_light_dot_selected;
+                    normalResId = R.drawable.icon_round_light_dot_normal;
+                }
             }
 
             for (int i = 0; i < size; i++) {
@@ -301,26 +299,24 @@ public class CommonUtil {
 
                 selectedResId = R.color.black;
                 normalResId = R.color.color_761a1a1a;
-            } else if (type == DARK_DOT) {
+            } else if (type == DARK_DOT || type == WHITE_DOT || type == ROUND_LIGHT_DOT) {
                 width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
                 height = width;
 
                 marginHorizontal = DensityUtil.dip2px(context, 4);
                 marginVertical = DensityUtil.dip2px(context, 15);
 
-                selectedResId = R.drawable.icon_white_dot_selected;
-                normalResId = R.drawable.icon_dark_dot_normal;
-            } else if (type == WHITE_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
 
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_white_dot_selected;
-                normalResId = R.drawable.icon_white_dot_normal;
+                if (type == DARK_DOT) {
+                    selectedResId = R.drawable.icon_dark_dot_selected;
+                    normalResId = R.drawable.icon_dark_dot_normal;
+                } else if (type == WHITE_DOT) {
+                    selectedResId = R.drawable.icon_white_dot_selected;
+                    normalResId = R.drawable.icon_white_dot_normal;
+                } else if (type == ROUND_LIGHT_DOT) {
+                    selectedResId = R.drawable.icon_round_light_dot_selected;
+                    normalResId = R.drawable.icon_round_light_dot_normal;
+                }
             }
 
             for (int i = 0; i < size; i++) {
@@ -374,6 +370,9 @@ public class CommonUtil {
         } else if (type == WHITE_DOT) {
             selectedResId = R.drawable.icon_white_dot_selected;
             normalResId = R.drawable.icon_white_dot_normal;
+        } else if (type == ROUND_LIGHT_DOT) {
+            selectedResId = R.drawable.icon_round_light_dot_selected;
+            normalResId = R.drawable.icon_round_light_dot_normal;
         }
 
         for (int i = 0; i < dotBtns.size(); i++) {

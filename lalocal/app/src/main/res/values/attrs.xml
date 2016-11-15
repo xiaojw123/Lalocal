@@ -90,4 +90,11 @@
         <attr name="lineSpacingMultiplier"/>
         <attr name="maxLines"/>
     </declare-styleable>
+
+    <!--阴影属性-->
+    <declare-styleable name="MyShadow">
+        <attr name="shadow_width" format="dimension|reference" />
+        <attr name="shadow_alpha" format="float|reference" />
+        <attr name="shadow_color" format="color|reference" />
+    </declare-styleable>
 </resources>

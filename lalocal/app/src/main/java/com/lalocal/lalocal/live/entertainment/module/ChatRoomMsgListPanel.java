@@ -125,6 +125,9 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     public void setHeaderViewVisible(){
         headInfos.setVisibility(View.VISIBLE);
     }
+    public void setHead(TextView textView){
+        messageListView.addHeaderView(textView);
+    }
 
 
 

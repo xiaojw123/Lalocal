@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
+import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
@@ -49,6 +50,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         setContentView(R.layout.home_layout);
         initView();
         checkUpdate();
+        //听云SDK
+//        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
 
     private void checkUpdate() {
@@ -122,7 +125,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             case R.id.home_tab_liveplay:
                 selected = FRAGMENT_NEWS;
                 if (newsFragment == null) {
-                    newsFragment = new NewsFragment();
+//                    newsFragment = new NewsFragment();
+                    // TODO: 2.2.0版本fragment更换
+                    newsFragment = new LiveFragment();
                     ft.add(R.id.home_fragment_container, newsFragment);
                 } else {
                     ft.show(newsFragment);
@@ -178,8 +183,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     @Override
     public void onShowRecommendFragment() {
-        AppLog.print("Activity  onShowRecommendFragment");
-        showFragment(home_recommend_tab);
+//        showFragment(home_recommend_tab);
+        showFragment(home_news_tab);
     }
 
     public static final int FRAGMENT_NEWS = 0;
@@ -355,4 +360,28 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //        testCheckUpdate(false);
 //    }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        AppLog.i("TAG","HomeActivity:onStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AppLog.i("TAG","HomeActivity:onResume");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        AppLog.i("TAG","HomeActivity:onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppLog.i("TAG","HomeActivity:onDestroy");
+    }
 }

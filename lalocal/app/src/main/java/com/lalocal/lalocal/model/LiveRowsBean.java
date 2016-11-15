@@ -2,6 +2,7 @@ package com.lalocal.lalocal.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * Created by android on 2016/7/19.
  */
-public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
+public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
     private int id;
     private String title;
     private String photo;
@@ -76,7 +77,6 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     }
 
 
-
     public int getChannelId() {
         return channelId;
     }
@@ -118,7 +118,6 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     }
 
 
-
     public int getDirection() {
         return direction;
     }
@@ -128,10 +127,10 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>,Parcelable {
     }
 
 
-
-
-
     public String getAddress() {
+        if (TextUtils.isEmpty(address)) {
+            return "乐可奇妙之旅";
+        }
         return address;
     }
 
