@@ -4,6 +4,8 @@ package com.lalocal.lalocal.help;
  * Created by xiaojw on 2016/6/16.
  */
 public interface KeyParams {
+    public static  final String UID_PARAMS="social_uid_params";
+    public static final  String SOCIAL_PARAMS="social_params";
     public static final  String USER="user";
     public static final  String CODE="code";
     public static final  String DESCRIPTON="descriptoin";
@@ -19,6 +21,7 @@ public interface KeyParams {
     public static  final  String TRAVEL_PERSONS_CONCACT="concact";
     public static  final String SETTING="setting";
     public static  final  String IM_LOGIN="im_login";
+    public static  final  String NORMAIL_BACK="normal_back";
     public static  final  String PASSWORD="psw";
     public static  final  String IS_LOGIN="isLogin";
     public static final String IM_TOKEN="imtoken";

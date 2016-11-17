@@ -7,6 +7,7 @@
     <com.lalocal.lalocal.view.LCustomLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:l_titleVisible="true"
         app:l_des="@string/give_you_one_diferent_world"
         app:l_title="@string/reigister_new_account" />
 
@@ -21,19 +22,32 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/login_emial_custom_edit_top"
             app:hint="@string/input_email"
+            app:my_title="@string/email"
+            app:clearEanble="true"
             />
 
-        <Button
+        <!--<Button-->
+            <!--android:id="@+id/lregister1_next"-->
+            <!--android:layout_width="@dimen/login_phone_edit_width"-->
+            <!--android:layout_height="@dimen/login_phone_edit_height"-->
+            <!--android:layout_below="@+id/lregister1_input_email"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
+            <!--android:background="@color/black_99"-->
+            <!--android:text="@string/next"-->
+            <!--android:textColor="@color/color_f0a028"-->
+            <!--android:textSize="@dimen/text_size_18_sp" />-->
+
+        <com.lalocal.lalocal.view.ProgressButton
             android:id="@+id/lregister1_next"
             android:layout_width="@dimen/login_phone_edit_width"
             android:layout_height="@dimen/login_phone_edit_height"
             android:layout_below="@+id/lregister1_input_email"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_size_10_dp"
-            android:background="@color/black_99"
-            android:text="@string/next"
-            android:textColor="@color/color_f0a028"
-            android:textSize="@dimen/text_size_18_sp" />
+            app:isOrangeBg="false"
+            app:pb_text="@string/next"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -51,9 +65,9 @@
                 android:textSize="@dimen/text_size_12_sp" />
 
             <TextView
+                android:id="@+id/lregister1_user_protocol"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/user_protocol"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_12_sp" />
 

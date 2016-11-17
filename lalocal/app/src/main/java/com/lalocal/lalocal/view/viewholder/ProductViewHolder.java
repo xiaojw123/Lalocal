@@ -13,7 +13,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
-import com.lalocal.lalocal.model.RecommendCommodityDataResp;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -64,6 +63,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         mTitleView.setText(title);
         mSubTitleView.setText(subtitle);
 
+        mGvCommodities.setFocusable(false);
         // 设置适配器
         mGvCommodities.setFocusable(false);
         mGvCommodities.setAdapter(new CommonAdapter<ProductDetailsResultBean>(mContext, commodityList, R.layout.home_recommend_product_gridview_item, MAX_PRODUCT) {

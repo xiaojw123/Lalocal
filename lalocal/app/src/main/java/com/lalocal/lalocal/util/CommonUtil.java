@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import java.text.DecimalFormat;
@@ -25,7 +26,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +40,9 @@ public class CommonUtil {
 
     public static int RESULT_DIALOG = 0;
     public static int REMIND_BACK = 0;
+
+    public  static  String LONGITUDE="";
+    public static   String LATITUDE="";
 
     public static String getProcessName(Context cxt, int pid) {
         ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
@@ -115,10 +118,14 @@ public class CommonUtil {
 
     //验证邮箱格式
     public static boolean checkEmail(String email) {
-        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-        Pattern regex = Pattern.compile(check);
-        Matcher matcher = regex.matcher(email);
-        return matcher.matches();
+//        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+//        Pattern regex = Pattern.compile(check);
+//        Matcher matcher = regex.matcher(email);
+//        return matcher.matches();
+        Pattern pattern = Pattern
+                .compile("^[A-Za-z0-9][\\w\\._]*[a-zA-Z0-9]+@[A-Za-z0-9-_]+\\.([A-Za-z]{2,4})");
+        Matcher mc = pattern.matcher(email);
+        return mc.matches();
     }
 
     //验证密码长度
@@ -165,6 +172,18 @@ public class CommonUtil {
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener) {
 
+        CustomDialog dialog = new CustomDialog(context);
+        dialog.setCancelable(false);
+        dialog.setTitle(context.getResources().getString(R.string.prompt));
+        dialog.setNeturalBtn(context.getResources().getString(R.string.sure), listener);
+        dialog.setMessage(message);
+        dialog.show();
+    }
+
+    public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener, ProgressButton pb) {
+        if (pb != null) {
+            pb.stopLoadingAnimation();
+        }
         CustomDialog dialog = new CustomDialog(context);
         dialog.setCancelable(false);
         dialog.setTitle(context.getResources().getString(R.string.prompt));
@@ -397,6 +416,7 @@ public class CommonUtil {
 
     /**
      * 计算两个时间的时间差，以“00:00:00”格式输出
+     *
      * @param start
      * @param end
      * @return
@@ -441,4 +461,6 @@ public class CommonUtil {
         NumberFormat nf = NumberFormat.getNumberInstance();
         return nf.format(num);
     }
+
+
 }

@@ -6,6 +6,8 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/layout_click"
+        android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -66,10 +68,13 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_userid"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="100dp"
+                    android:gravity="right"
                     android:layout_height="wrap_content"
-                    android:text="id加载中..."
+                    android:text="加载中..."
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:layout_gravity="center_vertical"
                     android:textSize="12sp"
                     android:textColor="@color/color_191000"
@@ -86,7 +91,7 @@
         </RelativeLayout>
 
         <com.lalocal.lalocal.view.ScaleImageView
-            android:id="@+id/img_live"
+            android:id="@+id/img_photo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_15_dp"
@@ -96,13 +101,12 @@
             android:scaleType="centerCrop"/>
 
         <TextView
-            android:id="@+id/tv_enter"
+            android:id="@+id/tv_last_msg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="47dp"
             android:layout_marginTop="@dimen/dimen_size_12_dp"
             android:layout_marginBottom="@dimen/dimen_size_12_dp"
-            android:text="目前无人进入直播间"
             android:textColor="@color/color_191000"
             android:alpha="0.5"/>
     </LinearLayout>

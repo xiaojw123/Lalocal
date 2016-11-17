@@ -184,7 +184,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
     private void initInputBarListener() {
 
-
         emojiButtonInInputBar.setOnClickListener(clickListener);
         sendMessageButtonInInputBar.setOnClickListener(clickListener);
         moreFuntionButtonInInputBar.setOnClickListener(clickListener);
@@ -357,7 +356,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         return;
                     }
 
-
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","1");
@@ -450,6 +448,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
     }
 
+
     // 隐藏语音布局
     private void hideAudioLayout() {
 
@@ -491,7 +490,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editTextMessage, 0);
-
         container.proxy.onInputPanelExpand();
     }
 

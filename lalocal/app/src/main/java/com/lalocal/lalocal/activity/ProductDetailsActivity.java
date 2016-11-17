@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.view.Gravity;
@@ -23,6 +22,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
@@ -58,7 +58,7 @@ import java.util.List;
  * Created by lenovo on 2016/6/22.
  */
 
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
+public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
         View.OnClickListener, CustomTitleView.onBackBtnClickListener {
 
     private static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
@@ -256,12 +256,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 if (UserHelper.isLogined(this)) {
                     contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
                 } else {
-                    Intent preIntent = new Intent();
-                    preIntent.setClass(this, LoginActivity.class);
-                    startActivityForResult(preIntent, 100);
+                    LLoginActivity.start(this);
                 }
-
-
                 break;
             case R.id.product_check_detail:
                 //TODO 查看详情
@@ -369,7 +365,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 productDetail(result);
                 List<PhotosVosBean> photoVOs = result.photoVOs;
                 List<RecommendAdResultBean> list = new ArrayList<>();
-                if (photoVOs.size() > 0) {
+                if (photoVOs!=null&&photoVOs.size() > 0) {
                     //显示轮播图
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoVOs.size(); i++) {
@@ -381,7 +377,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                         list.add(recommendAdResultBean);
                     }
                     showphotos(list);
-                } else if (photoList.size() > 0) {
+                } else if (photoList!=null&&photoList.size() > 0) {
                     detailsPhoto1.setVisibility(View.GONE);
 
                     for (int i = 0; i < photoList.size(); i++) {
@@ -635,14 +631,5 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LoginActivity.REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            contentService.login(email, psw);
-        }
-
-    }
 
 }

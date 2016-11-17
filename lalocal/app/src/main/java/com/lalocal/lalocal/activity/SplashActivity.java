@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.easemob.EMCallBack;
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
@@ -21,7 +22,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
-import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -34,10 +34,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.Observer;
-import com.netease.nimlib.sdk.StatusCode;
-import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
@@ -68,7 +64,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
         timeTv.setOnClickListener(this);
         mHandler = new SplashHandler();
-        registerObservers(true);
         requestUserPermission(Manifest.permission.READ_PHONE_STATE);
     }
 
@@ -98,21 +93,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    private void registerObservers(boolean register) {
-        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-    }
-
-    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
-        @Override
-        public void onEvent(StatusCode statusCode) {
-            AppLog.i("TAG", "SplashActivity監聽自動登錄狀態：" + statusCode);
-            if (statusCode == StatusCode.LOGINED) {
-                DemoCache.setLoginStatus(true);
-            }
-
-        }
-    };
-
 
     @Override
     public void onClick(View v) {
@@ -135,11 +115,15 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 String apiUrl = result.getApiUrl();
 //                AppConfig.setBaseUrl(apiUrl);
                 mContentloader.getSystemConfigs();
-            }else{
-                Toast.makeText(SplashActivity.this,"系统服务异常",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(SplashActivity.this, "系统服务异常", Toast.LENGTH_SHORT).show();
             }
         }
 
+        @Override
+        public void onError(VolleyError volleyError) {
+            startHomePage();
+        }
         @Override
         public void onGetSysConfigs(List<SysConfigItem> items) {
             AppLog.print("onGetSysConfigs____");
@@ -163,6 +147,10 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                     case 21:
                         String enumValue = item.getEnumValue();
                         LiveConstant.LIVE_DEFINITION = Integer.parseInt(enumValue);
+                        break;
+                    case 23://视频方向
+                        String defaultDirection = item.getEnumValue();
+                        LiveConstant.DEFAULT_DIRECTION=Integer.parseInt(defaultDirection);
                         break;
                 }
 
@@ -243,7 +231,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             @Override
             public void run() {
                 try {
-                    EMChatManager.getInstance().createAccountOnServer(uname, pwd);
+                    try {
+                        EMChatManager.getInstance().createAccountOnServer(uname, pwd);
+                    } catch (NullPointerException e) {
+                        updateVersion();
+                    }
                     if (callback != null) {
                         callback.onSuccess();
                     }
@@ -262,11 +254,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         EMChatManager.getInstance().login(uname, upwd, new EMCallBack() {
             @Override
             public void onSuccess() {
-                AppLog.print("环信账号登录成功。。。");
-                DemoHelper.getInstance().setCurrentUserName(uname);
-                DemoHelper.getInstance().setCurrentPassword(upwd);
                 try {
+                    DemoHelper.getInstance().setCurrentUserName(uname);
+                    DemoHelper.getInstance().setCurrentPassword(upwd);
                     EMChatManager.getInstance().loadAllConversations();
+                    AppLog.print("环信账号登录成功。。。");
                 } catch (Exception e) {
                     AppLog.print("环信账号登录异常");
                 }
@@ -354,7 +346,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        registerObservers(false);
+      //  registerObservers(false);
     }
 
 }

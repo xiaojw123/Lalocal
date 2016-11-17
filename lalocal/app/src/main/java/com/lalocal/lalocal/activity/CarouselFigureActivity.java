@@ -16,9 +16,9 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.SharePopupWindow;
@@ -79,7 +79,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO,String.valueOf(targetId));
+        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO, String.valueOf(targetId));
         shareActivity.showShareWindow();
         shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
                 Gravity.BOTTOM, 0, 0);
@@ -133,20 +133,19 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
                                 intent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
                                 startActivity(intent);
                             } else {
-                                Intent intent = new Intent(CarouselFigureActivity.this, LoginActivity.class);
-                                startActivityForResult(intent,KeyParams.REQUEST_CODE);
+                                LLoginActivity.start(CarouselFigureActivity.this);
                             }
                             return true;
-                        }else if("15".equals(targetType)){
+                        } else if ("15".equals(targetType)) {
                             Intent intent = new Intent(CarouselFigureActivity.this, AudienceActivity.class);
-                            intent.putExtra("id",targetId);
+                            intent.putExtra("id", targetId);
                             startActivity(intent);
                             return true;
-                        }else if("20".equals(targetType)){
+                        } else if ("20".equals(targetType)) {
                             Intent intent = new Intent(CarouselFigureActivity.this, PlayBackActivity.class);
-                            intent.putExtra("id",targetId);
+                            intent.putExtra("id", targetId);
                             startActivity(intent);
-                            return  true;
+                            return true;
                         }
                     }
 
@@ -160,21 +159,6 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LoginActivity.REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            setLoaderCallBack(new CarouseCallback());
-            mContentloader.login(email, psw);
-        }
-
-    }
-
-    class CarouseCallback extends ICallBack {
-
-
-    }
 
 
 }

@@ -1,30 +1,40 @@
 package com.lalocal.lalocal.activity;
 
-
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.umeng.analytics.MobclickAgent;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
@@ -37,22 +47,30 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     ViewGroup lastSelectedTab;
     FragmentManager fm;
     Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
-
     private int selected = 0;
-
     // 记录第一次点击back的时间
     private long clickTime = 0;
+
+    private LocationManager locationManager;
+    private String locationProvider;
+
+    private String provider;
+    private Location location;
+    protected MyLocationListener locationListener = new MyLocationListener();//定位监听器
+
+    int mPageType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
+        getLocation();
         initView();
         checkUpdate();
-        //听云SDK
-//        NBSAppAgent.setLicenseKey("115668f02db4459aa2766b23a6af4b35").withLocationServiceEnabled(true).start(getApplicationContext());
     }
+
+
 
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
@@ -67,10 +85,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showUpdateDialog(downLoadUrl, contentText);
             }
         }
-
-
     }
-
 
 
     private void initView() {
@@ -202,7 +217,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                     showFragment(home_destination_tab);
                     break;
                 case FRAGMENT_NEWS:
-                    Log.d("hahaha", "showFragment");
+
                     showFragment(home_news_tab);
                     break;
                 case FRAGMENT_ME:
@@ -229,10 +244,11 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             @Override
             public void clickLeftButton(View view) {
                 forceDailog.dismiss();
-                if (!MyApplication.isDebug) {
-                    MobclickAgent.onKillProcess(HomeActivity.this);
-                }
-                System.exit(0);
+                finish();
+//                if (!MyApplication.isDebug) {
+//                    MobclickAgent.onKillProcess(HomeActivity.this);
+//                }
+//                System.exit(0);
             }
 
             @Override
@@ -359,29 +375,191 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //    public void normalUpdate(View view){
 //        testCheckUpdate(false);
 //    }
+private String judgeProvider(LocationManager locationManager) {
+    Criteria criteria = new Criteria();
+    criteria.setAccuracy(Criteria.ACCURACY_FINE);
+    criteria.setAltitudeRequired(false);
+    criteria.setBearingRequired(false);
+    criteria.setCostAllowed(true);
+    criteria.setPowerRequirement(Criteria.POWER_LOW);
+    String provider =this.locationManager.getBestProvider(criteria, false);
 
+    return provider;
+}
+    protected static final int REQUEST_CODE = 1;
+    protected static int denyCount = 0; //记录拒绝次数  
+    private void getLocation() {
+        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                }else{
+
+                   /* if (denyCount >= 2){
+                        Log.d("MQL", "亲爱的用户,请到您的权限管理中打开");
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", "com.analysys.locationdemo", null);
+                        intent.setData(uri);
+                       startActivity(intent);
+                    }*/
+                }
+
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+
+            } else {
+
+               AppLog.i("MQL","系统版小于23");
+            }
+
+        } else {
+            AppLog.i("MQL","系统版小于23，哈哈哈哈哈");
+            this.locationManager.requestLocationUpdates("network", 1000*10*60, 3000,locationListener);
+        }
+
+    }
+
+    private String getBestProvider() {
+        //获取最合适的provider
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+        String provider =locationManager.getBestProvider(criteria, false);
+
+        //检查位置提供者是否启用
+        //在设置里，一些位置提供者比如GPS可以被关闭。良好的做法就是通过检测你想要的位置提供者是否打开。
+        //如果位置提供者被关闭了，你可以在设置里通过启动Intent来让用户打开。
+     /*   if (locationManager.isProviderEnabled(provider) == false) {
+
+            return null;
+        }*/
+
+
+        return provider;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (REQUEST_CODE == requestCode) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+              /*  String provider = this.getBestProvider();
+                if (provider != null){
+                    this.locationManager.requestLocationUpdates("network", 1000*60*30, 5000,locationListener);
+                }*/
+                this.locationManager.requestLocationUpdates("network", 1000*60*10, 5000,locationListener);
+
+            }else{
+                denyCount++;
+            }
+        }
+
+    }
+
+    class MyLocationListener implements LocationListener {
+
+        @Override
+        public void onLocationChanged(Location location) {
+
+            String longitude = location.getLongitude() + "";
+            String latitude = location.getLatitude() + "";
+            CommonUtil.LATITUDE=latitude;
+            CommonUtil.LONGITUDE=longitude;
+
+
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    }
+
+
+
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPageType = getPageType();
+        AppLog.print("onRestart___mPageType_" + mPageType);
+        if (mPageType == PageType.PAGE_ME_FRAGMENT) {
+            showFragment(home_me_tab);
+        } else if (mPageType == PageType.PAGE_HOME_FRAMENT) {
+            showFragment(home_news_tab);
+        }
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
-        AppLog.i("TAG","HomeActivity:onStart");
+        AppLog.print("onStart___");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AppLog.print("onPause___");
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        AppLog.i("TAG","HomeActivity:onResume");
+        AppLog.print("onResume___");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        AppLog.i("TAG","HomeActivity:onStop");
+        AppLog.print("onStop____");
+        setIntent(new Intent());
     }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        AppLog.i("TAG","HomeActivity:onDestroy");
+
+    }
+
+    //立即登录----home  其他---me
+    public static void start(Context context, boolean imLogin) {
+        Intent intent = new Intent(context, HomeActivity.class);
+        AppLog.print("start imlOGIN__"+imLogin);
+        if (imLogin) {
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_HOME_FRAMENT);
+        } else {
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_ME_FRAGMENT);
+        }
+        context.startActivity(intent);
+    }
+    //确保intent可以传递数据
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        AppLog.print("onNewIntent____");
+        setIntent(intent);
     }
 }

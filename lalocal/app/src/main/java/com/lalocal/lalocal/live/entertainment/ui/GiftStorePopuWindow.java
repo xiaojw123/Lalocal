@@ -14,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResultBean;
+import com.lalocal.lalocal.me.LLoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -161,8 +161,7 @@ public class GiftStorePopuWindow extends PopupWindow {
     }
 
     private void login() {
-        Intent intent=new Intent(mContext, LoginActivity.class);
-        mContext.startActivity(intent);
+        LLoginActivity.start(mContext);
     }
 
     private void charge() {

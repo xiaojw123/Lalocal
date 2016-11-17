@@ -1,15 +1,35 @@
 package com.lalocal.lalocal.help;
 
+import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.MyApplication;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.util.AppLog;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.socialize.UMAuthListener;
+import com.umeng.socialize.UMShareAPI;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import java.util.Map;
 
 /**
  * Created by xiaojw on 2016/10/19.
  */
 
 public class MobHelper {
+    private static MobHelper helper = new MobHelper();
+
+
+    private MobHelper() {
+
+    }
+
+    public static MobHelper getInstance() {
+        return helper;
+    }
+
 
     public static void sendEevent(Context context, String event) {
         if (!MyApplication.isDebug) {
@@ -29,5 +49,60 @@ public class MobHelper {
         }
     }
 
+    public void socialLogin(Activity activity, ContentLoader loader, SHARE_MEDIA share_media) {
+        AppLog.print("socialLogin__");
+        mActivity = activity;
+        mLoader = loader;
+        mUmShareAPI = UMShareAPI.get(activity);
+        mUmShareAPI.doOauthVerify(activity, share_media, authListener);
+
+    }
+
+    private UMAuthListener authListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            Toast.makeText(mActivity, "授权成功", Toast.LENGTH_SHORT).show();
+            if (mUmShareAPI != null) {
+                mUmShareAPI.getPlatformInfo(mActivity, share_media, infoGetListener);
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            Toast.makeText(mActivity, "授权失败", Toast.LENGTH_SHORT).show();
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+            Toast.makeText(mActivity, "取消授权", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+    private UMAuthListener infoGetListener = new UMAuthListener() {
+        @Override
+        public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
+            AppLog.print("获取三方信息成功——————");
+            if (mLoader != null) {
+                mLoader.loginBySocial(map, share_media);
+            }
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA share_media, int i, Throwable throwable) {
+            AppLog.print("获取三方信息错误——————");
+
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA share_media, int i) {
+            AppLog.print("获取三方信息失败——————");
+
+        }
+    };
+    UMShareAPI mUmShareAPI;
+    Activity mActivity;
+    ContentLoader mLoader;
 
 }

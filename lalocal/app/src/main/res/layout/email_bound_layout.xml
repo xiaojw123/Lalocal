@@ -20,11 +20,24 @@
         android:layout_marginLeft="@dimen/dimen_size_12_dp"
         android:layout_marginRight="@dimen/dimen_size_12_dp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"
-        app:text_hint="@string/input_email"
+        app:clearVisible="true"
         app:maxLen="50"
-        />
+        app:text_hint="@string/input_email" />
 
-    <Button
+    <!--<Button-->
+    <!--android:id="@+id/emailbound_change_email_btn"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/register_btn_height"-->
+    <!--android:layout_below="@+id/emailbound_email_edit"-->
+    <!--android:layout_marginLeft="@dimen/dimen_size_12_dp"-->
+    <!--android:layout_marginRight="@dimen/dimen_size_12_dp"-->
+    <!--android:layout_marginTop="@dimen/dimen_size_15_dp"-->
+    <!--android:background="@drawable/orange_corner_btn_bg"-->
+    <!--android:text="@string/send_email_vercode"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="@dimen/text_size_18_sp" />-->
+
+    <com.lalocal.lalocal.view.ProgressButton
         android:id="@+id/emailbound_change_email_btn"
         android:layout_width="match_parent"
         android:layout_height="@dimen/register_btn_height"
@@ -32,10 +45,7 @@
         android:layout_marginLeft="@dimen/dimen_size_12_dp"
         android:layout_marginRight="@dimen/dimen_size_12_dp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"
-        android:background="@drawable/orange_corner_btn_bg"
-        android:text="@string/send_email_vercode"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_18_sp" />
+        app:pb_text="@string/send_email_vercode" />
 
 
 </RelativeLayout>

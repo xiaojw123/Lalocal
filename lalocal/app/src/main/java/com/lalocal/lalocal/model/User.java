@@ -26,6 +26,25 @@ public class User implements Parcelable{
     String description;
     int role;
 
+    public String getFansNum() {
+        return fansNum;
+    }
+
+    public void setFansNum(String fansNum) {
+        this.fansNum = fansNum;
+    }
+
+    public String getAttentionNum() {
+        return attentionNum;
+    }
+
+    public void setAttentionNum(String attentionNum) {
+        this.attentionNum = attentionNum;
+    }
+
+    String fansNum;
+    String attentionNum;
+
     public String getDescription() {
         return description;
     }

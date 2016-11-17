@@ -43,4 +43,8 @@ public class SystemUtil {
         }
     }
 
+    public  static  final String  getMethod(){
+        return  "    /方法："+Thread.currentThread().getStackTrace()[2].getMethodName();
+    }
+
 }

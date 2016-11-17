@@ -9,6 +9,7 @@
 
 
     <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/p_emailbound_ctv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:title_name="@string/bound_email" />
@@ -19,21 +20,39 @@
         android:layout_marginRight="@dimen/dimen_size_12_dp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"
          app:maxLen="20"
-        app:isPsw="true"
-        app:text_hint="@string/set_pssword" />
+        app:isPsw="true" />
 
 
-    <Button
+    <!--<Button-->
+        <!--android:id="@+id/p_emailbound_startlalocal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/register_btn_height"-->
+        <!--android:layout_marginLeft="@dimen/dimen_size_12_dp"-->
+        <!--android:layout_marginRight="@dimen/dimen_size_12_dp"-->
+        <!--android:layout_marginTop="@dimen/dimen_size_15_dp"-->
+        <!--android:background="@drawable/orange_corner_btn_bg"-->
+        <!--android:text="@string/start_lalocal_travel"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="@dimen/text_size_18_sp" />-->
+
+    <com.lalocal.lalocal.view.ProgressButton
         android:id="@+id/p_emailbound_startlalocal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/register_btn_height"
         android:layout_marginLeft="@dimen/dimen_size_12_dp"
         android:layout_marginRight="@dimen/dimen_size_12_dp"
         android:layout_marginTop="@dimen/dimen_size_15_dp"
-        android:background="@drawable/orange_corner_btn_bg"
-        android:text="@string/start_lalocal_travel"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_18_sp" />
+        app:pb_text="@string/start_lalocal_travel"
+        />
+    <TextView
+        android:id="@+id/p_emailbound_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginRight="@dimen/dimen_size_12_dp"
+        android:layout_marginTop="@dimen/dimen_size_10_dp"
+        android:gravity="right"
+        />
 
 
 </LinearLayout>

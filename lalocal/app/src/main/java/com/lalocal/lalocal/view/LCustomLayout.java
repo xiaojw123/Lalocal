@@ -19,6 +19,7 @@ import com.lalocal.lalocal.R;
 public class LCustomLayout extends FrameLayout implements View.OnClickListener {
     OnBacKClickListener listener;
     Context mContext;
+    ImageView backImg;
 
     public LCustomLayout(Context context) {
         this(context, null);
@@ -39,7 +40,7 @@ public class LCustomLayout extends FrameLayout implements View.OnClickListener {
         LayoutInflater.from(context).inflate(R.layout.common_login_bg, this);
         TextView titleTv = (TextView) findViewById(R.id.common_title_tv);
         TextView desTv = (TextView) findViewById(R.id.common_des_tv);
-        ImageView backImg = (ImageView) findViewById(R.id.common_back_img);
+        backImg = (ImageView) findViewById(R.id.common_back_img);
         backImg.setOnClickListener(this);
         titleTv.setText(title);
         desTv.setText(des);
@@ -51,6 +52,14 @@ public class LCustomLayout extends FrameLayout implements View.OnClickListener {
 
 
     }
+    public void setBackVisbile(boolean flag){
+        if (flag){
+            backImg.setVisibility(VISIBLE);
+        }else{
+            backImg.setVisibility(GONE);
+        }
+    }
+
 
     public void setOnBackClickListener(OnBacKClickListener listener) {
         this.listener = listener;
@@ -64,7 +73,7 @@ public class LCustomLayout extends FrameLayout implements View.OnClickListener {
         ((Activity) mContext).finish();
     }
 
-    interface OnBacKClickListener {
+    public interface OnBacKClickListener {
 
         void onBackClick();
 

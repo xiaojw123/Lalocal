@@ -7,6 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:l_title="@string/set_pssword"
+        app:l_titleVisible="true"
         app:l_des="@string/we_have_send_email_to_you"
         />
     <LinearLayout
@@ -21,6 +22,7 @@
             android:layout_marginTop="@dimen/login_emial_custom_edit_top"
             app:hint="@string/set_your_password"
             app:is_password="true"
+            app:my_title="@string/password"
             android:id="@+id/lregister_set_password"
             />
         <com.lalocal.lalocal.view.MyEditText
@@ -29,19 +31,33 @@
             app:hint="@string/set_your_nickname"
             android:layout_marginTop="@dimen/dimen_size_half_dp"
             android:id="@+id/lregister_set_nickname"
+            app:my_title="@string/nickname"
             />
 
-        <Button
+        <!--<Button-->
+            <!--android:id="@+id/lregister_next"-->
+            <!--android:layout_width="@dimen/login_phone_edit_width"-->
+            <!--android:layout_height="@dimen/login_phone_edit_height"-->
+            <!--android:layout_below="@+id/lregister1_input_email"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:layout_marginTop="@dimen/dimen_size_10_dp"-->
+            <!--android:background="@color/black_99"-->
+            <!--android:text="@string/enter"-->
+            <!--android:textColor="@color/color_f0a028"-->
+            <!--android:textSize="@dimen/text_size_18_sp" />-->
+
+
+
+        <com.lalocal.lalocal.view.ProgressButton
             android:id="@+id/lregister_next"
             android:layout_width="@dimen/login_phone_edit_width"
             android:layout_height="@dimen/login_phone_edit_height"
             android:layout_below="@+id/lregister1_input_email"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dimen_size_10_dp"
-            android:background="@color/black_99"
-            android:text="@string/enter"
-            android:textColor="@color/color_f0a028"
-            android:textSize="@dimen/text_size_18_sp" />
+            app:isOrangeBg="false"
+            app:pb_text="@string/enter"
+            />
     </LinearLayout>
 
 

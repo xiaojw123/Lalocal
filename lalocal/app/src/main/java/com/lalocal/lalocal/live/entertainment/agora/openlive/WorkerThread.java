@@ -116,16 +116,17 @@ public class WorkerThread extends Thread {
     private AgoraYuvEnhancer mVideoEnhancer = null;
 
     public final void enablePreProcessor() {
-        if (mEngineConfig.mClientRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER) {
+        if (mEngineConfig.mClientRole == Constants.CLIENT_ROLE_BROADCASTER) {
             if (Constant.PRP_ENABLED) {
                 if (mVideoEnhancer == null) {
                     mVideoEnhancer = new AgoraYuvEnhancer(mContext);
-                    mVideoEnhancer.SetLighteningFactor(Constant.PRP_USER_LIGHTNESS);
-                    mVideoEnhancer.SetSmoothnessFactor(Constant.PRP_MAX_SMOOTHNESS);
+                    mVideoEnhancer.SetLighteningFactor(Constant.PRP_DEFAULT_LIGHTNESS);
+                    mVideoEnhancer.SetSmoothnessFactor(Constant.PRP_DEFAULT_SMOOTHNESS);
                     mVideoEnhancer.StartPreProcess();
+                    AppLog.i("TAG","开启美颜相机");
                 }else {
-                    mVideoEnhancer.SetLighteningFactor(Constant.PRP_USER_LIGHTNESS);
-                    mVideoEnhancer.SetSmoothnessFactor(Constant.PRP_MAX_SMOOTHNESS);
+                    mVideoEnhancer.SetLighteningFactor(Constant.PRP_DEFAULT_LIGHTNESS);
+                    mVideoEnhancer.SetSmoothnessFactor(Constant.PRP_DEFAULT_SMOOTHNESS);
                     mVideoEnhancer.StartPreProcess();
                 }
             }else{
@@ -139,7 +140,7 @@ public class WorkerThread extends Thread {
 
 
     public final void setPreParameters(float lightness, int smoothness) {
-        if (mEngineConfig.mClientRole == Constants.CLIENT_ROLE_DUAL_STREAM_BROADCASTER) {
+        if (mEngineConfig.mClientRole == Constants.CLIENT_ROLE_BROADCASTER) {
             if (Constant.PRP_ENABLED) {
                 if (mVideoEnhancer == null) {
                     mVideoEnhancer = new AgoraYuvEnhancer(mContext);
@@ -224,9 +225,9 @@ public class WorkerThread extends Thread {
         mEngineConfig.mClientRole = cRole;
         mEngineConfig.mVideoProfile = vProfile;
 
-        mRtcEngine.setVideoProfile(mEngineConfig.mVideoProfile);//设置本地视频属性
+        mRtcEngine.setVideoProfile(mEngineConfig.mVideoProfile, true);//设置本地视频属性
 
-        mRtcEngine.setClientRole(cRole);//设置和切换用户模式
+        mRtcEngine.setClientRole(cRole,"");//设置和切换用户模式
 
 
     }
@@ -261,15 +262,18 @@ public class WorkerThread extends Thread {
     private RtcEngine ensureRtcEngineReadyLock() {
         if (mRtcEngine == null) {
             //TODO 直播key
-            String vendorKey ="2ca334d72fde41d38278c57878b29bc4";
+
+            String vendorKey ="2ca334d72fde41d38278c57878b29bc4";//生产环境
             if (TextUtils.isEmpty(vendorKey)) {
                 throw new RuntimeException("NEED TO use your vendor key, get your own key at https://dashboard.agora.io/");
             }
-            mRtcEngine = RtcEngineEx.create(mContext, vendorKey, Constants.APP_CATEGORY_LIVE_BROADCASTING, mEngineEventHandler.mRtcEventHandler);
+            mRtcEngine = RtcEngineEx.create(mContext, vendorKey, mEngineEventHandler.mRtcEventHandler);
+            mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_LIVE_BROADCASTING);
             mRtcEngine.enableVideo();
             mRtcEngine.setParameters(String.format(Locale.US, "{\"rtc.log_file\":\"%s\"}", Environment.getExternalStorageDirectory()
                     + File.separator + mContext.getPackageName() + "/log/agora-rtc.log"));
             AppLog.i("TAG","创建了RtcEngineEx");
+            mRtcEngine.enableDualStreamMode(true);
         }
         return mRtcEngine;
     }

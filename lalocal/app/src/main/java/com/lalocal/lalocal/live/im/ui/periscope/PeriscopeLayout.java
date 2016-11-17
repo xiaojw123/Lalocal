@@ -170,12 +170,7 @@ public class PeriscopeLayout extends RelativeLayout {
         BezierEvaluator evaluator = new BezierEvaluator(getPointF(2), getPointF(1));
 
         //这里最好画个图 理解一下 传入了起点 和 终点
-        ValueAnimator animator = null;
-        if (getWidth() <= 0) {
-            animator = ValueAnimator.ofObject(evaluator, new PointF((mWidth - dWidth) / 2, mHeight - dHeight), new PointF(random.nextInt(10), 0));
-        } else {
-            animator = ValueAnimator.ofObject(evaluator, new PointF((mWidth - dWidth) / 2, mHeight - dHeight), new PointF(random.nextInt(getWidth()), 0));
-        }
+        ValueAnimator animator = ValueAnimator.ofObject(evaluator, new PointF((mWidth - dWidth) / 2, mHeight - dHeight),new PointF(random.nextInt((getWidth()<=0)?3:getWidth()), 0));
         animator.addUpdateListener(new BezierListenr(target));
         animator.setTarget(target);
         animator.setDuration(3000);

@@ -32,7 +32,6 @@ import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SecretTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -230,12 +229,6 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		AppLog.i("TAG","onError"+share_media.toString());
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-
-	}
 
 	/*@Override
 	public boolean handleMessage(Message msg) {

@@ -13,6 +13,8 @@ public class LoginUser extends User{
     String areaCode;
 
 
+
+
     public LoginUser(Parcel in) {
         super(in);
     }

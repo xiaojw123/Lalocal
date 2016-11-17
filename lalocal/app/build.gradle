@@ -94,6 +94,14 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:percent:22.2.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
+
+    compile files('libs/SocialSDK_umengqq.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/SocialSDK_umengsina.jar')
+    compile files('libs/SocialSDK_umengwx.jar')
+    compile files('libs/SocialSDK_Sina.jar')
+    compile files('libs/SocialSDK_WeiXin_1.jar')
+
 }
 
 
@@ -122,12 +130,6 @@ dependencies {
     compile 'in.srain.cube:ultra-ptr:1.0.11' // 下拉刷新控件
     compile 'in.srain.cube:cube-sdk:1.0.44@aar' // 上拉加载控件
     compile 'com.chanven.lib:cptr:1.1.0'
-//    compile('in.srain.cube:ultra-ptr:1.0.9.1-SNAPSHOT@aar') {
-//        exclude group: 'in.srain.cube', module: 'clog'
-//    }
-//    compile('in.srain.cube:cube-sdk:1.0.44.33-SNAPSHOT@aar') {
-//        exclude group: 'in.srain.cube', module: 'clog'
-//    }
     compile 'com.daimajia.slider:library:1.1.5@aar' // 广告轮播
     compile 'com.squareup.picasso:picasso:2.5.2' // 图片加载框架
     compile 'com.nineoldandroids:library:2.4.0' // 开源动画框架

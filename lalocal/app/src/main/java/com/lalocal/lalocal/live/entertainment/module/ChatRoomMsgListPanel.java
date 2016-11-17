@@ -141,7 +141,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         this.onChatRoomMessageItemClickListener = onChatRoomMessageItemClickListener;
     }
 
-
     // 刷新消息列表
     public void refreshMessageList() {
         container.activity.runOnUiThread(new Runnable() {
@@ -179,7 +178,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         if (needRefresh) {
             adapter.notifyDataSetChanged();
         }
-
         // incoming messages tip
         IMMessage lastMsg = messages.get(messages.size() - 1);
         if (isMyMessage(lastMsg) && needScrollToBottom) {
@@ -238,7 +236,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     public Class<? extends TViewHolder> viewHolderAtPosition(int position) {
         return ChatRoomMsgViewHolderFactory.getViewHolderByType(items.get(position));
     }
-
     @Override
     public boolean enabled(int position) {
         return true;
