@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -19,7 +20,6 @@ import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
-import com.lalocal.lalocal.view.MyGridView;
 import com.lalocal.lalocal.view.SquareImageView;
 import com.lalocal.lalocal.view.adapter.CommonAdapter;
 import com.lalocal.lalocal.view.adapter.CommonViewHolder;
@@ -36,7 +36,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     private TextView mTitleView;
     private TextView mSubTitleView;
     private RelativeLayout mLayoutMore;
-    private MyGridView mGvCommodities;
+    private GridView mGvCommodities;
     private FrameLayout mLayoutContainer;
 
     private static final int MAX_PRODUCT = 4;
@@ -49,7 +49,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
         mSubTitleView = (TextView) itemView.findViewById(R.id.tv_subtitle);
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
-        mGvCommodities = (MyGridView) itemView.findViewById(R.id.gv_commodities);
+        mGvCommodities = (GridView) itemView.findViewById(R.id.gv_commodities);
     }
 
     public void initData(List<ProductDetailsResultBean> list, String title, String subtitle) {
@@ -63,7 +63,6 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         mTitleView.setText(title);
         mSubTitleView.setText(subtitle);
 
-        mGvCommodities.setFocusable(false);
         // 设置适配器
         mGvCommodities.setFocusable(false);
         mGvCommodities.setAdapter(new CommonAdapter<ProductDetailsResultBean>(mContext, commodityList, R.layout.home_recommend_product_gridview_item, MAX_PRODUCT) {
@@ -83,14 +82,18 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
                 // 获取商品标题
                 String title = bean.title;
 
-                // 使用Glide加载商品图片
-                Glide.with(mContext)
-                        .load(photoUrl)
-                        .centerCrop()
-                        .crossFade()
-                        // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
-                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                        .into(imgComoddity);
+                // 使用Glide加载商品图片，注意：如果存在自定义计算高度的图片，Glide不是很合适
+//                Glide.with(mContext)
+//                        .load(photoUrl)
+//                        .centerCrop()
+//                        .crossFade()
+//                        // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
+//                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                        .into(imgComoddity);
+
+                // 加载图片
+                DrawableUtils.displayImg(mContext, imgComoddity, photoUrl);
+
                 // 设置商品价格
                 String priceShow = "￥ " + CommonUtil.formatNumWithComma(price) + "起";
                 holder.setText(R.id.tv_commodity_price, priceShow);

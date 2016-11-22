@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_fa"
-    android:orientation="vertical"
-    tools:context=".activity.fragment.RecommendNewFragment">
+    android:orientation="vertical">
 
     <com.lalocal.lalocal.view.CustomXRecyclerView
         android:id="@+id/xrv_recommend"

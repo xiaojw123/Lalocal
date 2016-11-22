@@ -44,7 +44,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class RecommendNewFragment extends BaseFragment {
+public class FindFragment extends BaseFragment {
 
     @BindView(R.id.xrv_recommend)
     CustomXRecyclerView mXrvRecommend;
@@ -139,7 +139,7 @@ public class RecommendNewFragment extends BaseFragment {
         mXrvRecommend.setLoadingMoreEnabled(true);
     }
 
-    public RecommendNewFragment() {
+    public FindFragment() {
 
     }
 
@@ -149,19 +149,6 @@ public class RecommendNewFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.home_recommend_new_layout, container, false);
         ButterKnife.bind(this, view);
 
-        mXrvRecommend.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                AppLog.i("scro", "state -- " + newState);
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                AppLog.i("scro", "dx = " + dx + "; dy = " + dy);
-            }
-        });
         return view;
     }
 
@@ -309,7 +296,6 @@ public class RecommendNewFragment extends BaseFragment {
                     List<ArticleDetailsResultBean> articleList = articlesResultBean == null ? null : articlesResultBean.getRows();
                     if (isLoadingMore) {
                         if (articleList == null || articleList.size() == 0) {
-//                            mHanlder.sendEmptyMessage(NO_MORE_ARTICLE);
 
                             isRefreshing = false;
                             isLoadingMore = false;
@@ -320,7 +306,6 @@ public class RecommendNewFragment extends BaseFragment {
                         } else {
                             mArticleList.addAll(articleList);
                         }
-//                        mHanlder.sendEmptyMessage(GET_ARTICLE_LIST);
 
                         isRefreshing = false;
                         isLoadingMore = false;
@@ -331,14 +316,11 @@ public class RecommendNewFragment extends BaseFragment {
 
                     if (isRefreshing){
                         mArticleList = articleList;
-//                        mHanlder.sendEmptyMessage(GET_ARTICLE_LIST);
 
                         isLoadingMore = false;
                         isRefreshing = false;
                         mXrvRecommend.refreshComplete();
-//                        mRecommendAdapter.notifyDataSetChanged();
                         setAdapter();
-//                        mPtrLayout.loadMoreComplete(false);
                         return;
                     }
                 }

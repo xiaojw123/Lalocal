@@ -250,7 +250,10 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             }
 
             if (!TextUtils.isEmpty(lastMsg)) {
+                tvLastMsg.setVisibility(View.VISIBLE);
                 tvLastMsg.setText(lastMsg);
+            } else {
+                tvLastMsg.setVisibility(View.GONE);
             }
 
             if (!TextUtils.isEmpty(avatar)) {

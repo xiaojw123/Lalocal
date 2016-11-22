@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/white"
         android:clipChildren="false"
         android:layerType="software"
@@ -99,6 +99,7 @@
             android:horizontalSpacing="@dimen/home_recommend_commodity_gridview_spacing"
             android:numColumns="2"
             android:paddingBottom="@dimen/dimen_size_25_dp"
-            android:verticalSpacing="@dimen/home_recommend_commodity_gridview_spacing" />
+            android:verticalSpacing="@dimen/home_recommend_commodity_gridview_spacing"
+            android:scrollbars="none"/>
     </LinearLayout>
 </FrameLayout>

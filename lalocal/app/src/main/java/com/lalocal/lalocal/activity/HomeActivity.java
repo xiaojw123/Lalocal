@@ -28,7 +28,7 @@ import com.lalocal.lalocal.activity.fragment.DestinationFragment;
 import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
-import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
+import com.lalocal.lalocal.activity.fragment.FindFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.VersionResult;
@@ -121,7 +121,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 AppLog.print("recommend__" + recommendFragment);
                 if (recommendFragment == null) {
                     AppLog.print("___add");
-                    recommendFragment = new RecommendNewFragment();
+                    recommendFragment = new FindFragment();
                     ft.add(R.id.home_fragment_container, recommendFragment);
                 } else {
                     AppLog.print("___show");
