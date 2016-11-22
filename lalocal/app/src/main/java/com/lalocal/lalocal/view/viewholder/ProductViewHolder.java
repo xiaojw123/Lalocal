@@ -9,6 +9,8 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
@@ -16,6 +18,7 @@ import com.lalocal.lalocal.model.ProductDetailsResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.MyGridView;
 import com.lalocal.lalocal.view.SquareImageView;
 import com.lalocal.lalocal.view.adapter.CommonAdapter;
@@ -38,12 +41,9 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
 
     private static final int MAX_PRODUCT = 4;
 
-    private boolean isEmpty;
-
-    public ProductViewHolder(Context context, View itemView, boolean isEmpty) {
+    public ProductViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
-        this.isEmpty = isEmpty;
 
         mLayoutContainer = (FrameLayout) itemView.findViewById(R.id.commodity_container);
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
@@ -53,12 +53,12 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void initData(List<ProductDetailsResultBean> list, String title, String subtitle) {
-        final List<ProductDetailsResultBean> commodityList = list;
-
-        if (isEmpty) {
+        if (list == null || list.size() == 0) {
             mLayoutContainer.setVisibility(View.GONE);
             return;
         }
+
+        final List<ProductDetailsResultBean> commodityList = list;
 
         mTitleView.setText(title);
         mSubTitleView.setText(subtitle);
@@ -70,16 +70,31 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void convert(CommonViewHolder holder, ProductDetailsResultBean bean) {
-                // 设置商品图片
+                // 获取图片url
+                String photoUrl = bean.photo;
+                // 获取图片控件宽高
                 SquareImageView imgComoddity = holder.getView(R.id.img_commodity);
-                DrawableUtils.displayImg(mContext, imgComoddity, bean.photo, R.drawable.androidloading);
-
-                // 设置商品价格
-                String price = "￥ " + CommonUtil.formatNumWithComma(bean.price) + "起";
-                holder.setText(R.id.tv_commodity_price, price);
-
-                // 设置商品标题
+                int width = imgComoddity.getWidth();
+                int height = imgComoddity.getHeight();
+                // 七牛云处理图片大小
+                photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
+                // 获取商品价格
+                double price = bean.price;
+                // 获取商品标题
                 String title = bean.title;
+
+                // 使用Glide加载商品图片
+                Glide.with(mContext)
+                        .load(photoUrl)
+                        .centerCrop()
+                        .crossFade()
+                        // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
+                        .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                        .into(imgComoddity);
+                // 设置商品价格
+                String priceShow = "￥ " + CommonUtil.formatNumWithComma(price) + "起";
+                holder.setText(R.id.tv_commodity_price, priceShow);
+                // 设置商品标题
                 holder.setText(R.id.tv_commodity_title, title);
 
             }

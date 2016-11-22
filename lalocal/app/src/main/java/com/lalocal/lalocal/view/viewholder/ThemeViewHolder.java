@@ -51,15 +51,9 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
 
     private List<Button> mDotBtns = new ArrayList<>();
 
-//    private CustomXRecyclerView mXRecyclerView;
-
-    private boolean isEmpty = false;
-
-    public ThemeViewHolder(Context context, View itemView, boolean isEmpty) {
+    public ThemeViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
-//        this.mXRecyclerView = xRecyclerView;
-        this.isEmpty = isEmpty;
 
         mLayoutContainer = (FrameLayout) itemView.findViewById(R.id.theme_container);
         mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
@@ -86,12 +80,12 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
      * @param subtitle
      */
     public void initData(List<RecommendRowsBean> list, String title, String subtitle) {
-        List<RecommendRowsBean> recommendSpecialList = list;
-
-        if (isEmpty) {
+        if (list == null || list.size() == 0) {
             mLayoutContainer.setVisibility(View.GONE);
             return;
         }
+
+        List<RecommendRowsBean> recommendSpecialList = list;
 
         mTitleView.setText(title);
         mSubtitleView.setText(subtitle);

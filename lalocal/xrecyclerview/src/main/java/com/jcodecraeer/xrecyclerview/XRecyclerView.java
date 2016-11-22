@@ -291,6 +291,13 @@ public class XRecyclerView extends RecyclerView {
         }
     }
 
+    public int getHeaderVisibleHeight() {
+        if (mRefreshHeader == null) {
+            return 0;
+        }
+        return mRefreshHeader.getVisibleHeight();
+    }
+
     private class DataObserver extends RecyclerView.AdapterDataObserver {
         @Override
         public void onChanged() {

@@ -3,6 +3,7 @@ package com.lalocal.lalocal.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 /**
  * Created by lenovo on 2016/6/22.
@@ -301,7 +302,7 @@ public class AppConfig {
 
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public static final String getPlayBackLiveDetails(int id) {
-
+        Log.i("urrr", baseUrl + "channels/historys/" + id);
         return baseUrl + "channels/historys/" + id;
     }
 
@@ -575,5 +576,14 @@ public class AppConfig {
      */
     public static String getHomeAttention() {
         return baseUrl + "channels/index/attention";
+    }
+
+    /**
+     * 获取每日推荐
+     * @return
+     */
+    public static String getDailyRecommendations(int type) {
+        AppLog.i("dailyy", baseUrl + "dailyRecommendations?type=" + type);
+        return baseUrl + "dailyRecommendations?type=" + type;
     }
 }

@@ -125,7 +125,7 @@ public class PlayBackActivity extends BaseActivity {
         DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         playbackMasterInfoLayout.setOnClickListener(clickListener);
-        AppLog.i("TAG", "视频回放:视频方向：" + direction + "    视频地址：" + videoList.get(0).getUrl());
+//        AppLog.i("TAG", "视频回放:视频方向：" + direction + "    视频地址：" + videoList.get(0).getUrl());
         // 视频回放:视频方向：1    视频地址：http://vid-11812.vod.chinanetcenter.broadcastapp.agoraio.cn/live-dev-388-11--20161027115838.mp4
         if (direction == 0) {//横屏
             positionChangeListener(0);

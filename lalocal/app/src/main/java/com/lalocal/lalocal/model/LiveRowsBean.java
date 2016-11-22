@@ -491,4 +491,5 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
             return new LiveRowsBean[size];
         }
     };
+
 }

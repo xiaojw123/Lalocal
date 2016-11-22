@@ -7,6 +7,8 @@ import android.text.TextUtils;
  */
 public class QiniuUtils {
 
+    public static final int NOT_SET = -999;
+
     /**
      * 等比缩放后居中裁剪
      * @param url 图片链接
@@ -21,11 +23,24 @@ public class QiniuUtils {
             return url;
         }
 
+        String widthUrl = "/w/" + width;
+        String heightUrl = "/h/" + height;
+
         // 如果url不包含“？”，则在传入参数前添加“？”；否则反之
-        if (url.contains("?")) {
-            return url + "/imageView2/1/w/" + width + "/h/" + height;
-        } else {
-            return url + "?imageView2/1/w/" + width + "/h/" + height;
+        if (!url.contains("?")) {
+            url += "?";
         }
+
+        url += "imageView2/1";
+
+        if (width != NOT_SET) {
+            url += widthUrl;
+        }
+
+        if (height != NOT_SET) {
+            url += heightUrl;
+        }
+
+        return url;
     }
 }

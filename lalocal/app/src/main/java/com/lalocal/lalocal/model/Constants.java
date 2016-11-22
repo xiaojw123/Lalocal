@@ -54,4 +54,10 @@ public class Constants {
     public static final int SOLID_WIDTH = -1;
     public static final int SOLID_HEIGHT = -2;
 
+    // -每日推荐参数
+    // 每日推荐
+    public static final int OPEN_APP_TO_SCAN = 0;
+    // 主动拉取
+    public static final int PULL_TO_SCAN = 1;
+
 }

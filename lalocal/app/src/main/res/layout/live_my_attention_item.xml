@@ -7,6 +7,7 @@
     android:paddingRight="@dimen/dimen_size_15_dp"
     android:paddingTop="@dimen/dimen_size_15_dp"
     android:paddingBottom="@dimen/dimen_size_5_dp"
+    android:focusable="false"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -100,6 +101,8 @@
                         android:id="@+id/tv_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:text="加载中..."
                         android:layout_marginLeft="@dimen/dimen_size_10_dp"
                         android:layout_gravity="center_vertical"
@@ -123,9 +126,11 @@
 
                     <TextView
                         android:id="@+id/tv_address"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:text="地点加载中..."
+                        android:maxLines="1"
+                        android:ellipsize="end"
                         android:layout_toRightOf="@id/icon_my_concern_address"
                         android:layout_marginLeft="@dimen/dimen_size_4_dp"
                         android:layout_centerVertical="true"
@@ -177,6 +182,8 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginTop="@dimen/dimen_size_12_dp"
                     android:layout_marginBottom="@dimen/dimen_size_12_dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:textColor="@color/color_191000"
                     android:alpha="0.5"/>
             </LinearLayout>

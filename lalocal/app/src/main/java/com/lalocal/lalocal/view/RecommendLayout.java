@@ -92,7 +92,7 @@ public class RecommendLayout extends LinearLayout {
         isHidden = false;
         prepareScroll(0, 0);
         // 开启动画
-        LiveFragment.startPeriscope();
+//        LiveFragment.startPeriscope();
     }
 
     // 隐藏视图
@@ -100,7 +100,7 @@ public class RecommendLayout extends LinearLayout {
         isHidden = true;
         prepareScroll(0, mViewHeight);
         // 关闭动画
-        LiveFragment.stopPeriscope();
+//        LiveFragment.stopPeriscope();
 
     }
 

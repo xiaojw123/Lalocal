@@ -43,6 +43,7 @@ import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
+import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
@@ -388,9 +389,17 @@ public abstract class ICallBack {
 
     /**
      * 获取首页我的关注
-     * @param json
+     * @param bean
      */
     public void onGetHomeAttention(LiveRowsBean bean) {
+
+    }
+
+    /**
+     * 获取每日推荐
+     * @param bean
+     */
+    public void onGetDailyRecommend(RecommendationsBean bean) {
 
     }
 }

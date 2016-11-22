@@ -67,6 +67,7 @@ import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
+import com.lalocal.lalocal.model.RecommendationsResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
@@ -1309,6 +1310,21 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
+    /**
+     * 获取每日推荐
+     */
+    public void getDailyRecommendations(int type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_DAILY_RECOMMENDATIONS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getDailyRecommendations(type),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -1855,6 +1871,9 @@ public class ContentLoader {
                         break;
                     case RequestCode.GET_HOME_ATTENTION:
                         responseHomeAttention(json);
+                        break;
+                    case RequestCode.GET_DAILY_RECOMMENDATIONS:
+                        responseDailyRecommendations(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -2617,6 +2636,7 @@ public class ContentLoader {
 
         //直播首页列表
         private void responListHomeList(String json) {
+            AppLog.i("dailyRec", "living list is " + json);
             LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
             if (liveHomeListResp != null) {
                 callBack.onLiveHomeList(liveHomeListResp, attentionFlag);
@@ -2626,6 +2646,7 @@ public class ContentLoader {
         private void responseAppLog(String json) {
             callBack.onResponseLog(json);
         }
+
         //历史直播
         private void responPlayBackLive(String json) {
             AppLog.i("TAG", "历史直播:" + json);
@@ -2714,6 +2735,17 @@ public class ContentLoader {
             }
         }
 
+        /**
+         * 每日推荐
+         * @param json
+         */
+        private void responseDailyRecommendations(String json) {
+            AppLog.i("dailyy", "json is " + json);
+            RecommendationsResp recommendationsResp = new Gson().fromJson(json, RecommendationsResp.class);
+            if (recommendationsResp.getReturnCode() == 0) {
+                callBack.onGetDailyRecommend(recommendationsResp.getResult());
+            }
+        }
 
         @Override
         public void onDialogClickListener() {
@@ -2999,6 +3031,7 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
+        AppLog.i("dailyRec", "device id " + map.get("DEVICE_ID"));
         AppLog.print("__USER_ID=" + String.valueOf(userid) + "\n__TOKEN=" + token);
         return map;
 
@@ -3140,6 +3173,7 @@ public class ContentLoader {
         int GET_USER_CUR_LIVE = 302;
         int GET_USER_ARTICLE = 303;
         int GET_HOME_ATTENTION = 304;
+        int GET_DAILY_RECOMMENDATIONS = 305;
     }
 
 }

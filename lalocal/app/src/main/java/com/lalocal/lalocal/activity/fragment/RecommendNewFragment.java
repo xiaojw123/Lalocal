@@ -132,7 +132,7 @@ public class RecommendNewFragment extends BaseFragment {
      */
     private void setAdapter() {
         // 初始化适配器
-        mRecommendAdapter = new HomeRecommendAdapter(getActivity(), mAdResultList, mRecommendListBeen, mArticleList, mXrvRecommend);
+        mRecommendAdapter = new HomeRecommendAdapter(getActivity(), mAdResultList, mRecommendListBeen, mArticleList);
         // 设置适配器
         mXrvRecommend.setAdapter(mRecommendAdapter);
         // 加载数据以后显示加载更多
@@ -182,18 +182,6 @@ public class RecommendNewFragment extends BaseFragment {
         mXrvRecommend.setFocusable(true);
     }
 
-//    @Override
-//    public void onHiddenChanged(boolean hidden) {
-//        View topView = mRecyclerView.getChildAt(0);
-//        if (hidden) {
-//            mOffset = topView.getTop();
-//            mLastPosition = mRecyclerView.getLayoutManager().getPosition(topView);
-//        } else {
-//            ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mLastPosition, mOffset);
-//        }
-//        super.onHiddenChanged(hidden);
-//    }
-
     /**
      * 初始化XRecyclerView
      */
@@ -238,8 +226,8 @@ public class RecommendNewFragment extends BaseFragment {
                 isRefreshing = true;
                 mXrvRecommend.setLoadingMoreEnabled(true);
                 // 隐藏首页推荐广告栏
-//                    mContentLoader.recommendAd();
-                mContentLoader.indexRecommentList();
+                    mContentLoader.recommendAd();
+//                mContentLoader.indexRecommentList();
             } else {
                 mXrvRecommend.refreshComplete();
             }
@@ -276,10 +264,6 @@ public class RecommendNewFragment extends BaseFragment {
                 if (recommendAdResp.getReturnCode() == 0) {
                     // 获取广告数据
                     List<RecommendAdResultBean> adResultList = recommendAdResp.getResult();
-//                    Message msg = new Message();
-//                    msg.what = GET_ADVERTISEMENT;
-//                    msg.obj = adResultList;
-//                    mHanlder.sendMessage(msg);
 
                     mAdResultList.clear();
                     mAdResultList.addAll(adResultList);
@@ -340,7 +324,7 @@ public class RecommendNewFragment extends BaseFragment {
 
                         isRefreshing = false;
                         isLoadingMore = false;
-                        mRecommendAdapter.setArticleData(mArticleList);
+                        mRecommendAdapter.refreshArticle(mArticleList);
                         mXrvRecommend.loadMoreComplete();
                         return;
                     }

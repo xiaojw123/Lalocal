@@ -40,14 +40,10 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     private FrameLayout mLiveContainer;
     private int mSelected = 0;
     private List<Button> mDotBtns = new ArrayList<>();
-    private boolean mLiveEmpty = false;
 
-    private MyPtrClassicFrameLayout mPtrLayout;
-
-    public ChannelViewHolder(Context context, View itemView, boolean mLiveEmpty) {
+    public ChannelViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
-        this.mLiveEmpty = mLiveEmpty;
 
         mLiveContainer = (FrameLayout) itemView.findViewById(R.id.live_container);
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
@@ -83,7 +79,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         final List<LiveRowsBean> hotLiveList = list;
         final int size = (list == null ? 0 : list.size());
 
-        if (mLiveEmpty) {
+        if (list == null || list.size() == 0) {
             mLiveContainer.setVisibility(View.GONE);
             return;
         }

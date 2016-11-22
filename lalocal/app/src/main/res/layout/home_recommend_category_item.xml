@@ -5,11 +5,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageView
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/ad_slider"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@android:color/holo_red_dark"
-        android:scaleType="centerCrop" />
+        android:background="@drawable/androidloading"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/cv_category"
