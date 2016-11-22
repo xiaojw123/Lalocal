@@ -2002,7 +2002,7 @@ public class ContentLoader {
 
         // 首页推荐文章列表
         private void responseArticleList(String json) {
-            AppLog.i("aaa", "response article lsit " + json);
+            AppLog.i("rsp", "response article lsit " + json);
             ArticlesResp articlesResp = new Gson().fromJson(json, ArticlesResp.class);
             if (articlesResp.getReturnCode() == 0) {
                 callBack.onArticleListResult(articlesResp);
@@ -2260,7 +2260,7 @@ public class ContentLoader {
 
         // 首页推荐列表，包括：直播、专题、商品
         private void responseIndexRecommendList(String json) {
-            AppLog.i("hehe", "recommendList is " + json);
+            AppLog.i("rsp", "recommendList is " + json);
             RecommendListDataResp recommendListDataResp = new Gson().fromJson(json, RecommendListDataResp.class);
             if (recommendListDataResp != null) {
                 callBack.onRecommendList(recommendListDataResp);
@@ -2466,6 +2466,7 @@ public class ContentLoader {
 
         //推荐广告
         public void responseRecommendAd(String json) {
+            AppLog.i("rsp", "ad: " + json);
             RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
             callBack.onRecommendAd(recommendAdResp);
         }

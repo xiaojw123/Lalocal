@@ -60,7 +60,6 @@ public class FindFragment extends BaseFragment {
     private int mArticlePageSize = 10;
     private int mArticlePageNum = 1;
 
-    private int mScrolledYDistance;
 
 //    private int mLastPosition = 0;
 //    private int mOffset = 0;
@@ -70,62 +69,9 @@ public class FindFragment extends BaseFragment {
     // 是否在加载
     private boolean isLoadingMore = false;
 
-    private static final int DATA_GOT_FINISHED = 3;
+    private static final int REFRESH_COMPLETE = 3;
 
-//    private static final int GET_ADVERTISEMENT = 0x01;
-//    private static final int GET_LIVE_COMODITY_SPECIAL = 0x02;
-//    private static final int GET_ARTICLE_LIST = 0x03;
-//    private static final int NO_MORE_ARTICLE = 0x04;
-//    private final Handler mHanlder = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case GET_ADVERTISEMENT:
-//                    mAdResultList = (List<RecommendAdResultBean>) msg.obj;
-//                    mContentLoader.indexRecommentList();
-////                    mRecommendAdapter.setAdData(mAdResultList);
-//                    break;
-//                case GET_LIVE_COMODITY_SPECIAL:
-//                    if (isRefreshing) {
-//                        mArticlePageNum = 1;
-//                    }
-//                    mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
-////                    mRecommendAdapter.setListData(mRecommendListBeen);
-//                    break;
-//                case GET_ARTICLE_LIST:
-//                    if (isRefreshing) {
-//                        AppLog.i("xrv", "refreshing--" + mArticleList.size());
-//                        isLoadingMore = false;
-//                        isRefreshing = false;
-//                        mXrvRecommend.refreshComplete();
-////                        mRecommendAdapter.notifyDataSetChanged();
-//                        setAdapter();
-////                        mPtrLayout.loadMoreComplete(false);
-//                        break;
-//                    }
-//                    if (isLoadingMore) {
-//                        AppLog.i("xrv", "loadingMore--" + mArticleList.size());
-//                        isRefreshing = false;
-//                        isLoadingMore = false;
-//                        mRecommendAdapter.setArticleData(mArticleList);
-//                        mXrvRecommend.loadMoreComplete();
-//                        break;
-//                    }
-//                    // 第一次刷新时，初始化RecyclerView
-//                    setAdapter();
-////                    mRecommendAdapter.setArticleData(mArticleList);
-//                    break;
-//                case NO_MORE_ARTICLE:
-//                    isRefreshing = false;
-//                    isLoadingMore = false;
-//                    // setNoMore与loadMoreComplete不能共存，否则不能显示FooterView
-//                    mXrvRecommend.setNoMore(true);
-//                    Toast.makeText(getActivity(), "没有更多文章咯~", Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        }
-//    };
-
+    private int mCountRefresh = 0;
 
     /**
      * 设置适配器
@@ -174,6 +120,7 @@ public class FindFragment extends BaseFragment {
      */
     @TargetApi(Build.VERSION_CODES.M)
     private void initXRecyclerView() {
+        AppLog.i("fd", "initXRecyclerView");
         // 初始化布局参数
         CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(getActivity());
         // 设置竖直排列
@@ -200,6 +147,18 @@ public class FindFragment extends BaseFragment {
                 }
             }
         });
+        // 滚动事件监听，保证滑动到底部的时候才加载更多而不是最后一个item出现的时候就加载
+        mXrvRecommend.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (mXrvRecommend.canScrollVertically(1) == true) {
+                    mXrvRecommend.loadMoreComplete();
+                } else if (mXrvRecommend.canScrollVertically(1) == false) {
+                    mXrvRecommend.setLoadingMoreEnabled(true);
+                }
+            }
+        });
     }
 
     /**
@@ -209,12 +168,14 @@ public class FindFragment extends BaseFragment {
 
         @Override
         public void onRefresh() {
+            AppLog.i("fd", "onRefresh");
             if (mXrvRecommend != null) {
                 isRefreshing = true;
                 mXrvRecommend.setLoadingMoreEnabled(true);
-                // 隐藏首页推荐广告栏
-                    mContentLoader.recommendAd();
-//                mContentLoader.indexRecommentList();
+
+                mContentLoader.recommendAd();
+                mContentLoader.indexRecommentList();
+                mContentLoader.articleList(10, 0);
             } else {
                 mXrvRecommend.refreshComplete();
             }
@@ -222,6 +183,7 @@ public class FindFragment extends BaseFragment {
 
         @Override
         public void onLoadMore() {
+            AppLog.i("fd", "onLoadMore");
             if (mXrvRecommend.canScrollVertically(1) == false) {
                 isLoadingMore = true;
                 mArticlePageNum++;
@@ -234,12 +196,12 @@ public class FindFragment extends BaseFragment {
      * 初始化ContentLoader
      */
     private void initLoader() {
+        AppLog.i("fd", "initLoader");
         mContentLoader = new ContentLoader(getActivity());
         mContentLoader.setCallBack(new MyCallBack());
-        // 首页推荐隐藏广告栏
-//        mContentLoader.recommendAd();
-//        mContentLoader.indexRecommentList();
-//        mContentLoader.articleList(10, 0);
+        mContentLoader.recommendAd();
+        mContentLoader.indexRecommentList();
+        mContentLoader.articleList(10, 0);
     }
 
     public class MyCallBack extends ICallBack {
@@ -247,14 +209,22 @@ public class FindFragment extends BaseFragment {
         @Override
         public void onRecommendAd(final RecommendAdResp recommendAdResp) {
             super.onRecommendAd(recommendAdResp);
+            AppLog.i("fd", "onRecommendAd");
             try {
                 if (recommendAdResp.getReturnCode() == 0) {
+                    mCountRefresh++;
+                    if (mCountRefresh == REFRESH_COMPLETE) {
+                        mCountRefresh = 0;
+                        isRefreshing = false;
+                        mXrvRecommend.refreshComplete();
+                        mXrvRecommend.loadMoreComplete();
+                    }
+
                     // 获取广告数据
                     List<RecommendAdResultBean> adResultList = recommendAdResp.getResult();
 
                     mAdResultList.clear();
                     mAdResultList.addAll(adResultList);
-                    mContentLoader.indexRecommentList();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -270,16 +240,37 @@ public class FindFragment extends BaseFragment {
         @Override
         public void onRecommendList(final RecommendListDataResp recommendListDataResp) {
             super.onRecommendList(recommendListDataResp);
+
+            AppLog.i("fd", "onRecommendList");
+            mCountRefresh++;
+            if (mCountRefresh == REFRESH_COMPLETE) {
+                AppLog.i("fd", "onRecommendList 1");
+                mCountRefresh = 0;
+                AppLog.i("fd", "onRecommendList 2");
+                isRefreshing = false;
+                AppLog.i("fd", "onRecommendList 3");
+                isLoadingMore = false;
+                AppLog.i("fd", "onRecommendList 4");
+                mXrvRecommend.refreshComplete();
+                AppLog.i("fd", "onRecommendList 5");
+                mXrvRecommend.loadMoreComplete();
+                AppLog.i("fd", "onRecommendList 6");
+            }
+
             try {
                 if (recommendListDataResp.getReturnCode() == 0) {
+                    AppLog.i("fd", "onRecommendList 7");
                     // 获取首页推荐列表
                     mRecommendListBeen = recommendListDataResp.getResult();
+                    AppLog.i("fd", "onRecommendList 8");
 //                    mHanlder.sendEmptyMessage(GET_LIVE_COMODITY_SPECIAL);
 
                     if (isRefreshing) {
+                        AppLog.i("fd", "onRecommendList 9");
                         mArticlePageNum = 1;
+                        AppLog.i("fd", "onRecommendList 10");
                     }
-                    mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
+//                    mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -289,39 +280,65 @@ public class FindFragment extends BaseFragment {
         @Override
         public void onArticleListResult(final ArticlesResp articlesResp) {
             super.onArticleListResult(articlesResp);
+
+            AppLog.i("fd", "onArticleListResult");
+
             try {
                 if (articlesResp.getReturnCode() == 0) {
+                    AppLog.i("fd", "onArticleListResult 5");
                     // 获取首页推荐文章列表
                     ArticlesResultBean articlesResultBean = articlesResp.getResult();
+                    AppLog.i("fd", "onArticleListResult 6");
                     List<ArticleDetailsResultBean> articleList = articlesResultBean == null ? null : articlesResultBean.getRows();
+                    AppLog.i("fd", "onArticleListResult 7");
                     if (isLoadingMore) {
+                        AppLog.i("fd", "onArticleListResult 8");
                         if (articleList == null || articleList.size() == 0) {
+                            AppLog.i("fd", "onArticleListResult 9");
 
-                            isRefreshing = false;
                             isLoadingMore = false;
+                            AppLog.i("fd", "onArticleListResult 10");
                             // setNoMore与loadMoreComplete不能共存，否则不能显示FooterView
                             mXrvRecommend.setNoMore(true);
+                            AppLog.i("fd", "onArticleListResult 11");
                             Toast.makeText(getActivity(), "没有更多文章咯~", Toast.LENGTH_SHORT).show();
+                            AppLog.i("fd", "onArticleListResult 12");
                             return;
                         } else {
                             mArticleList.addAll(articleList);
                         }
 
-                        isRefreshing = false;
                         isLoadingMore = false;
-                        mRecommendAdapter.refreshArticle(mArticleList);
+                        AppLog.i("fd", "onArticleListResult 13");
                         mXrvRecommend.loadMoreComplete();
+                        AppLog.i("fd", "onArticleListResult 14");
+                        mRecommendAdapter.refreshArticle(mArticleList);
+                        AppLog.i("fd", "onArticleListResult 15");
                         return;
                     }
 
-                    if (isRefreshing){
+                    if (isRefreshing) {
+                        AppLog.i("fd", "onArticleListResult 16");
                         mArticleList = articleList;
+                        AppLog.i("fd", "onArticleListResult 17");
+                        setAdapter();
+                        AppLog.i("fd", "onArticleListResult 18");
+                        return;
+                    }
+                }
 
+                if (isRefreshing) {
+                    mCountRefresh++;
+                    AppLog.i("fd", "onArticleListResult 1");
+                    if (mCountRefresh == REFRESH_COMPLETE) {
+                        AppLog.i("fd", "onArticleListResult 2");
+                        mCountRefresh = 0;
                         isLoadingMore = false;
                         isRefreshing = false;
+                        AppLog.i("fd", "onArticleListResult 3");
                         mXrvRecommend.refreshComplete();
-                        setAdapter();
-                        return;
+                        AppLog.i("fd", "onArticleListResult 4");
+                        mXrvRecommend.loadMoreComplete();
                     }
                 }
             } catch (Exception e) {
