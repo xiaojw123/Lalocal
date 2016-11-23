@@ -116,20 +116,6 @@ public class LiveFragment extends Fragment {
     // 当前分页页码
     private int mCurPageNum = 1;
 
-
-    // 声明Handler
-//    private static final int SHOW_PERISCOPE_LAYOUT = 0x01;
-//    private static final Handler mHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case SHOW_PERISCOPE_LAYOUT:
-//                    mPeriscope.addHeart();
-//                    break;
-//            }
-//        }
-//    };
-
     // 权限控制
     private final int LIVE_RECOMMEND_PEMISSION_CODE = 100;
     private static final String[] LIVE_PERMISSIONS = new String[]{
@@ -281,8 +267,14 @@ public class LiveFragment extends Fragment {
             // 隐藏推荐页
             mRecommendPage.hide();
         } else {
-            mContentLoader.getHomeAttention();
+            mXrvLive.setRefreshing(true);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mXrvLive.setRefreshing(true);
     }
 
     @OnClick({R.id.btn_takelive})
@@ -304,10 +296,11 @@ public class LiveFragment extends Fragment {
         if (isLogin) {
             startActivity(new Intent(getActivity(), LiveActivity.class));
         } else {
-            showLoginDialog();}
+            showLoginDialog();
+        }
     }
 
-    private  void  showLoginDialog(){
+    private void showLoginDialog() {
         CustomChatDialog customDialog = new CustomChatDialog(getActivity());
         customDialog.setContent(getString(R.string.live_login_hint));
         customDialog.setCancelable(false);
@@ -328,11 +321,8 @@ public class LiveFragment extends Fragment {
         public void onGetHomeAttention(LiveRowsBean bean) {
             super.onGetHomeAttention(bean);
 
-            mCountRefresh++;
-            if (mCountRefresh == PART_SIZE) {
-                mXrvLive.refreshComplete();
-                mCountRefresh = 0;
-            }
+            // 处理刷新状态
+            dealRefresh();
 
             // 恢复页码标记
             mCurPageNum = 1;
@@ -348,11 +338,8 @@ public class LiveFragment extends Fragment {
         public void onLiveHomeList(LiveHomeListResp liveListDataResp, String attenFlag) {
             super.onLiveHomeList(liveListDataResp, attenFlag);
 
-            mCountRefresh++;
-            if (mCountRefresh == PART_SIZE) {
-                mXrvLive.refreshComplete();
-                mCountRefresh = 0;
-            }
+            // 处理刷新状态
+            dealRefresh();
 
             // 恢复页码标记
             mCurPageNum = 1;
@@ -384,13 +371,8 @@ public class LiveFragment extends Fragment {
 
                     // 如果是刷新
                     if (isRefresh) {
-                        mCountRefresh++;
-                        if (mCountRefresh == PART_SIZE) {
-                            mXrvLive.refreshComplete();
-                            mCountRefresh = 0;
-                        }
-                        // 刷新状态改变
-                        isRefresh = false;
+                        // 处理刷新状态
+                        dealRefresh();
                         // 恢复页码标记
                         mCurPageNum = 1;
                         // 先清空列表
@@ -414,12 +396,8 @@ public class LiveFragment extends Fragment {
                 } else {
                     // 如果是刷新
                     if (isRefresh) {
-                        mCountRefresh++;
-                        if (mCountRefresh == PART_SIZE) {
-                            mXrvLive.refreshComplete();
-                            mCountRefresh = 0;
-                        }
-                        isRefresh = false;
+                        // 处理刷新状态
+                        dealRefresh();
                         // 恢复页码标记
                         mCurPageNum = 1;
                         // 清空列表
@@ -496,6 +474,24 @@ public class LiveFragment extends Fragment {
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);
         }
     }
+
+    /**
+     * 处理刷新状态
+     */
+    private void dealRefresh() {
+        if (isRefresh) {
+            mCountRefresh++;
+            if (mCountRefresh == PART_SIZE) {
+                mXrvLive.refreshComplete();
+                mCountRefresh = 0;
+                isRefresh = false;
+            }
+        } else {
+            mXrvLive.refreshComplete();
+            mCountRefresh = 0;
+        }
+    }
+
 
     /**
      * 配置适配器

@@ -7,13 +7,16 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
@@ -23,12 +26,17 @@ import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
+import com.lalocal.lalocal.view.adapter.HomeRecommendAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,18 +48,21 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
 
     private Context mContext;
 
-    private CardView mCardView;
     private LinearLayout mLayoutTheme;
     private LinearLayout mLayoutArticle;
     private LinearLayout mLayoutShop;
     private SliderLayout mSliderAd;
 
+    // 列表控件
     private RecyclerView mRvRecommendList;
+    // 小圆点容器
+    private LinearLayout mDotContainer;
 
+    // 广告列表
     private List<RecommendAdResultBean> mAdList = new ArrayList<>();
 
-    // 旅行笔记
-    private static final int ARTICLE = 4;
+    // 小圆点按钮列表
+    private List<Button> mDotBtns = new ArrayList<>();
 
     /**
      * 分类
@@ -63,7 +74,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
 
         this.mContext = context;
         // 关联控件
-        this.mCardView = (CardView) itemView.findViewById(R.id.cv_category);
+        this.mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
         this.mLayoutTheme = (LinearLayout) itemView.findViewById(R.id.layout_theme);
         this.mLayoutArticle = (LinearLayout) itemView.findViewById(R.id.layout_article);
         this.mLayoutShop = (LinearLayout) itemView.findViewById(R.id.layout_shop);
@@ -94,8 +105,8 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         this.mLayoutArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int lastPosition = mRvRecommendList.getAdapter().getItemCount();
-                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(lastPosition, 0);
+                int firstArticlePosition = ((HomeRecommendAdapter)mRvRecommendList.getAdapter()).getFirstArticlePositoin() + 1;
+                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(firstArticlePosition, 0);
             }
         });
 
@@ -124,7 +135,9 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         int width = DensityUtil.getWindowWidth((Activity) mContext);
         int height = DensityUtil.dip2px(mContext, 200);
 
-        for (int i = 0; i < mAdList.size(); i++) {
+        // 获取列表大小
+        int size = mAdList.size();
+        for (int i = 0; i < size; i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(mContext);
             RecommendAdResultBean ad = mAdList.get(i);
             String photoUrl = ad.photo;
@@ -143,19 +156,24 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
 
                     Intent intent = null;
                     switch (targetType) {
+                        case Constants.PLAY_BACK_TYPE_URL: // 回放
+                            intent = new Intent(mContext, PlayBackActivity.class);
+                            intent.putExtra("id", String.valueOf(targetId));
+                            mContext.startActivity(intent);
+                            break;
                         case Constants.TARGET_TYPE_URL: // 链接
                             AppLog.i("addd", "链接");
                             intent = new Intent(mContext, CarouselFigureActivity.class);
                             intent.putExtra("carousefigure", recommendAdResultBean);
                             mContext.startActivity(intent);
                             break;
-                        case Constants.TARGET_TYPE_ARTICLE:
+                        case Constants.TARGET_TYPE_ARTICLE: // 文章
                             AppLog.i("addd", "文章");
                             intent = new Intent(mContext, ArticleActivity.class);
                             intent.putExtra("targetID", String.valueOf(targetId));
                             mContext.startActivity(intent);
                             break;
-                        case Constants.TARGET_TYPE_PRODUCTION:
+                        case Constants.TARGET_TYPE_PRODUCTION: // 产品
                             AppLog.i("addd", "产品--" + targetId);
                             // 跳转到商品详情界面
                             SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
@@ -165,30 +183,52 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                             intent.putExtra("productdetails", specialToH5Bean);
                             mContext.startActivity(intent);
                             break;
-                        case Constants.TARGET_TYPE_ROUTE:
+                        case Constants.TARGET_TYPE_ROUTE: // 路线
                             AppLog.i("addd", "路线");
                             intent = new Intent(mContext, RouteDetailActivity.class);
                             intent.putExtra("detail_id", targetId);
                             mContext.startActivity(intent);
                             break;
-                        case Constants.TARGET_TYPE_THEME:
+                        case Constants.TARGET_TYPE_THEME: // 专题
                             AppLog.i("addd", "专题");
                             intent = new Intent(mContext, SpecialDetailsActivity.class);
                             intent.putExtra("rowId", targetId + "");
                             mContext.startActivity(intent);
                             break;
-                        case Constants.TARGET_TYPE_CHANNEL:
-
-                            Intent intent1=new Intent(mContext, AudienceActivity.class);
-                            intent1.putExtra("id",String.valueOf(targetId));
+                        case Constants.TARGET_TYPE_CHANNEL: // 视频直播频道
+                            Intent intent1 = new Intent(mContext, AudienceActivity.class);
+                            intent1.putExtra("id", String.valueOf(targetId));
                             mContext.startActivity(intent1);
-
+                            break;
+                        case Constants.TARGET_TYPE_USER: // 用户
+                            Intent intentUser = new Intent(mContext, LiveHomePageActivity.class);
+                            intentUser.putExtra("userId", String.valueOf(targetId));
+                            mContext.startActivity(intentUser);
                             break;
                     }
 
                 }
             });
             mSliderAd.addSlider(defaultSliderView);
+
         }
+
+        // 初始化小圆点列表
+        mDotBtns = DotUtils.initDot(mContext, mSliderAd, mDotContainer, size, mSliderAd.getCurrentPosition(), DotUtils.ROUND_WHITE_DOT);
+
+        // 轮播图页面改变
+        mSliderAd.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                // 防止数组越界
+                if (position >= mAdList.size()) {
+                    position %= position % mAdList.size();
+                    mSliderAd.setCurrentPosition(position);
+                }
+                AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
+                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_WHITE_DOT);
+            }
+        });
     }
 }

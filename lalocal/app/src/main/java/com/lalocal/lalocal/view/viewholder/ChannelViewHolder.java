@@ -16,6 +16,7 @@ import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
@@ -105,7 +106,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         AppLog.i("slidder", "mSelected is " + mSelected);
 
         // 初始化小圆点
-        mDotBtns = CommonUtil.initDot(mContext, mVpHotLives, mDotContainer, size, mSelected, CommonUtil.DARK_DOT);
+        mDotBtns = DotUtils.initDot(mContext, mVpHotLives, mDotContainer, size, mSelected, DotUtils.DARK_DOT);
 
         // 如果只有一项，显示查看更多
         if (size == 1) {
@@ -122,7 +123,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onPageSelected(int position) {
-                CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.DARK_DOT);
+                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.DARK_DOT);
                 // 如果滑动至最后一页
                 if (position == size - 1) {
                     // 查看更多字样显示

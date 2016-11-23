@@ -65,15 +65,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
     private String mTitleArticleCN;
     private String mTitleArticleEN;
 
-    public HomeRecommendAdapter(Context context) {
-        this.mContext = context;
-    }
-
     public HomeRecommendAdapter(Context context, List<RecommendAdResultBean> adList, RecommendListBean recommendListBean,
                                 List<ArticleDetailsResultBean> articleList) {
         this.mContext = context;
-        this.mAdList = adList;
-        this.mArticleList = articleList;
+        // 获取广告
+        if (adList != null) {
+            mAdList = adList;
+        }
+
+        // 获取专题、商品
         if (recommendListBean != null) {
             // 获取商品列表
             if (recommendListBean.getProduList() != null) {
@@ -96,10 +96,13 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             mTitleArticleCN = recommendListBean.getTravelCN();
             mTitleArticleEN = recommendListBean.getTravelEN();
         }
+
         // 获取文章列表
         if (articleList != null) {
             mArticleList = articleList;
         }
+
+
     }
 
     /**
@@ -108,7 +111,12 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      * @param adList
      */
     public void refreshAD(List<RecommendAdResultBean> adList) {
-        this.mAdList = adList;
+        AppLog.i("his", "refreshAD");
+        if (adList == null || adList.size() == 0) {
+            this.mAdList = new ArrayList<>();
+        } else {
+            this.mAdList = adList;
+        }
         this.notifyDataSetChanged();
     }
 
@@ -118,6 +126,61 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      * @param recommendListBean
      */
     public void refreshProductTheme(RecommendListBean recommendListBean) {
+        AppLog.i("his", "refreshProductTheme");
+        if (recommendListBean != null) {
+            AppLog.i("his", "bean not null");
+            // 获取商品列表
+            if (recommendListBean.getProduList() != null) {
+                this.mProduList = recommendListBean.getProduList();
+                AppLog.i("his", "product list size " + mProduList.size());
+            } else {
+                this.mProduList = new ArrayList<>();
+                AppLog.i("his", "product list null");
+            }
+            // 获取专题列表
+            if (recommendListBean.getThemeList() != null) {
+                this.mThemeList = recommendListBean.getThemeList();
+                AppLog.i("his", "theme list size " + mThemeList.size());
+            } else {
+                this.mThemeList = new ArrayList<>();
+                AppLog.i("his", "theme list null");
+            }
+        }
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * 刷新文章
+     *
+     * @param articleList
+     */
+    public void refreshArticle(List<ArticleDetailsResultBean> articleList) {
+        AppLog.i("his", "refreshArticle");
+        if (articleList == null || articleList.size() == 0) {
+            mArticleList = new ArrayList<>();
+        } else {
+            this.mArticleList = articleList;
+        }
+        this.notifyDataSetChanged();
+    }
+
+    /**
+     * 刷新所有
+     * @param adList
+     * @param recommendListBean
+     * @param articleList
+     */
+    public void refreshAll(List<RecommendAdResultBean> adList, RecommendListBean recommendListBean,
+                           List<ArticleDetailsResultBean> articleList) {
+        AppLog.i("his", "refreshAll");
+        // 刷新广告栏
+        if (adList == null || adList.size() == 0) {
+            this.mAdList = new ArrayList<>();
+        } else {
+            this.mAdList = adList;
+        }
+
+        // 刷新商品、专题
         if (recommendListBean != null) {
             // 获取商品列表
             if (recommendListBean.getProduList() != null) {
@@ -132,16 +195,15 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 this.mThemeList = new ArrayList<>();
             }
         }
-        this.notifyDataSetChanged();
-    }
 
-    /**
-     * 刷新文章
-     *
-     * @param articleList
-     */
-    public void refreshArticle(List<ArticleDetailsResultBean> articleList) {
-        this.mArticleList = articleList;
+        // 刷新文章列表
+        if (articleList == null || articleList.size() == 0) {
+            mArticleList = new ArrayList<>();
+        } else {
+            this.mArticleList = articleList;
+        }
+
+        // 刷新
         this.notifyDataSetChanged();
     }
 
@@ -189,10 +251,8 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((ThemeViewHolder) holder).initData(mThemeList, mTitleThemeCN, mTitleThemeEN);
                 break;
             case ARTICLE:
-                // 列表item总数
-                int size = getItemCount();
-                // 文章列表第一个item所在的下标
-                int firstIndex = size - mArticleList.size();
+                // 获取第一篇文章的位置
+                int firstIndex = getFirstArticlePositoin();
                 // 当前下标
                 int index = position - firstIndex;
                 // 获取文章bean
@@ -206,6 +266,20 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ((ArticleViewHolder) holder).initData(article, mTitleArticleCN, mTitleArticleEN, showHeader);
                 break;
         }
+    }
+
+    /**
+     * 获取第一篇文章对应列表的下标
+     * @return
+     */
+    public int getFirstArticlePositoin() {
+        // 列表item总数
+        int size = getItemCount();
+        // 文章列表第一个item所在的下标
+        int firstIndex = size - mArticleList.size();
+        AppLog.i("jump", "size = " + size + "; article size is " + mArticleList.size() + "; index is " + firstIndex);
+        // 返回下标
+        return firstIndex;
     }
 
     @Override

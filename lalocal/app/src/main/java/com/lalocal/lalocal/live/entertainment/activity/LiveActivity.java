@@ -68,6 +68,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.WrapContentImageView;
 import com.netease.nimlib.sdk.NIMClient;
@@ -404,7 +405,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             // 小点容器
             LinearLayout dotContainer = (LinearLayout) popView.findViewById(R.id.dot_container);
             // 小点列表
-            dotBtns = CommonUtil.initDot(this, vp, dotContainer, GUIDE_PAGE_SIZE, 0, CommonUtil.WHITE_DOT);
+            dotBtns = DotUtils.initDot(this, vp, dotContainer, GUIDE_PAGE_SIZE, 0, DotUtils.WHITE_DOT);
 
             final List<Button> finalDotBtns = dotBtns;
             // 设置适配器
@@ -433,7 +434,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 @Override
                 public void onPageSelected(int position) {
                     // 根据ViewPager滑动选择对应小圆点
-                    CommonUtil.selectDotBtn(finalDotBtns, position, CommonUtil.WHITE_DOT);
+                    DotUtils.selectDotBtn(finalDotBtns, position, DotUtils.WHITE_DOT);
                     // 如果是最后一页，则去掉不显示取消按钮
                     if (position == GUIDE_PAGE_SIZE - 1) {
                         btnSkip.setVisibility(View.INVISIBLE);
