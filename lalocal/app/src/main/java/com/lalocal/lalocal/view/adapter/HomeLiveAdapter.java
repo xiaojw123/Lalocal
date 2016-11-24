@@ -280,22 +280,23 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                         mContext.startActivity(intent);
                     } else if (targetType == 0) {
 
-                    }if (bean.getEndAt() != null && bean.getStartAt() != null) {
-                        Intent intent = new Intent(mContext, PlayBackActivity.class);
-                        intent.putExtra("id", String.valueOf(bean.getId()));
-                        mContext.startActivity(intent);
-                    } else {
-                        int roomId = bean.getRoomId();
-                        String createRoom = SPCUtils.getString(mContext, CREATE_ROOMID);
-                        String s = String.valueOf(roomId);
-                        if (createRoom != null && createRoom.equals(s)) {
-                            CommonUtil.REMIND_BACK = 1;
-                            prepareLive();
-                            return;
+                        if (bean.getEndAt() != null && bean.getStartAt() != null) {
+                            Intent intent = new Intent(mContext, PlayBackActivity.class);
+                            intent.putExtra("id", String.valueOf(bean.getId()));
+                            mContext.startActivity(intent);
+                        } else {
+                            int roomId = bean.getRoomId();
+                            String createRoom = SPCUtils.getString(mContext, CREATE_ROOMID);
+                            String s = String.valueOf(roomId);
+                            if (createRoom != null && createRoom.equals(s)) {
+                                CommonUtil.REMIND_BACK = 1;
+                                prepareLive();
+                                return;
+                            }
+                            Intent intent = new Intent(mContext, AudienceActivity.class);
+                            intent.putExtra("id", String.valueOf(bean.getId()));
+                            mContext.startActivity(intent);
                         }
-                        Intent intent = new Intent(mContext, AudienceActivity.class);
-                        intent.putExtra("id", String.valueOf(bean.getId()));
-                        mContext.startActivity(intent);
                     }
                 }
             });

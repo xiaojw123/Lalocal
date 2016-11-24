@@ -1136,6 +1136,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_REPORT);
+                    // 进入举报界面
+//                    Intent intent = new Intent(AudienceActivity.this, ReportActivity.class);
+//                    AudienceActivity.this.startActivity(intent);
                     Toast.makeText(AudienceActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
                 }
             });

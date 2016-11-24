@@ -101,5 +101,14 @@
             android:paddingBottom="@dimen/dimen_size_25_dp"
             android:verticalSpacing="@dimen/home_recommend_commodity_gridview_spacing"
             android:scrollbars="none"/>
+
+        <!--<GridLayout-->
+            <!--android:id="@+id/gv_commodities"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:columnCount="2"-->
+            <!--android:layout_marginLeft="7.5dp"-->
+            <!--android:layout_marginRight="7.5dp"-->
+            <!--android:paddingBottom="@dimen/dimen_size_25_dp" />-->
     </LinearLayout>
 </FrameLayout>

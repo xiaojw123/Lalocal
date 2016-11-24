@@ -102,7 +102,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
             mArticleList = articleList;
         }
 
-
     }
 
     /**

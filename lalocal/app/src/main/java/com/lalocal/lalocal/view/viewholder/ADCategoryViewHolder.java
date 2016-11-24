@@ -221,9 +221,10 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                int size = mAdList.size();
                 // 防止数组越界
-                if (position >= mAdList.size()) {
-                    position %= position % mAdList.size();
+                if (position >= size) {
+                    position = (position + size) % size;
                     mSliderAd.setCurrentPosition(position);
                 }
                 AppLog.i("TAG","首页轮播图野蛮改变监听："+position);

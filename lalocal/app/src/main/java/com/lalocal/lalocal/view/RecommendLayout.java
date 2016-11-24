@@ -39,6 +39,10 @@ public class RecommendLayout extends LinearLayout {
     // 手指按下时y轴坐标
     private float mDownY = 0;
 
+    // 拦截事件坐标
+    private int mInterLastX = 0;
+    private int mInterLastY = 0;
+
     // 当前视图是否隐藏
     private boolean isHidden = false;
 
@@ -144,6 +148,31 @@ public class RecommendLayout extends LinearLayout {
             }
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        boolean isIntercept = false;
+        int action = ev.getAction();
+        int curX = (int) ev.getX();
+        int curY = (int) ev.getY();
+        switch (action) {
+            case MotionEvent.ACTION_DOWN:
+                isIntercept = false;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (Math.abs(mInterLastX - curX) > 0 ||
+                        Math.abs(mInterLastY - curY) > 0) {
+                    isIntercept = true;
+                } else {
+                    isIntercept = false;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                isIntercept = false;
+                break;
+        }
+        return isIntercept;
     }
 
     class GestureListenerImpl implements GestureDetector.OnGestureListener {
@@ -351,4 +380,17 @@ public class RecommendLayout extends LinearLayout {
         return mContainer.findViewById(viewId);
     }
 
+    /**
+     * 设置点击事件
+     * @param viewId
+     * @param listener
+     */
+    public void setOnClick(int viewId, OnClickListener listener) {
+        // 获取控件
+        View view = getView(viewId);
+        // 设置可点击
+        view.setClickable(true);
+        // 设置点击监听事件
+        view.setOnClickListener(listener);
+    }
 }

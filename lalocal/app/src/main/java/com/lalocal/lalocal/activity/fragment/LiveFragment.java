@@ -32,7 +32,9 @@ import com.lalocal.lalocal.activity.SplashActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
@@ -49,7 +51,9 @@ import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.RecommendLayout;
 import com.lalocal.lalocal.view.adapter.HomeLiveAdapter;
 import com.melnykov.fab.FloatingActionButton;
@@ -103,6 +107,13 @@ public class LiveFragment extends Fragment {
     private static final int REFRESH_LIVING_LIST = 0x02;
     private static final int REFRESH_PLAYBACK_LIST = 0x03;
 
+    // 推荐页直播录播标记
+    private static final int LIVING = 0;
+    private static final int PLAYBACK = 1;
+
+    // 创建直播间id的key
+    public static final String CREATE_ROOMID = "createRoomId";
+
     // 第一次进入该页面
     private boolean isFirst = true;
 
@@ -148,11 +159,21 @@ public class LiveFragment extends Fragment {
      * 初始化
      */
     private void init() {
-        mRecommendPage.setVisibility(View.INVISIBLE);
+        // 初始化推荐页
+        initRecommendPage();
         // 初始化ContentLoader
         initLoader();
         // 初始化列表
         initXRecyclerView();
+    }
+
+    /**
+     * 初始化推荐页
+     */
+    private void initRecommendPage() {
+        // 设置不可见
+        mRecommendPage.setVisibility(View.GONE);
+
     }
 
     /**
@@ -263,9 +284,10 @@ public class LiveFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) {
+        if (hidden && isFirst) {
             // 隐藏推荐页
             mRecommendPage.hide();
+            mRecommendPage.setFocusable(false);
         } else {
             mXrvLive.setRefreshing(true);
         }
@@ -430,6 +452,9 @@ public class LiveFragment extends Fragment {
                 isFirst = false;
                 // 隐藏推荐页
                 mRecommendPage.hide();
+                // 推荐页不可见
+                mRecommendPage.setVisibility(View.GONE);
+                mRecommendPage.setFocusable(false);
                 return;
             }
 
@@ -439,8 +464,10 @@ public class LiveFragment extends Fragment {
             // 显示推荐页
             mRecommendPage.setVisibility(View.VISIBLE);
             mRecommendPage.show();
+            mRecommendPage.setFocusable(true);
 
-
+            final int type = bean.getType();
+            final int targetId = bean.getTargetId();
             String title = bean.getTitle();
             String address = bean.getAddress();
             String photo = bean.getPhoto();
@@ -472,6 +499,24 @@ public class LiveFragment extends Fragment {
                 nickname = "一位不愿意透露姓名的网友";
             }
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);
+
+            // 设置点击事件
+//            mRecommendPage.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    AppLog.i("rec", "type is " + type + "; id is " + targetId);
+//                    // 我的关注对回放还是直播进行判断
+//                    if (type == LIVING) {
+//                        Intent intent1 = new Intent(getActivity(), AudienceActivity.class);
+//                        intent1.putExtra("id", String.valueOf(targetId));
+//                        getActivity().startActivity(intent1);
+//                    } else if (type == PLAYBACK) {
+//                        Intent intent = new Intent(getActivity(), PlayBackActivity.class);
+//                        intent.putExtra("id", String.valueOf(targetId));
+//                        getActivity().startActivity(intent);
+//                    }
+//                }
+//            });
         }
     }
 
