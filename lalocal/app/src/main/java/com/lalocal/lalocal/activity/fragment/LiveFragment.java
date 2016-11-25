@@ -108,8 +108,8 @@ public class LiveFragment extends Fragment {
     private static final int REFRESH_PLAYBACK_LIST = 0x03;
 
     // 推荐页直播录播标记
-    private static final int LIVING = 0;
-    private static final int PLAYBACK = 1;
+    public static final int LIVING = 0;
+    public static final int PLAYBACK = 1;
 
     // 创建直播间id的key
     public static final String CREATE_ROOMID = "createRoomId";
@@ -501,22 +501,23 @@ public class LiveFragment extends Fragment {
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);
 
             // 设置点击事件
-//            mRecommendPage.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    AppLog.i("rec", "type is " + type + "; id is " + targetId);
-//                    // 我的关注对回放还是直播进行判断
-//                    if (type == LIVING) {
-//                        Intent intent1 = new Intent(getActivity(), AudienceActivity.class);
-//                        intent1.putExtra("id", String.valueOf(targetId));
-//                        getActivity().startActivity(intent1);
-//                    } else if (type == PLAYBACK) {
-//                        Intent intent = new Intent(getActivity(), PlayBackActivity.class);
-//                        intent.putExtra("id", String.valueOf(targetId));
-//                        getActivity().startActivity(intent);
-//                    }
-//                }
-//            });
+            mRecommendPage.setOnClick(R.id.view_click, new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AppLog.i("rec", "type is " + type + "; id is " + targetId);
+                    // 对回放还是直播进行判断
+                    if (type == LIVING) {
+                        Intent intent1 = new Intent(getActivity(), AudienceActivity.class);
+                        intent1.putExtra("id", String.valueOf(targetId));
+                        getActivity().startActivity(intent1);
+                    } else if (type == PLAYBACK) {
+                        Intent intent = new Intent(getActivity(), PlayBackActivity.class);
+                        intent.putExtra("id", String.valueOf(targetId));
+                        getActivity().startActivity(intent);
+                    }
+                }
+            });
+            mRecommendPage.setPlayTypeId(type, targetId);
         }
     }
 

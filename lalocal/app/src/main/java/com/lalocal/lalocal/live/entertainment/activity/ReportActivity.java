@@ -11,6 +11,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
 import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
@@ -35,7 +36,7 @@ import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.ThemeConfig;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 
-public class ReportActivity extends AppCompatActivity {
+public class ReportActivity extends BaseActivity {
 
     @BindView(R.id.et_report)
     EditText mEtReport;

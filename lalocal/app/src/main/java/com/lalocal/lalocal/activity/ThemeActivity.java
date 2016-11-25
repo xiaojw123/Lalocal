@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
-public class ThemeActivity extends AppCompatActivity {
+public class ThemeActivity extends BaseActivity {
 
 //    @BindView(R.id.ptr_frame_layout)
 //    PtrClassicFrameLayout mPtrFrame;

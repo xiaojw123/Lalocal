@@ -2,14 +2,17 @@ package com.lalocal.lalocal.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.util.SparseArray;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -18,10 +21,15 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.LiveFragment;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by wangjie on 2016/11/8.
- *
+ * <p>
  * 1. 照http://www.tuicool.com/articles/InYjEn6实现弹性归位
  * 2. 修改up事件的位置
  * 3. 锁屏时禁止下拉，只允许上拉
@@ -33,15 +41,31 @@ public class RecommendLayout extends LinearLayout {
     private GestureDetector mGestureDetector;
     private Context mContext;
 
+    // 控件的点击数组
+    private SparseArray<OnClickListener> mClickListeners = new SparseArray<>();
+    private List<Integer> mClickViewIds = new ArrayList<>();
+
     // 视图容器
     private View mContainer;
 
+    // 手指按下时x轴坐标
+    private float mDownX = 0;
     // 手指按下时y轴坐标
     private float mDownY = 0;
+
+    // 判断是不是滑动
+    private boolean isMove = false;
 
     // 拦截事件坐标
     private int mInterLastX = 0;
     private int mInterLastY = 0;
+
+    // 无播放类型
+    private static final int NULL = -999;
+    // 播放类型
+    private int mPlayType = NULL;
+    // 目标id
+    private int mTargetId = NULL;
 
     // 当前视图是否隐藏
     private boolean isHidden = false;
@@ -95,17 +119,12 @@ public class RecommendLayout extends LinearLayout {
     public void show() {
         isHidden = false;
         prepareScroll(0, 0);
-        // 开启动画
-//        LiveFragment.startPeriscope();
     }
 
     // 隐藏视图
     public void hide() {
         isHidden = true;
         prepareScroll(0, mViewHeight);
-        // 关闭动画
-//        LiveFragment.stopPeriscope();
-
     }
 
     @Override
@@ -115,10 +134,60 @@ public class RecommendLayout extends LinearLayout {
             switch (event.getAction()) {
                 // 除了ACTION_UP，其他手势交给GestureDetector
                 case MotionEvent.ACTION_DOWN:
-                    // 获取收按下时的y轴坐标
+                    // 获取按下时的y轴坐标
                     mDownY = event.getY();
+                    // 获取按下时的x轴坐标
+                    mDownX = event.getX();
                     return mGestureDetector.onTouchEvent(event);
+
+                case MotionEvent.ACTION_MOVE:
+                    // 获取当前滑动的y轴坐标
+                    float curY = event.getY();
+                    // 获取当前滑动的x轴坐标
+                    float curX = event.getX();
+                    // 获取移动的y轴距离
+                    float deltaY = curY - mDownY;
+
+                    // 判断是不是滑动
+                    int slop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+                    int moveX = (int) Math.abs(curX - mDownX);
+                    int moveY = (int) Math.abs(curY - mDownY);
+                    if (moveX > slop || moveY > slop) {
+                        isMove = true;
+                    } else {
+                        isMove = false;
+                    }
+
+                    // 阻止视图在原来位置时向下滚动
+                    if (deltaY < 0 || getScrollY() > 0) {
+                        return mGestureDetector.onTouchEvent(event);
+                    } else {
+                        return true;
+                    }
+
                 case MotionEvent.ACTION_UP:
+                    // 如果不是滑动，注意：这里的NULL不是null
+                    if (!isMove && mTargetId != NULL && mPlayType != NULL) {
+                        // 对回放还是直播进行判断
+                        if (mPlayType == LiveFragment.LIVING) {
+                            Intent intent1 = new Intent(mContext, AudienceActivity.class);
+                            intent1.putExtra("id", String.valueOf(mTargetId));
+                            mContext.startActivity(intent1);
+                        } else if (mPlayType == LiveFragment.PLAYBACK) {
+                            Intent intent = new Intent(mContext, PlayBackActivity.class);
+                            intent.putExtra("id", String.valueOf(mTargetId));
+                            mContext.startActivity(intent);
+                        }
+
+//                        int size = mClickViewIds.size();
+//                        for (int i = 0; i < size; i++) {
+//                            int viewId = mClickViewIds.get(i);
+//                            View view = getView(viewId);
+//                            view.setOnClickListener(mClickListeners.get(viewId));
+//                            view.setClickable(false);
+//                        }
+                    }
+
                     // 获取视图容器滚动的y轴距离
                     int scrollY = this.getScrollY();
                     // 未超过制定距离，则返回原来位置
@@ -130,18 +199,6 @@ public class RecommendLayout extends LinearLayout {
                         hide();
                     }
                     break;
-                case MotionEvent.ACTION_MOVE:
-                    // 获取当前滑动的y轴坐标
-                    float curY = event.getY();
-                    // 获取移动的y轴距离
-                    float deltaY = curY - mDownY;
-                    // 阻止视图在原来位置时向下滚动
-                    if (deltaY < 0 || getScrollY() > 0) {
-                        return mGestureDetector.onTouchEvent(event);
-                    } else {
-                        return true;
-                    }
-//                    break;
                 default:
                     //其余情况交给GestureDetector手势处理
                     return mGestureDetector.onTouchEvent(event);
@@ -150,29 +207,12 @@ public class RecommendLayout extends LinearLayout {
         return super.onTouchEvent(event);
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        boolean isIntercept = false;
-        int action = ev.getAction();
-        int curX = (int) ev.getX();
-        int curY = (int) ev.getY();
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                isIntercept = false;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (Math.abs(mInterLastX - curX) > 0 ||
-                        Math.abs(mInterLastY - curY) > 0) {
-                    isIntercept = true;
-                } else {
-                    isIntercept = false;
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                isIntercept = false;
-                break;
-        }
-        return isIntercept;
+    /**
+     * 设置播放类型、id
+     */
+    public void setPlayTypeId(int type, int id) {
+        this.mPlayType = type;
+        this.mTargetId = id;
     }
 
     class GestureListenerImpl implements GestureDetector.OnGestureListener {
@@ -224,12 +264,8 @@ public class RecommendLayout extends LinearLayout {
 
     //设置滚动的相对偏移
     protected void beginScroll(int dx, int dy) {
-        System.out.println("smoothScrollBy()---> dx="+dx+",dy="+dy);
         //第一,二个参数起始位置;第三,四个滚动的偏移量
         mScroller.startScroll(mScroller.getFinalX(), mScroller.getFinalY(), dx, dy);
-        System.out.println("smoothScrollBy()---> " +
-                "mScroller.getFinalX()="+mScroller.getFinalX()+","+
-                "mScroller.getFinalY()="+mScroller.getFinalY());
 
         //必须执行invalidate()从而调用computeScroll()
         invalidate();
@@ -237,6 +273,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 填充视图
+     *
      * @param context
      * @param layoutId
      */
@@ -260,6 +297,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置文本
+     *
      * @param viewId
      * @param charSequence
      */
@@ -270,6 +308,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置文本颜色
+     *
      * @param viewId
      * @param color
      */
@@ -280,6 +319,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置文本字体大小
+     *
      * @param viewId
      * @param textSize
      */
@@ -290,6 +330,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置按钮点击事件
+     *
      * @param viewId
      * @param listener
      */
@@ -300,6 +341,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置图片资源
+     *
      * @param viewId
      * @param resId
      */
@@ -312,6 +354,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置图片bitmap
+     *
      * @param viewId
      * @param bitmap
      */
@@ -324,6 +367,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置图片drawable
+     *
      * @param viewId
      * @param drawable
      */
@@ -336,6 +380,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置图片缩放类型
+     *
      * @param viewId
      * @param type
      */
@@ -348,6 +393,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置背景颜色
+     *
      * @param color
      */
     public void setBackgroundColor(int color) {
@@ -356,6 +402,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置背景图片
+     *
      * @param background
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -365,6 +412,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置背景图片资源id
+     *
      * @param resId
      */
     public void setBackgroundResource(int resId) {
@@ -373,6 +421,7 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 获取视图控件
+     *
      * @param viewId
      * @return
      */
@@ -382,15 +431,21 @@ public class RecommendLayout extends LinearLayout {
 
     /**
      * 设置点击事件
+     *
      * @param viewId
      * @param listener
      */
     public void setOnClick(int viewId, OnClickListener listener) {
-        // 获取控件
-        View view = getView(viewId);
-        // 设置可点击
-        view.setClickable(true);
-        // 设置点击监听事件
-        view.setOnClickListener(listener);
+        // 点击视图id
+        mClickViewIds.add(viewId);
+        // 点击事件
+        mClickListeners.put(viewId, listener);
+
+//        // 获取控件
+//        View view = getView(viewId);
+//        // 设置可点击
+//        view.setClickable(true);
+//        // 设置点击监听事件
+//        view.setOnClickListener(listener);
     }
 }

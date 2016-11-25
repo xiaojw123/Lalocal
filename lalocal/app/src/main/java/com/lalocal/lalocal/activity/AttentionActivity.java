@@ -52,7 +52,7 @@ import butterknife.OnClick;
 
 import static java.lang.Boolean.parseBoolean;
 
-public class AttentionActivity extends AppCompatActivity {
+public class AttentionActivity extends BaseActivity {
 
     @BindView(R.id.xrecyclerview)
     CustomXRecyclerView xRecyclerView;

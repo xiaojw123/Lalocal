@@ -124,4 +124,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/dimen_size_20_dp"/>
 
+    <View
+        android:id="@+id/view_click"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 </RelativeLayout>
