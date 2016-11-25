@@ -92,7 +92,7 @@ public class PhotoAdapter extends BaseAdapter {
         String path = photoInfo.getPhotoPath();
         Log.i("haha", "the path is " + path);
         // 如果为占位图片
-        if (TextUtils.equals(path, Constants.ADD_PIC)) {
+        if (TextUtils.equals(path, Constants.FLAG_ADD_PIC)) {
             // 加载添加按钮
             imgPhoto.setImageResource(R.drawable.add_pics_btn);
         } else {

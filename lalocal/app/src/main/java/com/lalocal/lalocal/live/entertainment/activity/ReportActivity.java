@@ -1,10 +1,13 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -16,6 +19,10 @@ import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
 import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
 import com.lalocal.lalocal.model.Constants;
+import com.lalocal.lalocal.model.ImgTokenBean;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.view.MyGridView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -55,6 +62,8 @@ public class ReportActivity extends BaseActivity {
 
     private PhotoAdapter mPhotoAdapter;
 
+    private ViewGroup.LayoutParams mRadioBtnLp;
+
     // 主题配置
     private ThemeConfig mThemeConfig;
     // 图片加载器
@@ -69,6 +78,8 @@ public class ReportActivity extends BaseActivity {
     // 选中的图片列表
     private List<PhotoInfo> mPhotoList = new ArrayList<>();
 
+    private ContentLoader mContentLoader;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,29 +90,26 @@ public class ReportActivity extends BaseActivity {
 
         // 初始化视图
         initView();
+        // 初始化ContentLoader
+        initContentLoader();
     }
 
     /**
      * 初始化视图
      */
     private void initView() {
-        // 初始化举报理由输入框
-        initEditText();
         // 初始化单选按钮
         initRadio();
         // 初始化选中的图片列表
         initSelectedPhoto();
-
     }
 
     /**
-     * 初始化举报理由输入框
+     * 初始化ContentLoader
      */
-    private void initEditText() {
-        // 阻止输入框一开始就获取焦点
-//        mEtReport.clearFocus();
-        // 一开始不显示输入框
-        mEtReport.setVisibility(View.GONE);
+    private void initContentLoader() {
+        mContentLoader = new ContentLoader(ReportActivity.this);
+        mContentLoader.setCallBack(new MyCallBack());
     }
 
     /**
@@ -112,6 +120,9 @@ public class ReportActivity extends BaseActivity {
         btns.add(mRbUncivilized);
         btns.add(mRbIllegal);
         btns.add(mRbOther);
+
+        // 初始选中的按钮
+        selectRadioBtn(btns, 0);
 
         for (int i = 0; i < btns.size(); i++) {
             final int finalI = i;
@@ -124,14 +135,25 @@ public class ReportActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 选择单选按钮
+     * @param btns
+     * @param selected
+     */
     private void selectRadioBtn(List<RadioButton> btns, int selected) {
         for (int i = 0; i < btns.size(); i++) {
             if (selected == i) {
                 btns.get(i).setButtonDrawable(R.drawable.only_checkbox_sel);
-                btns.get(i).setCompoundDrawablePadding(DensityUtil.dip2px(ReportActivity.this, 8));
+                btns.get(i).setPadding(DensityUtil.dip2px(ReportActivity.this, 8), 0, 0, 0);
+
+                if (i == 2) {
+                    mEtReport.setVisibility(View.VISIBLE);
+                } else {
+                    mEtReport.setVisibility(View.GONE);
+                }
             } else {
                 btns.get(i).setButtonDrawable(R.drawable.only_checkbox_unsel);
-                btns.get(i).setCompoundDrawablePadding(DensityUtil.dip2px(ReportActivity.this, 8));
+                btns.get(i).setPadding(DensityUtil.dip2px(ReportActivity.this, 8), 0, 0, 0);
             }
         }
     }
@@ -171,22 +193,34 @@ public class ReportActivity extends BaseActivity {
     private void addEmptyPhoto(List<PhotoInfo> list) {
         // 声明图片类
         PhotoInfo photoInfo = new PhotoInfo();
+        // 设置图片的id
+        photoInfo.setPhotoId(-999);
         // 设置标记
-        photoInfo.setPhotoPath(Constants.ADD_PIC);
+        photoInfo.setPhotoPath(Constants.FLAG_ADD_PIC);
         // 起到占位的作用
         list.add(photoInfo);
+        AppLog.i("pcs", "占位后，图片的数量是：" + list.size() + "; 最后一张图片的路径：" + list.get(list.size() - 1).getPhotoPath());
     }
 
     /**
      * 启动GalleryFinal
      */
     private void startGlideGalleryFinal() {
+        // 获取标题栏背景颜色
+        int colorTitleBarBg = ContextCompat.getColor(ReportActivity.this, R.color.titleBarBgColor);
+        // 标题栏文字颜色
+        int colorTitleBarText = ContextCompat.getColor(ReportActivity.this, R.color.titleBarTextColor);
+        // 浮动按钮常规颜色
+        int colorFabNormal = ContextCompat.getColor(ReportActivity.this, R.color.color_ffaa2a);
+        // 浮动按钮点击颜色
+        int colorFabPressed = ContextCompat.getColor(ReportActivity.this, R.color.color_e29428);
+
         // 设置主题
         mThemeConfig = new ThemeConfig.Builder()
-                .setTitleBarBgColor(R.color.titleBarBgColor) // 设置标题栏背景颜色
-                .setTitleBarTextColor(R.color.titleBarTextColor)    // 设置标题栏文字颜色
-                .setFabNornalColor(R.color.color_ffaa2a)  // 设置浮动按钮常规颜色
-                .setFabPressedColor(R.color.color_e29428)    // 设置浮动按钮点击颜色
+                .setTitleBarBgColor(colorTitleBarBg) // 设置标题栏背景颜色
+                .setTitleBarTextColor(colorTitleBarText)    // 设置标题栏文字颜色
+                .setFabNornalColor(colorFabNormal)  // 设置浮动按钮常规颜色
+                .setFabPressedColor(colorFabPressed)    // 设置浮动按钮点击颜色
                 .build();
 
         // 初始化图片加载器
@@ -265,7 +299,7 @@ public class ReportActivity extends BaseActivity {
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
             // 如果有选择图片
             if (resultList != null) {
-                Log.i("haha", "select num " + resultList.size());
+                AppLog.i("pcs", "得到图片的数量是：" + resultList.size() + "; 最后一张图片路径：" + resultList.get(resultList.size() - 1).getPhotoPath());
 //                if (resultList.size() < Constants.PIC_MAX_QUANTITY) {
                 // 添加占位图片
                 addEmptyPhoto(resultList);
@@ -275,7 +309,7 @@ public class ReportActivity extends BaseActivity {
                 mPhotoList.clear();
                 // 返回图片列表
                 mPhotoList.addAll(resultList);
-                Log.i("haha", "total num " + mPhotoList.size());
+                AppLog.i("pcs", "最终图片的数量是：" + mPhotoList.size() + "; 最后一张图片：" + mPhotoList.get(mPhotoList.size() - 1).getPhotoPath());
                 // 刷新页面
                 mPhotoAdapter.notifyDataSetChanged();
             }
@@ -308,6 +342,17 @@ public class ReportActivity extends BaseActivity {
                 // 显示输入框
                 mEtReport.setVisibility(View.VISIBLE);
                 break;
+        }
+    }
+
+    /**
+     * 回调事件类
+     */
+    private class MyCallBack extends ICallBack {
+        @Override
+        public void onImgToken(ImgTokenBean imgTokenBean) {
+            super.onImgToken(imgTokenBean);
+            // TODO: 接收Token
         }
     }
 }

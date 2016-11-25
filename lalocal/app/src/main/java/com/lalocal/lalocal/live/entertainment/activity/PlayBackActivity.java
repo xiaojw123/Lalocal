@@ -83,6 +83,7 @@ public class PlayBackActivity extends BaseActivity {
     private LiveUserInfoResultBean result;
     private int position1;
     private LiveUserBean user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +98,6 @@ public class PlayBackActivity extends BaseActivity {
         String id = getIntent().getStringExtra("id");
         contentLoader.getPlayBackLiveDetails(Integer.parseInt(id));
     }
-
 
 
     @Override
@@ -150,9 +150,9 @@ public class PlayBackActivity extends BaseActivity {
     }
 
 
-    private void positionChangeListener(int position){
+    private void positionChangeListener(int position) {
 
-        if((videoPlayer.getVisibility())==0){
+        if ((videoPlayer.getVisibility()) == 0) {
             if (videoList.size() == 1) {
                 videoPlayer.setBefore(0.4f, false);
                 videoPlayer.setNext(0.4f, false);
@@ -169,7 +169,7 @@ public class PlayBackActivity extends BaseActivity {
                 }
 
             }
-        }else if((videoViewPlayer.getVisibility())==0){
+        } else if ((videoViewPlayer.getVisibility()) == 0) {
             if (videoList.size() == 1) {
                 videoViewPlayer.setBefore(0.4f, false);
                 videoViewPlayer.setNext(0.4f, false);
@@ -190,12 +190,7 @@ public class PlayBackActivity extends BaseActivity {
         }
 
 
-
-
-
-
     }
-
 
 
     private View.OnClickListener clickListener = new View.OnClickListener() {
@@ -204,9 +199,9 @@ public class PlayBackActivity extends BaseActivity {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.playback_master_info_layout:
-                    if(UserHelper.isLogined(PlayBackActivity.this)){
+                    if (UserHelper.isLogined(PlayBackActivity.this)) {
                         contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
-                    }else{
+                    } else {
                         CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
                         customDialog.setContent(getString(R.string.live_login_hint));
                         customDialog.setCancelable(false);
@@ -215,7 +210,7 @@ public class PlayBackActivity extends BaseActivity {
                         customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
-                                LLoginActivity.startForResult(PlayBackActivity.this,RESQUEST_COD);
+                                LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
 
                             }
                         });
@@ -233,9 +228,9 @@ public class PlayBackActivity extends BaseActivity {
     private VideoPlayCallbackImpl mVideoPlayCallback = new VideoPlayCallbackImpl() {
         @Override
         public void onCloseVideo() {
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();//关闭VideoView
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
             }
 
@@ -266,10 +261,10 @@ public class PlayBackActivity extends BaseActivity {
                 ++position;
                 positionChangeListener(position);
                 Uri uri = Uri.parse(videoList.get(position).getUrl());
-                if((videoPlayer.getVisibility())==0){
+                if ((videoPlayer.getVisibility()) == 0) {
                     videoPlayer.close();
                     videoPlayer.loadAndPlay(uri, 0);
-                }else if((videoViewPlayer.getVisibility())==0){
+                } else if ((videoViewPlayer.getVisibility()) == 0) {
                     videoViewPlayer.close();
                     videoViewPlayer.loadAndPlay(uri, 0);
                 }
@@ -286,9 +281,9 @@ public class PlayBackActivity extends BaseActivity {
 
         @Override
         public void onClickQuit() {
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
             }
 
@@ -333,10 +328,10 @@ public class PlayBackActivity extends BaseActivity {
             positionChangeListener(position);
 
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();
                 videoPlayer.loadAndPlay(uri, 0);
-            }else if((videoViewPlayer.getVisibility())==0) {
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
                 videoViewPlayer.loadAndPlay(uri, 0);
             }
@@ -362,15 +357,13 @@ public class PlayBackActivity extends BaseActivity {
             }
             positionChangeListener(position);
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();
                 videoPlayer.loadAndPlay(uri, 0);
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
                 videoViewPlayer.loadAndPlay(uri, 0);
             }
-
-
 
 
         }
@@ -398,7 +391,7 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            if(liveRowsBean!=null){
+            if (liveRowsBean != null) {
                 parseIntent(liveRowsBean);
             }
         }
@@ -433,6 +426,15 @@ public class PlayBackActivity extends BaseActivity {
                         intent.putExtra("userId", String.valueOf(id));
                         startActivity(intent);
                         dialog.dismiss();
+                    }
+                });
+                dialog.setReport(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+                    @Override
+                    public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+//                        Toast.makeText(PlayBackActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
+                        // 进入举报界面
+                        Intent intent = new Intent(PlayBackActivity.this, ReportActivity.class);
+                        PlayBackActivity.this.startActivity(intent);
                     }
                 });
                 dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
@@ -479,9 +481,9 @@ public class PlayBackActivity extends BaseActivity {
         if (videoList != null && videoList.size() > 0) {
             Log.i("TAF", "播放器activityhhehh ");
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.loadAndPlay(uri, position1);
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.loadAndPlay(uri, position1);
             }
 
@@ -493,10 +495,10 @@ public class PlayBackActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         // 暂停播放
-        if ((videoPlayer.getVisibility())==0) {
+        if ((videoPlayer.getVisibility()) == 0) {
             Log.i("TAF", "播放器activityhhehh  onPause ");
             position1 = videoPlayer.pause();
-        }else if((videoViewPlayer.getVisibility())==0){
+        } else if ((videoViewPlayer.getVisibility()) == 0) {
             position1 = videoViewPlayer.pause();
         }
     }
@@ -504,10 +506,10 @@ public class PlayBackActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         // 释放资源
-        if ((videoPlayer.getVisibility())==0) {
+        if ((videoPlayer.getVisibility()) == 0) {
             videoPlayer.close();
-        }else{
-            if((videoViewPlayer.getVisibility())==0){
+        } else {
+            if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
             }
         }

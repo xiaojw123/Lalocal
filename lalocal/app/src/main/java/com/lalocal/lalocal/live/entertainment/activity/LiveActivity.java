@@ -120,7 +120,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private String roomName;//直播室名字
 
 
-
     boolean isshowPopu = false;
     boolean isEnterRoom = false;
     private boolean disconnected = false; // 是否断网（断网重连用）
@@ -265,7 +264,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         setListener();
 
     }
-
 
 
     protected void findViews() {
@@ -562,22 +560,22 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     overLiveShareFriends.setSelected(true);
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(false);
-                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE,false);
-                    isStartLiveShare=false;
+                    liveShare(SHARE_MEDIA.WEIXIN_CIRCLE, false);
+                    isStartLiveShare = false;
                     break;
                 case R.id.live_over_share_weibo:
                     overLiveShareFriends.setSelected(false);
                     overLiveShareWeibo.setSelected(true);
                     overLiveShareWeixin.setSelected(false);
-                    liveShare(SHARE_MEDIA.SINA,false);
-                    isStartLiveShare=false;
+                    liveShare(SHARE_MEDIA.SINA, false);
+                    isStartLiveShare = false;
                     break;
                 case R.id.live_over_share_weixin:
                     overLiveShareFriends.setSelected(false);
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(true);
-                    liveShare(SHARE_MEDIA.WEIXIN,false);
-                    isStartLiveShare=false;
+                    liveShare(SHARE_MEDIA.WEIXIN, false);
+                    isStartLiveShare = false;
                     break;
                 case R.id.challenge_new_task:
                     //TODO 挑战列表
@@ -594,17 +592,19 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     public boolean sendBarrageMessage(IMMessage msg) {
         return false;
     }
+
     public class LiveCallBack extends ICallBack {
         private int errorCode;
-        @Override
-        public void onResponseFailed(String message,int code) {
 
-            AppLog.i("TAG", "监听直播间状态异常:" + message+"    code:"+code);
+        @Override
+        public void onResponseFailed(String message, int code) {
+
+            AppLog.i("TAG", "监听直播间状态异常:" + message + "    code:" + code);
             if (code == 222 && firstWarning) {
                 firstWarning = false;
-                isCloseLive=true;
-                try{
-                    if(isUnDestory){
+                isCloseLive = true;
+                try {
+                    if (isUnDestory) {
 
                         final CustomChatDialog customDialog = new CustomChatDialog(LiveActivity.this);
                         customDialog.setContent(getString(R.string.live_status_inusual));
@@ -624,7 +624,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         });
                         customDialog.show();
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -644,14 +644,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 cname = liveRowsBean.getCname();
                 shareVO = liveRowsBean.getShareVO();
                 userId = String.valueOf(liveRowsBean.getUser().getId());
-                 String log=  TAG+"  / "+Thread.currentThread().getStackTrace()[2].getMethodName()+" REMIND_BACK:"+CommonUtil.REMIND_BACK;
+                String log = TAG + "  / " + Thread.currentThread().getStackTrace()[2].getMethodName() + " REMIND_BACK:" + CommonUtil.REMIND_BACK;
                 liveContentLoader.getUploadLogs(log);
                 getParameter(liveRowsBean);
                 initParam();
 
                 if (CommonUtil.REMIND_BACK != 1) {
                     AppLog.i("TAG", "开启直播走了这1");
-                    if(isUnDestory){
+                    if (isUnDestory) {
                         showCreateLiveRoomPopuwindow();
                     }
                 } else {
@@ -668,7 +668,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public void onResponseLog(String json) {
             super.onResponseLog(json);
-            AppLog.i("TAG","获取日志信息："+json);
+            AppLog.i("TAG", "获取日志信息：" + json);
         }
 
         @Override
@@ -765,7 +765,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (challengeDetailsResp.getReturnCode() == 0) {
                 //TODO  进入挑战列表
                 List<ChallengeDetailsResp.ResultBean> result = challengeDetailsResp.getResult();
-                if(isUnDestory){
+                if (isUnDestory) {
                     final CustomChallengeListviewDialog customChallengeListviewDialog = new CustomChallengeListviewDialog(LiveActivity.this, result);
                     customChallengeListviewDialog.setDialogClickListener(new CustomChallengeListviewDialog.CustomDialogListener() {
                         @Override
@@ -807,7 +807,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 if (volleyError.networkResponse != null) {
                     int code = volleyError.networkResponse.statusCode;
                     if (code == 401) {
-                        if(handler!=null){
+                        if (handler != null) {
                             handlerLine.removeCallbacks(myRunnable);
                         }
                     }
@@ -844,7 +844,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 ok = getString(R.string.challenge_dialog_waive_ok);
                 break;
         }
-        if(isUnDestory){
+        if (isUnDestory) {
             CustomChatDialog dialogChallenge = new CustomChatDialog(LiveActivity.this);
             dialogChallenge.setTitle(hintTitle);
             dialogChallenge.setContent(hintContent);
@@ -884,7 +884,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
         isManager = managerId != 0 ? true : false;
-        if(isUnDestory){
+        if (isUnDestory) {
             CustomLiveUserInfoDialog customLiveUserInfoDialog = new CustomLiveUserInfoDialog(LiveActivity.this, result1, isManager, isMuted);
             customLiveUserInfoDialog.setCancelable(false);
             customLiveUserInfoDialog.setCancelBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
@@ -918,6 +918,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 LiveConstant.IDENTITY = LiveConstant.LIVEER_CHECK_ADMIN;
                 customLiveUserInfoDialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
                     int fansCounts = -2;
+
                     @Override
                     public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView textView) {
                         if (fansCounts == -2) {
@@ -946,8 +947,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     @Override
                     public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                         MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_REPORT);
-                        //       Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
-                        // 进入举报界面
+//                        Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
+//                        // 进入举报界面
                         Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
                         LiveActivity.this.startActivity(intent);
 
@@ -1104,9 +1105,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     }
-    boolean isStartLiveShare=true;
+
+    boolean isStartLiveShare = true;
+
     private void showCreateLiveRoomPopuwindow() {
-        if(isUnDestory){
+        if (isUnDestory) {
             createLiveRoomPopuwindow = new CreateLiveRoomPopuwindow(this);
             createLiveRoomPopuwindow.showCreateLiveRoomPopuwindow();
             createLiveRoomPopuwindow.showAtLocation(this.findViewById(R.id.live_layout),
@@ -1136,12 +1139,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     startTime = System.currentTimeMillis();
 
                     if (isShareSelector == 0) {
-                        liveShare(SHARE_MEDIA.WEIXIN_CIRCLE,true);
+                        liveShare(SHARE_MEDIA.WEIXIN_CIRCLE, true);
                     } else if (isShareSelector == 1) {
-                        liveShare(SHARE_MEDIA.SINA,true);
+                        liveShare(SHARE_MEDIA.SINA, true);
                     } else if (isShareSelector == 2) {
-                        liveShare(SHARE_MEDIA.WEIXIN,true);
-                    }else{
+                        liveShare(SHARE_MEDIA.WEIXIN, true);
+                    } else {
                         startShareLive(false);
                     }
 
@@ -1167,7 +1170,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     // 退出聊天室
     private void logoutChatRoom() {
-        if(isUnDestory){
+        if (isUnDestory) {
             CustomChatDialog customDialog = new CustomChatDialog(getActivity());
             customDialog.setContent(getString(R.string.finish_confirm));
             customDialog.setCancelable(false);
@@ -1195,7 +1198,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveMessage.setStyle(MessageType.leaveLive);
         liveMessage.setCreatorAccount(creatorAccount);
         liveMessage.setUserId(userId);
-        if(container!=null&&container.account!=null){
+        if (container != null && container.account != null) {
             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播了哈哈哈哈哈哈", roomId, AuthPreferences.getUserAccount(), liveMessage);
             sendMessage(imMessage, MessageType.leaveLive);
         }
@@ -1209,15 +1212,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (inputPanel != null) {
                 inputPanel.collapse(true);// 收起软键盘
             }
-                    SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
-                    formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
-                    String hms = formatter.format(endTime - startTime);
-                    overTime.setText(hms);
-                    aucienceCount.setText(String.valueOf(maxOnLineUserCount));
-                    liveFinishLayout.setVisibility(View.VISIBLE);
-                    blurImageView.setBlurImageURL(avatar);
-                    blurImageView.setScaleRatio(20);
-                    blurImageView.setBlurRadius(1);
+            SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss");//初始化Formatter的转换格式。
+            formatter.setTimeZone(TimeZone.getTimeZone("GMT+00:00"));
+            String hms = formatter.format(endTime - startTime);
+            overTime.setText(hms);
+            aucienceCount.setText(String.valueOf(maxOnLineUserCount));
+            liveFinishLayout.setVisibility(View.VISIBLE);
+            blurImageView.setBlurImageURL(avatar);
+            blurImageView.setScaleRatio(20);
+            blurImageView.setBlurRadius(1);
         } else {
             finish();
         }
@@ -1227,7 +1230,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void checkNetInfo(String netType, int reminder) {
         if ("rests".equals(netType) && reminder == 0) {
             LiveConstant.NET_CHECK = 1;
-            if(isUnDestory){
+            if (isUnDestory) {
                 CustomChatDialog customChatDialog = new CustomChatDialog(LiveActivity.this);
                 customChatDialog.setTitle(getString(R.string.live_hint));
                 customChatDialog.setContent(getString(R.string.live_net_type_cmcc));
@@ -1274,7 +1277,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (!isCloseLive && DemoCache.getLoginChatRoomStatus()) {
                 AppLog.i("TAG", "上传在线人数：" + onlineCounts);
                 if (onlineCounts > 0 && liveContentLoader != null) {
-                    AppLog.i("TAG","主播端上传在线人数。。。。。。。");
+                    AppLog.i("TAG", "主播端上传在线人数。。。。。。。");
                     liveContentLoader.getUserOnLine(userOnLineCountParameter, onlineCounts);
                 }
 
@@ -1283,7 +1286,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
     }
+
     private MyRunnable myRunnable;
+
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
 
@@ -1291,7 +1296,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         this.joinUid = uid;
         this.joinElapsed = elapsed;
         runOnUiThread(new Runnable() {
-
 
 
             @Override
@@ -1414,7 +1418,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             @Override
             public void run() {
                 if (err == 1003) {
-                    if(isUnDestory){
+                    if (isUnDestory) {
                         final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
                         customDialog.setContent(getString(R.string.live_camera_start_failure));
                         customDialog.setCancelable(false);
@@ -1431,7 +1435,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
                 } else if (err == 1018) {
                     CommonUtil.RESULT_DIALOG = 0;
-                    if(isUnDestory){
+                    if (isUnDestory) {
                         final CustomChatDialog customDialog = new CustomChatDialog(getActivity());
                         customDialog.setContent(getString(R.string.live_frequency_start_failure));
                         customDialog.setCancelable(false);
@@ -1545,7 +1549,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     //分享
-    private void liveShare(SHARE_MEDIA share_media,boolean isStartLive) {
+    private void liveShare(SHARE_MEDIA share_media, boolean isStartLive) {
         ShareAction sp = new ShareAction(this);
         sp.setPlatform(share_media);
         sp.setCallback(new MyUMListener());
@@ -1601,16 +1605,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     private void startShareLive(boolean isResult) {
-        if(!isStartLiveShare){
+        if (!isStartLiveShare) {
             return;
         }
-        if(!isResult){
+        if (!isResult) {
             if (channelId != null) {
                 liveContentLoader.alterLive(roomName, channelId, null, null, null, null);
             } else {
                 finish();
             }
-        }else {
+        } else {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
