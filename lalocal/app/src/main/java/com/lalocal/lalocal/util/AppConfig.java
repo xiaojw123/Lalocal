@@ -586,4 +586,13 @@ public class AppConfig {
         AppLog.i("dailyy", baseUrl + "dailyRecommendations?type=" + type);
         return baseUrl + "dailyRecommendations?type=" + type;
     }
+
+    /**
+     * 直播间举报
+     * @return
+     */
+    public static String getChannelReport() {
+        AppLog.i("qn", "report url is " + baseUrl + "channels/report");
+        return baseUrl + "channels/report";
+    }
 }

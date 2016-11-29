@@ -25,6 +25,7 @@ import android.widget.AbsListView;
 import android.widget.ImageView;
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.R;
+import cn.finalteam.galleryfinal.ThemeConfig;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 import cn.finalteam.galleryfinal.widget.GFImageView;
 import cn.finalteam.toolsfinal.adapter.ViewHolderAdapter;
@@ -75,13 +76,32 @@ public class PhotoListAdapter extends ViewHolderAdapter<PhotoListAdapter.PhotoVi
         if (GalleryFinal.getCoreConfig().getAnimation() > 0) {
             holder.mView.setAnimation(AnimationUtils.loadAnimation(mActivity, GalleryFinal.getCoreConfig().getAnimation()));
         }
-        holder.mIvCheck.setImageResource(GalleryFinal.getGalleryTheme().getIconCheck());
+//        holder.mIvCheck.setImageResource(GalleryFinal.getGalleryTheme().getIconCheck());
         if ( GalleryFinal.getFunctionConfig().isMutiSelect() ) {
             holder.mIvCheck.setVisibility(View.VISIBLE);
+            ThemeConfig themeConfig = GalleryFinal.getGalleryTheme();
             if (mSelectList.contains(photoInfo)) {
-                holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckSelectedColor());
+                holder.mIvCheck.setImageResource(R.drawable.choosepic_sel);
+//                Drawable selectedDrawable = themeConfig.getCheckSelectedDrawable();
+//                int resId = themeConfig.getCheckSelectedResource();
+//                if (selectedDrawable != null) {
+//                    holder.mIvCheck.setImageDrawable(selectedDrawable);
+//                } else if (resId != 0) {
+//                    holder.mIvCheck.setImageResource(resId);
+//                } else {
+//                    holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckSelectedColor());
+//                }
             } else {
-                holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckNornalColor());
+                holder.mIvCheck.setImageResource(R.drawable.choosepic_unsel);
+//                Drawable normalDrawable = themeConfig.getCheckNormalDrawable();
+//                int resId = themeConfig.getCheckNormalResource();
+//                if (normalDrawable != null) {
+//                    holder.mIvCheck.setImageDrawable(normalDrawable);
+//                } else if (resId != 0) {
+//                    holder.mIvCheck.setImageResource(resId);
+//                } else {
+//                    holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckNormalColor());
+//                }
             }
         } else {
             holder.mIvCheck.setVisibility(View.GONE);

@@ -19,8 +19,6 @@ package cn.finalteam.galleryfinal.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.MediaStore;
-import android.util.Log;
-
 import cn.finalteam.galleryfinal.GalleryFinal;
 import cn.finalteam.galleryfinal.R;
 import cn.finalteam.galleryfinal.model.PhotoFolderInfo;
@@ -80,12 +78,6 @@ public class PhotoTools {
                     final int imageId = cursor.getInt(imageIdColumn);
                     final String path = cursor.getString(dataColumn);
                     //final String thumb = cursor.getString(thumbImageColumn);
-                    Log.i("fg", "the bucketId is " + bucketId);
-                    Log.i("fg", "the bucketName is " + bucketName);
-                    Log.i("fg", "the dataColumn is " + dataColumn);
-                    Log.i("fg", "the imageIdColumn is " + imageIdColumn);
-                    Log.i("fg", "the imageId is " + imageId);
-                    Log.i("fg", "the path is " + path);
                     File file = new File(path);
                     if ( (filterList == null || !filterList.contains(path)) && file.exists() && file.length() > 0 ) {
                         final PhotoInfo photoInfo = new PhotoInfo();

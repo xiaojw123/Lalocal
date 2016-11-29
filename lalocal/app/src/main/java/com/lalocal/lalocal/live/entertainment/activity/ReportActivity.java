@@ -1,14 +1,17 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -20,15 +23,21 @@ import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ImgTokenBean;
+import com.lalocal.lalocal.model.ImgTokenResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.MyGridView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import cn.finalteam.galleryfinal.PauseOnScrollListener;
 
 import java.util.ArrayList;
@@ -60,6 +69,9 @@ public class ReportActivity extends BaseActivity {
     @BindView(R.id.gv_report_pic)
     MyGridView mGvReportPic;
 
+    @BindView(R.id.btn_confirm_report)
+    Button mBtnConfirmReport;
+
     private PhotoAdapter mPhotoAdapter;
 
     private ViewGroup.LayoutParams mRadioBtnLp;
@@ -75,10 +87,31 @@ public class ReportActivity extends BaseActivity {
     // 核心配置
     private CoreConfig mCoreConfig;
 
-    // 选中的图片列表
+    // 选中的图片列表，用于显示
     private List<PhotoInfo> mPhotoList = new ArrayList<>();
+    // 选中的图片列表，用于上传
+    private List<PhotoInfo> mUploadPhotoList = new ArrayList<>();
+    // 成功上传的图片名称列表
+    private List<String> mUploadSuccess = new ArrayList<>();
 
     private ContentLoader mContentLoader;
+
+    // -intent传入数据
+    private String mUserId;
+    private String mMasterName;
+    private String mChannelId;
+
+    // 举报理由
+    private String mContent;
+    
+    // 标记当前传第几张图片
+    private int mCurUpload = 0;
+
+    // 选中按钮的选中标签
+    private int mSelected = 0;
+
+    // 文件名称的数组
+    private String[] mPhotos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,10 +121,42 @@ public class ReportActivity extends BaseActivity {
         // 使用ButterKnife框架
         ButterKnife.bind(this);
 
+        // 解析intent传入数据
+        parseIntent();
         // 初始化视图
         initView();
         // 初始化ContentLoader
         initContentLoader();
+    }
+
+    /**
+     * 解析intent传入数据
+     */
+    private void parseIntent() {
+        // 获取意图
+        Intent getData = getIntent();
+
+        // -获取bundle
+        if (getData == null) {
+            AppLog.i("qn", "itnent null");
+            return;
+        }
+        Bundle bundle = getData.getExtras();
+
+        // -获取key的值
+        if (bundle == null) {
+            AppLog.i("qn", "bundle null");
+            return;
+        }
+        // 获取被举报的用户id
+        mUserId = bundle.getString(Constants.KEY_USER_ID);
+        AppLog.i("qn", "userid is " + mUserId);
+        // 获取被举报的用户昵称
+        mMasterName = bundle.getString(Constants.KEY_MASTER_NAME);
+        AppLog.i("qn", "master name is " + mMasterName);
+        // 获取当前所在的直播间id
+        mChannelId = bundle.getString(Constants.KEY_CHANNEL_ID);
+        AppLog.i("qn", "channelId is " + mChannelId);
     }
 
     /**
@@ -137,10 +202,12 @@ public class ReportActivity extends BaseActivity {
 
     /**
      * 选择单选按钮
+     *
      * @param btns
      * @param selected
      */
     private void selectRadioBtn(List<RadioButton> btns, int selected) {
+        mSelected = selected;
         for (int i = 0; i < btns.size(); i++) {
             if (selected == i) {
                 btns.get(i).setButtonDrawable(R.drawable.only_checkbox_sel);
@@ -199,7 +266,6 @@ public class ReportActivity extends BaseActivity {
         photoInfo.setPhotoPath(Constants.FLAG_ADD_PIC);
         // 起到占位的作用
         list.add(photoInfo);
-        AppLog.i("pcs", "占位后，图片的数量是：" + list.size() + "; 最后一张图片的路径：" + list.get(list.size() - 1).getPhotoPath());
     }
 
     /**
@@ -219,7 +285,7 @@ public class ReportActivity extends BaseActivity {
         mThemeConfig = new ThemeConfig.Builder()
                 .setTitleBarBgColor(colorTitleBarBg) // 设置标题栏背景颜色
                 .setTitleBarTextColor(colorTitleBarText)    // 设置标题栏文字颜色
-                .setFabNornalColor(colorFabNormal)  // 设置浮动按钮常规颜色
+                .setFabNormalColor(colorFabNormal)  // 设置浮动按钮常规颜色
                 .setFabPressedColor(colorFabPressed)    // 设置浮动按钮点击颜色
                 .build();
 
@@ -297,22 +363,21 @@ public class ReportActivity extends BaseActivity {
     private GalleryFinal.OnHanlderResultCallback mOnHandlerResultCallback = new GalleryFinal.OnHanlderResultCallback() {
         @Override
         public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
-            // 如果有选择图片
-            if (resultList != null) {
-                AppLog.i("pcs", "得到图片的数量是：" + resultList.size() + "; 最后一张图片路径：" + resultList.get(resultList.size() - 1).getPhotoPath());
-//                if (resultList.size() < Constants.PIC_MAX_QUANTITY) {
-                // 添加占位图片
-                addEmptyPhoto(resultList);
-//                }
+            // 将返回的图片赋给上传的图片列表
+            mUploadPhotoList.clear();
+            mUploadPhotoList.addAll(resultList);
+            AppLog.i("qn", "gallery select pic " + mUploadPhotoList.size());
+            // 没有图片返回的时候，也可以进行操作：清空之前选中的图片
 
-                // 清除原来列表中的图片
-                mPhotoList.clear();
-                // 返回图片列表
-                mPhotoList.addAll(resultList);
-                AppLog.i("pcs", "最终图片的数量是：" + mPhotoList.size() + "; 最后一张图片：" + mPhotoList.get(mPhotoList.size() - 1).getPhotoPath());
-                // 刷新页面
-                mPhotoAdapter.notifyDataSetChanged();
-            }
+            // 添加占位图片
+            addEmptyPhoto(resultList);
+
+            // 清除原来列表中的图片
+            mPhotoList.clear();
+            // 返回图片列表
+            mPhotoList.addAll(resultList);
+            // 刷新页面
+            mPhotoAdapter.notifyDataSetChanged();
         }
 
         @Override
@@ -322,28 +387,68 @@ public class ReportActivity extends BaseActivity {
         }
     };
 
-    @OnClick(R.id.btn_close_report)
-    void clickCloseBtn() {
-        ReportActivity.this.finish();
-    }
-
-    @OnClick({R.id.rb_uncivilized, R.id.rb_illegal, R.id.rb_other})
-    void clickRadioButton(RadioButton rb) {
-        switch (rb.getId()) {
-            case R.id.rb_uncivilized:
-                // 隐藏输入框
-                mEtReport.setVisibility(View.GONE);
+    @OnClick({R.id.btn_close_report, R.id.btn_confirm_report})
+    void clickBtn(View v) {
+        switch (v.getId()) {
+            case R.id.btn_close_report:
+                ReportActivity.this.finish();
                 break;
-            case R.id.rb_illegal:
-                // 隐藏输入框
-                mEtReport.setVisibility(View.GONE);
-                break;
-            case R.id.rb_other:
-                // 显示输入框
-                mEtReport.setVisibility(View.VISIBLE);
+            case R.id.btn_confirm_report:
+                // 举报
+                report();
                 break;
         }
     }
+
+    /**
+     * 举报
+     */
+    private void report() {
+        if (mSelected == 0) {
+            mContent = "不文明直播";
+        } else if (mSelected == 1) {
+            mContent = "触犯法律法规";
+        } else if (mSelected == 2) {
+            mContent = mEtReport.getText().toString().trim();
+            if (TextUtils.isEmpty(mContent)) {
+                Toast.makeText(ReportActivity.this, "请输入有效的举报原因", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        // -上传图片
+        int size = mUploadPhotoList.size();
+        // 如果无图片，直接上传举报借口
+        if (size == 0) {
+            // 初始化图片名称字符串数组
+            mPhotos = new String[0];
+            // 将举报信息上传服务器
+            mContentLoader.getChannelReport(mContent, mPhotos, mUserId, mMasterName, mChannelId);
+            return;
+        }
+        for (int i = 0; i < size; i++) {
+            // 获取图片token
+            mContentLoader.getImgToken();
+        }
+    }
+
+//    @OnClick({R.id.rb_uncivilized, R.id.rb_illegal, R.id.rb_other})
+//    void clickRadioButton(RadioButton rb) {
+//        switch (rb.getId()) {
+//            case R.id.rb_uncivilized:
+//                // 隐藏输入框
+//                mEtReport.setVisibility(View.GONE);
+//                break;
+//            case R.id.rb_illegal:
+//                // 隐藏输入框
+//                mEtReport.setVisibility(View.GONE);
+//                break;
+//            case R.id.rb_other:
+//                // 显示输入框
+//                mEtReport.setVisibility(View.VISIBLE);
+//                break;
+//        }
+//    }
 
     /**
      * 回调事件类
@@ -352,7 +457,74 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onImgToken(ImgTokenBean imgTokenBean) {
             super.onImgToken(imgTokenBean);
-            // TODO: 接收Token
+
+            if (imgTokenBean.getReturnCode() == 0) {
+                AppLog.i("qn", "return code is 0");
+                ImgTokenResult result = imgTokenBean.getResult();
+                if (result == null) {
+                    AppLog.i("qn", "result null");
+                    Toast.makeText(ReportActivity.this, "获取Token失败", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // 获取文件名
+                String fileName = result.getFilename();
+                // 获取
+                String token = result.getToken();
+                // 获取文件信息对象
+                PhotoInfo photoInfo = mUploadPhotoList.get(mCurUpload);
+                // 获取文件路径
+                String filePath = photoInfo.getPhotoPath();
+                AppLog.i("qn", "filePaht is " + filePath);
+                // 上传七牛云图片
+                boolean isSuccess = QiniuUtils.uploadSimpleFile(filePath, fileName, token);
+                AppLog.i("qn", "isSuccess " + isSuccess);
+                if (isSuccess) {
+                    // 将文件名称添加到名称数组中
+                    mUploadSuccess.add(fileName);
+                }
+                // 当前上传的图片标记
+                mCurUpload++;
+                // 如果图片上传完毕
+                if (mCurUpload == mUploadPhotoList.size()) {
+                    // 标签重置
+                    mCurUpload = 0;
+                    // 将上传成功的图片列表传入数组
+                    mPhotos = new String[mUploadSuccess.size()];
+                    // 清空上传成功的列表
+                    mUploadSuccess.clear();
+                    // 将举报信息上传服务器
+                    mContentLoader.getChannelReport(mContent, mPhotos, mUserId, mMasterName, mChannelId);
+                }
+            } else {
+                AppLog.i("qn", "return code not 0");
+                Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        @Override
+        public void onGetChannelReport(String json) {
+            super.onGetChannelReport(json);
+
+            try {
+                // json解析
+                JSONObject response = new JSONObject(json);
+                // 获取json中的message
+                String message = response.getString("message");
+                // 如果上传成功
+                if ("success".equals(message)) {
+                    // 显示举报成功
+                    Toast.makeText(ReportActivity.this, "举报成功", Toast.LENGTH_SHORT).show();
+                    // 退出举报页面
+                    ReportActivity.this.finish();
+                } else {
+                    // 显示举报失败信息
+                    Toast.makeText(ReportActivity.this, "举报信息上传失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                // 举报信息返回失败提示
+                Toast.makeText(ReportActivity.this, "举报响应出错了，请稍后再试", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

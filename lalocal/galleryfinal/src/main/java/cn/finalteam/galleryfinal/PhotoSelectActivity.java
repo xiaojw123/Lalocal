@@ -167,10 +167,10 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
     }
 
     private void setTheme() {
-        mIvBack.setImageResource(GalleryFinal.getGalleryTheme().getIconBack());
-        if (GalleryFinal.getGalleryTheme().getIconBack() == R.drawable.ic_gf_back) {
-            mIvBack.setColorFilter(GalleryFinal.getGalleryTheme().getTitleBarIconColor());
-        }
+//        mIvBack.setImageResource(GalleryFinal.getGalleryTheme().getIconBack());
+//        if (GalleryFinal.getGalleryTheme().getIconBack() == R.drawable.ic_arrow_left) {
+//            mIvBack.setColorFilter(GalleryFinal.getGalleryTheme().getTitleBarIconColor());
+//        }
 
         mIvFolderArrow.setImageResource(GalleryFinal.getGalleryTheme().getIconFolderArrow());
         if (GalleryFinal.getGalleryTheme().getIconFolderArrow() == R.drawable.ic_gf_triangle_arrow) {
@@ -198,7 +198,7 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
         mTvTitle.setTextColor(GalleryFinal.getGalleryTheme().getTitleBarTextColor());
         mTvChooseCount.setTextColor(GalleryFinal.getGalleryTheme().getTitleBarTextColor());
         mFabOk.setColorPressed(GalleryFinal.getGalleryTheme().getFabPressedColor());
-        mFabOk.setColorNormal(GalleryFinal.getGalleryTheme().getFabNornalColor());
+        mFabOk.setColorNormal(GalleryFinal.getGalleryTheme().getFabNormalColor());
     }
 
     private void findViews() {
@@ -388,6 +388,9 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
                 } else {
                     toPhotoEdit();
                 }
+            } else {
+                // 图片未选择是也允许返回
+                resultData(mSelectPhotoList);
             }
         } else if ( id == R.id.iv_clear ) {
             mSelectPhotoList.clear();
@@ -479,9 +482,11 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
         PhotoListAdapter.PhotoViewHolder holder = (PhotoListAdapter.PhotoViewHolder) view.getTag();
         if (holder != null) {
             if (checked) {
-                holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckSelectedColor());
+//                holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckSelectedColor());
+                holder.mIvCheck.setImageResource(R.drawable.choosepic_sel);
             } else {
-                holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckNornalColor());
+//                holder.mIvCheck.setBackgroundColor(GalleryFinal.getGalleryTheme().getCheckNormalColor());
+                holder.mIvCheck.setImageResource(R.drawable.choosepic_unsel);
             }
         } else {
             mPhotoListAdapter.notifyDataSetChanged();

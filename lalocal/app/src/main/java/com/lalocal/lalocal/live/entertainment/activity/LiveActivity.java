@@ -950,6 +950,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 //                        Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
 //                        // 进入举报界面
                         Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_CHANNEL_ID, channelId);
+                        AppLog.i("qn", "the userId is " + id);
+                        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_USER_ID, id);
+                        // TODO: 因项目没有整合，这里待整合后传入用户真实昵称
+                        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME, "不明真相吃瓜群众");
+                        intent.putExtras(bundle);
                         LiveActivity.this.startActivity(intent);
 
                     }

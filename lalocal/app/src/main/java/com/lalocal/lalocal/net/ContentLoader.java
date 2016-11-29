@@ -47,6 +47,7 @@ import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
+import com.lalocal.lalocal.model.ImgTokenResult;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveDetailsDataResp;
@@ -1325,6 +1326,43 @@ public class ContentLoader {
 
     }
 
+    /**
+     * 直播间举报
+     * @param content 举报原因
+     * @param photos 举报图片，从服务器获取的filename组成的数组
+     * @param userId 被举报用户的id
+     * @param masterName 被举报用户的昵称
+     * @param channelId 当前直播间id
+     */
+    public void getChannelReport(String content, String[] photos,
+                                 String userId, String masterName, String channelId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_CHANNEL_REPORT);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getChannelReport(), response, response);
+        JSONObject jsonObject = new JSONObject();
+
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("qn", "content - " + content + "; photos size is " + photos.length + "; userId is " + userId + "; masterName is " + masterName + "; channelId is " + channelId);
+        try {
+            jsonObject.put("content", content);
+            JSONArray jsonArray = new JSONArray();
+            for (String photo : photos) {
+                jsonArray.put(photo);
+            }
+            jsonObject.put("photo", jsonArray);
+            jsonObject.put("userId", userId);
+            jsonObject.put("masterName", masterName);
+            jsonObject.put("channelId", channelId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -1874,6 +1912,9 @@ public class ContentLoader {
                         break;
                     case RequestCode.GET_DAILY_RECOMMENDATIONS:
                         responseDailyRecommendations(json);
+                        break;
+                    case RequestCode.GET_CHANNEL_REPORT:
+                        responseChannelReport(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -2748,6 +2789,15 @@ public class ContentLoader {
             }
         }
 
+        /**
+         * 响应直播间举报
+         * @param json
+         */
+        private void responseChannelReport(String json) {
+            // TODO: responseChannelReport
+            callBack.onGetChannelReport(json);
+        }
+
         @Override
         public void onDialogClickListener() {
             Intent intent = new Intent(context, LRegister1Activity.class);
@@ -3175,6 +3225,7 @@ public class ContentLoader {
         int GET_USER_ARTICLE = 303;
         int GET_HOME_ATTENTION = 304;
         int GET_DAILY_RECOMMENDATIONS = 305;
+        int GET_CHANNEL_REPORT = 306;
     }
 
 }

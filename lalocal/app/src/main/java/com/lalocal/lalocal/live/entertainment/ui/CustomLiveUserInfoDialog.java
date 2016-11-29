@@ -302,12 +302,12 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
                 break;
             case R.id.custom_dialog_report_audience://观众端举报
                 if(reportListener!=null){
-                    reportListener.onCustomLiveUserInfoDialogListener(null,audienceReport,managerMark);
+                    reportListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),audienceReport,managerMark);
                 }
                 break;
             case R.id.custom_dialog_report://主播端举报
                 if(reportListener!=null){
-                    reportListener.onCustomLiveUserInfoDialogListener(null,headerReport,managerMark);
+                    reportListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),headerReport,managerMark);
                 }
                 break;
             case R.id.custom_dialog_attention://主播端关注
@@ -340,12 +340,12 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
             case R.id.audience_manager_report:
 
                 if(reportListener!=null){
-                    reportListener.onCustomLiveUserInfoDialogListener(null,audienceManagerReport,null);
+                    reportListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),audienceManagerReport,null);
                 }
                 break;
             case R.id.audience_manager_ban:
                 if(banListener!=null){
-                    banListener.onCustomLiveUserInfoDialogListener(null,audienceManagerban,null);
+                    banListener.onCustomLiveUserInfoDialogListener(String.valueOf(accountId),audienceManagerban,null);
                 }
                 break;
             case R.id.audience_manager_attention:

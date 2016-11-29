@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_e5"
+    android:background="#11d9d9d9"
     tools:context="com.lalocal.lalocal.live.entertainment.activity.ReportActivity">
 
     <RelativeLayout
@@ -60,6 +60,7 @@
                 <RadioButton
                     android:id="@+id/rb_uncivilized"
                     android:layout_width="match_parent"
+                    android:textSize="16sp"
                     android:layout_height="@dimen/report_item_line_height"
                     android:layout_marginLeft="@dimen/report_item_margni_left"
                     android:text="不文明直播" />
@@ -74,6 +75,7 @@
                     android:id="@+id/rb_illegal"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/report_item_line_height"
+                    android:textSize="16sp"
                     android:layout_marginLeft="@dimen/report_item_margni_left"
                     android:text="触犯法律法规" />
 
@@ -87,20 +89,18 @@
                     android:id="@+id/rb_other"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/report_item_line_height"
+                    android:textSize="16sp"
                     android:layout_marginLeft="@dimen/report_item_margni_left"
                     android:text="其他原因" />
-                <!--android:button="@null"-->
-                <!--android:background="@null"-->
-                <!--android:drawableLeft="@drawable/only_checkbox_selector"-->
 
                 <EditText
                     android:id="@+id/et_report"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/report_et_height"
                     android:background="@color/white"
                     android:gravity="top"
                     android:hint="请输入举报内容"
+                    android:textSize="16sp"
                     android:paddingBottom="@dimen/report_et_padding_bottom"
                     android:paddingLeft="@dimen/report_et_padding_left"
                     android:paddingRight="@dimen/report_et_padding_right"

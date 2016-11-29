@@ -82,6 +82,7 @@ public class PlayBackActivity extends BaseActivity {
     private MyCallBack myCallBack;
     private LiveUserInfoResultBean result;
     private int position1;
+    private int channelId;
     private LiveUserBean user;
 
     @Override
@@ -111,6 +112,7 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
+        channelId = liveRowsBean.getChannelId();
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         initData(liveRowsBean);
     }
@@ -434,6 +436,13 @@ public class PlayBackActivity extends BaseActivity {
 //                        Toast.makeText(PlayBackActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
                         // 进入举报界面
                         Intent intent = new Intent(PlayBackActivity.this, ReportActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_CHANNEL_ID, String.valueOf(channelId));
+                        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_USER_ID, id);
+                        AppLog.i("qn", "the userId is " + id);
+                        // TODO: 因项目没有整合，这里待整合后传入用户真实昵称
+                        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME, "不明真相吃瓜群众");
+                        intent.putExtras(bundle);
                         PlayBackActivity.this.startActivity(intent);
                     }
                 });

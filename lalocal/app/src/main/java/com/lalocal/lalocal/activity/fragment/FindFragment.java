@@ -255,9 +255,6 @@ public class FindFragment extends BaseFragment {
                             AppLog.i("art", "6");
                             Toast.makeText(getActivity(), "没有更多文章咯~", Toast.LENGTH_SHORT).show();
                             return;
-                        } else {
-                            mArticleList.addAll(articleList);
-                            AppLog.i("art", "7");
                         }
 
                         isLoadingMore = false;

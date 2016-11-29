@@ -2,6 +2,12 @@ package com.lalocal.lalocal.util;
 
 import android.text.TextUtils;
 
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
+
+import org.json.JSONObject;
+
 /**
  * Created by wangjie on 2016/11/1.
  */
@@ -42,5 +48,28 @@ public class QiniuUtils {
         }
 
         return url;
+    }
+
+    /**
+     * 上传简单文件
+     * @param filePath 文件路径
+     * @param fileName 指定上传到七牛云上后图片的文件名
+     * @param token 从服务端获取的token
+     * @return 图片是否上传成功
+     */
+    public static boolean uploadSimpleFile(String filePath, String fileName, String token) {
+        final boolean[] isSuccess = {false};
+        final String[] link = new String[1];
+        UploadManager uploadManager = new UploadManager();
+        uploadManager.put(filePath, fileName, token,
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                        if (info.statusCode == 200) {
+                            isSuccess[0] = true;
+                        }
+                    }
+                }, null);
+        return isSuccess[0];
     }
 }

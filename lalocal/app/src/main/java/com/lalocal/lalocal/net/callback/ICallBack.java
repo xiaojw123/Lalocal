@@ -24,6 +24,7 @@ import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.ImgTokenBean;
+import com.lalocal.lalocal.model.ImgTokenResult;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveDetailsDataResp;
@@ -56,6 +57,7 @@ import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
+import com.lalocal.lalocal.util.AppLog;
 
 import java.util.List;
 
@@ -401,5 +403,13 @@ public abstract class ICallBack {
      */
     public void onGetDailyRecommend(RecommendationsBean bean) {
 
+    }
+
+    /**
+     * 直播间举报
+     * @param json
+     */
+    public void onGetChannelReport(String json) {
+        AppLog.i("qn", "report json is " + json);
     }
 }

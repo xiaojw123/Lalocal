@@ -1138,6 +1138,13 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_REPORT);
                     // 进入举报界面
                     Intent intent = new Intent(AudienceActivity.this, ReportActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(com.lalocal.lalocal.model.Constants.KEY_CHANNEL_ID, channelId);
+                    bundle.putString(com.lalocal.lalocal.model.Constants.KEY_USER_ID, id);
+                    AppLog.i("qn", "the userId is " + id);
+                    // TODO: 因项目没有整合，这里待整合后传入用户真实昵称
+                    bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME, "不明真相吃瓜群众");
+                    intent.putExtras(bundle);
                     AudienceActivity.this.startActivity(intent);
 //                    Toast.makeText(AudienceActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
                 }

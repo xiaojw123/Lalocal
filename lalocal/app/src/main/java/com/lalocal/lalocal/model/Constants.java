@@ -59,4 +59,9 @@ public class Constants {
     // 主动拉取
     public static final int PULL_TO_SCAN = 1;
 
+    // bundle传递的key
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_MASTER_NAME = "master_name";
+    public static final String KEY_CHANNEL_ID = "channel_id";
+
 }
