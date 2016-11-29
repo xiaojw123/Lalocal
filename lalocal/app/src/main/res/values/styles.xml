@@ -28,6 +28,8 @@
         <item name="android:background">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowEnterAnimation">@anim/live_dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/live_dialog_out_anim</item>
     </style>
     <style name="custom_dialog" parent="test_dialog">
         <item name="android:windowBackground">@color/thin_dark</item>

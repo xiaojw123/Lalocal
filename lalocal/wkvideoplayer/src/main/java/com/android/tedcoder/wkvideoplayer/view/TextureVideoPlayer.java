@@ -261,6 +261,9 @@ public class TextureVideoPlayer extends RelativeLayout {
     public  void setBefore(float alpha,boolean clickAble){
         mMediaController.setBefore(alpha,clickAble);
     }
+    public  void setCollect(boolean isCollect){
+        mMediaController.setCollect(isCollect);
+    }
     public  void setNext(float alpha,boolean clickAble){
         mMediaController.setNext(alpha,clickAble);
     }
@@ -335,14 +338,10 @@ public class TextureVideoPlayer extends RelativeLayout {
             }
         }
 
-        @Override
-        public void onClickShare() {
-            mVideoPlayCallback.onClickShare();
-        }
 
         @Override
-        public void onClickQuit() {
-            mVideoPlayCallback.onClickQuit();
+        public void onClickCollect(ImageView iv) {
+            mVideoPlayCallback.onClickCollect(iv);
         }
 
         @Override

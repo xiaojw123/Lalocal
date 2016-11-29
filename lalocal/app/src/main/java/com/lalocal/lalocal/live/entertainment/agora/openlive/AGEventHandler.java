@@ -15,4 +15,6 @@ public interface AGEventHandler {
     void onVideoStopped();//停止视频功能
    void  onLeaveChannel(IRtcEngineEventHandler.RtcStats stats);//离开频道的回调
     void onUserEnableVideo(int uid, boolean enabled);
+
+    void onLastmileQuality(int quality);//网络质量检测
 }

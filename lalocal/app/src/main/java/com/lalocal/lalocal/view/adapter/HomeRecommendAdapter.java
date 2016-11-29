@@ -245,7 +245,25 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 String diarySubTitle = mRecommendListBean.getTravelEN();
                 ((ArticleViewHolder) holder).initData(mArticleList, diaryTitle, diarySubTitle);
                 break;
+            case CATEGORY:
+                ((CategoryViewHolder) holder).setItemClick(new CategoryViewHolder.ItemClick() {
+                    @Override
+                    public void clickPosition(int position) {
+                        if (itemClickAdapter!=null){
+                            itemClickAdapter.clickPosition(position);
+                        }
+                    }
+                });
+                break;
         }
+    }
+
+    ItemClickAdapter itemClickAdapter;
+    public  interface  ItemClickAdapter{
+        void clickPosition(int position);
+    }
+    public  void setItemClick(ItemClickAdapter itemClickAdapter){
+        this.itemClickAdapter=itemClickAdapter;
     }
 
     @Override

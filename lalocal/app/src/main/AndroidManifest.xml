@@ -179,7 +179,7 @@
         <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1e017a0e358e7dcc6793beda9888be87" />
+            android:value="a8f4963ecfc34fa65f74c186ec6bab7a" />
 
         <service android:name="com.amap.api.location.APSService" />
 
@@ -309,10 +309,12 @@
         <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode = "adjustResize" />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode = "adjustResize"/>
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
@@ -355,6 +357,11 @@
         <activity android:name=".me.AccountSecurityActivity" />
         <activity android:name=".me.PhoneBindActivity" >
         </activity>
+        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

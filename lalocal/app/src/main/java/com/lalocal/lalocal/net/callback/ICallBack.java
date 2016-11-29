@@ -11,6 +11,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
@@ -382,6 +383,8 @@ public abstract class ICallBack {
 
     }
 
+    public void onLiveRoomAvatar(LiveRoomAvatarSortResp.ResultBean result) {
+    }
 
 
 
@@ -389,5 +392,14 @@ public abstract class ICallBack {
 
     public void onResponseLog(String json) {
 
+    }
+
+    public void onCancelManager(String json) {
+    }
+
+    public void onUserMuteResult(String json) {
+    }
+
+    public void onPerpetualMute(int json) {
     }
 }

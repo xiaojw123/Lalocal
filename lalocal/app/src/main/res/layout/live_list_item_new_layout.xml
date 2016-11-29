@@ -71,7 +71,7 @@
             android:id="@+id/item_live_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="的尽快发货快就会发生的"
+
             android:textColor="@android:color/white"
             android:layout_marginTop="@dimen/live_padding_20dp"
             android:layout_toRightOf="@+id/live_compere_head_portrait"
@@ -90,7 +90,7 @@
             android:layout_below="@+id/item_live_name"
             android:paddingLeft="@dimen/live_padding_8dp"
             android:textColor="#aaffffff"
-            android:text="日本"
+
             />
 
     </RelativeLayout>

@@ -17,7 +17,11 @@ public interface MessageType {
     int gift=10;//礼物
     int leaveLive=11;//退出直播
     int onlineNum=12;//人数
-    int liveShare=13;//直播分享
-    int masterEixt=100;//直播离开
-    int masterIn=101;//回来了
+    int closeLive=13;//关闭直播
+
+
+
+
+  //  @property (nonatomic,strong) NSString *style; //1  弹幕 0文本 2 点赞 3 修改公告 4 挑战 5 投注 6禁言 7解禁 8设置管理员 9取消 10 礼物 11 退出直播 12 踢人  13 关闭主播
+
 }

@@ -37,7 +37,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
     public ArticleViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
-
         mLayoutContainer = (FrameLayout) itemView.findViewById(R.id.article_container);
         mTvTitle = (TextView) itemView.findViewById(R.id.tv_title);
         mTvSubTitle = (TextView) itemView.findViewById(R.id.tv_subtitle);
@@ -46,7 +45,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder {
 
     public void initData(List<ArticleDetailsResultBean> list, String title, String subtitle) {
         final List<ArticleDetailsResultBean> articleList = list;
-
         int size = list == null ? 0 : list.size();
 
         if (size == 0) {

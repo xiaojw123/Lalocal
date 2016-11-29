@@ -108,6 +108,16 @@ public class AppConfig {
 
         return baseUrl + "users/bindEmail";
     }
+    //用户端离开直播间
+    public  static  final String  getUserLeaveRoom(String channels){
+        return  baseUrl+"channels/"+channels+"/leave";
+    }
+
+    //获取直播间头像  http://dev.lalocal.cn/api/channels/14/stats?number=7&isMaster=false
+    public  static  final String getLiveRoomAvatar(String roomId,int number,boolean isMaster){
+        return baseUrl+"channels/"+roomId+"/stats?number="+number+"&isMaster="+isMaster;
+    }
+
 
     //推荐接口RECOMMEND_URL
     public static String getRecommendUrl() {
@@ -301,13 +311,21 @@ public class AppConfig {
 
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public static final String getPlayBackLiveDetails(int id) {
-
         return baseUrl + "channels/historys/" + id;
     }
 
     //上报日志 http://dev.lalocal.cn/api/system/logs/app
     public  static  final  String uploadLogs(){
         return baseUrl+"system/logs/app";
+    }
+
+    //禁言
+    public  static final String getMute(){
+        return baseUrl+"channels/mute";
+    }
+    //永久禁言
+    public  static final String getPerpetualMute(String accid){
+        return baseUrl+"users/block/"+accid;
     }
 
     public static String getBaseUrl() {

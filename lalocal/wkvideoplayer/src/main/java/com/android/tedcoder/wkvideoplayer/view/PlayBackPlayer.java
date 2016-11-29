@@ -194,18 +194,12 @@ public class PlayBackPlayer extends RelativeLayout {
             }
         }
 
-        @Override
-        public void onClickShare() {
-            if(mVideoPlayCallback!=null){
-                mVideoPlayCallback.onClickShare();
-            }
 
-        }
 
         @Override
-        public void onClickQuit() {
+        public void onClickCollect(ImageView iv) {
             if(mVideoPlayCallback!=null){
-                mVideoPlayCallback.onClickQuit();
+                mVideoPlayCallback.onClickCollect(iv);
             }
 
         }
@@ -399,6 +393,9 @@ public class PlayBackPlayer extends RelativeLayout {
     }
     public  void setNext(float alpha,boolean clickAble){
         mMediaController.setNext(alpha,clickAble);
+    }
+    public  void setCollect(boolean isCollect){
+        mMediaController.setCollect(isCollect);
     }
 
     /**

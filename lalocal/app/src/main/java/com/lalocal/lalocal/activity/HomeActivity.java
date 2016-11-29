@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -365,17 +364,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //    public void normalUpdate(View view){
 //        testCheckUpdate(false);
 //    }
-private String judgeProvider(LocationManager locationManager) {
-    Criteria criteria = new Criteria();
-    criteria.setAccuracy(Criteria.ACCURACY_FINE);
-    criteria.setAltitudeRequired(false);
-    criteria.setBearingRequired(false);
-    criteria.setCostAllowed(true);
-    criteria.setPowerRequirement(Criteria.POWER_LOW);
-    String provider =this.locationManager.getBestProvider(criteria, false);
 
-    return provider;
-}
     protected static final int REQUEST_CODE = 1;
     protected static int denyCount = 0; //记录拒绝次数  
     private void getLocation() {
@@ -403,6 +392,7 @@ private String judgeProvider(LocationManager locationManager) {
                 double longitude = location.getLongitude();
                 CommonUtil.LATITUDE=String.valueOf(latitude);
                 CommonUtil.LONGITUDE=String.valueOf(longitude);
+                AppLog.i("TAG","获取地理位置:"+latitude);
             }
 
         }
@@ -425,6 +415,7 @@ private String judgeProvider(LocationManager locationManager) {
                     double longitude = location.getLongitude();
                     CommonUtil.LATITUDE=String.valueOf(latitude);
                     CommonUtil.LONGITUDE=String.valueOf(longitude);
+                    AppLog.i("TAG","获取地理位置2:"+latitude);
                 }
 
             }else{

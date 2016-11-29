@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -19,12 +17,10 @@
             >
         </RelativeLayout>
         <LinearLayout
-
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_50dp"
             android:layout_alignParentBottom="true"
             android:gravity="right">
-
             <ImageView
                 android:id="@+id/live_quit"
                 android:layout_width="@dimen/live_padding_30dp"
@@ -34,16 +30,12 @@
                 android:scaleType="centerCrop"
                 android:src="@drawable/peopleliving_quit" />
         </LinearLayout>
-
         <include layout="@layout/live_loading_page"></include>
 
-
-        <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
-            android:id="@+id/barrageView_test"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_125dp"
-            android:layout_marginTop="@dimen/live_height_80dp"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
     </RelativeLayout>
+
+<!--    android:layout_gravity="right"
+    android:layout_marginLeft="-65dp"-->
 
     <RelativeLayout
         android:id="@+id/live_layout"
@@ -66,34 +58,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/live_padding_5dp"
-            android:text="主播接受了任务"
+            android:text="@string/live_master_accept_challenge"
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
             android:background="#cc000000"
             android:gravity="center"
             android:visibility="gone"/>
 
-        <LinearLayout
-            android:id="@+id/live_telecast_model_layout"
+        <RelativeLayout
+            android:id="@+id/live_view_top_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_40dp"
-            android:layout_marginTop="@dimen/live_padding_12dp"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/live_padding_10dp">
+            android:layout_height="@dimen/live_height_36dp"
+            android:layout_marginTop="@dimen/live_padding_10dp"
+            >
+
             <LinearLayout
                 android:id="@+id/live_master_info_layout"
-                android:layout_width="@dimen/live_height_119dp"
+                android:layout_width="@dimen/live_height_100dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/live_emcee_info_shape"
+                android:layout_marginLeft="@dimen/live_padding_13dp"
                 android:orientation="horizontal">
-
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/live_emcee_head"
-                    android:layout_width="@dimen/live_height_40dp"
-                    android:layout_height="@dimen/live_height_40dp"
+                    android:layout_width="@dimen/live_height_36dp"
+                    android:layout_height="@dimen/live_height_36dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/androidloading" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -105,85 +96,84 @@
                         android:id="@+id/live_emcee_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/onlivelight"
-                        android:drawableRight="@drawable/onlive"
-                        android:textColor="@android:color/white"
+                        android:text="LIVE"
                         android:drawablePadding="@dimen/live_padding_5dp"
+                        android:paddingLeft="@dimen/live_padding_5dp"
+                        android:paddingRight="@dimen/live_padding_5dp"
                         android:textSize="@dimen/live_text_12sp" />
-
                     <TextView
                         android:id="@+id/live_online_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:drawableLeft="@drawable/manypeople_light"
                         android:drawablePadding="@dimen/live_padding_5dp"
+                        android:paddingLeft="@dimen/live_padding_5dp"
+                        android:paddingRight="@dimen/live_padding_5dp"
+                        android:text="0"
                         android:textSize="@dimen/live_text_12sp" />
                 </LinearLayout>
             </LinearLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/live_visitors_list_recy"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingLeft="@dimen/live_padding_20dp"
-                android:fadingEdge="none"
-                android:overScrollMode="never">
-            </android.support.v7.widget.RecyclerView>
-        </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/audience_score_layout"
+                android:layout_width="60dp"
+                android:layout_height="22dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="17dp"
+                android:layout_toRightOf="@+id/live_master_info_layout"
+                android:background="@drawable/live_emcee_info_shape">
+                <TextView
+                    android:id="@+id/audience_score_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:paddingLeft="@dimen/live_padding_5dp"
+                    android:paddingRight="@dimen/live_padding_5dp"
+                    android:drawablePadding="@dimen/live_padding_2dp"
+                    android:text="@string/live_ranking_list"
+                    />
+            </RelativeLayout>
 
+            <ImageView
+                android:id="@+id/live_telecast_quit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_alignParentRight="true"
+                android:paddingRight="@dimen/live_padding_10dp"
+                android:src="@drawable/peopleliving_quit"/>
+            <ImageView
+                android:id="@+id/live_telecast_top_setting"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_toLeftOf="@+id/live_telecast_quit"
+                android:paddingRight="@dimen/live_padding_20dp"
+                android:src="@drawable/peopleliving_share"/>
+        </RelativeLayout>
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/live_visitors_list_recy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/live_padding_15dp"
+            android:layout_below="@+id/live_view_top_layout"
+            android:paddingLeft="@dimen/live_padding_12dp"
+            android:paddingRight="@dimen/live_padding_12dp"
+            android:fadingEdge="none"
+
+            android:overScrollMode="never">
+        </android.support.v7.widget.RecyclerView>
         <LinearLayout
             android:id="@+id/audience_challenge_raise_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/live_padding_15dp"
-            android:layout_below="@+id/live_telecast_model_layout"
+            android:layout_below="@+id/live_view_top_layout"
             android:layout_alignParentRight="true"
             android:visibility="gone"
-           >
+            >
             <include layout="@layout/challenge_raise_money_layout" />
         </LinearLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/audience_score_layout"
-            android:layout_width="87dp"
-            android:layout_height="22dp"
-            android:layout_below="@+id/live_telecast_model_layout"
-            android:layout_marginLeft="@dimen/live_padding_10dp"
-            android:layout_marginTop="@dimen/live_padding_10dp"
-            android:background="@drawable/live_emcee_info_shape">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:paddingLeft="@dimen/live_padding_5dp"
-                android:src="@drawable/score" />
-
-            <TextView
-                android:id="@+id/audience_score_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:ellipsize="end"
-                android:maxLength="6"
-                android:paddingLeft="@dimen/live_padding_5dp"
-                android:paddingRight="@dimen/live_padding_5dp"
-                android:text="榜单"
-                android:textColor="@android:color/white" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:paddingRight="@dimen/live_padding_5dp"
-                android:src="@drawable/circlenext_ic" />
-        </RelativeLayout>
-
 
 
         <RelativeLayout
@@ -194,17 +184,35 @@
                 android:id="@+id/messageActivityBottomLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-
+                android:layout_alignParentBottom="true"
+                >
                 <include layout="@layout/nim_message_activity_text_layout" />
             </LinearLayout>
+            
+            <RelativeLayout
+                android:id="@+id/live_nofitifation_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_height_30dp"
+                android:layout_above="@+id/messageActivityBottomLayout"
+                android:background="@color/live_notification"
+
+                android:paddingLeft="@dimen/live_padding_10dp"
+                android:layout_marginTop="@dimen/live_padding_5dp">
+                <com.lalocal.lalocal.live.im.ui.widget.MarqueeView
+                    android:id="@+id/live_notifitation_marquee_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true" >
+                </com.lalocal.lalocal.live.im.ui.widget.MarqueeView>
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:id="@+id/setting_bottom_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-
+                android:layout_alignParentBottom="true"
+                >
                 <include layout="@layout/live_telecast_bottom_tab"></include>
             </LinearLayout>
 
@@ -215,14 +223,14 @@
                 android:layout_above="@id/setting_bottom_layout"
                 android:layout_alignParentBottom="true"
                 android:paddingBottom="@dimen/live_padding_20dp"
-               />
-
+                />
             <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
                 android:id="@+id/messageListView"
                 style="@style/list_view"
-                android:layout_width="@dimen/live_height_320dp"
-                android:layout_height="@dimen/live_height_150dp"
-                android:layout_above="@id/messageActivityBottomLayout"
+                android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/live_height_100dp"
+                android:layout_height="@dimen/live_height_200dp"
+                android:layout_above="@id/live_nofitifation_layout"
                 android:layout_marginBottom="@dimen/author_padding_10dp"
                 android:cacheColorHint="@android:color/transparent"
                 android:divider="@null"
@@ -230,12 +238,18 @@
                 android:listSelector="@android:color/transparent"
                 android:scrollbars="none" />
 
+            <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
+                android:id="@+id/barrageView_test"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_height_80dp"
+                android:paddingBottom="@dimen/live_padding_10dp"
+                android:layout_above="@+id/messageListView"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
+
             <include
                 android:id="@+id/gift_animation_view"
                 layout="@layout/gift_layout"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
-
                 android:layout_above="@id/messageListView"
                 android:layout_marginBottom="20dp" />
 
@@ -246,12 +260,9 @@
                 android:layout_height="80dp"
                 android:layout_above="@id/gift_animation_view"
                 android:layout_marginBottom="10dp" />
-
         </RelativeLayout>
-
-        <include layout="@layout/audience_over_layout"></include>
+        <include layout="@layout/audience_live_over_page"></include>
         <include layout="@layout/gift_plan_layout"></include>
-
 
     </RelativeLayout>
 

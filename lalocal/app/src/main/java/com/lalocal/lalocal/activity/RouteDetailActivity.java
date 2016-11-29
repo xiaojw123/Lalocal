@@ -594,7 +594,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             textView.setText(String.valueOf(pos + 1));
             textView.setBackground(getResources().getDrawable(res));
             options.icon(BitmapDescriptorFactory.fromView(textView));
-            LatLng latLng = new LatLng(item.getLongitude(), item.getLatitude());
+            LatLng latLng=new LatLng(item.getLatitude(),item.getLongitude());
             lats.add(latLng);
             options.position(latLng);
             aMap.addMarker(options);

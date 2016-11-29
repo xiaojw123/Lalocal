@@ -2,7 +2,6 @@ package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +32,7 @@ import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
+import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -44,6 +44,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -51,8 +52,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class PlayBackActivity extends BaseActivity {
     public static final int RESQUEST_COD = 101;
-
-
     @BindView(R.id.video_player)
     TextureVideoPlayer videoPlayer;
     @BindView(R.id.video_view_player)
@@ -65,8 +64,10 @@ public class PlayBackActivity extends BaseActivity {
     TextView playbackOnlineCount;
     @BindView(R.id.playback_master_info_layout)
     LinearLayout playbackMasterInfoLayout;
-    @BindView(R.id.play_layout)
-    LinearLayout playLayout;
+    @BindView(R.id.playback_quit)
+    ImageView playbackQuit;
+    @BindView(R.id.playback_top_share)
+    ImageView playbackTopSetting;
     @BindView(R.id.play_loading_page_bg)
     BlurImageView playLoadingPageBg;
     @BindView(R.id.loading_live_imag)
@@ -75,6 +76,10 @@ public class PlayBackActivity extends BaseActivity {
     LinearLayout xlistviewHeaderAnim;
     @BindView(R.id.playback_loading_page)
     RelativeLayout playbackLoadingPage;
+    @BindView(R.id.play_layout)
+    LinearLayout playLayout;
+
+
     private SpecialShareVOBean shareVO;
     private int direction;
     private List<LiveRowsBean.VideoListBean> videoList;
@@ -83,6 +88,11 @@ public class PlayBackActivity extends BaseActivity {
     private LiveUserInfoResultBean result;
     private int position1;
     private LiveUserBean user;
+    private int targetId;
+    private int targetType;
+    private Object praiseId;
+    private boolean praiseFlag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,10 +104,10 @@ public class PlayBackActivity extends BaseActivity {
         contentLoader = new ContentLoader(this);
         myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
-        String id = getIntent().getStringExtra("id");
+        String id = getIntent().getStringExtra("id");//1659
+        AppLog.i("TAG", "获取直播回放id:" + id);
         contentLoader.getPlayBackLiveDetails(Integer.parseInt(id));
     }
-
 
 
     @Override
@@ -111,6 +121,11 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
+        targetId= liveRowsBean.getId();
+        targetType = liveRowsBean.getType();
+        praiseId = liveRowsBean.getPraiseId();
+        praiseFlag = liveRowsBean.isPraiseFlag();
+        AppLog.i("TAG","检测视屏是否收藏："+(praiseFlag==true?"已收藏":"未收藏"));
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         initData(liveRowsBean);
     }
@@ -124,9 +139,7 @@ public class PlayBackActivity extends BaseActivity {
         playLoadingPageBg.setBlurRadius(1);
         DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
-        playbackMasterInfoLayout.setOnClickListener(clickListener);
-        AppLog.i("TAG", "视频回放:视频方向：" + direction + "    视频地址：" + videoList.get(0).getUrl());
-        // 视频回放:视频方向：1    视频地址：http://vid-11812.vod.chinanetcenter.broadcastapp.agoraio.cn/live-dev-388-11--20161027115838.mp4
+
         if (direction == 0) {//横屏
             positionChangeListener(0);
             videoViewPlayer.setVisibility(View.GONE);
@@ -150,9 +163,69 @@ public class PlayBackActivity extends BaseActivity {
     }
 
 
-    private void positionChangeListener(int position){
+    @OnClick({R.id.playback_master_info_layout,R.id.playback_quit,R.id.playback_top_share})
+    public void clickButton(View view) {
+        switch (view.getId()) {
+            case R.id.playback_master_info_layout:
+                if (UserHelper.isLogined(PlayBackActivity.this)) {
+                    contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
+                } else {
+                    CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
+                    customDialog.setContent(getString(R.string.live_login_hint));
+                    customDialog.setCancelable(false);
+                    customDialog.setCancelable(false);
+                    customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+                    customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
 
-        if((videoPlayer.getVisibility())==0){
+                        }
+                    });
+                    customDialog.show();
+
+                    DialogUtil.addDialog(customDialog);
+                }
+                break;
+            case R.id.playback_quit:
+                if((videoPlayer.getVisibility())==0){
+                    videoPlayer.close();
+                }else if((videoViewPlayer.getVisibility())==0){
+                    videoViewPlayer.close();
+                }
+
+                finish();
+                break;
+            case R.id.playback_top_share:
+                if (shareVO != null) {
+                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this, shareVO);
+                    shareActivity.showShareWindow();
+
+                    shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
+                            Gravity.BOTTOM, 0, 0);
+                } else {
+                    Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
+
+        }
+
+    public  void playBackCollectStatus(boolean isCollect){
+        if((videoPlayer.getVisibility()) == 0){
+            videoPlayer.setCollect(isCollect);
+
+        }else if((videoViewPlayer.getVisibility()) == 0){
+            videoViewPlayer.setCollect(isCollect);
+
+        }
+
+
+    }
+
+    private void positionChangeListener(int position) {
+        if ((videoPlayer.getVisibility()) == 0) {
             if (videoList.size() == 1) {
                 videoPlayer.setBefore(0.4f, false);
                 videoPlayer.setNext(0.4f, false);
@@ -169,7 +242,9 @@ public class PlayBackActivity extends BaseActivity {
                 }
 
             }
-        }else if((videoViewPlayer.getVisibility())==0){
+
+           videoPlayer.setCollect(praiseFlag);
+        } else if ((videoViewPlayer.getVisibility()) == 0) {
             if (videoList.size() == 1) {
                 videoViewPlayer.setBefore(0.4f, false);
                 videoViewPlayer.setNext(0.4f, false);
@@ -186,56 +261,20 @@ public class PlayBackActivity extends BaseActivity {
                 }
 
             }
-
+            videoViewPlayer.setCollect(praiseFlag);
         }
-
-
-
-
 
 
     }
 
 
 
-    private View.OnClickListener clickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.playback_master_info_layout:
-                    if(UserHelper.isLogined(PlayBackActivity.this)){
-                        contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
-                    }else{
-                        CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
-                        customDialog.setContent(getString(R.string.live_login_hint));
-                        customDialog.setCancelable(false);
-                        customDialog.setCancelable(false);
-                        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
-                        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
-                            @Override
-                            public void onDialogClickListener() {
-                                LLoginActivity.startForResult(PlayBackActivity.this,RESQUEST_COD);
-
-                            }
-                        });
-                        customDialog.show();
-
-                        DialogUtil.addDialog(customDialog);
-                    }
-
-                    break;
-            }
-        }
-    };
-
-
     private VideoPlayCallbackImpl mVideoPlayCallback = new VideoPlayCallbackImpl() {
         @Override
         public void onCloseVideo() {
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();//关闭VideoView
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
             }
 
@@ -266,10 +305,10 @@ public class PlayBackActivity extends BaseActivity {
                 ++position;
                 positionChangeListener(position);
                 Uri uri = Uri.parse(videoList.get(position).getUrl());
-                if((videoPlayer.getVisibility())==0){
+                if ((videoPlayer.getVisibility()) == 0) {
                     videoPlayer.close();
                     videoPlayer.loadAndPlay(uri, 0);
-                }else if((videoViewPlayer.getVisibility())==0){
+                } else if ((videoViewPlayer.getVisibility()) == 0) {
                     videoViewPlayer.close();
                     videoViewPlayer.loadAndPlay(uri, 0);
                 }
@@ -285,14 +324,14 @@ public class PlayBackActivity extends BaseActivity {
         }
 
         @Override
-        public void onClickQuit() {
-            if((videoPlayer.getVisibility())==0){
-                videoPlayer.close();
-            }else if((videoViewPlayer.getVisibility())==0){
-                videoViewPlayer.close();
+        public void onClickCollect(ImageView view) {//收藏
+            if(praiseFlag){
+                contentLoader.cancelParises(praiseId,targetId);
+            }else{
+                contentLoader.specialPraise(targetId, 20);//收藏
             }
 
-            finish();
+
         }
 
         @Override
@@ -333,10 +372,10 @@ public class PlayBackActivity extends BaseActivity {
             positionChangeListener(position);
 
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();
                 videoPlayer.loadAndPlay(uri, 0);
-            }else if((videoViewPlayer.getVisibility())==0) {
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
                 videoViewPlayer.loadAndPlay(uri, 0);
             }
@@ -362,34 +401,24 @@ public class PlayBackActivity extends BaseActivity {
             }
             positionChangeListener(position);
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.close();
                 videoPlayer.loadAndPlay(uri, 0);
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
                 videoViewPlayer.loadAndPlay(uri, 0);
             }
-
-
 
 
         }
 
         @Override
         public void showLoadingPage(boolean isShow) {
+
             playbackLoadingPage.setVisibility(View.GONE);
         }
-
-
     };
 
-
-    private void resetPageToPortrait() {
-        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
-        }
-    }
 
     private int status;
 
@@ -398,7 +427,7 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            if(liveRowsBean!=null){
+            if (liveRowsBean != null) {
                 parseIntent(liveRowsBean);
             }
         }
@@ -416,58 +445,81 @@ public class PlayBackActivity extends BaseActivity {
                     status = (int) parseDouble;
 
                 }
-                final CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
-                dialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                    @Override
-                    public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                        Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
-                        intent.putExtra("userId", String.valueOf(id));
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                    @Override
-                    public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                        Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
-                        intent.putExtra("userId", String.valueOf(id));
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
-                    int fansCounts = -2;
-
-                    @Override
-                    public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
-
-                        if (fansCounts == -2) {
-                            fansCounts = fansCount;
+                if (isUnDestroy) {
+                    final CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
+                    dialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+                        @Override
+                        public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                            Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
+                            intent.putExtra("userId", String.valueOf(id));
+                            startActivity(intent);
+                            dialog.dismiss();
                         }
-                        if (status == 0) {
-                            attentionStatus.setText(getString(R.string.live_attention_ok));
-                            attentionStatus.setAlpha(0.4f);
-                            ++fansCounts;
-                            fansView.setText(String.valueOf(fansCounts));
-                            contentLoader.getAddAttention(id);
-                            status = 1;
-                        } else {
-                            attentionStatus.setText(getString(R.string.live_attention));
-                            attentionStatus.setAlpha(1);
-                            --fansCounts;
-                            fansView.setText(String.valueOf(fansCounts));
-                            contentLoader.getCancelAttention(id);
-                            status = 0;
+                    });
+                    dialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
+                        @Override
+                        public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
+                            Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
+                            intent.putExtra("userId", String.valueOf(id));
+                            startActivity(intent);
+                            dialog.dismiss();
                         }
-                    }
-                });
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        LiveConstant.USER_INFO_FIRST_CLICK = true;
-                    }
-                });
-                dialog.show();
+                    });
+                    dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
+                        int fansCounts = -2;
+
+                        @Override
+                        public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
+
+                            if (fansCounts == -2) {
+                                fansCounts = fansCount;
+                            }
+                            if (status == 0) {
+                                attentionStatus.setText(getString(R.string.live_attention_ok));
+                                attentionStatus.setAlpha(0.4f);
+                                ++fansCounts;
+                                fansView.setText(String.valueOf(fansCounts));
+                                contentLoader.getAddAttention(id);
+                                status = 1;
+                            } else {
+                                attentionStatus.setText(getString(R.string.live_attention));
+                                attentionStatus.setAlpha(1);
+                                --fansCounts;
+                                fansView.setText(String.valueOf(fansCounts));
+                                contentLoader.getCancelAttention(id);
+                                status = 0;
+                            }
+                        }
+                    });
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            LiveConstant.USER_INFO_FIRST_CLICK = true;
+                        }
+                    });
+                    dialog.show();
+                }
+
+            }
+        }
+
+        @Override
+        public void onPariseResult(PariseResult pariseResult) {//取消收藏
+            super.onPariseResult(pariseResult);
+            if (pariseResult != null && pariseResult.getReturnCode() == 0) {
+                praiseFlag = false;
+                playBackCollectStatus(praiseFlag);
+            }
+
+        }
+
+        @Override
+        public void onInputPariseResult(PariseResult pariseResult) {//收藏
+            super.onInputPariseResult(pariseResult);
+            if (pariseResult.getReturnCode() == 0) {
+                praiseId = pariseResult.getResult();
+                praiseFlag = true;
+                playBackCollectStatus(praiseFlag);
             }
         }
     }
@@ -479,9 +531,9 @@ public class PlayBackActivity extends BaseActivity {
         if (videoList != null && videoList.size() > 0) {
             Log.i("TAF", "播放器activityhhehh ");
             Uri uri = Uri.parse(videoList.get(position).getUrl());
-            if((videoPlayer.getVisibility())==0){
+            if ((videoPlayer.getVisibility()) == 0) {
                 videoPlayer.loadAndPlay(uri, position1);
-            }else if((videoViewPlayer.getVisibility())==0){
+            } else if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.loadAndPlay(uri, position1);
             }
 
@@ -493,21 +545,24 @@ public class PlayBackActivity extends BaseActivity {
     protected void onPause() {
         super.onPause();
         // 暂停播放
-        if ((videoPlayer.getVisibility())==0) {
+        if ((videoPlayer.getVisibility()) == 0) {
             Log.i("TAF", "播放器activityhhehh  onPause ");
             position1 = videoPlayer.pause();
-        }else if((videoViewPlayer.getVisibility())==0){
+        } else if ((videoViewPlayer.getVisibility()) == 0) {
             position1 = videoViewPlayer.pause();
         }
     }
 
+    boolean isUnDestroy = true;
+
     @Override
     protected void onDestroy() {
+        isUnDestroy = false;
         // 释放资源
-        if ((videoPlayer.getVisibility())==0) {
+        if ((videoPlayer.getVisibility()) == 0) {
             videoPlayer.close();
-        }else{
-            if((videoViewPlayer.getVisibility())==0){
+        } else {
+            if ((videoViewPlayer.getVisibility()) == 0) {
                 videoViewPlayer.close();
             }
         }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
-import com.lalocal.lalocal.view.MyRecyclerView;
 import com.lalocal.lalocal.view.adapter.HomeRecommendAdapter;
 import com.lalocal.lalocal.view.ptr.PtrHeader;
 
@@ -43,7 +43,7 @@ public class RecommendNewFragment extends BaseFragment {
     private View mContentView;
 
     @BindView(R.id.recycleview_home_recomend)
-    MyRecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
 
     @BindView(R.id.ptr_layout)
     MyPtrClassicFrameLayout mPtrLayout;
@@ -126,6 +126,7 @@ public class RecommendNewFragment extends BaseFragment {
             }
         }
     };
+    private LinearLayoutManager linearLayoutManager;
 
 
     /**
@@ -136,10 +137,29 @@ public class RecommendNewFragment extends BaseFragment {
         mRecommendAdapter = new HomeRecommendAdapter(getActivity(), mAdResultList, mRecommendListBeen, mArticleList, mPtrLayout);
         mAdapter = new RecyclerAdapterWithHF(mRecommendAdapter);
         mRecyclerView.setAdapter(mAdapter);
+
         // 加载数据以后显示加载更多
         mPtrLayout.setLoadMoreEnable(true);
         // 设置适配器
 //        mRecyclerView.setAdapter(mRecommendAdapter);
+        mRecommendAdapter.setItemClick(new HomeRecommendAdapter.ItemClickAdapter() {
+            @Override
+            public void clickPosition(int position) {
+              //  mRecyclerView.smoothScrollToPosition(2);
+            //    mRecyclerView.scrollTo(0, DensityUtil.dip2px(getActivity(),1080));
+
+//        if (hidden) {
+//            mOffset = topView.getTop();
+//            mLastPosition = mRecyclerView.getLayoutManager().getPosition(topView);
+//        } else {
+//            ((LinearLayoutManager)mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(mLastPosition, mOffset);
+//        }
+
+
+
+
+            }
+        });
     }
 
     public RecommendNewFragment() {
@@ -262,7 +282,9 @@ public class RecommendNewFragment extends BaseFragment {
         // 避免出现RecyclerView has no LayoutManager的错误
         mRecyclerView.setHasFixedSize(true);
         // 计算RecyclerView的大小，可以显示其内容
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
     }
 
     /**

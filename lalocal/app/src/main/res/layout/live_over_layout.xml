@@ -1,176 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/live_over_bg"
-   >
+    android:background="@android:color/white"
+    >
+    <ImageView
 
-    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
-        android:id="@+id/live_over_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/live_loading_anim_"
         />
-
-<LinearLayout
-    android:layout_width="match_parent"
-   android:layout_height="match_parent"
-    android:paddingLeft="@dimen/live_over_padding_left"
-    android:background="@color/live_over_bg"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/live_over_padding_top"
-        android:textColor="@color/color_chat_content"
-        android:alpha="0.5"
-        android:text="@string/live_finish"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/goodjob_big_ic_yellow"
-        android:drawablePadding="@dimen/live_padding_10dp"
-        android:paddingTop="@dimen/live_padding_5dp"
-        android:text="@string/live_over_expression"
-        android:textColor="@color/color_ffaa2a"
-        android:textSize="@dimen/live_text_24sp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:textColor="@color/color_chat_content"
-        android:paddingTop="@dimen/live_padding_15dp"
-        android:text="@string/live_audience_count"/>
-    <TextView
-        android:id="@+id/live_over_audience_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/live_padding_5dp"
-        android:drawablePadding="@dimen/live_padding_10dp"
-        android:drawableLeft="@drawable/manypeople_big_ic_white"
-        android:textColor="@color/white"
-        android:textSize="@dimen/live_text_24sp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/live_padding_15dp"
-        android:alpha="0.5"
-        android:textColor="@color/color_chat_content"
-        android:text="@string/live_time_count"/>
-
-    <TextView
-        android:id="@+id/live_over_time_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/live_padding_5dp"
-        android:drawableLeft="@drawable/clock_big_ic_white"
-        android:drawablePadding="@dimen/live_padding_10dp"
-        android:textColor="@color/white"
-        android:textSize="@dimen/live_text_24sp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/live_padding_15dp"
-        android:alpha="0.5"
-        android:textColor="@color/color_chat_content"
-        android:text="@string/live_over_money"/>
-
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/live_padding_5dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/live_padding_30dp"
-            android:paddingRight="@dimen/dimen_size_10_dp"
-            android:text="+"/>
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:paddingRight="@dimen/live_padding_10dp"
-            android:paddingBottom="@dimen/live_padding_5dp"
-            android:src="@drawable/score"/>
-        <TextView
-            android:id="@+id/live_over_money"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:textColor="@color/white"
-            android:drawablePadding="@dimen/live_padding_10dp"
-            android:textSize="@dimen/live_text_24sp"
-            />
-    </LinearLayout>
-
-
-
-</LinearLayout>
-
-
-
-        <TextView
-            android:id="@+id/live_over_back_home"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_50dp"
-            android:layout_alignParentBottom="true"
-            android:text="@string/live_back"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:textSize="@dimen/text_size_16_sp"
-            android:textColor="@color/live_start_tv"
-            android:background="@color/live_input_live_bg"/>
-
-
-    <LinearLayout
-        android:id="@+id/live_over_share_layout"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/live_height_44dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_above="@+id/live_over_back_home"
-        android:layout_marginBottom="@dimen/live_padding_24dp">
+        android:layout_height="match_parent"
+        android:background="#b3191000"/>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/live_padding_109dp">
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginRight="@dimen/live_height_60dp"
+            android:layout_marginLeft="@dimen/live_height_60dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="5dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/cardbglines"
+                android:gravity="bottom"
+                >
 
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/live_over_layout_count"/>
+                    <TextView
+                        android:id="@+id/live_over_audience_count"
+                        android:paddingTop="@dimen/live_padding_5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                      />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/live_over_layout_time"/>
+                    <TextView
+                        android:id="@+id/live_over_time_tv"
+                        android:paddingTop="@dimen/live_padding_5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                       />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/live_over_layout_gold"/>
+                    <TextView
+                        android:id="@+id/live_over_money"
+                        android:paddingTop="@dimen/live_padding_5dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                       />
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/cc_layout"
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        android:layout_marginTop="225dp">
         <ImageView
-            android:id="@+id/live_over_share_friends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/liveend_tittlebg"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:layout_marginLeft="@dimen/live_padding_15dp"
+            android:layout_marginRight="@dimen/live_padding_15dp"
+            />
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/create_live_share_friends_selector"
-            android:paddingRight="@dimen/live_padding_21dp"/>
-
-        <ImageView
-            android:id="@+id/live_over_share_weibo"
+            android:layout_centerInParent="true"
+            android:paddingBottom="30dp"
+            android:textSize="@dimen/live_text_24sp"
+            android:text="@string/live_over_layout_content"/>
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/create_live_share_weibo_selector"
-            android:paddingRight="@dimen/live_padding_21dp"/>
-
-        <ImageView
-            android:id="@+id/live_over_share_weixin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/create_live_share_weixin_selector" />
-    </LinearLayout>
-
+            android:text="@string/live_over_reminder"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/over_share_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
-        android:textColor="@color/color_chat_content"
-        android:text="@string/live_over_share"
-        android:gravity="center"
-        android:layout_above="@+id/live_over_share_layout"
+        android:layout_below="@+id/cc_layout"
+        android:text="@string/live_over_share_reminder"
+        android:paddingTop="@dimen/live_height_50dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/live_padding_12dp"
-        android:textSize="@dimen/text_size_12"/>
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_10dp"
+        android:layout_marginLeft="@dimen/live_height_50dp"
+        android:layout_marginRight="@dimen/live_height_50dp"
+        android:layout_below="@+id/over_share_title">
+        <include layout="@layout/live_over_share_common_layout"></include>
+    </LinearLayout>
 
+    <ImageView
+        android:id="@+id/live_over_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/live_padding_20dp"
+        android:src="@drawable/cancel_dark"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
 </RelativeLayout>

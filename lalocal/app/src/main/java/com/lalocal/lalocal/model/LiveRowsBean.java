@@ -22,15 +22,6 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
     private String cid;
     private String cname;
     private String pushUrl;
-
-    public LiveUserBean getUser() {
-        return user;
-    }
-
-    public void setUser(LiveUserBean user) {
-        this.user = user;
-    }
-
     private String pullUrl;
     private String hlsPullUrl;
     private Object annoucement;
@@ -48,6 +39,34 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
     private int direction;
     private int channelId;
 
+    public boolean isPraiseFlag() {
+        return praiseFlag;
+    }
+
+    public void setPraiseFlag(boolean praiseFlag) {
+        this.praiseFlag = praiseFlag;
+    }
+
+    public Object getPraiseId() {
+        return praiseId;
+    }
+
+    public void setPraiseId(Object praiseId) {
+        this.praiseId = praiseId;
+    }
+
+    private  boolean praiseFlag;
+    public Object praiseId;
+
+
+
+    public LiveUserBean getUser() {
+        return user;
+    }
+
+    public void setUser(LiveUserBean user) {
+        this.user = user;
+    }
     public String getLiveLen() {
         return liveLen;
     }

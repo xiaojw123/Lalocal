@@ -95,6 +95,7 @@ public class MyApplication extends Application {
         }
         //数据库
         intCountryDB();
+
         //代码中设置环信IM的Appkey
         String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
         EMChat.getInstance().setAppkey(appkey);
@@ -113,7 +114,6 @@ public class MyApplication extends Application {
             FlavorDependent.getInstance().onApplicationCreate();
         }
     }
-
 
 
 
@@ -183,7 +183,6 @@ public class MyApplication extends Application {
     private LoginInfo getLoginInfo() {
         String imccId = AuthPreferences.getUserAccount();
         String imToken = AuthPreferences.getUserToken();
-
         AppLog.i("TAG", "MyApplication：account:" + imccId + "token:" + imToken);
         if (!TextUtils.isEmpty(imccId) && !TextUtils.isEmpty(imToken)) {
             DemoCache.setAccount(imccId.toLowerCase());
@@ -193,7 +192,6 @@ public class MyApplication extends Application {
         }
 
     }
-
 
     private void intCountryDB() {
         LitePalApplication.initialize(this);

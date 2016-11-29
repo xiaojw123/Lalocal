@@ -102,6 +102,7 @@ dependencies {
     compile files('libs/SocialSDK_Sina.jar')
     compile files('libs/SocialSDK_WeiXin_1.jar')
 
+
 }
 
 

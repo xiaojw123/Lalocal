@@ -8,10 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.netease.nimlib.sdk.chatroom.constant.MemberType;
-import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 
 import java.util.List;
 
@@ -25,19 +23,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class TouristAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private List<ChatRoomMember> items;
-    private LayoutInflater inflater;
-    private List<LiveRowsBean> rowsBeen;
 
-    public TouristAdapter(Context context, List<ChatRoomMember> items) {
+    private LayoutInflater inflater;
+    List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars;
+
+    public TouristAdapter(Context context,List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars) {
         this.mContext = context;
-        this.items = items;
+        this.userAvatars = userAvatars;
         inflater = LayoutInflater.from(mContext);
     }
-    public void refresh(List<ChatRoomMember> items) {
-        this.items = items;
-
-
+    public void refresh(List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars) {
+        this.userAvatars = userAvatars;
         notifyDataSetChanged();
 
     }
@@ -52,18 +48,13 @@ public class TouristAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
-      final ChatRoomMember member = items.get(position);
-        MemberType memberType = member.getMemberType();
-        if(memberType== MemberType.ADMIN){
-            liveViewHodler.managerMark.setVisibility(View.VISIBLE);
-        }else{
-            liveViewHodler.managerMark.setVisibility(View.GONE);
-        }
+        final LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean userAvatarsBean = userAvatars.get(position);
 
-        if(member.getAvatar()==null||member.getAvatar().length()==0){
-           liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
+        liveViewHodler.managerMark.setVisibility(View.GONE);
+        if(userAvatarsBean.getAvatar()==null||userAvatarsBean.getAvatar().length()==0){
+            liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
         }else{
-            DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, member.getAvatar());
+            DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, userAvatarsBean.getAvatar());
         }
 
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +62,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 if(onTouristItemClickListener!=null){
 
-                    onTouristItemClickListener.showTouristInfo(member,false);
+                    onTouristItemClickListener.showTouristInfo(userAvatarsBean,false);
                 }
             }
         });
@@ -79,7 +70,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return items==null?0:items.size();
+        return userAvatars==null?0:userAvatars.size();
     }
 
 
@@ -98,7 +89,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
     private OnTouristItemClickListener onTouristItemClickListener;
 
     public interface OnTouristItemClickListener {
-        void showTouristInfo(ChatRoomMember member, boolean isMasterAccount);
+        void showTouristInfo( LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean userAvatarsBean , boolean isMasterAccount);
     }
 
     public void setOnTouristItemClickListener(OnTouristItemClickListener onTouristItemClickListener) {

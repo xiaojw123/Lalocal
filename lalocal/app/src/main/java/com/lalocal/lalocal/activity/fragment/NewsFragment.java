@@ -142,6 +142,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         titleHot.setOnClickListener(this);
 
         xRecyclerView = (CustomXRecyclerView) view.findViewById(R.id.xrecyclerview);
+
         //TODO:直播搜索 add by xiaojw
         attenLoginText = (TextView) view.findViewById(R.id.live_no_login_atten);
 
@@ -206,6 +207,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 super.onScrollStateChanged(recyclerView, newState);
                 AppLog.print("onScrollStateChanged  newState_____" + newState);
                 int scollYDistance = getScollYDistance();
+                AppLog.i("TAG","onScrolled获取滚动距离："+scollYDistance);
                 if (scollYDistance > 0 && isFirstGetData) {
                     startScollYDistance = scollYDistance;
                     isFirstGetData = false;
@@ -220,6 +222,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int scollYDistance = getScollYDistance();
+                AppLog.i("TAG","onScrolled获取滚动距离："+scollYDistance);
                 int scollDy = 50 - DensityUtil.px2dip(getActivity(), (scollYDistance - startScollYDistance));
                 AppLog.print("onScrolled firstVisibleItemPosition____" + firstVisibleItemPosition + "____scollDy____" + scollDy);
                 if ((scollDy < 10 || firstVisibleItemPosition > 1)) {
@@ -349,7 +352,9 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 xRecyclerView.setVisibility(View.VISIBLE);
                 attenLoginText.setVisibility(View.INVISIBLE);
                 xRecyclerView.addHeaderView(inflate);
-                xRecyclerView.setAdapter(liveMainAdapter);
+                if(liveMainAdapter!=null){
+                    xRecyclerView.setAdapter(liveMainAdapter);
+                }
                 xRecyclerView.setRefreshing(true);
                 showIndictorView(titleHot);
                 AppLog.print("click end____searchLayout Visible___" + xRecyclerView.getVisibility());
@@ -474,7 +479,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         public void onResponseFailed(int code, String message) {
 //            resetAdapterData();
         }
-
         private void resetAdapterData() {
             allRows.clear();
             if (titleHot.isSelected()) {
@@ -792,7 +796,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 }
             }
 
-
         }
 
     }
@@ -809,6 +812,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private  void  showLoginDialog(){
+
         CustomChatDialog customDialog = new CustomChatDialog(getActivity());
         customDialog.setContent(getString(R.string.live_login_hint));
         customDialog.setCancelable(false);
