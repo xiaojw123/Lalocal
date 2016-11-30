@@ -8,15 +8,13 @@ import android.view.ViewGroup;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
-import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendListBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.view.CustomXRecyclerView;
-import com.lalocal.lalocal.view.viewholder.ArticleViewHolder;
 import com.lalocal.lalocal.view.viewholder.ADCategoryViewHolder;
+import com.lalocal.lalocal.view.viewholder.ArticleViewHolder;
 import com.lalocal.lalocal.view.viewholder.ChannelViewHolder;
 import com.lalocal.lalocal.view.viewholder.ProductViewHolder;
 import com.lalocal.lalocal.view.viewholder.ThemeViewHolder;

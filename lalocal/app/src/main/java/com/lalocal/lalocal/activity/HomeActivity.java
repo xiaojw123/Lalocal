@@ -1,21 +1,12 @@
 package com.lalocal.lalocal.activity;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,7 +23,6 @@ import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
@@ -67,8 +57,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     // 记录第一次点击back的时间
     private long clickTime = 0;
 
-    private LocationManager locationManager;
-    protected MyLocationListener locationListener = new MyLocationListener();//定位监听器
     int mPageType;
 
     public static final int FRAGMENT_LIVE = 0x01;
@@ -83,8 +71,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
         // 使用ButterKnife框架
         ButterKnife.bind(this);
-        // 获取定位
-        getLocation();
+
         // 显示直播fragment
         showFragment(FRAGMENT_LIVE);
         // 检查更新
@@ -472,123 +459,10 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //    public void normalUpdate(View view){
 //        testCheckUpdate(false);
 //    }
-    private String judgeProvider(LocationManager locationManager) {
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        String provider = this.locationManager.getBestProvider(criteria, false);
 
-        return provider;
-    }
 
     protected static final int REQUEST_CODE = 1;
-    protected static int denyCount = 0; //记录拒绝次数  
 
-    private void getLocation() {
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                } else {
-
-                }
-
-                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
-
-            } else {
-                AppLog.i("MQL", "系统版小于23");
-            }
-
-        } else {
-            AppLog.i("MQL", "系统版小于23，哈哈哈哈哈");
-            this.locationManager.requestLocationUpdates("network", 1000 * 10 * 60, 3000, locationListener);
-        }
-
-    }
-
-    private String getBestProvider() {
-        //获取最合适的provider
-        Criteria criteria = new Criteria();
-        criteria.setAccuracy(Criteria.ACCURACY_FINE);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(true);
-        criteria.setPowerRequirement(Criteria.POWER_LOW);
-        String provider = locationManager.getBestProvider(criteria, false);
-
-        //检查位置提供者是否启用
-        //在设置里，一些位置提供者比如GPS可以被关闭。良好的做法就是通过检测你想要的位置提供者是否打开。
-        //如果位置提供者被关闭了，你可以在设置里通过启动Intent来让用户打开。
-     /*   if (locationManager.isProviderEnabled(provider) == false) {
-
-            return null;
-        }*/
-
-
-        return provider;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        try {
-            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-            if (REQUEST_CODE == requestCode) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        return;
-                    }
-                    Location location = locationManager.getLastKnownLocation("network");
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        CommonUtil.LATITUDE = String.valueOf(latitude);
-                        CommonUtil.LONGITUDE = String.valueOf(longitude);
-                    }
-
-                } else {
-                    denyCount++;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    class MyLocationListener implements LocationListener {
-
-        @Override
-        public void onLocationChanged(Location location) {
-
-            String longitude = location.getLongitude() + "";
-            String latitude = location.getLatitude() + "";
-            CommonUtil.LATITUDE = latitude;
-            CommonUtil.LONGITUDE = longitude;
-
-
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
-    }
 
 
     @Override

@@ -90,11 +90,13 @@ public class BaseActivity extends AppCompatActivity {
             if (statusCode == StatusCode.KICKOUT) {
                 //TODO 账号被踢出
                 AppLog.print("baseActivity kiktout____");
+
                 if (UserHelper.isLogined(BaseActivity.this)) {
                     UserHelper.updateSignOutInfo(BaseActivity.this);
                     Toast.makeText(BaseActivity.this, "您的账号在其他设备上登录,请重新登录", Toast.LENGTH_SHORT).show();
                     LLoginActivity.start(BaseActivity.this);
                 }
+
             }
         }
     };

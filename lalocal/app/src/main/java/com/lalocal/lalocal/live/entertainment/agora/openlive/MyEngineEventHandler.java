@@ -119,7 +119,12 @@ public class MyEngineEventHandler {
 
         @Override
         public void onLastmileQuality(int quality) {
-
+            //网络质量回调
+            Iterator<AGEventHandler> it = mEventHandlerList.keySet().iterator();
+            while (it.hasNext()) {
+                AGEventHandler handler = it.next();
+                handler.onLastmileQuality(quality);
+            }
         }
 
         @Override

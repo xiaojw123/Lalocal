@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -17,14 +15,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
 import com.lalocal.lalocal.model.SpecialAuthorBean;
-import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.QiniuUtils;
-import com.lalocal.lalocal.view.WrapContentListView;
-import com.lalocal.lalocal.view.adapter.CommonAdapter;
-import com.lalocal.lalocal.view.adapter.CommonViewHolder;
-
-import java.util.List;
 
 /**
  * Created by wangjie on 2016/10/25.

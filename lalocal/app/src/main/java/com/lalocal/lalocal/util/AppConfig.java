@@ -3,7 +3,6 @@ package com.lalocal.lalocal.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -129,6 +128,16 @@ public class AppConfig {
 
         return baseUrl + "users/bindEmail";
     }
+    //用户端离开直播间
+    public  static  final String  getUserLeaveRoom(String channels){
+        return  baseUrl+"channels/"+channels+"/leave";
+    }
+
+    //获取直播间头像  http://dev.lalocal.cn/api/channels/14/stats?number=7&isMaster=false
+    public  static  final String getLiveRoomAvatar(String roomId,int number,boolean isMaster){
+        return baseUrl+"channels/"+roomId+"/stats?number="+number+"&isMaster="+isMaster;
+    }
+
 
     //推荐接口RECOMMEND_URL
     public static String getRecommendUrl() {
@@ -312,23 +321,28 @@ public class AppConfig {
     public static final String getLiveHotList(String areaId, String attentionFlag) {
         return baseUrl + "channels/index?area=" + areaId + "&attentionFlag=" + attentionFlag;
     }
-
     //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
     public static final String getPlayBackLive(String areaId, int pageNumber, String attentionFlag) {
         //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
         return baseUrl + "channels/historys?area=" + areaId + "&pageNumber=" + pageNumber + "&attentionFlag=" + attentionFlag;
-
     }
 
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public static final String getPlayBackLiveDetails(int id) {
-        Log.i("urrr", baseUrl + "channels/historys/" + id);
         return baseUrl + "channels/historys/" + id;
     }
-
     //上报日志 http://dev.lalocal.cn/api/system/logs/app
     public static final String uploadLogs() {
         return baseUrl + "system/logs/app";
+    }
+
+    //禁言
+    public  static final String getMute(){
+        return baseUrl+"channels/mute";
+    }
+    //永久禁言
+    public  static final String getPerpetualMute(String accid){
+        return baseUrl+"users/block/"+accid;
     }
 
     public static String getBaseUrl() {

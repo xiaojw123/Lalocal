@@ -16,8 +16,7 @@ public interface MessageType {
     int cancel=9;//取消
     int gift=10;//礼物
     int leaveLive=11;//退出直播
-    int onlineNum=12;//人数
+    int kickOut=12;//踢出直播间
+    int closeLive=13;//关闭直播
 
-    int masterEixt=100;//直播离开
-    int masterIn=101;//回来了
 }

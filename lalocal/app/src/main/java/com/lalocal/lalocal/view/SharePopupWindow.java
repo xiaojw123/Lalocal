@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,17 +27,17 @@ import com.umeng.socialize.media.UMImage;
  */
 public class SharePopupWindow extends PopupWindow implements View.OnClickListener {
     private Context context;
-    private LinearLayout shareFriends;
-    private LinearLayout shareWechat;
-    private LinearLayout shareWeibo;
+    private TextView shareFriends;
+    private TextView shareWechat;
+    private TextView shareWeibo;
     private SpecialShareVOBean shareVO;
-    private TextView cancel;
+    private ImageView cancel;
     private static final int REQUEST_PERM = 151;
   //  private BlurImageView shareBlur;
     private View view;
     private View cancelLayout;
     private  String  targetId;
-
+    ImageView cancelShareBtn;
 
 
     private ContentLoader contentLoader;
@@ -63,16 +63,15 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
             dismiss();
         }
         view = LayoutInflater.from(context).inflate(R.layout.share_layout, null);
-      /*  shareBlur = (BlurImageView) view.findViewById(R.id.share_blur);
-        shareBlur.setBlurImageRes(R.drawable.citybg,11,20);*/
-        shareFriends = (LinearLayout) view.findViewById(R.id.share_friends);
-        shareWechat = (LinearLayout) view.findViewById(R.id.share_wechat);
-        shareWeibo = (LinearLayout) view.findViewById(R.id.share_weibo);
-        cancelLayout = view.findViewById(R.id.cancel_layout);
+        shareFriends = (TextView) view.findViewById(R.id.share_friends);
+        shareWechat = (TextView) view.findViewById(R.id.share_wechat);
+        shareWeibo = (TextView) view.findViewById(R.id.share_weibo);
+   cancelShareBtn= (ImageView) view.findViewById(R.id.cancel_share);
+
         shareFriends.setOnClickListener(this);
         shareWechat.setOnClickListener(this);
         shareWeibo.setOnClickListener(this);
-        cancelLayout.setOnClickListener(this);
+        cancelShareBtn.setOnClickListener(this);
 
 
         if(!isInstallMm1){
@@ -138,7 +137,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
                     }
                 }
                 break;
-            case R.id.cancel_layout:
+            case R.id.cancel_share:
                 dismiss();
                 break;
         }

@@ -13,6 +13,22 @@ public class User implements Parcelable{
     String avatar;
     String token=null;
     int status=-1;
+    ImUserInfo imUserInfo;
+    String description;
+    int role;
+    String fansNum;
+    String attentionNum;
+    int sortValue;
+
+    public int getSortValue() {
+        return sortValue;
+    }
+
+    public void setSortValue(int sortValue) {
+        this.sortValue = sortValue;
+    }
+
+
 
     public int getRole() {
         return role;
@@ -22,9 +38,7 @@ public class User implements Parcelable{
         this.role = role;
     }
 
-    ImUserInfo imUserInfo;
-    String description;
-    int role;
+
 
     public String getFansNum() {
         return fansNum;
@@ -42,8 +56,7 @@ public class User implements Parcelable{
         this.attentionNum = attentionNum;
     }
 
-    String fansNum;
-    String attentionNum;
+
 
     public String getDescription() {
         return description;
@@ -129,9 +142,12 @@ public class User implements Parcelable{
         dest.writeString(this.avatar);
         dest.writeString(this.token);
         dest.writeInt(this.status);
+        dest.writeInt(this.sortValue);
         dest.writeParcelable(this.imUserInfo, flags);
         dest.writeString(this.description);
         dest.writeInt(this.role);
+        dest.writeString(this.fansNum);
+        dest.writeString(this.attentionNum);
     }
 
     protected User(Parcel in) {
@@ -141,9 +157,12 @@ public class User implements Parcelable{
         this.avatar = in.readString();
         this.token = in.readString();
         this.status = in.readInt();
+        this.sortValue = in.readInt();
         this.imUserInfo = in.readParcelable(ImUserInfo.class.getClassLoader());
         this.description = in.readString();
         this.role = in.readInt();
+        this.fansNum = in.readString();
+        this.attentionNum = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {

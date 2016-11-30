@@ -21,13 +21,9 @@ public class MsgAdapter extends TAdapter<IMMessage> {
 
     public MsgAdapter(Context context, List<IMMessage> items, TAdapterDelegate delegate) {
         super(context, items, delegate);
-
         timedItems = new HashSet<>();
         progresses = new HashMap<>();
     }
-
-
-
 
     public void setEventListener(ViewHolderEventListener eventListener) {
         this.eventListener = eventListener;
@@ -140,7 +136,6 @@ public class MsgAdapter extends TAdapter<IMMessage> {
                     //删除的不是最后一项
                     nextItem = getItem(index);
                 }
-
                 // 增加其他不需要显示时间的消息类型判断
                 if (hideTimeAlways(nextItem)) {
                     setShowTime(nextItem, false);

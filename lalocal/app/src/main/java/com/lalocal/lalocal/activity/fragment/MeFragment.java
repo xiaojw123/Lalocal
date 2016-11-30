@@ -156,6 +156,7 @@ MeFragment extends BaseFragment {
             //恢复上一次登录的状态
             mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
         } else {
+
             updateFragmentView(false, null);
         }
     }

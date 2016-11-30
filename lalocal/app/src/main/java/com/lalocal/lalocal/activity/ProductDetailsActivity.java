@@ -439,12 +439,9 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.product_viewpager, null);
 
         CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
-
         if (list.size() > 0) {
-
             ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
         }
-
         phones.addView(inflate);
     }
 

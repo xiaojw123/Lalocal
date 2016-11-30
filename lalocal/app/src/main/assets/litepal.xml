@@ -35,6 +35,7 @@
         <mapping class="com.lalocal.lalocal.model.MessageItem"/>
         <mapping class="com.lalocal.lalocal.model.Country" />
         <mapping class="com.lalocal.lalocal.model.HistoryItem"/>
+        <mapping class="com.lalocal.lalocal.model.LiveHistoryItem"/>
     </list>
 
     <!--

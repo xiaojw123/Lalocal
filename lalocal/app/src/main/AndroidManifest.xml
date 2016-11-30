@@ -188,7 +188,7 @@
         <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1e017a0e358e7dcc6793beda9888be87" />
+            android:value="a8f4963ecfc34fa65f74c186ec6bab7a" />
 
         <service android:name="com.amap.api.location.APSService" />
 
@@ -319,10 +319,12 @@
         <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode = "adjustResize"/>
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
@@ -349,7 +351,6 @@
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
-
         <activity android:name=".live.entertainment.activity.ReportActivity" />
         <activity android:name=".activity.MyArticleActivity" />
         <activity android:name=".me.LLoginActivity" />
@@ -364,6 +365,8 @@
         <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
+        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity>
+
         <activity android:name=".me.PhoneBindActivity" />
         <activity android:name=".activity.CmbPayActivity" />
         <activity
@@ -373,7 +376,6 @@
         <service
             android:name="cmb.pb.cmbsafe.CmbService"
             android:exported="false" />
-
         <activity android:name=".me.MyMessageActivity" />
         <activity android:name=".me.TargetWebActivity" />
         <activity android:name=".activity.GlobalSearchActivity"/>

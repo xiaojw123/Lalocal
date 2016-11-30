@@ -91,6 +91,7 @@ public class UserHelper {
         editor.putString(KeyParams.IM_TOKEN, bundle.getString(KeyParams.IM_TOKEN));
         editor.putString(KeyParams.IM_CCID, bundle.getString(KeyParams.IM_CCID));
         editor.putString(KeyParams.NICKNAME, bundle.getString(KeyParams.NICKNAME));
+        editor.putInt(KeyParams.SORTVALUE,bundle.getInt(KeyParams.SORTVALUE));
         editor.commit();
     }
 
@@ -150,6 +151,11 @@ public class UserHelper {
         initSPref(context);
         return sp.getInt(KeyParams.USERID, -1);
 
+    }
+
+    public static int getSortValue(Context context){
+        initSPref(context);
+        return sp.getInt(KeyParams.SORTVALUE, -1);
     }
 
     public static String getToken(Context context) {

@@ -73,13 +73,19 @@
     <!-- leave -->
     <!--========================-->
     <!--live-->
-    <color name="live_emcee_info_bg">#99000000</color>
+    <color name="live_emcee_info_bg">#b0ffffff</color>
+    <color name="live_barrageview_bg">#99000000</color>
+    <color name="live_notification">#b3191000</color>
     <color name="live_telecast_bottom_bg">#cc000000</color>
     <color name="live_text_color">#66ffffff</color>
     <color name="live_input_live_bg">#b2000000</color>
     <color name="live_start_tv">#ffaa2a</color>
     <color name="live_barraview">#73000000</color>
     <color name="live_gift">#64000000</color>
+    <color name="live_im_bg_color">#dff6cf4e</color>
+    <color name="live_im_item_name_color">#f6cf4e</color>
+    <color name="live_beauty_on">#f5a623</color>
+    <color name="live_im_item_content">#ffffff</color>
     <!--umeng-->
     <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
     <color name="umeng_socialize_divider">#E6E6E6</color>

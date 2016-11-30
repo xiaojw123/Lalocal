@@ -67,19 +67,18 @@ public class PlayBackPlayer extends RelativeLayout {
 
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-
                     showOrHideController();
-                    if (!mVideoView.isPlaying()){
+                  /*  if (!mVideoView.isPlaying()){
                         return false;
                     }
                     float downX =  event.getRawX();
                     touchLastX = downX;
                     position = mVideoView.getCurrentPosition();
                     touchPosition=position;
-                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);
+                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);*/
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.i("TAg", "ACTION_MOVE: "+touchPosition);
+                  /*  Log.i("TAg", "ACTION_MOVE: "+touchPosition);
                     float currentX =  event.getRawX();
                     float currentY = event.getRawY();
                     float deltaX = currentX - touchLastX;
@@ -112,10 +111,10 @@ public class PlayBackPlayer extends RelativeLayout {
                             touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
                             mVideoView.seekTo(position);
                         }
-                    }
+                    }*/
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (!mVideoView.isPlaying()){
+                   /* if (!mVideoView.isPlaying()){
                         return false;
                     }
                     Log.i("TAg", "ACTION_UP: "+touchPosition);
@@ -124,30 +123,13 @@ public class PlayBackPlayer extends RelativeLayout {
                         mVideoView.seekTo(touchPosition);
                         touchPosition = -1;
                         Log.i("TAg", "ACTION_UP: "+touchPosition+"哈哈哈哈哈哈哈哈");
-                  /*  if (videoControllerShow){
-                        return true;
+
                     }*/
-                    }
                     break;
-             /*   case MotionEvent.ACTION_CANCEL:
-                    if (!mVideoView.isPlaying()){
-                        return false;
-                    }
-                    Log.i("TAg", "ACTION_UP: "+touchPosition);
-                    touchStatusView.setVisibility(View.GONE);
-                    if (touchPosition!=-1){
-                        mVideoView.seekTo(touchPosition);
-                        touchPosition = -1;
-                  *//*  if (videoControllerShow){
-                        return true;
-                    }*//*
-                    }
-                    break;*/
+
             }
             return true;
 
-
-            //  return mCurrPageType == MediaController.PageType.EXPAND;
         }
     };
     private TextView loadingTv;
@@ -194,18 +176,12 @@ public class PlayBackPlayer extends RelativeLayout {
             }
         }
 
-        @Override
-        public void onClickShare() {
-            if(mVideoPlayCallback!=null){
-                mVideoPlayCallback.onClickShare();
-            }
 
-        }
 
         @Override
-        public void onClickQuit() {
+        public void onClickCollect(ImageView iv) {
             if(mVideoPlayCallback!=null){
-                mVideoPlayCallback.onClickQuit();
+                mVideoPlayCallback.onClickCollect(iv);
             }
 
         }
@@ -399,6 +375,9 @@ public class PlayBackPlayer extends RelativeLayout {
     }
     public  void setNext(float alpha,boolean clickAble){
         mMediaController.setNext(alpha,clickAble);
+    }
+    public  void setCollect(boolean isCollect){
+        mMediaController.setCollect(isCollect);
     }
 
     /**

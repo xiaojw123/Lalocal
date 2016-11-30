@@ -3,32 +3,25 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.SplashActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
@@ -38,30 +31,21 @@ import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout;
-import com.lalocal.lalocal.live.permission.MPermission;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
-import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
-import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
-import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.RecommendLayout;
 import com.lalocal.lalocal.view.adapter.HomeLiveAdapter;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,7 +65,6 @@ public class LiveFragment extends Fragment {
 
     // 适配器
     private HomeLiveAdapter mAdapter;
-
     // 声明内容加载器
     private ContentLoader mContentLoader;
     // 我的关注

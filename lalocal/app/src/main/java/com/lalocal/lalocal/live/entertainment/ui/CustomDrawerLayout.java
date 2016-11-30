@@ -15,7 +15,6 @@ public class CustomDrawerLayout extends DrawerLayout {
     public CustomDrawerLayout(Context context) {
         this(context, null);
     }
-
     public CustomDrawerLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -43,7 +42,7 @@ public class CustomDrawerLayout extends DrawerLayout {
 
                 case MotionEvent.ACTION_MOVE:
 
-                    int i = DensityUtil.dip2px(getContext(), 52);
+                    int i = DensityUtil.dip2px(getContext(), 100);
                     if(y<i){
                         return false;
                     }
