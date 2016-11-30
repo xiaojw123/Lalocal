@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -18,10 +19,16 @@ import com.easemob.EMCallBack;
 import com.easemob.EMError;
 import com.easemob.chat.EMChatManager;
 import com.easemob.exceptions.EaseMobException;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.easemob.Constant;
 import com.lalocal.lalocal.easemob.DemoHelper;
 import com.lalocal.lalocal.easemob.utils.CommonUtils;
+import com.lalocal.lalocal.help.TargetPage;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -36,6 +43,9 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.umeng.message.PushAgent;
+import com.umeng.message.common.inter.ITagManager;
+import com.umeng.message.tag.TagManager;
 
 import java.util.List;
 
@@ -53,8 +63,13 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     int totalTime = 0;
     SplashHandler mHandler;
     VersionResult result;
-
     private boolean isNotJumpt = true;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
+    private boolean isAdJumpt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +77,13 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         setContentView(R.layout.welcome_layout);
         welImg = (ImageView) findViewById(R.id.wel_img);
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
+        welImg.setOnClickListener(this);
         timeTv.setOnClickListener(this);
         mHandler = new SplashHandler();
         requestUserPermission(Manifest.permission.READ_PHONE_STATE);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void updateVersion() {
@@ -92,20 +111,156 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
-
-
     @Override
-    public void onClick(View v) {
-        timeTv.setEnabled(false);
-        if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
-            mHandler.removeMessages(MSG_UPDATE_TIME);
-        }
-        if (isNotJumpt) {
+    protected void onRestart() {
+        super.onRestart();
+        if (isAdJumpt) {
+            isAdJumpt = false;
             startHomePage();
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.wel_img:
+                Object tagObj = welImg.getTag();
+                if (tagObj != null) {
+                    WelcomeImg welImg = (WelcomeImg) tagObj;
+                    int targetType=welImg.getTargetType();
+                        switch (targetType){
+                            case -1://链接
+                                removeUpdateTime();
+                                TargetPage.gotoWebDetail(this, welImg.getTargetUrl(),welImg.getTargetName());
+                                break;
+                            case 0://用户
+                                removeUpdateTime();
+                                TargetPage.gotoUser(this, welImg.getTargetId());
+                                break;
+                            case 1://文章
+                            case 13://资讯
+                                removeUpdateTime();
+                                TargetPage.gotoArticleDetail(this, welImg.getTargetId());
+                                break;
+                            case 2://产品
+                                removeUpdateTime();
+                                TargetPage.gotoProductDetail(this, welImg.getTargetId(), targetType);
+                                break;
+                            case 9://线路
+                                removeUpdateTime();
+                                TargetPage.gotoRouteDetail(this, welImg.getTargetId());
+                                break;
+                            case 10://专题
+                                removeUpdateTime();
+                                TargetPage.gotoSpecialDetail(this, welImg.getTargetId());
+                                break;
+                            case 15://直播-视频
+                                removeUpdateTime();
+                                TargetPage.gotoLive(this, welImg.getTargetId());
+                                break;
+                            case 20://回放
+                                removeUpdateTime();
+                                TargetPage.gotoPlayBack(this, welImg.getTargetId());
+                                break;
+                        }
+                }
+
+                break;
+            case R.id.wel_time_tv:
+                timeTv.setEnabled(false);
+                if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
+                    mHandler.removeMessages(MSG_UPDATE_TIME);
+                }
+                if (isNotJumpt) {
+                    startHomePage();
+                }
+                break;
+        }
+    }
+
+    private void removeUpdateTime() {
+        isAdJumpt = true;
+        if (mHandler.hasMessages(MSG_UPDATE_TIME)) {
+            mHandler.removeMessages(MSG_UPDATE_TIME);
+        }
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Splash Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
+
     public class MyCallBack extends ICallBack {
+        //添加tag 添加alias
+        @Override
+        public void onResponseGetTags(final List<String> tags) {
+            if (tags != null && tags.size() > 0) {
+                final PushAgent mPushAgent = PushAgent.getInstance(SplashActivity.this);
+                mPushAgent.getTagManager().list(new TagManager.TagListCallBack() {
+                    @Override
+                    public void onMessage(boolean isSuccess, List<String> result) {
+                        AppLog.print("获取 taglist");
+                        if (result != null && result.size() > 0) {
+                            for (String tag : tags) {// 1  5  6      4
+                                if (!result.contains(tag)) {
+                                    //add
+                                    mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+
+                                        @Override
+                                        public void onMessage(boolean b, ITagManager.Result result) {
+                                            AppLog.print("添加 tag成功");
+                                        }
+                                    }, tag);
+                                }
+                            }
+
+                        } else {
+                            String tagArray[] = new String[tags.size()];
+                            mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+                                @Override
+                                public void onMessage(boolean b, ITagManager.Result result) {
+                                    AppLog.print("添加 tags成功");
+                                }
+                            }, tags.toArray(tagArray));
+                        }
+
+
+                    }
+                });
+            }
+            mContentloader.getSystemConfigs();
+        }
 
         @Override
         public void onVersionResult(VersionInfo versionInfo) {
@@ -114,7 +269,11 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             if (result != null) {
                 String apiUrl = result.getApiUrl();
                 AppConfig.setBaseUrl(apiUrl);
-                mContentloader.getSystemConfigs();
+                if (UserHelper.isLogined(SplashActivity.this)) {
+                    mContentloader.getPushTags();
+                } else {
+                    mContentloader.getSystemConfigs();
+                }
             } else {
                 Toast.makeText(SplashActivity.this, "系统服务异常", Toast.LENGTH_SHORT).show();
             }
@@ -124,6 +283,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         public void onError(VolleyError volleyError) {
             startHomePage();
         }
+
         @Override
         public void onGetSysConfigs(List<SysConfigItem> items) {
             AppLog.print("onGetSysConfigs____");
@@ -150,7 +310,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         break;
                     case 23://视频方向
                         String defaultDirection = item.getEnumValue();
-                        LiveConstant.DEFAULT_DIRECTION=Integer.parseInt(defaultDirection);
+                        LiveConstant.DEFAULT_DIRECTION = Integer.parseInt(defaultDirection);
                         break;
                 }
 
@@ -160,20 +320,29 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onGetWelcomeImgs(WelcomeImg welcomeImg) {
-            AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
-            String photo = welcomeImg.getPhoto();
-            if (TextUtils.isEmpty(photo)) {
+            welImg.setTag(welcomeImg);
+            if (welcomeImg != null) {
+                AppLog.print("welcommeImg_photo__" + welcomeImg.getPhoto());
+                String photo = welcomeImg.getPhoto();
+                if (TextUtils.isEmpty(photo)) {
+                    if (isNotJumpt) {
+                        startHomePage();
+                    }
+                } else {
+                    totalTime = welcomeImg.getSecond();
+                    Message message = mHandler.obtainMessage();
+                    message.what = MSG_DISPAY_IMG;
+                    message.obj = photo;
+                    mHandler.sendMessage(message);
+                }
+            } else {
                 if (isNotJumpt) {
                     startHomePage();
                 }
-            } else {
-                totalTime = welcomeImg.getSecond();
-                Message message = mHandler.obtainMessage();
-                message.what = MSG_DISPAY_IMG;
-                message.obj = photo;
-                mHandler.sendMessage(message);
             }
         }
+
+
     }
 
 
@@ -346,7 +515,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onDestroy() {
         super.onDestroy();
-      //  registerObservers(false);
+        //  registerObservers(false);
     }
 
 }

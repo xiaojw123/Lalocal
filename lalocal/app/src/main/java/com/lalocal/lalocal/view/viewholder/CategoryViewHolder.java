@@ -2,7 +2,6 @@ package com.lalocal.lalocal.view.viewholder;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -70,8 +69,9 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         mLayoutArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int lastPosition = mRvRecommendList.getAdapter().getItemCount();
-                ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(lastPosition, 0);
+               // int lastPosition = mRvRecommendList.getAdapter().getItemCount();
+                mRvRecommendList.smoothScrollToPosition(2);
+               // ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(lastPosition, 0);
             }
         });
 

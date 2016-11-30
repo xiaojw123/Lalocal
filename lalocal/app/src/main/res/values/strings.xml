@@ -23,6 +23,7 @@
     <string name="forget_psw">忘记密码</string>k
     <string name="other_login_way">其他方式登录</string>
     <string name="weixin">微信</string>
+    <string name="cmb">招商银行</string>
     <string name="qq">QQ</string>
     <string name="weibo">微博</string>
     <string name="sure">确认</string>
@@ -243,6 +244,7 @@
     <string name="more">More</string>
     <string name="no_favorite">没有收藏</string>
     <string name="my_message">我的消息</string>
+    <string name="message">消息</string>
     <string name="invite_friends">邀请好友</string>
     <string name="person_description">个人介绍</string>
     <string name="select_sex">选择性别</string>
@@ -347,5 +349,9 @@
     <string name="information_feedback">信息反馈</string>
     <string name="login_success">登录成功</string>
     <string name="register_success">注册成功</string>
-
+    <string name="contact_customer">联系客服</string>
+    <string name="look_over_the_record_of_commun_with_cutomer">点击查看您与客服的沟通纪录</string>
+    <string name="user">用户</string>
+    <string name="travel_note">笔记</string>
+    <string name="g_search_result_empt">该标签下没有搜索结果，看看其他标签或换一个关键词试试</string>
 </resources>

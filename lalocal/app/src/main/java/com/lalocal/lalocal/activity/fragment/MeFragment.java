@@ -3,43 +3,48 @@ package com.lalocal.lalocal.activity.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
+import com.lalocal.lalocal.activity.EmptActivity;
 import com.lalocal.lalocal.activity.MyArticleActivity;
 import com.lalocal.lalocal.activity.MyFavoriteActivity;
 import com.lalocal.lalocal.activity.MyLiveActivity;
 import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
-import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
 import com.lalocal.lalocal.me.LLoginActivity;
-import com.lalocal.lalocal.model.LiveUserInfoResultBean;
-import com.lalocal.lalocal.model.LiveUserInfosDataResp;
+import com.lalocal.lalocal.me.MyMessageActivity;
 import com.lalocal.lalocal.model.LoginUser;
+import com.lalocal.lalocal.model.MeItem;
 import com.lalocal.lalocal.model.User;
-import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.view.DampView;
+import com.lalocal.lalocal.view.ShapeTextView;
+import com.lalocal.lalocal.view.adapter.MeItemAdapter;
+import com.lalocal.lalocal.view.decoration.DividerGridItemDecoration;
+import com.lalocal.lalocal.view.listener.OnItemClickListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -59,23 +64,10 @@ MeFragment extends BaseFragment {
     public static final int UPDATE_ME_DATA = 301;
     public static final int IM_LOGIN_OK = 105;
     OnMeFragmentListener fragmentListener;
-    WalletContent walletContent;
     @BindView(R.id.home_me_fans_tab)
     LinearLayout homeMeFansTab;
     @BindView(R.id.home_me_atten_tab)
     LinearLayout homeMeFlowTab;
-    @BindView(R.id.home_me_item_message)
-    RelativeLayout homeMeItemMessage;
-    @BindView(R.id.home_me_item_favoirte)
-    FrameLayout homeMeItemFavoirte;
-    @BindView(R.id.home_me_item_wallet_amount_tv)
-    TextView homeMeItemWalletAmountTv;
-    @BindView(R.id.home_me_item_wallet)
-    RelativeLayout homeMeItemWallet;
-    @BindView(R.id.home_me_item_order)
-    FrameLayout homeMeItemOrder;
-    @BindView(R.id.home_me_invitefriends)
-    FrameLayout homeMeInvitefriends;
     @BindView(R.id.home_me_fans_num)
     TextView homeMeFansNum;
     @BindView(R.id.home_me_follow_num)
@@ -86,24 +78,28 @@ MeFragment extends BaseFragment {
     TextView verified_tv;
     @BindView(R.id.home_me_headportrait_img)
     ImageView headImg;
-    @BindView(R.id.home_me_set_btn)
-    ImageButton settingBtn;
-    @BindView(R.id.home_me_message_num)
-    TextView messageNumTv;
     @BindView(R.id.home_me_login_prompt)
     TextView loginPrompt;
-    @BindView(R.id.home_me_item_live)
-    FrameLayout liveItem;
     @BindView(R.id.home_me_author_tag)
     ImageView authorTag;
-    @BindView(R.id.home_me_item_artice)
-    FrameLayout articleFl;
-    @BindView(R.id.home_me_item_artice_line)
-    View articleLine;
+    @BindView(R.id.home_me_userprofile_container)
+    ViewGroup loginLayout;
+    @BindView(R.id.fragment_me_unlogin_layout)
+    ViewGroup unLoginLayout;
+    @BindView(R.id.fragment_me_login_stv)
+    ShapeTextView loginStv;
+    @BindView(R.id.fragment_me_dmpview)
+    DampView dmDampView;
+    @BindView(R.id.home_me_personal_info)
+    LinearLayout perInfoCotainer;
     @BindString(R.string.login_prompt)
     String loginPrmotText;
     @BindString(R.string.default_description)
     String defaultDecription;
+    @BindView(R.id.fragment_me_rlv)
+    RecyclerView itemRlv;
+    MeItemAdapter itemAdapter;
+
 
     @Override
     public void onAttach(Activity activity) {
@@ -116,10 +112,43 @@ MeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         AppLog.print("meFragment_onCreateView____");
-        View view = inflater.inflate(R.layout.fragment_me, container, false);
+        View view = inflater.inflate(R.layout.fragment_me_new, container, false);
         ButterKnife.bind(this, view);
+        dmDampView.setImageView(headImg);
+        if (itemAdapter == null) {
+            itemAdapter = new MeItemAdapter(getMeItems(false));
+            itemAdapter.setOnItemClickListener(recyclerClickListener);
+        }
+        itemRlv.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        itemRlv.addItemDecoration(new DividerGridItemDecoration(getActivity()));
+        itemRlv.setNestedScrollingEnabled(false);
+        itemRlv.setAdapter(itemAdapter);
         setLoaderCallBack(new MeCallBack());
         return view;
+    }
+
+    @NonNull
+    private List<MeItem> getMeItems(boolean hasArticle) {
+        List<MeItem> items = new ArrayList<>();
+        MeItem item1 = new MeItem(MeItemAdapter.ITEM_MY_LIVE, "我的直播", R.drawable.mylive_ic);
+        MeItem item2 = new MeItem(MeItemAdapter.ITEM_MY_MESSAGE, "我的消息", R.drawable.mymassage_ic);
+        MeItem item3 = new MeItem(MeItemAdapter.ITEM_MY_FAVOR, "我的收藏", R.drawable.mycollect_ic);
+        MeItem item4 = new MeItem(MeItemAdapter.ITEM_MY_WALLET, "我的钱包", R.drawable.mywallet_ic);
+        MeItem item5 = new MeItem(MeItemAdapter.ITEM_MY_ORDER, "我的订单", R.drawable.myorder_ic);
+        MeItem item6 = new MeItem(MeItemAdapter.ITEM_MY_FRIEND, "邀请好友", R.drawable.invitemyfriends_ic);
+        MeItem item8 = new MeItem(MeItemAdapter.ITEM_MY_SETTING, "设置", R.drawable.mysetting_ic);
+        items.add(item1);
+        items.add(item2);
+        items.add(item3);
+        items.add(item4);
+        items.add(item5);
+        items.add(item6);
+        if (hasArticle) {
+            MeItem item7 = new MeItem(MeItemAdapter.ITEM_MY_ARTICLE, "我的文章", R.drawable.myartical_ic);
+            items.add(item7);
+        }
+        items.add(item8);
+        return items;
     }
 
     private void initLogin() {
@@ -149,39 +178,12 @@ MeFragment extends BaseFragment {
         initLogin();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        AppLog.print("meFragment____onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        AppLog.print("meFragment____onPause");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        AppLog.print("meFragment____onStop");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        AppLog.print("meFragment____onDestry__");
-    }
-
     private void gotoSettingPage() {
         Intent intent = new Intent(getActivity(), SettingActivity.class);
         startActivityForResult(intent, 101);
     }
 
     private void gotoLoginPage() {
-        //TODO:登录改版
-//        Intent intent = new Intent(getActivity(), LoginActivity.class);
-//        startActivityForResult(intent, 100);
         Intent intent = new Intent(getActivity(), LLoginActivity.class);
         startActivityForResult(intent, KeyParams.REQUEST_CODE);
     }
@@ -189,19 +191,16 @@ MeFragment extends BaseFragment {
 
     private void updateFragmentView(boolean isLogined, User user) {
         if (isLogined && user != null) {
+            loginLayout.setVisibility(View.VISIBLE);
+            unLoginLayout.setVisibility(View.GONE);
             String description = user.getDescription();
             if (TextUtils.isEmpty(description)) {
                 loginPrompt.setText(defaultDecription);
             } else {
                 loginPrompt.setText(description);
             }
-            String nickname = user.getNickName();
-            AppLog.print("账号登录———————nickName—" + nickname);
-            if (!TextUtils.isEmpty(nickname)) {
-                username_tv.setActivated(true);
-                username_tv.setText(nickname);
-            }
-
+//                username_tv.setActivated(true);
+            username_tv.setText(user.getNickName());
             int role = user.getRole();
             if (role == 1) {
                 //专栏作者
@@ -241,66 +240,112 @@ MeFragment extends BaseFragment {
             }
             homeMeFollowNum.setText(user.getAttentionNum());
             homeMeFansNum.setText(user.getFansNum());
-            homeMeItemWalletAmountTv.setVisibility(View.VISIBLE);
-            mContentloader.getMyWallet();
+            mContentloader.getMessageCount();
         } else {
-            AppLog.print("账号退出————————");
-            loginPrompt.setText(loginPrmotText);
-            homeMeItemWalletAmountTv.setText("0");
-            username_tv.setActivated(false);
-            username_tv.setText(getResources().getString(R.string.please_login));
-            verified_tv.setVisibility(View.GONE);
-            headImg.setImageResource(R.drawable.home_me_personheadnormal);
-            homeMeFansNum.setText("0");
-            homeMeFollowNum.setText("0");
-            hidenArticeTag();
-            homeMeItemWalletAmountTv.setVisibility(View.GONE);
+            unLoginLayout.setVisibility(View.VISIBLE);
+            loginLayout.setVisibility(View.GONE);
+            updateMessageCount(null);
         }
+
     }
 
     public void showArticleTag() {
         authorTag.setVisibility(View.VISIBLE);
-        articleFl.setVisibility(View.VISIBLE);
-        articleLine.setVisibility(View.VISIBLE);
-
+        itemAdapter.updateItems(getMeItems(true));
     }
 
     public void hidenArticeTag() {
         authorTag.setVisibility(View.GONE);
-        articleFl.setVisibility(View.GONE);
-        articleLine.setVisibility(View.GONE);
+        itemAdapter.updateItems(getMeItems(false));
     }
 
-    @OnClick({R.id.home_me_item_artice, R.id.home_me_set_btn, R.id.home_me_username, R.id.home_me_headportrait_img, R.id.home_me_item_live, R.id.home_me_fans_tab, R.id.home_me_atten_tab, R.id.home_me_item_message, R.id.home_me_item_favoirte, R.id.home_me_item_wallet, R.id.home_me_item_order, R.id.home_me_invitefriends})
+    private OnItemClickListener recyclerClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClickListener(View view, int position) {
+            Object tagObj = view.getTag();
+            if (tagObj != null) {
+                MeItem item = (MeItem) tagObj;
+                switch (item.getId()) {
+                    case MeItemAdapter.ITEM_MY_LIVE://我的直播
+                        MobHelper.sendEevent(getActivity(), MobEvent.MY_LIVE);
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(MyLiveActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+                        break;
+                    case MeItemAdapter.ITEM_MY_MESSAGE://我的消息
+                        MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(MyMessageActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+                        break;
+                    case MeItemAdapter.ITEM_MY_FAVOR://我的收藏
+                        MobHelper.sendEevent(getActivity(), MobEvent.MY_COLLECTION);
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(MyFavoriteActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+                        break;
+                    case MeItemAdapter.ITEM_MY_WALLET://我的钱包
+                        MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(MyWalletActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+
+                        break;
+                    case MeItemAdapter.ITEM_MY_ORDER://我的订单
+                        MobHelper.sendEevent(getActivity(), MobEvent.MY_ORDER);
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(MyOrderActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+                        break;
+                    case MeItemAdapter.ITEM_MY_FRIEND://邀请好友
+                        MobHelper.sendEevent(getActivity(), MobEvent.MY_FIND);
+                        //TODO:待开发
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(EmptActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+                        break;
+                    case MeItemAdapter.ITEM_MY_ARTICLE://我的文章
+                        if (UserHelper.isLogined(getActivity())) {
+                            gotoMyItemPage(MyArticleActivity.class);
+                        } else {
+                            gotoLoginPage();
+                        }
+                        break;
+                    case MeItemAdapter.ITEM_MY_SETTING://设置
+                        gotoSettingPage();
+                        break;
+
+
+                }
+
+
+            }
+
+
+        }
+    };
+
+    @OnClick({R.id.home_me_personal_info, R.id.fragment_me_login_stv, R.id.home_me_fans_tab, R.id.home_me_atten_tab})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.home_me_item_artice:
-                if (UserHelper.isLogined(getActivity())) {
-                    gotoMyItemPage(MyArticleActivity.class);
-                } else {
-                    gotoLoginPage();
-                }
+            case R.id.fragment_me_login_stv:
+                gotoLoginPage();
                 break;
-            case R.id.home_me_username:
-            case R.id.home_me_headportrait_img:
+            case R.id.home_me_personal_info:
                 MobHelper.sendEevent(getActivity(), MobEvent.MY_AVATAR);
-                if (UserHelper.isLogined(getActivity())) {
-                    gotoEditPage();
-                } else {
-                    gotoLoginPage();
-                }
-                break;
-            case R.id.home_me_set_btn:
-                gotoSettingPage();
-                break;
-
-            case R.id.home_me_item_live:
-                MobHelper.sendEevent(getActivity(), MobEvent.MY_LIVE);
-                if (UserHelper.isLogined(getActivity())) {
-                    gotoMyItemPage(MyLiveActivity.class);
-                } else {
-                    gotoLoginPage();
-                }
+                gotoEditPage();
                 break;
             case R.id.home_me_fans_tab:
                 MobHelper.sendEevent(getActivity(), MobEvent.MY_FANS);
@@ -319,42 +364,6 @@ MeFragment extends BaseFragment {
                     gotoLoginPage();
                 }
                 break;
-            case R.id.home_me_item_message:
-                MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
-                if (UserHelper.isLogined(getActivity())) {
-                    //TODO:待开发
-                } else {
-                    gotoLoginPage();
-                }
-                break;
-            case R.id.home_me_item_favoirte:
-                MobHelper.sendEevent(getActivity(), MobEvent.MY_COLLECTION);
-                if (UserHelper.isLogined(getActivity())) {
-                    gotoMyItemPage(MyFavoriteActivity.class);
-                } else {
-                    gotoLoginPage();
-                }
-                break;
-            case R.id.home_me_item_wallet:
-                MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
-                if (UserHelper.isLogined(getActivity())) {
-                    gotoMyItemPage(MyWalletActivity.class);
-                } else {
-                    gotoLoginPage();
-                }
-                break;
-            case R.id.home_me_item_order:
-                MobHelper.sendEevent(getActivity(), MobEvent.MY_ORDER);
-                if (UserHelper.isLogined(getActivity())) {
-                    gotoMyItemPage(MyOrderActivity.class);
-                } else {
-                    gotoLoginPage();
-                }
-                break;
-            case R.id.home_me_invitefriends:
-                MobHelper.sendEevent(getActivity(), MobEvent.MY_FIND);
-                //TODO:待开发
-                break;
         }
     }
 
@@ -367,12 +376,7 @@ MeFragment extends BaseFragment {
 
     private void gotoMyItemPage(Class<?> cls) {
         Intent intent = new Intent(getActivity(), cls);
-        if (cls == MyWalletActivity.class) {
-            intent.putExtra(KeyParams.WALLET_CONTENT, walletContent);
-            startActivityForResult(intent, KeyParams.REQUEST_CODE);
-        } else {
-            startActivity(intent);
-        }
+        startActivity(intent);
     }
 
     private void gotoLiveUserPage(String liveType) {
@@ -385,23 +389,10 @@ MeFragment extends BaseFragment {
 
     class MeCallBack extends ICallBack {
 
-
         @Override
-        public void onError(VolleyError volleyError) {
-            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
-                if (!UserHelper.isLogined(getActivity())) {
-                    updateFragmentView(false, null);
-                }
-            }
-
+        public void onGetMessageCount(String msgCount) {
+            updateMessageCount(msgCount);
         }
-
-        @Override
-        public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
-            LiveUserInfoResultBean result = liveUserInfosDataResp.getResult();
-
-        }
-
 
         //只刷新验证状态————
         @Override
@@ -410,14 +401,26 @@ MeFragment extends BaseFragment {
             updateFragmentView(true, user);
         }
 
-        @Override
-        public void onGetMyWallet(WalletContent content) {
-            walletContent = content;
-            if (content != null) {
-                String goldText = CommonUtil.formartNum(content.getGold());
-                homeMeItemWalletAmountTv.setText(goldText);
+    }
+
+    private void updateMessageCount(String msgCount) {
+        if (!TextUtils.isEmpty(msgCount)) {
+            int msgC = Integer.parseInt(msgCount);
+            if (msgC > 0) {
+                if (itemAdapter != null) {
+                    List<MeItem> items = itemAdapter.getItems();
+                    MeItem item = items.get(1);
+                    if (item != null) {
+                        item.setMsgCount(msgCount);
+                        itemAdapter.notifyItemChanged(1);
+                    }
+                }
             }
+
+
         }
+
+
     }
 
 
@@ -431,32 +434,9 @@ MeFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("onActivityResult___");
         switch (resultCode) {
-
-            case LOGIN_OK: //登录成功
-                User user = data.getParcelableExtra(USER);
-                updateFragmentView(true, user);
-                break;
-            case UN_LOGIN_OK://退出成功
-                UserHelper.updateSignOutInfo(getActivity());
-                updateFragmentView(false, null);
-                break;
-            case UPDATE_ME_DATA://更新我的页面
-                if (UserHelper.isLogined(getActivity())) {
-                    mContentloader.getUserProfile(UserHelper.getUserId(getActivity()), UserHelper.getToken(getActivity()));
-                } else {
-                    updateFragmentView(false, null);
-                }
-                break;
             case IM_LOGIN_OK://立即登录
                 if (fragmentListener != null) {
                     fragmentListener.onShowRecommendFragment();
-                }
-                break;
-            case UPDAE_MY_WALLET://更新我的钱包
-                if (UserHelper.isLogined(getActivity())) {
-                    mContentloader.getMyWallet();
-                } else {
-                    updateFragmentView(false, null);
                 }
                 break;
         }

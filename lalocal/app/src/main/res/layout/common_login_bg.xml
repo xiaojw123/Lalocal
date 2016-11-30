@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="48dp"
             android:layout_height="49dp"
-            android:layout_marginTop="101dp"
+            android:layout_marginTop="90dp"
             android:background="@drawable/ic_login_logo" />
 
         <TextView

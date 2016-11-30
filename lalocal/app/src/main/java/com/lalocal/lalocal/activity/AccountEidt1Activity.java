@@ -18,14 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
-import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -314,12 +311,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             updateUserProfileView(user);
         }
 
-        @Override
-        public void onError(VolleyError volleyError) {
-            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
-                LLoginActivity.start(AccountEidt1Activity.this);
-            }
-        }
     }
 
 

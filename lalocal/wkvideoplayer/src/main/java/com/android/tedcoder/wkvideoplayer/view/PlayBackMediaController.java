@@ -20,7 +20,7 @@ import java.util.TimeZone;
 /**
  * Created by android on 2016/10/12.
  */
-public  class PlayBackMediaController extends FrameLayout  implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
+public class PlayBackMediaController extends FrameLayout implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
 
 
     private View mMenuViewPlaceHolder;
@@ -38,6 +38,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         if (isFromUser)
             mMediaControl.onProgressTurn(ProgressState.DOING, progress);
     }
+
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         mMediaControl.onProgressTurn(ProgressState.START, 0);
@@ -47,6 +48,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
     public void onStopTrackingTouch(SeekBar seekBar) {
         mMediaControl.onProgressTurn(ProgressState.STOP, 0);
     }
+
     public void setMediaControl(MediaControlImpl mediaControl) {
         mMediaControl = mediaControl;
     }
@@ -74,19 +76,21 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         mMenuViewPlaceHolder = findViewById(R.id.view_menu_placeholder);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
         share = (ImageView) findViewById(R.id.live_telecast_share);
-        videoBefore = (ImageView)findViewById(R.id.video_before);
-        videoNext = (ImageView)findViewById(R.id.video_next);
+        videoBefore = (ImageView) findViewById(R.id.video_before);
+        videoNext = (ImageView) findViewById(R.id.video_next);
         initData();
     }
 
-    public  void setBefore(float alpha,boolean clickAble){
+    public void setBefore(float alpha, boolean clickAble) {
         videoBefore.setAlpha(alpha);
         videoBefore.setClickable(clickAble);
     }
-    public void setNext(float alpha,boolean clickAble){
+
+    public void setNext(float alpha, boolean clickAble) {
         videoNext.setAlpha(alpha);
         videoNext.setClickable(clickAble);
     }
+
     private void initData() {
 
         mProgressSeekBar.setOnSeekBarChangeListener(this);
@@ -98,28 +102,32 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         setPlayState(PlayState.PAUSE);
 
     }
+
     public void setPlayState(PlayState playState) {
         mPlayImg.setImageResource(playState.equals(PlayState.PLAY) ? R.drawable.livingreplay_unplay : R.drawable.livingreplay_play);
     }
+
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.pause) {
-            mMediaControl.onPlayTurn();
-        } else if (view.getId() == R.id.expand) {
-            mMediaControl.onPageTurn();
+        if (mMediaControl != null) {
+            if (view.getId() == R.id.pause) {
+                mMediaControl.onPlayTurn();
+            } else if (view.getId() == R.id.expand) {
+                mMediaControl.onPageTurn();
 
-        } else if (view.getId() == R.id.shrink) {
-            mMediaControl.onPageTurn();
-        }else if(view.getId()==R.id.live_telecast_quit){
-            mMediaControl.onClickQuit();
+            } else if (view.getId() == R.id.shrink) {
+                mMediaControl.onPageTurn();
+            } else if (view.getId() == R.id.live_telecast_quit) {
+                mMediaControl.onClickQuit();
 
-        }else if(view.getId()==R.id.live_telecast_share){
-            mMediaControl.onClickShare();
-        }else if(view.getId()==R.id.video_before){
-            mMediaControl.onClickBefore((ImageView) view);
+            } else if (view.getId() == R.id.live_telecast_share) {
+                mMediaControl.onClickShare();
+            } else if (view.getId() == R.id.video_before) {
+                mMediaControl.onClickBefore((ImageView) view);
 
-        }else if(view.getId()==R.id.video_next){
-            mMediaControl.onClickNext((ImageView) view);
+            } else if (view.getId() == R.id.video_next) {
+                mMediaControl.onClickNext((ImageView) view);
+            }
         }
     }
 
@@ -134,7 +142,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
     /***
      * 强制横屏模式
      */
-    public void forceLandscapeMode(){
+    public void forceLandscapeMode() {
 
     }
 
@@ -177,6 +185,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         }
         return playSecondStr + "/" + allSecondStr;
     }
+
     /**
      * 播放样式 展开、缩放
      */
@@ -208,8 +217,9 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
 
         /**
          * 进度条点击
-         * @param state     进度条状态
-         * @param progress  进度
+         *
+         * @param state    进度条状态
+         * @param progress 进度
          */
         void onProgressTurn(ProgressState state, int progress);
 
@@ -218,9 +228,8 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         void onClickQuit();
 
         void onClickBefore(ImageView imageView);
+
         void onClickNext(ImageView imageView);
-
-
 
 
     }

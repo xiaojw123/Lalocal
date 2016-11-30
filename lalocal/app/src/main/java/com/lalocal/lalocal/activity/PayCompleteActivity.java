@@ -21,6 +21,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,7 +76,7 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
 
 
     private void updateView() {
-        payCompleteCtv.setOnBackClickListener(this);
+        payCompleteCtv.setOnCustomClickLister(this);
         if (mOrderDetail != null) {
             String formartPricee = CommonUtil.formartOrderPrice(mOrderDetail.getFee());
             if (!TextUtils.isEmpty(formartPricee)) {
@@ -96,15 +97,25 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         backToOrderDetail();
+//        super.onBackPressed();
     }
 
     private void backToOrderDetail() {
         AppLog.print("backToOrderDetail_____order id__");
-        Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
-        startActivityForResult(intent, 100);
+        if (mOrderDetail != null) {
+            MobHelper.sendEevent(this, MobEvent.ORDER_DETAIL);
+            Intent intent = new Intent(this, OrderActivity.class);
+            intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
+            startActivityForResult(intent, 100);
+        } else {
+            CommonUtil.showPromptDialog(this, "订单信息为空", new CustomDialog.CustomDialogListener() {
+                @Override
+                public void onDialogClickListener() {
+                    finish();
+                }
+            });
+        }
     }
 
     @OnClick({R.id.pay_complete_service, R.id.pay_complete_vieworder_btn})
@@ -120,12 +131,8 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
                 }
                 break;
             case R.id.pay_complete_vieworder_btn:
-                MobHelper.sendEevent(this,MobEvent.ORDER_DETAIL);
-                if (mOrderDetail != null) {
-                    Intent intent = new Intent(this, OrderActivity.class);
-                    intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
-                    startActivityForResult(intent, 100);
-                }
+                //// TODO: 2016/11/22
+                backToOrderDetail();
                 break;
         }
     }

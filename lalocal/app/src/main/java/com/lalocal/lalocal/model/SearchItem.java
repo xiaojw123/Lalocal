@@ -9,6 +9,8 @@ public class SearchItem {
     private String photo;
     private int modeltype;
     private String key;
+    private String readNum;
+    private String praiseNum;
 
     public String getKey() {
         return key;
@@ -49,5 +51,22 @@ public class SearchItem {
     public void setPhoto(String photo) {
         this.photo = photo;
     }
+
+    public String getReadNum() {
+        return readNum;
+    }
+
+    public void setReadNum(String readNum) {
+        this.readNum = readNum;
+    }
+
+    public String getPraiseNum() {
+        return praiseNum;
+    }
+
+    public void setPraiseNum(String praiseNum) {
+        this.praiseNum = praiseNum;
+    }
+
 
 }

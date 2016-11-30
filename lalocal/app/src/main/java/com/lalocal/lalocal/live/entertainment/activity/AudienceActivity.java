@@ -2,10 +2,12 @@ package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
@@ -178,11 +181,13 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private MyRunnable myRunnable;
     private TextView masterAttentino;
     private int fansNumMaster;
+    private AudioManager audio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initView();
+        audio = (AudioManager) getSystemService(Service.AUDIO_SERVICE);
         ActivityManager.removeAudienceCurrent();
         ActivityManager.audienceActivityStack(this);
         audienceCallBack = new AudienceCallBack();
@@ -1136,7 +1141,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 @Override
                 public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                     MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_REPORT);
-                    Toast.makeText(AudienceActivity.this,"点击了举报",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AudienceActivity.this, "举报功能暂未开放!", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -1588,6 +1593,27 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     @Override
     public void onUserEnableVideo(int uid, boolean enabled) {
         AppLog.i("TAG","其他用户启用/关闭视频 :"+uid+"         "+enabled);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                audio.adjustStreamVolume(
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_RAISE,
+                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                audio.adjustStreamVolume(
+                        AudioManager.STREAM_MUSIC,
+                        AudioManager.ADJUST_LOWER,
+                        AudioManager.FLAG_PLAY_SOUND | AudioManager.FLAG_SHOW_UI);
+                return true;
+            default:
+                break;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

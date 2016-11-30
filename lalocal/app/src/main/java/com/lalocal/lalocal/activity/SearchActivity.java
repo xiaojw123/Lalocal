@@ -237,7 +237,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         }
 
         @Override
-        public void onGetMoreItems(int pageNumber, int totalPages, List<SearchItem> items) {
+        public void onGetMoreItems(String key,int pageNumber, int totalPages, List<SearchItem> items) {
             searchBackImg.setVisibility(View.VISIBLE);
             morePageNumb = pageNumber;
             moreToalPages = totalPages;

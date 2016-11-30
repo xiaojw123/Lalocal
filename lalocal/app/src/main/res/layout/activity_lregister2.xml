@@ -19,7 +19,7 @@
         <com.lalocal.lalocal.view.MyEditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_emial_custom_edit_top"
+            android:layout_marginTop="@dimen/login_phone_edit_top"
             app:hint="@string/set_your_password"
             app:is_password="true"
             app:my_title="@string/password"

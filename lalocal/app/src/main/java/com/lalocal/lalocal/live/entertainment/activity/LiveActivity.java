@@ -945,10 +945,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     @Override
                     public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
                         MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_REPORT);
-                        //       Toast.makeText(LiveActivity.this, "点击了举报", Toast.LENGTH_SHORT).show();
+                               Toast.makeText(LiveActivity.this, "举报功能暂未开放!", Toast.LENGTH_SHORT).show();
                         // 进入举报界面
-                        Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
-                        LiveActivity.this.startActivity(intent);
+                     /*   Intent intent = new Intent(LiveActivity.this, ReportActivity.class);
+                        LiveActivity.this.startActivity(intent);*/
 
                     }
                 });

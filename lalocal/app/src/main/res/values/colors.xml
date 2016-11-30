@@ -132,4 +132,13 @@
     <color name="umeng_socialize_text_title">#464f61</color>
     <color name="black_color">#000000</color>
     <color name="white_color">#ffffff</color>
+    <color name="color_faf7f2">#faf7f2</color>
+    <color name="color_191000">#191000</color>
+    <color name="color_30191000">#30191000</color>
+    <color name="color_10191000">#10191000</color>
+    <color name="color_50191000">#50191000</color>]
+    <color name="color_70191000">#70191000</color>
+    <color name="color_f6cf4e">#F6CF4E</color>
+    <color name="color_faf6f0">#FAF6F0</color>
+    <color name="color_f5a623">#f5a623</color>
 </resources>

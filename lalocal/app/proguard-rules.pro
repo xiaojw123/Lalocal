@@ -90,8 +90,6 @@ public static final int *;
 -keep class * implements android.os.Parcelable {         # 保持 Parcelable 不被混淆
     public static final android.os.Parcelable$Creator *;
 }
-
-<<<<<<< HEAD
 #    3D 地图
 
     -keep   class com.amap.api.mapcore.**{*;}
@@ -139,10 +137,13 @@ public static final int *;
     -keep class org.bitlet.** {*;}
     -keep class org.slf4j.** {*;}
     -keep class ch.imvs.** {*;}
-=======
 #网易云信
 -dontwarn com.netease.**
 -dontwarn io.netty.**
 -keep class com.netease.** {*;}
 -keep class io.netty.** {*;}
->>>>>>> 6cc2021664b12ecaa1e69835c2d9f3a63643bd55
+-keepclasseswithmembers class cmb.pb.util.CMBKeyboardFunc {
+    public <init>(android.app.Activity);
+    public boolean HandleUrlCall(android.webkit.WebView,java.lang.String);
+    public void callKeyBoardActivity();
+}

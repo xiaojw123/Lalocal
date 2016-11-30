@@ -44,13 +44,11 @@ import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomNotificationHelper;
 import com.lalocal.lalocal.live.entertainment.helper.GiftAnimations;
 import com.lalocal.lalocal.live.entertainment.helper.GiftPlaneAnimation;
-import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.helper.SimpleCallback;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
-import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
@@ -763,13 +761,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         shareActivity.setOnSuccessShare(new SharePopupWindow.OnSuccessShareListener() {
                             @Override
                             public void shareSuccess() {
-                                LiveMessage liveMessage=new LiveMessage();
-                                liveMessage.setStyle(MessageType.liveShare);
-                                liveMessage.setUserId(userId);
-                                liveMessage.setCreatorAccount(creatorAccount);
-                                liveMessage.setChannelId(channelId);
-                                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "分享了直播", roomId, AuthPreferences.getUserAccount(), liveMessage);
-                                sendMessage(imMessage, MessageType.liveShare);
+
                             }
                         });
                     }
@@ -860,9 +852,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case MessageType.text://聊天
                     messageListPanel.onIncomingMessage(messages);
                     break;
-                case MessageType.liveShare:
-                    messageListPanel.onIncomingMessage(messages);
-                    break;
+
                 case MessageType.barrage://弹幕
                     ChatRoomMessage barrageMessage = (ChatRoomMessage) message;
 
@@ -1515,9 +1505,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case MessageType.challenge:
                     messageListPanel.onMsgSend(message);
                     break;
-                case MessageType.liveShare:
-                    messageListPanel.onMsgSend(message);
-                    break;
+
                 case MessageType.text:
                     AppLog.i("TAG","我发送了消息");
                     messageListPanel.onMsgSend(message);

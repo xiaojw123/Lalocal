@@ -630,4 +630,44 @@
         <item name="android:layout_marginTop">@dimen/dimen_size_10_dp</item>
     </style>
 
+
+    <!--<TextView-->
+        <!--android:id="@+id/tab1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/liveplay"-->
+        <!--android:textSize="@dimen/text_size_15_sp"-->
+        <!--android:clickable="true"-->
+        <!--android:textColor="@color/search_tab_textcolor"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--/>-->
+
+    <style name="GSearchTabTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/search_tab_textcolor</item>
+        <item name="android:textSize">@dimen/text_size_15_sp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!--<View-->
+        <!--android:layout_width="12dp"-->
+        <!--android:layout_height="@dimen/live_padding_2dp"-->
+        <!--android:clickable="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_below="@+id/tab1"-->
+        <!--android:layout_marginTop="@dimen/dimen_size_3_dp"-->
+        <!--android:background="@color/color_f5a623"-->
+        <!--/>-->
+
+    <style name="GSearchTabIndexStyle">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">@dimen/live_padding_2dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">@dimen/dimen_size_3_dp</item>
+        <item name="android:background">@drawable/search_tab_index_bg</item>
+    </style>
+
 </resources>

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,6 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
-import com.lalocal.lalocal.view.MyRecyclerView;
 import com.lalocal.lalocal.view.adapter.HomeRecommendAdapter;
 import com.lalocal.lalocal.view.ptr.PtrHeader;
 
@@ -43,7 +43,7 @@ public class RecommendNewFragment extends BaseFragment {
     private View mContentView;
 
     @BindView(R.id.recycleview_home_recomend)
-    MyRecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
 
     @BindView(R.id.ptr_layout)
     MyPtrClassicFrameLayout mPtrLayout;

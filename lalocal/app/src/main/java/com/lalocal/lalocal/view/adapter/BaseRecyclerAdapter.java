@@ -30,6 +30,7 @@ public  abstract  class BaseRecyclerAdapter extends RecyclerView.Adapter{
                   if (listener!=null){
                       listener.onItemClickListener(v,position);
                   }
+
               }
           });
 

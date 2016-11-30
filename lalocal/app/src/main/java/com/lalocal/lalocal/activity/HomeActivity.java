@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,12 +50,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     private long clickTime = 0;
 
     private LocationManager locationManager;
-    private String locationProvider;
-
-    private String provider;
-    private Location location;
-    protected MyLocationListener locationListener = new MyLocationListener();//定位监听器
-
     int mPageType;
 
     @Override
@@ -70,18 +63,19 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     }
 
 
-
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
-        boolean forceFlag = result.isForceFlag();
-        boolean checkUpdate = result.isCheckUpdate();
-        String downLoadUrl = result.getDownloadUrl();
-        String contentText = getUpdateContent(result.getMsg());
-        if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
-            if (forceFlag) {
-                showForceUpdateDialog(downLoadUrl, contentText);
-            } else {
-                showUpdateDialog(downLoadUrl, contentText);
+        if (result != null) {
+            boolean forceFlag = result.isForceFlag();
+            boolean checkUpdate = result.isCheckUpdate();
+            String downLoadUrl = result.getDownloadUrl();
+            String contentText = getUpdateContent(result.getMsg());
+            if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
+                if (forceFlag) {
+                    showForceUpdateDialog(downLoadUrl, contentText);
+                } else {
+                    showUpdateDialog(downLoadUrl, contentText);
+                }
             }
         }
     }
@@ -106,6 +100,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         @Override
         public void onClick(View v) {
             ViewGroup container = (ViewGroup) v;
+            if (container.isSelected()) {
+                return;
+            }
             showFragment(container);
         }
     };
@@ -190,6 +187,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             View v = container.getChildAt(i);
             v.setSelected(isSelected);
         }
+        container.setSelected(isSelected);
     }
 
 
@@ -343,8 +341,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     }
 
 
-/*   next only for test update
-* */
+    /*   next only for test update
+    * */
 //    private void testCheckUpdate(boolean focrce) {
 //        boolean checkUpdate =true;
 //        String downLoadUrl ="http://media.lalocal.cn/app/lalocal_2_1_2.apk";
@@ -372,128 +370,79 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //    public void normalUpdate(View view){
 //        testCheckUpdate(false);
 //    }
-private String judgeProvider(LocationManager locationManager) {
-    Criteria criteria = new Criteria();
-    criteria.setAccuracy(Criteria.ACCURACY_FINE);
-    criteria.setAltitudeRequired(false);
-    criteria.setBearingRequired(false);
-    criteria.setCostAllowed(true);
-    criteria.setPowerRequirement(Criteria.POWER_LOW);
-    String provider =this.locationManager.getBestProvider(criteria, false);
-
-    return provider;
-}
-    protected static final int REQUEST_CODE = 1;
-    protected static int denyCount = 0; //记录拒绝次数  
-    private void getLocation() {
-        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                }else{
-
-                   /* if (denyCount >= 2){
-                        Log.d("MQL", "亲爱的用户,请到您的权限管理中打开");
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        Uri uri = Uri.fromParts("package", "com.analysys.locationdemo", null);
-                        intent.setData(uri);
-                       startActivity(intent);
-                    }*/
-                }
-
-                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
-
-            } else {
-
-               AppLog.i("MQL","系统版小于23");
-            }
-
-        } else {
-            AppLog.i("MQL","系统版小于23，哈哈哈哈哈");
-            this.locationManager.requestLocationUpdates("network", 1000*10*60, 3000,locationListener);
-        }
-
-    }
-
-    private String getBestProvider() {
-        //获取最合适的provider
+    private String judgeProvider(LocationManager locationManager) {
         Criteria criteria = new Criteria();
         criteria.setAccuracy(Criteria.ACCURACY_FINE);
         criteria.setAltitudeRequired(false);
         criteria.setBearingRequired(false);
         criteria.setCostAllowed(true);
         criteria.setPowerRequirement(Criteria.POWER_LOW);
-        String provider =locationManager.getBestProvider(criteria, false);
-
-        //检查位置提供者是否启用
-        //在设置里，一些位置提供者比如GPS可以被关闭。良好的做法就是通过检测你想要的位置提供者是否打开。
-        //如果位置提供者被关闭了，你可以在设置里通过启动Intent来让用户打开。
-     /*   if (locationManager.isProviderEnabled(provider) == false) {
-
-            return null;
-        }*/
-
+        String provider = this.locationManager.getBestProvider(criteria, false);
 
         return provider;
     }
 
+    protected static final int REQUEST_CODE = 1;
+    protected static int denyCount = 0; //记录拒绝次数  
+
+    private void getLocation() {
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                } else {
+
+                }
+
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
+
+            } else {
+
+            }
+
+        } else {
+            Location location = locationManager.getLastKnownLocation("network");
+            if (location != null) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                CommonUtil.LATITUDE = String.valueOf(latitude);
+                CommonUtil.LONGITUDE = String.valueOf(longitude);
+            }
+
+        }
+
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        try {
+            super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            if (REQUEST_CODE == requestCode) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        return;
+                    }
+                    Location location = locationManager.getLastKnownLocation("network");
+                    if (location != null) {
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
+                        CommonUtil.LATITUDE = String.valueOf(latitude);
+                        CommonUtil.LONGITUDE = String.valueOf(longitude);
+                    }
 
-        if (REQUEST_CODE == requestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
+                } else {
+                    denyCount++;
                 }
-              /*  String provider = this.getBestProvider();
-                if (provider != null){
-                    this.locationManager.requestLocationUpdates("network", 1000*60*30, 5000,locationListener);
-                }*/
-                this.locationManager.requestLocationUpdates("network", 1000*60*10, 5000,locationListener);
-
-            }else{
-                denyCount++;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }
-
-    class MyLocationListener implements LocationListener {
-
-        @Override
-        public void onLocationChanged(Location location) {
-
-            String longitude = location.getLongitude() + "";
-            String latitude = location.getLatitude() + "";
-            CommonUtil.LATITUDE=latitude;
-            CommonUtil.LONGITUDE=longitude;
-
-
-        }
-
-        @Override
-        public void onStatusChanged(String s, int i, Bundle bundle) {
-
-
-        }
-
-        @Override
-        public void onProviderEnabled(String s) {
-        }
-
-        @Override
-        public void onProviderDisabled(String s) {
-
-        }
-    }
-
-
-
 
 
     @Override
@@ -544,7 +493,7 @@ private String judgeProvider(LocationManager locationManager) {
     //立即登录----home  其他---me
     public static void start(Context context, boolean imLogin) {
         Intent intent = new Intent(context, HomeActivity.class);
-        AppLog.print("start imlOGIN__"+imLogin);
+        AppLog.print("start imlOGIN__" + imLogin);
         if (imLogin) {
             intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_HOME_FRAMENT);
         } else {
@@ -552,6 +501,7 @@ private String judgeProvider(LocationManager locationManager) {
         }
         context.startActivity(intent);
     }
+
     //确保intent可以传递数据
     @Override
     protected void onNewIntent(Intent intent) {

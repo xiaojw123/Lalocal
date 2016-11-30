@@ -22,9 +22,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.lalocal.lalocal.R.id.my_diamond_llt;
-import static com.lalocal.lalocal.activity.fragment.MeFragment.UPDAE_MY_WALLET;
 
-public class MyWalletActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
+public class MyWalletActivity extends BaseActivity{
 
     @BindView(R.id.my_diamond_num)
     TextView myDiamondNum;
@@ -53,8 +52,6 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
         setContentView(R.layout.my_wallet_layout);
         ButterKnife.bind(this);
         instructions_tv.setText(Html.fromHtml("<u>" + goldInstructions + "</u>"));
-        myWalletCtv.setOnBackClickListener(this);
-
         setLoaderCallBack(new WalletCallBack());
         mWalletContent = getWalletContent();
         if (mWalletContent == null) {
@@ -94,16 +91,6 @@ public class MyWalletActivity extends BaseActivity implements CustomTitleView.on
         }
     }
 
-    @Override
-    public void onBackClick() {
-        setResult(UPDAE_MY_WALLET);
-    }
-
-    @Override
-    public void onBackPressed() {
-        setResult(UPDAE_MY_WALLET);
-        super.onBackPressed();
-    }
 
     class WalletCallBack extends ICallBack {
         @Override

@@ -19,11 +19,9 @@ public class JsInterface {
     public JsInterface(Context context){
         mContext=context;
     }
-
-
     @JavascriptInterface
     public void postMessage(String callback, String message) {
-        AppLog.print("callback___" + callback + ", message__" + message);
+        AppLog.print("postMessage@param  callback:" + callback + "\nmessage:" + message);
         switch (callback){
             case BookActivity.PAGE_TO_PAY:
                 Intent intent=new Intent(mContext,PayActivity.class);
@@ -33,30 +31,35 @@ public class JsInterface {
                 mContext.startActivity(intent);
                 ((Activity)mContext).finish();
                 break;
-
-        }
-
-    }
-
-    @JavascriptInterface
-    public void postMessage(String callback) {
-        AppLog.print("postMessage___callback__"+callback);
-        switch (callback){
             case BookActivity.PAGET_TO_COUPON:
                 //TODO:优惠券影响预定流程
-                gotoMyCoupon();
+                gotoMyCoupon(message);
                 break;
-
         }
-
 
     }
 
 
+//    @JavascriptInterface
+//    public void postMessage(String callback) {
+//        AppLog.print("postMessage___callback__"+callback);
+//        switch (callback){
+//            case BookActivity.PAGET_TO_COUPON:
+//                //TODO:优惠券影响预定流程
+////                gotoMyCoupon();
+//                break;
+//
+//        }
+//
+//
+//    }
 
 
-    private void gotoMyCoupon() {
+
+
+    private void gotoMyCoupon(String productionId) {
         Intent intent=new Intent(mContext, MyCouponActivity.class);
+        intent.putExtra(MyCouponActivity.PRODUCTION_ID,productionId);
         ((Activity)mContext).startActivityForResult(intent,KeyParams.REQUEST_CODE);
     }
 
