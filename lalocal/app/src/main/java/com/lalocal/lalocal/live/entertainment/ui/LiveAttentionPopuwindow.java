@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
@@ -66,7 +65,6 @@ public class LiveAttentionPopuwindow extends PopupWindow {
     public  void clickBtn(View view){
         switch (view.getId()){
             case R.id.live_attention_dialog_cance:
-                Toast.makeText(context,"点击了live_attention_dialog_cancel",Toast.LENGTH_SHORT).show();
                 dismiss();
                 break;
             case R.id.live_attention_dialog_btn:
@@ -94,11 +92,12 @@ public class LiveAttentionPopuwindow extends PopupWindow {
                     liveAttentionDialogBtn.setText("相互关注");
                     liveAttentionDialogBtn.setAlpha(0.6f);
                 }
-
                 Drawable drawable1 = context.getResources().getDrawable(R.drawable.followsb_ic_sel);
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
-
                 liveAttentionDialogBtn.setCompoundDrawables(drawable1, null, null, null);
+                if(onUserAttentionListener!=null){
+                    onUserAttentionListener.getAttention();
+                }
             }
 
         }
@@ -114,9 +113,14 @@ public class LiveAttentionPopuwindow extends PopupWindow {
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
                 liveAttentionDialogBtn.setCompoundDrawables(drawable1, null, null, null);
             }
-
         }
     }
+    public  interface  OnUserAttentionListener {
+        void getAttention();
+    }
+    OnUserAttentionListener onUserAttentionListener;
 
-
+    public  void setOnUserAttentionListener (OnUserAttentionListener onUserAttentionListener){
+        this.onUserAttentionListener=onUserAttentionListener;
+    }
 }

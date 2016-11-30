@@ -113,7 +113,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             result = versionInfo.getResult();
             if (result != null) {
                 String apiUrl = result.getApiUrl();
-                AppConfig.setBaseUrl(apiUrl);
+//                AppConfig.setBaseUrl(apiUrl);
                 mContentloader.getSystemConfigs();
             } else {
                 Toast.makeText(SplashActivity.this, "系统服务异常", Toast.LENGTH_SHORT).show();

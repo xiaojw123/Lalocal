@@ -894,7 +894,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
 
     protected void showInputTextView() {
-
+        AppLog.i("TAG","用户端显示软键盘showInputTextView");
         boolean logineds = UserHelper.isLogined(AudienceActivity.this);
         if (!logineds) {
             showLoginViewDialog();
@@ -932,6 +932,12 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 }
             });
         }
+    }
+
+    @Override
+    protected void superManagerKickOutUser() {
+        Toast.makeText(this,"你被管理员踢出聊天室",Toast.LENGTH_SHORT).show();
+        finishLive();
     }
 
 
@@ -993,7 +999,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
     };
 
-
+    boolean isClickSettingLayout=false;
     boolean giftStoreFirstClick = true;
     boolean isNeedRequestServerShowGiftStorePage = false;
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
@@ -1067,7 +1073,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     break;
 
                 case R.id.live_telecast_input_text:
-
+                    isClickSettingLayout=true;
                     showInputTextView();
                     break;
                 case R.id.audience_live_over_close:
@@ -1174,7 +1180,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         if (isStartLive) {
             logoutChatRoom();
         } else {
-
             NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
             clearChatRoom();
         }
@@ -1343,24 +1348,30 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-
-        if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {//显示
-            if (liveSettingLayout != null && keyboardLayout != null) {
-                keyboardLayout.setAlpha(1);
-                keyboardLayout.setClickable(true);
-                keyboardLayout.setVisibility(View.VISIBLE);
-                liveSettingLayout.setVisibility(View.INVISIBLE);
-                liveSettingLayout.setClickable(false);
-            }
-        } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
-            if (keyboardLayout != null) {
-                keyboardLayout.setAlpha(0);
-                keyboardLayout.setClickable(false);
-                keyboardLayout.setVisibility(View.INVISIBLE);
-                liveSettingLayout.setVisibility(View.VISIBLE);
-                liveSettingLayout.setClickable(true);
+        if(isClickSettingLayout){
+            if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)) {//显示
+                if (liveSettingLayout != null && keyboardLayout != null) {
+                    keyboardLayout.setAlpha(1);
+                    keyboardLayout.setClickable(true);
+                    keyboardLayout.setVisibility(View.VISIBLE);
+                    liveSettingLayout.setVisibility(View.INVISIBLE);
+                    liveSettingLayout.setClickable(false);
+                    topView.setVisibility(View.GONE);
+                    AppLog.i("TAG","用户端软键盘显示");
+                }
+            } else if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
+                if (keyboardLayout != null) {
+                    keyboardLayout.setAlpha(0);
+                    keyboardLayout.setClickable(false);
+                    keyboardLayout.setVisibility(View.INVISIBLE);
+                    liveSettingLayout.setVisibility(View.VISIBLE);
+                    liveSettingLayout.setClickable(true);
+                    topView.setVisibility(View.VISIBLE);
+                    AppLog.i("TAG","用户端软键盘隐藏");
+                }
             }
         }
+
     }
 
     @Override
@@ -1391,12 +1402,14 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 surfaceV.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
                     @Override
                     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-
+                        AppLog.i("TAG","视频布局变化监听");
                         if (palyerLayout != null && palyerLayout.getChildAt(0) != null) {
                             if (bottom > oldBottom) {
                                 palyerLayout.getChildAt(0).layout(left, top, right, bottom);
+                                AppLog.i("TAG","视频布局变化监听1");
                             } else {
                                 palyerLayout.getChildAt(0).layout(oldLeft, oldTop, oldRight, oldBottom);
+                                AppLog.i("TAG","视频布局变化监听2");
                             }
                         }
                     }
@@ -1432,11 +1445,25 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             @Override
             public void onFinish() {
                 AppLog.i("TAG", "显示观看直播1分钟，关注主播dialog");
-                if (overAttentionStatus == 0 && isUnDestory) {
+                if (overAttentionStatus == 0 && isUnDestory&&audienceOver.getVisibility()!=View.VISIBLE) {
                     LiveAttentionPopuwindow popuwindow = new LiveAttentionPopuwindow(AudienceActivity.this, liveRowsBean);
                     popuwindow.showAttentionPopu();
                     popuwindow.showAtLocation(AudienceActivity.this.findViewById(R.id.live_layout),
                             Gravity.BOTTOM, 0, 0);
+                    popuwindow.setOnUserAttentionListener(new LiveAttentionPopuwindow.OnUserAttentionListener() {
+                        @Override
+                        public void getAttention() {
+                            if (container != null && container.account != null && creatorAccount != null) {
+                                LiveMessage liveMessage = new LiveMessage();
+                                liveMessage.setStyle(MessageType.text);
+                                liveMessage.setUserId(userId);
+                                liveMessage.setCreatorAccount(creatorAccount);
+                                liveMessage.setChannelId(channelId);
+                                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "关注了主播!", roomId, AuthPreferences.getUserAccount(), liveMessage);
+                                sendMessage(imMessage, MessageType.text);
+                            }
+                        }
+                    });
                 }
             }
         }.start();

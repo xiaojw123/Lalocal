@@ -13,6 +13,7 @@ public  class LiveUserBean implements Parcelable {
     private String avatar;
     private String description;
     private String avatarOrigin;
+    private int sortValue;
 
     public int getId() {
         return id;
@@ -62,6 +63,14 @@ public  class LiveUserBean implements Parcelable {
         this.avatarOrigin = avatarOrigin;
     }
 
+    public int getSortValue() {
+        return sortValue;
+    }
+
+    public void setSortValue(int sortValue) {
+        this.sortValue = sortValue;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -75,6 +84,7 @@ public  class LiveUserBean implements Parcelable {
         dest.writeString(this.avatar);
         dest.writeString(this.description);
         dest.writeString(this.avatarOrigin);
+        dest.writeInt(this.sortValue);
     }
 
     public LiveUserBean() {
@@ -87,6 +97,7 @@ public  class LiveUserBean implements Parcelable {
         this.avatar = in.readString();
         this.description = in.readString();
         this.avatarOrigin = in.readString();
+        this.sortValue = in.readInt();
     }
 
     public static final Parcelable.Creator<LiveUserBean> CREATOR = new Parcelable.Creator<LiveUserBean>() {

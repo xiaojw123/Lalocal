@@ -11,7 +11,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/create_live_share_friends_selector"
+            android:src="@drawable/common_live_share_friends_selector"
             />
 
         <ImageView
@@ -19,7 +19,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/create_live_share_weibo_selector"
+            android:src="@drawable/common_live_share_weibo_selector"
             />
 
         <ImageView
@@ -27,7 +27,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/create_live_share_weixin_selector" />
+            android:src="@drawable/common_live_share_weixin_selector" />
         <ImageView
             android:id="@+id/over_page_qq"
             android:layout_width="0dp"

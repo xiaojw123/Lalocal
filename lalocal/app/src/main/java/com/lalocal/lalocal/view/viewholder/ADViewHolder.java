@@ -24,6 +24,7 @@ import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.view.DisallowParentTouchSliderLayout;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
 
@@ -138,7 +139,7 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
         }
 
         // 自定义指示器
-        mDotBtns = CommonUtil.initDot(mContext, mSliderLayout, mDotContainer, size, mSliderLayout.getCurrentPosition(), CommonUtil.AD_DOT);
+        mDotBtns = DotUtils.initDot(mContext, mSliderLayout, mDotContainer, size, mSliderLayout.getCurrentPosition(), DotUtils.AD_DOT);
 
         // 轮播图页面改变
         mSliderLayout.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
@@ -146,7 +147,7 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
-                CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.AD_DOT);
+                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.AD_DOT);
             }
         });
     }

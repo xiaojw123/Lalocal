@@ -94,6 +94,14 @@
         <attr name="lineSpacingMultiplier"/>
         <attr name="maxLines"/>
     </declare-styleable>
+
+    <!--阴影属性-->
+    <declare-styleable name="MyShadow">
+        <attr name="shadow_width" format="dimension|reference" />
+        <attr name="shadow_alpha" format="float|reference" />
+        <attr name="shadow_color" format="color|reference" />
+    </declare-styleable>
+
     <attr name="progressButtonStyle" format="reference" />
 
     <declare-styleable name="ProgressButton">
@@ -113,4 +121,5 @@
         <!--<item name="android:focusable">false</item>-->
     <!--</style>-->
 
+>>>>>>> 0fcca839061b1b34086fb294beb2608f6bef7618
 </resources>

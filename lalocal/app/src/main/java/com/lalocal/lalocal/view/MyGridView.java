@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.GridView;
 
+import com.lalocal.lalocal.util.AppLog;
+
 /**
  * Created by inerdstack on 2016/9/14.
  */

@@ -22,6 +22,15 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
     private String cid;
     private String cname;
     private String pushUrl;
+    private int targetType;
+    private String lastMsg;
+    public LiveUserBean getUser() {
+        return user;
+    }
+    public void setUser(LiveUserBean user) {
+        this.user = user;
+    }
+
     private String pullUrl;
     private String hlsPullUrl;
     private Object annoucement;
@@ -58,15 +67,6 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
     private  boolean praiseFlag;
     public Object praiseId;
 
-
-
-    public LiveUserBean getUser() {
-        return user;
-    }
-
-    public void setUser(LiveUserBean user) {
-        this.user = user;
-    }
     public String getLiveLen() {
         return liveLen;
     }
@@ -302,6 +302,21 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
         this.cname = cname;
     }
 
+    public int getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(int targetType) {
+        this.targetType = targetType;
+    }
+
+    public String getLastMsg() {
+        return lastMsg;
+    }
+
+    public void setLastMsg(String lastMsg) {
+        this.lastMsg = lastMsg;
+    }
 
     public static class VideoListBean implements Parcelable {
         private int id;
@@ -443,6 +458,8 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
         dest.writeInt(this.channelId);
         dest.writeString(this.liveLen);
         dest.writeString(this.date);
+        dest.writeInt(this.targetType);
+        dest.writeString(this.lastMsg);
     }
 
     protected LiveRowsBean(Parcel in) {
@@ -476,6 +493,8 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
         this.channelId = in.readInt();
         this.liveLen = in.readString();
         this.date = in.readString();
+        this.targetType = in.readInt();
+        this.lastMsg = in.readString();
     }
 
     public static final Creator<LiveRowsBean> CREATOR = new Creator<LiveRowsBean>() {
@@ -489,4 +508,5 @@ public class LiveRowsBean implements Comparable<LiveRowsBean>, Parcelable {
             return new LiveRowsBean[size];
         }
     };
+
 }

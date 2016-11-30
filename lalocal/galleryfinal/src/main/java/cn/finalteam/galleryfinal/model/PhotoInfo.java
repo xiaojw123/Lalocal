@@ -27,11 +27,19 @@ import java.io.Serializable;
  */
 public class PhotoInfo implements Serializable {
 
+    // 图片id
     private int photoId;
+    // 图片路径
     private String photoPath;
     //private String thumbPath;
+    // 图片宽度
     private int width;
+    // 图片高度
     private int height;
+    // 七牛云返回的token
+    private String token;
+    // 七牛云返回的文件名
+    private String fileName;
 
     public PhotoInfo() {}
 
@@ -66,6 +74,23 @@ public class PhotoInfo implements Serializable {
     public void setPhotoId(int photoId) {
         this.photoId = photoId;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     //
     //public String getThumbPath() {
     //    return thumbPath;

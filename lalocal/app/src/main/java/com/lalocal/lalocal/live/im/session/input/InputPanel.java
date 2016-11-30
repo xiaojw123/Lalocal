@@ -80,7 +80,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     protected FrameLayout textAudioSwitchLayout; // 切换文本，语音按钮布局
 
 
-    protected View moreFuntionButtonInInputBar;// 更多消息选择按钮
+
     protected View sendMessageButtonInInputBar;// 发送消息按钮
 
     protected View messageInputBar;
@@ -147,7 +147,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         initViews();
         initInputBarListener();
         initTextEdit();
-
         restoreText(false);
 
         for (int i = 0; i < actions.size(); ++i) {
@@ -168,8 +167,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         messageInputBar = view.findViewById(R.id.textMessageLayout);
         barrageView = (BarrageView) view.findViewById(R.id.barrageView_test);
         barrageAndChat = (ImageView) view.findViewById(R.id.im_barrage_and_chat_iv);
-        moreFuntionButtonInInputBar = view.findViewById(R.id.buttonMoreFuntionInText);
-        moreFuntionButtonInInputBar.setVisibility(inputConfig.isMoreFunctionShow ? View.VISIBLE : View.GONE);
+
         sendMessageButtonInInputBar = view.findViewById(R.id.buttonSendMessage);
         messageEditText = (EditText) view.findViewById(R.id.editTextMessage);
         // 表情
@@ -184,7 +182,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
 
         sendMessageButtonInInputBar.setOnClickListener(clickListener);
-        moreFuntionButtonInInputBar.setOnClickListener(clickListener);
+
         barrageAndChat.setOnClickListener(clickListener);
 
     }
@@ -290,8 +288,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     Toast.makeText(mContext,"正在连接聊天系统，请稍后",Toast.LENGTH_SHORT).show();
                 }
 
-            } else if (v == moreFuntionButtonInInputBar) {
-                toggleActionPanelLayout();
             } else if(v.getId()== R.id.im_barrage_and_chat_iv){
                 isSelector = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 barrageAndChat.setSelected(!isSelector);
@@ -548,11 +544,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void checkSendButtonEnable(EditText editText) {
         String textMessage = editText.getText().toString();
         if (!TextUtils.isEmpty(StringUtil.removeBlanks(textMessage)) && editText.hasFocus()) {
-            moreFuntionButtonInInputBar.setVisibility(View.GONE);
+
             sendMessageButtonInInputBar.setVisibility(View.VISIBLE);
         } else if (inputConfig.isMoreFunctionShow) {
             sendMessageButtonInInputBar.setVisibility(View.GONE);
-            moreFuntionButtonInInputBar.setVisibility(View.VISIBLE);
         }
     }
 

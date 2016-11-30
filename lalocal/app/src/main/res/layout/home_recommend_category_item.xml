@@ -1,132 +1,167 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/home_recommend_category_padding_vertical"
-        android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
-        android:gravity="center">
+    <com.daimajia.slider.library.SliderLayout
+        android:id="@+id/ad_slider"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="@color/white">
+
         <LinearLayout
-            android:id="@+id/layout_live"
-            android:clickable="true"
+            android:id="@+id/dot_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        
-            <ImageView
-                android:layout_width="@dimen/home_recommend_category_icon_size"
-                android:layout_height="@dimen/home_recommend_category_icon_size"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/phone_live"/>
+            android:layout_centerHorizontal="true"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"/>
+    </com.daimajia.slider.library.SliderLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="旅游直播"
-                android:textSize="@dimen/home_recommend_category_text_size"
-                android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
-                android:textColor="@color/black"/>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_category"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/home_recommend_category_padding_vertical"
-        android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
-        android:gravity="center">
+        android:layout_marginBottom="0dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="-10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/dimen_size_6_dp"
+        app:cardElevation="0dp"
+        app:cardMaxElevation="0dp">
+
         <LinearLayout
-            android:id="@+id/layout_theme"
-            android:clickable="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="19dp"
+            android:paddingRight="19dp">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
+                android:paddingTop="@dimen/home_recommend_category_padding_vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_theme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="73dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/travelspecial" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
+                        android:text="旅行专题"
+                        android:textColor="@color/color_1a"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
+                android:paddingTop="@dimen/home_recommend_category_padding_vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_article"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="73dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/traveldiary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
+                        android:text="旅游笔记"
+                        android:textColor="@color/color_1a"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
+                android:paddingTop="@dimen/home_recommend_category_padding_vertical">
+
+                <LinearLayout
+                    android:id="@+id/layout_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="73dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/travel_shop" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
+                        android:text="旅游商店"
+                        android:textColor="@color/color_1a"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="精彩推荐"
+        android:textColor="@color/color_191000"
+        android:textSize="12sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="36.5dp"
+        android:visibility="gone">
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="@dimen/home_recommend_category_icon_size"
-                android:layout_height="@dimen/home_recommend_category_icon_size"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/travel_special"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="旅行专题"
-                android:textSize="@dimen/home_recommend_category_text_size"
-                android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
-                android:textColor="@color/black"/>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/home_recommend_category_padding_vertical"
-        android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
-        android:gravity="center">
-        <LinearLayout
-            android:id="@+id/layout_article"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="@dimen/home_recommend_category_icon_size"
-                android:layout_height="@dimen/home_recommend_category_icon_size"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/travel_diary"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="旅游笔记"
-                android:textSize="@dimen/home_recommend_category_text_size"
-                android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
-                android:textColor="@color/black"/>
-        </LinearLayout>
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:paddingTop="@dimen/home_recommend_category_padding_vertical"
-        android:paddingBottom="@dimen/home_recommend_category_padding_vertical"
-        android:gravity="center">
-        <LinearLayout
-            android:id="@+id/layout_shop"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="@dimen/home_recommend_category_icon_size"
-                android:layout_height="@dimen/home_recommend_category_icon_size"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/travel_shop"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="旅游商店"
-                android:textSize="@dimen/home_recommend_category_text_size"
-                android:layout_marginTop="@dimen/home_recommend_category_text_margin_top"
-                android:textColor="@color/black"/>
-        </LinearLayout>
-    </RelativeLayout>
-
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:text="精彩推荐"
+            android:textColor="#191000"
+            android:textSize="12sp" />
+    </FrameLayout>
 </LinearLayout>

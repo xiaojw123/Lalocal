@@ -3,7 +3,7 @@
     android:id="@+id/create_live_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:visibility="gone"
    >
     <ImageView
         android:layout_width="match_parent"
@@ -97,7 +97,7 @@
             android:layout_toRightOf="@+id/create_live_head_iv"
             android:paddingTop="11dp"
             android:paddingLeft="@dimen/live_padding_10dp"
-            android:src="@drawable/common_live_share_friends_selector"/>
+            android:src="@drawable/create_live_share_friends_selector"/>
         <ImageView
             android:id="@+id/create_live_share_wechat"
             android:layout_width="wrap_content"
@@ -106,7 +106,7 @@
             android:layout_toRightOf="@+id/create_live_share_friends"
             android:paddingTop="11dp"
             android:paddingLeft="@dimen/live_padding_10dp"
-            android:src="@drawable/common_live_share_weixin_selector"/>
+            android:src="@drawable/create_live_share_weixin_selector"/>
 
         <ImageView
            android:id="@+id/create_live_share_weibo"
@@ -116,7 +116,7 @@
             android:layout_toRightOf="@+id/create_live_share_wechat"
             android:paddingTop="11dp"
             android:paddingLeft="@dimen/live_padding_10dp"
-            android:src="@drawable/common_live_share_weibo_selector"/>
+            android:src="@drawable/create_live_share_weibo_selector"/>
 
         <ImageView
             android:id="@+id/create_live_share_qq"

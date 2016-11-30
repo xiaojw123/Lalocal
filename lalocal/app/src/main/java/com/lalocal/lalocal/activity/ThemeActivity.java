@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.widget.Toast;
 import com.chanven.lib.cptr.PtrClassicFrameLayout;
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendResultBean;
@@ -28,15 +30,15 @@ import butterknife.ButterKnife;
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
-public class ThemeActivity extends AppCompatActivity {
+public class ThemeActivity extends BaseActivity {
 
-    @BindView(R.id.ptr_frame_layout)
-    PtrClassicFrameLayout mPtrFrame;
+//    @BindView(R.id.ptr_frame_layout)
+//    PtrClassicFrameLayout mPtrFrame;
 
     @BindView(R.id.rv_theme)
-    RecyclerView mRvTheme;
+    XRecyclerView mXrvTheme;
 
-    private RecyclerAdapterWithHF mAdapter;
+//    private RecyclerAdapterWithHF mAdapter;
     private ThemeAdapter mThemeAdapter;
 
     private ContentLoader mContentLoader;
@@ -61,10 +63,8 @@ public class ThemeActivity extends AppCompatActivity {
                         AppLog.i("cannotload", "a");
                         isRefreshing = false;
                         isLoadingMore = false;
-//                        mThemeAdapter.notifyDataSetChanged();
                         setAdapter(mThemeList);
-                        mPtrFrame.refreshComplete();
-//                        mPtrFrame.loadMoreComplete(false);
+                        mXrvTheme.refreshComplete();
                         break;
                     }
                     if (isLoadingMore) {
@@ -72,8 +72,8 @@ public class ThemeActivity extends AppCompatActivity {
                         isLoadingMore = false;
                         isRefreshing = false;
                         mThemeAdapter.notifyDataSetChanged();
-                        ((LinearLayoutManager)mRvTheme.getLayoutManager()).scrollToPositionWithOffset(mThemeList.size() - 1, 0);
-                        mPtrFrame.loadMoreComplete(true);
+                        ((LinearLayoutManager)mXrvTheme.getLayoutManager()).scrollToPositionWithOffset(mThemeList.size() - 1, 0);
+                        mXrvTheme.loadMoreComplete();
                     }
                     // 如果是第一次加载，则设置适配器
                     setAdapter(mThemeList);
@@ -82,13 +82,13 @@ public class ThemeActivity extends AppCompatActivity {
                     isRefreshing = false;
                     isLoadingMore = false;
                     Toast.makeText(ThemeActivity.this, "没有更多专题咯~", Toast.LENGTH_SHORT).show();
-                    mPtrFrame.setLoadMoreEnable(false);
+                    mXrvTheme.setNoMore(true);
                     break;
                 case GET_DATA_ERROR:
                     isRefreshing = false;
                     isLoadingMore = false;
                     Toast.makeText(ThemeActivity.this, "加载数据失败，请稍后再试", Toast.LENGTH_SHORT).show();
-                    mPtrFrame.refreshComplete();
+                    mXrvTheme.refreshComplete();
                     break;
             }
         }
@@ -99,13 +99,10 @@ public class ThemeActivity extends AppCompatActivity {
      * @param mThemeList
      */
     private void setAdapter(List<RecommendRowsBean> mThemeList) {
-        AppLog.i("hehe", "set adapter");
         mThemeAdapter = new ThemeAdapter(this, mThemeList);
-        mAdapter = new RecyclerAdapterWithHF(mThemeAdapter);
-        AppLog.i("hehe", "the adatper is " + mThemeAdapter.toString());
-        mRvTheme.setAdapter(mAdapter);
+        mXrvTheme.setAdapter(mThemeAdapter);
         // 加载数据以后显示加载更多
-        mPtrFrame.setLoadMoreEnable(true);
+        mXrvTheme.setLoadingMoreEnabled(true);
     }
 
     @Override
@@ -124,60 +121,52 @@ public class ThemeActivity extends AppCompatActivity {
      * 初始化试图
      */
     private void initView() {
-        // 初始化header
-        initPtrLoadMore();
-        // 初始化RecyclerView
-        initRecyclerView();
         // 初始化数据
         initLoader();
+        // 初始化XRecyclerView
+        initXRecyclerView();
     }
 
     /**
-     * 初始化RecyclerView
+     * 初始化初始化XRecyclerView
      */
-    private void initRecyclerView() {
-        // 避免出现RecyclerView has no LayoutManager的错误
-        mRvTheme.setHasFixedSize(true);
-        // 计算RecyclerView的大小，可以显示器内容
-        mRvTheme.setLayoutManager(new LinearLayoutManager(this));
-        // 点击事件封装在adapter里面
+    private void initXRecyclerView() {
+        // 初始化布局参数
+        LinearLayoutManager layoutManager = new LinearLayoutManager(ThemeActivity.this);
+        // 设置竖直排列
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        // 设置布局参数
+        mXrvTheme.setLayoutManager(layoutManager);
+        // 初始化加载监听事件
+        XRecyclerViewLoadingListener listener = new XRecyclerViewLoadingListener();
+        // 设置监听事件
+        mXrvTheme.setLoadingListener(listener);
+        // 激活下拉刷新
+        mXrvTheme.setPullRefreshEnabled(true);
+        // 设置刷新
+        mXrvTheme.setRefreshing(true);
     }
 
     /**
-     * 初始化header
+     * XRecyclerView监听事件
      */
-    private void initPtrLoadMore() {
-        // 实例化PTRHeader
-        PtrHeader ptrHeader = new PtrHeader(this);
-        // 给PTR控件添加头视图
-        mPtrFrame.setHeaderView(ptrHeader);
-        
-        mPtrFrame.setResistance(1.7f);
-        mPtrFrame.setRatioOfHeaderHeightToRefresh(1.2f);
-        mPtrFrame.setDurationToClose(200);
-        mPtrFrame.setLoadingMinTime(1000);
-        mPtrFrame.setKeepHeaderWhenRefresh(true);
+    private class XRecyclerViewLoadingListener implements XRecyclerView.LoadingListener {
 
-        // 下拉刷新
-        mPtrFrame.setPtrHandler(new com.chanven.lib.cptr.PtrDefaultHandler() {
-            @Override
-            public void onRefreshBegin(com.chanven.lib.cptr.PtrFrameLayout frame) {
+        @Override
+        public void onRefresh() {
+            if (mXrvTheme != null) {
                 isRefreshing = true;
-//                mPtrFrame.setLoadMoreEnable(true);
                 mPageNum = 1;
                 mContentLoader.recommentList(mPageSize, mPageNum);
             }
-        });
+        }
 
-        // 上拉加载更多
-        mPtrFrame.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void loadMore() {
-                isLoadingMore = true;
-                mPageNum++;
-                mContentLoader.recommentList(mPageSize, mPageNum);
-            }
-        });
+        @Override
+        public void onLoadMore() {
+            isLoadingMore = true;
+            mPageNum++;
+            mContentLoader.recommentList(mPageSize, mPageNum);
+        }
     }
 
     /**
@@ -186,7 +175,7 @@ public class ThemeActivity extends AppCompatActivity {
     private void initLoader() {
         mContentLoader = new ContentLoader(this);
         mContentLoader.setCallBack(new MyCallBack());
-        mContentLoader.recommentList(mPageSize, mPageNum);
+//        mContentLoader.recommentList(mPageSize, mPageNum);
     }
 
     private class MyCallBack extends ICallBack {
@@ -204,30 +193,54 @@ public class ThemeActivity extends AppCompatActivity {
 
             AppLog.i("hehe", "recommendresult bean is " + recommendDataResp);
 
+            // 如果返回结果为空
             if (result == null) {
-                AppLog.i("cannotload", "result is null");
-                mHandler.sendEmptyMessage(GET_DATA_ERROR);
+//                mHandler.sendEmptyMessage(GET_DATA_ERROR);
+
+                isRefreshing = false;
+                isLoadingMore = false;
+                Toast.makeText(ThemeActivity.this, "加载数据失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                mXrvTheme.refreshComplete();
                 return;
             }
 
-            List<RecommendRowsBean> themeList = result.getRows();
-
-
+            // 如果返回结果正常
             if (recommendDataResp.getReturnCode() == 0) {
+                // 获取专题列表
+                List<RecommendRowsBean> themeList = result.getRows();
+                // 如果是加载更多
                 if (isLoadingMore) {
+                    // 如果不再有数据
                     if (themeList == null || themeList.size() == 0) {
-                        AppLog.i("cannotload", "no more data");
-                        mHandler.sendEmptyMessage(NO_MORE_DATA);
+//                        mHandler.sendEmptyMessage(NO_MORE_DATA);
+
+                        isRefreshing = false;
+                        isLoadingMore = false;
+                        Toast.makeText(ThemeActivity.this, "没有更多专题咯~", Toast.LENGTH_SHORT).show();
+                        mXrvTheme.setNoMore(true);
                         return;
-                    } else {
+                    } else { // 如果有数据
                         mThemeList.addAll(themeList);
                     }
-                } else {
-                    mThemeList = themeList;
+//                    mHandler.sendEmptyMessage(GET_THEME_SUCCESS);
+
+                    isLoadingMore = false;
+                    isRefreshing = false;
+                    mThemeAdapter.notifyDataSetChanged();
+                    mXrvTheme.loadMoreComplete();
+                    return;
                 }
-                AppLog.i("hehe", "link success");
-                AppLog.i("cannotload", "get_theme_success");
-                mHandler.sendEmptyMessage(GET_THEME_SUCCESS);
+
+                // 如果是刷新
+                if(isRefreshing){
+                    mThemeList = themeList;
+//                    mHandler.sendEmptyMessage(GET_THEME_SUCCESS);
+
+                    isRefreshing = false;
+                    isLoadingMore = false;
+                    setAdapter(mThemeList);
+                    mXrvTheme.refreshComplete();
+                }
             }
         }
     }

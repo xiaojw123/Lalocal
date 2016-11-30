@@ -46,7 +46,7 @@ public class MsgViewHolderChat extends TViewHolder{
     private String channelId;
     private Container container;
     private String disableSendMsgUserId;
-    private String adminSendMsgImUserId;
+    private String adminSendMsgUserId;
 
     @Override
     protected int getResId() {
@@ -59,9 +59,7 @@ public class MsgViewHolderChat extends TViewHolder{
         itenImage = findView(R.id.nim_message_item_iv);
         messageItem = findView(R.id.message_item_text_item);
         itemLayout = findView(R.id.message_item_text_wang);
-        if(container==null){
-            container = new Container(((LivePlayerBaseActivity)context), LiveConstant.ROOM_ID, SessionTypeEnum.ChatRoom, ((LivePlayerBaseActivity)context));
-        }
+
 
     }
 
@@ -75,7 +73,7 @@ public class MsgViewHolderChat extends TViewHolder{
         String giftName=null;
         String textColor=null;
         disableSendMsgUserId=null;
-        adminSendMsgImUserId=null;
+        adminSendMsgUserId=null;
         message = (ChatRoomMessage) item;
         fromAccount = message.getFromAccount();
         if (LiveConstant.ROLE==0){
@@ -110,8 +108,8 @@ public class MsgViewHolderChat extends TViewHolder{
                 if ("disableSendMsgUserId".equals(key)) {
                     disableSendMsgUserId = value.toString();
                 }
-                if("adminSendMsgImUserId".equals(key)){
-                    adminSendMsgImUserId = value.toString();
+                if("adminSendMsgUserId".equals(key)){
+                    adminSendMsgUserId = value.toString();
                 }
                 if("adminSendMsgNickName".equals(key)){
                     adminSendMsgNickName=value.toString();
@@ -150,8 +148,6 @@ public class MsgViewHolderChat extends TViewHolder{
                 }else{
                     textColor="#190f00";
                 }
-
-
                 break;
             case "2"://点赞
                 itemContent="给主播点了个赞";
@@ -159,20 +155,20 @@ public class MsgViewHolderChat extends TViewHolder{
 
                 break;
             case "6"://禁言
-                itemContent="禁言了"+disableSendMsgNickName;
+                itemContent= message.getContent();;
                 textColor="#97d3e9";
 
                 break;
             case "7":
-                itemContent="解除了"+disableSendMsgNickName+"的禁言";
+                itemContent= message.getContent();;
                 textColor="#97d3e9";
                 break;
             case "8":
-                itemContent="将"+adminSendMsgNickName+"授权为管理员";
+                itemContent= message.getContent();
                 textColor="#97d3e9";
                 break;
             case "9":
-                itemContent="取消了"+adminSendMsgNickName+"的管理员权限";
+                itemContent= message.getContent();;
                 textColor="#97d3e9";
                 break;
             case "10":
@@ -185,18 +181,11 @@ public class MsgViewHolderChat extends TViewHolder{
                 AppLog.i("TAG","获取礼物URL:"+messageToGiftBean.getGiftImage());
                 DrawableUtils.displayImg(context,itenImage,messageToGiftBean.getGiftImage());
                 break;
-            case "13":
-                itemContent="分享了直播!";
-                textColor="#ffffff";
+            case "12":
+                itemContent= message.getContent();
+                textColor="#97d3e9";
                 break;
-            case "100":
-                itemContent = "离开了";
-                textColor="#ffffff";
-                break;
-            case "101":
-                itemContent = "回来了";
-                textColor="#ffffff";
-                break;
+
 
         }
 
@@ -204,15 +193,17 @@ public class MsgViewHolderChat extends TViewHolder{
             @Override
             public void onClick(View v) {
                 String userId1=null;
-                if(adminSendMsgImUserId!=null){
-                    userId1=adminSendMsgImUserId;
-                }else if(disableSendMsgUserId!=null){
-                    userId1=disableSendMsgUserId;
-                }else{
-                    userId1=userId;
+                if(container==null){
+                    container = new Container(((LivePlayerBaseActivity)context), LiveConstant.ROOM_ID, SessionTypeEnum.ChatRoom, ((LivePlayerBaseActivity)context));
                 }
-
-                CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
+               if(disableSendMsgUserId!=null){
+                   userId1=disableSendMsgUserId;
+               }else if(adminSendMsgUserId!=null){
+                   userId1=adminSendMsgUserId;
+               }else{
+                   userId1=userId;
+               }
+                CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                 dialog.show();
             }
         });
@@ -223,7 +214,7 @@ public class MsgViewHolderChat extends TViewHolder{
      }
 
     private SpannableStringBuilder textviewSetContent(String text,String textColor) {
-        String[] textContent = text.split(":");
+        String[] textContent = text.split(",.,");
         String nameText = textContent[0];
         String contentText = textContent[1];
         String substring = nameText.substring(0, nameText.length() - 1);
@@ -240,18 +231,18 @@ public class MsgViewHolderChat extends TViewHolder{
         if (message.getMsgType() != MsgTypeEnum.notification) {
             if(message.getRemoteExtension() != null) {
                 if(styles.equals("101")||styles.equals("100")){
-                    contentItem="主播  :  "+itemContent;
+                    contentItem="主播 :  ,.,  "+itemContent;
                     messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
                 }else {
                     String fromAccount = message.getFromAccount();
                     AppLog.i("TAG","我发消息的账号:"+fromAccount);
                     String account = DemoCache.getAccount();
                     if(fromAccount!=null&&fromAccount.equals(account)){
-                        contentItem="我  :  "+itemContent;
+                        contentItem="我 :  ,.,  "+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
-                        contentItem="主播  :  "+itemContent;
+                        contentItem="主播 :  ,.,  "+itemContent;
                     } else{
-                        contentItem=message.getChatRoomMessageExtension().getSenderNick()+"  :  "+itemContent;
+                        contentItem=message.getChatRoomMessageExtension().getSenderNick()+" :  ,.,  "+itemContent;
                     }
                 }
             }

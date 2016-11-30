@@ -54,7 +54,7 @@ public class LiveingSharePopuwindow extends PopupWindow {
 
     }
 
-    @OnClick({R.id.liveing_dialog_share_friends, R.id.liveing_dialog_share_wechat,R.id.liveing_dialog_share_weibo,R.id.liveing_dialog_share_qq,R.id.liveing_dialog_share_qzone})
+    @OnClick({R.id.liveing_dialog_share_friends, R.id.liveing_dialog_share_wechat,R.id.liveing_dialog_share_weibo,R.id.liveing_dialog_share_qq,R.id.liveing_dialog_share_qzone,R.id.liveing_dialog_cancel})
     public void clickBtn(View view) {
         switch (view.getId()) {
             case R.id.liveing_dialog_share_friends:

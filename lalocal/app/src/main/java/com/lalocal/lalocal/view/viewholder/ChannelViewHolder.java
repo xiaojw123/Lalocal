@@ -16,9 +16,11 @@ import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
+import com.lalocal.lalocal.view.WrapContentViewPager;
 import com.lalocal.lalocal.view.adapter.HomeRecoLiveAdapter;
 
 import java.util.ArrayList;
@@ -32,39 +34,31 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
     private TextView mTitleView;
     private TextView mSubTitleView;
-    private DisallowParentTouchViewPager mVpHotLives;
+    private ViewPager mVpHotLives;
     private LinearLayout mVtvSeeMore;
     private RelativeLayout mLayoutMore;
     private LinearLayout mDotContainer;
     private FrameLayout mLiveContainer;
     private int mSelected = 0;
     private List<Button> mDotBtns = new ArrayList<>();
-    private boolean mLiveEmpty = false;
 
-    private MyPtrClassicFrameLayout mPtrLayout;
-
-    public ChannelViewHolder(Context context, View itemView, boolean mLiveEmpty) {
+    public ChannelViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
-        this.mLiveEmpty = mLiveEmpty;
 
         mLiveContainer = (FrameLayout) itemView.findViewById(R.id.live_container);
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
         mSubTitleView = (TextView) itemView.findViewById(R.id.tv_subtitle);
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
-        mVpHotLives = (DisallowParentTouchViewPager) itemView.findViewById(R.id.vp_hot_lives);
+        mVpHotLives = (ViewPager) itemView.findViewById(R.id.vp_hot_lives);
         mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
         mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
 
-        // 传入父容器
-        mVpHotLives.setNestParent(mPtrLayout);
         // 设置一个屏幕最多显示视频的个数
         mVpHotLives.setOffscreenPageLimit(4);
         // 设置热播视频间距
         mVpHotLives.setPageMargin(mContext.getResources().getDimensionPixelSize(
                 R.dimen.home_recommend_viewpager_page_margin));
-        // 高度适应内容
-        mVpHotLives.enableWrapContent(true);
 
     }
 
@@ -86,7 +80,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         final List<LiveRowsBean> hotLiveList = list;
         final int size = (list == null ? 0 : list.size());
 
-        if (mLiveEmpty) {
+        if (list == null || list.size() == 0) {
             mLiveContainer.setVisibility(View.GONE);
             return;
         }
@@ -112,7 +106,13 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
         AppLog.i("slidder", "mSelected is " + mSelected);
 
         // 初始化小圆点
-        mDotBtns = CommonUtil.initDot(mContext, mVpHotLives, mDotContainer, size, mSelected, CommonUtil.DARK_DOT);
+        mDotBtns = DotUtils.initDot(mContext, mVpHotLives, mDotContainer, size, mSelected, DotUtils.DARK_DOT);
+
+        // 如果只有一项，显示查看更多
+        if (size == 1) {
+            // 查看更多字样显示
+            mVtvSeeMore.setVisibility(View.VISIBLE);
+        }
 
         // ViewPager添加滑动事件
         mVpHotLives.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -123,7 +123,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onPageSelected(int position) {
-                CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.DARK_DOT);
+                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.DARK_DOT);
                 // 如果滑动至最后一页
                 if (position == size - 1) {
                     // 查看更多字样显示

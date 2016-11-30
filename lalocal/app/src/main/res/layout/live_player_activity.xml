@@ -85,104 +85,111 @@
                     android:layout_height="200dp"
                     android:background="@drawable/live_bg_gradient_bottom"
                     android:layout_alignParentBottom="true"></View>
-                <RelativeLayout
-                    android:id="@+id/live_view_top_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/live_height_36dp"
-                    android:layout_marginTop="@dimen/live_padding_10dp"
-                    >
+
+        <RelativeLayout
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/live_view_top_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_height_36dp"
+                android:layout_marginTop="@dimen/live_padding_10dp"
+                >
+                <LinearLayout
+                    android:id="@+id/live_master_info_layout"
+                    android:layout_width="@dimen/live_height_100dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/live_emcee_info_shape"
+                    android:layout_marginLeft="@dimen/live_padding_13dp"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/live_emcee_head"
+                        android:layout_width="@dimen/live_height_36dp"
+                        android:layout_height="@dimen/live_height_36dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/androidloading" />
+
                     <LinearLayout
-                        android:id="@+id/live_master_info_layout"
-                        android:layout_width="@dimen/live_height_100dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@drawable/live_emcee_info_shape"
-                        android:layout_marginLeft="@dimen/live_padding_13dp"
-                        android:orientation="horizontal">
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/live_padding_5dp">
 
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/live_emcee_head"
-                            android:layout_width="@dimen/live_height_36dp"
-                            android:layout_height="@dimen/live_height_36dp"
-                            android:scaleType="centerCrop"
-                            android:src="@drawable/androidloading" />
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical"
-                            android:paddingLeft="@dimen/live_padding_5dp">
-
-                            <TextView
-                                android:id="@+id/live_online_count"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableLeft="@drawable/peoplequantity_light_16"
-                                android:drawablePadding="@dimen/live_padding_5dp"
-                                android:text="0"
-                                android:textSize="@dimen/live_text_12sp" />
-
-                            <TextView
-                                android:id="@+id/live_emcee_name"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:drawableLeft="@drawable/livecrown_16"
-                                android:drawablePadding="@dimen/live_padding_5dp"
-                                android:text="榜单"
-                                android:textSize="@dimen/live_text_12sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/audience_score_layout"
-                        android:layout_width="60dp"
-                        android:layout_height="22dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="17dp"
-                        android:layout_toRightOf="@+id/live_master_info_layout"
-                        >
-                        <ImageView
-                            android:id="@+id/network_hint_iv"
+                        <TextView
+                            android:id="@+id/live_online_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/signal_great"
-                            />
-                    </RelativeLayout>
-                    <ImageView
-                        android:id="@+id/live_telecast_quit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_alignParentRight="true"
-                        android:paddingRight="@dimen/live_padding_10dp"
-                        android:src="@drawable/peopleliving_quit"/>
-                    <ImageView
-                        android:id="@+id/live_telecast_top_setting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_toLeftOf="@+id/live_telecast_quit"
-                        android:paddingRight="@dimen/live_padding_20dp"
-                        android:src="@drawable/anotherfunction_unsel"/>
+                            android:drawableLeft="@drawable/peoplequantity_light_16"
+                            android:drawablePadding="@dimen/live_padding_5dp"
+                            android:text="0"
+                            android:textSize="@dimen/live_text_12sp" />
 
+                        <TextView
+                            android:id="@+id/live_emcee_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/livecrown_16"
+                            android:drawablePadding="@dimen/live_padding_5dp"
+                            android:text="榜单"
+                            android:textSize="@dimen/live_text_12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/audience_score_layout"
+                    android:layout_width="60dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="17dp"
+                    android:layout_toRightOf="@+id/live_master_info_layout"
+                    >
+                    <ImageView
+                        android:id="@+id/network_hint_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/signal_great"
+                        />
                 </RelativeLayout>
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/live_visitors_list_recy"
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:id="@+id/live_telecast_quit"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/live_padding_10dp"
-                    android:layout_below="@+id/live_view_top_layout"
-                    android:paddingLeft="@dimen/live_padding_12dp"
-                    android:paddingRight="@dimen/live_padding_12dp"
-                    android:fadingEdge="none"
-                    android:overScrollMode="never">
-                </android.support.v7.widget.RecyclerView>
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="@dimen/live_padding_10dp"
+                    android:src="@drawable/peopleliving_quit"/>
+                <ImageView
+                    android:id="@+id/live_telecast_top_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/live_telecast_quit"
+                    android:paddingRight="@dimen/live_padding_20dp"
+                    android:src="@drawable/anotherfunction_unsel"/>
+
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/live_visitors_list_recy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:layout_below="@+id/live_view_top_layout"
+                android:paddingLeft="@dimen/live_padding_12dp"
+                android:paddingRight="@dimen/live_padding_12dp"
+                android:fadingEdge="none"
+                android:overScrollMode="never">
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+
                 <ImageView
                     android:id="@+id/challenge_new_task"
                     android:layout_width="@dimen/live_height_36dp"
                     android:layout_height="@dimen/live_height_51dp"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@+id/live_view_top_layout"
                     android:paddingTop="@dimen/live_padding_15dp"
                     android:paddingRight="@dimen/live_padding_12dp"
                     android:visibility="gone"
@@ -190,7 +197,6 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
-
                     <LinearLayout
                         android:id="@+id/messageActivityBottomLayout"
                         android:layout_width="match_parent"
@@ -244,7 +250,7 @@
                         android:id="@+id/messageListView"
                         style="@style/list_view"
                         android:layout_width="match_parent"
-                        android:layout_marginRight="100dp"
+                        android:layout_marginRight="@dimen/live_height_100dp"
                         android:layout_height="200dp"
                         android:layout_above="@id/live_nofitifation_layout"
                         android:layout_marginBottom="10dp"

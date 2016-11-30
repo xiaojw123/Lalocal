@@ -135,7 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/live_padding_20dp"
-        android:src="@drawable/cancel_dark"
+        android:src="@drawable/cancel_white"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         />

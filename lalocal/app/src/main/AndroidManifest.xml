@@ -80,7 +80,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.AccountEidt1Activity"
             android:screenOrientation="portrait" />
@@ -310,7 +310,7 @@
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
             android:hardwareAccelerated="false"
-            android:windowSoftInputMode = "adjustResize" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false"
@@ -353,6 +353,8 @@
         <activity android:name=".me.LRegister1Activity" />
         <activity android:name=".me.LPasswordForget2Activity" />
         <activity android:name=".me.LPasswordForget1Activity" />
+        <activity android:name=".activity.AttentionActivity" />
+
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
         <activity android:name=".me.PhoneBindActivity" >

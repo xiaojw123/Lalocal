@@ -5,30 +5,24 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Paint;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -76,8 +70,8 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
-import com.lalocal.lalocal.view.WrapContentImageView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
@@ -92,7 +86,6 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
@@ -238,27 +231,27 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         super.onWindowFocusChanged(hasFocus);
 
     }
-
-
     //判断软键盘显示与隐藏
     @Override
     public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
         if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
-
             if (keyboardLayout != null && isEnterRoom) {
                 keyboardLayout.setAlpha(0);
                 keyboardLayout.setClickable(false);
                 if (nofitifationLayout != null) {
-                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);//两个参数分别是layout_width,layout_height
+                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
                     lp.height = DensityUtil.dip2px(this, 30);
                     nofitifationLayout.setLayoutParams(lp);
                 }
+                topView.setVisibility(View.VISIBLE);
+
             }
+        }else if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > keyHeight)){//显示
+            topView.setVisibility(View.GONE);
         }
     }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -336,7 +329,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     };
 
-
     private AMapLocationClientOption getDefaultOption() {
         AMapLocationClientOption mOption = new AMapLocationClientOption();
         mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
@@ -389,7 +381,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         closeLiveIv.setOnClickListener(buttonClickListener);
         aucienceCount = (TextView) findViewById(R.id.live_over_audience_count);
         overTime = (TextView) findViewById(R.id.live_over_time_tv);
-
 
 
         //挑战
@@ -464,9 +455,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         createLiveShareFriends = (ImageView) createLiveLayout.findViewById(R.id.create_live_share_friends);
         createLiveShareWechat = (ImageView) createLiveLayout.findViewById(R.id.create_live_share_wechat);
         createLiveShareWeibo = (ImageView) createLiveLayout.findViewById(R.id.create_live_share_weibo);
-      /*  qq空间和qq
-      createLiveShareQq = (ImageView) createLiveLayout.findViewById(R.id.create_live_share_qq);
-        createLiveShareQzone = (ImageView) createLiveLayout.findViewById(R.id.create_live_share_qzone);*/
+        if(UserHelper.getUserAvatar(this)!=null){
+            DrawableUtils.displayImg(this,createLiveHeadIv,UserHelper.getUserAvatar(this));
+        }
+
         liveTextTitleCount = (TextView) createLiveLayout.findViewById(R.id.live_text_title_count);
         createLiveLocationTv.setOnClickListener(buttonClickListener);
         liveCreateRoomCloseIv.setOnClickListener(buttonClickListener);
@@ -553,6 +545,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     protected void showInputTextView() {
+    //    topView.setVisibility(View.GONE);
         keyboardLayout.setAlpha(1.0f);
         keyboardLayout.setFocusable(true);
         keyboardLayout.setClickable(true);
@@ -601,7 +594,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         break;
                     case R.id.live_share_pop:
                         if (shareVO != null && isUnDestory) {
-                              shareLivePopu();
+                            shareLivePopu();
                         }
 
                         break;
@@ -613,6 +606,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         });
     }
 
+    @Override
+    protected void superManagerKickOutUser() {
+    }
     private void shareLivePopu() {
         try{
             LiveingSharePopuwindow sharePop = new LiveingSharePopuwindow(LiveActivity.this);
@@ -660,151 +656,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     }
 
-    /**
-     * 初始化新手引导弹窗
-     */
-    private void initGuideDialog() {
-        // 是否跳过新手引导
-        boolean isSkipGuide = SPCUtils.getBoolean(this, "skip_guide");
-        List<Button> dotBtns = new ArrayList<>();
-        // 不跳过
-        if (!isSkipGuide) {
-            // 显示过新手引导后，不再显示新手引导
-//            SPCUtils.put(this, "skip_guide", true);
-            // -弹出新手引导窗口
-            // 获取弹出窗口的view
-            View popView = LayoutInflater.from(this).inflate(R.layout.novice_guide_layout, null);
-            View rootView = LayoutInflater.from(this).inflate(R.layout.live_player_activity, null);
-            // 初始化弹出窗口
-            final PopupWindow pop = new PopupWindow(popView, RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.MATCH_PARENT, true);
-            // 设置可触摸
-            pop.setTouchable(true);
-            // 设置内容外不可触摸
-            pop.setOutsideTouchable(false);
-            // 全屏居中显示
-            pop.showAtLocation(rootView, Gravity.CENTER, 0, 0);
-            // 进入时渐变动画
-            pop.setAnimationStyle(R.style.GuidePopupStyle);
-            // 弹窗消失事件
-            pop.setOnDismissListener(new PopupWindow.OnDismissListener() {
-                @Override
-                public void onDismiss() {
 
-                }
-            });
-
-            // -新手引导ViewPager实现
-            // 新手引导ViewPager
-            ViewPager vp = (ViewPager) popView.findViewById(R.id.vp_guide);
-            // 跳过按钮
-            final Button btnSkip = (Button) popView.findViewById(R.id.btn_skip);
-            // 小点容器
-            LinearLayout dotContainer = (LinearLayout) popView.findViewById(R.id.dot_container);
-            // 小点列表
-            dotBtns = CommonUtil.initDot(this, vp, dotContainer, GUIDE_PAGE_SIZE, 0, CommonUtil.WHITE_DOT);
-
-            final List<Button> finalDotBtns = dotBtns;
-            // 设置适配器
-            vp.setAdapter(new GuideAdapter(pop));
-            // 设置页边距
-            vp.setPageMargin((int) getResources().getDimension(R.dimen.novice_guide_vp_margin));
-            // “跳过”按钮下划线
-            btnSkip.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
-            // 抗锯齿
-            btnSkip.getPaint().setAntiAlias(true);
-            // “跳过”按钮点击事件
-            btnSkip.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // 弹窗消失
-                    pop.dismiss();
-                }
-            });
-            // 页面滑动时间
-            vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    // 根据ViewPager滑动选择对应小圆点
-                    CommonUtil.selectDotBtn(finalDotBtns, position, CommonUtil.WHITE_DOT);
-                    // 如果是最后一页，则去掉不显示取消按钮
-                    if (position == GUIDE_PAGE_SIZE - 1) {
-                        btnSkip.setVisibility(View.INVISIBLE);
-                    } else {
-                        btnSkip.setVisibility(View.VISIBLE);
-                    }
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                }
-            });
-        }
-    }
-
-    /**
-     * 新手引导页适配器
-     */
-    private class GuideAdapter extends PagerAdapter {
-
-        PopupWindow window;
-
-        public GuideAdapter(PopupWindow window) {
-            this.window = window;
-        }
-
-        @Override
-        public int getCount() {
-            return GUIDE_PAGE_SIZE;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(final ViewGroup container, int position) {
-            View view = LayoutInflater.from(LiveActivity.this).inflate(R.layout.novice_guide_item, null);
-            WrapContentImageView page = (WrapContentImageView) view.findViewById(R.id.img_guide);
-            switch (position) {
-                case 0:
-                    page.setImageResource(R.drawable.card_1);
-                    break;
-                case 1:
-                    page.setImageResource(R.drawable.card_2);
-                    break;
-                case 2:
-                    page.setImageResource(R.drawable.card_3);
-                    break;
-                case 3:
-                    page.setImageResource(R.drawable.card_4);
-                    break;
-            }
-            if (position == GUIDE_PAGE_SIZE - 1) {
-                view.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        window.dismiss();
-                    }
-                });
-            }
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView((View) object);
-        }
-
-    }
 
     private void setListener() {
         backBtn.setOnClickListener(buttonClickListener);
@@ -1286,35 +1138,35 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
     int startTimes=3 ;
     private void startLiveCountDown() {
-       new CountDownTimer(4000,1000){
-           @Override
-           public void onTick(long millisUntilFinished) {
-               startLiveCountDownTV.setText(String.valueOf(startTimes));
-               --startTimes;
-           }
-           @Override
-           public void onFinish() {
-               startLiveCountDownTV.setVisibility(View.GONE);
-               new Thread(new Runnable() {
-                   @Override
-                   public void run() {
-                       try {
-                           Thread.sleep(200);
-                       } catch (InterruptedException e) {
-                           e.printStackTrace();
-                       }
-                       runOnUiThread(new Runnable() {
-                           @Override
-                           public void run() {
-                               drawerLayout.openDrawer(Gravity.RIGHT);
-                           }
-                       });
+        new CountDownTimer(4000,1000){
+            @Override
+            public void onTick(long millisUntilFinished) {
+                startLiveCountDownTV.setText(String.valueOf(startTimes));
+                --startTimes;
+            }
+            @Override
+            public void onFinish() {
+                startLiveCountDownTV.setVisibility(View.GONE);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                drawerLayout.openDrawer(Gravity.RIGHT);
+                            }
+                        });
 
-                   }
-               }).start();
+                    }
+                }).start();
 
-           }
-       }.start();
+            }
+        }.start();
 
     }
 
@@ -1327,8 +1179,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             @Override
             public void onFinish() {
                 AppLog.i("TAG", "显示主播直播1分钟，分享dialog");
-              shareLivePopu();
-
+                if(isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
+                    shareLivePopu();
+                }
             }
         }.start();
 

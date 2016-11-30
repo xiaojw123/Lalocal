@@ -23,9 +23,10 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.DestinationFragment;
+import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
-import com.lalocal.lalocal.activity.fragment.RecommendNewFragment;
+import com.lalocal.lalocal.activity.fragment.FindFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.VersionResult;
@@ -112,7 +113,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 AppLog.print("recommend__" + recommendFragment);
                 if (recommendFragment == null) {
                     AppLog.print("___add");
-                    recommendFragment = new RecommendNewFragment();
+                    recommendFragment = new FindFragment();
                     ft.add(R.id.home_fragment_container, recommendFragment);
                 } else {
                     AppLog.print("___show");
@@ -131,7 +132,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             case R.id.home_tab_liveplay:
                 selected = FRAGMENT_NEWS;
                 if (newsFragment == null) {
-                    newsFragment = new NewsFragment();
+//                    newsFragment = new NewsFragment();
+                    // TODO: 2.2.0版本fragment更换
+                    newsFragment = new LiveFragment();
                     ft.add(R.id.home_fragment_container, newsFragment);
                 } else {
                     ft.show(newsFragment);

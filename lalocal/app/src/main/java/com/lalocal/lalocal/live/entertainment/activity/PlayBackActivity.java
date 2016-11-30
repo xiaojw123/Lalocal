@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,7 +24,7 @@ import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
@@ -121,7 +120,7 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
-        targetId= liveRowsBean.getId();
+        targetId= liveRowsBean.getNumber();
         targetType = liveRowsBean.getType();
         praiseId = liveRowsBean.getPraiseId();
         praiseFlag = liveRowsBean.isPraiseFlag();
@@ -210,7 +209,7 @@ public class PlayBackActivity extends BaseActivity {
                 break;
         }
 
-        }
+    }
 
     public  void playBackCollectStatus(boolean isCollect){
         if((videoPlayer.getVisibility()) == 0){
@@ -243,7 +242,7 @@ public class PlayBackActivity extends BaseActivity {
 
             }
 
-           videoPlayer.setCollect(praiseFlag);
+            videoPlayer.setCollect(praiseFlag);
         } else if ((videoViewPlayer.getVisibility()) == 0) {
             if (videoList.size() == 1) {
                 videoViewPlayer.setBefore(0.4f, false);
@@ -328,7 +327,7 @@ public class PlayBackActivity extends BaseActivity {
             if(praiseFlag){
                 contentLoader.cancelParises(praiseId,targetId);
             }else{
-                contentLoader.specialPraise(targetId, 20);//收藏
+                contentLoader.specialPraise(targetId, targetType);//收藏
             }
 
 
@@ -435,68 +434,18 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
-
             if (liveUserInfosDataResp.getReturnCode() == 0) {
                 result = liveUserInfosDataResp.getResult();
+                int id = result.getId();
                 LiveConstant.IDENTITY = LiveConstant.ME_CHECK_OTHER;
                 Object statusa = result.getAttentionVO().getStatus();
+
                 if (statusa != null) {
                     double parseDouble = Double.parseDouble(String.valueOf(statusa));
                     status = (int) parseDouble;
-
                 }
                 if (isUnDestroy) {
-                    final CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
-                    dialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                        @Override
-                        public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                            Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
-                            intent.putExtra("userId", String.valueOf(id));
-                            startActivity(intent);
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                        @Override
-                        public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                            Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
-                            intent.putExtra("userId", String.valueOf(id));
-                            startActivity(intent);
-                            dialog.dismiss();
-                        }
-                    });
-                    dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
-                        int fansCounts = -2;
-
-                        @Override
-                        public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
-
-                            if (fansCounts == -2) {
-                                fansCounts = fansCount;
-                            }
-                            if (status == 0) {
-                                attentionStatus.setText(getString(R.string.live_attention_ok));
-                                attentionStatus.setAlpha(0.4f);
-                                ++fansCounts;
-                                fansView.setText(String.valueOf(fansCounts));
-                                contentLoader.getAddAttention(id);
-                                status = 1;
-                            } else {
-                                attentionStatus.setText(getString(R.string.live_attention));
-                                attentionStatus.setAlpha(1);
-                                --fansCounts;
-                                fansView.setText(String.valueOf(fansCounts));
-                                contentLoader.getCancelAttention(id);
-                                status = 0;
-                            }
-                        }
-                    });
-                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            LiveConstant.USER_INFO_FIRST_CLICK = true;
-                        }
-                    });
+                    CustomUserInfoDialog dialog = new CustomUserInfoDialog(PlayBackActivity.this, null, String.valueOf(id), null, 0, false, null, null);
                     dialog.show();
                 }
 

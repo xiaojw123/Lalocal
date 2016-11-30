@@ -178,6 +178,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private ImageView overLiveShareWeibo;
     private ImageView overLiveShareWeixin;
     protected ImageView quit;
+    protected View topView;
 
 
     protected abstract void checkNetInfo(String netType, int reminder);
@@ -401,6 +402,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
         @Override
         public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
+            AppLog.i("TAG","监听到被踢出聊天室");
             clearChatRoom();
         }
     };
@@ -420,6 +422,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private boolean isScrollStop = true;
 
     protected void findViews() {
+        topView = findViewById(R.id.top_view);
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
         barrageView = (BarrageView) findViewById(R.id.barrageView_test);
         masterName = (TextView) findViewById(R.id.live_emcee_name);
@@ -563,7 +566,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
                     @Override
                     public void showTouristInfo(LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean member, boolean isMasterAccount) {
-                        AppLog.i("TAG","item点击事件");
 
                         if (LiveConstant.USER_INFO_FIRST_CLICK) {
                             LiveConstant.USER_INFO_FIRST_CLICK = false;
@@ -839,6 +841,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
                         @Override
                         public void getUserId(String userId) {
+                            AppLog.i("TAG","弹幕被点击了");
                             showUserInfoDialog(userId, channelId ,false);
                         }
                     });
@@ -892,6 +895,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case MessageType.leaveLive:
                     showFinishLayout(true, 2);
                     break;
+                case MessageType.kickOut:
+                    if(messageUserId!=null&&messageUserId.equals(String.valueOf(UserHelper.getUserId(LivePlayerBaseActivity.this)))){
+                        superManagerKickOutUser();
+                    }
+                    messageListPanel.onIncomingMessage(messages);
+
             }
 
             if (message != null && message.getAttachment() instanceof ChatRoomNotificationAttachment) {
@@ -929,6 +938,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     case ChatRoomClose:
 
                         break;
+
                     case ChatRoomManagerAdd:
                         break;
                   
@@ -938,6 +948,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }
         }
     };
+
+    protected abstract void superManagerKickOutUser();
 
 
     protected abstract void closeLiveNotifi();
@@ -1360,8 +1372,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
                         @Override
                         public void getUserId(String userId) {
-                            contentLoader.setCallBack(myCallBack);
-                            contentLoader.getLiveUserInfo(userId);
+                            showUserInfoDialog(userId, channelId ,false);
                         }
                     });
                     break;
@@ -1386,16 +1397,17 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                 case MessageType.challenge:
                     messageListPanel.onMsgSend(message);
                     break;
-
                 case MessageType.text:
                     messageListPanel.onMsgSend(message);
                     break;
                 case MessageType.closeLive:
                     messageListPanel.onMsgSend(message);
                     break;
+                case MessageType.kickOut:
+
+                    messageListPanel.onMsgSend(message);
+                    break;
             }
-
-
         }
 
         return true;

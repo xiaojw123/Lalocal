@@ -9,6 +9,7 @@ import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
             @Override
             public void onClick(View v) {
                 if(onTouristItemClickListener!=null){
-
+                    AppLog.i("TAG","点击头像查看用户role："+userAvatarsBean.getRole());
                     onTouristItemClickListener.showTouristInfo(userAvatarsBean,false);
                 }
             }

@@ -105,7 +105,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         headInfos.setVisibility(View.GONE);
         messageListView.addHeaderView(view);
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }

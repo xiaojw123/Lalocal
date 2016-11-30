@@ -16,6 +16,7 @@
         android:background="@drawable/live_im_item_bg"
         android:paddingLeft="5dp"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:text="公告"/>
 
 </LinearLayout>
