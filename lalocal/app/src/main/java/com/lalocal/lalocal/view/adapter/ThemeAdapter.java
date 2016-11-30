@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.text.NumberFormat;
@@ -28,15 +27,19 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private List<RecommendRowsBean> mThemeList;
 
     public ThemeAdapter(Context context, List<RecommendRowsBean> themeList) {
-        AppLog.i("hehe", "ThemeAdapter()");
+
         this.mContext = context;
         this.mThemeList = themeList;
-        AppLog.i("hehe", themeList == null ? "themeList inner null" : "size is ss " + themeList.size());
+
+    }
+    public  void setResh(List<RecommendRowsBean> themeList){
+        this.mThemeList=themeList;
+        notifyDataSetChanged();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        AppLog.i("hehe", "onCreateViewHolder()");
+
         View view = LayoutInflater.from(mContext).inflate(R.layout.theme_list_item, null);
 
         RecyclerView.ViewHolder holder = new ThemeViewHolder(view);
@@ -46,18 +49,15 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        AppLog.i("hehe", "onBindViewHolder -- " + position);
+
         RecommendRowsBean bean = mThemeList.get(position);
-
         ThemeViewHolder holder = (ThemeViewHolder) viewHolder;
-
         String name = bean.getName();
         String subtitle = bean.getSubTitle();
         String photo = bean.getPhoto();
         String readNum = formatNum(bean.getReadNum());
         String praiseNum = formatNum(bean.getPraiseNum());
         final String rowId = String.valueOf(bean.getId());
-
         holder.tvThemeName.setText(name);
         holder.tvThemeSubTitle.setText(subtitle);
         DrawableUtils.displayImg(mContext, holder.imgTheme, photo);
@@ -78,7 +78,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemCount() {
         int size = mThemeList == null ? null : mThemeList.size();
-        AppLog.i("hehe", "getItemCount() -- " + size);
+
         return size;
     }
 

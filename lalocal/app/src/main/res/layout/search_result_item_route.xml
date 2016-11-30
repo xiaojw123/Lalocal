@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/search_result_item_height"
     android:paddingBottom="@dimen/dimen_size_10_dp"
-    android:paddingTop="@dimen/dimen_size_10_dp">
+    android:paddingTop="@dimen/dimen_size_10_dp"
+
+    >
 
     <include layout="@layout/search_result_item" />
 
@@ -24,6 +26,7 @@
         android:textSize="@dimen/text_size_12_sp"
         android:layout_gravity="bottom"
         android:layout_marginLeft="@dimen/search_result_item_article_author_left"
+        android:text="dddsfafaslfdaslfjljlafafaf"
         />
 
 </FrameLayout>

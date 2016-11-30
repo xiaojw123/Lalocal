@@ -18,9 +18,9 @@ import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
+import com.lalocal.lalocal.model.CmbPay;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
-import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
@@ -29,12 +29,14 @@ import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
+import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
+import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
@@ -44,6 +46,7 @@ import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
+import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
@@ -77,7 +80,7 @@ public abstract class ICallBack {
     }
 
 
-    public void onChargeGold(String result){
+    public void onChargeGold(String result,String channel){
 
     }
 
@@ -124,7 +127,11 @@ public abstract class ICallBack {
 
 
     }
-    public void onGetMoreItems(int pageNumber,int totalPages,List<SearchItem> items){
+    public void onGetMoreItems(String key,int pageNumber,int totalPages,List<SearchItem> items){
+
+
+    }
+    public void onGetMoreItems(int type,String key,int pageNumber,int totalPages,List<SearchItem> items){
 
 
     }
@@ -206,7 +213,7 @@ public abstract class ICallBack {
     }
     public void onResponseFailed(int returnCode,String message){
     }
-    public void onResponseFailed(String message,int returnCode){
+    public void onResponseFailed(String message,int requestCode){
     }
     //推荐
     public void onRecommend(RecommendDataResp recommendDataResp){}
@@ -284,7 +291,7 @@ public abstract class ICallBack {
     //礼物排行榜
     public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
     }
-    public void onGetExchargeResult(CouponItem couponItem){
+    public void onGetExchargeResult(){
     }
 
     //在线人数
@@ -417,6 +424,7 @@ public abstract class ICallBack {
         AppLog.i("qn", "report json is " + json);
     }
 
+
     public void onCancelManager(String json) {
     }
 
@@ -425,4 +433,32 @@ public abstract class ICallBack {
 
     public void onPerpetualMute(int json) {
     }
+
+    public void onResponseGetTags(List<String> tags){}
+
+    public void onGetCmbPayParams(CmbPay cmbPay){
+    }
+    public void onGetOrderStatus(int status){}
+    public void onGetPayStatus(int status){
+
+    }
+    public void onGetPushLogs(String date, List<MessageItem> items){}
+    public void onGetGLiveSearch(List<LiveRowsBean> rowList,String name){
+
+    }
+    public void onGetGPlayBackSearch(int pageNum,int toalPages,List<LiveRowsBean> rowList){
+
+    }
+
+    public void onGetGUserSearch(String key,int pageNum, int toalPages, List<LiveFansOrAttentionRowsBean> beanList){
+
+    }
+
+    public void onGetGSpecialSearch(String key,int pageNum, int toalPages, List<RecommendRowsBean> beanList){
+
+    }
+    public void onGetMessageCount(String msgCount){
+
+    }
+
 }

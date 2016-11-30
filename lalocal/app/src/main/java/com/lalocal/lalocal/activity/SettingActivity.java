@@ -167,7 +167,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void unLogin() {
-        setResult(UN_LOGIN_OK);
+        UserHelper.updateSignOutInfo(this);
         finish();
     }
 }

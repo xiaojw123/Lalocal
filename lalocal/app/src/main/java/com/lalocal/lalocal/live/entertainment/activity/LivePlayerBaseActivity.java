@@ -241,14 +241,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     private void checkSharePlatform() {
-       boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(this, "com.tencent.mm");
-      boolean  isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(this, "com.sina.weibo");
+        boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(this, "com.tencent.mm");
+        boolean  isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(this, "com.sina.weibo");
         if(!isInstallMm1){
             overLiveShareFriends.setVisibility(View.GONE);
             overLiveShareWeixin.setVisibility(View.GONE);
         }
         if (!isInstallWeibo) {
-           overLiveShareWeibo.setVisibility(View.GONE);
+            overLiveShareWeibo.setVisibility(View.GONE);
         }
 
     }
@@ -306,7 +306,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             AppLog.i("TAG", "LivePlayerBaseActivity監聽用戶登錄狀態愛;" + statusCode);
             if (statusCode != StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(false);
-               if (statusCode == StatusCode.UNLOGIN||statusCode==StatusCode.NET_BROKEN) {
+                if (statusCode == StatusCode.UNLOGIN||statusCode==StatusCode.NET_BROKEN) {
 
                     getHandler().postDelayed(new Runnable() {
                         @Override
@@ -913,7 +913,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         audienceOnLineCountsChange = true;
                         String fromAccountIn = message.getFromAccount();
                         showNotifacatin(message);
-                     //   sendMessage(message, MessageType.text);
+                        //   sendMessage(message, MessageType.text);
                         if (fromAccountIn != null && creatorAccount != null) {
                             if (creatorAccount.equals(fromAccountIn)) {
                                 //主播回来了
@@ -933,7 +933,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         break;
                     case ChatRoomInfoUpdated:
                         //直播间信息修改通知
-                    //    sendMessage(message, MessageType.text);
+                        //    sendMessage(message, MessageType.text);
                         break;
                     case ChatRoomClose:
 
@@ -941,7 +941,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
                     case ChatRoomManagerAdd:
                         break;
-                  
+
                 }
             } else {
 

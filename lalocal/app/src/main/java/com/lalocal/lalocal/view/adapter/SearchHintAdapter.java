@@ -2,8 +2,8 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.text.TextUtils;
 import android.util.SparseArray;
 import android.util.TypedValue;
@@ -31,12 +31,15 @@ public class SearchHintAdapter extends BaseRecyclerAdapter {
     List<SparseArray<String>> datas;
     Context context;
     Resources res;
+    int lastPosition;
+    boolean isNewLine;
 
 
     public SearchHintAdapter(Context context, List<SparseArray<String>> datas) {
         this.datas = datas;
         this.context = context;
         res = context.getResources();
+        lastPosition = datas.size() - 1;
     }
 
     public void updateItems(List<SparseArray<String>> datas) {
@@ -61,7 +64,6 @@ public class SearchHintAdapter extends BaseRecyclerAdapter {
             View view = LayoutInflater.from(context).inflate(R.layout.search_item_hot, parent, false);
             return new HotItem(view);
         } else if (viewType == ITEM_HISTORY_TITLE)
-
         {
             TextView textView = new TextView(context);
             textView.setLayoutParams(new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) res.getDimension(R.dimen.search_history_title_Height)));
@@ -69,23 +71,17 @@ public class SearchHintAdapter extends BaseRecyclerAdapter {
             textView.setGravity(Gravity.CENTER_VERTICAL);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_size_12_sp));
             return new HistoryTitle(textView);
-        } else if (viewType == ITEM_HOT_TITLE)
-
-        {
+        } else if (viewType == ITEM_HOT_TITLE) {
             TextView textView = new TextView(context);
             RecyclerView.LayoutParams params = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.bottomMargin = (int) res.getDimension(R.dimen.dimen_size_8_dp);
+            params.leftMargin= (int) res.getDimension(R.dimen.dimen_size_15_dp);
             textView.setLayoutParams(params);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.text_size_14_sp));
-            Drawable drawable = res.getDrawable(R.drawable.search_fire_icon);
-            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-            textView.setCompoundDrawables(drawable, null, null, null);
-            textView.setCompoundDrawablePadding((int) res.getDimension(R.dimen.dimen_size_6_dp));
-            textView.setTextColor(context.getResources().getColor(R.color.color_ffaa2a));
-            textView.setGravity(Gravity.BOTTOM);
+            textView.setTextColor(context.getResources().getColor(R.color.color_191000));
+            textView.setGravity(Gravity.CENTER);
             return new HotTitle(textView);
         }
-
         return null;
     }
 
@@ -113,7 +109,22 @@ public class SearchHintAdapter extends BaseRecyclerAdapter {
             });
 
         } else if (holder instanceof HotItem) {
-            ((HotItem) holder).itemKey.setText(value);
+            int c = position + 1;
+            if (c % 3 == 0) {
+                isNewLine = true;
+                ((HotItem) holder).itemKey.setText(Html.fromHtml("<u>" + value + "</u>"));
+            } else {
+                if (isNewLine) {
+                    isNewLine = false;
+                    String nextValue = "";
+                    if (c <= lastPosition) {
+                        final SparseArray<String> sp1 = datas.get(c);
+                        nextValue = sp1.valueAt(0);
+                    }
+                    ((HotItem) holder).itemKey.setText(Html.fromHtml("<u>" + value + "</u>     <u>" + nextValue+"</u>"));
+                }
+            }
+
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -162,6 +173,11 @@ public class SearchHintAdapter extends BaseRecyclerAdapter {
 
     @Override
     public int getItemViewType(int position) {
+        if (position < 0) {
+            position = 0;
+        } else if (position > lastPosition) {
+            position = lastPosition;
+        }
         SparseArray<String> sp = datas.get(position);
         return sp.keyAt(0);
     }

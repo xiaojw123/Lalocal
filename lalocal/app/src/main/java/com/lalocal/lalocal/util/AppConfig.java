@@ -4,23 +4,39 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
-    /*上报日志接口
+
+/*    1.获取我的推送标签
+
+            get
+
+    http://dev.lalocal.cn/api/users/pushTags
+
+    应用启动的时候调用（登陆状态），将返回的结果注册到友盟平台（tag）
+
+    相应：
+    数组String
+    */
+
+    /*2. 上报日志接口
     *method:post
     * params:log
     * ur:http://dev.lalocal.cn/api/system/logs/app
     * */
-
+    public static String UTF8 = "UTF-8";
 
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
-    //   private static String baseUrl = "http://api.lalocal.cn/api/";
-    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+//    private static String baseUrl = "http://api.lalocal.cn/api/";
+        private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
 
     public static String getWelcommeImgs() {
@@ -78,6 +94,10 @@ public class AppConfig {
     //我的优惠券接口 GET_MY_COUPON_ITEMS
     public static String getCouponItemsUrl() {
         return baseUrl + "coupons?";
+    }
+    public static String getAvaileCouponItemUrl(String productionId){
+
+        return baseUrl+"coupons/available?productionId="+productionId;
     }
 
     //我的订单接口 GET_MY_ORDER_ITEMS
@@ -312,8 +332,8 @@ public class AppConfig {
         return baseUrl + "channels/historys/" + id;
     }
     //上报日志 http://dev.lalocal.cn/api/system/logs/app
-    public  static  final  String uploadLogs(){
-        return baseUrl+"system/logs/app";
+    public static final String uploadLogs() {
+        return baseUrl + "system/logs/app";
     }
 
     //禁言
@@ -398,29 +418,58 @@ public class AppConfig {
 
     //获取搜索标签
     public static String getSearchTagUrl(String name) {
-        return baseUrl + "tags?name=" + name;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags?name=" + encodeName;
     }
 
     //获取搜索
     public static String getSearchResultUrl(String name) {
-        return baseUrl + "tags/search?name=" + name;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search?name=" + encodeName;
     }
 
     //获取更多文章
     public static String getMoreArticleUrl(String name, int pageNumber, int pageSize) {
-        return baseUrl + "tags/search/articles?name=" + name + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search/articles?name=" + encodeName + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
     }
 
     //获取更多产品
     public static String getMoreProductUrl(String name, int pageNumber, int pageSize) {
-        return baseUrl + "tags/search/productions?name=" + name +
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search/productions?name=" + encodeName +
                 "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
     }
     //获取更多路线
 
     public static String getMoreRouteUrl(String name, int pageNumber, int pageSize) {
-
-        return baseUrl + "tags/search/routes?name=" + name + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search/routes?name=" + encodeName + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
     }
 
     //⽬的地地区下⾯的路线列表
@@ -493,6 +542,18 @@ public class AppConfig {
         return baseUrl + "iaplogs/charges";
     }
 
+    //招商充值接口
+    public static String chargeCmbGoldUrl() {
+
+        return baseUrl + "iaplogs/charges/cmb";
+    }
+
+    public static String getPayStatus(String payNo) {
+        return String.format(baseUrl + "iaplogs/%1$s/status", payNo);
+
+    }
+
+
     public static String exchargeGoldUrl() {
 
         return baseUrl + "users/score/exchange";
@@ -500,12 +561,19 @@ public class AppConfig {
 
     //直播搜索
     public static String searchLiveUrl(int pageSize, int pageNum, String nickName) {
-        return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + nickName;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(nickName, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + encodeName;
     }
 
     //兑换优惠券
     public static String exchargeCouponUrl() {
-        return baseUrl + "codes";
+        return baseUrl + "codes/check";
+//
     }
 
     //用户历史直播
@@ -582,6 +650,81 @@ public class AppConfig {
     public static String getBindPhoneUrl() {
 //        http://dev.lalocal.cn:8080/api/users/phone/bind
         return baseUrl + "users/phone/bind";
+    }
+
+    public static String getPushTagUrl() {
+        return baseUrl + "users/pushTags";
+    }
+
+    public static String getCmbPayUrl(int orderId) {
+        return baseUrl + "pay/cmb/pay/" + orderId;
+    }
+
+    /* 招行支付命令
+    * 生产环境：https://netpay.cmbchina.com/netpayment/BaseHttp.dll?PrePayEUserP
+    * 测试环境：http://61.144.248.29:801/netpayment/BaseHttp.dll?PrePayEUserP
+    *
+    * */
+    public static String getCmbPayCommand(String branchId, String cono, String billNo, String amount, String date,
+                                          int expireTimeSpan, String merchantUrl, String merchantPara, String merchantCode,
+                                          String merchantRetUrl, String merchantRetPara) {
+//        return String.format("http://61.144.248.29:801/netpayment/BaseHttp.dll?PrePayEUserP?" +
+//                        "BranchID=%1$s&CoNo=%2$s&BillNo=%3$s&Amount=%4$s&Date=%5$s&ExpireTimeSpan=%6$s&MerchantUrl=%7$s" +
+//                        "&MerchantPara=%8$s&MerchantCode=%9$s&MerchantRetUrl=%10$s&MerchantRetPara=%11$s"
+//                , branchId, cono, billNo, amount, date,
+//                expireTimeSpan, merchantUrl, merchantPara, merchantCode,
+//                merchantRetUrl, merchantRetPara);
+        return String.format("https://netpay.cmbchina.com/netpayment/BaseHttp.dll?PrePayEUserP?" +
+                        "BranchID=%1$s&CoNo=%2$s&BillNo=%3$s&Amount=%4$s&Date=%5$s&ExpireTimeSpan=%6$s&MerchantUrl=%7$s" +
+                        "&MerchantPara=%8$s&MerchantCode=%9$s&MerchantRetUrl=%10$s&MerchantRetPara=%11$s"
+                , branchId, cono, billNo, amount, date,
+                expireTimeSpan, merchantUrl, merchantPara, merchantCode,
+                merchantRetUrl, merchantRetPara);
+
+    }
+
+    public static String getOrderStatusUrl(int orderId) {
+        return String.format(baseUrl + "orders/%1$s/status", orderId);
+    }
+
+    public static String getPushLogsUrl(String dateTime) {
+        if (dateTime == null) {
+            dateTime = "";
+        }
+        return baseUrl + "pushLogs?dateTime=" + dateTime;
+    }
+
+    public static String getGLiveSearchUrl(String name, int pageNum, int pageSize) {
+        return baseUrl + "tags/search/channels?name=" + encodeString(name) +
+                "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
+    }
+
+
+    //回放接口
+    public static String getGPlayBackSearchUrl(String name, int pageNum, int pageSize) {
+        return baseUrl + "tags/search/channel/historys?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
+    }
+
+
+    public static String getGSepicalSearchUrl(String name, int pageNum, int pageSize) {
+        return baseUrl + "tags/search/themes?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
+    }
+    public static String getGUserSearchUrl(int pageSize,int pageNum,String nickName){
+        return baseUrl+"users?pageSize=+"+pageSize+"&pageNumber="+pageNum+"&nickName="+encodeString(nickName);
+    }
+
+    public static String encodeString(String name) {
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encodeName;
+
+    }
+    public static String getMessageCount(){
+        return baseUrl+"dynamics/amount";
     }
 
     /**

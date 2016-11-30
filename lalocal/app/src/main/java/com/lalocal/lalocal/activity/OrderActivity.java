@@ -402,6 +402,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 case 5:
                     pay_channel.setText("优惠券");
                     break;
+                case 6:
+                    pay_channel.setText("一网通支付");
+                    break;
             }
         }
         if (evaluteTimeCotainer.getVisibility() == View.VISIBLE) {

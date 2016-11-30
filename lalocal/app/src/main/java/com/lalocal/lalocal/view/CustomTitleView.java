@@ -25,7 +25,7 @@ import com.lalocal.lalocal.me.LPasswordForget2Activity;
  * title_name   type:string 设置标题名称
  */
 public class CustomTitleView extends FrameLayout implements View.OnClickListener {
-    onBackBtnClickListener listener;
+    onBackBtnClickListener listener, cListener;
     Context context;
     TextView title_tv;
     boolean isFinishEanble = true;
@@ -44,7 +44,7 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleView);
         String name = a.getString(R.styleable.CustomTitleView_title_name);
         boolean lineVisible = a.getBoolean(R.styleable.CustomTitleView_lineVisible, true);
-        boolean backVisible=a.getBoolean(R.styleable.CustomTitleView_backVisible,true);
+        boolean backVisible = a.getBoolean(R.styleable.CustomTitleView_backVisible, true);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_title_layout, this);
         ImageView backImg = (ImageView) findViewById(R.id.titleview_back_img);
@@ -54,7 +54,7 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         if (!lineVisible) {
             line.setVisibility(GONE);
         }
-        if (!backVisible){
+        if (!backVisible) {
             backImg.setVisibility(GONE);
         }
         title_tv.setText(name);
@@ -69,26 +69,34 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
 
     }
 
+    public void setOnCustomClickLister(onBackBtnClickListener listener) {
+        cListener = listener;
+    }
+
     public void setTitle(String titleName) {
         title_tv.setText(titleName);
     }
 
     @Override
     public void onClick(View v) {
+        if (cListener != null) {
+            cListener.onBackClick();
+            return;
+        }
         try {
             if (listener != null) {
                 listener.onBackClick();
             }
             if (isFinishEanble) {
                 Activity a = (Activity) context;
-                if (a instanceof LPEmailBoundActivity){
+                if (a instanceof LPEmailBoundActivity) {
                     MobHelper.sendEevent(context, MobEvent.BINDING_BACK_01);
-                }else if (a instanceof LPEmailBound2Activity){
+                } else if (a instanceof LPEmailBound2Activity) {
                     MobHelper.sendEevent(context, MobEvent.BINDING_BACK_02);
-                }else if (a instanceof LPasswordForget1Activity){
-                    MobHelper.sendEevent(context,MobEvent.LOGIN_FORGET_BACK_01);
-                }else  if (a instanceof LPasswordForget2Activity){
-                    MobHelper.sendEevent(context,MobEvent.LOGIN_FORGET_BACK_02);
+                } else if (a instanceof LPasswordForget1Activity) {
+                    MobHelper.sendEevent(context, MobEvent.LOGIN_FORGET_BACK_01);
+                } else if (a instanceof LPasswordForget2Activity) {
+                    MobHelper.sendEevent(context, MobEvent.LOGIN_FORGET_BACK_02);
                 }
                 a.finish();
             }

@@ -179,6 +179,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private MyRunnable myRunnable;
     private TextView masterAttentino;
     private int fansNumMaster;
+
     private LiveRowsBean liveRowsBean;
     private CountDownTimer playerConnectTimer;
     private AudioManager audio;
@@ -1558,7 +1559,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     }
 
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         switch (keyCode) {
@@ -1579,4 +1579,5 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
         return super.onKeyDown(keyCode, event);
     }
+
 }

@@ -24,12 +24,12 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.Coupon;
-import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.JsCoupon;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.adapter.MyCouponRecyclerAdapter;
 
 import org.json.JSONArray;
@@ -44,6 +44,7 @@ import butterknife.OnClick;
 
 public class MyCouponActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
     private static final String MY_COUPON_FORMART = "我的优惠券(%1$s)";
+    public static final String PRODUCTION_ID = "productionid";
     @BindView(R.id.my_coupon_exchage_btn)
     Button myCouponExchageBtn;
     @BindView(R.id.my_coupon_rlv)
@@ -74,14 +75,15 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
         setContentView(R.layout.activity_my_coupon);
         ButterKnife.bind(this);
         pageType = getPageType();
+        setLoaderCallBack(new MyCouponCallBack());
         if (pageType == KeyParams.PAGE_TYPE_WALLET) {
             myCouponCtv.setTitle("我的优惠券");
+            mContentloader.getMyCoupon(UserHelper.getUserId(this), UserHelper.getToken(this));
         } else {
             myCouponCtv.setTitle("优惠券");
             myCouponUseContainer.setVisibility(View.VISIBLE);
+            mContentloader.getMyAvailableCoupon(UserHelper.getUserId(this), UserHelper.getToken(this), getProductionId());
         }
-        setLoaderCallBack(new MyCouponCallBack());
-        mContentloader.getMyCoupon(UserHelper.getUserId(this), UserHelper.getToken(this));
         myCouponCtv.setOnBackClickListener(this);
     }
 
@@ -95,7 +97,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                     couponInputEdt = (EditText) popContentView.findViewById(R.id.pop_coupon_edt);
                     spaceView = popContentView.findViewById(R.id.pop_blank_view);
                     headView = popContentView.findViewById(R.id.pop_coupon_headerview);
-                    Button exchargeBtn = (Button) popContentView.findViewById(R.id.pop_coupon_excharge_btn);
+                    ProgressButton exchargeBtn = (ProgressButton) popContentView.findViewById(R.id.pop_coupon_excharge_btn);
                     couponInputEdt.setOnClickListener(exhargeBtnClickListener);
                     headView.setOnClickListener(exhargeBtnClickListener);
                     spaceView.setOnClickListener(exhargeBtnClickListener);
@@ -119,12 +121,12 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
 //                        List<Coupon> selectedViews = adapter.getSelectedCoupons();
                         Map<Integer, Coupon> selelctedMap = adapter.getSelectedCouponMap();
 //                        List<Coupon> selectedViews = new ArrayList<>();
-                        JSONArray couponJarray=new JSONArray();
-                        List<JsCoupon> jsCouponList=new ArrayList<>();
+                        JSONArray couponJarray = new JSONArray();
+                        List<JsCoupon> jsCouponList = new ArrayList<>();
                         for (Map.Entry<Integer, Coupon> entry : selelctedMap.entrySet()) {
                             Coupon coupon = entry.getValue();
 //                            selectedViews.add(coupon);
-                            JsCoupon jsCoupon=new JsCoupon();
+                            JsCoupon jsCoupon = new JsCoupon();
                             jsCoupon.setStatus(coupon.getStatus());
                             jsCoupon.setMinFee(coupon.getMinFee());
                             jsCoupon.setStatusName(coupon.getStatusName());
@@ -135,11 +137,11 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
                             jsCoupon.setCouponId(String.valueOf(coupon.getId()));
                             jsCouponList.add(jsCoupon);
                         }
-                            Gson gson = new Gson();
-                            String json = gson.toJson(jsCouponList);
-                            intent = new Intent();
-                            AppLog.print("myCoupon____json___" + json);
-                            intent.putExtra("selectedCoupons", json);
+                        Gson gson = new Gson();
+                        String json = gson.toJson(jsCouponList);
+                        intent = new Intent();
+                        AppLog.print("myCoupon____json___" + json);
+                        intent.putExtra("selectedCoupons", json);
                     }
                 }
                 setResult(BookActivity.RESULT_COUPON_SELECTED, intent);
@@ -156,7 +158,7 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
             if (id == R.id.pop_coupon_excharge_btn) {
                 String text = couponInputEdt.getText().toString();
                 if (!TextUtils.isEmpty(text)) {
-                    mContentloader.exchargeCopon(text);
+                    mContentloader.exchargeCopon(text, (ProgressButton) v);
                 } else {
                     CommonUtil.showPromptDialog(MyCouponActivity.this, "优惠码不能为空", null);
                 }
@@ -223,12 +225,16 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
         }
 
         @Override
-        public void onGetExchargeResult(CouponItem couponItem) {
+        public void onGetExchargeResult() {
             if (window != null && window.isShowing()) {
                 window.dismiss();
             }
             CommonUtil.showToast(MyCouponActivity.this, "兑换成功", Toast.LENGTH_SHORT);
-            mContentloader.getMyCoupon(UserHelper.getUserId(MyCouponActivity.this), UserHelper.getToken(MyCouponActivity.this));
+            if (pageType == KeyParams.PAGE_TYPE_WALLET) {
+                mContentloader.getMyCoupon(UserHelper.getUserId(MyCouponActivity.this), UserHelper.getToken(MyCouponActivity.this));
+            }else{
+                mContentloader.getMyAvailableCoupon(UserHelper.getUserId(MyCouponActivity.this), UserHelper.getToken(MyCouponActivity.this),getProductionId());
+            }
         }
     }
 
@@ -249,5 +255,9 @@ public class MyCouponActivity extends BaseActivity implements CustomTitleView.on
             setResult(BookActivity.RESULT_COUPON_SELECTED, null);
         }
 
+    }
+
+    private String getProductionId() {
+        return getIntent().getStringExtra(PRODUCTION_ID);
     }
 }

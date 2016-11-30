@@ -63,8 +63,6 @@ public class LiveFragment extends Fragment {
     @BindView(R.id.recommend_page)
     RecommendLayout mRecommendPage;
 
-    // 动画控件
-//    private static PeriscopeLayout mPeriscope;
     // 适配器
     private HomeLiveAdapter mAdapter;
     // 声明内容加载器
@@ -120,6 +118,8 @@ public class LiveFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_live, container, false);
+
+        // 使用ButterKnife框架
         ButterKnife.bind(this, view);
 
         if (Build.VERSION.SDK_INT >= 22) {
@@ -487,6 +487,14 @@ public class LiveFragment extends Fragment {
                 nickname = "一位不愿意透露姓名的网友";
             }
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);
+
+            if (type == LIVING) {
+                mRecommendPage.setText(R.id.tv_recommendations_type, "正在直播");
+            } else if (type == PLAYBACK) {
+                mRecommendPage.setText(R.id.tv_recommendations_type, "精彩回放");
+            } else {
+                mRecommendPage.setText(R.id.tv_recommendations_type, "精彩推荐");
+            }
 
             // 设置点击事件
             mRecommendPage.setOnClick(R.id.view_click, new View.OnClickListener() {

@@ -89,7 +89,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
     public void setCollect(boolean isCollect){
         if(isCollect){
             collect.setImageResource(R.drawable.collect_light_sel);
-        }else{
+        }else {
             collect.setImageResource(R.drawable.collect_light_unsel);
         }
     }

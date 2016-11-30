@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lalocal.lalocal" >
+    package="com.lalocal.lalocal">
 
-    <!--地理位置权限-->
-
+    <!-- 地理位置权限 -->
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -42,6 +41,7 @@
     <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -70,7 +70,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.HomeActivity"
             android:launchMode="singleTask"
@@ -80,7 +80,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AccountEidt1Activity"
             android:screenOrientation="portrait" />
@@ -115,7 +115,7 @@
         <activity android:name=".activity.ArticleTestAct" />
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme" >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -128,11 +128,20 @@
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.UMDefault" />
-
+        <!-- lalocoal-release -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="57885600e0f55a60d5000b3f" />
-
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
+        <!-- //lalocal-debug -->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_APPKEY" -->
+        <!-- android:value="5806d2df67e58ef11a000e36" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_MESSAGE_SECRET" -->
+        <!-- android:value="9b462862fd10e9e8872745ec67df7718"/> -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -172,7 +181,7 @@
 
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="releaseOrigin" />
+            android:value="release_lalocal" />
 
         <!-- <meta-data -->
         <!-- android:name="UMENG_CHANNEL" -->
@@ -185,7 +194,7 @@
 
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity" />
-        <activity android:name=".activity.DestinationAreaActivity"/>
+        <activity android:name=".activity.DestinationAreaActivity" />
         <activity android:name=".activity.RouteDetailActivity" />
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -244,7 +253,7 @@
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -273,15 +282,16 @@
         <!-- 声明直播异常报警服务 -->
         <service android:name=".service.AlertService" />
 
-        <receiver android:name="com.netease.pushservice.receiver.PushServiceBootReceiver" >
+        <receiver android:name="com.netease.pushservice.receiver.PushServiceBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <!-- <meta-data -->
-        <!-- android:name="com.netease.nim.appKey" -->
-        <!-- android:value="4cbe3856032ad3755da23525e596405f" /> -->
+        <!-- lalocal-release -->
+         <!--<meta-data-->
+         <!--android:name="com.netease.nim.appKey"-->
+         <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
+        <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"
             android:value="efc9614a32336704ec2577f2129929fb" />
@@ -297,7 +307,7 @@
         <receiver
             android:name="com.netease.nimlib.service.NimReceiver"
             android:exported="false"
-            android:process=":core" >
+            android:process=":core">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -341,7 +351,6 @@
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
-
         <activity android:name=".live.entertainment.activity.ReportActivity" />
         <activity android:name=".activity.MyArticleActivity" />
         <activity android:name=".me.LLoginActivity" />
@@ -354,16 +363,23 @@
         <activity android:name=".me.LPasswordForget2Activity" />
         <activity android:name=".me.LPasswordForget1Activity" />
         <activity android:name=".activity.AttentionActivity" />
-
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
-        <activity android:name=".me.PhoneBindActivity" >
-        </activity>
-        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity>
+
+        <activity android:name=".me.PhoneBindActivity" />
+        <activity android:name=".activity.CmbPayActivity" />
+        <activity
+            android:name="cmb.pb.ui.PBKeyboardActivity"
+            android:theme="@style/CmbDialogStyleBottom" />
+
+        <service
+            android:name="cmb.pb.cmbsafe.CmbService"
+            android:exported="false" />
+        <activity android:name=".me.MyMessageActivity" />
+        <activity android:name=".me.TargetWebActivity" />
+        <activity android:name=".activity.GlobalSearchActivity"/>
+        <activity android:name=".activity.DestinationActivity"/>
     </application>
 
 </manifest>

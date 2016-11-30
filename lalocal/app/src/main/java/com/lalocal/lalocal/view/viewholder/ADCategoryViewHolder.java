@@ -20,6 +20,7 @@ import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
+import com.lalocal.lalocal.activity.DestinationActivity;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
@@ -114,7 +115,8 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 // 跳转目的地界面
-                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_DESTINATION);
+                Intent intent = new Intent(mContext, DestinationActivity.class);
+                mContext.startActivity(intent);
             }
         });
     }

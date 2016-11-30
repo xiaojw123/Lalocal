@@ -14,8 +14,6 @@
     <dimen name="home_me_headportrait_img_bottom">61dp</dimen>
     <dimen name="home_me_username_left">145dp</dimen>
     <dimen name="home_me_username_top">84dp</dimen>
-    <dimen name="home_me_verified_wdith">37dp</dimen>
-    <dimen name="home_me_verified_height">15dp</dimen>
     <dimen name="home_me_content_tab_height">54dp</dimen>
     <dimen name="home_me_content_tab_top_margin">151dp</dimen>
     <dimen name="home_me_tab_title_top">8dp</dimen>
@@ -104,7 +102,7 @@
     <dimen name="register_clear_btn_width">17dp</dimen>
     <dimen name="register_clear_btn_height">17dp</dimen>
     <dimen name="register_clear_btn_right">12dp</dimen>
-    <dimen name="login_emial_custom_edit_top">268.5dp</dimen>
+    <!--<dimen name="login_emial_custom_edit_top">268.5dp</dimen>-->
 
     <dimen name="wheel_dialog_item_height">43dp</dimen>
     <dimen name="my_coupon_corner_img_width">50dp</dimen>
@@ -182,13 +180,29 @@
     <dimen name="acount_edit_description_text_max_width">242dp</dimen>
     <dimen name="login_phone_edit_width">315dp</dimen>
     <dimen name="login_phone_edit_height">50dp</dimen>
-    <dimen name="login_phone_edit_top">270dp</dimen>
+    <dimen name="login_phone_edit_top">250dp</dimen>
     <dimen name="login_password_sedit_width">236dp</dimen>
     <dimen name="item_my_live_img_width">120dp</dimen>
     <dimen name="item_chllenge_descripton_height">42dp</dimen>
     <dimen name="item_gift_layout_hegit">94dp</dimen>
     <dimen name="item_gift_img_width">24dp</dimen>
     <dimen name="item_my_live_layout_height">160dp</dimen>
+    <dimen name="item_my_message_layout_height">70dp</dimen>
+
+
+
+
+    <!--2.2.0改版-->
+    <dimen name="me_headportrait_img_width">115dp</dimen>
+    <dimen name="me_message_customer_img_width">45dp</dimen>
+    <dimen name="me_message_customer_img_height">45dp</dimen>
+    <dimen name="my_message_customer_height">75dp</dimen>
+    <dimen name="global_search_layout_height">55dp</dimen>
+    <dimen name="gsearch_result_empty_top">200dp</dimen>
+
+
+
+
 
 
 

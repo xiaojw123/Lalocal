@@ -254,7 +254,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 //TODO 预定
                 MobHelper.sendEevent(this,MobEvent.PRODUCT_BOOKING);
                 if (UserHelper.isLogined(this)) {
-                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
+                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this),v);
                 } else {
                     LLoginActivity.start(this);
                 }
@@ -331,17 +331,31 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 if (user.getStatus() == 0) {
                     preOrderProduct();
                 } else {
-                    CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", new CustomDialog.CustomDialogListener() {
-                        @Override
-                        public void onDialogClickListener() {
-                            Intent intent = new Intent(ProductDetailsActivity.this, AccountEidt2Activity.class);
-                            intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
-                            intent.putExtra("emailtext", user.getEmail() + "(未验证)");
-                            intent.putExtra(KeyParams.USERID, user.getId());
-                            intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
-                            startActivity(intent);
-                        }
-                    });
+                    String email=user.getEmail();
+                    if (TextUtils.isEmpty(email)){
+                        CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未绑定,请前去绑定", new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                Intent intent = new Intent(ProductDetailsActivity.this, EmailBoundActivity.class);
+                                intent.putExtra(KeyParams.USERID, user.getId());
+                                intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
+                                startActivity(intent);
+                            }
+                        });
+
+                    }else {
+                        CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                Intent intent = new Intent(ProductDetailsActivity.this, AccountEidt2Activity.class);
+                                intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
+                                intent.putExtra("emailtext", user.getEmail() + "(未验证)");
+                                intent.putExtra(KeyParams.USERID, user.getId());
+                                intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
+                                startActivity(intent);
+                            }
+                        });
+                    }
                 }
             }
 

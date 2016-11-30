@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.AppLog;
@@ -61,16 +60,6 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
                     if (itemHolder.meetingTagLayout.getVisibility() == View.VISIBLE) {
                         itemHolder.meetingTagLayout.setVisibility(View.INVISIBLE);
                     }
-                }
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) ((LiveSearchViewHolder) holder).lin1.getLayoutParams();
-                if (position > 0 && position < mItems.size() - 1) {
-                    params.leftMargin = ScreenUtil.screenWidth * 18 / 37;
-                    ((LiveSearchViewHolder) holder).lin2.setVisibility(View.INVISIBLE);
-                } else if (position == mItems.size() - 1) {
-                    ((LiveSearchViewHolder) holder).lin2.setVisibility(View.VISIBLE);
-                } else {
-                    params.leftMargin = 0;
-                    ((LiveSearchViewHolder) holder).lin2.setVisibility(View.INVISIBLE);
                 }
                 DrawableUtils.displayImg(mContext, itemHolder.photoImg, item.getPhoto());
                 String title = item.getTitle();
@@ -130,10 +119,6 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
         TextView userNameTv;
         @BindView(R.id.live_search_item_loc)
         TextView locTv;
-        @BindView(R.id.live_search_lin1)
-        View lin1;
-        @BindView(R.id.live_search_lin2)
-        View lin2;
         @BindView(R.id.live_search_item_meeting_tag)
         LinearLayout meetingTagLayout;
 

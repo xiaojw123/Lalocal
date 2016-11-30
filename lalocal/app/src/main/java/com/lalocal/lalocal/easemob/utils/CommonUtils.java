@@ -2,6 +2,7 @@ package com.lalocal.lalocal.easemob.utils;
 
 import android.content.Context;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -103,7 +104,11 @@ public final class CommonUtils {
 
     public static String getRandomAccount(Context context) {
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tm.getDeviceId();
+        String randomAcount = tm.getDeviceId();
+        if (TextUtils.isEmpty(randomAcount)) {
+            randomAcount = "lalocal123";
+        }
+        return randomAcount;
     }
 
     public static void showSoftInput(Context context, View view) {

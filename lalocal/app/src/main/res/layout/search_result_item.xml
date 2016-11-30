@@ -1,27 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/search_result_item_height"
+    android:paddingLeft="@dimen/dimen_size_15_dp"
     >
 
     <ImageView
         android:id="@+id/search_result_item_img"
         android:layout_width="@dimen/search_result_item_img_width"
         android:layout_height="@dimen/search_result_item_img_height"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
+        android:src="@drawable/test_img"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:layout_marginBottom="@dimen/dimen_size_20_dp"
         />
 
     <TextView
         android:id="@+id/search_result_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textColor="@color/color_66"
-        android:textSize="@dimen/text_size_15_sp"
-        android:layout_toRightOf="@+id/search_result_item_img"
         android:layout_marginLeft="@dimen/dimen_size_10_dp"
-        />
+        android:layout_toRightOf="@+id/search_result_item_img"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:layout_alignTop="@+id/search_result_item_img"
+        android:textColor="@color/color_191000"
+        android:textSize="@dimen/text_size_15_sp" />
 
+    <TextView
+        android:id="@+id/search_result_item_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/search_result_item_title"
+        android:layout_below="@+id/search_result_item_title"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:textColor="@color/color_ffaa2a" />
 
+    <TextView
+        android:id="@+id/search_result_item_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/search_result_item_img"
+        android:layout_alignLeft="@+id/search_result_item_title"
+        android:layout_marginBottom="@dimen/dimen_size_2_dp"
+        android:drawableLeft="@drawable/reader_quantity"
+        android:drawablePadding="@dimen/dimen_size_2_dp"
+        android:text="0"
+        android:textColor="@color/color_30191000" />
+
+    <TextView
+        android:id="@+id/search_result_item_collect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/search_result_item_read"
+        android:layout_marginLeft="@dimen/dimen_size_19_dp"
+        android:layout_toRightOf="@+id/search_result_item_read"
+        android:drawableLeft="@drawable/save_quantity"
+        android:drawablePadding="@dimen/dimen_size_2_dp"
+        android:text="0"
+        android:textColor="@color/color_30191000" />
+
+    <View
+        style="@style/CommonDeLineTheme"
+        android:layout_alignLeft="@+id/search_result_item_title"
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

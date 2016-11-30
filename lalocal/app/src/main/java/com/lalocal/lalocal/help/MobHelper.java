@@ -7,6 +7,7 @@ import android.widget.Toast;
 import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -51,6 +52,13 @@ public class MobHelper {
 
     public void socialLogin(Activity activity, ContentLoader loader, SHARE_MEDIA share_media) {
         AppLog.print("socialLogin__");
+        if (share_media == SHARE_MEDIA.SINA) {
+            boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(activity, "com.sina.weibo");
+            if (!isInstallWeibo) {
+                Toast.makeText(activity, "没有安装微博客户端", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
         mActivity = activity;
         mLoader = loader;
         mUmShareAPI = UMShareAPI.get(activity);

@@ -19,9 +19,4 @@ public interface MessageType {
     int kickOut=12;//踢出直播间
     int closeLive=13;//关闭直播
 
-
-
-
-  //  @property (nonatomic,strong) NSString *style; //1  弹幕 0文本 2 点赞 3 修改公告 4 挑战 5 投注 6禁言 7解禁 8设置管理员 9取消 10 礼物 11 退出直播 12 踢人  13 关闭主播
-
 }

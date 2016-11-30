@@ -20,6 +20,7 @@ import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.SocialUser;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
@@ -152,6 +153,11 @@ public class AccountSecurityActivity extends BaseActivity {
                 share_media = SHARE_MEDIA.QQ;
             } else if (button == accoutSecurityWeiboCb) {
                 share_media = SHARE_MEDIA.SINA;
+                boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(AccountSecurityActivity.this, "com.sina.weibo");
+                if (!isInstallWeibo) {
+                    Toast.makeText(AccountSecurityActivity.this, "没有安装微博客户端", Toast.LENGTH_SHORT).show();
+                    return;
+                }
             }
             mUmShareAPI.doOauthVerify(this, share_media, authListener);
         } else if (!button.isChecked() && tag != null) {

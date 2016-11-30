@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="@dimen/item_my_message_layout_height"
+    android:background="@color/white"
+    android:id="@+id/list_item_msg_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/list_item_msg_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/text_size_14_sp"
+        android:ellipsize="end"
+        android:layout_marginRight="@dimen/dimen_size_20_dp"
+        android:maxLines="1"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        />
+
+    <TextView
+        android:id="@+id/list_item_msg_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_b3"
+        android:layout_below="@+id/list_item_msg_content"
+        android:textSize="@dimen/text_size_12_sp"
+        android:layout_marginTop="@dimen/dimen_size_6_dp"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/arrow_right"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        />
+    <View
+        style="@style/CommonDeLineTheme"
+        android:layout_alignParentBottom="true"
+        />
+
+</RelativeLayout>

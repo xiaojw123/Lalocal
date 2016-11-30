@@ -15,30 +15,43 @@
         android:layout_marginTop="@dimen/dimen_size_5_dp"
         android:orientation="vertical">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_size_15_dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/dimen_size_15_dp">
             <ImageView
+                android:id="@+id/icon"
                 android:layout_width="@dimen/dimen_size_12_dp"
                 android:layout_height="@dimen/dimen_size_12_dp"
                 android:layout_marginLeft="@dimen/dimen_size_25_dp"
-                android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/dimen_size_4_dp"
                 android:src="@drawable/homelist_living_ic"/>
 
             <TextView
                 android:id="@+id/tv_title"
+                android:layout_toRightOf="@id/icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="加载中..."
                 android:layout_marginLeft="@dimen/dimen_size_10_dp"
-                android:layout_gravity="center_vertical"
                 android:textSize="16sp"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:ellipsize="end"
                 android:textColor="@color/color_191000"/>
-        </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dimen_size_5_dp"
+                android:paddingRight="@dimen/dimen_size_5_dp"
+                android:text="直播中"
+                android:layout_marginTop="@dimen/dimen_size_2_dp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dimen_size_15_dp"
+                android:background="@drawable/bg_tag_living"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

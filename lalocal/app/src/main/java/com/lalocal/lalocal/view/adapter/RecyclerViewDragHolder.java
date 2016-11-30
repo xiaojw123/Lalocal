@@ -76,7 +76,7 @@ public abstract class RecyclerViewDragHolder {
     }
 
 
-    private void init() {
+    private void  init() {
         itemView = new DragLinearLayout(context);
         if (itemHeight == 0) {
             itemView.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, (int) context.getResources().getDimension(R.dimen.dimen_size_50_dp)));
@@ -91,6 +91,11 @@ public abstract class RecyclerViewDragHolder {
     public void close() {
         itemView.close();
     }
+    public void hidenDelete(){
+        bgView.setVisibility(View.GONE);
+    }
+
+
 
     public void open() {
         itemView.open();

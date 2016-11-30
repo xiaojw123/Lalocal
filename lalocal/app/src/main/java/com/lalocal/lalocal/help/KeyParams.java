@@ -4,6 +4,12 @@ package com.lalocal.lalocal.help;
  * Created by xiaojw on 2016/6/16.
  */
 public interface KeyParams {
+    public static final  int CHANNEL_LOGIN_PHONE=0x01;
+    public static final  int CHANNEL_LOGIN_EMAIL=0x02;
+    public static final  int CHANNEL_LOGIN_SOCIAL=0x03;
+    public static final  String DATE_TIME="dateTime";
+    public static final  String TARGE_URL="target_url";
+    public static final  String TARGE_TITLE="target_title";
     public static  final String UID_PARAMS="social_uid_params";
     public static final  String SOCIAL_PARAMS="social_params";
     public static final  String USER="user";
@@ -19,9 +25,11 @@ public interface KeyParams {
     public static  final  String AVATAR="avatar";
     public static  final String SORTVALUE="sortValue";
     public static  final  String ORDER_ID="orderid";
+    public static  final  String PAY_NO="payno";
     public static  final  String TRAVEL_PERSONS_CONCACT="concact";
     public static  final String SETTING="setting";
     public static  final  String IM_LOGIN="im_login";
+    public static  final  String LOGIN_CHANNEL="login_channel";
     public static  final  String NORMAIL_BACK="normal_back";
     public static  final  String PASSWORD="psw";
     public static  final  String IS_LOGIN="isLogin";
@@ -44,6 +52,7 @@ public interface KeyParams {
     //页面类型
     public static final String PAGE_TYPE="page_type";
     public static final int PAGE_TYPE_WALLET=0x11;
+
 
 
 }

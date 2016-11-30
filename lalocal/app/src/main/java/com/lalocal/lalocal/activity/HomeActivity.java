@@ -1,221 +1,309 @@
 package com.lalocal.lalocal.activity;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.DestinationFragment;
+import com.lalocal.lalocal.activity.fragment.FindFragment;
 import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
-import com.lalocal.lalocal.activity.fragment.NewsFragment;
-import com.lalocal.lalocal.activity.fragment.FindFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
+
+    @BindView(R.id.home_tab_live)
+    ImageView mImgTabLive;
+    @BindView(R.id.home_tab_find)
+    ImageView mImgTabFind;
+    @BindView(R.id.home_tab_search)
+    ImageView mImgTabSearch;
+    @BindView(R.id.home_tab_me)
+    ImageView mImgTabMe;
+    @BindView(R.id.home_tab_live_selected)
+    View mTabLiveSelected;
+    @BindView(R.id.home_tab_find_selected)
+    View mTabFindSelected;
+
     public static final String VERSION_RESULT = "version_result";
-    LinearLayout home_recommend_tab, home_destination_tab, home_news_tab, home_me_tab;
-    LinearLayout home_tab_container;
     ViewGroup lastSelectedTab;
     FragmentManager fm;
-    Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
-    private int selected = 0;
+//    Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
+    private Fragment mFragLive;
+    private Fragment mFragFind;
+    private Fragment mFragMe;
     // 记录第一次点击back的时间
     private long clickTime = 0;
 
-    private LocationManager locationManager;
     int mPageType;
+
+    public static final int FRAGMENT_LIVE = 0x01;
+    public static final int FRAGMENT_FIND = 0x02;
+    public static final int FRAGMENT_ME = 0x03;
+    public int mCurFragment = FRAGMENT_LIVE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppLog.print("HomeActivity__oncreate__");
         setContentView(R.layout.home_layout);
-        getLocation();
-        initView();
+
+        // 使用ButterKnife框架
+        ButterKnife.bind(this);
+
+        // 显示直播fragment
+        showFragment(FRAGMENT_LIVE);
+        // 检查更新
         checkUpdate();
     }
-
-
-
+    /**
+     * 检查更新
+     */
     private void checkUpdate() {
         VersionResult result = getIntent().getParcelableExtra(VERSION_RESULT);
-        boolean forceFlag = result.isForceFlag();
-        boolean checkUpdate = result.isCheckUpdate();
-        String downLoadUrl = result.getDownloadUrl();
-        String contentText = getUpdateContent(result.getMsg());
-        if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
-            if (forceFlag) {
-                showForceUpdateDialog(downLoadUrl, contentText);
-            } else {
-                showUpdateDialog(downLoadUrl, contentText);
+        if (result != null) {
+            boolean forceFlag = result.isForceFlag();
+            boolean checkUpdate = result.isCheckUpdate();
+            String downLoadUrl = result.getDownloadUrl();
+            String contentText = getUpdateContent(result.getMsg());
+            if (checkUpdate && !TextUtils.isEmpty(downLoadUrl)) {
+                if (forceFlag) {
+                    showForceUpdateDialog(downLoadUrl, contentText);
+                } else {
+                    showUpdateDialog(downLoadUrl, contentText);
+                }
             }
         }
     }
 
-
-    private void initView() {
-        home_tab_container = (LinearLayout) findViewById(R.id.home_tab_containner);
-        home_recommend_tab = (LinearLayout) findViewById(R.id.home_tab_recommend);
-        home_destination_tab = (LinearLayout) findViewById(R.id.home_tab_destination);
-        home_news_tab = (LinearLayout) findViewById(R.id.home_tab_liveplay);
-        home_me_tab = (LinearLayout) findViewById(R.id.home_tab_me);
-        home_recommend_tab.setOnClickListener(tabClickListener);
-        home_destination_tab.setOnClickListener(tabClickListener);
-        home_news_tab.setOnClickListener(tabClickListener);
-        home_me_tab.setOnClickListener(tabClickListener);
-        fm = getFragmentManager();
-        showFragment(home_news_tab);
-    }
-
-
-    private View.OnClickListener tabClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            ViewGroup container = (ViewGroup) v;
-            showFragment(container);
-        }
-    };
-
-    private void showFragment(ViewGroup container) {
-        FragmentTransaction ft = fm.beginTransaction();
-        hideFragment(ft);
-        setSelectedTab(container);
-        switch (container.getId()) {
-            case R.id.home_tab_recommend:
-                selected = FRAGMENT_RECOMMEND;
-                AppLog.print("recommend__" + recommendFragment);
-                if (recommendFragment == null) {
-                    AppLog.print("___add");
-                    recommendFragment = new FindFragment();
-                    ft.add(R.id.home_fragment_container, recommendFragment);
-                } else {
-                    AppLog.print("___show");
-                    ft.show(recommendFragment);
-                }
+    @OnClick({R.id.home_tab_live, R.id.home_tab_find, R.id.home_tab_me, R.id.home_tab_search})
+    void clickButton(View view) {
+        switch (view.getId()) {
+            case R.id.home_tab_live:
+                showFragment(FRAGMENT_LIVE);
                 break;
-            case R.id.home_tab_destination:
-                selected = FRAGMENT_DESTINATION;
-                if (distinationFragment == null) {
-                    distinationFragment = new DestinationFragment();
-                    ft.add(R.id.home_fragment_container, distinationFragment);
-                } else {
-                    ft.show(distinationFragment);
-                }
-                break;
-            case R.id.home_tab_liveplay:
-                selected = FRAGMENT_NEWS;
-                if (newsFragment == null) {
-//                    newsFragment = new NewsFragment();
-                    // TODO: 2.2.0版本fragment更换
-                    newsFragment = new LiveFragment();
-                    ft.add(R.id.home_fragment_container, newsFragment);
-                } else {
-                    ft.show(newsFragment);
-                }
+            case R.id.home_tab_find:
+                showFragment(FRAGMENT_FIND);
                 break;
             case R.id.home_tab_me:
-                selected = FRAGMENT_ME;
-                if (meFragment == null) {
-                    meFragment = new MeFragment();
-                    ft.add(R.id.home_fragment_container, meFragment);
-                } else {
-                    ft.show(meFragment);
-                }
+                showFragment(FRAGMENT_ME);
                 break;
         }
-        ft.commit();
-    }
-
-    private void hideFragment(FragmentTransaction ft) {
-
-        if (recommendFragment != null) {
-            ft.hide(recommendFragment);
-        }
-        if (distinationFragment != null) {
-            ft.hide(distinationFragment);
-        }
-        if (newsFragment != null) {
-            ft.hide(newsFragment);
-        }
-        if (meFragment != null) {
-            ft.hide(meFragment);
-        }
-
-
-    }
-
-    private void setSelectedTab(ViewGroup container) {
-        if (lastSelectedTab != null) {
-            setTabStatus(lastSelectedTab, false);
-        }
-        setTabStatus(container, true);
-        lastSelectedTab = container;
     }
 
 
-    private void setTabStatus(ViewGroup container, boolean isSelected) {
-        for (int i = 0; i < container.getChildCount(); i++) {
-            View v = container.getChildAt(i);
-            v.setSelected(isSelected);
+    /**
+     * 显示某一个fragment
+     * @param tab
+     */
+    private void showFragment(int tab) {
+        // 初始化碎片管理器
+        FragmentManager fm = getFragmentManager();
+        // 初始化碎片事务
+        FragmentTransaction transaction = fm.beginTransaction();
+        // 隐藏所有Fragments
+        hideFragments(transaction);
+        // 标记当前所在的fragment
+        mCurFragment = tab;
+        // 选中的tab修改样式
+        switch (tab) {
+            case FRAGMENT_LIVE:
+                // 显示直播fragment
+                if (mFragLive == null) {
+                    mFragLive = new LiveFragment();
+                    transaction.add(R.id.home_fragment_container, mFragLive);
+                } else {
+                    transaction.show(mFragLive);
+                }
+                // 直播字样不透明
+                mImgTabLive.setAlpha(1.0f);
+                // 选中bar显示
+                mTabLiveSelected.setVisibility(View.VISIBLE);
+                break;
+            case FRAGMENT_FIND:
+                // 显示发现fragment
+                if (mFragFind == null) {
+                    mFragFind = new FindFragment();
+                    transaction.add(R.id.home_fragment_container, mFragFind);
+                } else {
+                    transaction.show(mFragFind);
+                }
+                // 发现字样不透明
+                mImgTabFind.setAlpha(1.0f);
+                // 选中bar显示
+                mTabFindSelected.setVisibility(View.VISIBLE);
+                break;
+            case FRAGMENT_ME:
+                // 显示我fragment
+                if(mFragMe == null) {
+                    mFragMe = new MeFragment();
+                    transaction.add(R.id.home_fragment_container, mFragMe);
+                } else {
+                    transaction.show(mFragMe);
+                }
+                // 我 图标设置为选中样式
+                mImgTabMe.setImageResource(R.drawable.home_myself_sel);
+                break;
         }
+        // 事务提交
+        transaction.commit();
     }
 
+    /**
+     * 隐藏fragment
+     * @param transaction
+     */
+    private void hideFragments(FragmentTransaction transaction) {
+        // 如果transaction为空
+        if (transaction == null) {
+            return;
+        }
 
+        // 隐藏LiveFragment
+        if (mFragLive != null) {
+            transaction.hide(mFragLive);
+        }
+
+        // 隐藏FindFragment
+        if (mFragFind != null) {
+            transaction.hide(mFragFind);
+        }
+
+        // 隐藏MeFragment
+        if (mFragMe != null) {
+            transaction.hide(mFragMe);
+        }
+
+        // 直播字样设置为半透明
+        mImgTabLive.setAlpha(0.5f);
+        // 发现字样设置为半透明
+        mImgTabFind.setAlpha(0.5f);
+        // 我 图片设置为未选中状态
+        mImgTabMe.setImageResource(R.drawable.home_myself_ic);
+
+        // 直播选中bar 不显示
+        mTabLiveSelected.setVisibility(View.INVISIBLE);
+        // 发现选中bar 不显示
+        mTabFindSelected.setVisibility(View.INVISIBLE);
+
+    }
+
+//    private void showFragment(ViewGroup container) {
+//        FragmentTransaction ft = fm.beginTransaction();
+//        hideFragment(ft);
+//        setSelectedTab(container);
+//        switch (container.getId()) {
+//            case R.id.home_tab_recommend:
+//                selected = FRAGMENT_RECOMMEND;
+//                AppLog.print("recommend__" + recommendFragment);
+//                if (recommendFragment == null) {
+//                    AppLog.print("___add");
+//                    recommendFragment = new FindFragment();
+//                    ft.add(R.id.home_fragment_container, recommendFragment);
+//                } else {
+//                    AppLog.print("___show");
+//                    ft.show(recommendFragment);
+//                }
+//                break;
+//            case R.id.home_tab_destination:
+//                selected = FRAGMENT_DESTINATION;
+//                if (distinationFragment == null) {
+//                    distinationFragment = new DestinationFragment();
+//                    ft.add(R.id.home_fragment_container, distinationFragment);
+//                } else {
+//                    ft.show(distinationFragment);
+//                }
+//                break;
+//            case R.id.home_tab_liveplay:
+//                selected = FRAGMENT_NEWS;
+//                if (newsFragment == null) {
+////                    newsFragment = new NewsFragment();
+//                    // TODO: 2.2.0版本fragment更换
+//                    newsFragment = new LiveFragment();
+//                    ft.add(R.id.home_fragment_container, newsFragment);
+//                } else {
+//                    ft.show(newsFragment);
+//                }
+//                break;
+//            case R.id.home_tab_me:
+//                selected = FRAGMENT_ME;
+//                if (meFragment == null) {
+//                    meFragment = new MeFragment();
+//                    ft.add(R.id.home_fragment_container, meFragment);
+//                } else {
+//                    ft.show(meFragment);
+//                }
+//                break;
+//        }
+//        ft.commit();
+//    }
+//    private void hideFragment(FragmentTransaction ft) {
+//
+//        if (recommendFragment != null) {
+//            ft.hide(recommendFragment);
+//        }
+//        if (distinationFragment != null) {
+//            ft.hide(distinationFragment);
+//        }
+//        if (newsFragment != null) {
+//            ft.hide(newsFragment);
+//        }
+//        if (meFragment != null) {
+//            ft.hide(meFragment);
+//        }
+//
+//
+//    }
+
+//    private void setSelectedTab(ViewGroup container) {
+//        if (lastSelectedTab != null) {
+//            setTabStatus(lastSelectedTab, false);
+//        }
+//        setTabStatus(container, true);
+//        lastSelectedTab = container;
+//    }
+//
+//
+//    private void setTabStatus(ViewGroup container, boolean isSelected) {
+//        for (int i = 0; i < container.getChildCount(); i++) {
+//            View v = container.getChildAt(i);
+//            AppLog.i("tab", "tba is " + i);
+//            v.setSelected(isSelected);
+//        }
+//    }
     @Override
     public void onShowRecommendFragment() {
-//        showFragment(home_recommend_tab);
-        showFragment(home_news_tab);
+        showFragment(FRAGMENT_FIND);
     }
 
-    public static final int FRAGMENT_NEWS = 0;
-    public static final int FRAGMENT_DESTINATION = 1;
-    public static final int FRAGMENT_RECOMMEND = 2;
-    public static final int FRAGMENT_ME = 3;
-
+    /**
+     * 跳转到某一个Fragment
+     * @param position
+     */
     public void goToFragment(int position) {
-        if (selected != position) {
-            switch (position) {
-                case FRAGMENT_RECOMMEND:
-                    showFragment(home_recommend_tab);
-                    break;
-                case FRAGMENT_DESTINATION:
-                    showFragment(home_destination_tab);
-                    break;
-                case FRAGMENT_NEWS:
-
-                    showFragment(home_news_tab);
-                    break;
-                case FRAGMENT_ME:
-                    showFragment(home_me_tab);
-                    break;
-            }
+        if (mCurFragment != position) {
+            showFragment(position);
         }
     }
 
@@ -338,8 +426,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     }
 
 
-/*   next only for test update
-* */
+    /*   next only for test update
+    * */
 //    private void testCheckUpdate(boolean focrce) {
 //        boolean checkUpdate =true;
 //        String downLoadUrl ="http://media.lalocal.cn/app/lalocal_2_1_2.apk";
@@ -368,65 +456,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //        testCheckUpdate(false);
 //    }
 
+
     protected static final int REQUEST_CODE = 1;
-    protected static int denyCount = 0; //记录拒绝次数  
-    private void getLocation() {
-        locationManager = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
-                if (this.shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                }else{
-
-                }
-
-                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_CODE);
-
-            } else {
-
-            }
-
-        } else {
-            Location location = locationManager.getLastKnownLocation("network");
-            if(location!=null){
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                CommonUtil.LATITUDE=String.valueOf(latitude);
-                CommonUtil.LONGITUDE=String.valueOf(longitude);
-                AppLog.i("TAG","获取地理位置:"+latitude);
-            }
-
-        }
-
-    }
-
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (REQUEST_CODE == requestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    return;
-                }
-                Location location = locationManager.getLastKnownLocation("network");
-                if(location!=null){
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
-                    CommonUtil.LATITUDE=String.valueOf(latitude);
-                    CommonUtil.LONGITUDE=String.valueOf(longitude);
-                    AppLog.i("TAG","获取地理位置2:"+latitude);
-                }
-
-            }else{
-                denyCount++;
-            }
-        }
-
-    }
 
 
     @Override
@@ -435,9 +467,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         mPageType = getPageType();
         AppLog.print("onRestart___mPageType_" + mPageType);
         if (mPageType == PageType.PAGE_ME_FRAGMENT) {
-            showFragment(home_me_tab);
+            showFragment(FRAGMENT_ME);
         } else if (mPageType == PageType.PAGE_HOME_FRAMENT) {
-            showFragment(home_news_tab);
+            showFragment(FRAGMENT_LIVE);
         }
     }
 
@@ -477,7 +509,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     //立即登录----home  其他---me
     public static void start(Context context, boolean imLogin) {
         Intent intent = new Intent(context, HomeActivity.class);
-        AppLog.print("start imlOGIN__"+imLogin);
+        AppLog.print("start imlOGIN__" + imLogin);
         if (imLogin) {
             intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_HOME_FRAMENT);
         } else {
@@ -485,6 +517,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         }
         context.startActivity(intent);
     }
+
     //确保intent可以传递数据
     @Override
     protected void onNewIntent(Intent intent) {
