@@ -122,6 +122,10 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             case R.id.home_tab_me:
                 showFragment(FRAGMENT_ME);
                 break;
+            case R.id.home_tab_search:
+                Intent intent=new Intent(this,GlobalSearchActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 
