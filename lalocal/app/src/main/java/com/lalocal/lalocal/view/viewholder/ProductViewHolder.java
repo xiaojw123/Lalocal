@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.DestinationActivity;
 import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
@@ -173,7 +174,8 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 // 跳转目的地界面
-                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_DESTINATION);
+                Intent intent = new Intent(mContext, DestinationActivity.class);
+                mContext.startActivity(intent);
             }
         });
     }

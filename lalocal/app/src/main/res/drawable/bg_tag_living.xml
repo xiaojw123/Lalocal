@@ -5,5 +5,5 @@
         android:radius="@dimen/dimen_size_2_dp" />
 
     <solid
-        android:color="#00ccff" />
+        android:color="@color/color_live_type_living" />
 </shape>

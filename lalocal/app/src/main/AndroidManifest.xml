@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lalocal.lalocal" >
+    package="com.lalocal.lalocal">
 
-    <!--地理位置权限-->
-
+    <!-- 地理位置权限 -->
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -42,6 +41,7 @@
     <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -70,7 +70,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".activity.HomeActivity"
             android:launchMode="singleTask"
@@ -80,7 +80,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SettingActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.AccountEidt1Activity"
             android:screenOrientation="portrait" />
@@ -115,7 +115,7 @@
         <activity android:name=".activity.ArticleTestAct" />
         <activity
             android:name=".activity.SplashActivity"
-            android:theme="@style/SplashTheme" >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -185,7 +185,7 @@
 
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity" />
-        <activity android:name=".activity.DestinationAreaActivity"/>
+        <activity android:name=".activity.DestinationAreaActivity" />
         <activity android:name=".activity.RouteDetailActivity" />
         <!-- 设置环信应用的AppKey -->
         <meta-data
@@ -244,7 +244,7 @@
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
-            android:noHistory="true" >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -273,7 +273,7 @@
         <!-- 声明直播异常报警服务 -->
         <service android:name=".service.AlertService" />
 
-        <receiver android:name="com.netease.pushservice.receiver.PushServiceBootReceiver" >
+        <receiver android:name="com.netease.pushservice.receiver.PushServiceBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
             </intent-filter>
@@ -297,7 +297,7 @@
         <receiver
             android:name="com.netease.nimlib.service.NimReceiver"
             android:exported="false"
-            android:process=":core" >
+            android:process=":core">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
@@ -352,11 +352,10 @@
         <activity android:name=".me.LPasswordForget2Activity" />
         <activity android:name=".me.LPasswordForget1Activity" />
         <activity android:name=".activity.AttentionActivity" />
-
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
-        <activity android:name=".me.PhoneBindActivity" >
-        </activity>
+        <activity android:name=".me.PhoneBindActivity"></activity>
+        <activity android:name=".activity.DestinationActivity"></activity>
     </application>
 
 </manifest>

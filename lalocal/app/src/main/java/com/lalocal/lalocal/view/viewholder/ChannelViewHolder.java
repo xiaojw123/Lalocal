@@ -144,7 +144,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 // 跳转直播界面
-                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_NEWS);
+                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_LIVE);
             }
         });
 
@@ -153,7 +153,7 @@ public class ChannelViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 // 跳转直播界面
-                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_NEWS);
+                ((HomeActivity) mContext).goToFragment(HomeActivity.FRAGMENT_LIVE);
             }
         });
     }
