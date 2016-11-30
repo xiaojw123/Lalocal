@@ -44,14 +44,24 @@ public class Constants {
     public static final int TARGET_TYPE_CHANNEL = 15;
     // 我的粉丝页面
     public static final int TARGET_TYPE_FANS_PAGE = 16;
-    //回放
 
 
-    public static final String ADD_PIC = "empty for adding pic";
+    public static final String FLAG_ADD_PIC = "empty for adding pic";
     public static final int REQUEST_CODE_GALLERY = 0x01;
     public static final int PIC_MAX_QUANTITY = 5;
 
     public static final int SOLID_WIDTH = -1;
     public static final int SOLID_HEIGHT = -2;
+
+    // -每日推荐参数
+    // 每日推荐
+    public static final int OPEN_APP_TO_SCAN = 0;
+    // 主动拉取
+    public static final int PULL_TO_SCAN = 1;
+
+    // bundle传递的key
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_MASTER_NAME = "master_name";
+    public static final String KEY_CHANNEL_ID = "channel_id";
 
 }

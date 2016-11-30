@@ -6,46 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/master_attention_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/live_height_50dp"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/ml_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/master_attention"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="#ffaa2a" />
-        </LinearLayout>
-    </LinearLayout>
-
-    <com.lalocal.lalocal.view.CustomTitleView
-        android:id="@+id/homepage_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        attr:lineVisible="false" />
-
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -100,7 +63,7 @@
                             android:background="#999999"
                             android:paddingLeft="@dimen/live_padding_5dp"
                             android:paddingRight="@dimen/live_padding_5dp"
-                             />
+                            />
                     </RelativeLayout>
 
                     <TextView
@@ -126,18 +89,17 @@
                         android:text="这家伙啥也没写"
                         android:textColor="#b3b3b3" />
 
-                        <ImageView
-                            android:id="@+id/personal_home_page"
-                            android:layout_width="@dimen/home_me_headportrait_img_width"
-                            android:layout_height="@dimen/home_me_headportrait_img_height"
-                            android:background="@drawable/home_me_head_bg"
-                            android:paddingBottom="@dimen/home_me_headportrait_img_bottom"
-                            android:paddingLeft="@dimen/home_me_headportrait_img_left"
-                            android:paddingRight="@dimen/home_me_headportrait_img_right"
-                            android:paddingTop="@dimen/home_me_headportrait_img_top"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/home_me_personheadnormal" />
-
+                    <ImageView
+                        android:id="@+id/personal_home_page"
+                        android:layout_width="@dimen/home_me_headportrait_img_width"
+                        android:layout_height="@dimen/home_me_headportrait_img_height"
+                        android:background="@drawable/home_me_head_bg"
+                        android:paddingBottom="@dimen/home_me_headportrait_img_bottom"
+                        android:paddingLeft="@dimen/home_me_headportrait_img_left"
+                        android:paddingRight="@dimen/home_me_headportrait_img_right"
+                        android:paddingTop="@dimen/home_me_headportrait_img_top"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/home_me_personheadnormal" />
 
                     <View
                         android:id="@+id/ffdffhfd"
@@ -289,4 +251,39 @@
         </android.support.v4.widget.NestedScrollView>
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/homepage_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        attr:lineVisible="false" />
+
+
+    <LinearLayout
+        android:id="@+id/master_attention_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/ml_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/master_attention"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="关注"
+                android:textColor="#ffaa2a" />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

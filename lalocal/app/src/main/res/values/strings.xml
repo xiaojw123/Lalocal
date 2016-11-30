@@ -354,4 +354,7 @@
     <string name="user">用户</string>
     <string name="travel_note">笔记</string>
     <string name="g_search_result_empt">该标签下没有搜索结果，看看其他标签或换一个关键词试试</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

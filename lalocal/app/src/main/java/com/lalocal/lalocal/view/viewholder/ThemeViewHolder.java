@@ -20,8 +20,10 @@ import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
+import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
 import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
 import com.lalocal.lalocal.view.adapter.HomeRecoThemeAdapter;
@@ -39,37 +41,31 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
     private int mSize = -1;
     private int mSelected = -1;
 
-    TextView mTitleView;
-    TextView mSubtitleView;
-    FrameLayout mLayoutContainer;
-    RelativeLayout mLayoutMore;
+    private TextView mTitleView;
+    private TextView mSubtitleView;
+    private FrameLayout mLayoutContainer;
+    private RelativeLayout mLayoutMore;
 
-    DisallowParentTouchViewPager mVpTheme;
-    LinearLayout mVtvSeeMore;
-    LinearLayout mDotContainer;
+    private ViewPager mVpTheme;
+    private LinearLayout mVtvSeeMore;
+    private LinearLayout mDotContainer;
 
-    List<Button> mDotBtns = new ArrayList<>();
+    private List<Button> mDotBtns = new ArrayList<>();
 
-    private MyPtrClassicFrameLayout mPtrLayout;
-
-    private boolean isEmpty = false;
-
-    public ThemeViewHolder(Context context, View itemView, MyPtrClassicFrameLayout ptr, boolean isEmpty) {
+    public ThemeViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
-        this.mPtrLayout = ptr;
-        this.isEmpty = isEmpty;
 
         mLayoutContainer = (FrameLayout) itemView.findViewById(R.id.theme_container);
         mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
         mSubtitleView = (TextView) itemView.findViewById(R.id.tv_subtitle);
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
-        mVpTheme = (DisallowParentTouchViewPager) itemView.findViewById(R.id.vp_theme);
+        mVpTheme = (ViewPager) itemView.findViewById(R.id.vp_theme);
         mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
 
         // 传入父容器
-        mVpTheme.setNestParent(mPtrLayout);
+//        mVpTheme.setNestParent(mXRecyclerView);
         // 设置一个屏幕最多显示视频的个数
         mVpTheme.setOffscreenPageLimit(4);
         // 设置热播视频间距
@@ -85,12 +81,12 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
      * @param subtitle
      */
     public void initData(List<RecommendRowsBean> list, String title, String subtitle) {
-        List<RecommendRowsBean> recommendSpecialList = list;
-
-        if (isEmpty) {
+        if (list == null || list.size() == 0) {
             mLayoutContainer.setVisibility(View.GONE);
             return;
         }
+
+        List<RecommendRowsBean> recommendSpecialList = list;
 
         mTitleView.setText(title);
         mSubtitleView.setText(subtitle);
@@ -115,9 +111,15 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
         mSelected = mVpTheme.getCurrentItem();
 
         // 初始化小圆点
-        mDotBtns = CommonUtil.initDot(mContext, mVpTheme, mDotContainer, mSize, mSelected, CommonUtil.DARK_DOT);
+        mDotBtns = DotUtils.initDot(mContext, mVpTheme, mDotContainer, mSize, mSelected, DotUtils.ROUND_LIGHT_DOT);
 
-
+        // 如果只有一项，显示查看更多字样
+        if (mSize == 1) {
+            mVtvSeeMore.setVisibility(View.VISIBLE);
+        } else {
+            mVtvSeeMore.setVisibility(View.GONE);
+        }
+        // 滑动监听事件
         mVpTheme.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -126,7 +128,7 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onPageSelected(int position) {
-                CommonUtil.selectDotBtn(mDotBtns, position, CommonUtil.DARK_DOT);
+                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_LIGHT_DOT);
                 // 如果滑动至最后一页
                 if (position == mSize - 1) {
                     // 查看更多字样显示

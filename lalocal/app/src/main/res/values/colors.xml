@@ -42,7 +42,8 @@
     <color name="color_dcf3fa">#dcf3fa</color>
     <color name="color_eeee00">#90eaad3a</color>
     <color name="color_e29428">#e29428</color>
-
+    <color name="color_191000">#191000</color>
+    <color name="color_4d330c">#4d330c</color>
 
     <!-- common -->
 
@@ -129,11 +130,15 @@
     <color name="black_opacity_45">#72000000</color>
     <color name="black_99">#99000000</color>
     <color name="color_f0a028">#f0a028</color>
+    <color name="color_live_type_playback">#54A3FF</color>
+    <color name="color_live_type_living">#FFAA2A</color>
+    <color name="color_live_type_challenge">#FF6F6F</color>
+    <color name="color_tab_selected_bar">#F6A623</color>
+
     <color name="umeng_socialize_text_title">#464f61</color>
     <color name="black_color">#000000</color>
     <color name="white_color">#ffffff</color>
     <color name="color_faf7f2">#faf7f2</color>
-    <color name="color_191000">#191000</color>
     <color name="color_30191000">#30191000</color>
     <color name="color_10191000">#10191000</color>
     <color name="color_50191000">#50191000</color>]

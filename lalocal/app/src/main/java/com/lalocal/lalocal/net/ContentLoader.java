@@ -71,6 +71,7 @@ import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
 import com.lalocal.lalocal.model.RecommendRowsBean;
+import com.lalocal.lalocal.model.RecommendationsResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
@@ -1432,6 +1433,70 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
+    /**
+     * 获取首页我的关注
+     */
+    public void getHomeAttention() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_HOME_ATTENTION);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getHomeAttention(), response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 获取每日推荐
+     */
+    public void getDailyRecommendations(int type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_DAILY_RECOMMENDATIONS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getDailyRecommendations(type),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+
+    }
+
+    /**
+     * 直播间举报
+     * @param content 举报原因
+     * @param photos 举报图片，从服务器获取的filename组成的数组
+     * @param userId 被举报用户的id
+     * @param masterName 被举报用户的昵称
+     * @param channelId 当前直播间id
+     */
+    public void getChannelReport(String content, String[] photos,
+                                 String userId, String masterName, String channelId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_CHANNEL_REPORT);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getChannelReport(), response, response);
+        JSONObject jsonObject = new JSONObject();
+
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("qn", "content - " + content + "; photos size is " + photos.length + "; userId is " + userId + "; masterName is " + masterName + "; channelId is " + channelId);
+        try {
+            jsonObject.put("content", content);
+            JSONArray jsonArray = new JSONArray();
+            for (String photo : photos) {
+                jsonArray.put(photo);
+            }
+            jsonObject.put("photo", jsonArray);
+            jsonObject.put("userId", userId);
+            jsonObject.put("masterName", masterName);
+            jsonObject.put("channelId", channelId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -2023,6 +2088,14 @@ public class ContentLoader {
                     case RequestCode.GET_PUSH_TAGS:
                         AppLog.print("get push tags____" + json);
                         responseGetPushTags(jsonObj);
+                    case RequestCode.GET_HOME_ATTENTION:
+                        responseHomeAttention(json);
+                        break;
+                    case RequestCode.GET_DAILY_RECOMMENDATIONS:
+                        responseDailyRecommendations(json);
+                        break;
+                    case RequestCode.GET_CHANNEL_REPORT:
+                        responseChannelReport(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -2229,7 +2302,7 @@ public class ContentLoader {
 
         // 首页推荐文章列表
         private void responseArticleList(String json) {
-            AppLog.i("aaa", "response article lsit " + json);
+            AppLog.i("rsp", "response article lsit " + json);
             ArticlesResp articlesResp = new Gson().fromJson(json, ArticlesResp.class);
             if (articlesResp.getReturnCode() == 0) {
                 callBack.onArticleListResult(articlesResp);
@@ -2490,7 +2563,7 @@ public class ContentLoader {
 
         // 首页推荐列表，包括：直播、专题、商品
         private void responseIndexRecommendList(String json) {
-            AppLog.i("hehe", "recommendList is " + json);
+            AppLog.i("rsp", "recommendList is " + json);
             RecommendListDataResp recommendListDataResp = new Gson().fromJson(json, RecommendListDataResp.class);
             if (recommendListDataResp != null) {
                 callBack.onRecommendList(recommendListDataResp);
@@ -2697,6 +2770,7 @@ public class ContentLoader {
 
         //推荐广告
         public void responseRecommendAd(String json) {
+            AppLog.i("rsp", "ad: " + json);
             RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
             callBack.onRecommendAd(recommendAdResp);
         }
@@ -2867,6 +2941,7 @@ public class ContentLoader {
 
         //直播首页列表
         private void responListHomeList(String json) {
+            AppLog.i("dailyRec", "living list is " + json);
             LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
             if (liveHomeListResp != null) {
                 callBack.onLiveHomeList(liveHomeListResp, attentionFlag);
@@ -2955,6 +3030,36 @@ public class ContentLoader {
             }
         }
 
+        // 相应首页我的关注
+        private void responseHomeAttention(String json) {
+            AppLog.i("my_attention", "json -- " + json);
+            LiveRowsDataResp liveRowsDataResp = new Gson().fromJson(json, LiveRowsDataResp.class);
+            if (liveRowsDataResp.getReturnCode() == 0) {
+                LiveRowsBean bean = liveRowsDataResp.getResult();
+                callBack.onGetHomeAttention(bean);
+            }
+        }
+
+        /**
+         * 每日推荐
+         * @param json
+         */
+        private void responseDailyRecommendations(String json) {
+            AppLog.i("dailyy", "json is " + json);
+            RecommendationsResp recommendationsResp = new Gson().fromJson(json, RecommendationsResp.class);
+            if (recommendationsResp.getReturnCode() == 0) {
+                callBack.onGetDailyRecommend(recommendationsResp.getResult());
+            }
+        }
+
+        /**
+         * 响应直播间举报
+         * @param json
+         */
+        private void responseChannelReport(String json) {
+            // TODO: responseChannelReport
+            callBack.onGetChannelReport(json);
+        }
 
         @Override
         public void onDialogClickListener() {
@@ -3237,6 +3342,7 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
+        AppLog.i("dailyRec", "device id " + map.get("DEVICE_ID"));
         AppLog.print("__USER_ID=" + String.valueOf(userid) + "\n__TOKEN=" + token);
         return map;
 
@@ -3387,6 +3493,9 @@ public class ContentLoader {
         int GET_ARTICLE_LIST = 301;
         int GET_USER_CUR_LIVE = 302;
         int GET_USER_ARTICLE = 303;
+        int GET_HOME_ATTENTION = 304;
+        int GET_DAILY_RECOMMENDATIONS = 305;
+        int GET_CHANNEL_REPORT = 306;
     }
 
 }

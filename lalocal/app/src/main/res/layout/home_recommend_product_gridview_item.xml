@@ -39,7 +39,7 @@
         android:layout_marginTop="10dp"
         android:singleLine="true"
         android:text="正在加载中..."
-        android:textColor="@color/color_1a"
+        android:textColor="@color/color_191000"
         android:textSize="@dimen/text_size_14_sp" />
 
 </LinearLayout>

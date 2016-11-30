@@ -130,15 +130,10 @@ dependencies {
     compile 'in.srain.cube:ultra-ptr:1.0.11' // 下拉刷新控件
     compile 'in.srain.cube:cube-sdk:1.0.44@aar' // 上拉加载控件
     compile 'com.chanven.lib:cptr:1.1.0'
-//    compile('in.srain.cube:ultra-ptr:1.0.9.1-SNAPSHOT@aar') {
-//        exclude group: 'in.srain.cube', module: 'clog'
-//    }
-//    compile('in.srain.cube:cube-sdk:1.0.44.33-SNAPSHOT@aar') {
-//        exclude group: 'in.srain.cube', module: 'clog'
-//    }
     compile 'com.daimajia.slider:library:1.1.5@aar' // 广告轮播
     compile 'com.squareup.picasso:picasso:2.5.2' // 图片加载框架
     compile 'com.nineoldandroids:library:2.4.0' // 开源动画框架
+    compile 'com.melnykov:floatingactionbutton:1.3.0' // 扩展的浮动按钮
 }
 
 repositories {
@@ -149,6 +144,9 @@ repositories {
 dependencies {
     compile(name: 'videoprp', ext: 'aar')
     compile project(path: ':galleryfinal')
+}
+dependencies {
+    compile 'com.android.support:support-v4:23.+'
 }
 
 

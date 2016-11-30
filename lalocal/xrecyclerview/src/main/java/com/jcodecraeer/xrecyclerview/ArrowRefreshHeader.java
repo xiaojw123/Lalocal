@@ -22,7 +22,9 @@ import java.util.Date;
 import pl.droidsonroids.gif.GifImageView;
 
 public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeader {
-   private GifImageView mGifImageView;
+
+    private TextView mTvTip;
+    private GifImageView mGifImageView;
 	private LinearLayout mContainer;
 	private ImageView mArrowImageView;
 	private SimpleViewSwitcher mProgressBar;
@@ -65,6 +67,7 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 		addView(mContainer, new LayoutParams(LayoutParams.MATCH_PARENT, 0));
 		setGravity(Gravity.BOTTOM);
         mHeadContent=(RelativeLayout) findViewById(R.id.listview_header_content);
+        mTvTip = (TextView) findViewById(R.id.tv_tip);
         mGifImageView=(GifImageView) findViewById(R.id.listview_header_gifview);
         mArrowImageView = (ImageView)findViewById(R.id.listview_header_arrow);
 		mStatusTextView = (TextView)findViewById(R.id.refresh_status_textview);
@@ -183,6 +186,26 @@ public class ArrowRefreshHeader extends LinearLayout implements BaseRefreshHeade
 
     public int getState() {
         return mState;
+    }
+
+    /**
+     * 设置刷新文案提示
+     * @param charSequence
+     */
+    public void setTipText(CharSequence charSequence) {
+        if (mTvTip != null) {
+            mTvTip.setText(charSequence);
+        }
+    }
+
+    /**
+     * 设置刷新文案可见性，默认不可见
+     * @param visibility
+     */
+    public void setTipVisibility(int visibility) {
+        if (mTvTip != null) {
+            mTvTip.setVisibility(visibility);
+        }
     }
 
     @Override

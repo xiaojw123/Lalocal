@@ -33,7 +33,7 @@ public class ThemeConfig implements Serializable{
     //黑色主题
     public static ThemeConfig DARK = new ThemeConfig.Builder()
             .setTitleBarBgColor(Color.rgb(0x38, 0x42, 0x48))
-            .setFabNornalColor(Color.rgb(0x38, 0x42, 0x48))
+            .setFabNormalColor(Color.rgb(0x38, 0x42, 0x48))
             .setFabPressedColor(Color.rgb(0x20, 0x25, 0x28))
             .setCheckSelectedColor(Color.rgb(0x38, 0x42, 0x48))
             .setCropControlColor(Color.rgb(0x38, 0x42, 0x48))
@@ -41,7 +41,7 @@ public class ThemeConfig implements Serializable{
     //蓝绿主题
     public static ThemeConfig CYAN = new ThemeConfig.Builder()
             .setTitleBarBgColor(Color.rgb(0x01, 0x83, 0x93))
-            .setFabNornalColor(Color.rgb(0x00, 0xac, 0xc1))
+            .setFabNormalColor(Color.rgb(0x00, 0xac, 0xc1))
             .setFabPressedColor(Color.rgb(0x01, 0x83, 0x93))
             .setCheckSelectedColor(Color.rgb(0x00, 0xac, 0xc1))
             .setCropControlColor(Color.rgb(0x00, 0xac, 0xc1))
@@ -49,7 +49,7 @@ public class ThemeConfig implements Serializable{
     //橙色主题
     public static ThemeConfig ORANGE = new ThemeConfig.Builder()
             .setTitleBarBgColor(Color.rgb(0xFF, 0x57, 0x22))
-            .setFabNornalColor(Color.rgb(0xFF, 0x57, 0x22))
+            .setFabNormalColor(Color.rgb(0xFF, 0x57, 0x22))
             .setFabPressedColor(Color.rgb(0xE6, 0x4A, 0x19))
             .setCheckSelectedColor(Color.rgb(0xFF, 0x57, 0x22))
             .setCropControlColor(Color.rgb(0xFF, 0x57, 0x22))
@@ -57,7 +57,7 @@ public class ThemeConfig implements Serializable{
     //绿色主题
     public static ThemeConfig GREEN = new ThemeConfig.Builder()
             .setTitleBarBgColor(Color.rgb(0x4C, 0xAF, 0x50))
-            .setFabNornalColor(Color.rgb(0x4C, 0xAF, 0x50))
+            .setFabNormalColor(Color.rgb(0x4C, 0xAF, 0x50))
             .setFabPressedColor(Color.rgb(0x38, 0x8E, 0x3C))
             .setCheckSelectedColor(Color.rgb(0x4C, 0xAF, 0x50))
             .setCropControlColor(Color.rgb(0x4C, 0xAF, 0x50))
@@ -65,7 +65,7 @@ public class ThemeConfig implements Serializable{
     //青绿色主题
     public static ThemeConfig TEAL = new ThemeConfig.Builder()
             .setTitleBarBgColor(Color.rgb(0x00, 0x96, 0x88))
-            .setFabNornalColor(Color.rgb(0x00, 0x96, 0x88))
+            .setFabNormalColor(Color.rgb(0x00, 0x96, 0x88))
             .setFabPressedColor(Color.rgb(0x00, 0x79, 0x6B))
             .setCheckSelectedColor(Color.rgb(0x00, 0x96, 0x88))
             .setCropControlColor(Color.rgb(0x00, 0x96, 0x88))
@@ -74,9 +74,13 @@ public class ThemeConfig implements Serializable{
     private int titleBarTextColor;
     private int titleBarBgColor;
     private int titleBarIconColor;
-    private int checkNornalColor;
+    private int checkNormalColor;
+    private int checkNormalResource;
+    private Drawable checkNormalDrawable;
     private int checkSelectedColor;
-    private int fabNornalColor;
+    private int checkSelectedResource;
+    private Drawable checkSelectedDrawable;
+    private int fabNormalColor;
     private int fabPressedColor;
     private int cropControlColor;
 
@@ -98,9 +102,9 @@ public class ThemeConfig implements Serializable{
         this.titleBarTextColor = builder.titleBarTextColor;
         this.titleBarBgColor = builder.titleBarBgColor;
         this.titleBarIconColor = builder.titleBarIconColor;
-        this.checkNornalColor = builder.checkNornalColor;
+        this.checkNormalColor = builder.checkNormalColor;
         this.checkSelectedColor = builder.checkSelectedColor;
-        this.fabNornalColor = builder.fabNornalColor;
+        this.fabNormalColor = builder.fabNormalColor;
         this.fabPressedColor = builder.fabPressedColor;
         this.cropControlColor = builder.cropControlColor;
         this.iconBack = builder.iconBack;
@@ -115,24 +119,28 @@ public class ThemeConfig implements Serializable{
         this.bgEditTexture = builder.bgEditTexture;
         this.iconPreview = builder.iconPreview;
         this.bgPreveiw = builder.bgPreveiw;
+        this.checkNormalResource = builder.checkNormalResource;
+        this.checkSelectedResource = builder.checkSelectedResource;
+        this.checkNormalDrawable = builder.checkNormalDrawable;
+        this.checkSelectedDrawable = builder.checkSelectedDrawable;
     }
 
     public static class Builder {
         private int titleBarTextColor = Color.WHITE;
         private int titleBarBgColor = Color.rgb(0x3F, 0x51, 0xB5);
         private int titleBarIconColor = Color.WHITE;
-        private int checkNornalColor = Color.rgb(0xd2, 0xd2, 0xd7);
+        private int checkNormalColor = Color.rgb(0xd2, 0xd2, 0xd7);
         private int checkSelectedColor = Color.rgb(0x3F, 0x51, 0xB5);
-        private int fabNornalColor = Color.rgb(0x3F, 0x51, 0xB5);
+        private int fabNormalColor = Color.rgb(0x3F, 0x51, 0xB5);
         private int fabPressedColor = Color.rgb(0x30, 0x3f, 0x9f);
         private int cropControlColor = Color.rgb(0x3F, 0x51, 0xB5);
 
-        private int iconBack = R.drawable.ic_gf_back;
+        private int iconBack = R.drawable.ic_arrow_left;
         private int iconCamera = R.drawable.ic_gf_camera;
         private int iconCrop = R.drawable.ic_gf_crop;
         private int iconRotate = R.drawable.ic_gf_rotate;
         private int iconClear = R.drawable.ic_gf_clear;
-        private int iconFolderArrow = R.drawable.ic_gf_triangle_arrow;
+        private int iconFolderArrow = R.drawable.ic_arrow_drop_down;
         private int iconDelete = R.drawable.ic_delete_photo;
         private int iconCheck = R.drawable.ic_folder_check;
         private int iconFab = R.drawable.ic_folder_check;
@@ -140,6 +148,12 @@ public class ThemeConfig implements Serializable{
 
         private Drawable bgEditTexture;
         private Drawable bgPreveiw;
+
+        private int checkNormalResource;
+        private int checkSelectedResource;
+
+        private Drawable checkNormalDrawable;
+        private Drawable checkSelectedDrawable;
 
         public Builder setTitleBarTextColor(int titleBarTextColor) {
             this.titleBarTextColor = titleBarTextColor;
@@ -156,8 +170,8 @@ public class ThemeConfig implements Serializable{
             return this;
         }
 
-        public Builder setCheckNornalColor(int checkNornalColor) {
-            this.checkNornalColor = checkNornalColor;
+        public Builder setCheckNormalColor(int checkNormalColor) {
+            this.checkNormalColor = checkNormalColor;
             return this;
         }
 
@@ -171,8 +185,8 @@ public class ThemeConfig implements Serializable{
             return this;
         }
 
-        public Builder setFabNornalColor(int fabNornalColor) {
-            this.fabNornalColor = fabNornalColor;
+        public Builder setFabNormalColor(int fabNormalColor) {
+            this.fabNormalColor = fabNormalColor;
             return this;
         }
 
@@ -241,6 +255,40 @@ public class ThemeConfig implements Serializable{
             return this;
         }
 
+        public int getCheckNormalResource() {
+            return checkNormalResource;
+        }
+
+        public void setCheckNormalResource(int checkNormalResource) {
+            this.checkNormalResource = checkNormalResource;
+        }
+
+        public int getCheckSelectedResource() {
+            return checkSelectedResource;
+        }
+
+        public void setCheckSelectedResource(int checkSelectedResource) {
+            this.checkSelectedResource = checkSelectedResource;
+        }
+
+        public Drawable getCheckNormalDrawable() {
+            return checkNormalDrawable;
+        }
+
+        public Builder setCheckNormalDrawable(Drawable checkNormalDrawable) {
+            this.checkNormalDrawable = checkNormalDrawable;
+            return this;
+        }
+
+        public Builder setCheckSelectedDrawable(Drawable checkSelectedDrawable) {
+            this.checkSelectedDrawable = checkSelectedDrawable;
+            return this;
+        }
+
+        public Drawable getCheckSelectedDrawable() {
+            return checkSelectedDrawable;
+        }
+
         public ThemeConfig build() {
             return new ThemeConfig(this);
         }
@@ -254,8 +302,8 @@ public class ThemeConfig implements Serializable{
         return titleBarBgColor;
     }
 
-    public int getCheckNornalColor() {
-        return checkNornalColor;
+    public int getCheckNormalColor() {
+        return checkNormalColor;
     }
 
     public int getCheckSelectedColor() {
@@ -266,8 +314,8 @@ public class ThemeConfig implements Serializable{
         return titleBarIconColor;
     }
 
-    public int getFabNornalColor() {
-        return fabNornalColor;
+    public int getFabNormalColor() {
+        return fabNormalColor;
     }
 
     public int getFabPressedColor() {
@@ -324,5 +372,37 @@ public class ThemeConfig implements Serializable{
 
     public Drawable getEditPhotoBgTexture() {
         return bgEditTexture;
+    }
+
+    public int getCheckNormalResource() {
+        return checkNormalResource;
+    }
+
+    public void setCheckNormalResource(int checkNormalResource) {
+        this.checkNormalResource = checkNormalResource;
+    }
+
+    public int getCheckSelectedResource() {
+        return checkSelectedResource;
+    }
+
+    public void setCheckSelectedResource(int checkSelectedResource) {
+        this.checkSelectedResource = checkSelectedResource;
+    }
+
+    public Drawable getCheckNormalDrawable() {
+        return checkNormalDrawable;
+    }
+
+    public void setCheckNormalDrawable(Drawable checkNormalDrawable) {
+        this.checkNormalDrawable = checkNormalDrawable;
+    }
+
+    public Drawable getCheckSelectedDrawable() {
+        return checkSelectedDrawable;
+    }
+
+    public void setCheckSelectedDrawable(Drawable checkSelectedDrawable) {
+        this.checkSelectedDrawable = checkSelectedDrawable;
     }
 }

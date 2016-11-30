@@ -27,8 +27,6 @@ public class CustomViewPager extends ViewPager {
         addOnPageChangeListener(listener);
     }
 
-    ;
-
     public void setCallBack(PagerCallBack pagerCallBack) {
         mPagerCallBack = pagerCallBack;
     }

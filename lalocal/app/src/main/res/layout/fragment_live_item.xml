@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="false"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/layout_click"
+        android:clickable="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_15_dp">
+            <ImageView
+                android:id="@+id/icon"
+                android:layout_width="@dimen/dimen_size_12_dp"
+                android:layout_height="@dimen/dimen_size_12_dp"
+                android:layout_marginLeft="@dimen/dimen_size_25_dp"
+                android:layout_marginTop="@dimen/dimen_size_4_dp"
+                android:src="@drawable/homelist_living_ic"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_toRightOf="@id/icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="加载中..."
+                android:layout_marginLeft="@dimen/dimen_size_10_dp"
+                android:textSize="16sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/color_191000"/>
+
+            <TextView
+                android:id="@+id/tv_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/dimen_size_5_dp"
+                android:paddingRight="@dimen/dimen_size_5_dp"
+                android:text="直播中"
+                android:layout_marginTop="@dimen/dimen_size_2_dp"
+                android:textColor="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dimen_size_15_dp"
+                android:background="@drawable/bg_tag_living"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_10_dp"
+            android:paddingLeft="47dp">
+
+            <ImageView
+                android:id="@+id/icon_my_concern_address"
+                android:layout_width="@dimen/dimen_size_12_dp"
+                android:layout_height="@dimen/dimen_size_12_dp"
+                android:layout_centerVertical="true"
+                android:alpha="0.6"
+                android:src="@drawable/peopleliving_location_darkic_02"/>
+
+            <TextView
+                android:id="@+id/tv_address"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="地点加载中..."
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_toRightOf="@id/icon_my_concern_address"
+                android:layout_marginLeft="@dimen/dimen_size_4_dp"
+                android:layout_centerVertical="true"
+                android:textSize="@dimen/text_size_12_sp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_nickname"
+                    android:layout_width="100dp"
+                    android:gravity="right"
+                    android:layout_height="wrap_content"
+                    android:text="加载中..."
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="12sp"
+                    android:textColor="@color/color_191000"
+                    android:layout_marginRight="@dimen/dimen_size_6_dp"/>
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/img_avatar"
+                    android:layout_width="@dimen/dimen_size_16_dp"
+                    android:layout_height="@dimen/dimen_size_16_dp"
+                    android:src="@drawable/androidloading"
+                    app:riv_corner_radius="99dp"
+                    android:layout_marginRight="@dimen/dimen_size_15_dp"/>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <com.lalocal.lalocal.view.ScaleImageView
+            android:id="@+id/img_photo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
+            app:scale="1.4535"
+            app:solid="solid_width"
+            android:src="@drawable/androidloading"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/tv_last_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="47dp"
+            android:layout_marginTop="@dimen/dimen_size_12_dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginBottom="@dimen/dimen_size_12_dp"
+            android:textColor="@color/color_191000"
+            android:alpha="0.5"/>
+    </LinearLayout>
+
+</LinearLayout>

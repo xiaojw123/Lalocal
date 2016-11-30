@@ -1,8 +1,11 @@
 package com.lalocal.lalocal.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
 import android.widget.ImageView;
@@ -138,8 +141,21 @@ public class DrawableUtils {
         return null;
     }
 
+    /**
+     * 本地drawable文件中的drawable资源转uri
+     * @param resId
+     * @return
+     */
+    public static Uri drawableRes2Uri(Context context, int resId) {
+        if (context == null) {
+            return null;
+        }
 
-    ;
-
-
+        Resources r = context.getResources();
+        String uri = ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                + r.getResourcePackageName(resId) + "/"
+                + r.getResourceTypeName(resId) + "/"
+                + r.getResourceEntryName(resId);
+        return Uri.parse(uri);
+    }
 }

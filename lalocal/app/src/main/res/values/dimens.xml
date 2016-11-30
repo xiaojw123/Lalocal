@@ -82,7 +82,7 @@
     <dimen name="product_details_padding_bottom">10dp</dimen>
     <dimen name="dialog_card_margin">5dp</dimen>
 
-    <dimen name="home_recommend_category_padding_vertical">40dp</dimen>
+    <dimen name="home_recommend_category_padding_vertical">15dp</dimen>
     <dimen name="home_recommend_category_icon_size">40dp</dimen>
     <dimen name="home_recommend_category_text_size">10sp</dimen>
     <dimen name="home_recommend_category_text_margin_top">5dp</dimen>
@@ -128,4 +128,5 @@
     <dimen name="report_item_margni_left">15dp</dimen>
     <dimen name="dimen_size_16_dp">16dp</dimen>
     <dimen name="homepage_playback_img_dimen">120dp</dimen>
+    <dimen name="titlebar_height">55dp</dimen>
 </resources>

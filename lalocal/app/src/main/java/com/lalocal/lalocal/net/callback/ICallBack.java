@@ -46,6 +46,7 @@ import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
 import com.lalocal.lalocal.model.RecommendRowsBean;
+import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
@@ -58,6 +59,7 @@ import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
+import com.lalocal.lalocal.util.AppLog;
 
 import java.util.List;
 
@@ -389,13 +391,32 @@ public abstract class ICallBack {
 
     }
 
-
-
-
-
-
     public void onResponseLog(String json) {
 
+    }
+
+    /**
+     * 获取首页我的关注
+     * @param bean
+     */
+    public void onGetHomeAttention(LiveRowsBean bean) {
+
+    }
+
+    /**
+     * 获取每日推荐
+     * @param bean
+     */
+    public void onGetDailyRecommend(RecommendationsBean bean) {
+
+    }
+
+    /**
+     * 直播间举报
+     * @param json
+     */
+    public void onGetChannelReport(String json) {
+        AppLog.i("qn", "report json is " + json);
     }
     public void onResponseGetTags(List<String> tags){}
 

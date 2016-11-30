@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_attention"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.activity.AttentionActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_44_dp"
+        android:background="@color/white">
+        
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dimen_size_22_dp"
+            android:layout_height="@dimen/dimen_size_22_dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_size_12_dp"
+            android:src="@drawable/back"
+            android:clickable="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:ellipsize="end"
+            android:text="我的关注"
+            android:textSize="17sp"
+            android:layout_centerInParent="true"/>
+        
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="@dimen/live_height_30dp"
+            android:layout_height="@dimen/dimen_size_30_dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dimen_size_15_dp"
+            android:src="@drawable/search_ic"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/color_191000"
+        android:alpha="0.1" />
+
+    <com.lalocal.lalocal.view.CustomXRecyclerView
+        android:id="@+id/xrecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:overScrollMode="never"
+        android:scrollbars="none" />
+</LinearLayout>

@@ -361,6 +361,7 @@
         <activity android:name=".me.LRegister1Activity" />
         <activity android:name=".me.LPasswordForget2Activity" />
         <activity android:name=".me.LPasswordForget1Activity" />
+        <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
         <activity android:name=".me.PhoneBindActivity" />
@@ -375,7 +376,8 @@
 
         <activity android:name=".me.MyMessageActivity" />
         <activity android:name=".me.TargetWebActivity" />
-        <activity android:name=".activity.GlobalSearchActivity"></activity>
+        <activity android:name=".activity.GlobalSearchActivity"/>
+        <activity android:name=".activity.DestinationActivity"/>
     </application>
 
 </manifest>

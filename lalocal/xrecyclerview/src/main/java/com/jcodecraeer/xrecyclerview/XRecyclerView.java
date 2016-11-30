@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,6 +81,17 @@ public class XRecyclerView extends RecyclerView {
     public void setHeaderVisible() {
         if (mHeaderViews.size() > 1) {
             mHeaderViews.remove(mHeaderViews.size() - 1);
+        }
+    }
+
+    /**
+     * 设置默认刷新头部文本
+     * @param charSequence
+     */
+    public void setDefaultHeaderText(CharSequence charSequence) {
+        if (mRefreshHeader != null) {
+            mRefreshHeader.setTipText(charSequence);
+            mRefreshHeader.setTipVisibility(View.VISIBLE);
         }
     }
 
@@ -277,6 +289,13 @@ public class XRecyclerView extends RecyclerView {
         } else {
             return false;
         }
+    }
+
+    public int getHeaderVisibleHeight() {
+        if (mRefreshHeader == null) {
+            return 0;
+        }
+        return mRefreshHeader.getVisibleHeight();
     }
 
     private class DataObserver extends RecyclerView.AdapterDataObserver {

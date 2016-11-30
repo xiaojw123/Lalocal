@@ -3,6 +3,7 @@ package com.lalocal.lalocal.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -321,7 +322,7 @@ public class AppConfig {
 
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public static final String getPlayBackLiveDetails(int id) {
-
+        Log.i("urrr", baseUrl + "channels/historys/" + id);
         return baseUrl + "channels/historys/" + id;
     }
 
@@ -712,5 +713,29 @@ public class AppConfig {
         return baseUrl+"dynamics/amount";
     }
 
+    /**
+     * 首页我的关注接口
+     * @return
+     */
+    public static String getHomeAttention() {
+        return baseUrl + "channels/index/attention";
+    }
 
+    /**
+     * 获取每日推荐
+     * @return
+     */
+    public static String getDailyRecommendations(int type) {
+        AppLog.i("dailyy", baseUrl + "dailyRecommendations?type=" + type);
+        return baseUrl + "dailyRecommendations?type=" + type;
+    }
+
+    /**
+     * 直播间举报
+     * @return
+     */
+    public static String getChannelReport() {
+        AppLog.i("qn", "report url is " + baseUrl + "channels/report");
+        return baseUrl + "channels/report";
+    }
 }

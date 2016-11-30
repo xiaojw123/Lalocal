@@ -492,23 +492,6 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
         }
 
         @Override
-        public void onCreateLiveRoom(CreateLiveRoomDataResp createLiveRoomDataResp) {
-            super.onCreateLiveRoom(createLiveRoomDataResp);
-            if (createLiveRoomDataResp.getReturnCode() == 0) {
-                LiveRowsBean result = createLiveRoomDataResp.getResult();
-                createRoomId = result.getRoomId();
-                SPCUtils.put(getActivity(), CREATE_ROOMID, String.valueOf(createRoomId));
-                Object annoucement = createLiveRoomDataResp.getResult().getAnnoucement();
-                if (annoucement != null) {
-                    createAnn = annoucement.toString();
-                } else {
-                    createAnn = "这是公告";
-                }
-                //初始化直播间
-            }
-        }
-
-        @Override
         public void onLiveHomeList(LiveHomeListResp liveListDataResp, String attentionFlag) {
             try {
                 if (sliderLayout != null) {
@@ -778,6 +761,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
 
         @Override
         public void onLoadMore() {
+            AppLog.i("xrv", "onLoadMore()-" + allRows.size());
             isRefresh = false;
             if (lastPage) {
                 xRecyclerView.setNoMore(true);

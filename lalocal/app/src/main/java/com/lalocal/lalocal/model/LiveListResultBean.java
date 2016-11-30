@@ -6,7 +6,7 @@ import java.util.List;
  * Created by android on 2016/7/19.
  */
 
-public  class LiveListResultBean {
+public class LiveListResultBean {
     private int pageNumber;
     private int totalPages;
     private int pageSize;
