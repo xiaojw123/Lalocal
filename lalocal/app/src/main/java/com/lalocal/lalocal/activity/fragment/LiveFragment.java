@@ -299,11 +299,11 @@ public class LiveFragment extends Fragment {
         switch (v.getId()) {
             case R.id.btn_takelive:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    prepareLive();
-                } else {
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                prepareLive();
+//                } else {
 //                    reminderUserPermission();
-                }
+//                }
                 break;
         }
     }

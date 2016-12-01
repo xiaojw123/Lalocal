@@ -237,48 +237,31 @@ public class FindFragment extends BaseFragment {
 
             try {
                 if (articlesResp.getReturnCode() == 0) {
-                    AppLog.i("art", "1");
                     // 获取首页推荐文章列表
                     ArticlesResultBean articlesResultBean = articlesResp.getResult();
-                    AppLog.i("art", "2");
                     List<ArticleDetailsResultBean> articleList = articlesResultBean == null ? null : articlesResultBean.getRows();
-                    AppLog.i("art", "3");
-                    AppLog.i("art", "isLoadingMOre : " + isLoadingMore + "; isRefresing : " + isRefreshing);
                     if (isLoadingMore) {
-                        AppLog.i("art", "4");
+                        isLoadingMore = false;
                         if (articleList == null || articleList.size() == 0) {
-                            AppLog.i("art", "5");
-
-                            isLoadingMore = false;
                             // setNoMore与loadMoreComplete不能共存，否则不能显示FooterView
                             mXrvRecommend.setNoMore(true);
-                            AppLog.i("art", "6");
                             Toast.makeText(getActivity(), "没有更多文章咯~", Toast.LENGTH_SHORT).show();
                             return;
                         }
 
-                        isLoadingMore = false;
                         mXrvRecommend.loadMoreComplete();
-                        AppLog.i("art", "8");
                         updateAdapter(REFRESH_ARTICLE);
-                        AppLog.i("art", "9");
                     } else if (isRefreshing) {
                         mArticleList.clear();
-                        AppLog.i("art", "10");
                     }
-                    AppLog.i("art", "30");
                     mArticleList.addAll(articleList);
-                    AppLog.i("art", "11");
                     updateAdapter(REFRESH_ARTICLE);
-                    AppLog.i("art", "12");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
-                AppLog.i("art", "error " + e.getMessage());
             } finally {
                 // 刷新完毕
                 refreshComplete();
-                AppLog.i("art", "13");
             }
         }
 
@@ -295,7 +278,6 @@ public class FindFragment extends BaseFragment {
                 isLoadingMore = false;
                 isRefreshing = false;
                 mXrvRecommend.refreshComplete();
-                mXrvRecommend.loadMoreComplete();
             }
         }
     }
@@ -312,19 +294,15 @@ public class FindFragment extends BaseFragment {
         } else {
             switch (refreshType) {
                 case REFRESH_AD:
-                    AppLog.i("upd", "mAdresult List is " + mAdResultList.size());
                     mRecommendAdapter.refreshAD(mAdResultList);
                     break;
                 case REFRESH_PRODUCT_THEME:
-                    AppLog.i("upd", "recommend list is " + mRecommendListBeen.toString());
                     mRecommendAdapter.refreshProductTheme(mRecommendListBeen);
                     break;
                 case REFRESH_ARTICLE:
-                    AppLog.i("upd", "article list is " + mArticleList.size());
                     mRecommendAdapter.refreshArticle(mArticleList);
                     break;
                 case REFRESH_ALL:
-                    AppLog.i("upd", "refresh_all");
                     mRecommendAdapter.refreshAll(mAdResultList, mRecommendListBeen, mArticleList);
                     break;
                 case INIT:

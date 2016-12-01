@@ -1,13 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_destination"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.lalocal.lalocal.activity.DestinationActivity">
 
-</RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_44_dp"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="@dimen/dimen_size_22_dp"
+            android:layout_height="@dimen/dimen_size_22_dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_size_12_dp"
+            android:src="@drawable/back"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="目的地"
+            android:textSize="17sp"
+            android:textColor="@color/color_1a"/>
+        
+        <ImageView
+            android:id="@+id/img_search"
+            android:layout_width="@dimen/dimen_size_30_dp"
+            android:layout_height="@dimen/dimen_size_30_dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dimen_size_15_dp"
+            android:src="@drawable/search_ic"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_des_areas_rlv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
