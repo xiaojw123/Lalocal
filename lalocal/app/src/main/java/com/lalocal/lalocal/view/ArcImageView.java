@@ -11,10 +11,10 @@ import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.widget.ImageView;
+
+import com.lalocal.lalocal.util.AppLog;
 
 /**
  * Created by xiaojw on 2016/11/28.
@@ -24,6 +24,7 @@ public class ArcImageView extends ImageView {
     private Paint mPaintBitmap = new Paint(Paint.ANTI_ALIAS_FLAG);
     BitmapShader shader;
     Matrix matrix = new Matrix();
+    float mSupX, mSupY;
 
     public ArcImageView(Context context) {
         super(context);
@@ -37,9 +38,9 @@ public class ArcImageView extends ImageView {
         super(context, attrs, defStyleAttr);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
+        AppLog.print("onDraw____");
         Drawable drawable = getDrawable();
         if (drawable instanceof BitmapDrawable) {
             BitmapDrawable bd = (BitmapDrawable) drawable;
@@ -52,27 +53,45 @@ public class ArcImageView extends ImageView {
             shader.setLocalMatrix(matrix);
             mPaintBitmap.setShader(shader);
             mPaintBitmap.setStyle(Paint.Style.FILL);
-            int offset = getHeight()*15/100;
-            RectF oval = new RectF();                     //RectF对象
-            oval.left = 0;                              //左边
-            oval.top = getBottom() - offset*2;                                   //上边
-            oval.right = getWidth();                             //右边
-            oval.bottom = getBottom();
+            int offset = getHeight() * 16 / 100;
+//            RectF oval = new RectF();                     //RectF对象
+//            oval.left = 0;                              //左边
+//            oval.top = getBottom() - offset*2;                                   //上边
+//            oval.right = getWidth();                             //右边
+//            oval.bottom = getBottom();
 //            canvas.drawArc(oval, -360, 180, true, mPaintBitmap);
             RectF rectF = new RectF();
-            rectF.left =0;
+            rectF.left = 0;
             rectF.right = getWidth();
             rectF.top = 0;
             rectF.bottom = getBottom() - offset;
-//            canvas.drawRect(rectF,mPaintBitmap);
+            if (mSupX == 0) {
+                mSupX = rectF.right / 2;
+            }
+            if (mSupY == 0) {
+                mSupY = rectF.bottom + offset;
+            }
             Path path = new Path();
             path.addRect(rectF, Path.Direction.CW);
-            path.addArc(oval, 0, 180);
+            path.moveTo(0, rectF.bottom);
+            AppLog.print("sux___" + mSupX + ", suy__" + mSupY);
+            path.quadTo(mSupX, mSupY, rectF.right, rectF.bottom);
             canvas.drawPath(path, mPaintBitmap);
-
-
         }
-
-
     }
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        AppLog.print("onTouchEvent______" + event.getAction());
+//        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//            mSupX = event.getX();
+//            mSupY = event.getY();
+//            invalidate();
+//        }else if (event.getAction()==MotionEvent.ACTION_CANCEL){
+//            mSupX=0;
+//            mSupY=0;
+//            invalidate();
+//        }
+//        return super.onTouchEvent(event);
+//    }
 }

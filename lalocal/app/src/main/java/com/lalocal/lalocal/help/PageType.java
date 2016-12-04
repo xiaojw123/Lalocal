@@ -15,6 +15,7 @@ public interface PageType {
      int  PAGE_PASSWORD_MODIFY=0x21;
      int  PAGE_BOOK_BIND=0x22;
      int  PAGE_CHARGE=0x23;
+     int  PAGE_DESTIATION=0x24;
 
 
 

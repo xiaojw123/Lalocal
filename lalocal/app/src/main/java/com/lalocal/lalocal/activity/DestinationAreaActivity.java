@@ -10,9 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.HeaderViewListAdapter;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.RelativeLayout;
@@ -20,8 +19,10 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
@@ -45,11 +46,11 @@ import butterknife.OnClick;
 public class DestinationAreaActivity extends BaseActivity {
     public static final String AREA_ID = "area_id";
     public static final String AREA_NAME = "area_name";
-
+    @BindView(R.id.destion_search_btn)
+    Button searchBtn;
     @BindView(R.id.destination_area_title)
     CustomTitleView destinationAreaTitle;
-    @BindView(R.id.search_view)
-    FrameLayout searchView;
+    @BindView(R.id.des_areanav_menu_hot)
     TextView desAreanavMenuHot;
     @BindView(R.id.des_areanav_menu_strategy)
     TextView desAreanavMenuStrategy;
@@ -86,7 +87,6 @@ public class DestinationAreaActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.destination_area_layout);
         ButterKnife.bind(this);
-        desAreanavMenuHot = (TextView) findViewById(R.id.des_areanav_menu_hot);
         String areaName = getIntent().getStringExtra(AREA_NAME);
         destinationAreaTitle.setTitle(String.format(areaTile, areaName));
         desAreaItemsXlv.setPullRefreshEnable(true);
@@ -532,9 +532,10 @@ public class DestinationAreaActivity extends BaseActivity {
     }
 
 
-    @OnClick(R.id.search_view)
+    @OnClick(R.id.destion_search_btn)
     public void search() {
-        Intent intent = new Intent(this, SearchActivity.class);
+        Intent intent = new Intent(this, GlobalSearchActivity.class);
+        intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_DESTIATION);
         startActivity(intent);
     }
 

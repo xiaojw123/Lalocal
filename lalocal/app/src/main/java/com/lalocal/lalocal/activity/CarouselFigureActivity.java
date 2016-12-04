@@ -102,7 +102,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
 
     private void cloaseAudio() {
         String js = "var _audio = document.getElementsByTagName('audio')[0];\nif(_audio.played){\n_audio.pause();}";
-        carousFigure.loadUrl("javascript:" + js);
+        carousFigure.loadUrl("javascript:" + js);//video
     }
 
     @Override

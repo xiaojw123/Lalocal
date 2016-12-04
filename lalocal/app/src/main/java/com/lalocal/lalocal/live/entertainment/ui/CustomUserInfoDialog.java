@@ -86,7 +86,7 @@ public class CustomUserInfoDialog extends BaseDialog {
     LinearLayout userInfoLayoutBottom;
     private String userId;
     private Context mContext;
-   boolean isMuted;//是否禁言
+    boolean isMuted;//是否禁言
     private final ContentLoader contentLoader;
     private int userStatus;
     private int role;//身份，主播，用户
@@ -126,7 +126,7 @@ public class CustomUserInfoDialog extends BaseDialog {
     }
     @Override
     public void initView() {
-       setCanceledOnTouchOutside(false);
+        setCanceledOnTouchOutside(false);
         if(channelId==null){
             userinfoBottomCenter.setVisibility(View.GONE);
             userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
@@ -170,46 +170,46 @@ public class CustomUserInfoDialog extends BaseDialog {
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
             try {
-               if(liveUserInfosDataResp.getReturnCode()==0){
-                   result = liveUserInfosDataResp.getResult();
-                   nickName = result.getNickName();
-                   String avatar = result.getAvatar();
-                   attentionNum = result.getAttentionNum();
-                   accId = result.getAccId();
-                   fansNum = result.getFansNum();
-                   AppLog.i("TAG","查看用户省份："+result.getRole());
-                   String description = result.getDescription();
-                   Object status = result.getAttentionVO().getStatus();
+                if(liveUserInfosDataResp.getReturnCode()==0){
+                    result = liveUserInfosDataResp.getResult();
+                    nickName = result.getNickName();
+                    String avatar = result.getAvatar();
+                    attentionNum = result.getAttentionNum();
+                    accId = result.getAccId();
+                    fansNum = result.getFansNum();
+                    AppLog.i("TAG","查看用户省份："+result.getRole());
+                    String description = result.getDescription();
+                    Object status = result.getAttentionVO().getStatus();
 
-                   if (status != null) {
-                       double parseDouble = Double.parseDouble(String.valueOf(status));
-                       userStatus = (int) parseDouble;//关注状态
-                       if(userStatus==0){
-                           userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
-                       }else if(userStatus==1){
-                           userinfoBottomRight.setText(mContext.getString(R.string.live_attention_ok));
-                       }else if(userStatus==2){
-                           userinfoBottomRight.setText(mContext.getString(R.string.live_attention_mutual));
-                       }
-                   }
-                   DrawableUtils.displayImg(mContext,userinfoHeadIv,avatar);
-                   userinfoNickTv.setText(nickName);
-                   if (!TextUtils.isEmpty(description)) {
-                       masterInfoSignature.setText(description);
-                   }else{
-                       masterInfoSignature.setText("神秘人拒绝透露自己的个人简介!");
-                   }
-                   liveAttention.setText(String.valueOf(attentionNum));
-                   liveFans.setText(String.valueOf(fansNum));
-                   if(role==0){//用户端
-                       contentLoader.checkUserIdentity(channelId, String.valueOf(UserHelper.getUserId(mContext)));//查看我是否为管理员
-                   }else if(role!=2){//主播端
-                       contentLoader.checkUserIdentity(channelId, userId);//查看用户是否为管理员
-                   }else if(role==2){
-                       checkMute(accId);
-                   }
+                    if (status != null) {
+                        double parseDouble = Double.parseDouble(String.valueOf(status));
+                        userStatus = (int) parseDouble;//关注状态
+                        if(userStatus==0){
+                            userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
+                        }else if(userStatus==1){
+                            userinfoBottomRight.setText(mContext.getString(R.string.live_attention_ok));
+                        }else if(userStatus==2){
+                            userinfoBottomRight.setText(mContext.getString(R.string.live_attention_mutual));
+                        }
+                    }
+                    DrawableUtils.displayImg(mContext,userinfoHeadIv,avatar);
+                    userinfoNickTv.setText(nickName);
+                    if (!TextUtils.isEmpty(description)) {
+                        masterInfoSignature.setText(description);
+                    }else{
+                        masterInfoSignature.setText("神秘人拒绝透露自己的个人简介!");
+                    }
+                    liveAttention.setText(String.valueOf(attentionNum));
+                    liveFans.setText(String.valueOf(fansNum));
+                    if(role==0){//用户端
+                        contentLoader.checkUserIdentity(channelId, String.valueOf(UserHelper.getUserId(mContext)));//查看我是否为管理员
+                    }else if(role!=2){//主播端
+                        contentLoader.checkUserIdentity(channelId, userId);//查看用户是否为管理员
+                    }else if(role==2){
+                        checkMute(accId);
+                    }
 
-               }
+                }
 
             }catch (Exception e){
                 e.printStackTrace();
@@ -246,7 +246,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                                 liveManagerMark.setVisibility(View.GONE);
                             }
                             AppLog.i("TAG","查看用户accid:"+accId);
-                          checkMute(accId);
+                            checkMute(accId);
                         }
                     }
                 }else{
@@ -394,7 +394,7 @@ public class CustomUserInfoDialog extends BaseDialog {
             case R.id.custom_dialog_report:
                 // 举报
                 if(role==1){//主播端，举报
-                  toReportActivity();
+                    toReportActivity();
 
                 }else if(role==2){
                     if(isMaster){//关闭直播间

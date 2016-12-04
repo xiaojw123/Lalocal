@@ -16,8 +16,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
@@ -226,7 +224,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 break;
             case R.id.product_customer_service:
                 MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
-                startOnlineService();
+                CommonUtil.startCustomService(this);
                 //去客服页面
                 break;
             case R.id.product_btn_like:
@@ -270,8 +268,8 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
                 break;
             case R.id.product_service_ll:
-                startOnlineService();
-
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
+                CommonUtil.startCustomService(this);
                 break;
         }
     }
@@ -292,17 +290,6 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 startActivity(intent);
             }
         }
-    }
-
-    public void startOnlineService() {
-        Intent intent = new Intent(this, ChatActivity.class);
-        if (result != null) {
-            intent.putExtra(Constant.ITEM_TITLE, result.title);
-            intent.putExtra(Constant.ITEM_DES, result.description);
-            intent.putExtra(Constant.ITEM_POST_URL, result.photo);
-            intent.putExtra(Constant.ITEM_PRICE, String.valueOf((int) result.price));
-        }
-        startActivity(intent);
     }
 
 

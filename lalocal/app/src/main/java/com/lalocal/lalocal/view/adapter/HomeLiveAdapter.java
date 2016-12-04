@@ -19,13 +19,11 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
-import com.lalocal.lalocal.live.entertainment.agora.Constant;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 

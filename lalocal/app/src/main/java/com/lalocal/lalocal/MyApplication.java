@@ -8,9 +8,6 @@ import android.text.TextUtils;
 
 import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
-import com.easemob.chat.EMChat;
-import com.lalocal.lalocal.easemob.DemoHelper;
-import com.lalocal.lalocal.easemob.utils.HelpDeskPreferenceUtils;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
@@ -22,7 +19,6 @@ import com.lalocal.lalocal.live.im.util.storage.StorageType;
 import com.lalocal.lalocal.live.im.util.storage.StorageUtil;
 import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.lalocal.lalocal.model.Country;
-import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
@@ -84,7 +80,6 @@ import io.fabric.sdk.android.Fabric;
 public class MyApplication extends Application {
     public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
-    ContentLoader mLoader;
 
     @Override
     public void onCreate() {
@@ -93,10 +88,8 @@ public class MyApplication extends Application {
         Config.IsToastTip = true;
         AppLog.print("MyApplication onCreate___");
         AppCrashHandler.getInstance(this);
-        EMChat.getInstance().init(this);
-        EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         if (isDebug) {
-            Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
+            Bugtags.start("165db764bcad149e50e319635e6a614c", this, Bugtags.BTGInvocationEventBubble);
         } else {
             startFabric();
             startUmeng();
@@ -104,12 +97,6 @@ public class MyApplication extends Application {
         initUPsuh();
         //数据库
         intCountryDB();
-
-        //代码中设置环信IM的Appkey
-        String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
-        EMChat.getInstance().setAppkey(appkey);
-        // init demo helper
-        DemoHelper.getInstance().init(this);
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());
         if (inMainProcess()) {

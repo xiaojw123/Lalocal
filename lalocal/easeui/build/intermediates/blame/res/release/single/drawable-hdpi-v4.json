@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_chatting_biaoqing_btn_normal.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatting_biaoqing_btn_normal.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_default_avatar.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_default_avatar.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_chatto_bg_normal.9.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatto_bg_normal.9.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_chatting_biaoqing_btn_enable.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatting_biaoqing_btn_enable.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_default_image.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_default_image.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_type_select_btn_pressed.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_type_select_btn_pressed.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_input_bar_bg_active.9.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_input_bar_bg_active.9.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_input_bar_bg_normal.9.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_input_bar_bg_normal.9.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_type_select_btn_nor.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_type_select_btn_nor.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_chatto_bg_focused.9.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatto_bg_focused.9.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_msg_state_fail_resend_pressed.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_msg_state_fail_resend_pressed.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_msg_state_fail_resend.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_msg_state_fail_resend.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_chatfrom_bg_normal.9.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatfrom_bg_normal.9.png"
+    },
+    {
+        "merged": "D:\\lalocal\\lalocal\\easeui\\build\\intermediates\\res\\merged\\release\\drawable-hdpi-v4\\ease_chatfrom_bg_focused.9.png",
+        "source": "D:\\lalocal\\lalocal\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatfrom_bg_focused.9.png"
+    }
+]

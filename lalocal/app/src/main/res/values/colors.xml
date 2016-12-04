@@ -143,6 +143,9 @@
     <color name="color_live_type_challenge">#FF6F6F</color>
     <color name="color_tab_selected_bar">#F6A623</color>
 
+    <color name="color_theme_tag_author">#4ad3d9</color>
+    <color name="color_theme_tag_red">#fb6d6d</color>
+
     <color name="umeng_socialize_text_title">#464f61</color>
     <color name="black_color">#000000</color>
     <color name="white_color">#ffffff</color>

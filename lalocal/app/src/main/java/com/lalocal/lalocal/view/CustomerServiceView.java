@@ -1,26 +1,23 @@
 package com.lalocal.lalocal.view;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
+import com.lalocal.lalocal.activity.RouteDetailActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.util.CommonUtil;
 
 /**
  * Created by xiaojw on 2016/9/7.
  * 客服
  */
 public class CustomerServiceView extends TextView implements View.OnClickListener {
-    private String mPhotoUrl, mTitle;
-
-
     public CustomerServiceView(Context context) {
         this(context, null);
     }
@@ -40,25 +37,17 @@ public class CustomerServiceView extends TextView implements View.OnClickListene
         Drawable drawable = resources.getDrawable(R.drawable.serviceicon);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         setCompoundDrawables(null, drawable, null, null);
-        setPadding(0,(int) resources.getDimension(R.dimen.dimen_size_8_dp),0,0);
+        setPadding(0, (int) resources.getDimension(R.dimen.dimen_size_8_dp), (int) resources.getDimension(R.dimen.dimen_size_15_dp), 0);
         setOnClickListener(this);
     }
 
-    public void setData(String photoUrl, String title) {
-        mPhotoUrl = photoUrl;
-        mTitle = title;
-    }
-
-
     @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(getContext(), ChatActivity.class);
-        if (!TextUtils.isEmpty(mPhotoUrl)) {
-            intent.putExtra(Constant.ITEM_POST_URL, mPhotoUrl);
+    public void onClick(final View v) {
+        final Context context = v.getContext();
+        if (context instanceof RouteDetailActivity) {
+            // 进入主页面
+            MobHelper.sendEevent(context, MobEvent.DESTINATION_ROUTE_SERVICE);
         }
-        if (!TextUtils.isEmpty(mTitle)) {
-            intent.putExtra(Constant.ITEM_TITLE, mTitle);
-        }
-        getContext().startActivity(intent);
+        CommonUtil.startCustomService(context);
     }
 }

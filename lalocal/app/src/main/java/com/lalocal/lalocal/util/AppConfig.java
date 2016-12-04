@@ -714,7 +714,7 @@ public class AppConfig {
         return baseUrl + "tags/search/themes?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
     }
     public static String getGUserSearchUrl(int pageSize,int pageNum,String nickName){
-        return baseUrl+"users?pageSize=+"+pageSize+"&pageNumber="+pageNum+"&nickName="+encodeString(nickName);
+        return baseUrl+"users?pageSize="+pageSize+"&pageNumber="+pageNum+"&nickName="+encodeString(nickName);
     }
 
     public static String encodeString(String name) {

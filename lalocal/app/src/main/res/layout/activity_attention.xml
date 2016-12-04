@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_size_44_dp"
         android:background="@color/white">
-        
+
         <ImageView
             android:id="@+id/img_back"
             android:layout_width="@dimen/dimen_size_22_dp"
@@ -29,7 +29,7 @@
             android:text="我的关注"
             android:textSize="17sp"
             android:layout_centerInParent="true"/>
-        
+
         <ImageView
             android:id="@+id/img_search"
             android:layout_width="@dimen/live_height_30dp"

@@ -133,6 +133,7 @@
 
     <style name="AboutUsItemArrowTheme" parent="AcountEditItemArrowRight">
         <item name="android:layout_marginRight">@dimen/dimen_size_11_dp</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
 
     <style name="AboutUsItemTheme">

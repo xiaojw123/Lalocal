@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.help.UserHelper;
@@ -85,8 +84,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 grade();
                 break;
             case R.id.setting_info_feedback:
-                Intent fbIntent = new Intent(this, ChatActivity.class);
-                startActivity(fbIntent);
+                CommonUtil.startCustomService(this);
                 break;
 
             case setting_accout_security:

@@ -13,18 +13,14 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:title_name="@string/pay_complete" />
-    <TextView
-        android:id="@+id/pay_complete_service"
+    <com.lalocal.lalocal.view.CustomerServiceView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignTop="@+id/pay_complete_ctv"
-        android:layout_alignBottom="@+id/pay_complete_ctv"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/dimen_size_15_dp"
-        android:drawableTop="@drawable/serviceicon"
-        android:gravity="center_horizontal"
-        android:paddingTop="@dimen/dimen_size_8_dp"
-        android:text="@string/service" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        />
+
+
+
 
     <TextView
         android:id="@+id/pay_complete_fee_tv"

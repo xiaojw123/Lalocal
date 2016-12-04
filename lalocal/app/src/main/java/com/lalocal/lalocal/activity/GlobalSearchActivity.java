@@ -9,6 +9,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
@@ -48,9 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.lalocal.lalocal.R.id.gsearch_tab_special;
-
-public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.LoadingListener, TextView.OnEditorActionListener {
+public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.LoadingListener, TextView.OnEditorActionListener, View.OnTouchListener {
     @BindView(R.id.gsearch_cancel_tv)
     TextView gsearchCancelTv;
     @BindView(R.id.gsearch_edit)
@@ -61,7 +61,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     RelativeLayout gsearchTabUser;
     @BindView(R.id.gsearch_tab_travelnote)
     RelativeLayout gsearchTabTravelnote;
-    @BindView(gsearch_tab_special)
+    @BindView(R.id.gsearch_tab_special)
     RelativeLayout gsearchTabSpecial;
     @BindView(R.id.gsearch_tab_goods)
     RelativeLayout gsearchTabGoods;
@@ -76,8 +76,13 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     @BindView(R.id.gsearch_hint_cotainer)
     LinearLayout hintContainer;
     int mPageNum, mTotalPages;
-    String mSearchKey;
-    boolean isRefresh, isLoadMore;
+    String mSearchKey, lastKey;
+    boolean isRefresh, isLoadMore, isInit, isRwq;
+    LiveSearchAdapter searchAdapter;
+    AttentionOrFansRecyAdapter userAdapter;
+    ThemeAdapter themeAdapter;
+    MoreRecyclerAdapter articleAdapter, productAdapter, routeAdapter;
+    int pageType;
 
 
     @Override
@@ -85,18 +90,26 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_global_search);
         ButterKnife.bind(this);
+        pageType = getPageType();
+        if (pageType == PageType.PAGE_DESTIATION) {
+            gsearchTabLive.setVisibility(View.GONE);
+            gsearchTabUser.setVisibility(View.GONE);
+            setSelecteTab(gsearchTabSpecial);
+        } else {
+            setSelecteTab(gsearchTabLive);
+        }
         setLoaderCallBack(new GloabSearchCallBack());
         gsearchResultXrv.setLayoutManager(new LinearLayoutManager(this));
         gsearchResultXrv.setPullRefreshEnabled(true);
         gsearchResultXrv.setLoadingMoreEnabled(true);
         gsearchResultXrv.setLoadingListener(this);
+        gsearchResultXrv.setOnTouchListener(this);
         gsearchEdit.setOnEditorActionListener(this);
-        setSelecteTab(gsearchTabLive);
         mContentloader.getSearhHot();
     }
 
 
-    @OnClick({R.id.gsearch_cancel_tv, R.id.gsearch_tab_live, R.id.gsearch_tab_user, R.id.gsearch_tab_travelnote, gsearch_tab_special, R.id.gsearch_tab_goods, R.id.gsearch_tab_route})
+    @OnClick({R.id.gsearch_cancel_tv, R.id.gsearch_tab_live, R.id.gsearch_tab_user, R.id.gsearch_tab_travelnote, R.id.gsearch_tab_special, R.id.gsearch_tab_goods, R.id.gsearch_tab_route})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.gsearch_cancel_tv:
@@ -112,26 +125,49 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     return;
                 }
                 setSelecteTab(view);
-                mSearchKey = getName();
-                gsearchResultXrv.setRefreshing(true);
+                if (isRwq) {
+                    RecyclerView.Adapter adapter = null;
+                    if (gsearchTabLive.isSelected() && searchAdapter != null) {
+                        adapter = searchAdapter;
+                    }
+                    if (gsearchTabUser.isSelected() && userAdapter != null) {
+                        adapter = userAdapter;
+                    }
+                    if (gsearchTabTravelnote.isSelected() && articleAdapter != null) {
+                        adapter = articleAdapter;
+                    }
+                    if (gsearchTabSpecial.isSelected() && themeAdapter != null) {
+                        adapter = themeAdapter;
+                    }
+                    if (gsearchTabGoods.isSelected() && productAdapter != null) {
+                        adapter = productAdapter;
+                    }
+                    if (gsearchTabRoute.isSelected() && routeAdapter != null) {
+                        adapter = routeAdapter;
+                    }
+                    AppLog.print("l_click____adpter=" + adapter);
+                    if (adapter != null) {
+                        showDataResult();
+                        gsearchResultXrv.setAdapter(adapter);
+                    } else {
+                        showEmptResult();
+                    }
+                }
                 break;
         }
     }
 
 
     private void setSelecteTab(View view) {
-        AppLog.print("view___" + view);
         for (int i = 0; i < gsearchTabCotainer.getChildCount(); i++) {
             RelativeLayout layout = (RelativeLayout) gsearchTabCotainer.getChildAt(i);
             View view1 = layout.getChildAt(0);
             View view2 = layout.getChildAt(1);
             if (view == layout) {
-                AppLog.print("sel__pos__" + i);
                 layout.setSelected(true);
                 view1.setActivated(true);
                 view2.setActivated(true);
             } else {
-                AppLog.print("sel__pos__" + i);
                 layout.setSelected(false);
                 view1.setActivated(false);
                 view2.setActivated(false);
@@ -143,16 +179,11 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
     @Override
     public void onRefresh() {
-        KeyboardUtil.hidenSoftKey(gsearchEdit);
         if (!TextUtils.isEmpty(mSearchKey)) {
             isRefresh = true;
+            isInit = false;
             if (gsearchTabLive.isSelected()) {
-                RecyclerView.Adapter adapter = gsearchResultXrv.getAdapter();
-                if (adapter instanceof LiveSearchAdapter) {
-                    mContentloader.getGlobalSearchPlayBack(mSearchKey, 1);
-                } else {
-                    mContentloader.getGlobalSearchLive(mSearchKey);
-                }
+                mContentloader.getGlobalSearchPlayBack(mSearchKey, 1);
             }
             if (gsearchTabUser.isSelected()) {
                 mContentloader.getGloablSearchUser(mSearchKey, 1);
@@ -179,6 +210,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     public void onLoadMore() {
         if (mPageNum < mTotalPages) {
             isLoadMore = true;
+            isInit = false;
             ++mPageNum;
             if (gsearchTabLive.isSelected()) {
                 mContentloader.getGlobalSearchPlayBack(mSearchKey, mPageNum);
@@ -207,26 +239,36 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-            mSearchKey = v.getText().toString();
-            if (TextUtils.isEmpty(mSearchKey)) {
+            String text = v.getText().toString();
+            if (TextUtils.isEmpty(text)) {
                 CommonUtil.showPromptDialog(this, "搜索词不可为空", null);
                 return false;
             }
-            KeyboardUtil.hidenSoftKey(gsearchEdit);
-            RecyclerView.Adapter adapter = gsearchResultXrv.getAdapter();
-            if (adapter instanceof LiveSearchAdapter) {
-                mContentloader.getGlobalSearchPlayBack(mSearchKey, 1);
-            } else {
-                mContentloader.getGlobalSearchLive(mSearchKey);
+            if (!isRwq) {
+                isRwq = true;
             }
-            mContentloader.getGloablSearchUser(mSearchKey, 1);
-            mContentloader.getMoreAritleResult(mSearchKey, 1, 10);
-            mContentloader.getGlobalSearchSpecial(mSearchKey, 1);
-            mContentloader.getMoreProductResult(mSearchKey, 1, 10);
-            mContentloader.getMoreRouteResult(mSearchKey, 1, 10);
+            if (text.equals(lastKey)) {
+                return true;
+            }
+            mSearchKey = text;
+            searchReq();
             saveSearchHistory();
+            return true;
         }
         return false;
+    }
+
+    private void searchReq() {
+        isInit = true;
+        lastKey = mSearchKey;
+        if (pageType == PageType.PAGE_DEFAULT) {
+            mContentloader.getGlobalSearchLive(mSearchKey);
+            mContentloader.getGloablSearchUser(mSearchKey, 1);
+        }
+        mContentloader.getMoreAritleResult(mSearchKey, 1, 10);
+        mContentloader.getGlobalSearchSpecial(mSearchKey, 1);
+        mContentloader.getMoreProductResult(mSearchKey, 1, 10);
+        mContentloader.getMoreRouteResult(mSearchKey, 1, 10);
     }
 
     private void saveSearchHistory() {
@@ -258,25 +300,32 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         }
     }
 
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        KeyboardUtil.hidenSoftKey(gsearchEdit);
+        return false;
+    }
+
     class GloabSearchCallBack extends ICallBack {
         List<LiveRowsBean> rowsBeanList = new ArrayList<>();
         List<LiveRowsBean> playBackList = new ArrayList<>();
+        List<LiveRowsBean> liveList = new ArrayList<>();
         List<LiveFansOrAttentionRowsBean> userList = new ArrayList<>();
         List<RecommendRowsBean> specialList = new ArrayList<>();
         List<SearchItem> articleItems = new ArrayList<>();
         List<SearchItem> productItems = new ArrayList<>();
         List<SearchItem> routeItems = new ArrayList<>();
-        LiveSearchAdapter searchAdapter;
-        AttentionOrFansRecyAdapter userAdapter;
-        ThemeAdapter themeAdapter;
-        MoreRecyclerAdapter articleAdapter, productAdapter, routeAdapter;
-        int liveLen;
 
         @Override
         public void onGetGLiveSearch(List<LiveRowsBean> rowList, String name) {
             mSearchKey = name;
-            liveLen = rowList.size();
-            rowsBeanList.addAll(rowList);
+            if (isInit) {
+                rowsBeanList.clear();
+            }
+            if (liveList.size() > 0) {
+                liveList.clear();
+            }
+            liveList.addAll(rowList);
             mContentloader.getGlobalSearchPlayBack(name, 1);
 
         }
@@ -395,7 +444,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
         @Override
         public void onGetGPlayBackSearch(int pageNum, int toalPages, List<LiveRowsBean> rowList) {
-            AppLog.print("onGetGPlayBackSearch_____" + rowList);
+            AppLog.print("onGetGPlayBackSearch___size__" + rowList.size() + ", pageNum___" + pageNum + ", toalPages__" + toalPages);
             mPageNum = pageNum;
             mTotalPages = toalPages;
             if (isRefresh) {
@@ -407,19 +456,38 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 isLoadMore = false;
                 gsearchResultXrv.loadMoreComplete();
             }
+            if (isInit) {
+                playBackList.clear();// loadMore--
+            }
             playBackList.addAll(rowList);
+            if (rowsBeanList.size() > 0) {
+                rowsBeanList.clear();
+            }
+            rowsBeanList.addAll(liveList);
             rowsBeanList.addAll(playBackList);
             if (rowsBeanList.size() > 0) {
-                showDataResult();
                 if (searchAdapter == null) {
                     searchAdapter = new LiveSearchAdapter(rowsBeanList);
                     searchAdapter.setOnItemClickListener(itemClickListener);
                 } else {
                     searchAdapter.updatItems(rowsBeanList);
                 }
-                gsearchResultXrv.setAdapter(searchAdapter);
+                if (gsearchTabLive.isSelected()) {
+                    showDataResult();
+                    setSearchAdapter(searchAdapter);
+                }
             } else {
-                showEmptResult();
+                if (gsearchTabLive.isSelected()) {
+                    searchAdapter = null;
+                    showEmptResult();
+                }
+            }
+        }
+
+        public void setSearchAdapter(RecyclerView.Adapter adapter) {
+            RecyclerView.Adapter currentAdapter = gsearchResultXrv.getAdapter();
+            if (adapter != currentAdapter) {
+                gsearchResultXrv.setAdapter(adapter);
             }
         }
 
@@ -438,9 +506,11 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 isLoadMore = false;
                 gsearchResultXrv.loadMoreComplete();
             }
+            if (isInit) {
+                userList.clear();
+            }
             userList.addAll(beanList);
             if (userList.size() > 0) {
-                showDataResult();
                 if (userAdapter == null) {
                     userAdapter = new AttentionOrFansRecyAdapter(GlobalSearchActivity.this, userList);
                     userAdapter.setOnAttentionToFansItemClickListener(new AttentionOrFansRecyAdapter.OnAttentionToFansItemClickListener() {
@@ -455,85 +525,164 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 } else {
                     userAdapter.refresh(userList);
                 }
-                gsearchResultXrv.setAdapter(userAdapter);
+                if (gsearchTabUser.isSelected()) {
+                    showDataResult();
+                    setSearchAdapter(userAdapter);
+                }
             } else {
-                showEmptResult();
+                if (gsearchTabUser.isSelected()) {
+                    userAdapter = null;
+                    showEmptResult();
+                }
             }
         }
 
 
         @Override
         public void onGetMoreItems(int type, String key, int pageNumber, int totalPages, List<SearchItem> items) {
-            AppLog.print("onGetMoreItems_____" + items);
             mSearchKey = key;
             mPageNum = pageNumber;
             mTotalPages = totalPages;
             switch (type) {
                 case MoreRecyclerAdapter.MODUEL_TYPE_ARTICLE:
-                    updateMoreAdapter(articleAdapter, articleItems, items, type);
+                    if (isRefresh) {
+                        isRefresh = false;
+                        gsearchResultXrv.refreshComplete();
+                        articleItems.clear();
+                    }
+                    if (isLoadMore) {
+                        isLoadMore = false;
+                        gsearchResultXrv.loadMoreComplete();
+                    }
+                    if (isInit) {
+                        articleItems.clear();
+                    }
+                    articleItems.addAll(items);
+                    if (articleItems.size() > 0) {
+                        if (articleAdapter == null) {
+                            articleAdapter = new MoreRecyclerAdapter(GlobalSearchActivity.this, articleItems, MoreRecyclerAdapter.MODUEL_TYPE_ARTICLE);
+                            articleAdapter.setOnItemClickListener(itemClickListener);
+                        } else {
+                            articleAdapter.updateItems(articleItems);
+                        }
+                        if (gsearchTabTravelnote.isSelected()) {
+                            showDataResult();
+                            setSearchAdapter(articleAdapter);
+                        }
+                    } else {
+                        if (gsearchTabTravelnote.isSelected()) {
+                            articleAdapter = null;
+                            showEmptResult();
+                        }
+                    }
+                    AppLog.print("onGetMoreItems___articleAdapter_" + articleAdapter);
                     break;
                 case MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT:
-                    updateMoreAdapter(productAdapter, productItems, items, MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT);
+                    if (isRefresh) {
+                        isRefresh = false;
+                        gsearchResultXrv.refreshComplete();
+                        productItems.clear();
+                    }
+                    if (isLoadMore) {
+                        isLoadMore = false;
+                        gsearchResultXrv.loadMoreComplete();
+                    }
+                    if (isInit) {
+                        productItems.clear();
+                    }
+                    productItems.addAll(items);
+                    if (productItems.size() > 0) {
+                        if (productAdapter == null) {
+                            productAdapter = new MoreRecyclerAdapter(GlobalSearchActivity.this, productItems, MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT);
+                            productAdapter.setOnItemClickListener(itemClickListener);
+                        } else {
+                            productAdapter.updateItems(productItems);
+                        }
+                        if (gsearchTabGoods.isSelected()) {
+                            showDataResult();
+                            setSearchAdapter(productAdapter);
+                        }
+                    } else {
+                        if (gsearchTabGoods.isSelected()) {
+                            productAdapter = null;
+                            showEmptResult();
+                        }
+                    }
+                    AppLog.print("onGetMoreItems___productAdapter_" + productAdapter);
                     break;
                 case MoreRecyclerAdapter.MODUEL_TYPE_ROUTE:
-                    updateMoreAdapter(routeAdapter, routeItems, items, MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT);
+                    if (isRefresh) {
+                        isRefresh = false;
+                        gsearchResultXrv.refreshComplete();
+                        routeItems.clear();
+                    }
+                    if (isLoadMore) {
+                        isLoadMore = false;
+                        gsearchResultXrv.loadMoreComplete();
+                    }
+                    if (isInit) {
+                        routeItems.clear();
+                    }
+                    routeItems.addAll(items);
+                    if (routeItems.size() > 0) {
+                        if (routeAdapter == null) {
+                            routeAdapter = new MoreRecyclerAdapter(GlobalSearchActivity.this, routeItems, MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT);
+                            routeAdapter.setOnItemClickListener(itemClickListener);
+                        } else {
+                            routeAdapter.updateItems(routeItems);
+                        }
+                        if (gsearchTabRoute.isSelected()) {
+                            showDataResult();
+                            setSearchAdapter(routeAdapter);
+                        }
+                    } else {
+                        if (gsearchTabRoute.isSelected()) {
+                            routeAdapter = null;
+                            showEmptResult();
+                        }
+                    }
+                    AppLog.print("onGetMoreItems__routeAdapter__" + routeAdapter);
                     break;
-
             }
         }
 
         @Override
-        public void onGetGSpecialSearch(String key, int pageNum, int toalPages, List<RecommendRowsBean> beanList) {
+        public void onGetGSpecialSearch(String key, int pageNum, int toalPages, List<
+                RecommendRowsBean> beanList) {
             mSearchKey = key;
             mPageNum = pageNum;
             mTotalPages = toalPages;
             if (isRefresh) {
                 isRefresh = false;
-                gsearchResultXrv.refreshComplete();
                 specialList.clear();
+                gsearchResultXrv.refreshComplete();
             }
             if (isLoadMore) {
                 isLoadMore = false;
                 gsearchResultXrv.loadMoreComplete();
             }
+            if (isInit) {
+                specialList.clear();
+            }
             specialList.addAll(beanList);
             if (specialList.size() > 0) {
-                showDataResult();
                 if (themeAdapter == null) {
                     themeAdapter = new ThemeAdapter(GlobalSearchActivity.this, specialList);
                 } else {
                     themeAdapter.setResh(specialList);
                 }
-                gsearchResultXrv.setAdapter(themeAdapter);
+                if (gsearchTabSpecial.isSelected()) {
+                    showDataResult();
+                    setSearchAdapter(themeAdapter);
+                }
             } else {
-                showEmptResult();
+                if (gsearchTabSpecial.isSelected()) {
+                    themeAdapter = null;
+                    showEmptResult();
+                }
             }
         }
 
-        public void updateMoreAdapter(MoreRecyclerAdapter adapter, List<SearchItem> mItems, List<SearchItem> items, int type) {
-            if (isRefresh) {
-                isRefresh = false;
-                gsearchResultXrv.refreshComplete();
-                mItems.clear();
-            }
-            if (isLoadMore) {
-                isLoadMore = false;
-                gsearchResultXrv.loadMoreComplete();
-            }
-            mItems.addAll(items);
-            if (mItems.size() > 0) {
-                showDataResult();
-                if (adapter == null) {
-                    adapter = new MoreRecyclerAdapter(GlobalSearchActivity.this, mItems, type);
-                    adapter.setOnItemClickListener(itemClickListener);
-                } else {
-                    adapter.updateItems(mItems);
-                }
-                gsearchResultXrv.setAdapter(adapter);
-            } else {
-                showEmptResult();
-            }
-        }
     }
 
     private OnItemClickListener itemClickListener = new OnItemClickListener() {
@@ -594,8 +743,10 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
             if (tagObj != null) {
                 mSearchKey = (String) tagObj;
                 gsearchEdit.setText(mSearchKey);
-                gsearchResultXrv.setRefreshing(true);
-                saveSearchHistory();
+                if (!isRwq) {
+                    isRwq = true;
+                }
+                searchReq();
             }
         }
     };

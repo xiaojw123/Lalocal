@@ -2,21 +2,17 @@ package com.lalocal.lalocal.util;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
+import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.daimajia.slider.library.SliderLayout;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -25,7 +21,6 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,6 +38,27 @@ public class CommonUtil {
 
     public  static  String LONGITUDE="";
     public static   String LATITUDE="";
+
+    public static  void startCustomService(final Context context){
+        CustomDialog dialog=new CustomDialog(context);
+        dialog.setTitle("提示");
+        dialog.setMessage("是否要联系客服");
+        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                callPhone(context, AppConfig.FOREIGEN_PHONE);
+            }
+        });
+        dialog.setCancelBtn("取消",null);
+        dialog.show();
+
+    }
+
+    public static  void callPhone(Context context,String phone) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     public static String getProcessName(Context cxt, int pid) {
         ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);

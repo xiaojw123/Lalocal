@@ -12,7 +12,6 @@ import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
@@ -96,8 +95,7 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
                 startActivityForResult(rechargeIntent, KeyParams.REQUEST_CODE);
                 break;
             case R.id.consume_doubt_container:
-                Intent doubtIntent = new Intent(this, ChatActivity.class);
-                startActivity(doubtIntent);
+                CommonUtil.startCustomService(this);
                 break;
         }
     }

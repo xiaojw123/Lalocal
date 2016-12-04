@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +30,6 @@ public class PhotoAdapter extends BaseAdapter {
 
     // 图片列表
     private List<PhotoInfo> mList;
-    // 布局填充器
-    private LayoutInflater mInflater;
     // 上下文
     private Context mContext;
     // 屏幕宽度
@@ -39,7 +38,6 @@ public class PhotoAdapter extends BaseAdapter {
     public PhotoAdapter(Activity activity, List<PhotoInfo> list) {
         this.mList = list;
         this.mContext = activity;
-        this.mInflater = LayoutInflater.from(activity);
         this.mScreenWidth = DeviceUtils.getScreenPix(activity).widthPixels;
     }
 
@@ -108,7 +106,7 @@ public class PhotoAdapter extends BaseAdapter {
         // 设置图片高度=宽度
         int height = width;
         // 设置布局参数
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(width, height);
         // 设置布局参数
         img.setLayoutParams(lp);
     }
