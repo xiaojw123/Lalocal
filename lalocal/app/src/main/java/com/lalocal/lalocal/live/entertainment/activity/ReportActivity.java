@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
@@ -67,14 +68,12 @@ public class ReportActivity extends BaseActivity {
     RadioButton mRbOther;
 
     @BindView(R.id.gv_report_pic)
-    MyGridView mGvReportPic;
+    GridView mGvReportPic;
 
     @BindView(R.id.btn_confirm_report)
     Button mBtnConfirmReport;
 
     private PhotoAdapter mPhotoAdapter;
-
-    private ViewGroup.LayoutParams mRadioBtnLp;
 
     // 主题配置
     private ThemeConfig mThemeConfig;
@@ -280,6 +279,8 @@ public class ReportActivity extends BaseActivity {
         int colorFabNormal = ContextCompat.getColor(ReportActivity.this, R.color.color_ffaa2a);
         // 浮动按钮点击颜色
         int colorFabPressed = ContextCompat.getColor(ReportActivity.this, R.color.color_e29428);
+        // 图标颜色
+        int colorIcon = ContextCompat.getColor(ReportActivity.this, R.color.color_191000);
 
         // 设置主题
         mThemeConfig = new ThemeConfig.Builder()
@@ -287,6 +288,7 @@ public class ReportActivity extends BaseActivity {
                 .setTitleBarTextColor(colorTitleBarText)    // 设置标题栏文字颜色
                 .setFabNormalColor(colorFabNormal)  // 设置浮动按钮常规颜色
                 .setFabPressedColor(colorFabPressed)    // 设置浮动按钮点击颜色
+                .setTitleBarIconColor(colorIcon) // 设置标题栏图标颜色
                 .build();
 
         // 初始化图片加载器

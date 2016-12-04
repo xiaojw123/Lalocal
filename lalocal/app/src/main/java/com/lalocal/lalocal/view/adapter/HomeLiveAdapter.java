@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.GlobalSearchActivity;
+import com.lalocal.lalocal.activity.AttentionActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
@@ -186,7 +186,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     // 跳转我的关注页面查看更多关注
-                    mContext.startActivity(new Intent(mContext, GlobalSearchActivity.class));
+                    mContext.startActivity(new Intent(mContext, AttentionActivity.class));
                 }
             });
         }

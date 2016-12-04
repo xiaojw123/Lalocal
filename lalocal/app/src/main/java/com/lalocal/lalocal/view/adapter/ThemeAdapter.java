@@ -2,17 +2,27 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.RecommendRowsBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.text.NumberFormat;
@@ -42,11 +52,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.theme_list_item, null);
 
-        RecyclerView.ViewHolder holder = new ThemeViewHolder(view);
+        ThemeViewHolder holder = new ThemeViewHolder(view);
 
         return holder;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
@@ -55,9 +66,37 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         String name = bean.getName();
         String subtitle = bean.getSubTitle();
         String photo = bean.getPhoto();
+        int type = bean.getType();
+        int tagColor = Color.WHITE;
+        String tag = bean.getTag();
         String readNum = formatNum(bean.getReadNum());
         String praiseNum = formatNum(bean.getPraiseNum());
         final String rowId = String.valueOf(bean.getId());
+        if (type == Constants.THEME_AUTHOR) {
+            holder.layoutThemeTag.setVisibility(View.VISIBLE);
+            tag = "作者专栏";
+            tagColor = ContextCompat.getColor(mContext, R.color.color_theme_tag_author);
+        } else if (TextUtils.isEmpty(tag)) {
+            holder.layoutThemeTag.setVisibility(View.GONE);
+        } else {
+            holder.layoutThemeTag.setVisibility(View.VISIBLE);
+        }
+
+        if (holder.layoutThemeTag.getVisibility() == View.VISIBLE) {
+            if (type == Constants.THEME_AUTHOR) {
+                holder.layoutThemeTag.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+            } else {
+                holder.layoutThemeTag.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.color_theme_tag_red)));
+            }
+            char[] tagTexts = tag.toCharArray();
+            LinearLayout wrapperLayout = (LinearLayout) holder.layoutThemeTag.getChildAt(0);
+            for (int i = 0; i < tagTexts.length; i++) {
+                TextView textView = (TextView) wrapperLayout.getChildAt(i);
+                textView.setText(String.valueOf(tagTexts[i]));
+                textView.setTextColor(tagColor);
+            }
+        }
+
         holder.tvThemeName.setText(name);
         holder.tvThemeSubTitle.setText(subtitle);
         DrawableUtils.displayImg(mContext, holder.imgTheme, photo);
@@ -77,13 +116,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        int size = mThemeList == null ? null : mThemeList.size();
-
-        return size;
+        return mThemeList == null ? 0 : mThemeList.size();
     }
 
     private class ThemeViewHolder extends RecyclerView.ViewHolder {
         LinearLayout layoutContainer;
+        RelativeLayout layoutThemeTag;
         ImageView imgTheme;
         TextView tvThemeName;
         TextView tvThemeSubTitle;
@@ -99,6 +137,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tvThemeSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
             tvReadNum = (TextView) view.findViewById(R.id.tv_read_num);
             tvPraiseNum = (TextView) view.findViewById(R.id.tv_praise_num);
+            layoutThemeTag = (RelativeLayout) view.findViewById(R.id.layout_theme_tag);
         }
     }
 

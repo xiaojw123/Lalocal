@@ -19,30 +19,38 @@ import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class DestinationActivity extends BaseActivity implements View.OnClickListener {
-    private RecyclerView mRecyclerView;
-    private Button searchBtn;
+
+    @BindView(R.id.home_des_areas_rlv)
+    RecyclerView mRecyclerView;
+    @BindView(R.id.destion_search_btn)
+    Button searchBtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destination);
-        mRecyclerView = (RecyclerView)findViewById(R.id.home_des_areas_rlv);
-        searchBtn=(Button) findViewById(R.id.destion_search_btn);
-        searchBtn.setOnClickListener(this);
-//        mSearchView = (FrameLayout) view.findViewById(R.id.search_view);
-//        mSearchView.setOnClickListener(this);
+        ButterKnife.bind(this);
+        // 初始化ContentLoader
         initLoader();
 
 
     }
 
+    /**
+     * 初始化ContentLoader
+     */
     private void initLoader() {
         ContentLoader loader = new ContentLoader(this);
         loader.setCallBack(new DesCallBack());
         loader.getDestinationAreas();
     }
 
-    @Override
+    @OnClick({R.id.destion_search_btn})
     public void onClick(View v) {
         Intent intent=new Intent(this,GlobalSearchActivity.class);
         intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_DESTIATION);

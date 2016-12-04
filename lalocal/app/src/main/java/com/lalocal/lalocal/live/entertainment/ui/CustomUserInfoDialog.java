@@ -118,10 +118,7 @@ public class CustomUserInfoDialog extends BaseDialog {
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(String.valueOf(userId));//获取用户基本信息
 
-        if(channelId==null){
-            userinfoBottomCenter.setVisibility(View.GONE);
-            userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
-        }else{
+        if(channelId!=null){
             contentLoader.getLiveManagerList(channelId);//查看管理员列表
         }
 
@@ -130,6 +127,10 @@ public class CustomUserInfoDialog extends BaseDialog {
     @Override
     public void initView() {
        setCanceledOnTouchOutside(false);
+        if (channelId == null) {
+            userinfoBottomCenter.setVisibility(View.GONE);
+            userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+        }
         if(userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己
             customDialogLiveHeaderLayout.setVisibility(View.GONE);
             customDialogAudienceCloseLayout.setVisibility(View.VISIBLE);

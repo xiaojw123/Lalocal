@@ -26,6 +26,8 @@ import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
@@ -119,6 +121,28 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                 mContext.startActivity(intent);
             }
         });
+
+        // 列表滚动监听事件
+        mRvRecommendList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) mRvRecommendList.getLayoutManager();
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition > 1) {
+                    mSliderAd.stopAutoCycle();
+                } else {
+                    mSliderAd.startAutoCycle();
+                    mSliderAd.setFocusable(true);
+                }
+            }
+        });
     }
 
     /**
@@ -146,71 +170,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
             AppLog.i("photoU", "ad photo is " + photoUrl);
             defaultSliderView.image(photoUrl);
-            defaultSliderView.setOnSliderClickListener(new BaseSliderView.OnSliderClickListener() {
-                @Override
-                public void onSliderClick(BaseSliderView slider) {
-                    int position = mSliderAd.getCurrentPosition();
-                    // 点击跳转
-                    RecommendAdResultBean recommendAdResultBean = mAdList.get(position);
-                    String url = recommendAdResultBean.url;
-                    int targetType = recommendAdResultBean.targetType;
-                    int targetId = recommendAdResultBean.targetId;
-
-                    Intent intent = null;
-                    switch (targetType) {
-                        case Constants.PLAY_BACK_TYPE_URL: // 回放
-                            intent = new Intent(mContext, PlayBackActivity.class);
-                            intent.putExtra("id", String.valueOf(targetId));
-                            mContext.startActivity(intent);
-                            break;
-                        case Constants.TARGET_TYPE_URL: // 链接
-                            AppLog.i("addd", "链接");
-                            intent = new Intent(mContext, CarouselFigureActivity.class);
-                            intent.putExtra("carousefigure", recommendAdResultBean);
-                            mContext.startActivity(intent);
-                            break;
-                        case Constants.TARGET_TYPE_ARTICLE: // 文章
-                            AppLog.i("addd", "文章");
-                            intent = new Intent(mContext, ArticleActivity.class);
-                            intent.putExtra("targetID", String.valueOf(targetId));
-                            mContext.startActivity(intent);
-                            break;
-                        case Constants.TARGET_TYPE_PRODUCTION: // 产品
-                            AppLog.i("addd", "产品--" + targetId);
-                            // 跳转到商品详情界面
-                            SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
-                            specialToH5Bean.setTargetId(targetId);
-
-                            intent = new Intent(mContext, ProductDetailsActivity.class);
-                            intent.putExtra("productdetails", specialToH5Bean);
-                            mContext.startActivity(intent);
-                            break;
-                        case Constants.TARGET_TYPE_ROUTE: // 路线
-                            AppLog.i("addd", "路线");
-                            intent = new Intent(mContext, RouteDetailActivity.class);
-                            intent.putExtra("detail_id", targetId);
-                            mContext.startActivity(intent);
-                            break;
-                        case Constants.TARGET_TYPE_THEME: // 专题
-                            AppLog.i("addd", "专题");
-                            intent = new Intent(mContext, SpecialDetailsActivity.class);
-                            intent.putExtra("rowId", targetId + "");
-                            mContext.startActivity(intent);
-                            break;
-                        case Constants.TARGET_TYPE_CHANNEL: // 视频直播频道
-                            Intent intent1 = new Intent(mContext, AudienceActivity.class);
-                            intent1.putExtra("id", String.valueOf(targetId));
-                            mContext.startActivity(intent1);
-                            break;
-                        case Constants.TARGET_TYPE_USER: // 用户
-                            Intent intentUser = new Intent(mContext, LiveHomePageActivity.class);
-                            intentUser.putExtra("userId", String.valueOf(targetId));
-                            mContext.startActivity(intentUser);
-                            break;
-                    }
-
-                }
-            });
+            defaultSliderView.setOnSliderClickListener(onSliderClickListener);
             mSliderAd.addSlider(defaultSliderView);
 
         }
@@ -223,15 +183,103 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                int size = mAdList.size();
-                // 防止数组越界
-                if (position >= size) {
-                    position = (position + size) % size;
-                    mSliderAd.setCurrentPosition(position);
-                }
+
+//                int size = mAdList.size();
+//                // 防止数组越界
+//                if (position >= size) {
+//                    position = (position + size) % size;
+//                    mSliderAd.setCurrentPosition(position);
+//                }
                 AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
                 DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_WHITE_DOT);
+                AppLog.i("TAG","after selected " + position);
             }
         });
     }
+
+    private BaseSliderView.OnSliderClickListener onSliderClickListener = new BaseSliderView.OnSliderClickListener() {
+        @Override
+        public void onSliderClick(BaseSliderView slider) {
+            int position = mSliderAd.getCurrentPosition();
+            switch (position) {
+                case 0:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_01);
+                    break;
+                case 1:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_02);
+                    break;
+                case 2:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_03);
+                    break;
+                case 3:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_04);
+                    break;
+                case 4:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_05);
+                    break;
+                case 5:
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_06);
+                    break;
+            }
+            // 点击跳转
+            RecommendAdResultBean recommendAdResultBean = mAdList.get(position);
+            String url = recommendAdResultBean.url;
+            int targetType = recommendAdResultBean.targetType;
+            int targetId = recommendAdResultBean.targetId;
+
+            Intent intent = null;
+            switch (targetType) {
+                case Constants.PLAY_BACK_TYPE_URL: // 回放
+                    intent = new Intent(mContext, PlayBackActivity.class);
+                    intent.putExtra("id", String.valueOf(targetId));
+                    mContext.startActivity(intent);
+                    break;
+                case Constants.TARGET_TYPE_URL: // 链接
+                    AppLog.i("addd", "链接");
+                    intent = new Intent(mContext, CarouselFigureActivity.class);
+                    intent.putExtra("carousefigure", recommendAdResultBean);
+                    mContext.startActivity(intent);
+                    break;
+                case Constants.TARGET_TYPE_ARTICLE: // 文章
+                    AppLog.i("addd", "文章");
+                    intent = new Intent(mContext, ArticleActivity.class);
+                    intent.putExtra("targetID", String.valueOf(targetId));
+                    mContext.startActivity(intent);
+                    break;
+                case Constants.TARGET_TYPE_PRODUCTION: // 产品
+                    AppLog.i("addd", "产品--" + targetId);
+                    // 跳转到商品详情界面
+                    SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
+                    specialToH5Bean.setTargetId(targetId);
+
+                    intent = new Intent(mContext, ProductDetailsActivity.class);
+                    intent.putExtra("productdetails", specialToH5Bean);
+                    mContext.startActivity(intent);
+                    break;
+                case Constants.TARGET_TYPE_ROUTE: // 路线
+                    AppLog.i("addd", "路线");
+                    intent = new Intent(mContext, RouteDetailActivity.class);
+                    intent.putExtra("detail_id", targetId);
+                    mContext.startActivity(intent);
+                    break;
+                case Constants.TARGET_TYPE_THEME: // 专题
+                    AppLog.i("addd", "专题");
+                    intent = new Intent(mContext, SpecialDetailsActivity.class);
+                    intent.putExtra("rowId", targetId + "");
+                    mContext.startActivity(intent);
+                    break;
+                case Constants.TARGET_TYPE_CHANNEL: // 视频直播频道
+                    Intent intent1 = new Intent(mContext, AudienceActivity.class);
+                    intent1.putExtra("id", String.valueOf(targetId));
+                    mContext.startActivity(intent1);
+                    break;
+                case Constants.TARGET_TYPE_USER: // 用户
+                    Intent intentUser = new Intent(mContext, LiveHomePageActivity.class);
+                    intentUser.putExtra("userId", String.valueOf(targetId));
+                    mContext.startActivity(intentUser);
+                    break;
+            }
+
+        }
+    };
 }

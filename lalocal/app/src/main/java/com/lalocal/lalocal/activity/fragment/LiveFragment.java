@@ -54,7 +54,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LiveFragment extends Fragment {
+public class LiveFragment extends BaseFragment {
 
     @BindView(R.id.xrv_live)
     XRecyclerView mXrvLive;
@@ -266,8 +266,8 @@ public class LiveFragment extends Fragment {
             // 隐藏推荐页
             mRecommendPage.hide();
             mRecommendPage.setFocusable(false);
-        } else {
-            mXrvLive.setRefreshing(true);
+//        } else {
+//            mXrvLive.setRefreshing(true);
         }
     }
 
@@ -282,11 +282,11 @@ public class LiveFragment extends Fragment {
         switch (v.getId()) {
             case R.id.btn_takelive:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    prepareLive();
-                } else {
+//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                prepareLive();
+//                } else {
 //                    reminderUserPermission();
-                }
+//                }
                 break;
         }
     }

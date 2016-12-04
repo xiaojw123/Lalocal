@@ -12,6 +12,8 @@ public class RecommendRowsBean {
     private Object author;
     private String description;
     private String subTitle;
+    private String tag;
+    private String color;
 
     public int getReadNum() {
         return readNum;
@@ -96,4 +98,19 @@ public class RecommendRowsBean {
         this.description = description;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }
