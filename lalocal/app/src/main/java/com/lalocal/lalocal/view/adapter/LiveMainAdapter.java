@@ -83,7 +83,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
         if (viewType == VIEW_TYPE_HIGHT || viewType == VIEW_TYPE_HIGHT_TITILE) {
-            View hightView = inflater.inflate(R.layout.list_item_highlights, parent, false);
+            View hightView = inflater.inflate(R.layout.item_highlights, parent, false);
             hightView.setOnClickListener(this);
             if (viewType == VIEW_TYPE_HIGHT_TITILE) {
                 LinearLayout titleCotaner = new LinearLayout(mContext);

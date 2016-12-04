@@ -168,17 +168,17 @@ public class TextureVideoPlayer extends RelativeLayout {
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     showOrHideController();
-                    if (!mVideoView.isPlaying()){
+                /*    if (!mVideoView.isPlaying()){
                         return false;
                     }
                     float downX =  event.getRawX();
                     touchLastX = downX;
                     position = mVideoView.getCurrentPosition();
                     touchPosition=position;
-                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);
+                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);*/
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.i("TAg", "ACTION_MOVE: "+touchPosition);
+                 /*   Log.i("TAg", "ACTION_MOVE: "+touchPosition);
                     float currentX =  event.getRawX();
                     float currentY = event.getRawY();
                     float deltaX = currentX - touchLastX;
@@ -211,10 +211,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                             touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
                             mVideoView.seekTo(position);
                         }
-                    }
+                    }*/
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (!mVideoView.isPlaying()){
+                   /* if (!mVideoView.isPlaying()){
                         return false;
                     }
                     Log.i("TAg", "ACTION_UP: "+touchPosition);
@@ -223,10 +223,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                         mVideoView.seekTo(touchPosition);
                         touchPosition = -1;
                         Log.i("TAg", "ACTION_UP: "+touchPosition+"哈哈哈哈哈哈哈哈");
-                  /*  if (videoControllerShow){
+                  *//*  if (videoControllerShow){
                         return true;
+                    }*//*
                     }*/
-                    }
                     break;
              /*   case MotionEvent.ACTION_CANCEL:
                     if (!mVideoView.isPlaying()){
@@ -260,6 +260,9 @@ public class TextureVideoPlayer extends RelativeLayout {
 
     public  void setBefore(float alpha,boolean clickAble){
         mMediaController.setBefore(alpha,clickAble);
+    }
+    public  void setCollect(boolean isCollect){
+        mMediaController.setCollect(isCollect);
     }
     public  void setNext(float alpha,boolean clickAble){
         mMediaController.setNext(alpha,clickAble);
@@ -335,14 +338,10 @@ public class TextureVideoPlayer extends RelativeLayout {
             }
         }
 
-        @Override
-        public void onClickShare() {
-            mVideoPlayCallback.onClickShare();
-        }
 
         @Override
-        public void onClickQuit() {
-            mVideoPlayCallback.onClickQuit();
+        public void onClickCollect(ImageView iv) {
+            mVideoPlayCallback.onClickCollect(iv);
         }
 
         @Override

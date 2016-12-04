@@ -88,7 +88,6 @@ public class GiftPlaneAnimation {
         TextView sendName= (TextView) giftPlanceBg.findViewById(R.id.audience_gift_send_plane);
         sendName.setText(s);
         giftPlaneBg.startAnimation(getTranslateAnim());
-
         MyAnimationDrawable.animateRawManuallyFromXML(R.drawable.plane_rocket,target,null,null);
         handler.postDelayed(new Runnable() {
             @Override

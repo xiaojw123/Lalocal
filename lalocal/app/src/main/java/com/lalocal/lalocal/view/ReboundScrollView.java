@@ -15,9 +15,6 @@ import android.widget.ScrollView;
  * @date Feb 13, 2014 6:11:33 PM
  */
 public class ReboundScrollView extends ScrollView {
-  
-  private static final String TAG = "ElasticScrollView";
-  
   //移动因子, 是一个百分比, 比如手指移动了100px, 那么View就只移动50px
   //目的是达到一个延迟的效果
   private static final float MOVE_FACTOR = 0.5f;

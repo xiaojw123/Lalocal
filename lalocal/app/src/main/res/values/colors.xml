@@ -73,13 +73,19 @@
     <!-- leave -->
     <!--========================-->
     <!--live-->
-    <color name="live_emcee_info_bg">#99000000</color>
+    <color name="live_emcee_info_bg">#b0ffffff</color>
+    <color name="live_barrageview_bg">#99000000</color>
+    <color name="live_notification">#b3191000</color>
     <color name="live_telecast_bottom_bg">#cc000000</color>
     <color name="live_text_color">#66ffffff</color>
     <color name="live_input_live_bg">#b2000000</color>
     <color name="live_start_tv">#ffaa2a</color>
     <color name="live_barraview">#73000000</color>
     <color name="live_gift">#64000000</color>
+    <color name="live_im_bg_color">#dff6cf4e</color>
+    <color name="live_im_item_name_color">#f6cf4e</color>
+    <color name="live_beauty_on">#f5a623</color>
+    <color name="live_im_item_content">#ffffff</color>
     <!--umeng-->
     <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
     <color name="umeng_socialize_divider">#E6E6E6</color>
@@ -135,7 +141,18 @@
     <color name="color_live_type_challenge">#FF6F6F</color>
     <color name="color_tab_selected_bar">#F6A623</color>
 
+    <color name="color_theme_tag_author">#4ad3d9</color>
+    <color name="color_theme_tag_red">#fb6d6d</color>
+
     <color name="umeng_socialize_text_title">#464f61</color>
     <color name="black_color">#000000</color>
     <color name="white_color">#ffffff</color>
+    <color name="color_faf7f2">#faf7f2</color>
+    <color name="color_30191000">#30191000</color>
+    <color name="color_10191000">#10191000</color>
+    <color name="color_50191000">#50191000</color>]
+    <color name="color_70191000">#70191000</color>
+    <color name="color_f6cf4e">#F6CF4E</color>
+    <color name="color_faf6f0">#FAF6F0</color>
+    <color name="color_f5a623">#f5a623</color>
 </resources>

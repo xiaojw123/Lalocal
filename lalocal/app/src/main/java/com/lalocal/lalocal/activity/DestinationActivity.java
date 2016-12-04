@@ -1,16 +1,13 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.DestinationFragment;
-import com.lalocal.lalocal.help.MobEvent;
-import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -24,11 +21,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class DestinationActivity extends BaseActivity {
+public class DestinationActivity extends BaseActivity implements View.OnClickListener {
 
     @BindView(R.id.home_des_areas_rlv)
-    RecyclerView mRVDest;
-
+    RecyclerView mRecyclerView;
+    @BindView(R.id.destion_search_btn)
+    Button searchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,26 +37,24 @@ public class DestinationActivity extends BaseActivity {
         ButterKnife.bind(this);
         // 初始化ContentLoader
         initLoader();
+
+
     }
 
     /**
      * 初始化ContentLoader
      */
     private void initLoader() {
-        ContentLoader loader = new ContentLoader(DestinationActivity.this);
+        ContentLoader loader = new ContentLoader(this);
         loader.setCallBack(new DesCallBack());
         loader.getDestinationAreas();
     }
 
-    @OnClick({R.id.img_back, R.id.img_search})
-    void clickBtn(View v) {
+    @OnClick({R.id.destion_search_btn})
+    public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.img_back:
-                DestinationActivity.this.finish();
-                break;
-            case R.id.img_search:
-                MobHelper.sendEevent(DestinationActivity.this, MobEvent.DESTINATION_SEARCH);
-                Intent intent = new Intent(DestinationActivity.this, SearchActivity.class);
+            case R.id.destion_search_btn:
+                Intent intent=new Intent(this,GlobalSearchActivity.class);
                 startActivity(intent);
                 break;
         }
@@ -73,9 +69,9 @@ public class DestinationActivity extends BaseActivity {
                 adapter.setOnItemClickListener(this);
                 LinearLayoutManager lm=new LinearLayoutManager(DestinationActivity.this);
                 lm.setOrientation(LinearLayoutManager.VERTICAL);
-                mRVDest.addItemDecoration(new SpaceItemDecoration((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
-                mRVDest.setLayoutManager(lm);
-                mRVDest.setAdapter(adapter);
+                mRecyclerView.addItemDecoration(new SpaceItemDecoration((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
+                mRecyclerView.setLayoutManager(lm);
+                mRecyclerView.setAdapter(adapter);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -93,4 +89,5 @@ public class DestinationActivity extends BaseActivity {
 
         }
     }
+
 }

@@ -28,7 +28,7 @@
             app:my_title="@string/email"
             app:clearEanble="true"
             app:my_maxLen="50"
-            android:layout_marginTop="@dimen/login_emial_custom_edit_top"
+            android:layout_marginTop="@dimen/login_phone_edit_top"
             app:hint="@string/input_email" />
 
         <com.lalocal.lalocal.view.MyEditText

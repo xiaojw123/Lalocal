@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/audience_over"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+
+    >
+    <ImageView
+        android:id="@+id/audience_live_over_page_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/live_loading_anim_"
+       />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#b3191000"/>
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/live_padding_109dp">
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginRight="@dimen/live_height_60dp"
+        android:layout_marginLeft="@dimen/live_height_60dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="5dp"
+       >
+        <LinearLayout
+            android:id="@+id/audience_live_over_masterinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/cardbglines"
+            android:gravity="bottom"
+            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/live_over_audience_head_iv"
+                android:layout_width="@dimen/live_height_40dp"
+                android:layout_height="@dimen/live_height_40dp"
+                android:src="@drawable/androidloading"
+                android:layout_marginLeft="@dimen/live_padding_15dp"
+                />
+
+            <TextView
+                android:id="@+id/live_over_master_name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/live_height_40dp"
+                android:maxLines="2"
+                android:maxLength="10"
+                android:ellipsize="end"
+                android:text="lalocal"
+                android:layout_marginLeft="@dimen/live_padding_10dp"
+                android:layout_marginRight="@dimen/live_padding_20dp"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/live_text_13sp"
+                />
+
+            <TextView
+                android:id="@+id/audience_live_over_attention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关注"
+                android:paddingRight="@dimen/live_padding_13dp"
+                android:paddingLeft="@dimen/live_padding_13dp"
+                android:paddingTop="@dimen/live_padding_6dp"
+                android:paddingBottom="@dimen/live_padding_6dp"
+                android:background="@drawable/live_attention_dialog_attention_bg"
+                android:layout_marginRight="@dimen/live_padding_15dp"
+                android:textSize="@dimen/text_size_12_sp"
+                />
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ss_layout"
+        android:layout_width="match_parent"
+        android:layout_height="91dp"
+        android:layout_marginTop="225dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/liveend_tittlebg"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            android:layout_marginLeft="@dimen/live_padding_15dp"
+            android:layout_marginRight="@dimen/live_padding_15dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:layout_centerInParent="true"
+            android:paddingBottom="30dp"
+            android:textSize="@dimen/live_text_24sp"
+            android:text="@string/audience_master_rest"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/audience_over_attention"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/ss_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ss_layout"
+        android:text="@string/audience_over_share"
+       android:paddingTop="@dimen/live_height_50dp"
+        android:layout_centerHorizontal="true"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/live_padding_10dp"
+        android:layout_marginLeft="@dimen/live_height_50dp"
+        android:layout_marginRight="@dimen/live_height_50dp"
+        android:layout_below="@+id/ss_tv">
+        <include layout="@layout/live_over_share_common_layout"></include>
+    </LinearLayout>
+
+
+    <ImageView
+       android:id="@+id/audience_live_over_close"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/live_padding_20dp"
+        android:src="@drawable/cancel_white"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        />
+</RelativeLayout>

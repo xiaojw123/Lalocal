@@ -248,6 +248,7 @@ public class XRecyclerView extends RecyclerView {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mLastY = ev.getRawY();
+                Log.d("TAF","xRecyclerview 监听：MotionEvent.ACTION_DOWN："+mLastY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 final float deltaY = ev.getRawY() - mLastY;

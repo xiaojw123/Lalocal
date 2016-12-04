@@ -26,7 +26,7 @@ public class Constant {
     public static final float PRP_MAX_LIGHTNESS = 1.0f;
     public static final float PRP_MAX_SMOOTHNESS = 1.0f;
 
-    public static boolean CAMERABACK=false;
+    public static boolean CAMERABACK=false;//摄像头切换
 
 
 }

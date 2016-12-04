@@ -128,11 +128,20 @@
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.UMDefault" />
-
+        <!-- lalocoal-release -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="57885600e0f55a60d5000b3f" />
-
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
+        <!-- //lalocal-debug -->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_APPKEY" -->
+        <!-- android:value="5806d2df67e58ef11a000e36" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_MESSAGE_SECRET" -->
+        <!-- android:value="9b462862fd10e9e8872745ec67df7718"/> -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -172,14 +181,14 @@
 
         <meta-data
             android:name="UMENG_CHANNEL"
-            android:value="releaseOrigin" />
+            android:value="release_lalocal" />
 
         <!-- <meta-data -->
         <!-- android:name="UMENG_CHANNEL" -->
         <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1e017a0e358e7dcc6793beda9888be87" />
+            android:value="a8f4963ecfc34fa65f74c186ec6bab7a" />
 
         <service android:name="com.amap.api.location.APSService" />
 
@@ -278,10 +287,11 @@
                 <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <!-- <meta-data -->
-        <!-- android:name="com.netease.nim.appKey" -->
-        <!-- android:value="4cbe3856032ad3755da23525e596405f" /> -->
+        <!-- lalocal-release -->
+         <!--<meta-data-->
+         <!--android:name="com.netease.nim.appKey"-->
+         <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
+        <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"
             android:value="efc9614a32336704ec2577f2129929fb" />
@@ -309,10 +319,12 @@
         <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
-            android:hardwareAccelerated="false" />
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode = "adjustResize"/>
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
@@ -339,7 +351,6 @@
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
-
         <activity android:name=".live.entertainment.activity.ReportActivity" />
         <activity android:name=".activity.MyArticleActivity" />
         <activity android:name=".me.LLoginActivity" />
@@ -354,8 +365,21 @@
         <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
-        <activity android:name=".me.PhoneBindActivity"></activity>
-        <activity android:name=".activity.DestinationActivity"></activity>
+        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity>
+
+        <activity android:name=".me.PhoneBindActivity" />
+        <activity android:name=".activity.CmbPayActivity" />
+        <activity
+            android:name="cmb.pb.ui.PBKeyboardActivity"
+            android:theme="@style/CmbDialogStyleBottom" />
+
+        <service
+            android:name="cmb.pb.cmbsafe.CmbService"
+            android:exported="false" />
+        <activity android:name=".me.MyMessageActivity" />
+        <activity android:name=".me.TargetWebActivity" />
+        <activity android:name=".activity.GlobalSearchActivity"/>
+        <activity android:name=".activity.DestinationActivity"/>
     </application>
 
 </manifest>

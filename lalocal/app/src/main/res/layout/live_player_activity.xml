@@ -1,27 +1,29 @@
-<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout
     android:id="@+id/live_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="bottom">
+    android:layout_gravity="bottom"
+    android:visibility="gone"
+   >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom"
-
         >
-
         <RelativeLayout
             android:id="@+id/player_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:fillViewport="true">
-
-
         </RelativeLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,13 +42,15 @@
                 android:visibility="invisible" />
         </LinearLayout>
 
-
-        <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
-            android:id="@+id/barrageView_test"
+        <TextView
+            android:id="@+id/start_live_count_down"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_125dp"
-            android:layout_marginTop="80dp"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
-
+            android:layout_height="match_parent"
+            android:text="3"
+            android:textSize="180sp"
+            android:textStyle="italic"
+            android:textColor="@color/white"
+            android:gravity="center"/>
 
         <RelativeLayout
             android:id="@+id/live_finish_layout"
@@ -56,102 +60,55 @@
             <include layout="@layout/live_over_layout"></include>
         </RelativeLayout>
 
+
+
+
     </RelativeLayout>
+<!--
+    android:layout_gravity="right"
+    android:layout_marginLeft="-65dp"-->
 
     <RelativeLayout
         android:id="@+id/live_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:layout_marginLeft="-65dp">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="@drawable/live_bg_gradient_top"></View>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@drawable/live_bg_gradient_bottom"
-            android:layout_alignParentBottom="true"></View>
+        android:layout_marginLeft="-65dp"
+        >
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:background="@drawable/live_bg_gradient_top"></View>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/live_bg_gradient_bottom"
+                    android:layout_alignParentBottom="true"></View>
 
         <RelativeLayout
+            android:id="@+id/top_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-            <LinearLayout
-                android:id="@+id/messageActivityBottomLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:orientation="vertical">
-
-                <include layout="@layout/nim_message_activity_text_layout" />
-
-            </LinearLayout>
-
-            <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
-                android:id="@+id/messageListView"
-                style="@style/list_view"
-                android:layout_width="320dp"
-                android:layout_height="300dp"
-                android:layout_above="@id/messageActivityBottomLayout"
-                android:layout_marginBottom="10dp"
-                android:cacheColorHint="@android:color/transparent"
-                android:divider="@null"
-                android:fadingEdge="none"
-                android:focusable="false"
-                android:listSelector="@android:color/transparent"
-                android:scrollbars="none" />
-
-            <include
-                android:id="@+id/gift_animation_view"
-                layout="@layout/gift_layout"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_above="@id/messageListView"
-                android:layout_marginBottom="20dp" />
-
-            <include
-                android:id="@+id/gift_animation_view_up"
-                layout="@layout/gift_layout"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_above="@id/gift_animation_view"
-                android:layout_marginBottom="10dp" />
+            android:layout_height="wrap_content">
 
             <RelativeLayout
-                android:id="@+id/BackBtn"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_alignParentRight="true">
-
-                <TextView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/icon_close_selector" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/live_telecast_model_layout"
+                android:id="@+id/live_view_top_layout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/live_height_40dp"
-                android:layout_marginTop="@dimen/live_padding_12dp"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/live_padding_10dp">
-
+                android:layout_height="@dimen/live_height_36dp"
+                android:layout_marginTop="@dimen/live_padding_10dp"
+                >
                 <LinearLayout
                     android:id="@+id/live_master_info_layout"
-                    android:layout_width="@dimen/live_height_119dp"
+                    android:layout_width="@dimen/live_height_100dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/live_emcee_info_shape"
+                    android:layout_marginLeft="@dimen/live_padding_13dp"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/live_emcee_head"
-                        android:layout_width="@dimen/live_height_40dp"
-                        android:layout_height="@dimen/live_height_40dp"
+                        android:layout_width="@dimen/live_height_36dp"
+                        android:layout_height="@dimen/live_height_36dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/androidloading" />
 
@@ -163,113 +120,189 @@
                         android:paddingLeft="@dimen/live_padding_5dp">
 
                         <TextView
-                            android:id="@+id/live_emcee_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/onlivelight"
-                            android:drawablePadding="@dimen/live_padding_5dp"
-                            android:drawableRight="@drawable/onlive"
-                            android:textColor="@android:color/white"
-                            android:textSize="@dimen/live_text_12sp" />
-
-                        <TextView
                             android:id="@+id/live_online_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:drawableLeft="@drawable/manypeople_light"
+                            android:drawableLeft="@drawable/peoplequantity_light_16"
                             android:drawablePadding="@dimen/live_padding_5dp"
                             android:text="0"
-                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/live_text_12sp" />
+
+                        <TextView
+                            android:id="@+id/live_emcee_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableLeft="@drawable/livecrown_16"
+                            android:drawablePadding="@dimen/live_padding_5dp"
+                            android:text="榜单"
                             android:textSize="@dimen/live_text_12sp" />
                     </LinearLayout>
                 </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/live_visitors_list_recy"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"
-                    android:paddingLeft="@dimen/live_padding_20dp"
-                    android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/audience_score_layout"
-                android:layout_width="87dp"
-                android:layout_height="22dp"
-                android:layout_below="@+id/live_telecast_model_layout"
-                android:layout_marginLeft="@dimen/live_padding_10dp"
-                android:layout_marginTop="@dimen/live_padding_10dp"
-                android:background="@drawable/live_emcee_info_shape"
-                android:visibility="gone">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
+                <RelativeLayout
+                    android:id="@+id/audience_score_layout"
+                    android:layout_width="60dp"
+                    android:layout_height="22dp"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/live_padding_5dp"
-                    android:src="@drawable/score" />
-
-                <TextView
-                    android:id="@+id/audience_score_tv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:ellipsize="end"
-                    android:maxLength="6"
-                    android:paddingLeft="@dimen/live_padding_5dp"
-                    android:paddingRight="@dimen/live_padding_5dp"
-                    android:text="榜单"
-                    android:textColor="@android:color/white" />
-
+                    android:layout_marginLeft="17dp"
+                    android:layout_toRightOf="@+id/live_master_info_layout"
+                    >
+                    <ImageView
+                        android:id="@+id/network_hint_iv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/signal_great"
+                        />
+                </RelativeLayout>
                 <ImageView
+                    android:id="@+id/live_telecast_quit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:paddingRight="@dimen/live_padding_5dp"
-
-                    android:src="@drawable/circlenext_ic" />
+                    android:paddingRight="@dimen/live_padding_10dp"
+                    android:src="@drawable/peopleliving_quit"/>
+                <ImageView
+                    android:id="@+id/live_telecast_top_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/live_telecast_quit"
+                    android:paddingRight="@dimen/live_padding_20dp"
+                    android:src="@drawable/anotherfunction_unsel"/>
 
             </RelativeLayout>
-
-
-            <ImageView
-                android:id="@+id/challenge_new_task"
-                android:layout_width="@dimen/live_height_36dp"
-                android:layout_height="@dimen/live_height_51dp"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/live_telecast_model_layout"
-                android:paddingTop="@dimen/live_padding_15dp"
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/live_visitors_list_recy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:layout_below="@+id/live_view_top_layout"
+                android:paddingLeft="@dimen/live_padding_12dp"
                 android:paddingRight="@dimen/live_padding_12dp"
-                android:visibility="gone"
-                android:src="@drawable/newtask"/>
+                android:fadingEdge="none"
+                android:overScrollMode="never">
+            </android.support.v7.widget.RecyclerView>
         </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/setting_bottom_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/live_height_50dp"
-            android:layout_alignParentBottom="true">
+                <ImageView
+                    android:id="@+id/challenge_new_task"
+                    android:layout_width="@dimen/live_height_36dp"
+                    android:layout_height="@dimen/live_height_51dp"
+                    android:layout_alignParentRight="true"
+                    android:paddingTop="@dimen/live_padding_15dp"
+                    android:paddingRight="@dimen/live_padding_12dp"
+                    android:visibility="gone"
+                    android:src="@drawable/newtask"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/messageActivityBottomLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
 
-            <include layout="@layout/live_telecast_bottom_tab"></include>
+                        >
+                        <include layout="@layout/nim_message_activity_text_layout" />
 
-        </LinearLayout>
+                    </LinearLayout>
 
-        <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
-            android:id="@+id/periscope"
-            android:layout_width="@dimen/live_height_70dp"
-            android:layout_height="350dp"
-            android:layout_above="@id/setting_bottom_layout"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="43dp"
-            android:paddingBottom="@dimen/live_padding_20dp"
-            ></com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout>
-<!--143-->
+                    <RelativeLayout
+                        android:id="@+id/live_nofitifation_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/live_height_30dp"
+                        android:layout_above="@+id/messageActivityBottomLayout"
+                        android:background="@color/live_notification"
+                        android:layout_alignParentBottom="true"
+                        android:paddingLeft="@dimen/live_padding_10dp"
+                        android:layout_marginTop="@dimen/live_padding_5dp">
+                        <com.lalocal.lalocal.live.im.ui.widget.MarqueeView
+                            android:id="@+id/live_notifitation_marquee_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true" >
+                        </com.lalocal.lalocal.live.im.ui.widget.MarqueeView>
+                    </RelativeLayout>
 
-        <include layout="@layout/gift_plan_layout"></include>
+                    <LinearLayout
+                        android:id="@+id/setting_bottom_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                       >
+                        <include layout="@layout/live_telecast_bottom_tab"></include>
+
+                    </LinearLayout>
+
+                    <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
+                        android:id="@+id/periscope"
+                        android:layout_width="@dimen/live_height_70dp"
+                        android:layout_height="350dp"
+                        android:layout_above="@id/setting_bottom_layout"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="23dp"
+                        android:paddingBottom="@dimen/live_padding_20dp"
+                        ></com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout>
+
+                    <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
+                        android:id="@+id/messageListView"
+                        style="@style/list_view"
+                        android:layout_width="match_parent"
+                        android:layout_marginRight="@dimen/live_height_100dp"
+                        android:layout_height="200dp"
+                        android:layout_above="@id/live_nofitifation_layout"
+                        android:layout_marginBottom="10dp"
+                        android:cacheColorHint="@android:color/transparent"
+                        android:divider="@null"
+                        android:scrollbars="none" />
+                    <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
+                        android:id="@+id/barrageView_test"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/live_height_80dp"
+                        android:paddingBottom="@dimen/live_padding_10dp"
+                        android:layout_above="@+id/messageListView"
+                        android:layout_marginTop="80dp"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
+
+                    <include
+                        android:id="@+id/gift_animation_view"
+                        layout="@layout/gift_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_above="@id/messageListView"
+                        android:layout_marginBottom="20dp" />
+
+                    <include
+                        android:id="@+id/gift_animation_view_up"
+                        layout="@layout/gift_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_above="@id/gift_animation_view"
+                        android:layout_marginBottom="10dp" />
+
+                    <RelativeLayout
+                        android:id="@+id/BackBtn"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentRight="true">
+
+                        <TextView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:layout_centerInParent="true"
+                            android:background="@drawable/icon_close_selector" />
+                    </RelativeLayout>
+
+                    <include layout="@layout/gift_plan_layout"></include>
+
+                </RelativeLayout>
 
     </RelativeLayout>
+
+
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>
+
+    <include layout="@layout/create_live_popu_layout"></include>
+
+    </RelativeLayout>

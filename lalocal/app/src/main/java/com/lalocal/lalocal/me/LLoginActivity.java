@@ -109,7 +109,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.login_close_btn:
-                if (isImLogin && pageType == PageType.PAGE_SETTING) {
+                if (isImLogin && pageType == PageType.PAGE_SETTING || pageType == PageType.PAGE_BACK_NORMAIL) {
                     finish();
                 } else {
                     HomeActivity.start(this, isImLogin);
@@ -123,7 +123,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                     CommonUtil.showPromptDialog(this, "手机号或密码为空", null);
                     return;
                 }
-                mContentloader.loginByPhone(getPhone(), getCode(),nextBtn);
+                mContentloader.loginByPhone(getPhone(), getCode(), nextBtn);
                 break;
             case R.id.login_get_password:
                 MobHelper.sendEevent(this, MobEvent.LOGIN_PHONE_VERIFICATOIN);
@@ -132,7 +132,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                     CommonUtil.showPromptDialog(this, "手机号不能为空", null);
                     return;
                 }
-                mContentloader.getSMSCode(view, getPhone(), null,pswGetBtn);
+                mContentloader.getSMSCode(view, getPhone(), null, pswGetBtn);
                 break;
             case R.id.login_email_btn:
                 MobHelper.sendEevent(this, MobEvent.LOGIN_EMAIL);
@@ -263,13 +263,14 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("lloginAcitivty  onActivityResult___data__" + data + ", resultcode__" + resultCode);
-        if (resultCode == MeFragment.LOGIN_OK&&pageType!=PageType.PAGE_BACK_NORMAIL) {
+        if (resultCode == MeFragment.LOGIN_OK && pageType != PageType.PAGE_BACK_NORMAIL) {
+            AppLog.print("loginActivity loginOk___startHome home");
             //非常规返回
             UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-            AppLog.print("loginActivity loginOk___startHome");
             HomeActivity.start(this, isImLogin);
         } else {
             //常规返回
+            AppLog.print("loginActivity loginOk___startHome nomral");
             super.onActivityResult(requestCode, resultCode, data);
         }
 //        if (isImLogin&&resultCode==MeFragment.LOGIN_OK) {
@@ -286,22 +287,25 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
 
     @Override
     public void onBackPressed() {
-        if (isImLogin && pageType == PageType.PAGE_SETTING||pageType==PageType.PAGE_BACK_NORMAIL) {
+        if (isImLogin && pageType == PageType.PAGE_SETTING || pageType == PageType.PAGE_BACK_NORMAIL) {
+            AppLog.print("onBackPressed___normal__");
             super.onBackPressed();
         } else {
+            AppLog.print("onBackPress__home___");
             HomeActivity.start(this, isImLogin);
         }
     }
 
     public static void start(Context context) {
-        Intent intent = new Intent(context,LLoginActivity.class);
+        Intent intent = new Intent(context, LLoginActivity.class);
         intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_BACK_NORMAIL);
         context.startActivity(intent);
     }
-    public static void startForResult(Context context,int resuctCode) {
-        Intent intent = new Intent(context,LLoginActivity.class);
+
+    public static void startForResult(Context context, int resuctCode) {
+        Intent intent = new Intent(context, LLoginActivity.class);
         intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_BACK_NORMAIL);
-        ((Activity)context).startActivityForResult(intent,resuctCode);
+        ((Activity) context).startActivityForResult(intent, resuctCode);
     }
 
 }

@@ -22,6 +22,8 @@ import com.lalocal.lalocal.live.im.util.storage.StorageType;
 import com.lalocal.lalocal.live.im.util.storage.StorageUtil;
 import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.lalocal.lalocal.model.Country;
+import com.lalocal.lalocal.net.ContentLoader;
+import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
@@ -31,6 +33,8 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.pingplusplus.android.PingppLog;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.utils.Log;
@@ -66,17 +70,21 @@ import io.fabric.sdk.android.Fabric;
  * <p>
  * 3.baseUrl改为生产环境
  * 解决app崩溃后退回开发环境问题
- *
- * 4第三方加固
+ * <p>
+ * 4.云信key(线上)
+ * 5.
+ * 5-1 第三方加固
  * meta-data选项选择UMENG_CHANNEL
  * 根据不同市场设置对应value，生成
  * 相应渠道包
+ * 5-2 重新签名
  * 此约定从2.1.3版本开始生效
  *
  */
 public class MyApplication extends Application {
     public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
+    ContentLoader mLoader;
 
     @Override
     public void onCreate() {
@@ -89,12 +97,14 @@ public class MyApplication extends Application {
         EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         if (isDebug) {
             Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
-        }else{
+        } else {
             startFabric();
             startUmeng();
         }
+        initUPsuh();
         //数据库
         intCountryDB();
+
         //代码中设置环信IM的Appkey
         String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
         EMChat.getInstance().setAppkey(appkey);
@@ -114,9 +124,28 @@ public class MyApplication extends Application {
         }
     }
 
+    private void initUPsuh() {
+        PushAgent mPushAgent = PushAgent.getInstance(this);
+//注册推送服务，每次调用register方法都会回调该接口c
+        mPushAgent.register(new IUmengRegisterCallback() {
 
+            @Override
+            public void onSuccess(String deviceToken) {
+                //注册成功会返回device token
+                AppLog.print("uPush deviceToken____" + deviceToken);
+            }
 
+            @Override
+            public void onFailure(String s, String s1) {
 
+            }
+        });
+
+//        mPushAgent.setDebugMode(false);
+//        mPushAgent.getTagManager().add();
+//        mPushAgent.addAlias("", "YWE".);
+
+    }
 
     private static void initLogManager() {
         Log.LOG = isDebug;
@@ -183,7 +212,6 @@ public class MyApplication extends Application {
     private LoginInfo getLoginInfo() {
         String imccId = AuthPreferences.getUserAccount();
         String imToken = AuthPreferences.getUserToken();
-
         AppLog.i("TAG", "MyApplication：account:" + imccId + "token:" + imToken);
         if (!TextUtils.isEmpty(imccId) && !TextUtils.isEmpty(imToken)) {
             DemoCache.setAccount(imccId.toLowerCase());
@@ -193,7 +221,6 @@ public class MyApplication extends Application {
         }
 
     }
-
 
     private void intCountryDB() {
         LitePalApplication.initialize(this);
@@ -260,6 +287,11 @@ public class MyApplication extends Application {
             e.printStackTrace();
         }
         mWorkerThread = null;
+    }
+
+    class  ApplictionCallBack extends ICallBack{
+
+
     }
 
 

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -27,7 +28,7 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
     private TextView masterInfoNickTv;
     private TextView masterInfoSignature;
     private TextView liveAttention;
-    private LinearLayout masterInfoBack;
+
     private TextView liveFans;
 
     private TextView liveMasterHome;
@@ -56,14 +57,13 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
     private ImageView managerMark;
     private boolean isMuted;
 
-
-
     public CustomLiveUserInfoDialog(Context context, LiveUserInfoResultBean result, boolean isManager, boolean isMuted) {
         super(context);
         this.context = context;
         this.result=result;
         this.isManager=isManager;
         this.isMuted=isMuted;
+        AppLog.i("TAG","获取用户身份信息:"+result.getRole());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
         masterInfoNickTv = (TextView)findViewById(R.id.master_info_nick_tv);
         masterInfoSignature = (TextView)findViewById(R.id.master_info_signature);
         liveAttention = (TextView)findViewById(R.id.live_attention);
-        masterInfoBack = (LinearLayout)findViewById(R.id.master_info_back_home);
+
         liveFans = (TextView)findViewById(R.id.live_fans);
 
         managerMark = (ImageView) findViewById(R.id.live_manager_mark);
@@ -195,7 +195,6 @@ public class CustomLiveUserInfoDialog extends BaseDialog implements View.OnClick
 
         }else if(LiveConstant.IDENTITY== LiveConstant.LIVEER_CHECK_ADMIN){//主播设置管理员
             if(!TextUtils.isEmpty(ban)){
-
                 if(isMuted){
                     liveManagerBan.setText("解除禁言");
                     liveManagerBan.setAlpha(0.4f);

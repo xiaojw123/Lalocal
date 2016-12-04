@@ -45,6 +45,16 @@ public class Constants {
     // 我的粉丝页面
     public static final int TARGET_TYPE_FANS_PAGE = 16;
 
+    // -专题类型
+    // 0：综合
+    public static final int THEME_NORMAL = 0;
+    // 1：商品
+    public static final int THEME_PRODUCT = 1;
+    // 2：作者
+    public static final int THEME_AUTHOR = 2;
+    // 3：文章
+    public static final int THEME_ARTICLE = 3;
+
 
     public static final String FLAG_ADD_PIC = "empty for adding pic";
     public static final int REQUEST_CODE_GALLERY = 0x01;

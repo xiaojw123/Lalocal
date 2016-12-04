@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -10,10 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
+import com.lalocal.lalocal.model.CmbPay;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
@@ -43,8 +48,12 @@ public class ChargePayActivity extends BaseActivity {
     ImageView payMannerWeixinCb;
     @BindView(R.id.pay_manner_weixin_fl)
     FrameLayout payMannerWeixinFl;
+    @BindView(R.id.pay_manner_cmb_cb)
+    ImageView payMannerCmbCb;
     @BindView(R.id.charge_pay_btn)
     Button chargePayBtn;
+    @BindView(R.id.pay_manner_cmb_fl)
+    FrameLayout payMannerCmbFl;
     RechargeItem item;
     boolean isPayConfirm;
 
@@ -60,12 +69,13 @@ public class ChargePayActivity extends BaseActivity {
         setLoaderCallBack(new ChargePayCallBack());
     }
 
-    @OnClick({R.id.pay_manner_alipay_fl, R.id.pay_manner_weixin_fl, R.id.charge_pay_btn})
+    @OnClick({R.id.pay_manner_alipay_fl, R.id.pay_manner_weixin_fl, R.id.pay_manner_cmb_fl, R.id.charge_pay_btn})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.pay_manner_alipay_fl:
             case R.id.pay_manner_weixin_fl:
+            case R.id.pay_manner_cmb_fl:
                 selectPayManner(id);
                 break;
             case R.id.charge_pay_btn:
@@ -86,6 +96,9 @@ public class ChargePayActivity extends BaseActivity {
             AppLog.print("支付宝——————支付————");
 
         }
+        if (payMannerCmbCb.isSelected()) {
+            channel = PayActivity.CHANNEL_CMB;
+        }
         JSONObject jobj = new JSONObject();
         try {
             jobj.put("channel", channel);
@@ -93,7 +106,7 @@ public class ChargePayActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        mContentloader.chargeGold(jobj.toString());
+        mContentloader.chargeGold(jobj.toString(), channel);
 
     }
 
@@ -104,12 +117,21 @@ public class ChargePayActivity extends BaseActivity {
                     payMannerAlipayCb.setSelected(true);
                 }
                 payMannerWeixinCb.setSelected(false);
+                payMannerCmbCb.setSelected(false);
                 break;
             case R.id.pay_manner_weixin_fl:
                 if (!payMannerWeixinCb.isSelected()) {
                     payMannerWeixinCb.setSelected(true);
                 }
                 payMannerAlipayCb.setSelected(false);
+                payMannerCmbCb.setSelected(false);
+                break;
+            case R.id.pay_manner_cmb_fl:
+                if (!payMannerCmbCb.isSelected()) {
+                    payMannerCmbCb.setSelected(true);
+                }
+                payMannerAlipayCb.setSelected(false);
+                payMannerWeixinCb.setSelected(false);
                 break;
         }
     }
@@ -120,8 +142,42 @@ public class ChargePayActivity extends BaseActivity {
 
     class ChargePayCallBack extends ICallBack {
         @Override
-        public void onChargeGold(String result) {
-            Pingpp.createPayment(ChargePayActivity.this, result);
+        public void onChargeGold(String result, String channel) {
+            if (PayActivity.CHANNEL_CMB.equals(channel)) {
+                AppLog.print("channel cmb_____" + result);
+                cmbCharge(result);
+            } else {
+                Pingpp.createPayment(ChargePayActivity.this, result);
+
+            }
+        }
+
+        private void cmbCharge(String result) {
+            Gson gson = new Gson();
+            CmbPay cmbPay = gson.fromJson(result, CmbPay.class);
+            String retPara = cmbPay.getMerchantRetPara();
+            String cmbPayCommandUrl = AppConfig.getCmbPayCommand(
+                    cmbPay.getBranchId(),
+                    cmbPay.getCoNo(),
+                    cmbPay.getBillNo(),
+                    cmbPay.getAmount(),
+                    cmbPay.getDate(),
+                    cmbPay.getExpireTimeSpan(),
+                    cmbPay.getMerchantUrl(),
+                    cmbPay.getMerchantPara(),
+                    cmbPay.getMerchantCode(),
+                    cmbPay.getMerchantRetUrl(),
+                    retPara);
+            AppLog.print("招行支付命令————" + cmbPayCommandUrl);
+            Intent intent = new Intent(ChargePayActivity.this, CmbPayActivity.class);
+            intent.putExtra(CmbPayActivity.CMB_PAY_URL, cmbPayCommandUrl);
+            if (!TextUtils.isEmpty(retPara)) {
+                String payNo = retPara.substring(retPara.indexOf("=") + 1, retPara.length());
+                AppLog.print("payNo:"+payNo);
+                intent.putExtra(KeyParams.PAY_NO, payNo);
+            }
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_CHARGE);
+            startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
 
@@ -149,6 +205,11 @@ public class ChargePayActivity extends BaseActivity {
                         Toast.makeText(this, "支付失效", Toast.LENGTH_SHORT).show();
                         break;
                 }
+            }
+        } else {
+            if (resultCode == PayActivity.RESULT_CMB_PAY_SUCCESS) {
+                setResult(KeyParams.RESULT_ChARGE_SUCCESS, null);
+                finish();
             }
         }
     }

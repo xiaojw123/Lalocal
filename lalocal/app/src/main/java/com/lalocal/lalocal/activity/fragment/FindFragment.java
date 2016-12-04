@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
+import com.daimajia.slider.library.SliderLayout;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -130,17 +131,17 @@ public class FindFragment extends BaseFragment {
         // 初始化适配器
         updateAdapter(INIT);
         // 滚动事件监听，保证滑动到底部的时候才加载更多而不是最后一个item出现的时候就加载
-        mXrvRecommend.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (mXrvRecommend.canScrollVertically(1) == true) {
-                    mXrvRecommend.loadMoreComplete();
-                } else if (mXrvRecommend.canScrollVertically(1) == false) {
-                    mXrvRecommend.setLoadingMoreEnabled(true);
-                }
-            }
-        });
+//        mXrvRecommend.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (mXrvRecommend.canScrollVertically(1) == true) {
+//                    mXrvRecommend.loadMoreComplete();
+//                } else if (mXrvRecommend.canScrollVertically(1) == false) {
+//                    mXrvRecommend.setLoadingMoreEnabled(true);
+//                }
+//            }
+//        });
     }
 
     /**

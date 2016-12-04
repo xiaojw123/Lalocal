@@ -145,7 +145,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                 if (items == null) {
                     items = new ArrayList<>();
                 }
-
                 for (HistoryItem item : items) {
                     if (text.equals(item.getName())) {
                         DataSupport.deleteAll(HistoryItem.class, "name=?", text);
@@ -237,7 +236,7 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
         }
 
         @Override
-        public void onGetMoreItems(int pageNumber, int totalPages, List<SearchItem> items) {
+        public void onGetMoreItems(String key,int pageNumber, int totalPages, List<SearchItem> items) {
             searchBackImg.setVisibility(View.VISIBLE);
             morePageNumb = pageNumber;
             moreToalPages = totalPages;
@@ -346,7 +345,6 @@ public class SearchActivity extends BaseActivity implements TextView.OnEditorAct
                         SparseArray<String> sp = new SparseArray<>();
                         sp.put(SearchHintAdapter.ITEM_HISTORY, item.getName());
                         datas.add(sp);
-
                     }
                 }
             } catch (Exception e) {

@@ -11,7 +11,7 @@
         android:id="@+id/input_start_live"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="开始直播"
+        android:text="发起直播"
         android:layout_gravity="center"
         android:textSize="@dimen/text_size_16_sp"
         android:textColor="@color/live_start_tv" />

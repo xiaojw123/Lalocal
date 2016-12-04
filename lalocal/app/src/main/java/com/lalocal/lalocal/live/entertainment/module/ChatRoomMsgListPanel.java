@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.ui.TAdapterDelegate;
@@ -96,8 +97,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private void initListView() {
         items = new LinkedList<>();
         adapter = new MsgAdapter(container.activity, items, this);
-        adapter.setEventListener(new MsgItemEventListener());
-
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
        View view= View.inflate(container.activity, R.layout.chat_head_items,null);
         headInfos = (TextView) view.findViewById(R.id.chat_info_head);
@@ -105,22 +104,12 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         headInfos.setText("公告： "+content);
         headInfos.setVisibility(View.GONE);
         messageListView.addHeaderView(view);
-        messageListView.requestDisallowInterceptTouchEvent(true);
-
-        messageListView.setMode(AutoRefreshListView.Mode.START);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
             messageListView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
-        // adapter
         messageListView.setAdapter(adapter);
 
-        messageListView.setListViewEventListener(new MessageListViewEx.OnListViewEventListener() {
-            @Override
-            public void onListViewStartScroll() {
-                container.proxy.shouldCollapseInputPanel();
-            }
-        });
     }
     public void setHeaderViewVisible(){
         headInfos.setVisibility(View.VISIBLE);
@@ -131,15 +120,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
 
 
-    private OnChatRoomMessageItemClickListener onChatRoomMessageItemClickListener;
 
-    public interface OnChatRoomMessageItemClickListener {
-       void onMessageListItem(String userId);
-    }
-
-    public void setOnChatRoomMessageItemClickListener(OnChatRoomMessageItemClickListener onChatRoomMessageItemClickListener) {
-        this.onChatRoomMessageItemClickListener = onChatRoomMessageItemClickListener;
-    }
 
     // 刷新消息列表
     public void refreshMessageList() {
@@ -457,12 +438,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
         @Override
         public void itemClickListener(IMMessage itemMessage) {
-        //    Toast.makeText(context,"itemMessage"+itemMessage.getFromAccount(),Toast.LENGTH_SHORT).show();
-
-         /*   Intent intent = new Intent();
-            intent.setAction(NIM_CHAT_MESSAGE_INFO);
-            intent.putExtra("msg", itemMessage.getFromAccount());
-            context.sendBroadcast(intent);*/
+           Toast.makeText(context,"itemMessage"+itemMessage.getFromAccount(),Toast.LENGTH_SHORT).show();
 
         }
 
@@ -502,7 +478,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
                 item.setStatus(MsgStatusEnum.sending);
                 refreshViewHolderByIndex(index);
             }
-
             NIMClient.getService(ChatRoomService.class).sendMessage((ChatRoomMessage) message, true);
         }
 

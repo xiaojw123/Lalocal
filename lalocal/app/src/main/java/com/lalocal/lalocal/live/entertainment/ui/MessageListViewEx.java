@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.im.ui.listview.MessageListView;
 
 
@@ -12,7 +13,8 @@ import com.lalocal.lalocal.live.im.ui.listview.MessageListView;
  * Created by hzxuwen on 2016/3/31.
  */
 public class MessageListViewEx extends MessageListView {
-    private int maxHeight = ScreenUtil.dip2px(110);
+
+    private int maxHeight = ScreenUtil.dip2px(LiveConstant.ROLE==1?200:150);
 
     public MessageListViewEx(Context context) {
         super(context);

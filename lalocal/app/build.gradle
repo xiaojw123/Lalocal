@@ -69,7 +69,7 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${libs.support}"
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.belerweb:pinyin4j:2.5.1'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
         transitive = true;
     }
@@ -94,7 +94,6 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.android.support:percent:22.2.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
-
     compile files('libs/SocialSDK_umengqq.jar')
     compile files('libs/umeng_social_api.jar')
     compile files('libs/SocialSDK_umengsina.jar')
@@ -102,6 +101,8 @@ dependencies {
     compile files('libs/SocialSDK_Sina.jar')
     compile files('libs/SocialSDK_WeiXin_1.jar')
 
+    compile project(':PushSDK')
+    compile files('libs/cmbkeyboard.jar')
 }
 
 

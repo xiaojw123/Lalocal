@@ -13,6 +13,8 @@ public class LiveConstant {
     public  static final  int LIVEER_CHECK_ADMIN=5;//主播设置管理员
     public  static  final  int ME_CHECK_OTHER=6;//我看别人
     public static  int IDENTITY=0;
+    public  static  int ROLE=-1;
+    public  static String  ROOM_ID="";
 
     public  static boolean enterRoom=false;
 

@@ -31,6 +31,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.UMShareAPI;
 /*
 *
@@ -49,6 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        PushAgent.getInstance(this).onAppStart();
         //getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         //  getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
 //            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -59,7 +61,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        isOnResume=false;
+        isOnResume = false;
         registerObservers(false);
     }
 
@@ -73,24 +75,28 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onEvent(StatusCode statusCode) {
             AppLog.i("TAG", "BaseActivity 監聽用戶登錄狀態：" + statusCode);
-            if(statusCode==StatusCode.UNLOGIN){
+            if (statusCode == StatusCode.UNLOGIN) {
                 String userAccount = AuthPreferences.getUserAccount();
                 String userToken = AuthPreferences.getUserToken();
-                if(userAccount!=null&&userToken!=null&&isOnResume){
+                if (userAccount != null && userToken != null && isOnResume) {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    loginIMServer(userAccount,userToken);
+                    loginIMServer(userAccount, userToken);
                 }
             }
-            if(statusCode==StatusCode.KICKOUT){
+            if (statusCode == StatusCode.KICKOUT) {
                 //TODO 账号被踢出
                 AppLog.print("baseActivity kiktout____");
-                UserHelper.updateSignOutInfo(BaseActivity.this);
-                Toast.makeText(BaseActivity.this,"您的账号在其他设备上登录,请重新登录",Toast.LENGTH_SHORT).show();
-                LLoginActivity.start(BaseActivity.this);
+
+                if (UserHelper.isLogined(BaseActivity.this)) {
+                    UserHelper.updateSignOutInfo(BaseActivity.this);
+                    Toast.makeText(BaseActivity.this, "您的账号在其他设备上登录,请重新登录", Toast.LENGTH_SHORT).show();
+                    LLoginActivity.start(BaseActivity.this);
+                }
+
             }
         }
     };
@@ -100,20 +106,21 @@ public class BaseActivity extends AppCompatActivity {
 
             @Override
             public void onSuccess(Object o) {
-                AppLog.i("TAG","BaseActivity,登录云信成功");
+                AppLog.i("TAG", "BaseActivity,登录云信成功");
                 DemoCache.setAccount(imccId);
                 DemoCache.getRegUserInfo();
                 DemoCache.setLoginStatus(true);
             }
+
             @Override
             public void onFailed(int i) {
-                AppLog.i("TAG","BaseActivity,登录云信失败"+i);
+                AppLog.i("TAG", "BaseActivity,登录云信失败" + i);
                 DemoCache.setLoginStatus(false);
             }
 
             @Override
             public void onException(Throwable throwable) {
-                AppLog.i("TAG","BaseActivity,登录云信异常");
+                AppLog.i("TAG", "BaseActivity,登录云信异常");
                 DemoCache.setLoginStatus(false);
             }
         });
@@ -162,7 +169,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isOnResume=true;
+        isOnResume = true;
         registerObservers(true);
         //注：回调 1
         if (MyApplication.isDebug) {

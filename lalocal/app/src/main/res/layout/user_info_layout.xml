@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+  >
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:background="@drawable/popuwindow_bg"
+                app:layout_marginTopPercent="22%"
+                app:layout_marginLeftPercent="10%"
+                app:layout_marginRightPercent="10%"
+                app:layout_marginBottomPercent="22%"
+                >
+                <FrameLayout
+                    android:id="@+id/userinfo_header_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/live_height_45dp"
+                    android:layout_gravity="center"
+                    >
+
+                    <include layout="@layout/custom_dialog_audience_header_layout"></include>
+                    <include layout="@layout/audience_custom_header_layout"></include>
+                </FrameLayout>
+                <RelativeLayout
+                    android:layout_width="@dimen/live_height_60dp"
+                    android:layout_height="@dimen/live_height_60dp"
+                    android:paddingTop="@dimen/live_padding_10dp"
+                    android:layout_gravity="center">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/userinfo_head_iv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:src="@drawable/androidloading" />
+                    <ImageView
+                        android:id="@+id/live_manager_mark"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:visibility="gone"
+                        android:src="@drawable/livemanager_ic"/>
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/userinfo_nick_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:paddingTop="@dimen/live_padding_5dp"
+                    android:maxLength="10"
+                    android:ellipsize="end"
+                    android:text="lalocal"
+                    android:textColor="@color/live_info_1a1a1a"
+                    android:textSize="@dimen/live_text_16sp" />
+
+
+                <TextView
+                    android:id="@+id/master_info_signature"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:ellipsize="end"
+                    android:gravity="center"
+                    android:maxLines="4"
+                    android:paddingLeft="@dimen/author_padding_25dp"
+                    android:paddingRight="@dimen/author_padding_25dp"
+                    android:text="神秘人拒绝透露自己的个人简介!"
+                    android:textColor="@color/color_b3b3b3"
+                    android:textSize="@dimen/live_text_13sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="@dimen/live_padding_10dp">
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/live_height_50dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/live_master_attention" />
+                        <TextView
+                            android:id="@+id/live_attention"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/live_height_50dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/live_master_fans" />
+
+                        <TextView
+                            android:id="@+id/live_fans"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0" />
+                    </LinearLayout>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/user_info_layout_bottom"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/live_height_45dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/userinfo_bottom_left"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textColor="@color/color_ffaa2a"
+                        android:textSize="@dimen/text_size_14_sp"
+
+                        />
+                    <TextView
+                        android:id="@+id/userinfo_bottom_center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_ffaa2a"
+                        android:textSize="@dimen/text_size_14_sp"
+                        android:gravity="center"
+
+                        />
+
+                    <TextView
+                        android:id="@+id/userinfo_bottom_right"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/color_ffaa2a"
+                        android:textSize="@dimen/text_size_14_sp"
+                        android:gravity="center"
+                        />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+    </android.support.percent.PercentRelativeLayout>
+
+
+
+
+
+</LinearLayout>
