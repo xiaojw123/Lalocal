@@ -28,18 +28,6 @@
                 android:src="@drawable/homelist_living_ic"/>
 
             <TextView
-                android:id="@+id/tv_title"
-                android:layout_toRightOf="@id/icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="加载中..."
-                android:layout_marginLeft="@dimen/dimen_size_10_dp"
-                android:textSize="16sp"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textColor="@color/color_191000"/>
-
-            <TextView
                 android:id="@+id/tv_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,6 +39,20 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dimen_size_15_dp"
                 android:background="@drawable/bg_tag_living"/>
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_toLeftOf="@id/tv_type"
+                android:layout_marginRight="@dimen/dimen_size_15_dp"
+                android:layout_toRightOf="@id/icon"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="加载中..."
+                android:layout_marginLeft="@dimen/dimen_size_10_dp"
+                android:textSize="16sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="@color/color_191000"/>
         </RelativeLayout>
 
         <RelativeLayout
