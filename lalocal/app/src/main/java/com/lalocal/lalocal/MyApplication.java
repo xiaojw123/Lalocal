@@ -19,7 +19,6 @@ import com.lalocal.lalocal.live.im.util.storage.StorageType;
 import com.lalocal.lalocal.live.im.util.storage.StorageUtil;
 import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.lalocal.lalocal.model.Country;
-import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.thread.AreaParseTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
@@ -127,10 +126,6 @@ public class MyApplication extends Application {
 
             }
         });
-
-//        mPushAgent.setDebugMode(false);
-//        mPushAgent.getTagManager().add();
-//        mPushAgent.addAlias("", "YWE".);
 
     }
 
@@ -276,10 +271,6 @@ public class MyApplication extends Application {
         mWorkerThread = null;
     }
 
-    class  ApplictionCallBack extends ICallBack{
-
-
-    }
 
 
 }

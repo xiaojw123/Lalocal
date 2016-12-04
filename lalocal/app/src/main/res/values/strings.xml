@@ -110,7 +110,7 @@
     <string name="mobile">手机</string>
     <string name="unlogin_warn">你还没有登录，即使是我们的工程师也不能算出你有多少优惠券</string>
     <string name="search">搜索</string>
-    <string name="input_key_word">请输入关键字</string>
+    <string name="input_key_word">请输入关键词</string>
     <string name="hot">热门</string>
     <string name="strategy">攻略</string>
     <string name="packagetour">精品游</string>
