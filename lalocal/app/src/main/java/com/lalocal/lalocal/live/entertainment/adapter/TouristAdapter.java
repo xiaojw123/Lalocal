@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
+import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -50,12 +52,20 @@ public class TouristAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
         final LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean userAvatarsBean = userAvatars.get(position);
-
         liveViewHodler.managerMark.setVisibility(View.GONE);
         if(userAvatarsBean.getAvatar()==null||userAvatarsBean.getAvatar().length()==0){
             liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
         }else{
             DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, userAvatarsBean.getAvatar());
+        }
+        if(LiveConstant.result.size()>0&&position<5){
+            for(LiveManagerListBean bean :LiveConstant.result){
+               if(bean.getId()==userAvatarsBean.getId()){
+                   liveViewHodler.managerMark.setVisibility(View.VISIBLE);
+               }
+            }
+
+
         }
 
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {

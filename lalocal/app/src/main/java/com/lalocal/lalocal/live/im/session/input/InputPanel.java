@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
@@ -354,8 +355,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","1");
                         ext.put("creatorAccount",creatorAccount);
-                        ext.put("userId",userId);
-                        ext.put("disableSendMsgUserId",userId);
+                        ext.put("userId", UserHelper.getUserId(mContext));
+                        ext.put("disableSendMsgUserId",UserHelper.getUserId(mContext));
                         ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
@@ -367,8 +368,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","0");
                         ext.put("creatorAccount",creatorAccount);
-                        ext.put("userId",userId);
-                        ext.put("disableSendMsgUserId",userId);
+                        ext.put("userId", UserHelper.getUserId(mContext));
+                        ext.put("disableSendMsgUserId",UserHelper.getUserId(mContext));
                         ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }

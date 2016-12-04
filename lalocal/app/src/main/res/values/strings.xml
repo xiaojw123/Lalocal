@@ -332,7 +332,7 @@
     <string name="super_manager_close_liveroom_content">你要好好确认一下不然扣你工资了噢</string>
     <string name="super_manager_cancel_liveroom">给个机会</string>
     <string name="super_manager_close_liveroom_ok">我就关了咋地</string>
-    <string name="super_manager_ban_long">永久禁言</string>
+    <string name="super_manager_ban_long">踢出直播间</string>
     <string name="live_report">举报</string>
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>

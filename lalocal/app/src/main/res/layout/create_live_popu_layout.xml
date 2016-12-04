@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:visibility="gone"
-   >
+    >
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,29 +15,32 @@
         android:layout_height="match_parent"
         android:background="@color/live_notification"></View>
     <ImageView
-       android:id="@+id/live_create_room_close_iv"
+        android:id="@+id/live_create_room_close_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/live_padding_15dp"
         android:paddingLeft="@dimen/live_padding_15dp"
         android:src="@drawable/cancel_white"/>
 
-    <ScrollView
-        android:id="@+id/start_live_bottom_layout"
+    <TextView
+        android:id="@+id/input_start_live"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/live_height_50dp"
+        android:text="发起直播"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_16_sp"
+        android:textColor="@color/live_start_nomal_tv"
         android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:background="@color/live_input_live_bg">
-        <include layout="@layout/start_live_botton_layout"></include>
-    </ScrollView>
+        android:background="@color/live_input_live_bg"/>
+
     <EditText
         android:id="@+id/live_room_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/live_height_50dp"
         android:gravity="center_vertical"
         android:background="@null"
-        android:layout_above="@+id/start_live_bottom_layout"
+        android:layout_above="@+id/input_start_live"
         android:paddingLeft="@dimen/live_padding_15dp"
         android:hint="为直播间取个名字"
         android:textColorHint="@color/live_text_color"
@@ -50,9 +53,9 @@
         android:id="@+id/live_text_title_count"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/live_height_50dp"
-        android:layout_above="@+id/start_live_bottom_layout"
+        android:layout_above="@+id/input_start_live"
         android:gravity="bottom"
-       android:layout_alignParentRight="true"
+        android:layout_alignParentRight="true"
         android:text="0/20"
         android:textColor="@android:color/white"
         android:textSize="@dimen/live_text_10sp"/>
@@ -71,23 +74,23 @@
             android:src="@drawable/androidloading"
             android:layout_marginLeft="@dimen/live_padding_15dp"/>
 
-            <TextView
-                android:id="@+id/create_live_location_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/create_live_head_iv"
-                android:text="正在获取位置信息..."
-                android:background="@drawable/live_create_location_bg"
-                android:paddingTop="@dimen/live_padding_3dp"
-                android:paddingBottom="@dimen/live_padding_3dp"
-                android:paddingLeft="@dimen/live_padding_6dp"
-                android:paddingRight="@dimen/live_padding_6dp"
-                android:drawablePadding="@dimen/live_padding_5dp"
-                android:layout_marginLeft="@dimen/live_padding_10dp"
-                android:singleLine="true"
-                android:maxLength="15"
-                android:ellipsize="end"
-                android:drawableRight="@drawable/arrow_nextpage_right_ic"/>
+        <TextView
+            android:id="@+id/create_live_location_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/create_live_head_iv"
+            android:text="正在获取位置信息..."
+            android:background="@drawable/live_create_location_bg"
+            android:paddingTop="@dimen/live_padding_3dp"
+            android:paddingBottom="@dimen/live_padding_3dp"
+            android:paddingLeft="@dimen/live_padding_6dp"
+            android:paddingRight="@dimen/live_padding_6dp"
+            android:drawablePadding="@dimen/live_padding_5dp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:singleLine="true"
+            android:maxLength="15"
+            android:ellipsize="end"
+            android:drawableRight="@drawable/arrow_nextpage_right_ic"/>
 
         <ImageView
             android:id="@+id/create_live_share_friends"
@@ -109,7 +112,7 @@
             android:src="@drawable/create_live_share_weixin_selector"/>
 
         <ImageView
-           android:id="@+id/create_live_share_weibo"
+            android:id="@+id/create_live_share_weibo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/create_live_location_tv"

@@ -90,7 +90,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         initXlistView();
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
-       contentLoader.getAttentionOrFansList(typeId);
+        contentLoader.getAttentionOrFansList(typeId);
 
     }
 
@@ -105,8 +105,8 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     protected void onStart() {
         super.onStart();
 
-        AppLog.i("TAG","getAttentionOrFansList："+"走了onStart");
-       // contentLoader.getAttentionOrFansList(typeId);
+        AppLog.i("TAG", "getAttentionOrFansList：" + "走了onStart");
+        // contentLoader.getAttentionOrFansList(typeId);
 
     }
 
@@ -129,11 +129,11 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
             if (searchName.length() > 0) {
                 searchTextHint.setVisibility(View.GONE);
                 searchClearBtn.setVisibility(View.VISIBLE);
-                if(allRows==null||allRows.size()==0){
+                if (allRows == null || allRows.size() == 0) {
                     searchResultNull.setVisibility(View.VISIBLE);
                     liveAttentionListview.setVisibility(View.GONE);
                     searchResultNull.setText("暂无搜索结果!");
-                }else {
+                } else {
                     searchResultNull.setVisibility(View.GONE);
                     liveAttentionListview.setVisibility(View.VISIBLE);
                 }
@@ -152,7 +152,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 }
             }
             Collections.sort(allRows, comp);
-            if(attentionOrFansRecyAdapter!=null){
+            if (attentionOrFansRecyAdapter != null) {
                 attentionOrFansRecyAdapter.refresh(allRows);
             }
         }
@@ -165,11 +165,15 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         liveAttentionListview.setPullRefreshEnabled(true);
         liveAttentionListview.setLoadingMoreEnabled(true);
         liveAttentionListview.setRefreshing(true);
+        attentionOrFansRecyAdapter = new AttentionOrFansRecyAdapter(LiveAttentionOrFansActivity.this, null);
+        liveAttentionListview.setAdapter(attentionOrFansRecyAdapter);
         XRecyclerviewLoadingListener xRecyclerviewLoadingListener = new XRecyclerviewLoadingListener();
         liveAttentionListview.setLoadingListener(xRecyclerviewLoadingListener);
+        listItemAdapter();
     }
 
-    int searchPages=1;
+    int searchPages = 1;
+
     @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel, R.id.live_search_layout_font, R.id.seach_clear_btn})
     public void clickButton(View view) {
         switch (view.getId()) {
@@ -195,13 +199,13 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
 
                 liveAttentionSearchCancel.setVisibility(View.VISIBLE);
                 userAttentionTitle.setVisibility(View.GONE);
-                if(attentionOrFansRecyAdapter!=null){
+                if (attentionOrFansRecyAdapter != null) {
                     attentionOrFansRecyAdapter.refresh(null);
                 }
                 isSearchFansOrAttention = true;
                 allSearchRows.clear();
                 allRows.clear();
-                if(totalPages>0){
+                if (totalPages > 0) {
                     String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + searchPages;
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
@@ -209,7 +213,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 liveAttentionSearchEt.addTextChangedListener(watcher);
                 break;
             case R.id.live_attention_search_cancel:
-                searchPages=1;
+                searchPages = 1;
                 liveSearchLayoutFont.setVisibility(View.VISIBLE);
                 liveSearchLayout.setVisibility(View.GONE);
                 isSearchFansOrAttention = false;
@@ -226,7 +230,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 break;
             case R.id.seach_clear_btn:
                 liveAttentionSearchEt.setText("");
-                if(attentionOrFansRecyAdapter!=null){
+                if (attentionOrFansRecyAdapter != null) {
                     attentionOrFansRecyAdapter.refresh(null);
                 }
                 searchClearBtn.setVisibility(View.GONE);
@@ -262,7 +266,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 allSearchRows.addAll(allSearchRows.size(), searchRows);
                 Collections.sort(allSearchRows, comp);
                 ++searchPages;
-                if(searchPages<=totalPages){
+                if (searchPages <= totalPages) {
                     String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + searchPages;
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
@@ -270,7 +274,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 return;
             }
             if (liveFansOrAttentionResp.getReturnCode() == 0) {
-                if(searchRows!=null){
+                if (searchRows != null) {
                     searchRows.clear();
                 }
                 LiveFansOrAttentionResultBean result = liveFansOrAttentionResp.getResult();
@@ -284,10 +288,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                     } else {
                         searchResultNull.setText("暂时没有粉丝哦!");
                     }
-                 //   liveAttentionSearchEt.setEnabled(false);
-
                 } else {
-                  //  liveAttentionSearchEt.setEnabled(true);
                     searchResultNull.setVisibility(View.GONE);
                     liveAttentionListview.setVisibility(View.VISIBLE);
                     totalPages = result.getTotalPages();
@@ -297,28 +298,24 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                         userAttentionTitle.setTitle("粉丝(" + totalRows + ")");
                     }
                     List<LiveFansOrAttentionRowsBean> rows = result.getRows();
-                    Collections.sort(rows, comp);
-                    if (isFirstLoadData) {
-                        isFirstLoadData = false;
-
-                        attentionOrFansRecyAdapter = new AttentionOrFansRecyAdapter(LiveAttentionOrFansActivity.this,rows);
-
-                        liveAttentionListview.setAdapter(attentionOrFansRecyAdapter);
-                        listItemAdapter();
-                        allRows.addAll(rows);
-                        Collections.sort(allRows, comp);
-                    } else {
-                        if (isRefreshStatus == 1) {
-                            allRows.clear();
-                            pages = 2;
-                            liveAttentionListview.refreshComplete();
-                        }else if(isRefreshStatus==2){
-                            liveAttentionListview.loadMoreComplete();
-                        }
-                        allRows.addAll(allRows.size(), rows);
-                        Collections.sort(allRows, comp);
-                        attentionOrFansRecyAdapter.refresh(allRows);
+                    if (isRefreshStatus == 1) {
+                        allRows.clear();
+                        pages = 2;
+                        liveAttentionListview.refreshComplete();
+                    } else if (isRefreshStatus == 2) {
+                        liveAttentionListview.loadMoreComplete();
                     }
+                    if (allRows.size() == 0) {
+                        allRows.addAll(rows);
+                    } else {
+                        allRows.addAll(allRows.size(), rows);
+                    }
+                    if ("0".equals(liveType)) {
+                    } else {
+                        Collections.sort(allRows, comp);
+                    }
+                    attentionOrFansRecyAdapter.refresh(allRows);
+
                 }
 
             }
@@ -330,8 +327,8 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
             @Override
             public void onItemClick(int id) {
                 Intent intent = new Intent(LiveAttentionOrFansActivity.this, LiveHomePageActivity.class);
-                intent.putExtra("userId",String.valueOf(id));
-              //  intent.putExtra("back","2");
+                intent.putExtra("userId", String.valueOf(id));
+                //  intent.putExtra("back","2");
                 startActivity(intent);
                 finish();
             }
@@ -349,13 +346,12 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 return -1;
             }
 
-            return lhs.getAttentionVO().getStatus()-rhs.getAttentionVO().getStatus();
+            return lhs.getAttentionVO().getStatus() - rhs.getAttentionVO().getStatus();
         }
     };
 
 
-
-    public  class  XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
+    public class XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
 
         @Override
         public void onRefresh() {
@@ -376,9 +372,6 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         }
 
     }
-
-
-
 
 
     boolean isFirstLoadData = true;
@@ -402,7 +395,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
             pages = pages + 1;
         } else {
             Toast.makeText(LiveAttentionOrFansActivity.this, "没有更多数据", Toast.LENGTH_SHORT).show();
-       //     liveAttentionListview.stopLoadMore();
+            //     liveAttentionListview.stopLoadMore();
         }
 
     }

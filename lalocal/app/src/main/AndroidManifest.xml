@@ -188,7 +188,7 @@
         <!-- android:value="${CATEGORY}" /> -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="a8f4963ecfc34fa65f74c186ec6bab7a" />
+            android:value="1e017a0e358e7dcc6793beda9888be87" />
 
         <service android:name="com.amap.api.location.APSService" />
 

@@ -33,7 +33,6 @@ import java.util.Map;
  */
 public class MsgViewHolderChat extends TViewHolder{
     private ChatRoomMessage message;
-
     private TextView bodyText;
     private TextView nameText;
     private ImageView itenImage;
@@ -48,6 +47,7 @@ public class MsgViewHolderChat extends TViewHolder{
     private String disableSendMsgUserId;
     private String adminSendMsgUserId;
 
+
     @Override
     protected int getResId() {
         return R.layout.message_item_text;
@@ -59,8 +59,6 @@ public class MsgViewHolderChat extends TViewHolder{
         itenImage = findView(R.id.nim_message_item_iv);
         messageItem = findView(R.id.message_item_text_item);
         itemLayout = findView(R.id.message_item_text_wang);
-
-
     }
 
     @Override
@@ -76,12 +74,8 @@ public class MsgViewHolderChat extends TViewHolder{
         adminSendMsgUserId=null;
         message = (ChatRoomMessage) item;
         fromAccount = message.getFromAccount();
-        if (LiveConstant.ROLE==0){
-            messageItem.setBackgroundResource(0);//用户端
-        }else{//主播端
-            messageItem.setBackgroundResource(R.drawable.live_master_im_item_bg);
-            messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
-        }
+        messageItem.setBackgroundResource(R.drawable.live_master_im_item_bg);
+        messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
         Map<String, Object> remoteExtension = message.getRemoteExtension();
         if (remoteExtension != null) {
             Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
@@ -143,33 +137,38 @@ public class MsgViewHolderChat extends TViewHolder{
         switch (styles){
             case "0":
                 itemContent = message.getContent();
-                if(LiveConstant.ROLE==0){
-                    textColor="#ffffff";
-                }else{
-                    textColor="#190f00";
-                }
+                textColor="#99190f00";
+                break;
+            case "1":
+                itemContent=message.getContent();
+              //  textColor="#97d3e9";
+                textColor="#99190f00";
                 break;
             case "2"://点赞
                 itemContent="给主播点了个赞";
-                textColor="#97d3e9";
-
+              //  textColor="#97d3e9";
+                textColor="#99190f00";
                 break;
             case "6"://禁言
-                itemContent= message.getContent();;
-                textColor="#97d3e9";
+                itemContent= message.getContent();
+                textColor="#99190f00";
+             //   textColor="#97d3e9";
 
                 break;
             case "7":
-                itemContent= message.getContent();;
-                textColor="#97d3e9";
+                itemContent= message.getContent();
+                textColor="#99190f00";
+            //    textColor="#97d3e9";
                 break;
             case "8":
                 itemContent= message.getContent();
-                textColor="#97d3e9";
+          //      textColor="#97d3e9";
+                textColor="#99190f00";
                 break;
             case "9":
-                itemContent= message.getContent();;
-                textColor="#97d3e9";
+                itemContent= message.getContent();
+             //   textColor="#97d3e9";
+                textColor="#99190f00";
                 break;
             case "10":
                 GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
@@ -183,7 +182,8 @@ public class MsgViewHolderChat extends TViewHolder{
                 break;
             case "12":
                 itemContent= message.getContent();
-                textColor="#97d3e9";
+              //  textColor="#97d3e9";
+                textColor="#99190f00";
                 break;
 
 
@@ -203,14 +203,17 @@ public class MsgViewHolderChat extends TViewHolder{
                }else{
                    userId1=userId;
                }
-                CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
-                dialog.show();
+                AppLog.i("TAG","点击公屏itme,获取用户id:"+userId1+"    userId:"+userId);
+              if(LiveConstant.isUnDestory){
+                    CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
+                    dialog.show();
+                }
+
             }
         });
 
         AppLog.i("TAG","creatorAccount:"+creatorAccount+"    itemContent:"+itemContent);
         setNameTextView(creatorAccount,itemContent,textColor,styles);
-
      }
 
     private SpannableStringBuilder textviewSetContent(String text,String textColor) {
@@ -241,6 +244,8 @@ public class MsgViewHolderChat extends TViewHolder{
                         contentItem="我 :  ,.,  "+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
                         contentItem="主播 :  ,.,  "+itemContent;
+                        messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
+                        textColor="#99190f00";
                     } else{
                         contentItem=message.getChatRoomMessageExtension().getSenderNick()+" :  ,.,  "+itemContent;
                     }

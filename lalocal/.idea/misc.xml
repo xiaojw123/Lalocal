@@ -43,12 +43,11 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-<<<<<<< HEAD
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">
         <settings>
-          <last-edited>1.7</last-edited>
+          <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -60,6 +59,4 @@
       </state>
     </states>
   </component>
-=======
->>>>>>> dde7e9abb33eba8fe394b617a47610042e825d4a
 </project>

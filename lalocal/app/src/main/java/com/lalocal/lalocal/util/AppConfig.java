@@ -344,6 +344,10 @@ public class AppConfig {
     public  static final String getPerpetualMute(String accid){
         return baseUrl+"users/block/"+accid;
     }
+    //发送消息
+    public static  final String sendMessage(){
+        return baseUrl+"system/msgs/validate";
+    }
 
     public static String getBaseUrl() {
         return baseUrl;
