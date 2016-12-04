@@ -5,6 +5,8 @@
     android:orientation="vertical"
     >
 
+
+
     <TextView
         android:id="@+id/item_hot_key"
         android:layout_width="match_parent"

@@ -24,7 +24,6 @@ public class KeyboardUtil {
 
     //关闭软键盘
     public static void hidenSoftKey(EditText editText) {
-        AppLog.print("hidenSoftKey____");
         isShow = false;
         Context context = editText.getContext();
         InputMethodManager imm = (InputMethodManager)

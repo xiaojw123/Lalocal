@@ -192,34 +192,9 @@
 
         <service android:name="com.amap.api.location.APSService" />
 
-        <activity android:name=".activity.SearchActivity" />
         <activity android:name=".test.TestActivity" />
         <activity android:name=".activity.DestinationAreaActivity" />
         <activity android:name=".activity.RouteDetailActivity" />
-        <!-- 设置环信应用的AppKey -->
-        <meta-data
-            android:name="EASEMOB_APPKEY"
-            android:value="lalocal#lalocal" />
-        <!-- 声明sdk所需的service SDK核心功能 -->
-        <service android:name="com.easemob.chat.EMChatService" />
-
-        <!-- 环信移动客服 -->
-        <!-- 聊天页面 -->
-        <activity
-            android:name=".easemob.ui.ChatActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-
-        <!-- 显示下载大图页面 -->
-        <activity
-            android:name="com.easemob.easeui.ui.EaseShowBigImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
-        <!-- 下载文件 -->
-        <activity
-            android:name="com.easemob.easeui.ui.EaseShowNormalFileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/horizontal_slide" />
         <activity android:name=".activity.BookActivity" />
         <activity android:name=".activity.PayActivity" />
 
@@ -337,7 +312,6 @@
         <activity android:name=".activity.RechargeActivity" />
         <activity android:name=".activity.ExchangeActivity" />
         <activity android:name=".activity.ChargePayActivity" />
-        <activity android:name=".activity.LiveSearchActivity" />
         <activity android:name=".activity.MyCouponActivity" />
         <activity android:name=".activity.ThemeActivity" />
         <activity android:name=".activity.MyFavoriteActivity" />
@@ -345,6 +319,7 @@
         <activity android:name=".activity.PersonalIntroActivity" />
         <activity android:name=".activity.MyLiveActivity" />
         <activity android:name=".activity.LiveDetailActivity" />
+        <activity android:name=".activity.AttentionActivity"/>
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
         <activity android:name=".live.entertainment.activity.PlayBackActivity" />
         <!-- GlideModule -->
@@ -362,7 +337,6 @@
         <activity android:name=".me.LRegister1Activity" />
         <activity android:name=".me.LPasswordForget2Activity" />
         <activity android:name=".me.LPasswordForget1Activity" />
-        <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
         <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity>

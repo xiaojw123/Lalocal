@@ -74,12 +74,10 @@ public class DividerGridItemDecoration extends RecyclerView.ItemDecoration {
             if (i <= 2) {
                 int top1 = child.getTop() + params.topMargin;
                 c.drawLine(left, top1, right, top1, paint);
+            } else if (i >= lastStartPos) {
+                int bottom1 = child.getBottom() + params.bottomMargin;
+                c.drawLine(left, bottom1, right, bottom1, paint);
             }
-
-//            else if (i>=lastStartPos){
-//                int bottom1=child.getBottom()+params.bottomMargin;
-//                c.drawLine(left,bottom1,right,bottom1,paint);
-//            }
 
 //       7
         }

@@ -37,7 +37,6 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.DampView;
 import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.adapter.MeItemAdapter;
 import com.lalocal.lalocal.view.decoration.DividerGridItemDecoration;
@@ -88,8 +87,6 @@ MeFragment extends BaseFragment {
     ViewGroup unLoginLayout;
     @BindView(R.id.fragment_me_login_stv)
     ShapeTextView loginStv;
-    @BindView(R.id.fragment_me_dmpview)
-    DampView dmDampView;
     @BindView(R.id.home_me_personal_info)
     LinearLayout perInfoCotainer;
     @BindString(R.string.login_prompt)
@@ -114,7 +111,6 @@ MeFragment extends BaseFragment {
         AppLog.print("meFragment_onCreateView____");
         View view = inflater.inflate(R.layout.fragment_me_new, container, false);
         ButterKnife.bind(this, view);
-        dmDampView.setImageView(headImg);
         if (itemAdapter == null) {
             itemAdapter = new MeItemAdapter(getMeItems(false));
             itemAdapter.setOnItemClickListener(recyclerClickListener);

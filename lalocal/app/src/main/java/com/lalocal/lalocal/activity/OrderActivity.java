@@ -21,8 +21,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
@@ -219,7 +217,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 break;
             case R.id.morefunction_customer_sevice:
                 popupWindow.dismiss();
-                startOnlineService();
+                CommonUtil.startCustomService(this);
                 break;
             case R.id.morefunction_cancel_order:
                 popupWindow.dismiss();
@@ -232,15 +230,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     }
 
 
-    public void startOnlineService() {
-        Intent intent = new Intent(this, ChatActivity.class);
-        if (mOrderDetail != null) {
-            intent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
-            intent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
-            intent.putExtra(Constant.ITEM_PRICE, String.valueOf(mOrderDetail.getFee()));
-        }
-        startActivity(intent);
-    }
 
     public void showPopWindow() {
         if (popupWindow == null) {

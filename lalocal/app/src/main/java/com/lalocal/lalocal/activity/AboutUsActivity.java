@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.util.AppConfig;
+import com.lalocal.lalocal.util.CommonUtil;
 
 /*
 * 关于我们页面*/
@@ -40,10 +40,10 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
                 sendEmail();
                 break;
             case R.id.about_us_phone_inner:
-                callPhone(AppConfig.IN_LAND_PHONE);
+                CommonUtil.callPhone(this,AppConfig.IN_LAND_PHONE);
                 break;
             case R.id.about_us_phone_outer:
-                callPhone(AppConfig.FOREIGEN_PHONE);
+                CommonUtil.callPhone(this,AppConfig.FOREIGEN_PHONE);
                 break;
             case R.id.about_us_use_clauses:
                 watchUseClauses();
@@ -71,11 +71,7 @@ public class AboutUsActivity extends BaseActivity implements View.OnClickListene
         startActivity(intent);
     }
 
-    public void callPhone(String phone) {
-        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-    }
+
 
 
 }

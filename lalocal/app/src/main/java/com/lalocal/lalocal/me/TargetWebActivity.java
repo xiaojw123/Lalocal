@@ -35,6 +35,17 @@ public class TargetWebActivity extends BaseActivity {
         webView.setWebViewClient(new TargetWebviewClient());
     }
 
+    private void cloaseVideo() {
+        String js = "var _video = document.getElementsByTagName('video')[0];\nif(_video.played){\n_video.pause();}";
+        webView.loadUrl("javascript:" + js);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        cloaseVideo();
+    }
+
     class TargetWebviewClient extends WebViewClient {
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {

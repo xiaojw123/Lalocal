@@ -34,7 +34,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
-import com.lalocal.lalocal.activity.LiveSearchActivity;
+import com.lalocal.lalocal.activity.GlobalSearchActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
@@ -57,7 +57,6 @@ import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.Constants;
-import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
@@ -340,7 +339,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 break;
             case R.id.live_search_fl:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_SEARCH);
-                Intent intent = new Intent(getActivity(), LiveSearchActivity.class);
+                Intent intent = new Intent(getActivity(), GlobalSearchActivity.class);
                 startActivity(intent);
                 break;
             case R.id.live_fragment_title_hot:
@@ -388,7 +387,7 @@ public class NewsFragment extends BaseFragment implements View.OnClickListener {
                 AppLog.print("click end____searchLayout Visible___" + xRecyclerView.getVisibility());
                 break;
             case live_search_bar:
-                Intent intent1 = new Intent(getActivity(), LiveSearchActivity.class);
+                Intent intent1 = new Intent(getActivity(), GlobalSearchActivity.class);
                 startActivity(intent1);
                 break;
         }

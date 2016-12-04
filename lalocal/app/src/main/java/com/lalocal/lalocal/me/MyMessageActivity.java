@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.me;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,12 +8,12 @@ import android.widget.RelativeLayout;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.TargetPage;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.adapter.MyMessageAdapter;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 
@@ -62,8 +61,7 @@ public class MyMessageActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.my_message_customer:
-                Intent intent = new Intent(this, ChatActivity.class);
-                startActivity(intent);
+                CommonUtil.startCustomService(this);
                 break;
         }
     }

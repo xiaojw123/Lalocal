@@ -35,8 +35,6 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.PariseResult;
@@ -86,8 +84,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     Button dayItemDetailBuyBtn;
     private boolean praiseFlag;
     private Object praiseId;
-    @BindView(R.id.route_detail_service)
-    TextView routeDetailService;
     @BindView(R.id.route_detail_mapview)
     MapView mapView;
     AMap aMap;
@@ -144,19 +140,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         routeDetailViewpagerRoute.setCallBack(pagerCallBack);
         RoutePagerAdpater pagerAdpater = new RoutePagerAdpater(views);
         routeDetailViewpagerRoute.setAdapter(pagerAdpater);
-    }
-
-    @OnClick(R.id.route_detail_service)
-    public void chatToLalocalService() {
-        // 进入主页面
-        MobHelper.sendEevent(this, MobEvent.DESTINATION_ROUTE_SERVICE);
-        int messageToIndex = Constant.MESSAGE_TO_DEFAULT;
-        Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra(
-                Constant.MESSAGE_TO_INTENT_EXTRA, messageToIndex);
-        intent.putExtra(Constant.ITEM_POST_URL, mRouteDetail.getPhoto());
-        intent.putExtra(Constant.ITEM_TITLE, mRouteDetail.getTitle());
-        startActivity(intent);
     }
 
     @OnClick(R.id.day_item_detail_title_container)

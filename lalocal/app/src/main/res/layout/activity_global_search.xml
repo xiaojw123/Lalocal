@@ -90,25 +90,6 @@
 
         </RelativeLayout>
 
-
-        <RelativeLayout
-            android:id="@+id/gsearch_tab_travelnote"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
-
-            <TextView
-                android:id="@+id/tab3"
-                style="@style/GSearchTabTextStyle"
-                android:text="@string/travel_note" />
-
-            <View
-                style="@style/GSearchTabIndexStyle"
-                android:layout_below="@+id/tab3" />
-
-        </RelativeLayout>
-
-
         <RelativeLayout
             android:id="@+id/gsearch_tab_special"
             android:layout_width="0dp"
@@ -130,19 +111,19 @@
 
 
         <RelativeLayout
-            android:id="@+id/gsearch_tab_goods"
+            android:id="@+id/gsearch_tab_travelnote"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/tab5"
+                android:id="@+id/tab3"
                 style="@style/GSearchTabTextStyle"
-                android:text="@string/goods" />
+                android:text="@string/travel_note" />
 
             <View
                 style="@style/GSearchTabIndexStyle"
-                android:layout_below="@+id/tab5" />
+                android:layout_below="@+id/tab3" />
 
         </RelativeLayout>
 
@@ -162,6 +143,26 @@
                 android:layout_below="@+id/tab6" />
 
         </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/gsearch_tab_goods"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tab5"
+                style="@style/GSearchTabTextStyle"
+                android:text="@string/goods" />
+
+            <View
+                style="@style/GSearchTabIndexStyle"
+                android:layout_below="@+id/tab5" />
+
+        </RelativeLayout>
+
+
 
 
     </LinearLayout>

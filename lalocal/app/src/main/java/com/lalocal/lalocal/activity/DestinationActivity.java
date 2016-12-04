@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -43,6 +45,7 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         Intent intent=new Intent(this,GlobalSearchActivity.class);
+        intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_DESTIATION);
         startActivity(intent);
     }
 

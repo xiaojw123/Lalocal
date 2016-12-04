@@ -189,6 +189,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="12dp"
             />
+
+
         <ImageView
             android:layout_width="@dimen/recommend_title_img_wdith"
             android:layout_height="@dimen/recommend_title_img_height"

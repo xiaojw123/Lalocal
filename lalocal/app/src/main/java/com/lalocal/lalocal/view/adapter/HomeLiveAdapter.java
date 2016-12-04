@@ -14,18 +14,16 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.AttentionActivity;
+import com.lalocal.lalocal.activity.GlobalSearchActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
-import com.lalocal.lalocal.live.entertainment.agora.Constant;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 
@@ -188,7 +186,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 @Override
                 public void onClick(View v) {
                     // 跳转我的关注页面查看更多关注
-                    mContext.startActivity(new Intent(mContext, AttentionActivity.class));
+                    mContext.startActivity(new Intent(mContext, GlobalSearchActivity.class));
                 }
             });
         }
