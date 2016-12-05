@@ -4,10 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -92,16 +89,7 @@ public class BarrageView extends RelativeLayout{
         checkAndRunTextBarrage();
     }
 
-    private SpannableStringBuilder textviewSetContent(String text) {
-        String[] textContent = text.split(":");
-        String nameText = textContent[0];
-        String contentText = textContent[1];
-        int length = nameText.length();
-        SpannableStringBuilder style=new SpannableStringBuilder(text);
-        style.setSpan(new ForegroundColorSpan(Color.parseColor("#ffaa2a")), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.WHITE), length+1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return  style;
-    }
+
 
     private void checkAndRunTextBarrage() {
         if (textCache.isEmpty()) {
@@ -126,10 +114,8 @@ public class BarrageView extends RelativeLayout{
         poll = textCache.poll();
         if (linearLayout == null) {
             linearLayout = buildTextView(poll, availableLine);
-            AppLog.i("TAG","弹幕容器linearLayout为空");
 
         } else {
-            AppLog.i("TAG","弹幕容器linearLayout不为空");
             linearLayout = reuseTextView(linearLayout, poll, availableLine);
         }
 
@@ -284,6 +270,7 @@ public class BarrageView extends RelativeLayout{
             @Override
             public void onAnimationEnd(Animator animation) {
                 onTextBarrageDone(target, line);
+
             }
 
             @Override
@@ -316,21 +303,11 @@ public class BarrageView extends RelativeLayout{
     private void onTextBarrageDone(final LinearLayout view, final int line) {
         AppLog.i("TAG","弹幕动画结束，移除view");
         removeView(view);
-
         textViewCache.add(new SoftReference<>(view));
 
         checkAndRunTextBarrage();
     }
 
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        super.onWindowVisibilityChanged(visibility);
-        if (View.GONE == visibility) {
-
-        } else {
-
-        }
-    }
 
     private void log(String message) {
         if (OUTPUT_LOG) {

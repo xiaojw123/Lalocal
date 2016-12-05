@@ -97,6 +97,7 @@
                 android:windowSoftInputMode="stateVisible"
                 android:background="@null"
                 android:paddingLeft="@dimen/live_padding_15dp"
+                android:maxLength="20"
                 />
             <TextView
                 android:id="@+id/live_input_location_tv"

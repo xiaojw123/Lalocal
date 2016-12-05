@@ -377,10 +377,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         @Override
         public void onSwitchPageType() {
             if (isFullScreen) {
-              //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 showFullScreen();
             } else {
-              //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 hideFullScreen();
             }
         }

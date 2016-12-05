@@ -38,7 +38,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
     public void refresh(List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars) {
         this.userAvatars = userAvatars;
         notifyDataSetChanged();
-
+        AppLog.i("TAG","头像列表刷新");
     }
 
     @Override
@@ -58,14 +58,16 @@ public class TouristAdapter extends RecyclerView.Adapter {
         }else{
             DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, userAvatarsBean.getAvatar());
         }
-        if(LiveConstant.result.size()>0&&position<5){
+
+        if(LiveConstant.result.size()>0&&LiveConstant.refreshManager){
             for(LiveManagerListBean bean :LiveConstant.result){
                if(bean.getId()==userAvatarsBean.getId()){
                    liveViewHodler.managerMark.setVisibility(View.VISIBLE);
                }
             }
-
-
+        }
+        if(position==19&&LiveConstant.refreshManager){
+            LiveConstant.refreshManager=false;
         }
 
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {

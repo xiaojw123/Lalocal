@@ -247,6 +247,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
         hintAdapter = new LocationHistoryAdapter(this, locationDatas);
         locationRecycler.addItemDecoration(new LinearItemDecoration(this));
         locationRecycler.setAdapter(hintAdapter);
+
         hintAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
@@ -311,7 +312,6 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 }else{
                     LiveActivity.locationY=false;
                     Toast.makeText(this,"请输入地址!",Toast.LENGTH_SHORT).show();
-
                 }
 
                 break;

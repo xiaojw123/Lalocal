@@ -72,7 +72,6 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.netease.nimlib.sdk.AbortableFuture;
@@ -207,24 +206,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     @Override
     protected void initUIandEvent() {
         event().addEventHandler(this);
-    }
-
-    private boolean isLocation = false;
-
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        int[] locations = new int[2];
-        if (quit != null && periscopeLayout != null && !isLocation) {//计算点赞动画的位置
-            isLocation = true;
-            quit.getLocationOnScreen(locations);
-            int x = locations[0];
-
-            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
-            int i = DensityUtil.dip2px(LivePlayerBaseActivity.this, 70);
-            layoutParams.leftMargin = x - (i / 4);
-            periscopeLayout.setLayoutParams(layoutParams);
-        }
     }
 
     @Override
@@ -450,7 +431,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         sendPlaneName = (TextView) findViewById(R.id.audience_gift_send_plane);
         marqueeView = (MarqueeView) findViewById(R.id.live_notifitation_marquee_view);
 
-
         //直播結束，分享
         overLiveShareFriends = (ImageView) findViewById(R.id.over_page_friends);
         overLiveShareWeibo = (ImageView) findViewById(R.id.over_page_weibo);
@@ -560,6 +540,113 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 showStatusUnUsual();
             }
         }
+        @Override
+        public void onSendMessage(int code) {
+            super.onSendMessage(code);
+            if(code==0){
+                final ChatRoomMessage message = (ChatRoomMessage) msg;
+                if (msg != null) {
+                    NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+                            .setCallback(new RequestCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void param) {
+                                    switch (messageType) {
+                                        case MessageType.barrage:
+                                            String content = msg.getContent();
+                                            Map<String, Object> remoteExtension = msg.getRemoteExtension();
+                                            if (remoteExtension != null) {
+                                                Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
+                                                while (iterator.hasNext()) {
+                                                    Map.Entry<String, Object> next = iterator.next();
+                                                    String key = next.getKey();
+                                                    Object value = next.getValue();
+                                                    if ("userId".equals(key)) {
+                                                        messageUserId = value.toString();
+                                                    }
+                                                }
+                                            }
+
+
+                                            barrageView.init(new BarrageConfig());
+                                            if (content != null) {
+                                                BarrageViewBean barrageViewBean = new BarrageViewBean();
+                                                barrageViewBean.setUserId(messageUserId);
+                                                barrageViewBean.setContent(content);
+                                                barrageViewBean.setSenderName("我");
+                                                barrageViewBean.setAvator(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
+                                                barrageView.addTextBarrage(barrageViewBean);
+                                            }
+                                            barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
+                                                @Override
+                                                public void getUserId(String userId) {
+                                                    showUserInfoDialog(userId, channelId ,false);
+                                                }
+                                            });
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.gift:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.ban:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.relieveBan:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.cancel:
+                                            if(channelId!=null){
+                                                contentLoader.getLiveManagerList(channelId);
+                                            }
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.managerLive:
+                                            if(channelId!=null){
+                                                contentLoader.getLiveManagerList(channelId);
+                                            }
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.leaveLive:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.challenge:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.text:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.closeLive:
+                                            messageListPanel.onMsgSend(message);
+                                            break;
+                                        case MessageType.kickOut:
+
+                                            break;
+                                        case MessageType.like:
+                                            if(message.getContent().equals("给主播点了个赞")){
+                                                messageListPanel.onMsgSend(message);
+                                            }else{
+                                                break;
+                                            }
+                                            break;
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(int code) {
+                                    if(code==13004){
+                                        Toast.makeText(LivePlayerBaseActivity.this,"你已被管理员禁言!",Toast.LENGTH_SHORT).show();
+                                    }
+                                    return;
+
+                                }
+
+                                @Override
+                                public void onException(Throwable exception) {
+                                }
+                            });
+                }
+            }
+
+        }
 
         @Override
         public void onManagerList(LiveManagerListResp liveManagerListResp) {
@@ -567,7 +654,8 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             if(liveManagerListResp.getReturnCode()==0){
                 LiveConstant.result.clear();
                 LiveConstant.result= liveManagerListResp.getResult();
-                isOnLineUsersCountChange = true;
+                LiveConstant.refreshManager=true;
+                AppLog.i("TAG","查看直播间管理员列表");
             }
         }
 
@@ -580,6 +668,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars = result.getUserAvatars();
             if (isFirstLoadding) {
                 tourisAdapter = new TouristAdapter(LivePlayerBaseActivity.this, userAvatars);
+                LiveConstant.refreshManager=true;
                 touristList.setAdapter(tourisAdapter);
                 isFirstLoadding = false;
                 tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
@@ -592,7 +681,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                             if (!isLogin) {
                                 showLoginViewDialog();
                             } else {
-
                                 String userIdItem =String.valueOf(member.getId());
                                 inputPanel.hideInputMethod();
                                 if (!isMasterAccount) {
@@ -601,7 +689,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                         Toast.makeText(LivePlayerBaseActivity.this, "该用户为游客!", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
-
                                     showUserInfoDialog(userIdItem, channelId ,false);
                                 }
                             }
@@ -612,6 +699,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
             } else if (userAvatars.size() > 0) {
                 tourisAdapter.refresh(userAvatars);
+                AppLog.i("TAG","基类刷线。。。。。。");
             }
 
         }
@@ -715,7 +803,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                         boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
                         if (logineds) {
                             contentLoader.liveGiftRanks(channelId);
-                            contentLoader.setCallBack(myCallBack);
                         } else {
                             showLoginViewDialog();
                         }
@@ -733,7 +820,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                         boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
                         if (logineds) {
                             contentLoader.liveGiftRanks(channelId);
-                            contentLoader.setCallBack(myCallBack);
+
                         } else {
                             showLoginViewDialog();
                         }
@@ -845,28 +932,34 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                     AppLog.i("TAG", "获取用户头像:" + senderAvatar);
                     String content = barrageMessage.getContent();
                     if (senderNick != null) {
-                        barrageView.init(new BarrageConfig());
-                        if (content != null) {
-                            BarrageViewBean barrageBean = new BarrageViewBean();
-                            barrageBean.setUserId(messageUserId);
-                            barrageBean.setContent(content);
-                            barrageBean.setAvator(senderAvatar);
-                            barrageBean.setSenderName(senderNick);
-                            barrageView.addTextBarrage(barrageBean);
+
+                            barrageView.setVisibility(View.VISIBLE);
+                            barrageView.init(new BarrageConfig());
+                            if (content != null) {
+                                BarrageViewBean barrageBean = new BarrageViewBean();
+                                barrageBean.setUserId(messageUserId);
+                                barrageBean.setContent(content);
+                                barrageBean.setAvator(senderAvatar);
+                                barrageBean.setSenderName(senderNick);
+                                barrageView.addTextBarrage(barrageBean);
+                            }
+
+                        messageListPanel.onIncomingMessage(messages);
+                        barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
+                            @Override
+                            public void getUserId(String userId) {
+                                showUserInfoDialog(userId, channelId ,false);
+                            }
+                        });
                         }
-                    }
-                    messageListPanel.onIncomingMessage(messages);
-                    barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
-                        @Override
-                        public void getUserId(String userId) {
-                            showUserInfoDialog(userId, channelId ,false);
-                        }
-                    });
+
                     break;
                 case MessageType.like:
                     periscopeLayout.addHeart();
                 //   marqueeView.start(((ChatRoomMessage) message).getChatRoomMessageExtension().getSenderNick() + "  给主播点了个赞");
-                    messageListPanel.onIncomingMessage(messages);
+                    if(message.getContent().equals("给主播点了个赞")){
+                        messageListPanel.onIncomingMessage(messages);
+                    }
                     break;
                 case MessageType.gift:
                     if ("003".equals(code)) {
@@ -884,7 +977,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
                     break;
                 case MessageType.managerLive:
+                    AppLog.i("TAG","接收到设置管理员的消息");
                     if(channelId!=null){
+                        AppLog.i("TAG","接收到设置管理员的消息，查看管理员列表");
                         contentLoader.getLiveManagerList(channelId);
                     }
                     messageListPanel.onIncomingMessage(messages);
@@ -1133,7 +1228,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         @Override
         public void run() {
             handler.removeCallbacks(this);
-            if(LiveConstant.isUnDestory&&isOnLineUsersCountChange){
+            if(LiveConstant.isUnDestory&&(isOnLineUsersCountChange||LiveConstant.refreshManager)){
                 isOnLineUsersCountChange=false;
                 if(roomId!=null&&liveNumber!=-1){
                     contentLoader.getLiveAvatar(channelId,liveNumber,isLiveMaster);
@@ -1293,109 +1388,13 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
      * Module proxy
      ***************************/
     String messageUserId = null;
+    IMMessage msg;
+    int messageType;
     @Override
     public boolean sendMessage(final IMMessage msg, final int type) {
+        this.msg=msg;
+        this.messageType=type;
         contentLoader.sendMessage(msg.getContent(),15);
-        contentLoader.setCallBack(new ICallBack() {
-            @Override
-            public void onSendMessage(int code) {
-                super.onSendMessage(code);
-                if(code==0){
-                    final ChatRoomMessage message = (ChatRoomMessage) msg;
-                    if (msg != null) {
-                        NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
-                                .setCallback(new RequestCallback<Void>() {
-                                    @Override
-                                    public void onSuccess(Void param) {
-                                        switch (type) {
-                                            case MessageType.barrage:
-                                                String content = msg.getContent();
-                                                Map<String, Object> remoteExtension = msg.getRemoteExtension();
-                                                if (remoteExtension != null) {
-                                                    Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
-                                                    while (iterator.hasNext()) {
-                                                        Map.Entry<String, Object> next = iterator.next();
-                                                        String key = next.getKey();
-                                                        Object value = next.getValue();
-                                                        if ("userId".equals(key)) {
-                                                            messageUserId = value.toString();
-                                                        }
-                                                    }
-                                                }
-                                                barrageView.init(new BarrageConfig());
-                                                if (content != null) {
-                                                    BarrageViewBean barrageViewBean = new BarrageViewBean();
-                                                    barrageViewBean.setUserId(messageUserId);
-                                                    barrageViewBean.setContent(content);
-                                                    barrageViewBean.setSenderName("我");
-                                                    barrageViewBean.setAvator(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
-                                                    barrageView.addTextBarrage(barrageViewBean);
-                                                }
-                                                barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
-                                                    @Override
-                                                    public void getUserId(String userId) {
-                                                        showUserInfoDialog(userId, channelId ,false);
-                                                    }
-                                                });
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.gift:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.ban:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.relieveBan:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.cancel:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.managerLive:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.leaveLive:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.challenge:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.text:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.closeLive:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                            case MessageType.kickOut:
-
-                                                break;
-                                            case MessageType.like:
-                                                messageListPanel.onMsgSend(message);
-                                                break;
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onFailed(int code) {
-                                        if(code==13004){
-                                            Toast.makeText(LivePlayerBaseActivity.this,"你已被管理员禁言!",Toast.LENGTH_SHORT).show();
-                                        }
-                                        return;
-
-                                    }
-
-                                    @Override
-                                    public void onException(Throwable exception) {
-                                    }
-                                });
-
-                    }
-                }
-
-            }
-        });
-
-
         return true;
     }
 
