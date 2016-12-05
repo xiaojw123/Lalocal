@@ -10,7 +10,6 @@
         android:layout_width="@dimen/search_result_item_img_width"
         android:layout_height="@dimen/search_result_item_img_height"
         android:scaleType="centerCrop"
-        android:src="@drawable/test_img"
         android:layout_marginTop="@dimen/dimen_size_20_dp"
         android:layout_marginBottom="@dimen/dimen_size_20_dp"
         />

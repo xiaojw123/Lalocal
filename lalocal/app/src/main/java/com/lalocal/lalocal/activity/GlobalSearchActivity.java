@@ -32,7 +32,6 @@ import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.KeyboardUtil;
 import com.lalocal.lalocal.view.adapter.LiveSearchAdapter;
@@ -145,7 +144,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     if (gsearchTabRoute.isSelected() && routeAdapter != null) {
                         adapter = routeAdapter;
                     }
-                    AppLog.print("l_click____adpter=" + adapter);
                     if (adapter != null) {
                         showDataResult();
                         gsearchResultXrv.setAdapter(adapter);
@@ -302,7 +300,9 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        KeyboardUtil.hidenSoftKey(gsearchEdit);
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            KeyboardUtil.hidenSoftKey(gsearchEdit);
+        }
         return false;
     }
 
@@ -444,7 +444,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
         @Override
         public void onGetGPlayBackSearch(int pageNum, int toalPages, List<LiveRowsBean> rowList) {
-            AppLog.print("onGetGPlayBackSearch___size__" + rowList.size() + ", pageNum___" + pageNum + ", toalPages__" + toalPages);
             mPageNum = pageNum;
             mTotalPages = toalPages;
             if (isRefresh) {
@@ -493,7 +492,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
         @Override
         public void onGetGUserSearch(String key, int pageNum, int toalPages, List<LiveFansOrAttentionRowsBean> beanList) {
-            AppLog.print("onGetGUserSearch_____" + beanList);
             mSearchKey = key;
             mPageNum = pageNum;
             mTotalPages = toalPages;
@@ -575,7 +573,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                             showEmptResult();
                         }
                     }
-                    AppLog.print("onGetMoreItems___articleAdapter_" + articleAdapter);
                     break;
                 case MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT:
                     if (isRefresh) {
@@ -608,7 +605,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                             showEmptResult();
                         }
                     }
-                    AppLog.print("onGetMoreItems___productAdapter_" + productAdapter);
                     break;
                 case MoreRecyclerAdapter.MODUEL_TYPE_ROUTE:
                     if (isRefresh) {
@@ -641,7 +637,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                             showEmptResult();
                         }
                     }
-                    AppLog.print("onGetMoreItems__routeAdapter__" + routeAdapter);
                     break;
             }
         }

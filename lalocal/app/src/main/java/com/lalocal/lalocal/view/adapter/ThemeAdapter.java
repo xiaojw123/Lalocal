@@ -57,7 +57,6 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return holder;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
@@ -84,9 +83,13 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (holder.layoutThemeTag.getVisibility() == View.VISIBLE) {
             if (type == Constants.THEME_AUTHOR) {
-                holder.layoutThemeTag.setBackgroundTintList(ColorStateList.valueOf(Color.BLACK));
+                Drawable bg = ContextCompat.getDrawable(mContext, R.drawable.nextsharemeeting_tag);
+                bg = DrawableUtils.tintDrawable(bg, ColorStateList.valueOf(Color.BLACK));
+                holder.layoutThemeTag.setBackgroundDrawable(bg);
             } else {
-                holder.layoutThemeTag.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.color_theme_tag_red)));
+                Drawable bg = ContextCompat.getDrawable(mContext, R.drawable.nextsharemeeting_tag);
+                bg = DrawableUtils.tintDrawable(bg, ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.color_theme_tag_red)));
+                holder.layoutThemeTag.setBackgroundDrawable(bg);
             }
             char[] tagTexts = tag.toCharArray();
             LinearLayout wrapperLayout = (LinearLayout) holder.layoutThemeTag.getChildAt(0);
