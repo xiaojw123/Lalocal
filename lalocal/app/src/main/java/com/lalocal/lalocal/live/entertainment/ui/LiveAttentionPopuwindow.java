@@ -10,11 +10,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.DrawableUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,7 +61,8 @@ public class LiveAttentionPopuwindow extends PopupWindow {
         ColorDrawable dw = new ColorDrawable();
         this.setBackgroundDrawable(dw);
         userId = String.valueOf(liveRowsBean.getUser().getId());
-
+        DrawableUtils.displayImg(context,liveAttentionDialogHead,liveRowsBean.getUser().getAvatar());
+        liveAttentionDialogName.setText(liveRowsBean.getUser().getNickName());
     }
     @OnClick({R.id.live_attention_dialog_cance,R.id.live_attention_dialog_btn})
     public  void clickBtn(View view){
@@ -69,7 +72,16 @@ public class LiveAttentionPopuwindow extends PopupWindow {
                 break;
             case R.id.live_attention_dialog_btn:
                 if(isAttention){
-                    contentLoader.getAddAttention(userId);
+
+                    if(UserHelper.isLogined(context)){
+                        contentLoader.getAddAttention(userId);
+                    }else{
+                        //去弹登录dialog
+                        if(onUserAttentionListener!=null){
+                            onUserAttentionListener.goLoginActivity();
+                        }
+                    }
+
                 }else {
                     contentLoader.getCancelAttention(userId);
                 }
@@ -115,8 +127,11 @@ public class LiveAttentionPopuwindow extends PopupWindow {
             }
         }
     }
+
+
     public  interface  OnUserAttentionListener {
         void getAttention();
+        void goLoginActivity();
     }
     OnUserAttentionListener onUserAttentionListener;
 

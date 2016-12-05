@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
@@ -49,7 +48,6 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        AppLog.print("LiveSearchAdapter   onBindViewHolder___updateIng__");
         if (mItems != null && mItems.size() > 0) {
             LiveRowsBean item = mItems.get(position);
             if (item != null) {

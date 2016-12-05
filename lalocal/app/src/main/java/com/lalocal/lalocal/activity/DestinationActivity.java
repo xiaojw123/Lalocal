@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -32,8 +34,6 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_destination);
-
-        // 使用ButterKnife框架
         ButterKnife.bind(this);
         // 初始化ContentLoader
         initLoader();
@@ -52,12 +52,9 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
 
     @OnClick({R.id.destion_search_btn})
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.destion_search_btn:
-                Intent intent=new Intent(this,GlobalSearchActivity.class);
-                startActivity(intent);
-                break;
-        }
+        Intent intent=new Intent(this,GlobalSearchActivity.class);
+        intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_DESTIATION);
+        startActivity(intent);
     }
 
     class DesCallBack extends ICallBack implements OnItemClickListener {

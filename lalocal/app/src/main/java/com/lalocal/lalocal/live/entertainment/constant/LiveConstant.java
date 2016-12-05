@@ -1,6 +1,11 @@
 package com.lalocal.lalocal.live.entertainment.constant;
 
 
+import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by android on 2016/9/4.
  */
@@ -15,6 +20,10 @@ public class LiveConstant {
     public static  int IDENTITY=0;
     public  static  int ROLE=-1;
     public  static String  ROOM_ID="";
+    public  static  boolean isUnDestory=false;
+    public  static  int newMessageCount=0;
+
+    public  static List<LiveManagerListBean> result=new ArrayList<>();
 
     public  static boolean enterRoom=false;
 

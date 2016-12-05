@@ -167,7 +167,6 @@ public class WorkerThread extends Thread {
 
     public final void joinChannel(final String channel, int uid) {
         if (Thread.currentThread() != this) {
-
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_JOIN_CHANNEL;
             envelop.obj = new String[]{channel};
@@ -213,7 +212,6 @@ public class WorkerThread extends Thread {
 
     public final void configEngine(int cRole, int vProfile) {
         if (Thread.currentThread() != this) {
-
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_CONFIG_ENGINE;
             envelop.obj = new Object[]{cRole, vProfile};
@@ -224,9 +222,7 @@ public class WorkerThread extends Thread {
         ensureRtcEngineReadyLock();
         mEngineConfig.mClientRole = cRole;
         mEngineConfig.mVideoProfile = vProfile;
-
         mRtcEngine.setVideoProfile(mEngineConfig.mVideoProfile, true);//设置本地视频属性
-
         mRtcEngine.setClientRole(cRole,"");//设置和切换用户模式
 
 
@@ -234,7 +230,6 @@ public class WorkerThread extends Thread {
 
     public final void preview(boolean start, SurfaceView view, int uid) {
         if (Thread.currentThread() != this) {
-
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_PREVIEW;
             envelop.obj = new Object[]{start, view, uid};
@@ -250,6 +245,7 @@ public class WorkerThread extends Thread {
             AppLog.i("TAG","开启le视频预览");
         } else {
             mRtcEngine.stopPreview();
+            AppLog.i("TAG","停止le视频预览");
         }
     }
 
@@ -262,7 +258,6 @@ public class WorkerThread extends Thread {
     private RtcEngine ensureRtcEngineReadyLock() {
         if (mRtcEngine == null) {
             //TODO 直播key
-
             String vendorKey ="2ca334d72fde41d38278c57878b29bc4";//生产环境
             if (TextUtils.isEmpty(vendorKey)) {
                 throw new RuntimeException("NEED TO use your vendor key, get your own key at https://dashboard.agora.io/");

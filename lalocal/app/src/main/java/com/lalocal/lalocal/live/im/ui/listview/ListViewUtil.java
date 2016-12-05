@@ -12,7 +12,7 @@ public class ListViewUtil {
 			return false;
 		}
 		
-	    if (messageListView.getLastVisiblePosition() >= messageListView.getAdapter().getCount() - 1 - messageListView.getFooterViewsCount()) {
+	    if (messageListView.getLastVisiblePosition() >= messageListView.getAdapter().getCount() - 2 - messageListView.getFooterViewsCount()) {
 	        return true;
 	    } else {
 	        return false;

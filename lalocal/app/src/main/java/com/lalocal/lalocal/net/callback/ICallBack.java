@@ -461,4 +461,6 @@ public abstract class ICallBack {
 
     }
 
+    public void onSendMessage(int code) {
+    }
 }

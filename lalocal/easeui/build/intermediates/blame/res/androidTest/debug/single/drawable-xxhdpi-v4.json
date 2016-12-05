@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\common_btn_back_nor.png",
+        "source": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\common_btn_back_nor.png"
+    },
+    {
+        "merged": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\vistor_header_default.png",
+        "source": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\vistor_header_default.png"
+    },
+    {
+        "merged": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\common_btn_back_pre.png",
+        "source": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\common_btn_back_pre.png"
+    },
+    {
+        "merged": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xxhdpi-v4\\service_header_default.png",
+        "source": "E:\\workspace\\AndroidStudio\\lalocal_Android\\lalocal\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-xxhdpi-v4\\service_header_default.png"
+    }
+]

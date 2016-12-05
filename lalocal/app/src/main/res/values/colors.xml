@@ -80,9 +80,11 @@
     <color name="live_text_color">#66ffffff</color>
     <color name="live_input_live_bg">#b2000000</color>
     <color name="live_start_tv">#ffaa2a</color>
+    <color name="live_start_nomal_tv">#99ffaa2a</color>
     <color name="live_barraview">#73000000</color>
     <color name="live_gift">#64000000</color>
     <color name="live_im_bg_color">#dff6cf4e</color>
+    <color name="live_im_item_bg_color">#99f6cf4e</color>
     <color name="live_im_item_name_color">#f6cf4e</color>
     <color name="live_beauty_on">#f5a623</color>
     <color name="live_im_item_content">#ffffff</color>

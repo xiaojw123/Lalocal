@@ -15,18 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.easemob.EMCallBack;
-import com.easemob.EMError;
-import com.easemob.chat.EMChatManager;
-import com.easemob.exceptions.EaseMobException;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.DemoHelper;
-import com.lalocal.lalocal.easemob.utils.CommonUtils;
 import com.lalocal.lalocal.help.TargetPage;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
@@ -56,7 +49,6 @@ import java.util.List;
 public class SplashActivity extends BaseActivity implements View.OnClickListener {
     private static final int MSG_UPDATE_TIME = 0x001;
     private static final int MSG_DISPAY_IMG = 0x002;
-    private static final int MSG_LOGIN_HUANXIN = 0x003;
     public static final int MSG_VERSION_UPDATE = 0x005;
     ImageView welImg;
     TextView timeTv;
@@ -95,7 +87,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         AppLog.print("onPermissionGranted___");
         ICallBack callBack = new MyCallBack();
         setLoaderCallBack(callBack);
-        loginChatService();
+        updateVersion();
     }
 
     @OnMPermissionDenied(PERMISSION_STGAT_CODE)
@@ -355,97 +347,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    private void loginChatService() {
-        // 自动生成账号
-        final String randomAccount = CommonUtils.getRandomAccount(this);
-        final String userPwd = Constant.DEFAULT_ACCOUNT_PWD;
-        createAccountToServer(randomAccount, userPwd, new EMCallBack() {
-
-            @Override
-            public void onSuccess() {
-                //登录环信服务器
-                AppLog.print("创建账号成功！！");
-                loginHuanxinServer(randomAccount, userPwd);
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-            }
-
-            @Override
-            public void onError(final int errorCode, final String message) {
-                if (errorCode == EMError.USER_ALREADY_EXISTS) {
-                    AppLog.print("用户已存在！！！");
-                    loginHuanxinServer(randomAccount, userPwd);
-                } else {
-                    if (errorCode == EMError.NONETWORK_ERROR) {
-                        AppLog.print("网络不可用！！！");
-                    } else if (errorCode == EMError.UNAUTHORIZED) {
-                        AppLog.print("无开放注册权限！！！");
-                    } else if (errorCode == EMError.ILLEGAL_USER_NAME) {
-                        AppLog.print("用户名非法！！！");
-                    } else {
-                        AppLog.print("注册失败！！！");
-                    }
-                    updateVersion();
-                }
-            }
-        });
-    }
-
-    //注册用户
-    private void createAccountToServer(final String uname, final String pwd, final EMCallBack callback) {
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    try {
-                        EMChatManager.getInstance().createAccountOnServer(uname, pwd);
-                    } catch (NullPointerException e) {
-                        updateVersion();
-                    }
-                    if (callback != null) {
-                        callback.onSuccess();
-                    }
-                } catch (EaseMobException e) {
-                    if (callback != null) {
-                        callback.onError(e.getErrorCode(), e.getMessage());
-                    }
-                }
-            }
-        });
-        thread.start();
-    }
-
-    public void loginHuanxinServer(final String uname, final String upwd) {
-        // login huanxin server
-        EMChatManager.getInstance().login(uname, upwd, new EMCallBack() {
-            @Override
-            public void onSuccess() {
-                try {
-                    DemoHelper.getInstance().setCurrentUserName(uname);
-                    DemoHelper.getInstance().setCurrentPassword(upwd);
-                    EMChatManager.getInstance().loadAllConversations();
-                    AppLog.print("环信账号登录成功。。。");
-                } catch (Exception e) {
-                    AppLog.print("环信账号登录异常");
-                }
-                updateVersion();
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                AppLog.print("环信账号登录过程中。。。");
-            }
-
-            @Override
-            public void onError(final int code, final String message) {
-                AppLog.print("环信聊天移动客服服务登录失败,errorMsg:" + message);
-                updateVersion();
-            }
-        });
-    }
 
     public class SplashHandler extends Handler implements ImageLoadingListener {
         @Override
@@ -471,9 +372,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                     break;
                 case MSG_DISPAY_IMG:
                     DrawableUtils.displayImg(SplashActivity.this, welImg, ((String) msg.obj), -1, this);
-                    break;
-                case MSG_LOGIN_HUANXIN:
-                    loginChatService();
                     break;
                 case MSG_VERSION_UPDATE:
                     mContentloader.versionUpdate(AppConfig.getVersionName(SplashActivity.this));

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -148,8 +149,11 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 String errorInfo = loc.getErrorInfo();
                 if("success".equals(errorInfo)){
                     //解析定位结果
+                    LiveActivity.locationY=true;
                     latitude = loc.getLatitude();
                     longitude = loc.getLongitude();
+                    LiveActivity.latitude=String.valueOf(latitude);
+                    LiveActivity.latitude=String.valueOf(longitude);
                     String result = loc.getCountry() + "·" + loc.getProvince() + "·" + loc.getCity();
                     LiveActivity.liveLocation=result;
                     liveLocationTv.setText("当前地位: " + result);
@@ -160,8 +164,6 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     liveLocationTv.setText("定位失败!");
                     LiveActivity.liveLocation="Lalocal神秘之地";
                 }
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -189,12 +191,9 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     }
                     if(hintAdapter!=null){
                         hintAdapter.updateItems(locationDatas);
-
                     }
-
                 }}
         }
-
     }
 
     @Override
@@ -235,11 +234,9 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                             hintAdapter.updateItems(locationDatas);
                         }
                     });
-
                 }
             }
         }).start();
-
     }
 
     private void initView() {
@@ -255,6 +252,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
             public void onItemClickListener(View view, int position) {
                 String text = (String) view.getTag();
                 LiveActivity.liveLocation = text;
+                LiveActivity.locationY=true;
                 try{
                     List<LiveHistoryItem> all = DataSupport.findAll(LiveHistoryItem.class);
                     if(all!=null&&all.size()>0){
@@ -289,30 +287,39 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 break;
             case R.id.live_input_location_tv:
                 String trim = liveLocationInputEt.getText().toString().trim();
-                LiveActivity.liveLocation =trim;
-                try{
-                    List<LiveHistoryItem> all = DataSupport.findAll(LiveHistoryItem.class);
-                    if(all!=null&&all.size()>0){
-                        for(LiveHistoryItem historyItem:all){
-                            if(historyItem.getName().equals(trim)){
-                                finish();
-                                return;
+                if(trim.length()>0){
+                    LiveActivity.locationY=true;
+                    LiveActivity.liveLocation =trim;
+                    try{
+                        List<LiveHistoryItem> all = DataSupport.findAll(LiveHistoryItem.class);
+                        if(all!=null&&all.size()>0){
+                            for(LiveHistoryItem historyItem:all){
+                                if(historyItem.getName().equals(trim)){
+                                    finish();
+                                    return;
+                                }
                             }
                         }
+                        LiveHistoryItem item = new LiveHistoryItem();
+                        item.setName(LiveActivity.liveLocation);
+                        item.save();
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                    LiveHistoryItem item = new LiveHistoryItem();
-                    item.setName(LiveActivity.liveLocation);
-                    item.save();
-                }catch (Exception e){
-                    e.printStackTrace();
+
+                    finish();
+                }else{
+                    LiveActivity.locationY=false;
+                    Toast.makeText(this,"请输入地址!",Toast.LENGTH_SHORT).show();
+
                 }
 
-                finish();
                 break;
             case R.id.live_location_complete:
                 finish();
                 break;
             case R.id.live_again_location:
+                initHistoryData();
                 startLocation();
                 break;
         }
@@ -365,7 +372,6 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
         if (oldBottom != 0 && bottom != 0 && (bottom - oldBottom > keyHeight)) {//隐藏
             liveLocationInputLayout.setVisibility(View.GONE);
             liveLocationNo.setVisibility(View.VISIBLE);
-
         }
     }
 }

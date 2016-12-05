@@ -344,6 +344,10 @@ public class AppConfig {
     public  static final String getPerpetualMute(String accid){
         return baseUrl+"users/block/"+accid;
     }
+    //发送消息
+    public static  final String sendMessage(){
+        return baseUrl+"system/msgs/validate";
+    }
 
     public static String getBaseUrl() {
         return baseUrl;
@@ -710,7 +714,7 @@ public class AppConfig {
         return baseUrl + "tags/search/themes?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
     }
     public static String getGUserSearchUrl(int pageSize,int pageNum,String nickName){
-        return baseUrl+"users?pageSize=+"+pageSize+"&pageNumber="+pageNum+"&nickName="+encodeString(nickName);
+        return baseUrl+"users?pageSize="+pageSize+"&pageNumber="+pageNum+"&nickName="+encodeString(nickName);
     }
 
     public static String encodeString(String name) {

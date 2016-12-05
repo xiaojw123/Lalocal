@@ -1059,14 +1059,14 @@ public class ContentLoader {
     }
 
     //修改直播
-    public void alterLive(String title, String userId, String photo, String announcement, String longitude, String latitude) {
+    public void alterLive(String title, String userId, String photo, String announcement, String longitude, String latitude,String address) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_ROOM);
         }
 
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
+        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude,address));
         requestQueue.add(request);
     }
 
@@ -1078,7 +1078,7 @@ public class ContentLoader {
 
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
+        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude,""));
         requestQueue.add(request);
     }
 
@@ -1312,6 +1312,16 @@ public class ContentLoader {
         request.setBodyParams(getLogBodyParams(logContent));
         requestQueue.add(request);
     }
+    //发消息
+    public void sendMessage(String content,int targetType){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.VALIDATE_MSGS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.sendMessage(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getMsgBodyParams(content,targetType));
+        requestQueue.add(request);
+    }
 
     //挑战详情
     public void getChallengeDetails(String challengeId) {
@@ -1428,7 +1438,6 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
-
 
     //产品详情
     public void productDetails(String targetId) {
@@ -2135,7 +2144,6 @@ public class ContentLoader {
                     case RequestCode.APP_LOG:
                         responseAppLog(json);
                         break;
-
                     case RequestCode.USER_MUTE:
                         responseUserMute(json);
                         break;
@@ -2162,6 +2170,10 @@ public class ContentLoader {
                     case RequestCode.GET_CHANNEL_REPORT:
                         responseChannelReport(json);
                         break;
+                    case RequestCode.VALIDATE_MSGS:
+                        responseMsg(jsonObj);
+                        break;
+
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -2442,6 +2454,12 @@ public class ContentLoader {
         }
 
 
+        //发消息
+        private void responseMsg(JSONObject jsonObj) {
+            int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+            AppLog.i("TAG","发消息反馈：");
+            callBack.onSendMessage(code);
+        }
         private void responseGetAreaDetailItems(JSONObject jsonObj, int moduleType) {
             JSONObject resJobj = jsonObj.optJSONObject(ResultParams.REULST);
             int pageNumber = resJobj.optInt(ResultParams.PAGE_NUMBER);
@@ -3155,6 +3173,8 @@ public class ContentLoader {
     }
 
 
+
+
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
             phone, String description) {
         JSONObject jsonObj = new JSONObject();
@@ -3408,6 +3428,18 @@ public class ContentLoader {
         return jsonObject.toString();
     }
 
+    //发消息
+    private String getMsgBodyParams(String content,int targetType){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg", content);
+            jsonObject.put("targetType", targetType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
 
     //上传在线人数
     public String getUserOnLines(String onLinesUser) {
@@ -3423,7 +3455,7 @@ public class ContentLoader {
 
 
     //修改直播
-    private String getAlterLiveRoom(String title, String photo, String announcement, String longitude, String latitude) {
+    private String getAlterLiveRoom(String title, String photo, String announcement, String longitude, String latitude,String address) {
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -3432,7 +3464,7 @@ public class ContentLoader {
             jsonObject.put("announcement", announcement);
             jsonObject.put("longitude", longitude);
             jsonObject.put("latitude", latitude);
-
+            jsonObject.put("address",address);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -3612,13 +3644,12 @@ public class ContentLoader {
         int LIVE_HOME_LIST = 237;
         int LIVE_PALY_BACK = 238;
         int LIVE_PALY_BACK_DETAILS = 239;
+        int APP_LOG = 240;
         int USER_MUTE=241;
         int PERPETUAL_MUTE=242;
         int LIVE_AVATAR=243;
         int USER_LEAVE_ROOM=244;
-        int APP_LOG = 240;
-
-
+        int VALIDATE_MSGS=245;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

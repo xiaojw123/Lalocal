@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.WalletContent;
@@ -91,8 +90,7 @@ public class RechargeActivity extends BaseActivity implements CustomTitleView.on
                 startActivityForResult(intent, KeyParams.REQUEST_CODE);
                 break;
             case R.id.recharge_doubt_container:
-                Intent doubtIntent = new Intent(this, ChatActivity.class);
-                startActivity(doubtIntent);
+                CommonUtil.startCustomService(this);
                 break;
 
         }

@@ -1,38 +1,23 @@
 package com.lalocal.lalocal.activity;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.daimajia.slider.library.Indicators.PagerIndicator;
-import com.daimajia.slider.library.SliderLayout;
-import com.daimajia.slider.library.SliderTypes.BaseSliderView;
-import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.fragment.NewsFragment;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
-import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
-import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
-import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -193,7 +178,7 @@ public class AttentionActivity extends BaseActivity {
     void clickBtn(View v) {
         switch (v.getId()) {
             case R.id.img_search:
-                startActivity(new Intent(AttentionActivity.this, LiveSearchActivity.class));
+                startActivity(new Intent(AttentionActivity.this, GlobalSearchActivity.class));
                 break;
             case R.id.img_back:
                 // 销毁activity

@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -15,6 +16,7 @@ import android.os.Message;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -375,8 +377,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         @Override
         public void onSwitchPageType() {
             if (isFullScreen) {
+              //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
                 showFullScreen();
             } else {
+              //  setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 hideFullScreen();
             }
         }
@@ -395,6 +399,33 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
 
     };
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (null == videoView) return;
+        /***
+         * 根据屏幕方向重新设置播放器的大小
+         */
+        if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().getDecorView().invalidate();
+            float height = com.android.tedcoder.wkvideoplayer.util.DensityUtil.getWidthInPx(this);
+            float width = com.android.tedcoder.wkvideoplayer.util.DensityUtil.getHeightInPx(this);
+            videoView.getLayoutParams().height = (int) width;
+            videoView.getLayoutParams().width = (int) height;
+        } else if (this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            final WindowManager.LayoutParams attrs = getWindow().getAttributes();
+            attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            getWindow().setAttributes(attrs);
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+            float width = com.android.tedcoder.wkvideoplayer.util.DensityUtil.getWidthInPx(this);
+            float height = com.android.tedcoder.wkvideoplayer.util.DensityUtil.dip2px(this, 200.f);
+            videoView.getLayoutParams().height = (int) height;
+            videoView.getLayoutParams().width = (int) width;
+        }
+    }
 
     //隐藏全屏
     private void hideFullScreen() {

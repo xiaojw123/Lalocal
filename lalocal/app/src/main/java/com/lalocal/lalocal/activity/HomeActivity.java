@@ -71,7 +71,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
         // 使用ButterKnife框架
         ButterKnife.bind(this);
-
         // 显示直播fragment
         showFragment(FRAGMENT_LIVE);
         // 检查更新

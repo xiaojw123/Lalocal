@@ -199,6 +199,7 @@ public class XRecyclerView extends RecyclerView {
 
     @Override
     public void setAdapter(Adapter adapter) {
+        setNoMore(false);
         mAdapter = adapter;
         mWrapAdapter = new WrapAdapter(adapter);
         super.setAdapter(mWrapAdapter);

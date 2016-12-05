@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
@@ -29,8 +27,6 @@ import butterknife.OnClick;
 
 public class PayCompleteActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
 
-    @BindView(R.id.pay_complete_service)
-    TextView customerService;
     @BindView(R.id.pay_complete_fee_tv)
     TextView orderFeeTv;
     @BindView(R.id.pay_complete_good_name)
@@ -118,18 +114,9 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
         }
     }
 
-    @OnClick({R.id.pay_complete_service, R.id.pay_complete_vieworder_btn})
+    @OnClick({R.id.pay_complete_vieworder_btn})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.pay_complete_service:
-                if (mOrderDetail != null) {
-                    Intent csIntent = new Intent(this, ChatActivity.class);
-                    csIntent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
-                    csIntent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
-                    csIntent.putExtra(Constant.ITEM_PRICE, String.valueOf(mOrderDetail.getFee()));
-                    startActivity(csIntent);
-                }
-                break;
             case R.id.pay_complete_vieworder_btn:
                 //// TODO: 2016/11/22
                 backToOrderDetail();

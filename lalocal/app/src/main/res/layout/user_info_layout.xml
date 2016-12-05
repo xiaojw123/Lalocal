@@ -75,7 +75,6 @@
                     android:maxLines="4"
                     android:paddingLeft="@dimen/author_padding_25dp"
                     android:paddingRight="@dimen/author_padding_25dp"
-                    android:text="神秘人拒绝透露自己的个人简介!"
                     android:textColor="@color/color_b3b3b3"
                     android:textSize="@dimen/live_text_13sp" />
                 <LinearLayout
