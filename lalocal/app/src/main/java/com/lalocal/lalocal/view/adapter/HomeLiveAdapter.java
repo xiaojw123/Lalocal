@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -173,6 +174,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
         // 我的关注
         private CardView cvAttention;
+        // 用户layout
+        private RelativeLayout layoutUser;
         // 我的关注头像
         private ImageView imgAvatar;
 
@@ -181,27 +184,75 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
             // -关联控件
             imgAvatar = (ImageView) itemView.findViewById(R.id.img_avatar);
+            layoutUser = (RelativeLayout) itemView.findViewById(R.id.layout_attention_user);
             cvAttention = (CardView) itemView.findViewById(R.id.card_view_attention);
+
+        }
+
+        /**
+         * 初始化数据
+         * @param bean
+         */
+        public void initData(final LiveRowsBean bean) {
+            // 获取直播间id
+            final int channelId = bean.getId();
+            // 获取用户id
+            final int userId = UserHelper.getUserId(mContext);
+            // 是否浏览过记录
+            final boolean isScanned = isScanned(userId, channelId);
+            // 判断是否已经浏览过
+            if (!isScanned) {
+                layoutUser.setVisibility(View.VISIBLE);
+                // 获取用户bean
+                LiveUserBean user = bean.getUser();
+                // 获取头像
+                String avatar = user.getAvatar();
+                // 如果接口有头像链接
+                if (!TextUtils.isEmpty(avatar)) {
+                    Glide.with(mContext).load(avatar).into(imgAvatar);
+                }
+            } else {
+                layoutUser.setVisibility(View.INVISIBLE);
+            }
 
             // 我的关注点击事件
             cvAttention.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // 保存用户浏览记录
+                    saveScanRecord(userId, channelId, isScanned);
                     // 跳转我的关注页面查看更多关注
                     mContext.startActivity(new Intent(mContext, AttentionActivity.class));
                 }
             });
         }
 
-        public void initData(final LiveRowsBean bean) {
+        /**
+         * 判断用户是否浏览过我的关注
+         * @param userId
+         * @param id
+         * @return
+         */
+        private boolean isScanned(int userId, int id) {
+            String key = "live_attention_" + userId;
+            int value = id;
+            int valueGet = SPCUtils.getInt(mContext, key);
+            if (valueGet == value) {
+                return true;
+            }
+            return false;
+        }
 
-            // 获取用户bean
-            LiveUserBean user = bean.getUser();
-            // 获取头像
-            String avatar = user.getAvatar();
-            // 如果接口有头像链接
-            if (!TextUtils.isEmpty(avatar)) {
-                Glide.with(mContext).load(avatar).into(imgAvatar);
+        /**
+         * 保存用户浏览记录
+         * @param userId
+         * @param id
+         */
+        private void saveScanRecord(int userId, int id, boolean isScanned) {
+            String key = "live_attention_" + userId;
+            int value = id;
+            if (!isScanned) {
+                SPCUtils.put(mContext, key, value);
             }
         }
     }

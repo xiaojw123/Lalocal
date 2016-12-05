@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.NewsFragment;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
@@ -87,6 +88,11 @@ public class AttentionActivity extends BaseActivity {
     private int roomId = 0;
     // 创建直播间标记
     public static final String CREATE_ROOMID = "createRoomId";
+
+    // 直播的直播间id
+    private int mLivingId = -1;
+    // 回放的直播间id
+    private int mPlaybackId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -196,6 +202,11 @@ public class AttentionActivity extends BaseActivity {
         }
     }
 
+    /**
+     * 浏览记录保存算法：
+     * 直播：有直播数据：存直播；无直播数据：存回放
+     * 回放：有直播数据：不存；无直播数据：存回放
+     */
     public class MyCallBack extends ICallBack {
         String reminfBack = "0";
 
@@ -214,9 +225,27 @@ public class AttentionActivity extends BaseActivity {
             try {
                 if (liveListDataResp.getReturnCode() == 0) {
                     List<LiveRowsBean> rows = liveListDataResp.getResult();
+                    int userId = UserHelper.getUserId(AttentionActivity.this);
                     if (rows == null) {
+                        mLivingId = -1;
+                        if (mPlaybackId != -1) {
+                            saveScanRecord(userId, mPlaybackId);
+                        }
                         return;
                     }
+
+                    // 没有直播数据，存回放
+                    if (rows.size() == 0) {
+                        mLivingId = -1;
+                        if (mPlaybackId != -1) {
+                            saveScanRecord(userId, mPlaybackId);
+                        }
+                    }
+
+                    // 有直播数据，存直播
+                    mLivingId = rows.get(0).getId();
+                    saveScanRecord(userId, mLivingId);
+
                     if (isRefresh) {
                         allRows.clear();
                         allAttenRows.clear();
@@ -255,14 +284,27 @@ public class AttentionActivity extends BaseActivity {
         public void onPlayBackList(String json, String attentionFlag) {
             LivePlayBackListResp livePlayBackListResp = new Gson().fromJson(json, LivePlayBackListResp.class);
             if (livePlayBackListResp.getReturnCode() == 0) {
+                // 获取用户id
+                int userId = UserHelper.getUserId(AttentionActivity.this);
                 LivePlayBackListResp.ResultBean result = livePlayBackListResp.getResult();
                 pageNumber = result.getPageNumber() + 1;
                 lastPage = result.isLastPage();
                 List<LiveRowsBean> rows = result.getRows();
                 AppLog.print("onPlayBackList size____" + rows.size());
                 if (rows == null) {
+                    mPlaybackId = -1;
                     return;
                 }
+
+                if (rows.size() == 0) {
+                    mPlaybackId = -1;
+                }
+
+                if (rows.size() > 0 && mLivingId == -1) {
+                    mPlaybackId = rows.get(0).getId();
+                    saveScanRecord(userId, mPlaybackId);
+                }
+
                 allRows.addAll(allRows.size(), rows);
                 allAttenRows.addAll(allAttenRows.size(), rows);
                 boolean isAttention = Boolean.parseBoolean(attentionFlag);
@@ -308,4 +350,33 @@ public class AttentionActivity extends BaseActivity {
             }
         }
     };
+
+    /**
+     * 判断用户是否浏览过我的关注
+     *
+     * @param userId
+     * @param id
+     * @return
+     */
+    private boolean isScanned(int userId, int id) {
+        String key = "live_attention_" + userId;
+        int value = id;
+        int valueGet = SPCUtils.getInt(AttentionActivity.this, key);
+        if (valueGet == value) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 保存用户浏览记录
+     *
+     * @param userId
+     * @param id
+     */
+    private void saveScanRecord(int userId, int id) {
+        String key = "live_attention_" + userId;
+        int value = id;
+        SPCUtils.put(AttentionActivity.this, key, value);
+    }
 }

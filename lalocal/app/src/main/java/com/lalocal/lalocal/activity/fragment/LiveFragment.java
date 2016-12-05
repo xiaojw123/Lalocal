@@ -123,7 +123,6 @@ public class LiveFragment extends BaseFragment {
 
 
     public LiveFragment() {
-        // Required empty public constructor
     }
 
     @Override
