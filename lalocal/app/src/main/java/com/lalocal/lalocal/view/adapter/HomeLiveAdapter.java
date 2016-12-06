@@ -44,16 +44,15 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
 
-    private LiveRowsBean mMyAttention;
+    private LiveUserBean mAttentionUser;
     private List<LiveRowsBean> mLivingList = new ArrayList<>();
     private List<LiveRowsBean> mPlaybackList = new ArrayList<>();
 
-    public HomeLiveAdapter(Context context, LiveRowsBean attention, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
+    public HomeLiveAdapter(Context context, LiveUserBean attention, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
         this.mContext = context;
-        this.mMyAttention = attention;
+        this.mAttentionUser = attention;
         this.mLivingList = livingList;
         this.mPlaybackList = playbackList;
-
     }
 
     /**
@@ -61,8 +60,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      *
      * @param attention
      */
-    public void refreshMyAttention(LiveRowsBean attention) {
-        this.mMyAttention = attention;
+    public void refreshMyAttention(LiveUserBean attention) {
+        this.mAttentionUser = attention;
         this.notifyDataSetChanged();
     }
 
@@ -108,7 +107,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case MY_ATTENTION:
-                ((AttentionViewHolder) holder).initData(mMyAttention);
+                ((AttentionViewHolder) holder).initData(mAttentionUser);
                 break;
             case LIVING_ITEM:
                 int livingIndex = getIndex(position);
@@ -123,7 +122,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        if (mMyAttention == null) {
+        if (mAttentionUser == null) {
             return mLivingList.size() + mPlaybackList.size();
         }
         return mLivingList.size() + mPlaybackList.size() + 1;
@@ -131,7 +130,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     public int getIndex(int position) {
         int index = position;
-        if (mMyAttention == null) {
+        if (mAttentionUser == null) {
             if (index >= mLivingList.size()) {
                 index -= mLivingList.size();
             }
@@ -148,7 +147,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        if (mMyAttention == null) {
+        int userId = UserHelper.getUserId(mContext);
+        if (userId == -1) {
             if (position < mLivingList.size()) {
                 return LIVING_ITEM;
             } else {
@@ -189,22 +189,17 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
         /**
          * 初始化数据
+         *
          * @param bean
          */
-        public void initData(final LiveRowsBean bean) {
-            // 获取直播间id
-            final int channelId = bean.getId();
-            // 获取用户id
-            final int userId = UserHelper.getUserId(mContext);
-            // 是否浏览过记录
-            final boolean isScanned = isScanned(userId, channelId);
-            // 判断是否已经浏览过
-            if (!isScanned) {
+        public void initData(final LiveUserBean bean) {
+            int id = -1;
+            int userId = -1;
+            boolean isScanned = false;
+            if (bean != null) {
                 layoutUser.setVisibility(View.VISIBLE);
-                // 获取用户bean
-                LiveUserBean user = bean.getUser();
                 // 获取头像
-                String avatar = user.getAvatar();
+                String avatar = bean.getAvatar();
                 // 如果接口有头像链接
                 if (!TextUtils.isEmpty(avatar)) {
                     Glide.with(mContext).load(avatar).into(imgAvatar);
@@ -217,8 +212,20 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             cvAttention.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // 保存用户浏览记录
-                    saveScanRecord(userId, channelId, isScanned);
+                    // 获取用户id
+                    int userId = UserHelper.getUserId(mContext);
+                    // 如果用户为登录状态
+                    if (userId != -1) {
+                        // 获取接口的时间key
+                        String baseGetKey = "live_index_timestamp_get_";
+                        // 查看消息的时间key
+                        String baseScanKey = "live_index_timestamp_scan_";
+                        // 获取最近一次拉取接口的时间戳
+                        String dateTime = SPCUtils.getString(mContext, baseGetKey + String.valueOf(userId));
+                        // 将拉取接口的时间戳存到最近一次查看消息的时间戳键值对里
+                        SPCUtils.put(mContext, baseScanKey + String.valueOf(userId), dateTime);
+                    }
+
                     // 跳转我的关注页面查看更多关注
                     mContext.startActivity(new Intent(mContext, AttentionActivity.class));
                 }
@@ -227,6 +234,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
         /**
          * 判断用户是否浏览过我的关注
+         *
          * @param userId
          * @param id
          * @return
@@ -243,6 +251,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
         /**
          * 保存用户浏览记录
+         *
          * @param userId
          * @param id
          */

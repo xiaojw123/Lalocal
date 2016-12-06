@@ -214,6 +214,7 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
                 view = LayoutInflater.from(mContext).inflate(R.layout.home_recommend_category_item, parent, false);
                 holder = new ADCategoryViewHolder(mContext, view, (RecyclerView) parent);
                 break;
+
             case LIVE: // 热门直播
                 view = View.inflate(mContext, R.layout.home_recommend_hotlive_item, null);
                 holder = new ChannelViewHolder(mContext, view);

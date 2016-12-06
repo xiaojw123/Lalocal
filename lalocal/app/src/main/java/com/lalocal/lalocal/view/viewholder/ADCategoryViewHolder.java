@@ -77,6 +77,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
     public ADCategoryViewHolder(final Context context, View itemView, RecyclerView recyclerView) {
         super(itemView);
 
+        AppLog.i("TAH", "inti ADCategoryViewHolder");
         this.mContext = context;
         // 关联控件
         this.mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
@@ -138,10 +139,13 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) mRvRecommendList.getLayoutManager();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 if (firstVisibleItemPosition > 1) {
+                    AppLog.i("TAH", "1 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.stopAutoCycle();
                 } else {
+                    AppLog.i("TAH", "2 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.startAutoCycle();
                     mSliderAd.setFocusable(true);
+                    mDotContainer.setFocusable(true);
                 }
             }
         });
@@ -157,7 +161,10 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             mSliderAd.setVisibility(View.GONE);
             return;
         }
-        mAdList = ads;
+        mAdList.clear();
+        mAdList.addAll(ads);
+
+        mPrePosition = -1;
 
         // 获取广告栏的宽高
         int width = DensityUtil.getWindowWidth((Activity) mContext);
@@ -167,6 +174,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         int size = mAdList.size();
         // 移除所有小圆点
         mDotContainer.removeAllViews();
+        mSliderAd.removeAllSliders();
         for (int i = 0; i < size; i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(mContext);
             RecommendAdResultBean ad = mAdList.get(i);
@@ -181,7 +189,6 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             // 添加小圆点
             View point = new View(mContext);
             int bottomMargin = DensityUtil.dip2px(mContext, 20);
-            int horizontalMargin = DensityUtil.dip2px(mContext, 3);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     15, 15);
             params.leftMargin = 20;
@@ -201,35 +208,18 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-
-//                int size = mAdList.size();
-//                // 防止数组越界
-//                if (position >= size) {
-//                    position = (position + size) % size;
-//                    mSliderAd.setCurrentPosition(position);
-//                }
-//                AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
-//                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_WHITE_DOT);
-//                AppLog.i("TAG","after selected " + position);
-
-                AppLog.i("sdl", "position is " + position);
-                AppLog.i("sdl", "the zero child is " + (mDotContainer.getChildAt(0) != null ? "not null" : "null"));
-                AppLog.i("sdl", "the last child is " + (mDotContainer.getChildAt(position) != null ? "not null" : "null"));
+                AppLog.i("TAH", "position - " + position + "; preposition -* " + mPrePosition);
                 if (mDotContainer.getChildAt(0) != null && mDotContainer.getChildAt(position) != null) {
-                    AppLog.i("sdl", "all not null");
                     mDotContainer.getChildAt(position).setBackgroundResource(
                             R.drawable.icon_round_white_dot_selected);
-                    AppLog.i("sdl", "setSelected");
                     if (mPrePosition != -1) {
-                        AppLog.i("sdl", "preposition not null");
                         mDotContainer.getChildAt(mPrePosition).setBackgroundResource(
                                 R.drawable.icon_round_white_dot_normal);
-                        AppLog.i("sdl", "set normal " + mPrePosition);
                     }
                     mPrePosition = position;
-                    AppLog.i("sdl", "mPreposition is " + mPrePosition);
                 }
             }
+
         });
     }
 

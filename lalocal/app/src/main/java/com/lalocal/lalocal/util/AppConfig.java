@@ -756,4 +756,19 @@ public class AppConfig {
         AppLog.i("qn", "report url is " + baseUrl + "channels/report");
         return baseUrl + "channels/report";
     }
+
+    /**
+     * 2.2版本直播首页接口
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @param dateTime
+     * @return
+     */
+    public static String getChannelIndexTotal(String pageNum, String pageSize, String categoryId, String dateTime) {
+        String url = baseUrl + "channels/index/total?pageNumber=" + pageNum + "&pageSize=" +
+                pageSize + "&categoryId=" + categoryId + "&dateTime=" + dateTime;
+        AppLog.i("channelIndex", url);
+        return url;
+    }
 }
