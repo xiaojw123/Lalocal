@@ -89,6 +89,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="LIVE"
+                            android:textStyle="italic"
                             android:drawablePadding="@dimen/live_padding_5dp"
                             android:paddingLeft="@dimen/live_padding_5dp"
                             android:paddingRight="@dimen/live_padding_5dp"
@@ -100,6 +101,7 @@
                             android:drawablePadding="@dimen/live_padding_5dp"
                             android:paddingLeft="@dimen/live_padding_5dp"
                             android:paddingRight="@dimen/live_padding_5dp"
+                            android:textStyle="italic"
                             android:text="0"
                             android:textSize="@dimen/live_text_12sp" />
                     </LinearLayout>
@@ -220,7 +222,6 @@
                 android:layout_marginRight="@dimen/live_height_100dp"
                 android:layout_height="200dp"
                 android:layout_above="@id/live_nofitifation_layout"
-                android:layout_marginBottom="@dimen/author_padding_10dp"
                 android:cacheColorHint="@android:color/transparent"
                 android:divider="@null"
                 android:fadingEdge="none"

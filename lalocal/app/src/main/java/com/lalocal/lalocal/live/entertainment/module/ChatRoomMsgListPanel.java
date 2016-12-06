@@ -62,13 +62,16 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     private   Context context;
     private TextView headInfos;
     TextView newView;
+    String title;
+    private TextView infoRemind;
 
-    public ChatRoomMsgListPanel(Container container, View rootView, String content, Context context,TextView newView) {
+    public ChatRoomMsgListPanel(Container container, View rootView, String content,String title, Context context,TextView newView) {
         this.container = container;
         this.rootView = rootView;
         this.content=content;
         this.context=context;
         this.newView=newView;
+        this.title=title;
         init();
     }
 
@@ -104,11 +107,16 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
         View view= View.inflate(container.activity, R.layout.chat_head_items,null);
+        View view2= View.inflate(container.activity, R.layout.live_item_remind_layout,null);
         headInfos = (TextView) view.findViewById(R.id.chat_info_head);
+        infoRemind = (TextView) view2.findViewById(R.id.chat_info_remind);
 
         headInfos.setText("公告： "+content);
         headInfos.setVisibility(View.GONE);
+        infoRemind.setText(title);
+        infoRemind.setVisibility(View.GONE);
         messageListView.addHeaderView(view);
+        messageListView.addHeaderView(view2);
         messageListView.requestDisallowInterceptTouchEvent(true);
 
         messageListView.setMode(AutoRefreshListView.Mode.START);
@@ -134,6 +142,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     }
     public void setHeaderViewVisible(){
         headInfos.setVisibility(View.VISIBLE);
+        infoRemind.setVisibility(View.VISIBLE);
     }
     public void setHead(TextView textView){
         messageListView.addHeaderView(textView);

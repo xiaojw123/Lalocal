@@ -272,9 +272,15 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         channelId = String.valueOf(liveRowsBean.getId());
         playType = String.valueOf(liveRowsBean.getType());
         avatar = liveRowsBean.getUser().getAvatar();
+        String title = liveRowsBean.getTitle();
+        if(LivePlayerBaseActivity.this instanceof  LiveActivity){
+            title="开始直播";
+        }else{
+            title="正在直播： "+title;
+        }
         container = new Container(this, roomId, SessionTypeEnum.ChatRoom, this);
         if (messageListPanel == null) {
-            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, LivePlayerBaseActivity.this,newMessageRemind);
+            messageListPanel = new ChatRoomMsgListPanel(container, view, annoucement, title,LivePlayerBaseActivity.this,newMessageRemind);
         }
         // 礼物动画展示
         findGiftLayout();
@@ -583,6 +589,12 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                                 }
                                             });
                                             messageListPanel.onMsgSend(message);
+                                            if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_BARRAGE);
+                                            }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_BARRAGE);
+                                            }
+
                                             break;
                                         case MessageType.gift:
                                             messageListPanel.onMsgSend(message);
@@ -612,6 +624,11 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                             messageListPanel.onMsgSend(message);
                                             break;
                                         case MessageType.text:
+                                            if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_EDIT);
+                                            }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_EDIT);
+                                            }
                                             messageListPanel.onMsgSend(message);
                                             break;
                                         case MessageType.closeLive:
@@ -654,7 +671,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             if(liveManagerListResp.getReturnCode()==0){
                 LiveConstant.result.clear();
                 LiveConstant.result= liveManagerListResp.getResult();
-                LiveConstant.refreshManager=true;
+                isOnLineUsersCountChange=true;
                 AppLog.i("TAG","查看直播间管理员列表");
             }
         }
@@ -692,14 +709,12 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                     showUserInfoDialog(userIdItem, channelId ,false);
                                 }
                             }
-
                         }
                     }
                 });
 
             } else if (userAvatars.size() > 0) {
                 tourisAdapter.refresh(userAvatars);
-                AppLog.i("TAG","基类刷线。。。。。。");
             }
 
         }
@@ -708,7 +723,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
             if (liveGiftRanksResp.getReturnCode() == 0) {
-                firstClick = false;
+
                 List<TotalRanksBean> currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                 if (currentRanks != null && currentRanks.size() > 0) {
                     for (int i = 0; i < currentRanks.size(); i++) {
@@ -795,18 +810,24 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.live_master_info_layout:
-                    if(LivePlayerBaseActivity.this instanceof AudienceActivity){
-                        if(userId!=null&&channelId!=null){
-                            showUserInfoDialog(userId, channelId, true);
+                    if(UserHelper.isLogined(LivePlayerBaseActivity.this)){
+                        if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                            if(userId!=null&&channelId!=null){
+                                showUserInfoDialog(userId, channelId, true);
+                            }
+                        }else {
+                            boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                            if (logineds&&firstClick){
+                                firstClick = false;
+                                contentLoader.liveGiftRanks(channelId);
+                            } else {
+                                showLoginViewDialog();
+                            }
                         }
                     }else {
-                        boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
-                        if (logineds) {
-                            contentLoader.liveGiftRanks(channelId);
-                        } else {
-                            showLoginViewDialog();
-                        }
+                        showLoginViewDialog();
                     }
+
 
 
                     break;
@@ -819,8 +840,8 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                     if (firstClick&&LivePlayerBaseActivity.this instanceof AudienceActivity) {
                         boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
                         if (logineds) {
+                            firstClick = false;
                             contentLoader.liveGiftRanks(channelId);
-
                         } else {
                             showLoginViewDialog();
                         }
@@ -1173,7 +1194,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             creatorAccount = roomInfo.getCreator();
             ChatRoomMemberCache.getInstance().saveMyMember(member1);
             DrawableUtils.displayImg(LivePlayerBaseActivity.this, maseterHead, LivePlayerBaseActivity.this.avatar);
-
             if (marqueeView != null) {
                 marqueeView.start("登陆聊天室成功...");
             }
@@ -1228,7 +1248,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         @Override
         public void run() {
             handler.removeCallbacks(this);
-            if(LiveConstant.isUnDestory&&(isOnLineUsersCountChange||LiveConstant.refreshManager)){
+            if(LiveConstant.isUnDestory&&isOnLineUsersCountChange){
                 isOnLineUsersCountChange=false;
                 if(roomId!=null&&liveNumber!=-1){
                     contentLoader.getLiveAvatar(channelId,liveNumber,isLiveMaster);
@@ -1330,7 +1350,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             inputPanel.collapse(false);
         }
     }
-
     @Override
     public boolean isLongClickEnabled() {
         return false;
@@ -1341,8 +1360,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         List<BaseAction> actions = new ArrayList<>();
         return actions;
     }
-
-
     //显示礼物排行榜
     private void showGiftRanksPopuWindow(LiveGiftRanksResp liveGiftRanksResp) {
         giftsRankPopuWindow = new GiftsRankPopuWindow(LivePlayerBaseActivity.this, liveGiftRanksResp);

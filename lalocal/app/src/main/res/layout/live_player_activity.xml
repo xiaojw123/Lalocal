@@ -133,6 +133,8 @@
                                 android:drawableLeft="@drawable/peoplequantity_light_16"
                                 android:drawablePadding="@dimen/live_padding_5dp"
                                 android:text="0"
+                                android:textStyle="italic"
+                                android:textColor="@android:color/black"
                                 android:textSize="@dimen/live_text_12sp" />
 
                             <TextView
@@ -140,8 +142,11 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:drawableLeft="@drawable/livecrown_16"
+                                android:drawableRight="@drawable/livecrown_arrow"
                                 android:drawablePadding="@dimen/live_padding_5dp"
                                 android:text="榜单"
+                                android:textStyle="italic"
+                                android:textColor="@android:color/black"
                                 android:textSize="@dimen/live_text_12sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -271,7 +276,6 @@
                     android:layout_marginRight="@dimen/live_height_100dp"
                     android:layout_height="200dp"
                     android:layout_above="@id/live_nofitifation_layout"
-                    android:layout_marginBottom="10dp"
                     android:cacheColorHint="@android:color/transparent"
                     android:divider="@null"
                     android:fadingEdge="none"

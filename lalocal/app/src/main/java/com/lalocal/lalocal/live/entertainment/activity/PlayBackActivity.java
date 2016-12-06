@@ -120,7 +120,6 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
-
         targetId =liveRowsBean.getId();
         targetType = liveRowsBean.getType();
         praiseId = liveRowsBean.getPraiseId();
@@ -193,7 +192,6 @@ public class PlayBackActivity extends BaseActivity {
                 }else if((videoViewPlayer.getVisibility())==0){
                     videoViewPlayer.close();
                 }
-
                 finish();
                 break;
             case R.id.playback_top_share:
