@@ -50,7 +50,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     public static final String VERSION_RESULT = "version_result";
     ViewGroup lastSelectedTab;
     FragmentManager fm;
-//    Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
+    //    Fragment meFragment, newsFragment, distinationFragment, recommendFragment;
     private Fragment mFragLive;
     private Fragment mFragFind;
     private Fragment mFragMe;
@@ -76,6 +76,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         // 检查更新
         checkUpdate();
     }
+
     /**
      * 检查更新
      */
@@ -109,8 +110,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showFragment(FRAGMENT_ME);
                 break;
             case R.id.home_tab_search:
-                Intent intent=new Intent(this,GlobalSearchActivity.class);
-                startActivity(intent);
+                Intent intent = new Intent(this, GlobalSearchActivity.class);
+                startActivityForResult(intent,100);
                 break;
         }
     }
@@ -118,6 +119,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     /**
      * 显示某一个fragment
+     *
      * @param tab
      */
     private void showFragment(int tab) {
@@ -159,7 +161,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 break;
             case FRAGMENT_ME:
                 // 显示我fragment
-                if(mFragMe == null) {
+                if (mFragMe == null) {
                     mFragMe = new MeFragment();
                     transaction.add(R.id.home_fragment_container, mFragMe);
                 } else {
@@ -175,6 +177,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     /**
      * 隐藏fragment
+     *
      * @param transaction
      */
     private void hideFragments(FragmentTransaction transaction) {
@@ -279,7 +282,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 //
 //    }
 
-//    private void setSelectedTab(ViewGroup container) {
+    //    private void setSelectedTab(ViewGroup container) {
 //        if (lastSelectedTab != null) {
 //            setTabStatus(lastSelectedTab, false);
 //        }
@@ -302,6 +305,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     /**
      * 跳转到某一个Fragment
+     *
      * @param position
      */
     public void goToFragment(int position) {
@@ -461,7 +465,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
 
     protected static final int REQUEST_CODE = 1;
-
 
 
     @Override

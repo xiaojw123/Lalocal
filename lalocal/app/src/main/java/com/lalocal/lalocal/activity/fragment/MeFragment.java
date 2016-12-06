@@ -37,6 +37,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.view.ReboundScrollView;
 import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.adapter.MeItemAdapter;
 import com.lalocal.lalocal.view.decoration.DividerGridItemDecoration;
@@ -95,6 +96,8 @@ MeFragment extends BaseFragment {
     String defaultDecription;
     @BindView(R.id.fragment_me_rlv)
     RecyclerView itemRlv;
+    @BindView(R.id.fragment_me_rsv)
+    ReboundScrollView reboundScrollView;
     MeItemAdapter itemAdapter;
 
 
@@ -163,9 +166,9 @@ MeFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         AppLog.print("meFragment_onHiddenChanged____" + hidden);
-        if (!hidden) {
-            initLogin();
-        }
+//        if (!hidden) {
+//            initLogin();
+//        }
     }
 
     @Override
@@ -188,8 +191,10 @@ MeFragment extends BaseFragment {
 
     private void updateFragmentView(boolean isLogined, User user) {
         if (isLogined && user != null) {
-            loginLayout.setVisibility(View.VISIBLE);
-            unLoginLayout.setVisibility(View.GONE);
+            if (loginLayout.getVisibility() != View.VISIBLE) {
+                loginLayout.setVisibility(View.VISIBLE);
+                unLoginLayout.setVisibility(View.GONE);
+            }
             String description = user.getDescription();
             if (TextUtils.isEmpty(description)) {
                 loginPrompt.setText(defaultDecription);
@@ -237,11 +242,11 @@ MeFragment extends BaseFragment {
             }
             homeMeFollowNum.setText(user.getAttentionNum());
             homeMeFansNum.setText(user.getFansNum());
-            mContentloader.getMessageCount();
+//            mContentloader.getMessageCount();
         } else {
             unLoginLayout.setVisibility(View.VISIBLE);
             loginLayout.setVisibility(View.GONE);
-            updateMessageCount(null);
+//            updateMessageCount(null);
         }
 
     }

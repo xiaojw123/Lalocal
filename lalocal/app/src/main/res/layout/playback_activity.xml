@@ -18,7 +18,7 @@
             android:layout_margin="0dp"
             android:gravity="center"
             android:layout_centerInParent="true"
-           >
+            >
         </com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer>
 
         <com.android.tedcoder.wkvideoplayer.view.PlayBackPlayer
@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
            >
+
             <LinearLayout
                 android:id="@+id/playback_master_info_layout"
                 android:layout_width="@dimen/live_height_119dp"
@@ -83,7 +84,7 @@
                 android:id="@+id/playback_quit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-               android:layout_centerInParent="true"
+                android:layout_centerInParent="true"
                 android:layout_alignParentRight="true"
                 android:paddingRight="@dimen/live_padding_10dp"
                 android:src="@drawable/peopleliving_quit"/>
@@ -101,32 +102,32 @@
 
 
 
-<RelativeLayout
-    android:id="@+id/playback_loading_page"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-  >
-    <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
-        android:id="@+id/play_loading_page_bg"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-    <LinearLayout
-        android:id="@+id/xlistview_header_anim"
-        android:layout_width="120dp"
-        android:layout_height="80dp"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:background="@drawable/loading_anim_bg">
-        <com.cunoraz.gifview.library.GifView
-            android:id="@+id/loading_live_imag"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            custom:gif="@drawable/loading"
-            />
-    </LinearLayout>
-</RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/playback_loading_page"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <com.lalocal.lalocal.live.im.ui.blur.BlurImageView
+                android:id="@+id/play_loading_page_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+            <LinearLayout
+                android:id="@+id/xlistview_header_anim"
+                android:layout_width="120dp"
+                android:layout_height="80dp"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:background="@drawable/loading_anim_bg">
+                <com.cunoraz.gifview.library.GifView
+                    android:id="@+id/loading_live_imag"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:scaleType="centerCrop"
+                    custom:gif="@drawable/loading"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

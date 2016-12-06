@@ -37,6 +37,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.lalocal.lalocal.R.id.exchage_btn;
+import static com.lalocal.lalocal.R.id.exchage_score_edit;
 
 public class ExchangeActivity extends BaseActivity implements TextWatcher, CustomTitleView.onBackBtnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
     private static String FORMART_EXCHARGE_PROMPT = "%1$d游票马上要兑换成%2$s乐钻啦";
@@ -44,7 +45,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     TextView exchageScoreNumTv;
     @BindView(R.id.exchage_gold_num_tv)
     TextView exchageGoldNumTv;
-    @BindView(R.id.exchage_score_edit)
+    @BindView(exchage_score_edit)
     EditText exchageScoreEdit;
     @BindView(exchage_btn)
     Button exchageBtn;
@@ -108,6 +109,14 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
                     long socre = Long.parseLong(socreText);
                     socre *= 100;
                     final long finalSocre = socre;
+                    if (finalSocre>mWalletCont.getScore()){
+                        CustomDialog dialog=new CustomDialog(this);
+                        dialog.setTitle("提示");
+                        dialog.setMessage("游票不足....");
+                        dialog.setNeturalBtn("知道了",null);
+                        dialog.show();
+                        return;
+                    }
                     CustomDialog dialog = new CustomDialog(this);
                     dialog.setTitle("兑换");
                     dialog.setMessage(String.format(FORMART_EXCHARGE_PROMPT, socre, exchageGoldNumTv.getText().toString()));
@@ -144,12 +153,15 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if (s.length() > 0) {
+            unitTv.setTextColor(getResources().getColor(R.color.color_1a));
             exchageBtn.setEnabled(true);
             long scoreNum = Long.parseLong(s.toString());
             exchageGoldNumTv.setText(CommonUtil.formartNum(scoreNum * scale));
         } else {
+            unitTv.setTextColor(getResources().getColor(R.color.color_d9));
             exchageBtn.setEnabled(false);
             exchageGoldNumTv.setText("0");
+
         }
     }
 

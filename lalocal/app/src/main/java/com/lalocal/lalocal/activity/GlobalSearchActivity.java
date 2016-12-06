@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -74,6 +75,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     TextView searchEmptyTv;
     @BindView(R.id.gsearch_hint_cotainer)
     LinearLayout hintContainer;
+//    @BindView(R.id.gsearch_result_vp)
+//    ViewPager mViewPager;
     int mPageNum, mTotalPages;
     String mSearchKey, lastKey;
     boolean isRefresh, isLoadMore, isInit, isRwq;
@@ -105,6 +108,47 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         gsearchResultXrv.setOnTouchListener(this);
         gsearchEdit.setOnEditorActionListener(this);
         mContentloader.getSearhHot();
+    }
+
+//    private void initViewPager(List<BaseRecyclerAdapter> adapterList) {
+//        List<XRecyclerView> mViews = new ArrayList<>();
+//        for (BaseRecyclerAdapter adapter : adapterList) {
+//            XRecyclerView mXRecyclerView = new XRecyclerView(this);
+//            mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//            mXRecyclerView.setAdapter(adapter);
+//            mViews.add(mXRecyclerView);
+//        }
+//        mViewPager.setAdapter(new SearchPageAdapter(mViews));
+//    }
+
+    class SearchPageAdapter extends PagerAdapter {
+        List<XRecyclerView> mViews;
+
+        public SearchPageAdapter(List<XRecyclerView> views) {
+            mViews = views;
+        }
+
+        @Override
+        public int getCount() {
+            return mViews.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+            XRecyclerView view = mViews.get(position);
+            container.addView(view);
+            return view;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            container.removeView(mViews.get(position));
+        }
     }
 
 

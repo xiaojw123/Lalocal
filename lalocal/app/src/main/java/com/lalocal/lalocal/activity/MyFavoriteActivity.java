@@ -11,6 +11,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -181,12 +182,21 @@ public class MyFavoriteActivity extends BaseActivity implements XRecyclerView.Lo
                     case 10://专题
                         gotoSpecialDetail(item);
                         break;
+                    case 20://回放
+                        gotoLivePlay(item);
+                        break;
                 }
             }
 
 
         }
 
+    }
+
+    private void gotoLivePlay(FavoriteItem item) {
+        Intent intent = new Intent(this, PlayBackActivity.class);
+        intent.putExtra("id",String.valueOf(item.getTargetId()));
+        startActivityForResult(intent, 100);
     }
 
     private void gotoProductDetail(FavoriteItem item) {
@@ -221,9 +231,7 @@ public class MyFavoriteActivity extends BaseActivity implements XRecyclerView.Lo
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         AppLog.print("onActivityResult  rescode______"+resultCode);
-        if (resultCode == UPDATE_MY_DATA) {
-            mContentloader.getMyFavor(userId, token, 1);
-        }
+        mContentloader.getMyFavor(userId, token, 1);
 
     }
 }
