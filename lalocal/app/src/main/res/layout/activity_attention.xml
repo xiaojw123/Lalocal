@@ -46,11 +46,25 @@
         android:background="@color/color_191000"
         android:alpha="0.1" />
 
-    <com.lalocal.lalocal.view.CustomXRecyclerView
-        android:id="@+id/xrecyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@null"
-        android:overScrollMode="never"
-        android:scrollbars="none" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_tip"
+            android:visibility="invisible"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="快去关注旅行达人，看遍世界的美景吧~"/>
+
+        <com.lalocal.lalocal.view.CustomXRecyclerView
+            android:id="@+id/xrecyclerview"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </RelativeLayout>
 </LinearLayout>

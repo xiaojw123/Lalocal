@@ -146,4 +146,26 @@ public interface MobEvent {
     String ORDER_LIST_DELETE = "217_order_list_delete";
     String ORDER_REFUND = "217_order_refund";
     String ORDER_SUMBIT_REFUND = "217_order_sumbit_refund";
+    /*217新增*/
+    String ESTINATION_HOT_HIT_LIST="217_destination_hot_hit_list";//热门点击
+    String LIVE_ANCHOR_BEAUTY_OFF="217_live_anchor_beauty_off";//主播端美颜关
+    String LIVE_ANCHOR_BEAUTY_ON="217_live_anchor_beauty_on";//主播端美颜开
+    String LIVE_HOT="217_live_hot";//直播热门
+    String LIVE_RANK_AVATAR_CLICK="217_live_rank_avatar_click";//礼物榜单头像点击
+    String LIVE_USER_TASK_NEXT_CANCEL="217_live_user_task_next_cancel";//用户发起任务第二页关闭
+    /*220*/
+    String LIVE_LOCACTION_BUTTON = "220_live_location_button";//开启直播间地理位置按钮
+    String LIVE_LOCATION_MANUAL = "220_live_location_manual";//手动填写地理位置
+    String LIVE_LOCATION_BACK = "220_live_location_back";//直播位置返回
+    String LIVE_LOCATION_SURRE = "220_live_location_sure";//直播位置确定
+    String RECOMMEDN_LIVE = "220_recommend_live";//每日推荐直播
+    String RECOMMEDN_MORE = "220_recommend_more";//更多精彩按钮
+    String SEARCH_CANCEL = "220_search_cancel";//取消搜索,0
+    String SEARCH_TAG_LIST = "220_search_tag_list";//搜索标签
+    String SEARCH_HISTORY = "220_search_history";//搜索历史
+    String SEARCH_HOT = "220_search_hot";//搜索热门
+    String USER_LOGIN_BUTTON = "220_user_login_button";//个人页面登录按钮
+
+
+
 }

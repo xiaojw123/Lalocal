@@ -81,15 +81,6 @@
                 </LinearLayout>
 
             </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:alpha="0.1"
-                android:background="@color/color_191000"
-                android:layout_marginLeft="32dp"/>
-
-
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>

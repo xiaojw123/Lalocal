@@ -582,8 +582,7 @@ public class AppConfig {
 
     //用户历史直播
     public static String getUserLiveUrl(int userid, int pageNum) {
-        String url = baseUrl + "channels/users/" + userid + "/historys?pageNum=" + pageNum + "&pageSize=10";
-        AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
+        String url = baseUrl + "channels/users/" + userid + "/historys?pageNumber=" + pageNum + "&pageSize=10";
         return url;
 
     }
@@ -755,5 +754,20 @@ public class AppConfig {
     public static String getChannelReport() {
         AppLog.i("qn", "report url is " + baseUrl + "channels/report");
         return baseUrl + "channels/report";
+    }
+
+    /**
+     * 2.2版本直播首页接口
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @param dateTime
+     * @return
+     */
+    public static String getChannelIndexTotal(String pageNum, String pageSize, String categoryId, String dateTime) {
+        String url = baseUrl + "channels/index/total?pageNumber=" + pageNum + "&pageSize=" +
+                pageSize + "&categoryId=" + categoryId + "&dateTime=" + dateTime;
+        AppLog.i("channelIndex", url);
+        return url;
     }
 }

@@ -757,7 +757,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         boolean ok = info.isOK();
                         AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
                         AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败"));
-                        //  newxmlfile.delete();
+
 
                     }
                 }, null);

@@ -120,6 +120,7 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
+
         targetId =liveRowsBean.getId();
         targetType = liveRowsBean.getType();
         praiseId = liveRowsBean.getPraiseId();
@@ -178,7 +179,6 @@ public class PlayBackActivity extends BaseActivity {
                         @Override
                         public void onDialogClickListener() {
                             LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
-
                         }
                     });
                     customDialog.show();

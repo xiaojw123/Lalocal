@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
@@ -51,6 +53,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.LoadingListener, TextView.OnEditorActionListener, View.OnTouchListener {
+    private static final int ID_SEARCH_HISTORY = 0x11;
+    private static final int ID_SEARCH_HOT = 0x12;
     @BindView(R.id.gsearch_cancel_tv)
     TextView gsearchCancelTv;
     @BindView(R.id.gsearch_edit)
@@ -75,7 +79,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     TextView searchEmptyTv;
     @BindView(R.id.gsearch_hint_cotainer)
     LinearLayout hintContainer;
-//    @BindView(R.id.gsearch_result_vp)
+    //    @BindView(R.id.gsearch_result_vp)
 //    ViewPager mViewPager;
     int mPageNum, mTotalPages;
     String mSearchKey, lastKey;
@@ -156,6 +160,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.gsearch_cancel_tv:
+                MobHelper.sendEevent(this, MobEvent.SEARCH_CANCEL);
                 finish();
                 break;
             case R.id.gsearch_tab_live:
@@ -293,6 +298,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 return true;
             }
             mSearchKey = text;
+            MobHelper.sendEevent(this, MobEvent.SEARCH_TAG_LIST);
             searchReq();
             saveSearchHistory();
             return true;
@@ -402,6 +408,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     historyTv.setTextColor(res.getColor(R.color.color_50191000));
                     HistoryItem item = historyItems.get(i);
                     historyTv.setText(Html.fromHtml("<u>" + item.getName() + "</u>"));
+                    historyTv.setTag(R.id.search_id, ID_SEARCH_HISTORY);
                     historyTv.setTag(item.getName());
                     historyTv.setOnClickListener(hintClickListener);
                     hintContainer.addView(historyTv, hParams);
@@ -439,6 +446,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                                 TextView key2Tv = new TextView(GlobalSearchActivity.this);
                                 String key2 = hotKeys.get(nextPos);
                                 key2Tv.setTag(key2);
+                                key2Tv.setTag(R.id.search_id, ID_SEARCH_HOT);
                                 key2Tv.setOnClickListener(hintClickListener);
                                 key2Tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, res.getDimension(R.dimen.text_size_16_sp));
                                 key2Tv.setTextColor(res.getColor(R.color.color_50191000));
@@ -459,6 +467,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                             continue;
                         }
                     }
+                    keyTv.setTag(R.id.search_id, ID_SEARCH_HOT);
                     hintContainer.addView(keyTv, keyParams);
                 }
 
@@ -480,6 +489,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     LinearLayout.LayoutParams keyParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     keyParams.bottomMargin = (int) res.getDimension(R.dimen.dimen_size_10_dp);
                     keyText.setTag(key);
+                    keyText.setTag(R.id.search_id, ID_SEARCH_HOT);
                     keyText.setOnClickListener(hintClickListener);
                     hintContainer.addView(keyText, keyParams);
                 }
@@ -780,6 +790,15 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         public void onClick(View v) {
             Object tagObj = v.getTag();
             if (tagObj != null) {
+                Object idObj = v.getTag(R.id.search_id);
+                if (idObj != null) {
+                    int searchId = (int) idObj;
+                    if (searchId == ID_SEARCH_HISTORY) {
+                        MobHelper.sendEevent(GlobalSearchActivity.this, MobEvent.SEARCH_HISTORY);
+                    } else if (searchId == ID_SEARCH_HOT) {
+                        MobHelper.sendEevent(GlobalSearchActivity.this, MobEvent.SEARCH_HOT);
+                    }
+                }
                 mSearchKey = (String) tagObj;
                 gsearchEdit.setText(mSearchKey);
                 if (!isRwq) {

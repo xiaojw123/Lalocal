@@ -93,6 +93,7 @@
                             android:drawablePadding="@dimen/live_padding_5dp"
                             android:paddingLeft="@dimen/live_padding_5dp"
                             android:paddingRight="@dimen/live_padding_5dp"
+                            android:textColor="@android:color/black"
                             android:textSize="@dimen/live_text_12sp" />
                         <TextView
                             android:id="@+id/live_online_count"
@@ -103,6 +104,7 @@
                             android:paddingRight="@dimen/live_padding_5dp"
                             android:textStyle="italic"
                             android:text="0"
+                            android:textColor="@android:color/black"
                             android:textSize="@dimen/live_text_12sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -123,6 +125,7 @@
                         android:paddingLeft="@dimen/live_padding_5dp"
                         android:paddingRight="@dimen/live_padding_5dp"
                         android:drawablePadding="@dimen/live_padding_2dp"
+                        android:drawableRight="@drawable/livecrown_arrow"
                         android:text="@string/live_ranking_list"
                         />
                 </RelativeLayout>

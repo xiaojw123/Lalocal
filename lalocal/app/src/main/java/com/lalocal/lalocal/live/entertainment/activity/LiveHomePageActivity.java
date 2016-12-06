@@ -314,7 +314,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 // 设置文章tab颜色为未选中的颜色
                 tvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
                 // 隐藏文章选中标记
-                imgLiveSelected.setVisibility(View.INVISIBLE);
+                imgArticleSelected.setVisibility(View.INVISIBLE);
 
                 // viewpager滑动到直播
                 vpLiveArticle.setCurrentItem(TAB_LIVE);
@@ -327,7 +327,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 // 设置文章tab颜色为选中的颜色
                 tvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
                 // 显示文章选中标记
-                imgLiveSelected.setVisibility(View.VISIBLE);
+                imgArticleSelected.setVisibility(View.VISIBLE);
 
                 // viewpager滑动到文章
                 vpLiveArticle.setCurrentItem(TAB_ARTICLE);

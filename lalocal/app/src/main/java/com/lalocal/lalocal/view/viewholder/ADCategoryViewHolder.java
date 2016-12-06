@@ -68,7 +68,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
      */
     public ADCategoryViewHolder(final Context context, View itemView, RecyclerView recyclerView) {
         super(itemView);
-        AppLog.i("TAH","ADCategoryViewHolder");
+
         this.mContext = context;
         // 关联控件
         this.mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
@@ -129,12 +129,13 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 AppLog.i("TAH","录播图.....："+firstVisibleItemPosition);
                 if (firstVisibleItemPosition > 1) {
-                    AppLog.i("TAH","录播图：1");
+                    AppLog.i("TAH", "1 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.stopAutoCycle();
                 } else {
-                    AppLog.i("TAH","录播图：2");
+                    AppLog.i("TAH", "2 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.startAutoCycle();
                     mSliderAd.setFocusable(true);
+                    mDotContainer.setFocusable(true);
                 }
             }
         });
@@ -150,7 +151,11 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             mSliderAd.setVisibility(View.GONE);
             return;
         }
-        mAdList = ads;
+        mAdList.clear();
+        mAdList.addAll(ads);
+
+        mPrePosition = -1;
+
         // 获取广告栏的宽高
         int width = DensityUtil.getWindowWidth((Activity) mContext);
         int height = DensityUtil.dip2px(mContext, 200);
@@ -158,6 +163,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         // 获取列表大小
         int size = mAdList.size();
         // 移除所有小圆点
+        mDotContainer.removeAllViews();
         mSliderAd.removeAllSliders();
         for (int i = 0; i < size; i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(mContext);
@@ -173,7 +179,6 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
          /*   // 添加小圆点
             View point = new View(mContext);
             int bottomMargin = DensityUtil.dip2px(mContext, 20);
-            int horizontalMargin = DensityUtil.dip2px(mContext, 3);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     15, 15);
             params.leftMargin = 20;
@@ -193,7 +198,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                AppLog.i("TAH","position:"+position+" /  mPrePosition:"+mPrePosition);
+                AppLog.i("TAH", "position - " + position + "; preposition -* " + mPrePosition);
                 if (mDotContainer.getChildAt(0) != null && mDotContainer.getChildAt(position) != null) {
                     mDotContainer.getChildAt(position).setBackgroundResource(
                             R.drawable.icon_round_white_dot_selected);
@@ -204,6 +209,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                     mPrePosition = position;
                 }
             }
+
         });*/
     }
 
