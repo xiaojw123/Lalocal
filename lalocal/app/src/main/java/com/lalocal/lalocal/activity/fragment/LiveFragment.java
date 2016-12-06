@@ -154,6 +154,13 @@ public class LiveFragment extends BaseFragment {
         initLoader();
         // 初始化列表
         initXRecyclerView();
+        //创建日志文件夹
+        createLogFiles();
+    }
+
+    private void createLogFiles() {
+
+
     }
 
     /**
@@ -162,7 +169,6 @@ public class LiveFragment extends BaseFragment {
     private void initRecommendPage() {
         // 设置不可见
         mRecommendPage.setVisibility(View.GONE);
-
     }
 
     /**
@@ -173,7 +179,6 @@ public class LiveFragment extends BaseFragment {
         mContentLoader = new ContentLoader(getActivity());
         // 设置回调接口
         mContentLoader.setCallBack(new MyCallBack());
-
         mContentLoader.getHomeAttention();
         mContentLoader.getLivelist("", "");
         mContentLoader.getPlayBackLiveList("", 1, "");

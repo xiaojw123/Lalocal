@@ -69,6 +69,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.LogFileUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -86,7 +87,6 @@ import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONObject;
 
-import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
@@ -167,6 +167,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private int liveNumber;
     private String fileNam;
     private String logTime;
+    private String logFile;
 
 
     @Override
@@ -222,6 +223,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveContentLoader.setCallBack(liveCallBack);
         liveContentLoader.createLiveRoom();//直播接口
         viewById = findViewById(R.id.live_layout);
+
         //七牛云api
         uploadManager = new UploadManager();
         //获取屏幕高度
@@ -732,6 +734,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 userId = String.valueOf(liveRowsBean.getUser().getId());
                 getParameter(liveRowsBean);
                 CommonUtil.REMIND_BACK = 0;
+                logFile();
                 startLive();
                 AppLog.i("TAG","创建直播成功");
             }
@@ -750,13 +753,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.onImgToken(imgTokenBean);
             if (imgTokenBean.getReturnCode() == 0) {
                 ImgTokenResult imgToken = imgTokenBean.getResult();
-                final File newxmlfile = new File(Environment.getExternalStorageDirectory(),logTime);
-                uploadManager.put(newxmlfile, null, imgToken.getToken(), new UpCompletionHandler() {
+                uploadManager.put(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime,null, imgToken.getToken(), new UpCompletionHandler() {
                     @Override
-                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                    public void complete(String key, ResponseInfo info, JSONObject res) {
                         boolean ok = info.isOK();
+                        AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
                         AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败"));
-                      //  newxmlfile.delete();
+                        //  newxmlfile.delete();
 
                     }
                 }, null);
@@ -882,7 +885,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     endHandler();
                     endTime = System.currentTimeMillis();
                     isCloseLive = true;
-                  //  liveContentLoader.getImgToken();
+                    liveContentLoader.getImgToken();
                     endLive();
                 }
             });
@@ -1026,7 +1029,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }.start();
 
     }
-  //  http://dev.lalocal.cn:8080/api/channels/null
+    //  http://dev.lalocal.cn:8080/api/channels/null
     private void showLiveingShareDialog() {
         new CountDownTimer(60000, 60000) {
             @Override
@@ -1178,7 +1181,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
     @Override
     public void onVideoStopped() {//停止视频功能
-
+        AppLog.i("TAG","主播端视频功能停止回调");
     }
 
     @Override
@@ -1210,7 +1213,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         netWorkHint.setImageResource(R.drawable.signal_non);
                         break;
                     default:
-                     //   netWorkHint.setImageResource(R.drawable.signal_non);
+                        //   netWorkHint.setImageResource(R.drawable.signal_non);
                         break;
                 }
             }
@@ -1250,11 +1253,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             rtcEngine().setupLocalVideo(new VideoCanvas(surfaceView, VideoCanvas.RENDER_MODE_HIDDEN, 0));//VideoCanvas:本地代码显示属性
             surfaceView.setZOrderOnTop(true);
             surfaceView.setZOrderMediaOverlay(true);
-         // int i = rtcEngine().setLogFile(logFile());
+            int i = rtcEngine().setLogFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
 
-            rtcEngine().setLogFilter(1);
-         //  AppLog.i("TAG","查看日志是否调用成功："+i);
-            AppLog.i("TAG","主播端开启视频预览。。。。。");
             worker().preview(true, surfaceView, UserHelper.getUserId(LiveActivity.this));
         }
         worker().joinChannel(cname, UserHelper.getUserId(LiveActivity.this));
@@ -1297,20 +1297,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
     }
 
-    public  String  logFile(){
+    public  void  logFile(){
         Time time = new Time("GMT+8");
         time.setToNow();
         int year = time.year;
         int month = time.month;
         int monthDay = time.monthDay;
-        logTime = year+"_"+month+"_"+monthDay+"_"+channelId+"_"+liveNumber+"_"+ UserHelper.getUserId(this);
-        fileNam = "logs/ago/android/"+ logTime;
-        AppLog.i("TAG","创建日志文件:"+fileNam);
-        File newxmlfile = new File(Environment.getExternalStorageDirectory(), "arog.log");
-        if(!newxmlfile.exists())
-            newxmlfile.mkdir();
-        AppLog.i("TAG","查看日志文件目录："+Environment.getExternalStorageDirectory()+ fileNam);
-        return Environment.getExternalStorageDirectory()+logTime;
+        logTime = year+"_"+month+"_"+monthDay+"_"+channelId+"_"+liveNumber+"_"+ UserHelper.getUserId(this)+".log";
+        LogFileUtils.makeAgoraFilePath(logTime);
+
+
     }
     //分享
     @Override
@@ -1413,9 +1409,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         }
 
-
         rtcEngine().enableLastmileTest();//启动网络质量检测
-
+        if(isStartLive){
+            //主播回来了
+            LiveMessage liveMessage = new LiveMessage();
+            liveMessage.setStyle(MessageType.text);
+            liveMessage.setUserId(userId);
+            liveMessage.setCreatorAccount(creatorAccount);
+            liveMessage.setChannelId(channelId);
+            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "回来了", roomId, creatorAccount, liveMessage);
+            sendMessage(imMessage,MessageType.text);
+        }
     }
 
     @Override
@@ -1424,6 +1428,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         DialogUtil.clear();
         rtcEngine().disableLastmileTest();//关闭网络质量检测
         AppLog.i("TAG", "LiveActivity:onStop");
+        if(isStartLive){
+            //主播离开了
+            LiveMessage liveMessage = new LiveMessage();
+            liveMessage.setStyle(MessageType.text);
+            liveMessage.setUserId(userId);
+            liveMessage.setCreatorAccount(creatorAccount);
+            liveMessage.setChannelId(channelId);
+            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "离开了一会", roomId, creatorAccount, liveMessage);
+            sendMessage(imMessage,MessageType.text);
+        }
     }
 
     protected void onPause() {

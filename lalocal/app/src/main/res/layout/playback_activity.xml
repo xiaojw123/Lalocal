@@ -31,10 +31,10 @@
             android:layout_centerInParent="true"></com.android.tedcoder.wkvideoplayer.view.PlayBackPlayer>
 
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
            >
             <LinearLayout
                 android:id="@+id/playback_master_info_layout"
@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:drawableLeft="@drawable/onlivelight"
                         android:drawableRight="@drawable/replay"
-                        android:textColor="@android:color/white"
+
                         android:drawablePadding="@dimen/live_padding_5dp"
                         android:textSize="@dimen/live_text_12sp" />
 
@@ -73,15 +73,11 @@
                         android:id="@+id/playback_online_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
                         android:drawableLeft="@drawable/manypeople_light"
                         android:drawablePadding="@dimen/live_padding_5dp"
                         android:textSize="@dimen/live_text_12sp" />
                 </LinearLayout>
             </LinearLayout>
-
-
-
 
             <ImageView
                 android:id="@+id/playback_quit"
@@ -99,8 +95,8 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/playback_quit"
                 android:paddingRight="@dimen/live_padding_20dp"
-
                 android:src="@drawable/peopleliving_share"/>
+
         </RelativeLayout>
 
 

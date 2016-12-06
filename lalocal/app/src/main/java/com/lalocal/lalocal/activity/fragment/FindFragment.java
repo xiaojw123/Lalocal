@@ -5,18 +5,12 @@ import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.chanven.lib.cptr.loadmore.OnLoadMoreListener;
-import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
-import com.daimajia.slider.library.SliderLayout;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -31,10 +25,7 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomXRecyclerView;
-import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
-import com.lalocal.lalocal.view.MyRecyclerView;
 import com.lalocal.lalocal.view.adapter.HomeRecommendAdapter;
-import com.lalocal.lalocal.view.ptr.PtrHeader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -296,6 +287,7 @@ public class FindFragment extends BaseFragment {
             switch (refreshType) {
                 case REFRESH_AD:
                     mRecommendAdapter.refreshAD(mAdResultList);
+                    AppLog.i("TAH","刷新。。。。。。。。。轮播图");
                     break;
                 case REFRESH_PRODUCT_THEME:
                     mRecommendAdapter.refreshProductTheme(mRecommendListBeen);
