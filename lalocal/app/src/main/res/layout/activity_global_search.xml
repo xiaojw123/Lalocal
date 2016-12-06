@@ -45,7 +45,6 @@
     </RelativeLayout>
 
     <View style="@style/CommonDeLineTheme" />
-
     <LinearLayout
         android:id="@+id/gsearch_tab_container"
         android:layout_width="match_parent"
@@ -179,6 +178,10 @@
             android:overScrollMode="never"
             android:background="@color/white"
             />
+        <!--<android.support.v4.view.ViewPager-->
+            <!--android:id="@+id/gsearch_result_vp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
 
         <LinearLayout
             android:id="@+id/gsearch_hint_cotainer"
@@ -203,6 +206,8 @@
             android:visibility="gone" />
 
     </FrameLayout>
+
+
 
 
 </LinearLayout>

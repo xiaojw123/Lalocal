@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -58,6 +59,7 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                 Resources res = context.getResources();
                 String authorText = "";
                 String priceText = "";
+                boolean isLive = false;
                 itemHolder.author.setText(authorText);
                 itemHolder.price.setText(priceText);
                 switch (targetType) {
@@ -67,7 +69,7 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                         Author author = item.getAuthor();
                         if (author != null) {
                             authorText = author.getAuthorName();
-                            itemHolder.author.setText(CommonUtil.getSpannelStyle(context,"—— "+authorText,R.style.AuthorNameStyle,0,3));
+                            itemHolder.author.setText(CommonUtil.getSpannelStyle(context, "—— " + authorText, R.style.AuthorNameStyle, 0, 3));
                         }
                         break;
                     case 2://商品
@@ -81,7 +83,19 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     case 10:
                         itemHolder.type.setText(res.getString(R.string.special));
                         break;
+                    case 20:
+                        isLive = true;
+                        itemHolder.type.setText(res.getString(R.string.liveplay));
+                        break;
                 }
+                if (isLive) {
+                    itemHolder.liveCotainer.setVisibility(View.VISIBLE);
+                    itemHolder.liveLoc.setText(item.getAddress());
+                    itemHolder.liveTimeStart.setText(item.getStartAt());
+                } else {
+                    itemHolder.liveCotainer.setVisibility(View.GONE);
+                }
+
                 if (!TextUtils.isEmpty(authorText)) {
                     itemHolder.author.setVisibility(View.VISIBLE);
                 } else {
@@ -93,14 +107,14 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     itemHolder.price.setVisibility(View.GONE);
                 }
                 itemHolder.title.setText(item.getTargetName());
-                String readNum = item.getReadNum();
+                double readNum = item.getReadNum();
                 String praiseNum = item.getPraiseNum();
                 String commentNum = item.getCommentNum();
-                if (!TextUtils.isEmpty(readNum)) {
+                if (!TextUtils.isEmpty(formartNum(readNum))) {
                     if (itemHolder.readnNum.getVisibility() != View.VISIBLE) {
                         itemHolder.readnNum.setVisibility(View.VISIBLE);
                     }
-                    itemHolder.readnNum.setText(readNum);
+                    itemHolder.readnNum.setText(formartNum(readNum));
                 } else {
                     itemHolder.readnNum.setVisibility(View.GONE);
                 }
@@ -131,6 +145,15 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
 
     }
 
+    public String formartNum(double num) {
+
+        if (num >= 1000) {
+            double x = num / 1000;
+            return String.valueOf(x);
+        }
+        return  String.valueOf(num);
+    }
+
     @Override
     public int getItemCount() {
         return datas != null && datas.size() > 0 ? datas.size() : 0;
@@ -155,6 +178,12 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
         TextView praiseNum;
         @BindView(R.id.my_favorite_item_commentnum_tv)
         TextView commentNum;
+        @BindView(R.id.my_favorite_live_cotainer)
+        LinearLayout liveCotainer;
+        @BindView(R.id.my_favorite_live_loc)
+        TextView liveLoc;
+        @BindView(R.id.my_favorite_live_time)
+        TextView liveTimeStart;
 
         public FavoriteHolder(View itemView) {
             super(itemView);

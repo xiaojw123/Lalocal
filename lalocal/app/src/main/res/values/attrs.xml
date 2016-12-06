@@ -113,6 +113,14 @@
         <attr name="isOrangeBg" format="boolean"/>
     </declare-styleable>
 
+    <declare-styleable name="ArcHeader">
+        <attr name="arc_height" format="dimension" />
+        <attr name="arc_cropDirection" format="enum">
+            <enum name="cropInside" value="0" />
+            <enum name="cropOutside" value="1"/>
+        </attr>
+    </declare-styleable>
+
     <!--<style name="ProgressButton" />-->
 
     <!--&lt;!&ndash; Base theme for the Progress button. &ndash;&gt;-->
@@ -121,5 +129,5 @@
         <!--<item name="android:focusable">false</item>-->
     <!--</style>-->
 
->>>>>>> 0fcca839061b1b34086fb294beb2608f6bef7618
+
 </resources>

@@ -6,6 +6,7 @@
     android:background="@color/white">
 
     <com.lalocal.lalocal.view.ReboundScrollView
+        android:id="@+id/fragment_me_rsv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:overScrollMode="never"
@@ -32,11 +33,29 @@
                     android:orientation="vertical"
                     >
 
-                    <com.lalocal.lalocal.view.ArcImageView
-                        android:id="@+id/home_me_headportrait_img"
+                    <com.lalocal.lalocal.view.ArcLayout
                         android:layout_width="match_parent"
-                        android:layout_height="250dp"
-                        android:src="@drawable/home_me_personheadnormal" />
+                        android:layout_height="280dp"
+                        app:arc_cropDirection="cropOutside"
+                        app:arc_height="30dp"
+                        >
+                        <ImageView
+                            android:id="@+id/home_me_headportrait_img"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/home_me_personheadnormal" />
+
+
+                    </com.lalocal.lalocal.view.ArcLayout>
+
+
+                    <!--<com.lalocal.lalocal.view.ArcImageView-->
+                        <!--android:id="@+id/home_me_headportrait_img"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="250dp"-->
+                        <!--android:scaleType="centerCrop"-->
+                        <!--android:src="@drawable/home_me_personheadnormal" />-->
                     <!--<ImageView-->
                 <!--android:id="@+id/home_me_headportrait_img"-->
                 <!--android:layout_width="@dimen/me_headportrait_img_width"-->
@@ -51,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dimen_size_15_dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="30dp"
                     android:background="@drawable/home_me_verified_bg"
                     android:gravity="center"
                     android:padding="@dimen/dimen_size_3_dp"
@@ -187,8 +206,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_size_25_dp"
                     android:overScrollMode="never"
+                    android:focusable="false"
                     />
-
             </RelativeLayout>
         </LinearLayout>
     </com.lalocal.lalocal.view.ReboundScrollView>
