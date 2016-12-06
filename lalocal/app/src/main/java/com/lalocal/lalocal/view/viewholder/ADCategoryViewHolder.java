@@ -67,6 +67,8 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
     // 小圆点按钮列表
     private List<Button> mDotBtns = new ArrayList<>();
 
+    // 上一个小圆点位置
+    private int mPrePosition = -1;
     /**
      * 分类
      *
@@ -163,6 +165,8 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
 
         // 获取列表大小
         int size = mAdList.size();
+        // 移除所有小圆点
+        mDotContainer.removeAllViews();
         for (int i = 0; i < size; i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(mContext);
             RecommendAdResultBean ad = mAdList.get(i);
@@ -170,13 +174,27 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
             AppLog.i("photoU", "ad photo is " + photoUrl);
             defaultSliderView.image(photoUrl);
+            defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
             defaultSliderView.setOnSliderClickListener(onSliderClickListener);
             mSliderAd.addSlider(defaultSliderView);
 
+            // 添加小圆点
+            View point = new View(mContext);
+            int bottomMargin = DensityUtil.dip2px(mContext, 20);
+            int horizontalMargin = DensityUtil.dip2px(mContext, 3);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                    15, 15);
+            params.leftMargin = 20;
+            params.bottomMargin = bottomMargin;
+            point.setBackgroundResource(R.drawable.icon_round_white_dot_normal);
+            point.setLayoutParams(params);
+            // 为point设置标识,便于将来识别point
+            point.setTag(i);
+            mDotContainer.addView(point);
         }
 
         // 初始化小圆点列表
-        mDotBtns = DotUtils.initDot(mContext, mSliderAd, mDotContainer, size, mSliderAd.getCurrentPosition(), DotUtils.ROUND_WHITE_DOT);
+//        mDotBtns = DotUtils.initDot(mContext, mSliderAd, mDotContainer, size, mSliderAd.getCurrentPosition(), DotUtils.ROUND_WHITE_DOT);
 
         // 轮播图页面改变
         mSliderAd.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
@@ -190,9 +208,27 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
 //                    position = (position + size) % size;
 //                    mSliderAd.setCurrentPosition(position);
 //                }
-                AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
-                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_WHITE_DOT);
-                AppLog.i("TAG","after selected " + position);
+//                AppLog.i("TAG","首页轮播图野蛮改变监听："+position);
+//                DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_WHITE_DOT);
+//                AppLog.i("TAG","after selected " + position);
+
+                AppLog.i("sdl", "position is " + position);
+                AppLog.i("sdl", "the zero child is " + (mDotContainer.getChildAt(0) != null ? "not null" : "null"));
+                AppLog.i("sdl", "the last child is " + (mDotContainer.getChildAt(position) != null ? "not null" : "null"));
+                if (mDotContainer.getChildAt(0) != null && mDotContainer.getChildAt(position) != null) {
+                    AppLog.i("sdl", "all not null");
+                    mDotContainer.getChildAt(position).setBackgroundResource(
+                            R.drawable.icon_round_white_dot_selected);
+                    AppLog.i("sdl", "setSelected");
+                    if (mPrePosition != -1) {
+                        AppLog.i("sdl", "preposition not null");
+                        mDotContainer.getChildAt(mPrePosition).setBackgroundResource(
+                                R.drawable.icon_round_white_dot_normal);
+                        AppLog.i("sdl", "set normal " + mPrePosition);
+                    }
+                    mPrePosition = position;
+                    AppLog.i("sdl", "mPreposition is " + mPrePosition);
+                }
             }
         });
     }
@@ -201,6 +237,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         @Override
         public void onSliderClick(BaseSliderView slider) {
             int position = mSliderAd.getCurrentPosition();
+            int size = mAdList.size();
             switch (position) {
                 case 0:
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_01);

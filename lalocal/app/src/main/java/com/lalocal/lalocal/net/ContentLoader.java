@@ -1059,28 +1059,16 @@ public class ContentLoader {
     }
 
     //修改直播
-    public void alterLive(String title, String userId, String photo, String announcement, String longitude, String latitude,String address) {
+    public void alterLive(String title, String photo,String address) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_ROOM);
         }
-
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getAlterLive(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude,address));
+        request.setBodyParams(getAlterLiveRoom(title, photo,address));
         requestQueue.add(request);
     }
 
-    //上传直播封面
-    public void alterLiveCover(String title, String userId, String photo, String announcement, String longitude, String latitude) {
-        if (callBack != null) {
-            response = new ContentResponse(RequestCode.ALTER_LIVE_COVER);
-        }
-
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
-        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude,""));
-        requestQueue.add(request);
-    }
 
     //上传在线人数
     public void getUserOnLine(String onLineUsers, int onlinecount) {
@@ -2831,6 +2819,7 @@ public class ContentLoader {
 
         //取消赞
         private void responseCancelParises(String json) {
+            AppLog.i("TAG","取消收藏："+json);
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onPariseResult(pariseResult);
         }
@@ -3455,15 +3444,13 @@ public class ContentLoader {
 
 
     //修改直播
-    private String getAlterLiveRoom(String title, String photo, String announcement, String longitude, String latitude,String address) {
+    private String getAlterLiveRoom(String title, String photo,String address) {
 
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
             jsonObject.put("photo", photo);
-            jsonObject.put("announcement", announcement);
-            jsonObject.put("longitude", longitude);
-            jsonObject.put("latitude", latitude);
+            jsonObject.put("direction ",1);
             jsonObject.put("address",address);
 
         } catch (JSONException e) {

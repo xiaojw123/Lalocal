@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:easemob="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+   >
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_actionbar_height"
+        android:paddingTop="@dimen/app_statusbar_height"
+        android:id="@+id/title_bar_contaier"
+        >
+        <ImageView
+            android:id="@+id/titleview_back_img"
+            android:layout_width="32dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="15dp"
+            android:src="@drawable/common_back_btn_bg" />
+        <TextView
+            android:id="@+id/titleview_title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textStyle="bold"
+            android:text="在线客服"
+            android:textColor="@color/color_1a"
+            android:textSize="17sp" />
+        <View
+            android:id="@+id/titleview_line"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="bottom"
+            android:background="#b3b3b3" />
+
+    </FrameLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/input_menu"
+        android:layout_below="@id/title_bar_contaier" >
+
+        <com.easemob.easeui.widget.EaseChatMessageList
+            android:id="@+id/message_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
+
+    <com.easemob.easeui.widget.EaseChatInputMenu
+        android:id="@+id/input_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

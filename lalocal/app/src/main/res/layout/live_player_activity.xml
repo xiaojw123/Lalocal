@@ -83,7 +83,6 @@
             android:layout_gravity="right"
             android:layout_marginLeft="-65dp"
             >
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
@@ -262,7 +261,6 @@
                     android:layout_above="@id/setting_bottom_layout"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="23dp"
                     android:paddingBottom="@dimen/live_padding_20dp"
                     ></com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout>
 
@@ -285,26 +283,26 @@
                 <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
                     android:id="@+id/barrageView_test"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/live_height_80dp"
-                    android:paddingBottom="@dimen/live_padding_10dp"
+                    android:layout_height="@dimen/live_height_65dp"
+                    android:paddingBottom="@dimen/live_padding_5dp"
                     android:layout_above="@+id/messageListView"
-                    android:layout_marginTop="80dp"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
+                   ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
 
                 <include
                     android:id="@+id/gift_animation_view"
                     layout="@layout/gift_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:layout_above="@id/messageListView"
-                    android:layout_marginBottom="20dp" />
+                    android:layout_height="60dp"
+                    android:layout_above="@id/barrageView_test"
+                   />
 
                 <include
                     android:id="@+id/gift_animation_view_up"
                     layout="@layout/gift_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="60dp"
                     android:layout_above="@id/gift_animation_view"
-                    android:layout_marginBottom="10dp" />
+                  />
 
                 <RelativeLayout
                     android:id="@+id/BackBtn"

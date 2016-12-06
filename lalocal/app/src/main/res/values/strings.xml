@@ -336,6 +336,7 @@
     <string name="live_report">举报</string>
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>
+    <string name="live_read_write_external_storage">SD卡读写权限未开启,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_camera_jurisdiction">没有视频权限，无法开启直播</string>
     <string name="live_camera_start_failure">摄像头启动失败,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_frequency_start_failure">音频权限开启失败,请尝试在手机应用权限管理中打开权限!</string>

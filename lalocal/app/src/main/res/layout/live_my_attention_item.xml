@@ -51,6 +51,7 @@
                     android:layout_alignParentRight="true">
 
                     <RelativeLayout
+                        android:id="@+id/layout_attention_user"
                         android:layout_width="@dimen/dimen_size_25_dp"
                         android:layout_height="@dimen/dimen_size_25_dp"
                         android:layout_marginRight="@dimen/dimen_size_10_dp"

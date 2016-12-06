@@ -67,6 +67,7 @@ import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.netease.neliveplayer.NELivePlayer;
@@ -139,6 +140,21 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private TextView overAttention;
     private CircleImageView headIv;
     private TextView masterName;
+    private boolean isLocation = false;
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        int[] locations = new int[2];
+        if (quit != null && periscopeLayout != null && !isLocation) {//计算点赞动画的位置
+            isLocation = true;
+            quit.getLocationOnScreen(locations);
+            int x = locations[0];
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) periscopeLayout.getLayoutParams();
+            int i = DensityUtil.dip2px(this, 70);
+            layoutParams.leftMargin = x - (i / 4);
+            periscopeLayout.setLayoutParams(layoutParams);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1150,15 +1166,22 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
      ********************************/
 
     // 发送点赞爱心
+    boolean isSendLike=true;
     public void sendLike() {
      //   marqueeView.start("我给主播点了个赞");
         if (!isFastClick() && container != null && container.account != null && creatorAccount != null) {
+            IMMessage imMessage=null;
             LiveMessage liveMessage = new LiveMessage();
             liveMessage.setStyle(MessageType.like);
             liveMessage.setUserId(userId);
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "给主播点了个赞", roomId, AuthPreferences.getUserAccount(), liveMessage);
+            if(isSendLike){
+                isSendLike=false;
+                imMessage = SendMessageUtil.sendMessage(container.account, "给主播点了个赞", roomId, AuthPreferences.getUserAccount(), liveMessage);
+            }else{
+                imMessage = SendMessageUtil.sendMessage(container.account, "给主播点了个赞1", roomId, AuthPreferences.getUserAccount(), liveMessage);
+            }
             sendMessage(imMessage, MessageType.like);
 
         }

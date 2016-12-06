@@ -120,7 +120,11 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
+<<<<<<< HEAD
         // targetId= liveRowsBean.getNumber();
+=======
+       // targetId= liveRowsBean.getNumber();
+>>>>>>> 12de75fd219e89c2400c3bd5977bbfc6e2e00a42
         targetId =liveRowsBean.getId();
         targetType = liveRowsBean.getType();
         praiseId = liveRowsBean.getPraiseId();

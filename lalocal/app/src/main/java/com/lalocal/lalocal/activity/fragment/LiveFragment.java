@@ -103,15 +103,26 @@ public class LiveFragment extends BaseFragment {
     // 当前分页页码
     private int mCurPageNum = 1;
 
-    // 权限控制
-    private final int LIVE_RECOMMEND_PEMISSION_CODE = 100;
-    private static final String[] LIVE_PERMISSIONS = new String[]{
+    // -标记
+    private static final int INIT = 0x01;
+    private static final int PREPARE_LVIE = 0x02;
+
+    // -权限控制
+    // SD卡读写权限
+    private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
+    private static final String[] RW_SD_PERMISSIONS = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    // 照相机权限
+    private final int LIVE_PERMISSION_CAMERA_CODE = 101;
+    private static final String[] CAMERA_PERMISSIONS = new String[] {
+            Manifest.permission.CAMERA,
+            Manifest.permission.RECORD_AUDIO
+    };
+
 
     public LiveFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -124,7 +135,7 @@ public class LiveFragment extends BaseFragment {
 
         if (Build.VERSION.SDK_INT >= 22) {
             // 请求用户权限
-            reminderUserPermission();
+            reminderUserPermission(INIT);
         } else {
             // 初始化
             init();
@@ -229,17 +240,30 @@ public class LiveFragment extends BaseFragment {
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private void reminderUserPermission() {
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(LIVE_PERMISSIONS, LIVE_RECOMMEND_PEMISSION_CODE);
-        } else if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(LIVE_PERMISSIONS, LIVE_RECOMMEND_PEMISSION_CODE);
-        } else {
-            // 初始化
-            init();
+    private void reminderUserPermission(int type) {
+        switch (type) {
+            case INIT:
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+                } else if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+                } else {
+                    // 初始化
+                    init();
+                }
+                break;
+            case PREPARE_LVIE:
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(CAMERA_PERMISSIONS, LIVE_PERMISSION_CAMERA_CODE);
+                } else if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(CAMERA_PERMISSIONS, LIVE_PERMISSION_CAMERA_CODE);
+                } else {
+                    prepareLive();
+                }
+                break;
         }
-
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -248,13 +272,22 @@ public class LiveFragment extends BaseFragment {
     }
 
     private void doNext(int requestCode, int[] grantResults) {
-        if (requestCode == LIVE_RECOMMEND_PEMISSION_CODE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 初始化
-                init();
-            } else {
-                Toast.makeText(getActivity(), getString(R.string.live_camera_jurisdiction), Toast.LENGTH_SHORT).show();
-            }
+        switch (requestCode) {
+            case LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // 初始化
+                    init();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.live_read_write_external_storage), Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case LIVE_PERMISSION_CAMERA_CODE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    prepareLive();
+                } else {
+                    Toast.makeText(getActivity(), getString(R.string.live_camera_jurisdiction), Toast.LENGTH_SHORT).show();
+                }
+                break;
 
         }
     }
@@ -282,11 +315,13 @@ public class LiveFragment extends BaseFragment {
         switch (v.getId()) {
             case R.id.btn_takelive:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
-//                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                prepareLive();
-//                } else {
-//                    reminderUserPermission();
-//                }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+
+                    prepareLive();
+                } else {
+                    // 提示用户开启直播权限
+                    reminderUserPermission(PREPARE_LVIE);
+                }
                 break;
         }
     }
@@ -477,12 +512,10 @@ public class LiveFragment extends BaseFragment {
                 ImageView imgPhoto = (ImageView) mRecommendPage.getView(R.id.img_recommendations);
                 Glide.with(getActivity()).load(photo).into(imgPhoto);
             }
-
             if (!TextUtils.isEmpty(avatar)) {
                 ImageView imgAvatar = (ImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
                 Glide.with(getActivity()).load(avatar).into(imgAvatar);
             }
-
             if (TextUtils.isEmpty(nickname)) {
                 nickname = "一位不愿意透露姓名的网友";
             }
@@ -515,6 +548,7 @@ public class LiveFragment extends BaseFragment {
             });
             mRecommendPage.setPlayTypeId(type, targetId);
         }
+
     }
 
     /**
