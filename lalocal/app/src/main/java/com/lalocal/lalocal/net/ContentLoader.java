@@ -40,6 +40,8 @@ import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelIndexTotal;
+import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
@@ -91,6 +93,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.MD5Util;
+import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
@@ -1543,6 +1546,23 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
+    /**
+     * 2.2版本
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @param dateTime
+     */
+    public void getChannelIndexTotal(int pageNum, int pageSize, String categoryId, String dateTime) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_CHANNEL_INDEX_TOTAL);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getChannelIndexTotal(String.valueOf(pageNum), String.valueOf(pageSize), categoryId, dateTime),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -2161,7 +2181,9 @@ public class ContentLoader {
                     case RequestCode.VALIDATE_MSGS:
                         responseMsg(jsonObj);
                         break;
-
+                    case RequestCode.GET_CHANNEL_INDEX_TOTAL:
+                        responseChannelIndexTotal(json);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -3030,7 +3052,7 @@ public class ContentLoader {
 
         //历史直播
         private void responPlayBackLive(String json) {
-            AppLog.i("TAG", "历史直播:" + json);
+            AppLog.i("lve", "历史直播:" + json);
             callBack.onPlayBackList(json, attentionFlag);
         }
 
@@ -3149,8 +3171,28 @@ public class ContentLoader {
          * @param json
          */
         private void responseChannelReport(String json) {
-            // TODO: responseChannelReport
             callBack.onGetChannelReport(json);
+        }
+
+        private void responseChannelIndexTotal(String json) {
+            ChannelIndexTotal channelIndexTotal = new Gson().fromJson(json, ChannelIndexTotal.class);
+            ChannelIndexTotalResult result = channelIndexTotal.getResult();
+            long dateTime = channelIndexTotal.getDate();
+            if (channelIndexTotal.getReturnCode() == 0) {
+
+                // -存时间戳
+                // 获取用户id，-1表示获取失败，即：未登录状态，可以的userId用-1表示
+                int userId = UserHelper.getUserId(context);
+                // key的基
+                String baseKey = "live_index_timestamp_get_";
+                if (userId != -1) {
+                    SPCUtils.put(context, (baseKey + String.valueOf(userId)), String.valueOf(dateTime));
+                }
+//                 存上未登录时的时间戳
+//                SPCUtils.put(context, (baseKey + "_0"), String.valueOf(dateTime));
+
+                callBack.onGetChannelIndexTotal(result, dateTime);
+            }
         }
 
         @Override
@@ -3645,6 +3687,7 @@ public class ContentLoader {
         int GET_HOME_ATTENTION = 304;
         int GET_DAILY_RECOMMENDATIONS = 305;
         int GET_CHANNEL_REPORT = 306;
+        int GET_CHANNEL_INDEX_TOTAL = 307;
     }
 
 }

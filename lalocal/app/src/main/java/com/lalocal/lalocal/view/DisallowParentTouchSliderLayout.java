@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import com.daimajia.slider.library.SliderLayout;
 
+
 /**
  * Created by wangjie on 2016/9/23.
  */

@@ -16,6 +16,7 @@ import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
@@ -463,4 +464,6 @@ public abstract class ICallBack {
 
     public void onSendMessage(int code) {
     }
+
+    public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {}
 }

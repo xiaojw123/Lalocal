@@ -121,6 +121,10 @@ public class PlayBackActivity extends BaseActivity {
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
        // targetId= liveRowsBean.getNumber();
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9e1b45f50477e3e27a05c31bedeb185880125b82
         targetId =liveRowsBean.getId();
         targetType = liveRowsBean.getType();
         praiseId = liveRowsBean.getPraiseId();
@@ -179,7 +183,6 @@ public class PlayBackActivity extends BaseActivity {
                         @Override
                         public void onDialogClickListener() {
                             LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
-
                         }
                     });
                     customDialog.show();

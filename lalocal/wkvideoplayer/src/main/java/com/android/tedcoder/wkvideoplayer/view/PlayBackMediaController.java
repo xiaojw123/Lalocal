@@ -31,6 +31,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
     private ImageView collect;
     private ImageView videoBefore;
     private ImageView videoNext;
+    private TextView thinkCollect;
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean isFromUser) {
@@ -72,6 +73,7 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
         mTimeTxt = (TextView) findViewById(R.id.time);
         mMenuViewPlaceHolder = findViewById(R.id.view_menu_placeholder);
         collect = (ImageView) findViewById(R.id.live_telecast_collect);
+        thinkCollect = (TextView) findViewById(R.id.think_collect);
         videoBefore = (ImageView)findViewById(R.id.video_before);
         videoNext = (ImageView)findViewById(R.id.video_next);
         initData();
@@ -89,8 +91,10 @@ public  class PlayBackMediaController extends FrameLayout  implements SeekBar.On
     public void setCollect(boolean isCollect){
         if(isCollect){
             collect.setImageResource(R.drawable.collect_light_sel);
+            thinkCollect.setVisibility(VISIBLE);
         }else {
             collect.setImageResource(R.drawable.collect_light_unsel);
+            thinkCollect.setVisibility(GONE);
         }
     }
     private void initData() {

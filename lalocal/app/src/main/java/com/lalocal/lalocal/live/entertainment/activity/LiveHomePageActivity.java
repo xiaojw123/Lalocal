@@ -6,7 +6,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -16,19 +15,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.BigPictureActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.LiveArticleVPAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
-import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
@@ -53,63 +51,54 @@ import butterknife.OnClick;
  * Created by android on 2016/8/5.
  */
 public class LiveHomePageActivity extends BaseActivity {
+
+    @BindView(R.id.userpage_headportrait_img)
+    ImageView userpageHeadportraitImg;
+    @BindView(R.id.userpage_verified)
+    TextView userpageVerified;
+    @BindView(R.id.userpage_author_tag)
+    ImageView userpageAuthorTag;
+    @BindView(R.id.userpage_username)
+    TextView userpageUsername;
+    @BindView(R.id.userpage_login_prompt)
+    TextView userpageLoginPrompt;
+    @BindView(R.id.userpage_personal_info)
+    LinearLayout userpagePersonalInfo;
+    @BindView(R.id.userpage_follow_num)
+    TextView userpageFollowNum;
+    @BindView(R.id.userpage_atten_tab)
+    LinearLayout userpageAttenTab;
+    @BindView(R.id.userpage_fans_num)
+    TextView userpageFansNum;
+    @BindView(R.id.userpage_fans_tab)
+    LinearLayout userpageFansTab;
+    @BindView(R.id.userpage_userprofile_container)
+    LinearLayout userpageUserprofileContainer;
+    @BindView(R.id.tv_live)
+    TextView tvLive;
+    @BindView(R.id.img_live_selected)
+    ImageView imgLiveSelected;
+    @BindView(R.id.tv_article)
+    TextView tvArticle;
+    @BindView(R.id.img_article_selected)
+    ImageView imgArticleSelected;
+    @BindView(R.id.layout_article_part)
+    LinearLayout layoutArticlePart;
+    @BindView(R.id.tv_title_layout)
+    LinearLayout tvTitleLayout;
+    @BindView(R.id.vp_live_article)
+    DisallowParentTouchViewPager vpLiveArticle;
+    @BindView(R.id.nested_scroll_view)
+    ScrollView nestedScrollView;
     @BindView(R.id.homepage_head)
     CustomTitleView homepageHead;
-    @BindView(R.id.live_verified)
-    TextView liveVerified;
-    @BindView(R.id.homepage_master_name)
-    TextView homepageMasterName;
-    @BindView(R.id.homepage_master_signature)
-    TextView homepageMasterSignature;
-    @BindView(R.id.personal_home_page)
-    ImageView personalHomePage;
-
-
-    @BindView(R.id.homepage_attention_count_tv)
-    TextView homepageAttentionCountTv;
-    @BindView(R.id.homepage_fans_count)
-    TextView homepageFansCount;
-    @BindView(R.id.line_g)
-    LinearLayout lineG;
     @BindView(R.id.master_attention)
     TextView masterAttention;
-    @BindView(R.id.homepage_attention_layout)
-    LinearLayout homepageAttentionLayout;
-    @BindView(R.id.homepage_fans_layout)
-    LinearLayout homepageFansLayout;
     @BindView(R.id.master_attention_layout)
     LinearLayout masterAttentionLayout;
-
-    @BindView(R.id.line_layout)
-    RelativeLayout lineLayout;
-    @BindView(R.id.ffdffhfd)
-    View ffdffhfd;
-    @BindView(R.id.live_user_type)
-    ImageView liveUserType;
-
     @BindView(R.id.live_attention_homepage)
     RelativeLayout liveAttentionHomepage;
-
-    @BindView(R.id.tv_live)
-    TextView mTvLive;
-    @BindView(R.id.tv_article)
-    TextView mTvArticle;
-    @BindView(R.id.img_live_selected)
-    ImageView mImgLiveSelected;
-    @BindView(R.id.img_article_selected)
-    ImageView mImgArticleSelected;
-
-    @BindView(R.id.vp_live_article)
-    DisallowParentTouchViewPager mVpLiveArticle;
-
-    @BindView(R.id.layout_article_part)
-    LinearLayout mLayoutArticlePart;
-
-    @BindView(R.id.nested_scroll_view)
-    NestedScrollView mNestedScrollView;
-
     private LiveArticleVPAdapter mVPAdapter;
-
     private ContentLoader contentLoader;
     private String userId;
     private TextView popuCancel;
@@ -137,7 +126,6 @@ public class LiveHomePageActivity extends BaseActivity {
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
         contentLoader.getLiveUserInfo(userId);
-
         // 获取用户历史直播列表
         contentLoader.getUserLive(Integer.valueOf(userId), 1);
         // 获取用户当前直播
@@ -151,13 +139,13 @@ public class LiveHomePageActivity extends BaseActivity {
      */
     private void setLiveArticleData() {
         // 获取屏幕高度
-        int minHeight = mNestedScrollView.getMeasuredHeight();
+        int minHeight = nestedScrollView.getMeasuredHeight();
         AppLog.i("hhhh", "screenHeight is " + minHeight);
 
         // 设置高度适应内容
-        mVpLiveArticle.enableWrapContent(true);
+        vpLiveArticle.enableWrapContent(true);
         // 设置ViewPager最小高度
-        mVpLiveArticle.setMinHeight(minHeight);
+        vpLiveArticle.setMinHeight(minHeight);
 
         // 初始化数据
         boolean isSelf = false;
@@ -169,13 +157,13 @@ public class LiveHomePageActivity extends BaseActivity {
         mVPAdapter = new LiveArticleVPAdapter(LiveHomePageActivity.this, isSelf, mUserLiving, mUserLiveList, mUserArticleList, isAuthor);
 
         // 设置适配器
-        mVpLiveArticle.setAdapter(mVPAdapter);
+        vpLiveArticle.setAdapter(mVPAdapter);
 
         // 默认显示第一页（下标为0）
         selecteTab(0);
 
         // 设置vp滑动监听事件
-        mVpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        vpLiveArticle.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -197,10 +185,10 @@ public class LiveHomePageActivity extends BaseActivity {
 //        }
     }
 
-    @OnClick({R.id.homepage_attention_layout, R.id.homepage_fans_layout, R.id.master_attention, R.id.personal_home_page, R.id.master_attention_layout, R.id.tv_article, R.id.tv_live})
+    @OnClick({R.id.userpage_atten_tab, R.id.userpage_fans_tab, R.id.master_attention, R.id.master_attention_layout, R.id.tv_article, R.id.tv_live})
     public void clickButton(View view) {
         switch (view.getId()) {
-            case R.id.homepage_attention_layout:
+            case R.id.userpage_atten_tab:
                 Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent.putExtra("liveType", "0");
                 intent.putExtra("userId", userId);
@@ -209,7 +197,7 @@ public class LiveHomePageActivity extends BaseActivity {
                     finish();
                 }*/
                 break;
-            case R.id.homepage_fans_layout:
+            case R.id.userpage_fans_tab:
                 Intent intent1 = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent1.putExtra("liveType", "1");
                 intent1.putExtra("userId", userId);
@@ -217,7 +205,7 @@ public class LiveHomePageActivity extends BaseActivity {
 
                 break;
 
-            case R.id.personal_home_page:
+           /* case R.id.personal_home_page:
                 BigPictureBean bean = new BigPictureBean();
                 bean.setUserAvatar(true);
                 String avatarOrigin = result.getAvatarOrigin();
@@ -230,7 +218,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 startActivity(intent2);
                 overridePendingTransition(R.anim.head_in, R.anim.head_out);
 
-                break;
+                break;*/
             case R.id.master_attention:
                 boolean isLogin = UserHelper.isLogined(LiveHomePageActivity.this);
                 if (isLogin) {
@@ -320,29 +308,29 @@ public class LiveHomePageActivity extends BaseActivity {
             case TAB_LIVE:
                 // ContextCompat.getColor(this, R.color.color_1a)用来替代过时的getResources().getColor()
                 // 设置直播tab颜色为选中的颜色
-                mTvLive.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
+                tvLive.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
                 // 显示直播选中标记
-                mImgLiveSelected.setVisibility(View.VISIBLE);
+                imgLiveSelected.setVisibility(View.VISIBLE);
                 // 设置文章tab颜色为未选中的颜色
-                mTvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
+                tvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
                 // 隐藏文章选中标记
-                mImgArticleSelected.setVisibility(View.INVISIBLE);
+                imgArticleSelected.setVisibility(View.INVISIBLE);
 
                 // viewpager滑动到直播
-                mVpLiveArticle.setCurrentItem(TAB_LIVE);
+                vpLiveArticle.setCurrentItem(TAB_LIVE);
                 break;
             case TAB_ARTICLE:
                 // 设置直播tab颜色为未选中的颜色
-                mTvLive.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
+                tvLive.setTextColor(ContextCompat.getColor(this, R.color.color_b3));
                 // 隐藏直播选中标记
-                mImgLiveSelected.setVisibility(View.INVISIBLE);
+                imgLiveSelected.setVisibility(View.INVISIBLE);
                 // 设置文章tab颜色为选中的颜色
-                mTvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
+                tvArticle.setTextColor(ContextCompat.getColor(this, R.color.color_1a));
                 // 显示文章选中标记
-                mImgArticleSelected.setVisibility(View.VISIBLE);
+                imgArticleSelected.setVisibility(View.VISIBLE);
 
                 // viewpager滑动到文章
-                mVpLiveArticle.setCurrentItem(TAB_ARTICLE);
+                vpLiveArticle.setCurrentItem(TAB_ARTICLE);
                 break;
         }
     }
@@ -357,7 +345,7 @@ public class LiveHomePageActivity extends BaseActivity {
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
             result = liveUserInfosDataResp.getResult();
-            homepageMasterName.setText(result.getNickName());
+            userpageUsername.setText(result.getNickName());
             attentionNum = result.getAttentionNum();
             fansNum = result.getFansNum();
             int id = UserHelper.getUserId(LiveHomePageActivity.this);
@@ -369,40 +357,40 @@ public class LiveHomePageActivity extends BaseActivity {
 
 
             if (result.getRole() == 1) {
-                liveVerified.setText("专栏作者");
-                liveVerified.setTextColor(Color.WHITE);
-                liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
+                userpageVerified.setText("专栏作者");
+                userpageVerified.setTextColor(Color.WHITE);
+                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
                 isAuthor = true;
-                liveUserType.setVisibility(View.VISIBLE);
-                liveVerified.setVisibility(View.GONE);
+                userpageAuthorTag.setVisibility(View.VISIBLE);
+                userpageVerified.setVisibility(View.GONE);
                 // 显示文章
-                mLayoutArticlePart.setVisibility(View.VISIBLE);
+                layoutArticlePart.setVisibility(View.VISIBLE);
             } else if (result.getRole() == -1) {
-                liveVerified.setText("管理员");
-                liveVerified.setTextColor(Color.WHITE);
-                liveVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
+                userpageVerified.setText("管理员");
+                userpageVerified.setTextColor(Color.WHITE);
+                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
 
                 isAuthor = false;
-                liveUserType.setVisibility(View.GONE);
-                liveVerified.setVisibility(View.VISIBLE);
+                userpageAuthorTag.setVisibility(View.GONE);
+                userpageVerified.setVisibility(View.VISIBLE);
                 // 隐藏文章
-                mLayoutArticlePart.setVisibility(View.GONE);
+                layoutArticlePart.setVisibility(View.GONE);
             } else {
-                liveVerified.setText("未验证");
-                liveVerified.setTextColor(Color.BLACK);
-                liveVerified.setBackgroundColor(Color.parseColor("#999999"));
-                liveUserType.setVisibility(View.GONE);
-                liveVerified.setVisibility(View.VISIBLE);
+                userpageVerified.setText("未验证");
+                userpageVerified.setTextColor(Color.BLACK);
+                userpageVerified.setBackgroundColor(Color.parseColor("#999999"));
+                userpageAuthorTag.setVisibility(View.GONE);
+                userpageVerified.setVisibility(View.VISIBLE);
                 isAuthor = false;
                 // 隐藏文章
-                mLayoutArticlePart.setVisibility(View.GONE);
+                layoutArticlePart.setVisibility(View.GONE);
             }
             String s = new Gson().toJson(liveUserInfosDataResp);
-            homepageAttentionCountTv.setText(String.valueOf(attentionNum));
-            homepageFansCount.setText(String.valueOf(fansNum));
-            DrawableUtils.displayImg(LiveHomePageActivity.this, personalHomePage, result.getAvatar());
+            userpageFollowNum.setText(String.valueOf(attentionNum));
+            userpageFansNum.setText(String.valueOf(fansNum));
+            DrawableUtils.displayImg(LiveHomePageActivity.this, userpageHeadportraitImg, result.getAvatar());
             if (!TextUtils.isEmpty(result.getDescription())) {
-                homepageMasterSignature.setText(result.getDescription());
+                userpageLoginPrompt.setText(result.getDescription());
             }
 
             Object statusa = result.getAttentionVO().getStatus();
@@ -435,13 +423,13 @@ public class LiveHomePageActivity extends BaseActivity {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已关注");
                     fansNum = fansNum + 1;
-                    homepageFansCount.setText(String.valueOf(fansNum));
+                    userpageFansNum.setText(String.valueOf(fansNum));
                     masterAttention.setTextColor(Color.BLACK);
                 } else if (status == 2) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已相互关注");
                     fansNum = fansNum + 1;
-                    homepageFansCount.setText(String.valueOf(fansNum));
+                    userpageFansNum.setText(String.valueOf(fansNum));
                     masterAttention.setTextColor(Color.BLACK);
                 }
 
@@ -457,8 +445,8 @@ public class LiveHomePageActivity extends BaseActivity {
                 Toast.makeText(LiveHomePageActivity.this, "已取消关注", Toast.LENGTH_SHORT).show();
                 masterAttention.setText("关注");
                 masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
-                fansNum = fansNum - 1;
-                homepageFansCount.setText(String.valueOf(fansNum));
+                fansNum=fansNum - 1;
+                userpageFansNum.setText(String.valueOf(fansNum));
             }
         }
 
