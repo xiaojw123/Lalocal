@@ -111,8 +111,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
                     final long finalSocre = socre;
                     if (finalSocre>mWalletCont.getScore()){
                         CustomDialog dialog=new CustomDialog(this);
-                        dialog.setTitle("提示");
-                        dialog.setMessage("游票不足....");
+                        dialog.setMessage("小主的钱袋里面没有这么多游票");
                         dialog.setNeturalBtn("知道了",null);
                         dialog.show();
                         return;

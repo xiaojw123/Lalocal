@@ -4,6 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/item_my_live_layout_height">
 
+    <TextView
+        style="@style/CommonDeLineTheme"
+        android:layout_gravity="bottom"
+        android:layout_marginLeft="@dimen/dimen_size_166_dp"
+        />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,6 +56,8 @@
             android:drawablePadding="@dimen/dimen_size_4_dp"
             android:textColor="@color/color_b3"
             android:textSize="@dimen/text_size_12_sp"
+            android:maxLines="1"
+            android:ellipsize="end"
            />
 
         <TextView
@@ -103,10 +111,5 @@
             android:textSize="@dimen/text_size_12_sp" />
 
     </RelativeLayout>
-    <TextView
-        style="@style/CommonDeLineTheme"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="@dimen/dimen_size_166_dp"
-        />
 
 </FrameLayout>

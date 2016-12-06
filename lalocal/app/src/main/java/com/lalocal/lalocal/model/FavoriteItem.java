@@ -45,8 +45,8 @@ public class FavoriteItem {
     private String photo;
     private Author author;
     private double price;
-    private String commentNum;
-    private String praiseNum;
+    private double commentNum;
+    private double praiseNum;
     private double readNum;
     private int status;
     private String address;
@@ -119,19 +119,19 @@ public class FavoriteItem {
         this.price = price;
     }
 
-    public String getCommentNum() {
+    public double getCommentNum() {
         return commentNum;
     }
 
-    public void setCommentNum(String commentNum) {
+    public void setCommentNum(double commentNum) {
         this.commentNum = commentNum;
     }
 
-    public String getPraiseNum() {
+    public double getPraiseNum() {
         return praiseNum;
     }
 
-    public void setPraiseNum(String praiseNum) {
+    public void setPraiseNum(double praiseNum) {
         this.praiseNum = praiseNum;
     }
 

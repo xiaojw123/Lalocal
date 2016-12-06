@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -37,6 +36,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.view.FullyGridLayoutManager;
 import com.lalocal.lalocal.view.ReboundScrollView;
 import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.adapter.MeItemAdapter;
@@ -118,9 +118,8 @@ MeFragment extends BaseFragment {
             itemAdapter = new MeItemAdapter(getMeItems(false));
             itemAdapter.setOnItemClickListener(recyclerClickListener);
         }
-        itemRlv.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        itemRlv.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
         itemRlv.addItemDecoration(new DividerGridItemDecoration(getActivity()));
-        itemRlv.setNestedScrollingEnabled(false);
         itemRlv.setAdapter(itemAdapter);
         setLoaderCallBack(new MeCallBack());
         return view;
@@ -166,9 +165,9 @@ MeFragment extends BaseFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         AppLog.print("meFragment_onHiddenChanged____" + hidden);
-//        if (!hidden) {
-//            initLogin();
-//        }
+        if (!hidden) {
+            initLogin();
+        }
     }
 
     @Override
@@ -242,11 +241,11 @@ MeFragment extends BaseFragment {
             }
             homeMeFollowNum.setText(user.getAttentionNum());
             homeMeFansNum.setText(user.getFansNum());
-//            mContentloader.getMessageCount();
+            mContentloader.getMessageCount();
         } else {
             unLoginLayout.setVisibility(View.VISIBLE);
             loginLayout.setVisibility(View.GONE);
-//            updateMessageCount(null);
+            updateMessageCount(null);
         }
 
     }
@@ -343,6 +342,7 @@ MeFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fragment_me_login_stv:
+                MobHelper.sendEevent(getActivity(),MobEvent.USER_LOGIN_BUTTON);
                 gotoLoginPage();
                 break;
             case R.id.home_me_personal_info:

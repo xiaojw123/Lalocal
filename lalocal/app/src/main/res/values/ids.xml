@@ -10,4 +10,5 @@
     
     
     <item type="id" name="giftdatabean">0x32</item>
+    <item type="id" name="search_id">0x24</item>
 </resources>
