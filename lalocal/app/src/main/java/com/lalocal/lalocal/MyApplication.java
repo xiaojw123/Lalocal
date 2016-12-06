@@ -161,13 +161,11 @@ public class MyApplication extends Application {
         // 配置保存图片，文件，log等数据的目录
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim/";
         options.sdkStorageRootPath = sdkPath;
-        android.util.Log.i("demo", FlavorDependent.getInstance().getFlavorName() + " demo nim sdk log path=" + sdkPath);
-
         // 配置数据库加密秘钥
         options.databaseEncryptKey = "NETEASE";
 
         // 配置是否需要预下载附件缩略图
-        options.preloadAttach = true;
+        options.preloadAttach = false;
 
         // 配置附件缩略图的尺寸大小，
         options.thumbnailSize = (int) (0.5 * ScreenUtil.screenWidth);

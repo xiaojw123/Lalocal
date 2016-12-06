@@ -3,25 +3,19 @@ package com.lalocal.lalocal.view.viewholder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
-import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.CarouselFigureActivity;
 import com.lalocal.lalocal.activity.DestinationActivity;
-import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
@@ -29,7 +23,6 @@ import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.Constants;
@@ -37,7 +30,6 @@ import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
-import com.lalocal.lalocal.util.DotUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.adapter.HomeRecommendAdapter;
 
@@ -77,7 +69,6 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
     public ADCategoryViewHolder(final Context context, View itemView, RecyclerView recyclerView) {
         super(itemView);
 
-        AppLog.i("TAH", "inti ADCategoryViewHolder");
         this.mContext = context;
         // 关联控件
         this.mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
@@ -87,7 +78,6 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         this.mSliderAd = (SliderLayout) itemView.findViewById(R.id.ad_slider);
 
         // 隐藏指示器
-        this.mSliderAd.setIndicatorVisibility(PagerIndicator.IndicatorVisibility.Invisible);
 
         // 取消焦点
         this.mLayoutTheme.setFocusable(false);
@@ -135,9 +125,9 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 LinearLayoutManager layoutManager = (LinearLayoutManager) mRvRecommendList.getLayoutManager();
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                AppLog.i("TAH","录播图.....："+firstVisibleItemPosition);
                 if (firstVisibleItemPosition > 1) {
                     AppLog.i("TAH", "1 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.stopAutoCycle();
@@ -186,7 +176,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             defaultSliderView.setOnSliderClickListener(onSliderClickListener);
             mSliderAd.addSlider(defaultSliderView);
 
-            // 添加小圆点
+         /*   // 添加小圆点
             View point = new View(mContext);
             int bottomMargin = DensityUtil.dip2px(mContext, 20);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -197,14 +187,14 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             point.setLayoutParams(params);
             // 为point设置标识,便于将来识别point
             point.setTag(i);
-            mDotContainer.addView(point);
+            mDotContainer.addView(point);*/
         }
 
         // 初始化小圆点列表
 //        mDotBtns = DotUtils.initDot(mContext, mSliderAd, mDotContainer, size, mSliderAd.getCurrentPosition(), DotUtils.ROUND_WHITE_DOT);
 
         // 轮播图页面改变
-        mSliderAd.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
+     /*   mSliderAd.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
@@ -220,7 +210,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                 }
             }
 
-        });
+        });*/
     }
 
     private BaseSliderView.OnSliderClickListener onSliderClickListener = new BaseSliderView.OnSliderClickListener() {

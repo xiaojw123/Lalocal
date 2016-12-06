@@ -158,6 +158,13 @@ public class LiveFragment extends BaseFragment {
         initLoader();
         // 初始化列表
         initXRecyclerView();
+        //创建日志文件夹
+        createLogFiles();
+    }
+
+    private void createLogFiles() {
+
+
     }
 
     /**
@@ -177,9 +184,6 @@ public class LiveFragment extends BaseFragment {
         // 设置回调接口
         mContentLoader.setCallBack(new MyCallBack());
 
-//        mContentLoader.getHomeAttention();
-//        mContentLoader.getLivelist("", "");
-//        mContentLoader.getPlayBackLiveList("", 1, "");
         // 获取直播首页数据
         getChannelIndexTotal(1);
         // 获取每日推荐数据
@@ -224,9 +228,6 @@ public class LiveFragment extends BaseFragment {
 
                 if (isRefresh == false) {
                     isRefresh = true;
-//                    mContentLoader.getHomeAttention();
-//                    mContentLoader.getLivelist("", "");
-//                    mContentLoader.getPlayBackLiveList("", 1, "");
                     getChannelIndexTotal(1);
                 }
             }
@@ -238,8 +239,6 @@ public class LiveFragment extends BaseFragment {
                     isLoadingMore = true;
                     // 页码+1
                     mCurPageNum++;
-                    // 获取相应页码的回放列表
-//                    mContentLoader.getPlayBackLiveList("", mCurPageNum, "");
                     getChannelIndexTotal(mCurPageNum);
                 }
             }
@@ -325,8 +324,6 @@ public class LiveFragment extends BaseFragment {
             // 隐藏推荐页
             mRecommendPage.hide();
             mRecommendPage.setFocusable(false);
-//        } else {
-//            mXrvLive.setRefreshing(true);
         }
     }
 
