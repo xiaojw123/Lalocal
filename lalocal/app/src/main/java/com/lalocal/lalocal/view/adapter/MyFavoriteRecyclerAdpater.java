@@ -17,6 +17,7 @@ import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,6 +31,7 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
 
     Context context;
     List<FavoriteItem> datas;
+    private static final String NUM_FORMART = "%.2f";
 
     public MyFavoriteRecyclerAdpater(List<FavoriteItem> datas) {
         this.datas = datas;
@@ -107,14 +109,14 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     itemHolder.price.setVisibility(View.GONE);
                 }
                 itemHolder.title.setText(item.getTargetName());
-                double readNum = item.getReadNum();
-                String praiseNum = item.getPraiseNum();
-                String commentNum = item.getCommentNum();
-                if (!TextUtils.isEmpty(formartNum(readNum))) {
+                String praiseNum = formartNum(item.getPraiseNum());
+                String commentNum = formartNum(item.getCommentNum());
+                String readNum = formartNum(item.getReadNum());
+                if (!TextUtils.isEmpty(readNum)) {
                     if (itemHolder.readnNum.getVisibility() != View.VISIBLE) {
                         itemHolder.readnNum.setVisibility(View.VISIBLE);
                     }
-                    itemHolder.readnNum.setText(formartNum(readNum));
+                    itemHolder.readnNum.setText(readNum);
                 } else {
                     itemHolder.readnNum.setVisibility(View.GONE);
                 }
@@ -146,12 +148,15 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
     }
 
     public String formartNum(double num) {
-
         if (num >= 1000) {
             double x = num / 1000;
-            return String.valueOf(x);
+            BigDecimal b = new BigDecimal(x);
+            double f = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+            return String.valueOf(f + "k");
+        } else if (num <= 0) {
+            return "";
         }
-        return  String.valueOf(num);
+        return String.valueOf((int) num);
     }
 
     @Override

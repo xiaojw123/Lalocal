@@ -24,6 +24,8 @@
                 android:id="@+id/home_me_userprofile_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -206,7 +208,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_size_25_dp"
                     android:overScrollMode="never"
-                    android:focusable="false"
                     />
             </RelativeLayout>
         </LinearLayout>

@@ -582,8 +582,7 @@ public class AppConfig {
 
     //用户历史直播
     public static String getUserLiveUrl(int userid, int pageNum) {
-        String url = baseUrl + "channels/users/" + userid + "/historys?pageNum=" + pageNum + "&pageSize=10";
-        AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
+        String url = baseUrl + "channels/users/" + userid + "/historys?pageNumber=" + pageNum + "&pageSize=10";
         return url;
 
     }
