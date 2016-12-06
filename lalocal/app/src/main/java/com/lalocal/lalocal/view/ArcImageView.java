@@ -64,12 +64,12 @@ public class ArcImageView extends ImageView {
             rectF.left = 0;
             rectF.right = getWidth();
             rectF.top = 0;
-            rectF.bottom = getBottom() - offset;
+            rectF.bottom = getBottom()-offset;
             if (mSupX == 0) {
                 mSupX = rectF.right / 2;
             }
             if (mSupY == 0) {
-                mSupY = rectF.bottom + offset;
+                mSupY =getBottom()+offset;
             }
             Path path = new Path();
             path.addRect(rectF, Path.Direction.CW);
@@ -95,3 +95,4 @@ public class ArcImageView extends ImageView {
 //        return super.onTouchEvent(event);
 //    }
 }
+

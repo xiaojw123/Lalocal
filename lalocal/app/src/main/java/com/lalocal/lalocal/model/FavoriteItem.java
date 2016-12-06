@@ -1,5 +1,7 @@
 package com.lalocal.lalocal.model;
 
+import android.text.TextUtils;
+
 /**
  * Created by xiaojw on 2016/6/20.
  */
@@ -31,11 +33,11 @@ public class FavoriteItem {
         this.subTitle = subTitle;
     }
 
-    public void setReadNum(String readNum) {
+    public void setReadNum(double readNum) {
         this.readNum = readNum;
     }
 
-    public String getReadNum() {
+    public double getReadNum() {
         return readNum;
 
     }
@@ -45,8 +47,29 @@ public class FavoriteItem {
     private double price;
     private String commentNum;
     private String praiseNum;
-    private String readNum;
+    private double readNum;
     private int status;
+    private String address;
+    private String startAt;
+
+    public String getAddress() {
+        if (TextUtils.isEmpty(address)) {
+            return "乐可奇妙之旅";
+        }
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getStartAt() {
+        return startAt;
+    }
+
+    public void setStartAt(String startAt) {
+        this.startAt = startAt;
+    }
 
     public int getTargetType() {
         return targetType;

@@ -120,11 +120,12 @@ public class PlayBackActivity extends BaseActivity {
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
         direction = liveRowsBean.getDirection();
-        targetId= liveRowsBean.getNumber();
+       // targetId= liveRowsBean.getNumber();
+        targetId =liveRowsBean.getId();
         targetType = liveRowsBean.getType();
         praiseId = liveRowsBean.getPraiseId();
         praiseFlag = liveRowsBean.isPraiseFlag();
-        AppLog.i("TAG","检测视屏是否收藏："+(praiseFlag==true?"已收藏":"未收藏"));
+        AppLog.i("TAG","检测视屏是否收藏："+(praiseFlag==true?"已收藏":"未收藏")+"    targetType:"+targetType+"   targetId:"+targetId);
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         initData(liveRowsBean);
     }
@@ -178,7 +179,6 @@ public class PlayBackActivity extends BaseActivity {
                         @Override
                         public void onDialogClickListener() {
                             LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
-
                         }
                     });
                     customDialog.show();
@@ -325,12 +325,12 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onClickCollect(ImageView view) {//收藏
             if(praiseFlag){
+                AppLog.i("TAG","取消收藏。。。。。");
                 contentLoader.cancelParises(praiseId,targetId);
             }else{
-                contentLoader.specialPraise(targetId, targetType);//收藏
+                AppLog.i("TAG","添加收藏。。。。。");
+                contentLoader.specialPraise(targetId,20);//收藏
             }
-
-
         }
 
         @Override

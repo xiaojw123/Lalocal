@@ -233,29 +233,29 @@
             <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
                 android:id="@+id/barrageView_test"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/live_height_80dp"
-                android:paddingBottom="@dimen/live_padding_10dp"
-                android:layout_above="@+id/messageListView"></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
+                android:layout_height="@dimen/live_height_65dp"
+                android:paddingBottom="@dimen/live_padding_5dp"
+                android:layout_above="@+id/messageListView"
+                ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
 
             <include
                 android:id="@+id/gift_animation_view"
                 layout="@layout/gift_layout"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_above="@id/messageListView"
-                android:layout_marginBottom="20dp" />
+                android:layout_height="60dp"
+                android:layout_above="@id/barrageView_test"
+                 />
 
             <include
                 android:id="@+id/gift_animation_view_up"
                 layout="@layout/gift_layout"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="60dp"
                 android:layout_above="@id/gift_animation_view"
-                android:layout_marginBottom="10dp" />
+                 />
         </RelativeLayout>
         <include layout="@layout/audience_live_over_page"></include>
         <include layout="@layout/gift_plan_layout"></include>
-
     </RelativeLayout>
 
 

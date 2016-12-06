@@ -129,19 +129,19 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.UMDefault" />
         <!-- lalocoal-release -->
-        <!--<meta-data-->
-            <!--android:name="UMENG_APPKEY"-->
-            <!--android:value="57885600e0f55a60d5000b3f" />-->
-        <!--<meta-data-->
-            <!--android:name="UMENG_MESSAGE_SECRET"-->
-            <!--android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />-->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57885600e0f55a60d5000b3f" />
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
         <!-- //lalocal-debug -->
-         <meta-data
-         android:name="UMENG_APPKEY"
-         android:value="5806d2df67e58ef11a000e36" />
-         <meta-data
-         android:name="UMENG_MESSAGE_SECRET"
-         android:value="9b462862fd10e9e8872745ec67df7718"/>
+         <!--<meta-data-->
+         <!--android:name="UMENG_APPKEY"-->
+         <!--android:value="5806d2df67e58ef11a000e36" />-->
+         <!--<meta-data-->
+         <!--android:name="UMENG_MESSAGE_SECRET"-->
+         <!--android:value="9b462862fd10e9e8872745ec67df7718"/>-->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"

@@ -538,12 +538,10 @@ public class LiveFragment extends BaseFragment {
                 ImageView imgPhoto = (ImageView) mRecommendPage.getView(R.id.img_recommendations);
                 Glide.with(getActivity()).load(photo).into(imgPhoto);
             }
-
             if (!TextUtils.isEmpty(avatar)) {
                 ImageView imgAvatar = (ImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
                 Glide.with(getActivity()).load(avatar).into(imgAvatar);
             }
-
             if (TextUtils.isEmpty(nickname)) {
                 nickname = "一位不愿意透露姓名的网友";
             }

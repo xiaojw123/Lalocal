@@ -152,16 +152,18 @@ public class MsgViewHolderChat extends TViewHolder{
             case "6"://禁言
                 itemContent= message.getContent();
                 textColor="#99190f00";
+                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
              //   textColor="#97d3e9";
-
                 break;
             case "7":
                 itemContent= message.getContent();
                 textColor="#99190f00";
+                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
             //    textColor="#97d3e9";
                 break;
             case "8":
                 itemContent= message.getContent();
+                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
           //      textColor="#97d3e9";
                 textColor="#99190f00";
                 break;
@@ -169,6 +171,7 @@ public class MsgViewHolderChat extends TViewHolder{
                 itemContent= message.getContent();
              //   textColor="#97d3e9";
                 textColor="#99190f00";
+                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "10":
                 GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);

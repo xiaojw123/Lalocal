@@ -104,7 +104,6 @@ public class CustomUserInfoDialog extends BaseDialog {
     private String accId;
     private String nickName;
     private int managerResult;
-
     public CustomUserInfoDialog(Context context, Container container, String userId, String channelId, int role, boolean isMaster,String creatorAccount,String roomId) {
         super(context);
         this.userId = userId;
@@ -311,6 +310,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                 isCancelManager=false;
                 liveManagerBean.getResult();
                 userinfoBottomCenter.setText(mContext.getString(R.string.live_cancel_manager_cancel));
+                liveManagerMark.setVisibility(View.VISIBLE);
                 String messageContent = "授权" + result.getNickName() + "为管理员";
                 sendMessage(messageContent,MessageType.managerLive);
                 LiveManagerListBean listBean=new LiveManagerListBean();
@@ -326,6 +326,7 @@ public class CustomUserInfoDialog extends BaseDialog {
             userinfoBottomCenter.setText(mContext.getString(R.string.lvie_setting_manager));
             isManager = false;
             String messageContent = "取消了" + result.getNickName() + "管理员权限";
+            liveManagerMark.setVisibility(View.GONE);
             sendMessage(messageContent,MessageType.cancel);
             LiveManagerListBean listBean=new LiveManagerListBean();
             listBean.setAvatar(result.getAvatar());
