@@ -48,6 +48,7 @@ import com.lalocal.lalocal.live.entertainment.model.OnLineUser;
 import com.lalocal.lalocal.live.entertainment.model.RankUserBean;
 import com.lalocal.lalocal.live.entertainment.model.RoomNotifyExt;
 import com.lalocal.lalocal.live.entertainment.model.TotalRanksBean;
+import com.lalocal.lalocal.live.entertainment.model.UserAvatarsBean;
 import com.lalocal.lalocal.live.entertainment.module.ChatRoomMsgListPanel;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -99,6 +100,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -179,6 +181,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     protected View topView;
     private TextView newMessageRemind;
     private boolean isFirstEnterRoom=true;
+
 
 
     protected abstract void checkNetInfo(String netType, int reminder);
@@ -536,6 +539,8 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             }
         });
     }
+    Set<UserAvatarsBean> userAvatarsBeanSet=new HashSet<>();
+    List<UserAvatarsBean> allUserAvatars=new ArrayList<>();
     protected abstract void showStatusUnUsual();
     public class MyCallBack extends ICallBack {
 
@@ -571,8 +576,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                                     }
                                                 }
                                             }
-
-
                                             barrageView.init(new BarrageConfig());
                                             if (content != null) {
                                                 BarrageViewBean barrageViewBean = new BarrageViewBean();
@@ -670,9 +673,19 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             super.onManagerList(liveManagerListResp);
             if(liveManagerListResp.getReturnCode()==0){
                 LiveConstant.result.clear();
-                LiveConstant.result= liveManagerListResp.getResult();
+              //  userAvatarsBeanSet.clear();
+               LiveConstant.result= liveManagerListResp.getResult();
+              /*  if(LiveConstant.result!=null&&LiveConstant.result.size()>0){
+                    for(LiveManagerListBean bean: LiveConstant.result){
+                        UserAvatarsBean userAvatarsBean=new UserAvatarsBean();
+                        userAvatarsBean.setAvatar(bean.getAvatar());
+                        userAvatarsBean.setId(bean.getId());
+                        userAvatarsBeanSet.add(userAvatarsBean);
+                    }
+                }*/
                 isOnLineUsersCountChange=true;
                 AppLog.i("TAG","查看直播间管理员列表");
+
             }
         }
 
@@ -682,15 +695,17 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             int number = result.getNumber();
             onlineCounts=number;
             onlineCountText.setText(String.valueOf(number) + "人");
-            List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars = result.getUserAvatars();
+            List<UserAvatarsBean> userAvatars = result.getUserAvatars();
             if (isFirstLoadding) {
+              /*  userAvatarsBeanSet.addAll(userAvatars);
+                allUserAvatars.addAll(userAvatarsBeanSet);*/
                 tourisAdapter = new TouristAdapter(LivePlayerBaseActivity.this, userAvatars);
                 LiveConstant.refreshManager=true;
                 touristList.setAdapter(tourisAdapter);
                 isFirstLoadding = false;
                 tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
                     @Override
-                    public void showTouristInfo(LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean member, boolean isMasterAccount) {
+                    public void showTouristInfo(UserAvatarsBean member, boolean isMasterAccount) {
 
                         if (LiveConstant.USER_INFO_FIRST_CLICK) {
                             LiveConstant.USER_INFO_FIRST_CLICK = false;
@@ -714,6 +729,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 });
 
             } else if (userAvatars.size() > 0) {
+              /*  allUserAvatars.clear();
+                userAvatarsBeanSet.addAll(userAvatars);
+                allUserAvatars.addAll(userAvatarsBeanSet);*/
                 tourisAdapter.refresh(userAvatars);
             }
 
@@ -816,12 +834,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                 showUserInfoDialog(userId, channelId, true);
                             }
                         }else {
-                            boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
-                            if (logineds&&firstClick){
+                            if (firstClick){
                                 firstClick = false;
                                 contentLoader.liveGiftRanks(channelId);
-                            } else {
-                                showLoginViewDialog();
                             }
                         }
                     }else {
@@ -1174,6 +1189,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             ext1.put("avatar", UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
             ext1.put("sortValue", String.valueOf(UserHelper.getSortValue(LivePlayerBaseActivity.this)));
             data.setNotifyExtension(ext1);
+            data.setExtension(ext1);
+            data.setAvatar(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
+            data.setNick(UserHelper.getUserName(LivePlayerBaseActivity.this));
             enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
             enterChatRoomRequestCallback = new EnterChatRoomRequestCallback();
             enterRequest.setCallback(enterChatRoomRequestCallback);
@@ -1220,6 +1238,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     OnLinesRunnable   onLInesRunnable=null;
     private int liveNumber;
     private void getRoomUsersCount() {
+        if(channelId!=null){
+            contentLoader.getLiveManagerList(channelId);
+        }
         if(LivePlayerBaseActivity.this instanceof AudienceActivity){
             isLiveMaster=false;
 
