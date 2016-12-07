@@ -45,12 +45,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/media_controller_progress"
+
                 android:layout_centerHorizontal="true">
                 <ImageView
                     android:id="@+id/video_before"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
                     android:paddingTop="5dp"
                     android:src="@drawable/video_before_btn"/>
 
@@ -60,7 +62,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="20dp"
+                   android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dp"
                     android:paddingTop="5dp"
                     android:layout_toRightOf="@+id/video_before"
                     android:src="@drawable/livingreplay_unplay"/>
@@ -71,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingLeft="20dp"
+                    android:layout_marginLeft="20dp"
                     android:paddingTop="5dp"
                     android:layout_toRightOf="@+id/pause"
                     android:src="@drawable/video_next_btn"/>
