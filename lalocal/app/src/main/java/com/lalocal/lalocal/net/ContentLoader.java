@@ -3106,7 +3106,7 @@ public class ContentLoader {
         }
 
         private void responseLiveAvatar(String json) {
-            //AppLog.i("TAG","获取直播间用户头像和排序"+json);
+            AppLog.i("TAG","获取直播间用户头像和排序"+json);
             LiveRoomAvatarSortResp liveRoomAvatarSortResp = new Gson().fromJson(json, LiveRoomAvatarSortResp.class);
             if(liveRoomAvatarSortResp.getReturnCode()==0){
                 callBack.onLiveRoomAvatar(liveRoomAvatarSortResp.getResult());

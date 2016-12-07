@@ -24,7 +24,7 @@
             android:lineSpacingExtra="@dimen/dimen_size_3_dp"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"
-
+            android:text="激发看得见风景梵蒂冈梵蒂冈的高高的郭德纲方法个电饭锅电饭锅电饭锅"
             />
 
         <ImageView

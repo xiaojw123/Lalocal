@@ -87,6 +87,7 @@ import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.TimeZone;
@@ -280,6 +281,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     }
                 } else {
                     if (createLiveLocationTv != null) {
+                        AppLog.i("TAG","定位是吧的地理位置:"+LiveActivity.liveLocation);
                         createLiveLocationTv.setText("Lalocal神秘之地");
                         LiveActivity.liveLocation = "Lalocal神秘之地";
                     }
@@ -665,7 +667,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
                         clearChatRoom();
                     }
-                    liveContentLoader.cancelLiveRoom(channelId);
+                    if(channelId!=null){
+                        liveContentLoader.cancelLiveRoom(channelId);
+                    }
                     break;
                 case R.id.input_start_live:
                     startLiveing();
@@ -694,6 +698,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             inputStartLive.setText("准备中...");
             isClickStartLiveBtn = true;
             startTime = System.currentTimeMillis();
+            AppLog.i("TAG","创建直播的地理位置:"+LiveActivity.liveLocation);
             liveContentLoader.alterLive(roomName,null,LiveActivity.liveLocation);
         }
     }
@@ -757,7 +762,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         boolean ok = info.isOK();
                         AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
                         AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败"));
-
+                        deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
 
                     }
                 }, null);
@@ -824,6 +829,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }
 
     }
+
+    public boolean deleteFile(String filePath) {
+        File file = new File(filePath);
+        if (file.isFile() && file.exists()) {
+            return file.delete();
+        }
+        return false;
+    }
+
+
+
     private void showHintDialog(final int status, final int challengeId) {
 
         String hintTitle = null;
@@ -1416,6 +1432,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         viewById.addOnLayoutChangeListener(this);
         if (createLiveLayout!=null&&createLiveLayout.getVisibility() == View.VISIBLE&&inputStartLive!=null) {
             createLiveLocationTv.setText(LiveActivity.liveLocation);
+            AppLog.i("TAG","返回地理位置："+LiveActivity.liveLocation);
             inputStartLive.setTextColor(getResources().getColor(R.color.live_start_tv));
         } else {
             if (inputPanel != null) {

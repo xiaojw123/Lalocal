@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.viewholder;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -10,14 +11,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.ui.TViewHolder;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
 import com.lalocal.lalocal.live.im.session.Container;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -96,18 +100,19 @@ public class MsgViewHolderChat extends TViewHolder{
                     channelId = value.toString();
                 }
 
-                if("disableSendMsgNickName".equals(key)){
-                    disableSendMsgNickName=value.toString();
-                }
                 if ("disableSendMsgUserId".equals(key)) {
                     disableSendMsgUserId = value.toString();
                 }
                 if("adminSendMsgUserId".equals(key)){
                     adminSendMsgUserId = value.toString();
                 }
+                if("disableSendMsgNickName".equals(key)){
+                    disableSendMsgNickName=value.toString();
+                }
                 if("adminSendMsgNickName".equals(key)){
                     adminSendMsgNickName=value.toString();
                 }
+
                 if ("giftModel".equals(key)) {
                     String text = value.toString();
                     if (text != null && !"null".equals(text)) {
@@ -141,42 +146,37 @@ public class MsgViewHolderChat extends TViewHolder{
                 break;
             case "1":
                 itemContent=message.getContent();
-              //  textColor="#97d3e9";
+
                 textColor="#99190f00";
                 break;
             case "2"://点赞
                 itemContent="给主播点了个赞";
-              //  textColor="#97d3e9";
                 textColor="#99190f00";
                 break;
             case "6"://禁言
-                itemContent= message.getContent();
+                itemContent="禁言了"+disableSendMsgNickName;
                 textColor="#99190f00";
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
-             //   textColor="#97d3e9";
                 break;
             case "7":
-                itemContent= message.getContent();
+                itemContent= "解除了"+disableSendMsgNickName+"的禁言";
                 textColor="#99190f00";
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
-            //    textColor="#97d3e9";
                 break;
             case "8":
-                itemContent= message.getContent();
+                itemContent= "将"+adminSendMsgNickName+"授权为管理员";
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
-          //      textColor="#97d3e9";
                 textColor="#99190f00";
                 break;
             case "9":
-                itemContent= message.getContent();
-             //   textColor="#97d3e9";
+                itemContent="取消了"+adminSendMsgNickName+"的管理员权限";
                 textColor="#99190f00";
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "10":
                 GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
                 itemContent="给主播送了"+giftCount+"个"+giftName;
-                textColor="#97d3e9";
+                textColor="#ffffff";
                 itenImage.setVisibility(View.VISIBLE);
                 messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
                 messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
@@ -185,7 +185,6 @@ public class MsgViewHolderChat extends TViewHolder{
                 break;
             case "12":
                 itemContent= message.getContent();
-              //  textColor="#97d3e9";
                 textColor="#99190f00";
                 break;
 
@@ -200,18 +199,38 @@ public class MsgViewHolderChat extends TViewHolder{
                     container = new Container(((LivePlayerBaseActivity)context), LiveConstant.ROOM_ID, SessionTypeEnum.ChatRoom, ((LivePlayerBaseActivity)context));
                 }
                if(disableSendMsgUserId!=null&&!disableSendMsgUserId.equals("null")){
-
                    userId1=disableSendMsgUserId;
                }else if(adminSendMsgUserId!=null&&!adminSendMsgUserId.equals("null")){
-
                    userId1=adminSendMsgUserId;
                }else{
                    userId1=userId;
                }
-              if(LiveConstant.isUnDestory){
-                    CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
-                    dialog.show();
+                if(UserHelper.isLogined(context)){
+                    if(LiveConstant.isUnDestory){
+                        CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
+                        dialog.show();
+                    }
+                }else {
+                    final CustomChatDialog customDialog = new CustomChatDialog(context);
+                    customDialog.setContent(context.getString(R.string.live_login_hint));
+                    customDialog.setCancelable(false);
+                    customDialog.setCancelBtn(context.getString(R.string.live_canncel), null);
+                    customDialog.setSurceBtn(context.getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            DemoCache.setLoginStatus(false);
+                            LLoginActivity.startForResult(context, 701);
+                        }
+                    });
+                    customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            LiveConstant.USER_INFO_FIRST_CLICK = true;
+                        }
+                    });
+                    customDialog.show();
                 }
+
 
             }
         });

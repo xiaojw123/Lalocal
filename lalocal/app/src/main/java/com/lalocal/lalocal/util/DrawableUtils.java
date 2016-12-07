@@ -75,7 +75,6 @@ public class DrawableUtils {
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
             loader.displayImage(fileUri, img, listener);
-
         }
     }
 

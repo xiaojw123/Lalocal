@@ -77,7 +77,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         this.mLayoutShop = (LinearLayout) itemView.findViewById(R.id.layout_shop);
         this.mSliderAd = (SliderLayout) itemView.findViewById(R.id.ad_slider);
 
-        // 隐藏指示器
+
 
         // 取消焦点
         this.mLayoutTheme.setFocusable(false);
@@ -163,7 +163,6 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         // 获取列表大小
         int size = mAdList.size();
         // 移除所有小圆点
-        mDotContainer.removeAllViews();
         mSliderAd.removeAllSliders();
         for (int i = 0; i < size; i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(mContext);
