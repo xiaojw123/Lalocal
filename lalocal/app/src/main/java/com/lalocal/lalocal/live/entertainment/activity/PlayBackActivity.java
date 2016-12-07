@@ -167,6 +167,9 @@ public class PlayBackActivity extends BaseActivity {
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.playback_master_info_layout:
+                if (user == null) {
+                    break;
+                }
                 if (UserHelper.isLogined(PlayBackActivity.this)) {
                     contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
                 } else {
