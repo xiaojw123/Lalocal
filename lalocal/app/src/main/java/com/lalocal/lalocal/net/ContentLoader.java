@@ -1168,7 +1168,7 @@ public class ContentLoader {
         }
         AppLog.i("TAG","回访客户开发和地方："+accid);
 
-        ContentRequest request = new ContentRequest(Request.Method.POST,"http://dev.lalocal.cn:8080/api/users/block", response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.getPerpetualMute(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         request.setBodyParams(getMuteParams(accid));
         requestQueue.add(request);
@@ -3487,12 +3487,11 @@ public class ContentLoader {
 
     //修改直播
     private String getAlterLiveRoom(String title, String photo,String address) {
-
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
             jsonObject.put("photo", photo);
-            jsonObject.put("direction ",1);
+            jsonObject.put("direction",1);
             jsonObject.put("address",address);
 
         } catch (JSONException e) {

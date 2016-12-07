@@ -390,7 +390,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         routeDetailViewpagerRoute.setCurrentItem(id - 1);
     }
 
-
     public void setSelectItem(ViewGroup viewGroup, int selectedId) {
         AppLog.print("setSelectItem___start_");
         for (int i = 0; i < viewGroup.getChildCount(); i++) {
@@ -592,8 +591,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             textView.setText(String.valueOf(pos + 1));
             textView.setBackground(getResources().getDrawable(res));
             options.icon(BitmapDescriptorFactory.fromView(textView));
-
-            LatLng latLng = new LatLng(item.getLatitude(), item.getLongitude());
+            LatLng latLng = new LatLng(item.getLongitude(),item.getLatitude());
+          //  LatLng latLng = new LatLng(item.getLatitude(), item.getLongitude());
             lats.add(latLng);
             options.position(latLng);
             aMap.addMarker(options);

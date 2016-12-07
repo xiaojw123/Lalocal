@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.animation.Animation;
@@ -30,7 +31,7 @@ public class MarqueeView extends ViewFlipper {
     private boolean isSetAnimDuration = false;
     private int interval = 1000;
     private int animDuration = 500;
-    private int textSize = 14;
+    private int textSize = 12;
     private int textColor = 0xffffffff;
     private Queue<String> content;
     public MarqueeView(Context context, AttributeSet attrs) {
@@ -111,6 +112,8 @@ public class MarqueeView extends ViewFlipper {
     private TextView createTextView(String text) {
 
         TextView tv = new TextView(mContext);
+        tv.setEllipsize(TextUtils.TruncateAt.END);
+        tv.setLines(1);
         tv.setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
         tv.setText(text);
         if(text.equals("欢迎你进入直播间")||text.equals("登陆聊天室成功...")){

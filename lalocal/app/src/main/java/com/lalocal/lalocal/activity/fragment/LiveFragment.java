@@ -18,8 +18,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
@@ -28,8 +28,6 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
-import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
-import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.ChannelIndexTotalResult;
@@ -483,6 +481,13 @@ public class LiveFragment extends BaseFragment {
 //            }
 //
 //        }
+
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+            AppLog.i("TAG","龙卷风两级分类街坊邻居会计师费");
+        }
 
         @Override
         public void onGetDailyRecommend(RecommendationsBean bean) {

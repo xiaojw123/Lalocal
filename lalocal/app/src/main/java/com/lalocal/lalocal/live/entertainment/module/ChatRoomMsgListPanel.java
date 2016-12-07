@@ -110,6 +110,12 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         View view2= View.inflate(container.activity, R.layout.live_item_remind_layout,null);
         headInfos = (TextView) view.findViewById(R.id.chat_info_head);
         infoRemind = (TextView) view2.findViewById(R.id.chat_info_remind);
+        newView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                scrollToBottom();
+            }
+        });
 
         headInfos.setText("公告： "+content);
         headInfos.setVisibility(View.GONE);
@@ -175,6 +181,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         uiHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                newView.setVisibility(View.GONE);
                 ListViewUtil.scrollToBottom(messageListView);
             }
         }, 200);

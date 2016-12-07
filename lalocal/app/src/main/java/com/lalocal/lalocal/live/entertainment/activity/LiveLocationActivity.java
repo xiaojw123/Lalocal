@@ -1,9 +1,14 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -28,6 +33,8 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.LiveHistoryItem;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.adapter.LocationHistoryAdapter;
@@ -96,7 +103,48 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
         initView();
         initHistoryData();
         //初始化定位
-        initLocation();
+        if (Build.VERSION.SDK_INT >= 22) {
+            // 请求用户权限
+            reminderUserPermission(INIT);
+        } else {
+            // 初始化
+            initLocation();
+        }
+
+    }
+    private static final int INIT = 0x01;
+    private static final String[] RW_SD_PERMISSIONS = new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
+    @TargetApi(Build.VERSION_CODES.M)
+    private void reminderUserPermission(int init) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+        } else {
+            // 初始化
+            initLocation();
+        }
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        doNext(requestCode, grantResults);
+    }
+    private void doNext(int requestCode, int[] grantResults) {
+        if(LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE==requestCode){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 初始化
+                initLocation();
+            } else {
+                Toast.makeText(this, "没有地理位置权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
     private void initLocation() {
@@ -277,13 +325,18 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
 
     }
 
-    @OnClick({R.id.live_location_no, R.id.live_input_location_tv, R.id.live_location_complete, R.id.live_again_location})
+    @OnClick({R.id.live_location_no, R.id.live_input_location_tv, R.id.live_location_complete, R.id.live_again_location,R.id.live_location_title_back})
     public void clickBtn(View view) {
         switch (view.getId()) {
+            case R.id.live_location_title_back:
+                MobHelper.sendEevent(this, MobEvent.LIVE_LOCATION_BACK);
+                finish();
+                break;
             case R.id.live_location_no:
                 liveLocationNo.setVisibility(View.GONE);
                 liveLocationInputLayout.setVisibility(View.VISIBLE);
                 liveLocationInputEt.requestFocus();
+                MobHelper.sendEevent(this, MobEvent.LIVE_LOCATION_MANUAL);
                 handler.postDelayed(showTextRunnable, SHOW_LAYOUT_DELAY);
                 break;
             case R.id.live_input_location_tv:
@@ -313,9 +366,9 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     LiveActivity.locationY=false;
                     Toast.makeText(this,"请输入地址!",Toast.LENGTH_SHORT).show();
                 }
-
                 break;
             case R.id.live_location_complete:
+                MobHelper.sendEevent(this, MobEvent.LIVE_LOCATION_SURRE);
                 finish();
                 break;
             case R.id.live_again_location:

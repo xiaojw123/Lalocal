@@ -49,6 +49,9 @@ public class GiftStorePopuWindow extends PopupWindow {
         IndicatorView mIndicatorView = (IndicatorView) giftView.findViewById(R.id.idv_banner);
         TextView giftSend = (TextView) giftView.findViewById(R.id.audience_gift_send);
         List<GridView> list = new ArrayList<>();
+        if(giftSresult==null){
+            return;
+        }
         int giftCountSize = giftSresult.size();
         int viewPageCount=(giftCountSize%6)==0?(giftCountSize/6):(giftCountSize/6)+1;
         for(int i=0;i<viewPageCount;i++){

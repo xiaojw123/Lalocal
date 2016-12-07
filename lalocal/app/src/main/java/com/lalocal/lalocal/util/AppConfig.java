@@ -341,8 +341,8 @@ public class AppConfig {
         return baseUrl+"channels/mute";
     }
     //永久禁言
-    public  static final String getPerpetualMute(String accid){
-        return baseUrl+"users/block/"+accid;
+    public  static final String getPerpetualMute(){
+        return baseUrl+"users/block/";
     }
     //发送消息
     public static  final String sendMessage(){

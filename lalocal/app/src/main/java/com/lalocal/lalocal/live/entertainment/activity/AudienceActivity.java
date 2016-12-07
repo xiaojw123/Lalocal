@@ -204,6 +204,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             if(liveAttentionStatusBean.getReturnCode()==0){
                 LiveAttentionStatusBean.ResultBean result = liveAttentionStatusBean.getResult();
               int  userStatus = result.getStatus();
+                overAttentionStatus=userStatus;
                 if(userStatus==0){
                     overAttention.setText(getString(R.string.live_master_attention));
                 }else if(userStatus==1){
@@ -219,6 +220,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
             super.onLiveCancelAttention(liveCancelAttention);
             if(liveCancelAttention.getReturnCode()==0){
+                overAttentionStatus=0;
                 overAttention.setText(getString(R.string.live_master_attention));
             }
         }
@@ -488,7 +490,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     boolean masterComeBack = true;
     //计算主播离开时间，若果超过30秒还未回来，就显示主播离开界面，masterComeBack：标记主播离开回来状态
 
-
     public void masterLeaveTime() {
         countDownTimer = new CountDownTimer(30000, 1000) {
             @Override
@@ -510,8 +511,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
        new CountDownTimer(30000, 30000) {
             @Override
             public void onTick(long millisUntilFinished) {
-            }
 
+            }
             @Override
             public void onFinish() {
                 runOnUiThread(new Runnable() {
@@ -553,8 +554,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         }
                     }
                 });
-
-
             }
         }.start();
 
@@ -885,7 +884,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             Toast.makeText(AudienceActivity.this, "没有登录聊天室，请退出重进!", Toast.LENGTH_SHORT).show();
         }
     }
-
     @Override
     protected void liveCommonSetting() {
         MobHelper.sendEevent(this, MobEvent.LIVE_USER_SHARE);
@@ -940,29 +938,11 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         if (b) {
             masterComeBack = true;
             //主播回来了
-            LiveMessage liveMessage = new LiveMessage();
-            liveMessage.setStyle(MessageType.text);
-            liveMessage.setUserId(userId);
-            liveMessage.setCreatorAccount(creatorAccount);
-            liveMessage.setChannelId(channelId);
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "回来了", roomId, creatorAccount, liveMessage);
-            messageListPanel.onMsgSend(imMessage);
-         //   marqueeView.start("主播回来了");
-            AppLog.i("TAG","用户端主播进入直播间"+container.account+"   roomId:"+roomId+"     creatorAccount:"+creatorAccount+"channelId:"+channelId+"userId:"+userId);
             showFinishLayout(false, 2);
         } else {
             masterComeBack = false;
             masterLeaveTime();
             //主播离开了
-            LiveMessage liveMessage = new LiveMessage();
-            liveMessage.setStyle(MessageType.text);
-            liveMessage.setUserId(userId);
-            liveMessage.setCreatorAccount(creatorAccount);
-            liveMessage.setChannelId(channelId);
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "离开了", roomId, creatorAccount, liveMessage);
-          //  marqueeView.start("主播离开了");
-            AppLog.i("TAG","用户端主播离开直播间");
-            messageListPanel.onMsgSend(imMessage);
         }
 
     }
@@ -1042,7 +1022,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     showInputTextView();
                     break;
                 case R.id.audience_live_over_close:
-
                     finishLive();
                     break;
                 case R.id.audience_live_over_attention:
@@ -1420,7 +1399,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     public void run() {
                         try{
                             if (overAttentionStatus == 0 && LiveConstant.isUnDestory&&audienceOver.getVisibility()!=View.VISIBLE) {
-                                LiveAttentionPopuwindow popuwindow = new LiveAttentionPopuwindow(AudienceActivity.this, liveRowsBean);
+                                final LiveAttentionPopuwindow popuwindow = new LiveAttentionPopuwindow(AudienceActivity.this, liveRowsBean);
                                 popuwindow.showAttentionPopu();
                                 popuwindow.showAtLocation(AudienceActivity.this.findViewById(R.id.live_layout),
                                         Gravity.BOTTOM, 0, 0);
@@ -1436,6 +1415,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                                             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "关注了主播!", roomId, AuthPreferences.getUserAccount(), liveMessage);
                                             sendMessage(imMessage, MessageType.text);
                                         }
+                                        popuwindow.dismiss();
                                     }
 
                                     @Override
@@ -1460,7 +1440,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     @Override
     protected void onStop() {
         super.onStop();
-
 
         DialogUtil.clear();
         if (giftStorePopuWindow != null) {

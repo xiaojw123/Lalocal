@@ -19,6 +19,8 @@ import com.android.volley.VolleyError;
 import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
 import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
@@ -197,6 +199,7 @@ public class ReportActivity extends BaseActivity {
             btns.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     selectRadioBtn(btns, finalI);
                 }
             });
@@ -248,6 +251,7 @@ public class ReportActivity extends BaseActivity {
                 int lastIndex = mPhotoAdapter.getCount() - 1;
                 // 如果当前点击的是最后一张图片(“添加”图片)
                 if (position == lastIndex) {
+                    MobHelper.sendEevent(ReportActivity.this, MobEvent.LIVE_USER_REPORT_PICTURE);
                     // 启动GalleryFinal
                     startGlideGalleryFinal();
                 }
@@ -397,12 +401,14 @@ public class ReportActivity extends BaseActivity {
     void clickBtn(View v) {
         switch (v.getId()) {
             case R.id.btn_close_report:
+                MobHelper.sendEevent(this, MobEvent.LIVE_USER_REPORT_CANCEL);
                 ReportActivity.this.finish();
                 break;
             case R.id.btn_confirm_report:
                 loading.setVisibility(View.VISIBLE);
                 // 举报
                 report();
+                MobHelper.sendEevent(this, MobEvent.LIVE_USER_REPORT_SURE);
                 break;
         }
     }
