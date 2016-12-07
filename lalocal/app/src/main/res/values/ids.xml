@@ -11,4 +11,6 @@
     
     <item type="id" name="giftdatabean">0x32</item>
     <item type="id" name="search_id">0x24</item>
+    <item type="id" name="pageNum"/>
+    <item type="id" name="toalPages"/>
 </resources>

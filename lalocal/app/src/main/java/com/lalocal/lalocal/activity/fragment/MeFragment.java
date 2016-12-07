@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -36,7 +37,6 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.view.FullyGridLayoutManager;
 import com.lalocal.lalocal.view.ReboundScrollView;
 import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.adapter.MeItemAdapter;
@@ -118,8 +118,10 @@ MeFragment extends BaseFragment {
             itemAdapter = new MeItemAdapter(getMeItems(false));
             itemAdapter.setOnItemClickListener(recyclerClickListener);
         }
-        itemRlv.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
+//        itemRlv.setLayoutManager(new FullyGridLayoutManager(getActivity(), 3));
+        itemRlv.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         itemRlv.addItemDecoration(new DividerGridItemDecoration(getActivity()));
+        itemRlv.setNestedScrollingEnabled(false);
         itemRlv.setAdapter(itemAdapter);
         setLoaderCallBack(new MeCallBack());
         return view;
@@ -247,7 +249,7 @@ MeFragment extends BaseFragment {
             loginLayout.setVisibility(View.GONE);
             updateMessageCount(null);
         }
-
+        reboundScrollView.smoothScrollTo(0,0);
     }
 
     public void showArticleTag() {
