@@ -199,14 +199,15 @@ public class MsgViewHolderChat extends TViewHolder{
                 if(container==null){
                     container = new Container(((LivePlayerBaseActivity)context), LiveConstant.ROOM_ID, SessionTypeEnum.ChatRoom, ((LivePlayerBaseActivity)context));
                 }
-               if(disableSendMsgUserId!=null){
+               if(disableSendMsgUserId!=null&&!disableSendMsgUserId.equals("null")){
+
                    userId1=disableSendMsgUserId;
-               }else if(adminSendMsgUserId!=null){
+               }else if(adminSendMsgUserId!=null&&!adminSendMsgUserId.equals("null")){
+
                    userId1=adminSendMsgUserId;
                }else{
                    userId1=userId;
                }
-                AppLog.i("TAG","点击公屏itme,获取用户id:"+userId1+"    userId:"+userId);
               if(LiveConstant.isUnDestory){
                     CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                     dialog.show();

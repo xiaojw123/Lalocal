@@ -192,7 +192,6 @@ public class PlayBackActivity extends BaseActivity {
                 }else if((videoViewPlayer.getVisibility())==0){
                     videoViewPlayer.close();
                 }
-
                 finish();
                 break;
             case R.id.playback_top_share:

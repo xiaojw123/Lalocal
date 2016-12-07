@@ -2,6 +2,7 @@ package com.lalocal.lalocal.live.im.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -108,10 +109,15 @@ public class MarqueeView extends ViewFlipper {
 
     // 创建ViewFlipper下的TextView
     private TextView createTextView(String text) {
+
         TextView tv = new TextView(mContext);
         tv.setGravity(Gravity.LEFT|Gravity.CENTER_VERTICAL);
         tv.setText(text);
-        tv.setTextColor(textColor);
+        if(text.equals("欢迎你进入直播间")||text.equals("登陆聊天室成功...")){
+            tv.setTextColor(Color.parseColor("#e4f6cf4e"));
+        }else{
+            tv.setTextColor(textColor);
+        }
         tv.setTextSize(textSize);
         return tv;
     }

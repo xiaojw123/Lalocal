@@ -102,7 +102,6 @@ import io.agora.rtc.video.VideoCanvas;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.ActivityProxy, View.OnLayoutChangeListener {
     private static final String TAG = "LiveActivity";
-
     private int screenHeight;
     private int keyHeight;
     public static String liveLocation = "LALOCAL神秘之地";
@@ -217,11 +216,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        AppLog.i("TAG", "主播端走了onCreate");
         liveContentLoader = new ContentLoader(this);
         liveCallBack = new LiveCallBack();
         liveContentLoader.setCallBack(liveCallBack);
-        liveContentLoader.createLiveRoom();//直播接口
         viewById = findViewById(R.id.live_layout);
 
         //七牛云api
@@ -241,7 +238,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             liveContentLoader.alterLive(roomName,null,LiveActivity.liveLocation);
         }
     }
-
 
 
     AMapLocationClient locationClient = null;
@@ -536,6 +532,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             Constant.CAMERABACK = true;
                             Constant.PRP_ENABLED = false;
                         }
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_CAMERA);
                         worker().enablePreProcessor();//美颜开闭切换
                         worker().getRtcEngine().switchCamera();
                         break;
@@ -548,7 +545,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             ((TextView) view).setText(R.string.live_beauty_on);
                             ((TextView) view).setTextColor(getResources().getColor(R.color.live_beauty_on));
                         }
-
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_BEAUTY);
                         worker().enablePreProcessor();//美颜开闭切换
 
                         break;
@@ -556,7 +553,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         if (shareVO != null && LiveConstant.isUnDestory) {
                             shareLivePopu();
                         }
-
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE);
                         break;
                     case R.id.live_send_message_pop:
                         showInputTextView();
@@ -571,6 +568,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
     private void shareLivePopu() {
         try{
+            MobHelper.sendEevent(this, MobEvent.LIVE_USER_SHARE);
             LiveingSharePopuwindow sharePop = new LiveingSharePopuwindow(LiveActivity.this);
             sharePop.showSharePopu();
             sharePop.showAtLocation(LiveActivity.this.findViewById(R.id.live_layout),
@@ -759,7 +757,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         boolean ok = info.isOK();
                         AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
                         AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败"));
-                        //  newxmlfile.delete();
+
 
                     }
                 }, null);
@@ -1328,10 +1326,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onResult(SHARE_MEDIA share_media) {
             liveContentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()), share_media.equals(SHARE_MEDIA.SINA) ? "2" : (share_media.equals(SHARE_MEDIA.WEIXIN) ? "1" : "0"));
             if (share_media.equals(SHARE_MEDIA.SINA)) {
+                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WEIBO);
                 Toast.makeText(LiveActivity.this, "微博分享成功!", Toast.LENGTH_SHORT).show();
+                sendShareMessage("到新浪微博");
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
+                sendShareMessage("到微信");
+                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WECHAT1);
                 Toast.makeText(LiveActivity.this, "微信分享成功!", Toast.LENGTH_SHORT).show();
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                sendShareMessage("到朋友圈");
+                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WECHAT2);
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享成功!", Toast.LENGTH_SHORT).show();
             }
 
@@ -1340,10 +1344,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
             if (share_media.equals(SHARE_MEDIA.SINA)) {
+                sendShareMessage("到新浪微博");
                 Toast.makeText(LiveActivity.this, "微博分享失败!", Toast.LENGTH_SHORT).show();
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
+                sendShareMessage("到微信");
                 Toast.makeText(LiveActivity.this, "微信分享失败!", Toast.LENGTH_SHORT).show();
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
+                sendShareMessage("到朋友圈");
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享失败!", Toast.LENGTH_SHORT).show();
             }
 
@@ -1361,7 +1368,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
         }
 
-
+    }
+  public  void  sendShareMessage(String content){
+        LiveMessage liveMessage = new LiveMessage();
+        liveMessage.setStyle(MessageType.text);
+        liveMessage.setUserId(userId);
+        liveMessage.setCreatorAccount(creatorAccount);
+        liveMessage.setChannelId(channelId);
+        IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "分享了直播"+content, roomId, AuthPreferences.getUserAccount(), liveMessage);
+        sendMessage(imMessage, MessageType.text);
     }
 
 

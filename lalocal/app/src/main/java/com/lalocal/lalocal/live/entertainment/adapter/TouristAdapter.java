@@ -58,18 +58,13 @@ public class TouristAdapter extends RecyclerView.Adapter {
         }else{
             DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, userAvatarsBean.getAvatar());
         }
-
-        if(LiveConstant.result.size()>0&&LiveConstant.refreshManager){
+        if(LiveConstant.result.size()>0){
             for(LiveManagerListBean bean :LiveConstant.result){
                if(bean.getId()==userAvatarsBean.getId()){
                    liveViewHodler.managerMark.setVisibility(View.VISIBLE);
                }
             }
         }
-        if(position==19&&LiveConstant.refreshManager){
-            LiveConstant.refreshManager=false;
-        }
-
         liveViewHodler.touristItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

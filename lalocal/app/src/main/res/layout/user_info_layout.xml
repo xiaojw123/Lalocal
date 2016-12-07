@@ -132,17 +132,16 @@
                         android:id="@+id/userinfo_bottom_left"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:gravity="center"
                         android:textColor="@color/color_ffaa2a"
                         android:textSize="@dimen/text_size_14_sp"
-
                         />
                     <TextView
                         android:id="@+id/userinfo_bottom_center"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:textColor="@color/color_ffaa2a"
                         android:textSize="@dimen/text_size_14_sp"
                         android:gravity="center"
@@ -153,7 +152,7 @@
                         android:id="@+id/userinfo_bottom_right"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:textColor="@color/color_ffaa2a"
                         android:textSize="@dimen/text_size_14_sp"
                         android:gravity="center"

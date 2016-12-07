@@ -119,6 +119,7 @@ public class CustomUserInfoDialog extends BaseDialog {
         contentLoader.getLiveUserInfo(String.valueOf(userId));//获取用户基本信息
         if(channelId!=null){
             contentLoader.getLiveManagerList(channelId);//查看管理员列表
+            AppLog.i("TAG","用户信息dialog:channelId"+channelId);
         }
 
         AppLog.i("TAG","获取用户ID:"+userId);
@@ -133,11 +134,17 @@ public class CustomUserInfoDialog extends BaseDialog {
         if(userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己
             customDialogLiveHeaderLayout.setVisibility(View.GONE);
             customDialogAudienceCloseLayout.setVisibility(View.VISIBLE);
-            userInfoLayoutBottom.setVisibility(View.GONE);
+            userinfoBottomLeft.setVisibility(View.GONE);
+            userinfoBottomRight.setVisibility(View.GONE);
+            userinfoBottomCenter.setText("主页");
+            userinfoBottomCenter.setTextColor(Color.WHITE);
+            userinfoBottomCenter.setBackgroundColor(mContext.getResources().getColor(R.color.color_ffaa2a));
+            AppLog.i("TAG","用户信息6");
         }else {
             if(role==0){
                 customDialogLiveHeaderLayout.setVisibility(View.GONE);
                 customDialogAudienceCloseLayout.setVisibility(View.VISIBLE);
+
             }else{
                 customDialogLiveHeaderLayout.setVisibility(View.VISIBLE);
                 customDialogAudienceCloseLayout.setVisibility(View.GONE);
@@ -176,7 +183,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                     attentionNum = result.getAttentionNum();
                     accId = result.getAccId();
                     fansNum = result.getFansNum();
-                    AppLog.i("TAG","查看用户省份："+result.getRole());
+                    AppLog.i("TAG","查看用户省份："+result.getRole()+"    accId:"+accId);
                     String description = result.getDescription();
                     Object status = result.getAttentionVO().getStatus();
 
@@ -207,7 +214,6 @@ public class CustomUserInfoDialog extends BaseDialog {
                     }else if(role==2){
                         checkMute(accId);
                     }
-
                 }
 
             }catch (Exception e){
@@ -223,10 +229,16 @@ public class CustomUserInfoDialog extends BaseDialog {
                 if(!isCancelManager){
                     if(role==0){//用户端
                         if(managerResult!=0){
+                            AppLog.i("TAG","用户信息1");
                             checkMute(accId);
                         }else{
-                            userinfoBottomCenter.setVisibility(View.GONE);
-                            userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+                            AppLog.i("TAG","用户信息2");
+                            if(!userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){
+                                AppLog.i("TAG","用户信息7");
+                                userinfoBottomCenter.setVisibility(View.GONE);
+                                userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+                            }
+
                         }
 
                     }else{//主播端
@@ -235,11 +247,13 @@ public class CustomUserInfoDialog extends BaseDialog {
 
                         }else{
                             if(managerResult !=0){
+                                AppLog.i("TAG","用户信息3");
                                 //他是管理员
                                 isManager=true;
                                 userinfoBottomCenter.setText(mContext.getString(R.string.live_cancel_manager_cancel));
                                 liveManagerMark.setVisibility(View.VISIBLE);
                             }else{
+                                AppLog.i("TAG","用户信息4");
                                 isManager=false;
                                 userinfoBottomCenter.setText(mContext.getString(R.string.lvie_setting_manager));
                                 liveManagerMark.setVisibility(View.GONE);
@@ -343,7 +357,8 @@ public class CustomUserInfoDialog extends BaseDialog {
         }
     }
 
-    private void checkMute(String accId) {
+    private void checkMute(final String accId) {
+        AppLog.i("TAG","用户信息5");
         List<String> userIdList=new ArrayList<>();
         userIdList.add(accId);
         NIMClient.getService(ChatRoomService.class)
@@ -355,20 +370,32 @@ public class CustomUserInfoDialog extends BaseDialog {
                         if(chatRoomMembers!=null&&chatRoomMembers.size()>0){
                             for(ChatRoomMember chatRoom:chatRoomMembers ){
                                 isMuted= chatRoom.isTempMuted();
+                                AppLog.i("TAG","用户信息8");
                                 if(role==0||role==2){
                                     if(!userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){
                                         userinfoBottomCenter.setVisibility(View.VISIBLE);
-                                        if(isMuted){
-                                            userinfoBottomCenter.setText(mContext.getString(R.string.live_relieve_ban));
-                                        }else{
-                                            userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
+                                        if(role==0&&accId.equals(LiveConstant.creatorAccid)){//他是主播
+                                            userinfoBottomCenter.setVisibility(View.GONE);
+                                            AppLog.i("TAG","用户信息9");
+                                        }else {
+                                            if(isMuted){
+                                                AppLog.i("TAG","用户信息10");
+                                                userinfoBottomCenter.setText(mContext.getString(R.string.live_relieve_ban));
+                                            }else{
+                                                AppLog.i("TAG","用户信息11");
+                                                userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
+                                            }
+                                            AppLog.i("TAG","用户信息12");
                                         }
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
                                     }
                                 }else if(role==1){
+                                    AppLog.i("TAG","用户信息13");
                                     if(isMuted){
+                                        AppLog.i("TAG","用户信息14");
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_relieve_ban));
                                     }else{
+                                        AppLog.i("TAG","用户信息15");
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_ban));
                                     }
                                 }
@@ -376,9 +403,27 @@ public class CustomUserInfoDialog extends BaseDialog {
                             }
                         }else{
                             if(role==1) {
+                                AppLog.i("TAG","用户信息16");
                                 userinfoBottomLeft.setText(mContext.getString(R.string.live_ban));
-                            }
+                            }else{
+                                if(role==0||role==2) {
+                                    if (!userId.equals(String.valueOf(UserHelper.getUserId(mContext)))) {
+                                        userinfoBottomCenter.setVisibility(View.VISIBLE);
+                                        if (role == 0 && accId.equals(LiveConstant.creatorAccid)) {//他是主播
+                                            userinfoBottomCenter.setVisibility(View.GONE);
+                                            AppLog.i("TAG", "用户信息17");
+                                        } else {
+                                            userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
+                                            AppLog.i("TAG", "用户信息18");
+                                        }
+                                        userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+                                    }
+
+                                }
+
+                                }
                         }
+                        AppLog.i("TAG","查看用户是否被禁言ddddd："+i);
                     }
 
 
@@ -460,20 +505,27 @@ public class CustomUserInfoDialog extends BaseDialog {
                 break;
             case R.id.userinfo_bottom_center:
                 if(role==0||role==2){//禁言
-                    if(isMuted){
-                        //解除禁言
-                        userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
-                        contentLoader.getUserMute(channelId,roomId,String.valueOf(UserHelper.getUserId(mContext)),userId,1);
-                        isMuted=false;
-                        sendMessage("解除了"+result.getNickName()+"的禁言",MessageType.relieveBan);
+                    if(userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己进入主页
+                        intent = new Intent(mContext, LiveHomePageActivity.class);
+                        intent.putExtra("userId", String.valueOf(userId));
+                        mContext.startActivity(intent);
+                    }else{
+                        if(isMuted){
+                            //解除禁言
+                            userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
+                            contentLoader.getUserMute(channelId,roomId,String.valueOf(UserHelper.getUserId(mContext)),userId,1);
+                            isMuted=false;
+                            sendMessage("解除了"+result.getNickName()+"的禁言",MessageType.relieveBan);
 
-                    }else {
-                        //禁言
-                        userinfoBottomCenter.setText(mContext.getString(R.string.live_relieve_ban));
-                        isMuted=true;
-                        contentLoader.getUserMute(channelId,roomId,String.valueOf(UserHelper.getUserId(mContext)),userId,0);
-                        sendMessage("禁言了"+result.getNickName(),MessageType.ban);
+                        }else {
+                            //禁言
+                            userinfoBottomCenter.setText(mContext.getString(R.string.live_relieve_ban));
+                            isMuted=true;
+                            contentLoader.getUserMute(channelId,roomId,String.valueOf(UserHelper.getUserId(mContext)),userId,0);
+                            sendMessage("禁言了"+result.getNickName(),MessageType.ban);
+                        }
                     }
+
                 }else {//管理员设置
                     if(isManager){
                         //取消管理员

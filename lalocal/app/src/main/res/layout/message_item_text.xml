@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/message_item_text_wang"
     android:clickable="true"
-    android:paddingTop="@dimen/live_padding_3dp"
+    android:paddingTop="@dimen/live_padding_2dp"
    >
 
     <LinearLayout

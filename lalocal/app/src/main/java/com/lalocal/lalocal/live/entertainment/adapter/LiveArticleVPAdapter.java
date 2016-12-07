@@ -79,6 +79,8 @@ public class LiveArticleVPAdapter extends PagerAdapter {
         holder.xrvList.setLoadingMoreEnabled(false);
         holder.xrvList.setPullRefreshEnabled(false);
 
+        holder.xrvList.setFocusable(false);
+
         // TODO: 根据数据的有无判断是否显示列表
 
         RecyclerView.Adapter adapter = null;

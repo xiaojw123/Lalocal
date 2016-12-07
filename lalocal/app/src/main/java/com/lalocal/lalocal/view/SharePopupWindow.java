@@ -243,9 +243,8 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         @Override
         public void onResult(SHARE_MEDIA share_media) {
             contentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()),share_media.equals(SHARE_MEDIA.SINA)?"2":(share_media.equals(SHARE_MEDIA.WEIXIN)?"1":"0"));
-
             if(onSuccessShare!=null){
-                onSuccessShare.shareSuccess();
+                onSuccessShare.shareSuccess(share_media);
             }
            if(share_media.equals(SHARE_MEDIA.SINA)){
                Toast.makeText(context,"微博分享成功!",Toast.LENGTH_SHORT).show();
@@ -257,6 +256,9 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
 
         }
         public void onError(SHARE_MEDIA share_media, Throwable throwable) {
+            if(onSuccessShare!=null){
+                onSuccessShare.shareSuccess(share_media);
+            }
             if(share_media.equals(SHARE_MEDIA.SINA)){
                 Toast.makeText(context,"微博分享失败!",Toast.LENGTH_SHORT).show();
             }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
@@ -267,6 +269,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
         }
         @Override
         public void onCancel(SHARE_MEDIA share_media) {
+
             if(share_media.equals(SHARE_MEDIA.SINA)){
                 Toast.makeText(context,"已取消微博分享!",Toast.LENGTH_SHORT).show();
             }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
@@ -281,7 +284,7 @@ public class SharePopupWindow extends PopupWindow implements View.OnClickListene
     private  OnSuccessShareListener onSuccessShare;
 
     public  interface OnSuccessShareListener{
-        void shareSuccess();
+        void shareSuccess(SHARE_MEDIA share_media);
     }
     public void setOnSuccessShare(OnSuccessShareListener onSuccessShare) {
         this.onSuccessShare = onSuccessShare;

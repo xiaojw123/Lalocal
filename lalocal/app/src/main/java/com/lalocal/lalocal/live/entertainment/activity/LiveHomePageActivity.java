@@ -432,8 +432,6 @@ public class LiveHomePageActivity extends BaseActivity {
                     userpageFansNum.setText(String.valueOf(fansNum));
                     masterAttention.setTextColor(Color.BLACK);
                 }
-
-
             }
         }
 

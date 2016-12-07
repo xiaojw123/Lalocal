@@ -141,6 +141,8 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private CircleImageView headIv;
     private TextView masterName;
     private boolean isLocation = false;
+    private String liveTitle;
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -236,7 +238,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 } else {
                     annoucement = "这是公告哈";
                 }
-
+                liveTitle = liveRowsBean.getTitle();
                 channelId = String.valueOf(liveRowsBean.getId());
                 cname = liveRowsBean.getCname();
                 liveStatus = String.valueOf(liveRowsBean.getStatus());
@@ -246,6 +248,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
                 int onlineUser = liveRowsBean.getOnlineUser();
                 url = liveRowsBean.getPullUrl();
+               LiveConstant.creatorAccid=liveRowsBean.getCreaterAccId();
                 userId = String.valueOf(liveRowsBean.getUser().getId());
                 if (avatar != null) {
                     blurView.setBlurImageURL(avatar);
@@ -892,14 +895,25 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                     Gravity.BOTTOM, 0, 0);
             shareActivity.setOnSuccessShare(new SharePopupWindow.OnSuccessShareListener() {
                 @Override
-                public void shareSuccess() {
-                    marqueeView.start(UserHelper.getUserName(AudienceActivity.this) + "分享了直播!");
+                public void shareSuccess(SHARE_MEDIA share_media) {
+                    String content=null;
+                    if(share_media.equals(SHARE_MEDIA.SINA)){
+                        content="到新浪微博";
+                        MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_SHARE_WEIBO);
+                    }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
+                        content="到微信";
+                        MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_SHARE_WECHAT1);
+                    }else if(share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)){
+                        content="到朋友圈";
+                        MobHelper.sendEevent(AudienceActivity.this, MobEvent.LIVE_USER_SHARE_WECHAT2);
+                    }
+
                     LiveMessage liveMessage = new LiveMessage();
                     liveMessage.setStyle(MessageType.text);
                     liveMessage.setUserId(userId);
                     liveMessage.setCreatorAccount(creatorAccount);
                     liveMessage.setChannelId(channelId);
-                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "分享了直播", roomId, AuthPreferences.getUserAccount(), liveMessage);
+                    IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "分享了直播"+content, roomId, AuthPreferences.getUserAccount(), liveMessage);
                     sendMessage(imMessage, MessageType.text);
                 }
             });
