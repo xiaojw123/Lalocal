@@ -42,7 +42,8 @@ public class UserHelper {
     }
 
     public static void updateSignOutInfo(Context context) {
-        removeUserAlias(context);
+        // TODO: 2016/12/7 umsg
+//        removeUserAlias(context);
         MobHelper.singOff();
         AuthPreferences.clearUserInfo();
         DemoCache.clear();
@@ -76,7 +77,8 @@ public class UserHelper {
     public static void saveLoginInfo(Context context, Bundle bundle) {
         int userid = bundle.getInt(KeyParams.USERID, -1);
         boolean isLogin = bundle.getBoolean(KeyParams.IS_LOGIN);
-        addUserAlias(context, userid);
+        // TODO: 2016/12/7 umsg
+//        addUserAlias(context, userid);
         initSPref(context);
         SharedPreferences.Editor editor = sp.edit();
         if (!isLogin) {

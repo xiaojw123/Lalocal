@@ -89,16 +89,16 @@ public class MyMessageActivity extends BaseActivity {
                         break;
                     case 1://文章
                     case 13://资讯
-                        TargetPage.gotoArticleDetail(MyMessageActivity.this, item.getTargetId());
+                        TargetPage.gotoArticleDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()));
                         break;
                     case 2://产品
-                        TargetPage.gotoProductDetail(MyMessageActivity.this, item.getTargetId(), item.getTargetType());
+                        TargetPage.gotoProductDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()), item.getTargetType());
                         break;
                     case 9://线路
                         TargetPage.gotoRouteDetail(MyMessageActivity.this, item.getTargetId());
                         break;
                     case 10://专题
-                        TargetPage.gotoSpecialDetail(MyMessageActivity.this, item.getTargetId());
+                        TargetPage.gotoSpecialDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()));
                         break;
                 }
 

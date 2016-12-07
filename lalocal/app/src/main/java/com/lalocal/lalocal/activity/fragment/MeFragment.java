@@ -98,6 +98,8 @@ MeFragment extends BaseFragment {
     RecyclerView itemRlv;
     @BindView(R.id.fragment_me_rsv)
     ReboundScrollView reboundScrollView;
+//    @BindView(R.id.home_me_headportrait_arcimg)
+//    ArcImageView headArcImg;
     MeItemAdapter itemAdapter;
 
 
@@ -193,9 +195,11 @@ MeFragment extends BaseFragment {
     private void updateFragmentView(boolean isLogined, User user) {
         if (isLogined && user != null) {
             if (loginLayout.getVisibility() != View.VISIBLE) {
+                reboundScrollView.smoothScrollTo(0, 0);
                 loginLayout.setVisibility(View.VISIBLE);
                 unLoginLayout.setVisibility(View.GONE);
             }
+            loginLayout.requestFocus();
             String description = user.getDescription();
             if (TextUtils.isEmpty(description)) {
                 loginPrompt.setText(defaultDecription);
@@ -240,16 +244,21 @@ MeFragment extends BaseFragment {
             String avatar = user.getAvatar();
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
+//                DrawableUtils.displayImg(getActivity(),headArcImg,avatar);
             }
             homeMeFollowNum.setText(user.getAttentionNum());
             homeMeFansNum.setText(user.getFansNum());
             mContentloader.getMessageCount();
         } else {
-            unLoginLayout.setVisibility(View.VISIBLE);
-            loginLayout.setVisibility(View.GONE);
+            if (unLoginLayout.getVisibility() != View.VISIBLE) {
+                reboundScrollView.smoothScrollTo(0, 0);
+                unLoginLayout.setVisibility(View.VISIBLE);
+                loginLayout.setVisibility(View.GONE);
+            }
+            unLoginLayout.requestFocus();
             updateMessageCount(null);
         }
-        reboundScrollView.smoothScrollTo(0,0);
+
     }
 
     public void showArticleTag() {
@@ -344,7 +353,7 @@ MeFragment extends BaseFragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fragment_me_login_stv:
-                MobHelper.sendEevent(getActivity(),MobEvent.USER_LOGIN_BUTTON);
+                MobHelper.sendEevent(getActivity(), MobEvent.USER_LOGIN_BUTTON);
                 gotoLoginPage();
                 break;
             case R.id.home_me_personal_info:

@@ -71,7 +71,7 @@ public class AttentionActivity extends BaseActivity {
     // 是否是最后一页
     private boolean lastPage = false;
     // 当前页码
-    private int pageNumber = 1;
+    private int pageNumber=1;
     // 直播间id
     private int roomId = 0;
     // 创建直播间标记
@@ -115,7 +115,7 @@ public class AttentionActivity extends BaseActivity {
         xRecyclerView.setLoadingListener(xRecyclerviewLoadingListener);
         xRecyclerView.setPullRefreshEnabled(true);
         xRecyclerView.setLoadingMoreEnabled(true);
-        xRecyclerView.setRefreshing(true);
+//        xRecyclerView.setRefreshing(true);
         xRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -166,9 +166,11 @@ public class AttentionActivity extends BaseActivity {
             AppLog.i("xrv", "onLoadMore()-" + allRows.size());
             isRefresh = false;
             if (lastPage) {
+                pageNumber=1;
                 xRecyclerView.setNoMore(true);
             } else {
                 AppLog.print("关注laodmore");
+                AppLog.print("loadMore__pageNumber__"+pageNumber);
                 contentService.getPlayBackLiveList("", pageNumber, "true");
             }
 
@@ -314,6 +316,7 @@ public class AttentionActivity extends BaseActivity {
                 LivePlayBackListResp.ResultBean result = livePlayBackListResp.getResult();
                 AppLog.i("visb", "19");
                 pageNumber = result.getPageNumber() + 1;
+                AppLog.print("onPlayBackList____"+pageNumber);
                 AppLog.i("visb", "20");
                 lastPage = result.isLastPage();
                 AppLog.i("visb", "21");

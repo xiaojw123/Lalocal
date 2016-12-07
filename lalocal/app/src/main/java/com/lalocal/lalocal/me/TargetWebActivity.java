@@ -2,7 +2,9 @@ package com.lalocal.lalocal.me;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -27,7 +29,12 @@ public class TargetWebActivity extends BaseActivity {
         setContentView(R.layout.activity_target_web);
         CustomTitleView titleView = (CustomTitleView) findViewById(R.id.target_web_title);
         webView = (WebView) findViewById(R.id.target_web_wv);
-        titleView.setTitle(getTargetTitle());
+        String title = getTargetTitle();
+        if (!TextUtils.isEmpty(title)) {
+            titleView.setTitle(title);
+        }else{
+            titleView.setVisibility(View.GONE);
+        }
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setUseWideViewPort(false);
