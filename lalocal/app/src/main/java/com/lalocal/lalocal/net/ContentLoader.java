@@ -3106,7 +3106,7 @@ public class ContentLoader {
         }
 
         private void responseLiveAvatar(String json) {
-            //AppLog.i("TAG","获取直播间用户头像和排序"+json);
+            AppLog.i("TAG","获取直播间用户头像和排序"+json);
             LiveRoomAvatarSortResp liveRoomAvatarSortResp = new Gson().fromJson(json, LiveRoomAvatarSortResp.class);
             if(liveRoomAvatarSortResp.getReturnCode()==0){
                 callBack.onLiveRoomAvatar(liveRoomAvatarSortResp.getResult());
@@ -3175,24 +3175,36 @@ public class ContentLoader {
         }
 
         private void responseChannelIndexTotal(String json) {
+            AppLog.i("rfs", "json is " + json);
             ChannelIndexTotal channelIndexTotal = new Gson().fromJson(json, ChannelIndexTotal.class);
+            AppLog.i("rfs", "接口  1");
             ChannelIndexTotalResult result = channelIndexTotal.getResult();
+            AppLog.i("rfs", "接口  2");
             long dateTime = channelIndexTotal.getDate();
+            AppLog.i("rfs", "接口 3 ");
             if (channelIndexTotal.getReturnCode() == 0) {
+                AppLog.i("rfs", "接口  4");
 
                 // -存时间戳
                 // 获取用户id，-1表示获取失败，即：未登录状态，可以的userId用-1表示
                 int userId = UserHelper.getUserId(context);
+                AppLog.i("rfs", "接口 5 ");
                 // key的基
                 String baseKey = "live_index_timestamp_get_";
+                AppLog.i("rfs", "接口 6 ");
                 if (userId != -1) {
+                    AppLog.i("rfs", "接口 7 ");
                     SPCUtils.put(context, (baseKey + String.valueOf(userId)), String.valueOf(dateTime));
+                    AppLog.i("rfs", "接口 8 ");
                 }
 //                 存上未登录时的时间戳
 //                SPCUtils.put(context, (baseKey + "_0"), String.valueOf(dateTime));
 
+                AppLog.i("rfs", "接口 9 ");
                 callBack.onGetChannelIndexTotal(result, dateTime);
+                AppLog.i("rfs", "接口 10 ");
             }
+            AppLog.i("rfs", "接口 11 ");
         }
 
         @Override

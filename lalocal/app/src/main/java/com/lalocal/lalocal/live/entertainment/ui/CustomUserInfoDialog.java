@@ -144,7 +144,6 @@ public class CustomUserInfoDialog extends BaseDialog {
             if(role==0){
                 customDialogLiveHeaderLayout.setVisibility(View.GONE);
                 customDialogAudienceCloseLayout.setVisibility(View.VISIBLE);
-
             }else{
                 customDialogLiveHeaderLayout.setVisibility(View.VISIBLE);
                 customDialogAudienceCloseLayout.setVisibility(View.GONE);
@@ -200,11 +199,17 @@ public class CustomUserInfoDialog extends BaseDialog {
                     }
                     DrawableUtils.displayImg(mContext,userinfoHeadIv,avatar);
                     userinfoNickTv.setText(nickName);
-                    if (!TextUtils.isEmpty(description)) {
-                        masterInfoSignature.setText(description);
+
+                    if(accId.equals(LiveConstant.creatorAccid)){//主播
+                        masterInfoSignature.setText(LiveConstant.liveTitle);
                     }else{
-                        masterInfoSignature.setText("神秘人拒绝透露自己的个人简介!");
+                        if (!TextUtils.isEmpty(description)) {
+                            masterInfoSignature.setText(description);
+                        }else{
+                            masterInfoSignature.setText("神秘人拒绝透露自己的个人简介!");
+                        }
                     }
+
                     liveAttention.setText(String.valueOf(attentionNum));
                     liveFans.setText(String.valueOf(fansNum));
                     if(role==0){//用户端
@@ -435,13 +440,18 @@ public class CustomUserInfoDialog extends BaseDialog {
     public  void clickBtn(View view){
         switch (view.getId()){
             case R.id.custom_dialog_close_iv:
+                if(role==1){
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_CANCEL);
+                }else{
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_CANCEL);
+                }
                 dismiss();
                 break;
             case R.id.custom_dialog_report:
                 // 举报
                 if(role==1){//主播端，举报
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_REPORT);
                     toReportActivity();
-
                 }else if(role==2){
                     if(isMaster){//关闭直播间
 
@@ -580,11 +590,11 @@ public class CustomUserInfoDialog extends BaseDialog {
         try {
             LiveMessage liveMessage = new LiveMessage();
             liveMessage.setStyle(type);
-            liveMessage.setAdminSendMsgImUserId(String.valueOf(UserHelper.getUserId(mContext)));
-            liveMessage.setAdminSendMsgNickName(UserHelper.getUserName(mContext));
-            liveMessage.setAdminSendMsgUserId(String.valueOf(UserHelper.getUserId(mContext)));
-            liveMessage.setDisableSendMsgNickName(UserHelper.getUserName(mContext));
-            liveMessage.setDisableSendMsgUserId(String.valueOf(UserHelper.getUserId(mContext)));
+            liveMessage.setAdminSendMsgImUserId(accId);
+            liveMessage.setAdminSendMsgNickName(nickName);
+            liveMessage.setAdminSendMsgUserId(userId);
+            liveMessage.setDisableSendMsgNickName(nickName);
+            liveMessage.setDisableSendMsgUserId(userId);
             liveMessage.setUserId(userId);
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);

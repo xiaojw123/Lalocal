@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
@@ -248,6 +249,16 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements CustomT
     }
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+
+            isRefreshStatus = false;
+            liveAttentionListview.refreshComplete();
+            liveAttentionListview.loadMoreComplete();
+        }
+
         @Override
         public void onLiveFansOrAttention(LiveFansOrAttentionResp liveFansOrAttentionResp, boolean isSecarch) {
             super.onLiveFansOrAttention(liveFansOrAttentionResp, isSecarch);

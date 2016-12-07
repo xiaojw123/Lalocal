@@ -363,6 +363,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         List<SearchItem> articleItems = new ArrayList<>();
         List<SearchItem> productItems = new ArrayList<>();
 
+
+
         @Override
         public void onGetGLiveSearch(List<LiveRowsBean> rowList, String name) {
             mSearchKey = name;

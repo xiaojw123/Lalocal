@@ -7,8 +7,37 @@
     android:background="@color/color_background"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/master_attention_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/ml_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/master_attention"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="关注"
+                android:textColor="#ffaa2a" />
+        </LinearLayout>
+    </LinearLayout>
+
     <com.lalocal.lalocal.view.ReboundScrollView
         android:id="@+id/nested_scroll_view"
+        android:layout_above="@id/master_attention_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -226,40 +255,11 @@
             <com.lalocal.lalocal.view.DisallowParentTouchViewPager
                 android:id="@+id/vp_live_article"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:scrollbars="none"
                 android:layout_below="@+id/tv_title_layout" />
         </LinearLayout>
     </com.lalocal.lalocal.view.ReboundScrollView>
-
-
-    <LinearLayout
-        android:id="@+id/master_attention_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/live_height_50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/white"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/ml_gray" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/master_attention"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="#ffaa2a" />
-        </LinearLayout>
-    </LinearLayout>
 
     <com.lalocal.lalocal.view.CustomTitleView
         android:id="@+id/homepage_head"

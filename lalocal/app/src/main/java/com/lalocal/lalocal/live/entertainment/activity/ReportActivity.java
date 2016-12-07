@@ -2,21 +2,21 @@ package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
@@ -30,7 +30,6 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.QiniuUtils;
-import com.lalocal.lalocal.view.MyGridView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
@@ -38,8 +37,6 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import cn.finalteam.galleryfinal.PauseOnScrollListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +47,7 @@ import butterknife.OnClick;
 import cn.finalteam.galleryfinal.CoreConfig;
 import cn.finalteam.galleryfinal.FunctionConfig;
 import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.PauseOnScrollListener;
 import cn.finalteam.galleryfinal.ThemeConfig;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 
@@ -72,6 +70,12 @@ public class ReportActivity extends BaseActivity {
 
     @BindView(R.id.btn_confirm_report)
     Button mBtnConfirmReport;
+    @BindView(R.id.btn_close_report)
+    ImageButton btnCloseReport;
+    @BindView(R.id.layout_close)
+    RelativeLayout layoutClose;
+    @BindView(R.id.loading)
+    GifView loading;
 
     private PhotoAdapter mPhotoAdapter;
 
@@ -102,7 +106,7 @@ public class ReportActivity extends BaseActivity {
 
     // 举报理由
     private String mContent;
-    
+
     // 标记当前传第几张图片
     private int mCurUpload = 0;
 
@@ -396,6 +400,7 @@ public class ReportActivity extends BaseActivity {
                 ReportActivity.this.finish();
                 break;
             case R.id.btn_confirm_report:
+                loading.setVisibility(View.VISIBLE);
                 // 举报
                 report();
                 break;
@@ -499,9 +504,17 @@ public class ReportActivity extends BaseActivity {
                     mContentLoader.getChannelReport(mContent, mPhotos, mUserId, mMasterName, mChannelId);
                 }
             } else {
-                AppLog.i("qn", "return code not 0");
+                loading.setVisibility(View.GONE);
                 Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
             }
+
+        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+            mCurUpload = 0;
+            loading.setVisibility(View.GONE);
         }
 
         @Override
@@ -513,6 +526,8 @@ public class ReportActivity extends BaseActivity {
                 JSONObject response = new JSONObject(json);
                 // 获取json中的message
                 String message = response.getString("message");
+                // 隐藏加载
+                loading.setVisibility(View.GONE);
                 // 如果上传成功
                 if ("success".equals(message)) {
                     // 显示举报成功
@@ -526,6 +541,9 @@ public class ReportActivity extends BaseActivity {
             } catch (JSONException e) {
                 // 举报信息返回失败提示
                 Toast.makeText(ReportActivity.this, "举报响应出错了，请稍后再试", Toast.LENGTH_SHORT).show();
+            } finally {
+                // 隐藏加载
+                loading.setVisibility(View.GONE);
             }
         }
     }

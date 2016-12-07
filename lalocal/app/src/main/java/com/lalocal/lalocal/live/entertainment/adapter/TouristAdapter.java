@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
-import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.UserAvatarsBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -28,14 +28,14 @@ public class TouristAdapter extends RecyclerView.Adapter {
     private Context mContext;
 
     private LayoutInflater inflater;
-    List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars;
+    List<UserAvatarsBean> userAvatars;
 
-    public TouristAdapter(Context context,List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars) {
+    public TouristAdapter(Context context,List<UserAvatarsBean> userAvatars) {
         this.mContext = context;
         this.userAvatars = userAvatars;
         inflater = LayoutInflater.from(mContext);
     }
-    public void refresh(List<LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean> userAvatars) {
+    public void refresh(List<UserAvatarsBean> userAvatars) {
         this.userAvatars = userAvatars;
         notifyDataSetChanged();
         AppLog.i("TAG","头像列表刷新");
@@ -51,7 +51,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         LiveViewHodler liveViewHodler = (LiveViewHodler) holder;
-        final LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean userAvatarsBean = userAvatars.get(position);
+        final UserAvatarsBean userAvatarsBean = userAvatars.get(position);
         liveViewHodler.managerMark.setVisibility(View.GONE);
         if(userAvatarsBean.getAvatar()==null||userAvatarsBean.getAvatar().length()==0){
             liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
@@ -97,7 +97,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
     private OnTouristItemClickListener onTouristItemClickListener;
 
     public interface OnTouristItemClickListener {
-        void showTouristInfo( LiveRoomAvatarSortResp.ResultBean.UserAvatarsBean userAvatarsBean , boolean isMasterAccount);
+        void showTouristInfo(UserAvatarsBean userAvatarsBean , boolean isMasterAccount);
     }
 
     public void setOnTouristItemClickListener(OnTouristItemClickListener onTouristItemClickListener) {
