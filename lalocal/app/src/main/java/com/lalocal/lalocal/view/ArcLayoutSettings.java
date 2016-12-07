@@ -23,7 +23,6 @@ public class ArcLayoutSettings {
     ArcLayoutSettings(Context context, AttributeSet attrs) {
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.ArcHeader, 0, 0);
         arcHeight = styledAttributes.getDimension(R.styleable.ArcHeader_arc_height, dpToPx(context, 10));
-
         final int cropDirection = styledAttributes.getInt(R.styleable.ArcHeader_arc_cropDirection, CROP_INSIDE);
         cropInside = (cropDirection & CROP_INSIDE) == CROP_INSIDE;
 

@@ -8,6 +8,8 @@ import android.text.TextUtils;
 
 import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
+import com.lalocal.lalocal.help.TargetPage;
+import com.lalocal.lalocal.help.TargetType;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
@@ -30,6 +32,9 @@ import com.pingplusplus.android.PingppLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
+import com.umeng.message.UmengMessageHandler;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.utils.Log;
@@ -39,6 +44,7 @@ import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 
 import java.util.List;
+import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
 
@@ -74,7 +80,6 @@ import io.fabric.sdk.android.Fabric;
  * 相应渠道包
  * 5-2 重新签名
  * 此约定从2.1.3版本开始生效
- *
  */
 public class MyApplication extends Application {
     public static final boolean isDebug = true;
@@ -93,7 +98,8 @@ public class MyApplication extends Application {
             startFabric();
             startUmeng();
         }
-        initUPsuh();
+        // TODO: 2016/12/7 umsg
+//        initUPsuh();
         //数据库
         intCountryDB();
         DemoCache.setContext(this);
@@ -112,6 +118,98 @@ public class MyApplication extends Application {
 
     private void initUPsuh() {
         PushAgent mPushAgent = PushAgent.getInstance(this);
+        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+            /**
+             * 自定义消息的回调方法
+             * */
+            @Override
+            public void dealWithCustomMessage(final Context context, final UMessage msg) {
+                AppLog.print("dealWithCustomMessage____");
+                super.dealWithCustomMessage(context, msg);
+            }
+
+            @Override
+            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+                super.dealWithNotificationMessage(context, uMessage);
+            }
+        };
+        mPushAgent.setMessageHandler(messageHandler);
+
+
+        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+            //打开链接
+            @Override
+            public void openUrl(Context context, UMessage uMessage) {
+                AppLog.print("UMessage____openUrl__text__" + uMessage.text);
+                super.openUrl(context, uMessage);
+            }
+
+            //打开应用
+            @Override
+            public void launchApp(Context context, UMessage uMessage) {
+                AppLog.print("UMessage____launchApp");
+                super.launchApp(context,uMessage);
+                Map<String, String> data = uMessage.extra;
+                if (data != null && data.size() > 0) {
+                    String targetType = data.get("targetType");
+                    String targetId = data.get("targetId");
+                    String targetUrl = data.get("targetUrl");
+                    String targetName = data.get("targetName");
+                    if (targetType != null) {
+                        switch (targetType) {
+                            case TargetType.URL://链接
+                                TargetPage.gotoWebDetail(context, targetUrl, targetName);
+                                break;
+                            case TargetType.USER://用户
+                                TargetPage.gotoUser(context, targetId);
+                                break;
+                            case TargetType.ARTICLE://文章
+                            case TargetType.INFORMATION://资讯
+                                TargetPage.gotoArticleDetail(context, targetId);
+                                break;
+                            case TargetType.PRODUCT://产品
+                                TargetPage.gotoProductDetail(context, targetId, Integer.parseInt(targetType));
+                                break;
+                            case TargetType.ROUTE://线路
+                                TargetPage.gotoRouteDetail(context, Integer.parseInt(targetId));
+                                break;
+                            case TargetType.SPECIAL://专题
+                                TargetPage.gotoSpecialDetail(context, targetId);
+                                break;
+                            case TargetType.LIVE_VIDEO://直播-视频
+                                TargetPage.gotoLive(context, targetId);
+                                break;
+                            case TargetType.LIVE_PALY_BACK://回放
+                                TargetPage.gotoPlayBack(context, targetId);
+                                break;
+
+                        }
+                    }
+
+
+                }
+            }
+
+            //打开指定页面
+            @Override
+            public void openActivity(Context context, UMessage uMessage) {
+                AppLog.print("UMessage____openActivity");
+                super.openActivity(context, uMessage);
+            }
+
+            //自定义行为
+            @Override
+            public void dealWithCustomAction(Context context, UMessage msg) {
+                AppLog.print("UMessage____dealWithCustomAction");
+                super.dealWithCustomAction(context, msg);
+//                for (Map.Entry<String, String> entry : msg.extra.entrySet()) {
+//                    String key = entry.getKey();
+//                    String value = entry.getValue();
+//                    AppLog.print("Application__dealWithCustomAction@ key:"+key+", value:"+value);
+//                }
+            }
+        };
+        mPushAgent.setNotificationClickHandler(notificationClickHandler);
 //注册推送服务，每次调用register方法都会回调该接口c
         mPushAgent.register(new IUmengRegisterCallback() {
 
@@ -126,6 +224,7 @@ public class MyApplication extends Application {
 
             }
         });
+
 
     }
 
@@ -268,7 +367,6 @@ public class MyApplication extends Application {
         }
         mWorkerThread = null;
     }
-
 
 
 }

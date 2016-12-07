@@ -22,9 +22,9 @@ import com.lalocal.lalocal.model.SpecialToH5Bean;
 public class TargetPage {
 
    //直播
-    public static  void gotoLive(Context context,int id){
+    public static  void gotoLive(Context context,String id){
         Intent intent = new Intent(context, AudienceActivity.class);
-        intent.putExtra("id", String.valueOf(id));
+        intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
@@ -42,9 +42,9 @@ public class TargetPage {
     }
 
     //回放
-    public static void gotoPlayBack(Context context, int id) {
+    public static void gotoPlayBack(Context context, String id) {
         Intent intent = new Intent(context, PlayBackActivity.class);
-        intent.putExtra("id", String.valueOf(id));
+        intent.putExtra("id", id);
         context.startActivity(intent);
     }
 
@@ -59,31 +59,31 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoUser(Context context, int targetId) {
+    public static void gotoUser(Context context, String targetId) {
         Intent intent = new Intent(context, LiveHomePageActivity.class);
-        intent.putExtra("userId",String.valueOf(targetId));
+        intent.putExtra("userId",targetId);
         context.startActivity(intent);
     }
 
-    public static void gotoProductDetail(Context context, int targetId, int targetType) {
+    public static void gotoProductDetail(Context context, String targetId, int targetType) {
         Intent intent = new Intent(context, ProductDetailsActivity.class);
         SpecialToH5Bean bean = new SpecialToH5Bean();
-        bean.setTargetId(targetId);
+        bean.setTargetId(Integer.parseInt(targetId));
         bean.setTargetType(targetType);
         intent.putExtra("productdetails", bean);
         context.startActivity(intent);
     }
 
-    public static void gotoSpecialDetail(Context context, int targetId) {
+    public static void gotoSpecialDetail(Context context, String targetId) {
         Intent intent = new Intent(context, SpecialDetailsActivity.class);
-        intent.putExtra("rowId", String.valueOf(targetId));
+        intent.putExtra("rowId", targetId);
         context.startActivity(intent);
     }
 
 
-    public static void gotoArticleDetail(Context context, int targetId) {
+    public static void gotoArticleDetail(Context context, String targetId) {
         Intent intent = new Intent(context, ArticleActivity.class);
-        intent.putExtra("targetID", String.valueOf(targetId));
+        intent.putExtra("targetID", targetId);
         context.startActivity(intent);
     }
 
