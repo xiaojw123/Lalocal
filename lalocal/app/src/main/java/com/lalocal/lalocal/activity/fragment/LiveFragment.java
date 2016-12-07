@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -426,10 +427,8 @@ public class LiveFragment extends BaseFragment {
 //                LivePlayBackListResp.ResultBean bean = liveHomeListResp.getResult();
 //
 //                if (bean != null) {
-//                    AppLog.i("rfe", "bean not null");
 //                    // 如果是刷新
 //                    if (isRefresh) {
-//                        AppLog.i("rfe", "isRefresh 1");
 //                        // 处理刷新状态
 //                        dealRefresh();
 //                        // 恢复页码标记
@@ -441,11 +440,9 @@ public class LiveFragment extends BaseFragment {
 //                        // 配置适配器
 //                        setAdapter(REFRESH_PLAYBACK_LIST);
 //                    } else if (isLoadingMore) {
-//                        AppLog.i("rfe", "isLoadingMore 1");
 //                        // 如果返回数据为空，则禁止加载更多
 //                        List<LiveRowsBean> rows = bean.getRows();
 //                        if (rows == null || rows.size() == 0) {
-//                            AppLog.i("rfe", "size 0");
 //                            mXrvLive.setNoMore(true);
 //
 //                            isLoadingMore = false;
@@ -459,10 +456,8 @@ public class LiveFragment extends BaseFragment {
 //                        setAdapter(REFRESH_PLAYBACK_LIST);
 //                    }
 //                } else {
-//                    AppLog.i("rfe", "bean null");
 //                    // 如果是刷新
 //                    if (isRefresh) {
-//                        AppLog.i("rfe", "isRefresh 2");
 //                        // 处理刷新状态
 //                        dealRefresh();
 //                        // 恢复页码标记
@@ -473,16 +468,46 @@ public class LiveFragment extends BaseFragment {
 //                        setAdapter(REFRESH_PLAYBACK_LIST);
 //
 //                    } else if (isLoadingMore) { // 如果是加载更多，则表示没有更多数据
-//                        AppLog.i("rfe", "isLoadingMore 2");
 //                        Toast.makeText(getActivity(), "没有更多数据咯~", Toast.LENGTH_SHORT).show();
 //                        mXrvLive.setNoMore(true);
 //                    }
 //                }
-//                AppLog.i("rfe", "finish");
 //                isLoadingMore = false;
 //            }
-//
 //        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+
+            if (isLoadingMore) {
+               isLoadingMore = false;
+                mXrvLive.loadMoreComplete();
+            }
+            if (isRefresh) {
+                isRefresh = false;
+                mXrvLive.refreshComplete();
+            }
+        }
+
+        @Override
+        public void onResponseFailed(String message, int requestCode) {
+            super.onResponseFailed(message, requestCode);
+
+
+            isRefresh = false;
+            isLoadingMore = false;
+            mXrvLive.refreshComplete();
+        }
+
+        @Override
+        public void onResponseFailed(int returnCode, String message) {
+            super.onResponseFailed(returnCode, message);
+
+            isRefresh = false;
+            isLoadingMore = false;
+            mXrvLive.refreshComplete();
+        }
 
         @Override
         public void onGetDailyRecommend(RecommendationsBean bean) {
@@ -556,7 +581,6 @@ public class LiveFragment extends BaseFragment {
             mRecommendPage.setOnClick(R.id.view_click, new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    AppLog.i("rec", "type is " + type + "; id is " + targetId);
                     // 对回放还是直播进行判断
                     if (type == LIVING) {
                         Intent intent1 = new Intent(getActivity(), AudienceActivity.class);
@@ -619,6 +643,13 @@ public class LiveFragment extends BaseFragment {
                     setAdapter(REFRESH_PLAYBACK_LIST);
                 }
             }
+
+            // 加载完毕
+            isLoadingMore = false;
+            // 刷新完毕
+            isRefresh = false;
+            // 刷新结束
+            mXrvLive.refreshComplete();
         }
     }
 

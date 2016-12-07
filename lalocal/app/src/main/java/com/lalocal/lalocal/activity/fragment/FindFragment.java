@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -177,6 +178,22 @@ public class FindFragment extends BaseFragment {
     }
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+
+            if (isRefreshing) {
+                isRefreshing = false;
+                mCountRefresh = 0;
+                mXrvRecommend.refreshComplete();
+            }
+
+            if (isLoadingMore) {
+                isLoadingMore = false;
+                mXrvRecommend.loadMoreComplete();
+            }
+        }
 
         @Override
         public void onRecommendAd(final RecommendAdResp recommendAdResp) {

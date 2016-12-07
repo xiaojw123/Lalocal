@@ -77,11 +77,6 @@ public class AttentionActivity extends BaseActivity {
     // 创建直播间标记
     public static final String CREATE_ROOMID = "createRoomId";
 
-    // 直播的直播间id
-    private int mLivingId = -1;
-    // 回放的直播间id
-    private int mPlaybackId = -1;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -208,7 +203,12 @@ public class AttentionActivity extends BaseActivity {
 
         @Override
         public void onError(VolleyError volleyError) {
-//            resetAdapterData();
+            super.onError(volleyError);
+            isRefresh = true;
+            lastPage = false;
+            pageNumber = 1;
+            xRecyclerView.refreshComplete();
+            xRecyclerView.loadMoreComplete();
         }
 
         @Override
@@ -227,46 +227,8 @@ public class AttentionActivity extends BaseActivity {
                     int userId = UserHelper.getUserId(AttentionActivity.this);
                     AppLog.i("visb", "8");
                     if (rows == null) {
-                        AppLog.i("visb", "9");
-                        mLivingId = -1;
-                        AppLog.i("visb", "10");
-                        if (mPlaybackId != -1) {
-                            AppLog.i("visb", "11");
-                            saveScanRecord(userId, mPlaybackId);
-                            AppLog.i("visb", "12");
-//                            xRecyclerView.setVisibility(View.VISIBLE);
-//                            AppLog.i("visb", "13");
-//                            mTvTip.setVisibility(View.INVISIBLE);
-//                            AppLog.i("visb", "14");
-//                        } else {
-//                            AppLog.i("visb", "15");
-//                            xRecyclerView.setVisibility(View.INVISIBLE);
-//                            AppLog.i("visb", "16");
-//                            mTvTip.setVisibility(View.VISIBLE);
-                        }
                         return;
                     }
-
-                    // 没有直播数据，存回放
-                    if (rows.size() == 0) {
-                        mLivingId = -1;
-                        if (mPlaybackId != -1) {
-                            saveScanRecord(userId, mPlaybackId);
-                        }
-                    } else {
-
-                        AppLog.i("visb", "1");
-                        // 有直播数据，存直播
-                        mLivingId = rows.get(0).getId();
-                        AppLog.i("visb", "2");
-                        saveScanRecord(userId, mLivingId);
-                        AppLog.i("visb", "3");
-                    }
-
-//                    xRecyclerView.setVisibility(View.VISIBLE);
-//                    AppLog.i("visb", "4");
-//                    mTvTip.setVisibility(View.INVISIBLE);
-//                    AppLog.i("visb", "5");
 
                     if (isRefresh) {
                         allRows.clear();
@@ -307,66 +269,20 @@ public class AttentionActivity extends BaseActivity {
             super.onPlayBackList(json, attentionFlag);
             LivePlayBackListResp livePlayBackListResp = new Gson().fromJson(json, LivePlayBackListResp.class);
             if (livePlayBackListResp.getReturnCode() == 0) {
-                AppLog.i("visb", "17");
-                // 获取用户id
-                int userId = UserHelper.getUserId(AttentionActivity.this);
-                AppLog.i("visb", "18");
                 LivePlayBackListResp.ResultBean result = livePlayBackListResp.getResult();
-                AppLog.i("visb", "19");
                 pageNumber = result.getPageNumber() + 1;
-                AppLog.i("visb", "20");
                 lastPage = result.isLastPage();
-                AppLog.i("visb", "21");
                 List<LiveRowsBean> rows = result.getRows();
-                AppLog.i("visb", "22");
                 AppLog.print("onPlayBackList size____" + rows.size());
-                // 如果没有回放,则表示没有关注达人
                 if (rows == null) {
-                    AppLog.i("visb", "23");
-                    mPlaybackId = -1;
-                    AppLog.i("visb", "24");
-                    if (mLivingId == -1) {
-                        AppLog.i("visb", "25");
-                        xRecyclerView.setVisibility(View.INVISIBLE);
-                        AppLog.i("visb", "26");
+                    if (allAttenRows.size() == 0) {
+                        xRecyclerView.setVisibility(View.GONE);
                         mTvTip.setVisibility(View.VISIBLE);
-                        AppLog.i("visb", "27");
                     } else {
-                        AppLog.i("visb", "28");
                         xRecyclerView.setVisibility(View.VISIBLE);
-                        AppLog.i("visb", "29");
-                        mTvTip.setVisibility(View.INVISIBLE);
-                        AppLog.i("visb", "30");
+                        mTvTip.setVisibility(View.GONE);
                     }
                     return;
-                }
-
-                if (rows.size() == 0) {
-                    mPlaybackId = -1;
-                    if (mLivingId == -1) {
-                        AppLog.i("visb", "41");
-                        xRecyclerView.setVisibility(View.INVISIBLE);
-                        AppLog.i("visb", "42");
-                        mTvTip.setVisibility(View.VISIBLE);
-                        AppLog.i("visb", "43");
-                    } else {
-                        AppLog.i("visb", "44");
-                        xRecyclerView.setVisibility(View.VISIBLE);
-                        AppLog.i("visb", "45");
-                        mTvTip.setVisibility(View.INVISIBLE);
-                        AppLog.i("visb", "46");
-                    }
-                } else {
-                    AppLog.i("visb", "31");
-                    xRecyclerView.setVisibility(View.VISIBLE);
-                    AppLog.i("visb", "32");
-                    mTvTip.setVisibility(View.INVISIBLE);
-                    AppLog.i("visb", "33");
-                }
-
-                if (rows.size() > 0 && mLivingId == -1) {
-                    mPlaybackId = rows.get(0).getId();
-                    saveScanRecord(userId, mPlaybackId);
                 }
 
                 allRows.addAll(allRows.size(), rows);
@@ -381,6 +297,13 @@ public class AttentionActivity extends BaseActivity {
                     xRecyclerView.setNoMore(true);
                 } else {
                     xRecyclerView.loadMoreComplete();
+                }
+                if (allAttenRows.size() == 0) {
+                    xRecyclerView.setVisibility(View.GONE);
+                    mTvTip.setVisibility(View.VISIBLE);
+                } else {
+                    xRecyclerView.setVisibility(View.VISIBLE);
+                    mTvTip.setVisibility(View.GONE);
                 }
             }
 
@@ -415,32 +338,4 @@ public class AttentionActivity extends BaseActivity {
         }
     };
 
-    /**
-     * 判断用户是否浏览过我的关注
-     *
-     * @param userId
-     * @param id
-     * @return
-     */
-    private boolean isScanned(int userId, int id) {
-        String key = "live_attention_" + userId;
-        int value = id;
-        int valueGet = SPCUtils.getInt(AttentionActivity.this, key);
-        if (valueGet == value) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 保存用户浏览记录
-     *
-     * @param userId
-     * @param id
-     */
-    private void saveScanRecord(int userId, int id) {
-        String key = "live_attention_" + userId;
-        int value = id;
-        SPCUtils.put(AttentionActivity.this, key, value);
-    }
 }
