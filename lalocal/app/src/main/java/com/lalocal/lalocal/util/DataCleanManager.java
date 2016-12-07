@@ -18,6 +18,7 @@ public class DataCleanManager {
 //                cacheSize += getFolderSize(context.getExternalCacheDir());
                 AppLog.print("imgFile size___"+DrawableUtils.getCacheImgFile());
                 cacheSize += getFolderSize(DrawableUtils.getCacheImgFile());
+                cacheSize+=getFolderSize(new File(Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim/"));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,6 +30,7 @@ public class DataCleanManager {
 //        deleteDir(context.getCacheDir());
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
 //            deleteDir(context.getExternalCacheDir());
+            deleteDir(new File(Environment.getExternalStorageDirectory() + "/" + context.getPackageName() + "/nim/"));
             deleteDir(DrawableUtils.getCacheImgFile());
         }
     }

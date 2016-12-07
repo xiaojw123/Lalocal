@@ -2501,9 +2501,9 @@ public class ContentLoader {
 
         private void responsMoreItems(JSONObject jsonObj, int type) {
             JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
-            int pageNumber = resultJobj.optInt("pageNumber");
-            int totalPages = resultJobj.optInt("totalPages");
-            JSONArray rowsJarray = resultJobj.optJSONArray("rows");
+            int pageNumber = resultJobj.optInt(ResultParams.PAGE_NUMBER);
+            int totalPages = resultJobj.optInt(ResultParams.TOTAL_PAGES);
+            JSONArray rowsJarray = resultJobj.optJSONArray(ResultParams.ROWS);
             List<SearchItem> items = new ArrayList<>();
             Gson gson = new Gson();
             for (int i = 0; i < rowsJarray.length(); i++) {

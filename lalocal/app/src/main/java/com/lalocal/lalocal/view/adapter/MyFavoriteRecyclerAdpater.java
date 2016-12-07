@@ -2,6 +2,7 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -31,7 +32,6 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
 
     Context context;
     List<FavoriteItem> datas;
-    private static final String NUM_FORMART = "%.2f";
 
     public MyFavoriteRecyclerAdpater(List<FavoriteItem> datas) {
         this.datas = datas;
@@ -92,6 +92,10 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                 }
                 if (isLive) {
                     itemHolder.liveCotainer.setVisibility(View.VISIBLE);
+                    Drawable[] liveLocDrawables=itemHolder.liveLoc.getCompoundDrawables();
+                    liveLocDrawables[0].setAlpha(50);
+                    Drawable[] liveTimeDrawables=itemHolder.liveTimeStart.getCompoundDrawables();
+                    liveTimeDrawables[0].setAlpha(50);
                     itemHolder.liveLoc.setText(item.getAddress());
                     itemHolder.liveTimeStart.setText(item.getStartAt());
                 } else {
@@ -132,6 +136,8 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     if (itemHolder.commentNum.getVisibility() != View.VISIBLE) {
                         itemHolder.commentNum.setVisibility(View.VISIBLE);
                     }
+                    Drawable[] drawables = itemHolder.commentNum.getCompoundDrawables();
+                    drawables[0].setAlpha(50);
                     itemHolder.commentNum.setText(commentNum);
                 } else {
                     itemHolder.commentNum.setVisibility(View.GONE);

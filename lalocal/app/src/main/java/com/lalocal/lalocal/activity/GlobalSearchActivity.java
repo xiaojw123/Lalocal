@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -69,8 +68,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     RelativeLayout gsearchTabSpecial;
     @BindView(R.id.gsearch_tab_goods)
     RelativeLayout gsearchTabGoods;
-    @BindView(R.id.gsearch_tab_route)
-    RelativeLayout gsearchTabRoute;
     @BindView(R.id.gsearch_result_xrv)
     XRecyclerView gsearchResultXrv;
     @BindView(R.id.gsearch_tab_container)
@@ -79,15 +76,13 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
     TextView searchEmptyTv;
     @BindView(R.id.gsearch_hint_cotainer)
     LinearLayout hintContainer;
-    //    @BindView(R.id.gsearch_result_vp)
-//    ViewPager mViewPager;
     int mPageNum, mTotalPages;
     String mSearchKey, lastKey;
     boolean isRefresh, isLoadMore, isInit, isRwq;
     LiveSearchAdapter searchAdapter;
     AttentionOrFansRecyAdapter userAdapter;
     ThemeAdapter themeAdapter;
-    MoreRecyclerAdapter articleAdapter, productAdapter, routeAdapter;
+    MoreRecyclerAdapter articleAdapter, productAdapter;
     int pageType;
 
 
@@ -114,49 +109,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         mContentloader.getSearhHot();
     }
 
-//    private void initViewPager(List<BaseRecyclerAdapter> adapterList) {
-//        List<XRecyclerView> mViews = new ArrayList<>();
-//        for (BaseRecyclerAdapter adapter : adapterList) {
-//            XRecyclerView mXRecyclerView = new XRecyclerView(this);
-//            mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-//            mXRecyclerView.setAdapter(adapter);
-//            mViews.add(mXRecyclerView);
-//        }
-//        mViewPager.setAdapter(new SearchPageAdapter(mViews));
-//    }
 
-    class SearchPageAdapter extends PagerAdapter {
-        List<XRecyclerView> mViews;
-
-        public SearchPageAdapter(List<XRecyclerView> views) {
-            mViews = views;
-        }
-
-        @Override
-        public int getCount() {
-            return mViews.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            XRecyclerView view = mViews.get(position);
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(mViews.get(position));
-        }
-    }
-
-
-    @OnClick({R.id.gsearch_cancel_tv, R.id.gsearch_tab_live, R.id.gsearch_tab_user, R.id.gsearch_tab_travelnote, R.id.gsearch_tab_special, R.id.gsearch_tab_goods, R.id.gsearch_tab_route})
+    @OnClick({R.id.gsearch_cancel_tv, R.id.gsearch_tab_live, R.id.gsearch_tab_user, R.id.gsearch_tab_travelnote, R.id.gsearch_tab_special, R.id.gsearch_tab_goods})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.gsearch_cancel_tv:
@@ -168,7 +122,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
             case R.id.gsearch_tab_travelnote:
             case R.id.gsearch_tab_special:
             case R.id.gsearch_tab_goods:
-            case R.id.gsearch_tab_route:
                 if (view.isSelected()) {
                     return;
                 }
@@ -190,10 +143,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     if (gsearchTabGoods.isSelected() && productAdapter != null) {
                         adapter = productAdapter;
                     }
-                    if (gsearchTabRoute.isSelected() && routeAdapter != null) {
-                        adapter = routeAdapter;
-                    }
-                    if (adapter != null) {
+                    if (adapter != null&&adapter.getItemCount()>0) {
                         showDataResult();
                         gsearchResultXrv.setAdapter(adapter);
                     } else {
@@ -244,9 +194,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
             if (gsearchTabGoods.isSelected()) {
                 mContentloader.getMoreProductResult(mSearchKey, 1, 10);
             }
-            if (gsearchTabRoute.isSelected()) {
-                mContentloader.getMoreRouteResult(mSearchKey, 1, 10);
-            }
         } else {
             showEmptResult();
             gsearchResultXrv.refreshComplete();
@@ -255,31 +202,83 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
     @Override
     public void onLoadMore() {
-        if (mPageNum < mTotalPages) {
-            isLoadMore = true;
-            isInit = false;
-            ++mPageNum;
-            if (gsearchTabLive.isSelected()) {
-                mContentloader.getGlobalSearchPlayBack(mSearchKey, mPageNum);
+
+
+        if (gsearchTabLive.isSelected()) {
+            int pageNum = (int) gsearchTabLive.getTag(R.id.pageNum);
+            int toatPages = (int) gsearchTabLive.getTag(R.id.toalPages);
+            if (pageNum < toatPages) {
+                isLoadMore = true;
+                isInit = false;
+                pageNum++;
+                gsearchTabLive.setTag(R.id.pageNum, pageNum);
+                mContentloader.getGlobalSearchPlayBack(mSearchKey, pageNum);
+            } else {
+                gsearchResultXrv.setNoMore(true);
             }
-            if (gsearchTabUser.isSelected()) {
-                mContentloader.getGloablSearchUser(mSearchKey, mPageNum);
-            }
-            if (gsearchTabTravelnote.isSelected()) {
-                mContentloader.getMoreAritleResult(mSearchKey, mPageNum, 10);
-            }
-            if (gsearchTabSpecial.isSelected()) {
-                mContentloader.getGlobalSearchSpecial(mSearchKey, mPageNum);
-            }
-            if (gsearchTabGoods.isSelected()) {
-                mContentloader.getMoreProductResult(mSearchKey, mPageNum, 10);
-            }
-            if (gsearchTabRoute.isSelected()) {
-                mContentloader.getMoreRouteResult(mSearchKey, mPageNum, 10);
-            }
-        } else {
-            gsearchResultXrv.setNoMore(true);
+
         }
+
+
+        if (gsearchTabUser.isSelected()) {
+            int pageNum = (int) gsearchTabUser.getTag(R.id.pageNum);
+            int toatPages = (int) gsearchTabUser.getTag(R.id.toalPages);
+            if (pageNum < toatPages) {
+                isLoadMore = true;
+                isInit = false;
+                pageNum++;
+                gsearchTabUser.setTag(R.id.pageNum, pageNum);
+                mContentloader.getGloablSearchUser(mSearchKey, pageNum);
+            } else {
+                gsearchResultXrv.setNoMore(true);
+            }
+        }
+
+        if (gsearchTabTravelnote.isSelected()) {
+            int pageNum = (int) gsearchTabTravelnote.getTag(R.id.pageNum);
+            int toatPages = (int) gsearchTabTravelnote.getTag(R.id.toalPages);
+            if (pageNum < toatPages) {
+                isLoadMore = true;
+                isInit = false;
+                pageNum++;
+                gsearchTabTravelnote.setTag(R.id.pageNum, pageNum);
+                mContentloader.getMoreAritleResult(mSearchKey, pageNum, 10);
+            }else {
+                gsearchResultXrv.setNoMore(true);
+            }
+        }
+
+
+        if (gsearchTabSpecial.isSelected()) {
+            int pageNum = (int) gsearchTabSpecial.getTag(R.id.pageNum);
+            int toatPages = (int) gsearchTabSpecial.getTag(R.id.toalPages);
+            if (pageNum < toatPages) {
+                isLoadMore = true;
+                isInit = false;
+                pageNum++;
+                gsearchTabSpecial.setTag(R.id.pageNum, pageNum);
+                mContentloader.getGlobalSearchSpecial(mSearchKey, pageNum);
+
+            } else {
+                gsearchResultXrv.setNoMore(true);
+            }
+        }
+
+        if (gsearchTabGoods.isSelected()) {
+            int pageNum = (int) gsearchTabGoods.getTag(R.id.pageNum);
+            int toatPages = (int) gsearchTabGoods.getTag(R.id.toalPages);
+            if (pageNum < toatPages) {
+                isLoadMore = true;
+                isInit = false;
+                pageNum++;
+                gsearchTabGoods.setTag(R.id.pageNum, pageNum);
+                mContentloader.getMoreProductResult(mSearchKey, pageNum, 10);
+
+            }else {
+                gsearchResultXrv.setNoMore(true);
+            }
+        }
+
 
     }
 
@@ -316,7 +315,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         mContentloader.getMoreAritleResult(mSearchKey, 1, 10);
         mContentloader.getGlobalSearchSpecial(mSearchKey, 1);
         mContentloader.getMoreProductResult(mSearchKey, 1, 10);
-        mContentloader.getMoreRouteResult(mSearchKey, 1, 10);
     }
 
     private void saveSearchHistory() {
@@ -364,7 +362,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         List<RecommendRowsBean> specialList = new ArrayList<>();
         List<SearchItem> articleItems = new ArrayList<>();
         List<SearchItem> productItems = new ArrayList<>();
-        List<SearchItem> routeItems = new ArrayList<>();
 
         @Override
         public void onGetGLiveSearch(List<LiveRowsBean> rowList, String name) {
@@ -498,8 +495,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
 
         @Override
         public void onGetGPlayBackSearch(int pageNum, int toalPages, List<LiveRowsBean> rowList) {
-            mPageNum = pageNum;
-            mTotalPages = toalPages;
+            gsearchTabLive.setTag(R.id.pageNum, pageNum);
+            gsearchTabLive.setTag(R.id.toalPages, toalPages);
             if (isRefresh) {
                 isRefresh = false;
                 gsearchResultXrv.refreshComplete();
@@ -547,8 +544,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         @Override
         public void onGetGUserSearch(String key, int pageNum, int toalPages, List<LiveFansOrAttentionRowsBean> beanList) {
             mSearchKey = key;
-            mPageNum = pageNum;
-            mTotalPages = toalPages;
+            gsearchTabUser.setTag(R.id.pageNum, pageNum);
+            gsearchTabUser.setTag(R.id.toalPages, toalPages);
             if (isRefresh) {
                 isRefresh = false;
                 gsearchResultXrv.refreshComplete();
@@ -597,6 +594,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
             mTotalPages = totalPages;
             switch (type) {
                 case MoreRecyclerAdapter.MODUEL_TYPE_ARTICLE:
+                    gsearchTabTravelnote.setTag(R.id.pageNum, pageNumber);
+                    gsearchTabTravelnote.setTag(R.id.toalPages, totalPages);
                     if (isRefresh) {
                         isRefresh = false;
                         gsearchResultXrv.refreshComplete();
@@ -629,6 +628,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     }
                     break;
                 case MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT:
+                    gsearchTabGoods.setTag(R.id.pageNum, pageNumber);
+                    gsearchTabGoods.setTag(R.id.toalPages, totalPages);
                     if (isRefresh) {
                         isRefresh = false;
                         gsearchResultXrv.refreshComplete();
@@ -660,38 +661,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                         }
                     }
                     break;
-                case MoreRecyclerAdapter.MODUEL_TYPE_ROUTE:
-                    if (isRefresh) {
-                        isRefresh = false;
-                        gsearchResultXrv.refreshComplete();
-                        routeItems.clear();
-                    }
-                    if (isLoadMore) {
-                        isLoadMore = false;
-                        gsearchResultXrv.loadMoreComplete();
-                    }
-                    if (isInit) {
-                        routeItems.clear();
-                    }
-                    routeItems.addAll(items);
-                    if (routeItems.size() > 0) {
-                        if (routeAdapter == null) {
-                            routeAdapter = new MoreRecyclerAdapter(GlobalSearchActivity.this, routeItems, MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT);
-                            routeAdapter.setOnItemClickListener(itemClickListener);
-                        } else {
-                            routeAdapter.updateItems(routeItems);
-                        }
-                        if (gsearchTabRoute.isSelected()) {
-                            showDataResult();
-                            setSearchAdapter(routeAdapter);
-                        }
-                    } else {
-                        if (gsearchTabRoute.isSelected()) {
-                            routeAdapter = null;
-                            showEmptResult();
-                        }
-                    }
-                    break;
             }
         }
 
@@ -699,8 +668,8 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         public void onGetGSpecialSearch(String key, int pageNum, int toalPages, List<
                 RecommendRowsBean> beanList) {
             mSearchKey = key;
-            mPageNum = pageNum;
-            mTotalPages = toalPages;
+            gsearchTabSpecial.setTag(R.id.pageNum, pageNum);
+            gsearchTabSpecial.setTag(R.id.toalPages, toalPages);
             if (isRefresh) {
                 isRefresh = false;
                 specialList.clear();
@@ -761,10 +730,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                     case MoreRecyclerAdapter.MODUEL_TYPE_PRODUCT:
                         gotoProductDetail(searchItem);
                         break;
-                    case MoreRecyclerAdapter.MODUEL_TYPE_ROUTE:
-                        gotoRouteDetail(searchItem);
-                        break;
-
                 }
 
 
@@ -813,12 +778,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
         return gsearchEdit.getText().toString();
     }
 
-    private void gotoRouteDetail(SearchItem item) {
-        Intent intent = new Intent();
-        intent.setClass(this, RouteDetailActivity.class);
-        intent.putExtra(RouteDetailActivity.DETAILS_ID, item.getId());
-        startActivity(intent);
-    }
 
     private void gotoProductDetail(SearchItem item) {
         Intent intent = new Intent();

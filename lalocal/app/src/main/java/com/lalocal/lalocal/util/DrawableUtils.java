@@ -59,6 +59,7 @@ public class DrawableUtils {
 
     public static void displayImg(Context context, ImageView img, String url, int radius, int drawable, ImageLoadingListener listener) {
         if (TextUtils.isEmpty(url)) {
+            img.setImageResource(DRAWABLE_NULL);
             return;
         }
         if (loader == null) {
@@ -67,6 +68,7 @@ public class DrawableUtils {
         if (!loader.isInited()) {
             loader.init(getConfiguration(context));
         }
+
         File imgFile = loader.getDiskCache().get(url);
 
         if (imgFile == null || !imgFile.exists()) {
@@ -104,8 +106,8 @@ public class DrawableUtils {
         builder.diskCacheFileCount(100);
         builder.tasksProcessingOrder(QueueProcessingType.FIFO);
         builder.taskExecutor(Executors.newCachedThreadPool());
-        if(MyApplication.isDebug){
-        builder.writeDebugLogs();
+        if (MyApplication.isDebug) {
+            builder.writeDebugLogs();
         }
         return builder.build();
     }
@@ -142,6 +144,7 @@ public class DrawableUtils {
 
     /**
      * 本地drawable文件中的drawable资源转uri
+     *
      * @param resId
      * @return
      */

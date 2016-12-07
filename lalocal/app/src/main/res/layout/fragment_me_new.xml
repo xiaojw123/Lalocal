@@ -13,6 +13,7 @@
         android:scrollbars="none">
 
         <LinearLayout
+            android:id="@+id/fragment_me_llt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -26,7 +27,8 @@
                 android:layout_height="wrap_content"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                >
 
                 <LinearLayout
                     android:id="@+id/home_me_personal_info"
@@ -50,21 +52,6 @@
 
 
                     </com.lalocal.lalocal.view.ArcLayout>
-
-
-                    <!--<com.lalocal.lalocal.view.ArcImageView-->
-                        <!--android:id="@+id/home_me_headportrait_img"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="250dp"-->
-                        <!--android:scaleType="centerCrop"-->
-                        <!--android:src="@drawable/home_me_personheadnormal" />-->
-                    <!--<ImageView-->
-                <!--android:id="@+id/home_me_headportrait_img"-->
-                <!--android:layout_width="@dimen/me_headportrait_img_width"-->
-                <!--android:layout_height="@dimen/me_headportrait_img_width"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:scaleType="centerCrop"-->
-                <!--android:src="@drawable/mycenterhead_normal" />-->
 
 
                 <TextView
@@ -96,7 +83,7 @@
                     android:layout_marginLeft="@dimen/dimen_size_15_dp"
                     android:layout_marginTop="5.5dp"
                     android:ellipsize="end"
-                    android:ems="8"
+                    android:ems="20"
                     android:maxEms="18"
                     android:singleLine="true"
                     android:textColor="@color/color_191000"
@@ -181,7 +168,10 @@
                 android:id="@+id/fragment_me_unlogin_layout"
                 android:layout_width="match_parent"
                 android:layout_height="194dp"
-                android:visibility="gone">
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:visibility="gone"
+                >
 
                 <com.lalocal.lalocal.view.ShapeTextView
                     android:id="@+id/fragment_me_login_stv"
