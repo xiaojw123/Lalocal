@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
+import com.android.volley.VolleyError;
 import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
@@ -117,6 +118,16 @@ public class ThemeActivity extends BaseActivity {
                     }
                 }
             }
+        }
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+
+            isRefresh = false;
+            pageNum = 1;
+            xRecyclerView.refreshComplete();
+            xRecyclerView.loadMoreComplete();
         }
     }
 }

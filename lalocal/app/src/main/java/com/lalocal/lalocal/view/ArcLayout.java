@@ -3,6 +3,8 @@ package com.lalocal.lalocal.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Outline;
+import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
 import android.graphics.Path;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -21,6 +23,7 @@ public class ArcLayout extends FrameLayout {
     private int width = 0;
 
     private Path clipPath;
+    PaintFlagsDrawFilter pfd;
 
     public ArcLayout(Context context) {
         super(context);
@@ -33,6 +36,7 @@ public class ArcLayout extends FrameLayout {
     }
 
     public void init(Context context, AttributeSet attrs) {
+        pfd=new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
         settings = new ArcLayoutSettings(context, attrs);
         settings.setElevation(ViewCompat.getElevation(this));
 
@@ -47,6 +51,8 @@ public class ArcLayout extends FrameLayout {
          */
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
             setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        }else{
+            setLayerType(View.LAYER_TYPE_HARDWARE, null);
         }
     }
 
@@ -108,10 +114,9 @@ public class ArcLayout extends FrameLayout {
     @Override
     protected void dispatchDraw(Canvas canvas) {
         canvas.save();
-
+        canvas.setDrawFilter(pfd);
         canvas.clipPath(clipPath);
         super.dispatchDraw(canvas);
-
         canvas.restore();
     }
 }

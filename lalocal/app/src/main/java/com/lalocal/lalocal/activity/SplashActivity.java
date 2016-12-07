@@ -21,7 +21,6 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.TargetPage;
-import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -127,16 +126,16 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                                 break;
                             case 0://用户
                                 removeUpdateTime();
-                                TargetPage.gotoUser(this, welImg.getTargetId());
+                                TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()));
                                 break;
                             case 1://文章
                             case 13://资讯
                                 removeUpdateTime();
-                                TargetPage.gotoArticleDetail(this, welImg.getTargetId());
+                                TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()));
                                 break;
                             case 2://产品
                                 removeUpdateTime();
-                                TargetPage.gotoProductDetail(this, welImg.getTargetId(), targetType);
+                                TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType);
                                 break;
                             case 9://线路
                                 removeUpdateTime();
@@ -144,15 +143,15 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                                 break;
                             case 10://专题
                                 removeUpdateTime();
-                                TargetPage.gotoSpecialDetail(this, welImg.getTargetId());
+                                TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()));
                                 break;
                             case 15://直播-视频
                                 removeUpdateTime();
-                                TargetPage.gotoLive(this, welImg.getTargetId());
+                                TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()));
                                 break;
                             case 20://回放
                                 removeUpdateTime();
-                                TargetPage.gotoPlayBack(this, welImg.getTargetId());
+                                TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()));
                                 break;
                         }
                 }
@@ -261,11 +260,12 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             if (result != null) {
                 String apiUrl = result.getApiUrl();
                 AppConfig.setBaseUrl(apiUrl);
-                if (UserHelper.isLogined(SplashActivity.this)) {
-                    mContentloader.getPushTags();
-                } else {
+//                if (UserHelper.isLogined(SplashActivity.this)) {
+                // TODO: 2016/12/7 umsg
+//                    mContentloader.getPushTags();
+//                } else {
                     mContentloader.getSystemConfigs();
-                }
+//                }
             } else {
                 Toast.makeText(SplashActivity.this, "系统服务异常", Toast.LENGTH_SHORT).show();
             }
