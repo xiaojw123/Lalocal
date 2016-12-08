@@ -78,7 +78,6 @@ public class PlayBackActivity extends BaseActivity {
     @BindView(R.id.play_layout)
     LinearLayout playLayout;
 
-
     private SpecialShareVOBean shareVO;
     private int direction;
     private List<LiveRowsBean.VideoListBean> videoList;
