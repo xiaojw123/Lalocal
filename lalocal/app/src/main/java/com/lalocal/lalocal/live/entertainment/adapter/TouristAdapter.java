@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.UserAvatarsBean;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.util.List;
 
@@ -56,7 +56,7 @@ public class TouristAdapter extends RecyclerView.Adapter {
         if(userAvatarsBean.getAvatar()==null||userAvatarsBean.getAvatar().length()==0){
             liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
         }else{
-            DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, userAvatarsBean.getAvatar());
+            Glide.with(mContext).load(userAvatarsBean.getAvatar()).placeholder(R.drawable.androidloading).into(liveViewHodler.touristItem);
         }
         if(LiveConstant.result.size()>0){
             for(LiveManagerListBean bean :LiveConstant.result){

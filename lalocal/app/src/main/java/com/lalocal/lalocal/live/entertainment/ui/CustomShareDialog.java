@@ -1,7 +1,9 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,20 +34,24 @@ public class CustomShareDialog extends BaseDialog {
     ImageView liveingDialogCancel;
 
     public CustomShareDialog(Context mContext) {
-        super(mContext);
+        super(mContext,R.style.share_dialog);
     }
 
     @Override
     public void initView() {
-
+       getWindow().setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        //设置窗口宽度为充满全屏
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        //设置窗口高度为包裹内容
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        getWindow().setAttributes(lp);
     }
 
     @Override
     public int getLayoutId() {
         return R.layout.liveing_share_dialog;
     }
-
-
 
     @OnClick({R.id.liveing_dialog_share_friends, R.id.liveing_dialog_share_wechat,R.id.liveing_dialog_share_weibo,R.id.liveing_dialog_share_qq,R.id.liveing_dialog_share_qzone,R.id.liveing_dialog_cancel})
     public void clickBtn(View view) {

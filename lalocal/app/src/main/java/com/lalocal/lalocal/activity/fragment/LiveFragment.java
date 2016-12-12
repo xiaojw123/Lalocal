@@ -471,7 +471,7 @@ public class LiveFragment extends BaseFragment {
 //                isLoadingMore = false;
 //            }
 //        }
-        
+
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);

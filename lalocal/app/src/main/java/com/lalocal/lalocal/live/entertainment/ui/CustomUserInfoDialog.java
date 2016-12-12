@@ -121,12 +121,10 @@ public class CustomUserInfoDialog extends BaseDialog {
             contentLoader.getLiveManagerList(channelId);//查看管理员列表
             AppLog.i("TAG","用户信息dialog:channelId"+channelId);
         }
-
         AppLog.i("TAG","获取用户ID:"+userId);
     }
     @Override
     public void initView() {
-        setCanceledOnTouchOutside(false);
         if(channelId==null){
             userinfoBottomCenter.setVisibility(View.GONE);
             userinfoBottomLeft.setText(mContext.getString(R.string.live_report));

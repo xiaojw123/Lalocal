@@ -122,10 +122,8 @@ public class ReportActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
         // 使用ButterKnife框架
         ButterKnife.bind(this);
-
         // 解析intent传入数据
         parseIntent();
         // 初始化视图
@@ -178,8 +176,13 @@ public class ReportActivity extends BaseActivity {
      * 初始化ContentLoader
      */
     private void initContentLoader() {
-        mContentLoader = new ContentLoader(ReportActivity.this);
-        mContentLoader.setCallBack(new MyCallBack());
+        try{
+            mContentLoader = new ContentLoader(this);
+            mContentLoader.setCallBack(new MyCallBack());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -526,7 +529,7 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onGetChannelReport(String json) {
             super.onGetChannelReport(json);
-
+            AppLog.i("TAG","举报成功："+json);
             try {
                 // json解析
                 JSONObject response = new JSONObject(json);

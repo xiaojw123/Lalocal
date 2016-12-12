@@ -360,11 +360,9 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         shareVO.setDesc(routeShareVO.getDesc());
         shareVO.setTitle(routeShareVO.getTitle());
         shareVO.setUrl(routeShareVO.getUrl());
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(this, shareVO);
-        sharePopupWindow.showShareWindow();
-        sharePopupWindow.showAtLocation(getWindow().getDecorView(),
-                Gravity.BOTTOM, 0, 0);
-
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(this);
+        sharePopupWindow.showShareWindow(shareVO);
+        sharePopupWindow.show();
     }
 
     @OnClick(R.id.route_detail_collect_sbtn)

@@ -56,7 +56,6 @@ import com.lalocal.lalocal.live.entertainment.ui.CustomChallengeListviewDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomToast;
 import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
-import com.lalocal.lalocal.live.entertainment.ui.LiveingSharePopuwindow;
 import com.lalocal.lalocal.live.entertainment.ui.MasterMoreSettingPopuWindow;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.thirdparty.live.LivePlayer;
@@ -83,10 +82,6 @@ import com.netease.nimlib.sdk.msg.model.IMMessage;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
-import com.umeng.socialize.ShareAction;
-import com.umeng.socialize.UMShareListener;
-import com.umeng.socialize.bean.SHARE_MEDIA;
-import com.umeng.socialize.media.UMImage;
 
 import org.json.JSONObject;
 
@@ -178,9 +173,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     };
     private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
     private ImgTokenResult imgToken;
-
-    private LiveingSharePopuwindow sharePop;
-
 
     @TargetApi(Build.VERSION_CODES.M)
     private void reminderUserPermission(int init) {
@@ -602,10 +594,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
                         break;
                     case R.id.live_share_pop:
-                        if (shareVO != null && LiveConstant.isUnDestory) {
-                            shareLivePopu();
-                        }
-                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE);
+                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_USER_SHARE);
+                        showSharePopuwindow(shareVO,"分享了直播");
                         break;
                     case R.id.live_send_message_pop:
                         showInputTextView();
@@ -618,34 +608,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void superManagerKickOutUser() {
     }
-    private void shareLivePopu() {
-        try{
-            MobHelper.sendEevent(this, MobEvent.LIVE_USER_SHARE);
-          /*  sharePop = new CustomShareDialog(LiveActivity.this);
-            sharePop.setOnLivingShareListener(new CustomShareDialog.LivingShareListener() {
-                @Override
-                public void sharePlatform(SHARE_MEDIA share_media) {
-                    isStartLiveShare = false;
-                    liveShare(share_media);
-                }
-            });
-            sharePop.show();*/
-            sharePop = new LiveingSharePopuwindow(LiveActivity.this);
-            sharePop.showSharePopu();
-            sharePop.showAtLocation(LiveActivity.this.findViewById(R.id.live_layout),
-                    Gravity.BOTTOM, 0, 0);
-            sharePop.setOnLivingShareListener(new LiveingSharePopuwindow.LivingShareListener() {
-                @Override
-                public void sharePlatform(SHARE_MEDIA share_media) {
-                    isStartLiveShare = false;
-                    liveShare(share_media);
-                }
-            });
 
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
     //烧鸡管理员关闭直播间
     @Override
@@ -724,7 +687,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     if (isStartLive) {
                         finish();
                     } else {
-                        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                        if(DemoCache.getLoginChatRoomStatus()){
+                            NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+                        }
                         clearChatRoom();
                     }
                     if(channelId!=null){
@@ -824,7 +789,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
                         AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败")+"     文件名:"+Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
 
-                   //     deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
+                        //     deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
 
                     }
                 }, null);
@@ -1070,7 +1035,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 }
                 modelLayout.setVisibility(View.VISIBLE);
                 scoreLayout.setVisibility(View.VISIBLE);
-                showLiveingShareDialog();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
+                            showSharePopuwindow(shareVO,"分享额了直播");
+                        }
+                    }
+                }, 60000);
             }
         });
 
@@ -1107,31 +1079,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         }.start();
 
     }
-    //  http://dev.lalocal.cn:8080/api/channels/null
-    private void showLiveingShareDialog() {
-        new CountDownTimer(60000, 60000) {
-            @Override
-            public void onTick(long millisUntilFinished) {
-                AppLog.i("TAG", "显示主播直播1分钟，onTick");
-            }
 
-            @Override
-            public void onFinish() {
-                AppLog.i("TAG", "显示主播直播1分钟，分享dialog");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
-                            shareLivePopu();
-                        }
-                    }
-                });
-
-            }
-        }.start();
-
-
-    }
 
     Handler handler = new Handler() {
         @Override
@@ -1139,6 +1087,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             super.handleMessage(msg);
         }
     };
+
 
     @Override
     public void onUserOffline(int uid, int reason) {
@@ -1163,7 +1112,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     private void againLoginIm() {
         AppLog.i("TAG", "直播連接中斷连接中断回调");
-        //  NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+
         String userToken = AuthPreferences.getUserToken();
         final String userAccount = AuthPreferences.getUserAccount();
 
@@ -1384,93 +1333,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
 
     }
-    //分享
-    @Override
-    protected void liveShare(SHARE_MEDIA share_media) {
-        ShareAction sp = new ShareAction(this);
-        sp.setPlatform(share_media);
-        sp.setCallback(new MyUMListener());
-        sp.withTitle(shareVO.getTitle());
-        sp.withTargetUrl(shareVO.getUrl());
-        sp.withText(shareVO.getTitle());
-        UMImage image = new UMImage(this, shareVO.getImg());
-        sp.withMedia(image);
-        sp.share();
-    }
 
-    class MyUMListener implements UMShareListener {
-
-        @Override
-        public void onResult(SHARE_MEDIA share_media) {
-            liveContentLoader.getShareStatistics(String.valueOf(shareVO.getTargetType()), String.valueOf(shareVO.getTargetId()), share_media.equals(SHARE_MEDIA.SINA) ? "2" : (share_media.equals(SHARE_MEDIA.WEIXIN) ? "1" : "0"));
-            if (share_media.equals(SHARE_MEDIA.SINA)) {
-                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WEIBO);
-                Toast.makeText(LiveActivity.this, "微博分享成功!", Toast.LENGTH_SHORT).show();
-                sendShareMessage("到新浪微博");
-            } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
-                sendShareMessage("到微信");
-                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WECHAT1);
-                Toast.makeText(LiveActivity.this, "微信分享成功!", Toast.LENGTH_SHORT).show();
-            } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                sendShareMessage("到朋友圈");
-                MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WECHAT2);
-                Toast.makeText(LiveActivity.this, "微信朋友圈分享成功!", Toast.LENGTH_SHORT).show();
-            }
-            if(sharePop!=null){
-                sharePop.dismiss();
-            }
-        }
-
-        @Override
-        public void onError(SHARE_MEDIA share_media, Throwable throwable) {
-            if (share_media.equals(SHARE_MEDIA.SINA)) {
-                sendShareMessage("到新浪微博");
-                Toast.makeText(LiveActivity.this, "微博分享失败!", Toast.LENGTH_SHORT).show();
-            } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
-                sendShareMessage("到微信");
-                Toast.makeText(LiveActivity.this, "微信分享失败!", Toast.LENGTH_SHORT).show();
-            } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                sendShareMessage("到朋友圈");
-                Toast.makeText(LiveActivity.this, "微信朋友圈分享失败!", Toast.LENGTH_SHORT).show();
-            }
-            if(sharePop!=null){
-                sharePop.dismiss();
-            }
-
-        }
-
-        @Override
-        public void onCancel(SHARE_MEDIA share_media) {
-            if (share_media.equals(SHARE_MEDIA.SINA)) {
-                Toast.makeText(LiveActivity.this, "已取消微博分享!", Toast.LENGTH_SHORT).show();
-            } else if (share_media.equals(SHARE_MEDIA.WEIXIN)) {
-                Toast.makeText(LiveActivity.this, "已取消微信分享!", Toast.LENGTH_SHORT).show();
-            } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
-                Toast.makeText(LiveActivity.this, "已取消微信朋友圈分享!", Toast.LENGTH_SHORT).show();
-            }
-            if(sharePop!=null){
-                sharePop.dismiss();
-            }
-
-        }
-
-    }
-  public  void  sendShareMessage(String content){
-        LiveMessage liveMessage = new LiveMessage();
-        liveMessage.setStyle(MessageType.text);
-        liveMessage.setUserId(userId);
-        liveMessage.setCreatorAccount(creatorAccount);
-        liveMessage.setChannelId(channelId);
-        IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "分享了直播"+content, roomId, AuthPreferences.getUserAccount(), liveMessage);
-        sendMessage(imMessage, MessageType.text);
-    }
 
 
     private void finishLive() {
         if (isStartLive) {
             logoutChatRoom();
         } else {
-            NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+            if(DemoCache.getLoginChatRoomStatus()){
+                NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+            }
             clearChatRoom();
         }
     }
@@ -1511,7 +1383,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         }
 
-    //    rtcEngine().enableLastmileTest();//启动网络质量检测
+        //    rtcEngine().enableLastmileTest();//启动网络质量检测
         if(isStartLive){
             //主播回来了
             LiveMessage liveMessage = new LiveMessage();
@@ -1552,7 +1424,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         AppLog.i("TAG", "直播端走了onDestroy");
 
         destroyLocation();
-        NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+        if(DemoCache.getLoginChatRoomStatus()){
+            NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
+        }
+
         if (isLeaveChannel) {
             deInitUIandEvent();
         }

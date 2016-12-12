@@ -1,12 +1,11 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -19,14 +18,13 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by android on 2016/11/16.
  */
-public class LiveAttentionPopuwindow extends PopupWindow {
+public class LiveAttentionPopuwindow extends BaseDialog {
     @BindView(R.id.live_attention_dialog_bgiv)
     ImageView liveAttentionDialogBgiv;
     @BindView(R.id.live_attention_dialog_head)
@@ -37,32 +35,37 @@ public class LiveAttentionPopuwindow extends PopupWindow {
     TextView liveAttentionDialogBtn;
     @BindView(R.id.live_attention_dialog_cance)
     ImageView liveAttentionDialogCancel;
-    private Context context;
-    private  LiveRowsBean liveRowsBean;
-    private final ContentLoader contentLoader;
+
+    private  ContentLoader contentLoader;
     private String userId;
 
-    public LiveAttentionPopuwindow(Context context,LiveRowsBean liveRowsBean) {
-        this.context = context;
-        this.liveRowsBean=liveRowsBean;
-        contentLoader = new ContentLoader(context);
-        AttentionCallBack attentionCallBack=new AttentionCallBack();
-        contentLoader.setCallBack(attentionCallBack);
+    public LiveAttentionPopuwindow(Context mContext) {
+        super(mContext, R.style.share_dialog);
+    }
+    @Override
+    public void initView() {
+        getWindow().setGravity(Gravity.BOTTOM);
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        //设置窗口宽度为充满全屏
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        //设置窗口高度为包裹内容
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        getWindow().setAttributes(lp);
     }
 
-    public void showAttentionPopu() {
-        View view = View.inflate(context, R.layout.live_attention_dialog, null);
-        ButterKnife.bind(this, view);
-        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        this.setContentView(view);
-        this.setFocusable(true);
-        this.setOutsideTouchable(true);
-        ColorDrawable dw = new ColorDrawable();
-        this.setBackgroundDrawable(dw);
+    @Override
+    public int getLayoutId() {
+        return R.layout.live_attention_dialog;
+    }
+
+
+    public void showAttentionPopu(LiveRowsBean liveRowsBean) {
         userId = String.valueOf(liveRowsBean.getUser().getId());
-        DrawableUtils.displayImg(context,liveAttentionDialogHead,liveRowsBean.getUser().getAvatar());
+        DrawableUtils.displayImg(getContext(),liveAttentionDialogHead,liveRowsBean.getUser().getAvatar());
         liveAttentionDialogName.setText(liveRowsBean.getUser().getNickName());
+        contentLoader = new ContentLoader(getContext());
+        AttentionCallBack attentionCallBack=new AttentionCallBack();
+        contentLoader.setCallBack(attentionCallBack);
     }
     @OnClick({R.id.live_attention_dialog_cance,R.id.live_attention_dialog_btn})
     public  void clickBtn(View view){
@@ -72,8 +75,7 @@ public class LiveAttentionPopuwindow extends PopupWindow {
                 break;
             case R.id.live_attention_dialog_btn:
                 if(isAttention){
-
-                    if(UserHelper.isLogined(context)){
+                    if(UserHelper.isLogined(getContext())){
                         contentLoader.getAddAttention(userId);
                     }else{
                         //去弹登录dialog
@@ -90,6 +92,8 @@ public class LiveAttentionPopuwindow extends PopupWindow {
     }
 
     boolean isAttention=true;
+
+
     class  AttentionCallBack extends ICallBack{
         @Override
         public void onLiveAttentionStatus(LiveAttentionStatusBean liveAttentionStatusBean) {
@@ -104,7 +108,7 @@ public class LiveAttentionPopuwindow extends PopupWindow {
                     liveAttentionDialogBtn.setText("相互关注");
                     liveAttentionDialogBtn.setAlpha(0.6f);
                 }
-                Drawable drawable1 = context.getResources().getDrawable(R.drawable.followsb_ic_sel);
+                Drawable drawable1 = getContext().getResources().getDrawable(R.drawable.followsb_ic_sel);
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
                 liveAttentionDialogBtn.setCompoundDrawables(drawable1, null, null, null);
                 if(onUserAttentionListener!=null){
@@ -121,7 +125,7 @@ public class LiveAttentionPopuwindow extends PopupWindow {
                 isAttention=true;
                 liveAttentionDialogBtn.setText("关注");
                 liveAttentionDialogBtn.setAlpha(1.0f);
-                Drawable drawable1 = context.getResources().getDrawable(R.drawable.followsb_ic_unsel);
+                Drawable drawable1 = getContext().getResources().getDrawable(R.drawable.followsb_ic_unsel);
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
                 liveAttentionDialogBtn.setCompoundDrawables(drawable1, null, null, null);
             }
