@@ -1744,7 +1744,7 @@ public class ContentLoader {
                 return;
             } else {
                 if (resultCode == RequestCode.GET_PUSH_TAGS) {
-                    getWelcommenImgs();
+                    getSystemConfigs();
                     return;
                 }
                 if (volleyError != null) {
@@ -1782,6 +1782,10 @@ public class ContentLoader {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
+                    if (resultCode == RequestCode.GET_PUSH_TAGS) {
+                        getSystemConfigs();
+                        return;
+                    }
                     if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
                         CustomDialog dialog = new CustomDialog(context);
                         dialog.setMessage(message);
@@ -1796,6 +1800,7 @@ public class ContentLoader {
                     callBack.onResponseFailed(code, message);
                     callBack.onResponseFailed(message, RequestCode.LIVE_AVATAR);
                     return;
+
 
                 }
                 switch (resultCode) {
@@ -3575,7 +3580,7 @@ public class ContentLoader {
         }
         if (MyApplication.isDebug) {
             for (Map.Entry<String, String> entry : map.entrySet()) {
-                AppLog.print("loginHeadParams:key:" + entry.getKey() + ", value:" + entry.getValue()+"\n");
+                AppLog.print("loginHeadParams:key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
             }
         }
 
