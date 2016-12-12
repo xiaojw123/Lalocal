@@ -105,6 +105,7 @@
                     android:ems="1"
                     android:lineSpacingExtra="@dimen/dimen_size_2_dp"
                     android:layout_marginTop="@dimen/dimen_size_2_dp"/>
+
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

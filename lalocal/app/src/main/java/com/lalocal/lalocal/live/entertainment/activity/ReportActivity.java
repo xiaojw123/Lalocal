@@ -480,6 +480,7 @@ public class ReportActivity extends BaseActivity {
                 if (result == null) {
                     AppLog.i("qn", "result null");
                     Toast.makeText(ReportActivity.this, "获取Token失败", Toast.LENGTH_SHORT).show();
+                    resetReport();
                     return;
                 }
 
@@ -515,6 +516,7 @@ public class ReportActivity extends BaseActivity {
             } else {
                 loading.setVisibility(View.GONE);
                 Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
+                resetReport();
             }
 
         }
@@ -522,6 +524,13 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
+            resetReport();
+        }
+
+        /**
+         * 重置举报
+         */
+        private void resetReport() {
             mCurUpload = 0;
             loading.setVisibility(View.GONE);
         }
@@ -551,8 +560,7 @@ public class ReportActivity extends BaseActivity {
                 // 举报信息返回失败提示
                 Toast.makeText(ReportActivity.this, "举报响应出错了，请稍后再试", Toast.LENGTH_SHORT).show();
             } finally {
-                // 隐藏加载
-                loading.setVisibility(View.GONE);
+                resetReport();
             }
         }
     }

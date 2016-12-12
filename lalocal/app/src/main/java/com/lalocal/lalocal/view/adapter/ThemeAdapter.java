@@ -127,6 +127,8 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView tvReadNum;
         TextView tvPraiseNum;
         TextView tvTag;
+        TextView tvThemeTag;
+
 
         public ThemeViewHolder(View view) {
             super(view);
@@ -139,6 +141,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tvPraiseNum = (TextView) view.findViewById(R.id.tv_praise_num);
             tvTag = (TextView) view.findViewById(R.id.tv_theme_tag);
             layoutThemeTag = (RelativeLayout) view.findViewById(R.id.layout_theme_tag);
+            tvThemeTag = (TextView) view.findViewById(R.id.tv_theme_tag);
         }
     }
 

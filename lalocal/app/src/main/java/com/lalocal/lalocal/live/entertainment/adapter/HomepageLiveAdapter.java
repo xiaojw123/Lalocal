@@ -142,10 +142,10 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         TextView tvLivePlayBack;
         // 直播图片
         ScaleImageView imgLiving;
-        // cardview控件，当前直播视图容器
-        CardView cardView;
-        // 直播定位图标
-        ImageView imgLiveLocation;
+        // 上一次信息
+        TextView tvLastMsg;
+        // 当前直播视图容器
+        LinearLayout liveClick;
 
         public LivingViewHolder(View itemView) {
             super(itemView);
@@ -155,10 +155,8 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             tvLivePlayBack = (TextView) itemView.findViewById(R.id.tv_live_playback);
             tvLivingLocation = (TextView) itemView.findViewById(R.id.tv_live_ing_location);
             imgLiving = (ScaleImageView) itemView.findViewById(R.id.img_live_ing);
-            cardView = (CardView) itemView.findViewById(R.id.card_view);
-            imgLiveLocation = (ImageView) itemView.findViewById(R.id.icon_live_location);
-            // 图标透明度设置为20%
-            imgLiveLocation.getDrawable().setAlpha(20);
+            tvLastMsg = (TextView) itemView.findViewById(R.id.tv_last_msg);
+            liveClick = (LinearLayout) itemView.findViewById(R.id.layout_click);
         }
 
         /**
@@ -170,11 +168,12 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         public void initView(boolean isShowLiving, final LiveRowsBean liveBean, boolean isShowTitle) {
             if (isShowLiving) {
                 // 设置当前直播视图可见
-                cardView.setVisibility(View.VISIBLE);
+                liveClick.setVisibility(View.VISIBLE);
 
                 String title = null;
                 String location = null;
                 String picUrl = null;
+                String lastMsg = null;
                 if (liveBean != null) {
                     // 获取当前直播标题
                     title = liveBean.getTitle();
@@ -182,6 +181,8 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                     location = liveBean.getAddress();
                     // 获取直播图片
                     picUrl = liveBean.getPhoto();
+                    // 获取上一次信息
+                    lastMsg = liveBean.getLastMsg();
                 }
 
                 // -空数据处理
@@ -208,9 +209,16 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                     DrawableUtils.displayRadiusImg(mContext, imgLiving, picUrl,
                             DensityUtil.dip2px(mContext, 3), R.drawable.androidloading);
                 }
+                // 上一次信息
+                if (!TextUtils.isEmpty(lastMsg)) {
+                    tvLastMsg.setText(lastMsg);
+                    tvLastMsg.setVisibility(View.VISIBLE);
+                } else {
+                    tvLastMsg.setVisibility(View.GONE);
+                }
 
             } else {
-                cardView.setVisibility(View.GONE);
+                liveClick.setVisibility(View.GONE);
             }
 
             // 判断是否显示直播的提示
@@ -223,7 +231,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             }
 
             // 点击事件回调
-            cardView.setOnClickListener(new View.OnClickListener() {
+            liveClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 如果是自己在直播
@@ -258,12 +266,8 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         TextView tvLivePlaybackPeople;
         // 直播回放时长
         TextView tvLivePlaybackTime;
-        // 直播回放定位图标
-        ImageView imgPlaybackLocation;
-        // 直播回放浏览人数图标
-        ImageView imgPlaybackPeople;
-        // 直播回放时长图标
-        ImageView imgPlaybackTime;
+        // 分割线
+        View divider;
 
         public LivePlaybackViewHolder(View itemView) {
             super(itemView);
@@ -275,14 +279,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
             this.tvLivePlaybackLocation = (TextView) itemView.findViewById(R.id.tv_live_playback_location);
             this.tvLivePlaybackPeople = (TextView) itemView.findViewById(R.id.tv_live_playback_people);
             this.tvLivePlaybackTime = (TextView) itemView.findViewById(R.id.tv_live_playback_time);
-            this.imgPlaybackLocation = (ImageView) itemView.findViewById(R.id.icon_playback_location);
-            this.imgPlaybackPeople = (ImageView) itemView.findViewById(R.id.icon_playback_people);
-            this.imgPlaybackTime = (ImageView) itemView.findViewById(R.id.icon_playback_time);
-
-            // 直播回放图标透明度设置为20%
-            this.imgPlaybackLocation.getDrawable().setAlpha(20);
-            this.imgPlaybackPeople.getDrawable().setAlpha(20);
-            this.imgPlaybackTime.getDrawable().setAlpha(20);
+            this.divider = itemView.findViewById(R.id.divider);
         }
 
         public void initView(final LiveRowsBean bean, boolean isBottom) {
@@ -336,10 +333,12 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                 RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) itemContainer.getLayoutParams();
                 lp.setMargins(0, 0, 0, DensityUtil.dip2px(mContext, 15));
                 itemContainer.setLayoutParams(lp);
+                divider.setVisibility(View.GONE);
             } else {
                 RecyclerView.LayoutParams lp = (RecyclerView.LayoutParams) itemContainer.getLayoutParams();
                 lp.setMargins(0, 0, 0, 0);
                 itemContainer.setLayoutParams(lp);
+                divider.setVisibility(View.VISIBLE);
             }
 
             // 点击事件回调

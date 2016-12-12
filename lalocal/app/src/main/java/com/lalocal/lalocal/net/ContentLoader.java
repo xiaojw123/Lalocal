@@ -2978,6 +2978,7 @@ public class ContentLoader {
 
         //上传图片token
         private void responseImgToken(String json) {
+            AppLog.i("rpt", "igm token is " + json);
             ImgTokenBean imgTokenBean = new Gson().fromJson(json, ImgTokenBean.class);
             callBack.onImgToken(imgTokenBean);
         }
@@ -3171,6 +3172,7 @@ public class ContentLoader {
          * @param json
          */
         private void responseChannelReport(String json) {
+            AppLog.i("rpt", "report response is " + json);
             callBack.onGetChannelReport(json);
         }
 
