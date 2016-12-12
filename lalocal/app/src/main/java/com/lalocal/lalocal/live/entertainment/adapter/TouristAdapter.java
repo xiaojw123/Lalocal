@@ -56,7 +56,16 @@ public class TouristAdapter extends RecyclerView.Adapter {
         if(userAvatarsBean.getAvatar()==null||userAvatarsBean.getAvatar().length()==0){
             liveViewHodler.touristItem.setImageResource(R.drawable.androidloading);
         }else{
-            DrawableUtils.displayImg(mContext, liveViewHodler.touristItem, userAvatarsBean.getAvatar());
+            if(userAvatarsBean.getAvatar().equals(liveViewHodler.touristItem.getTag())){
+                AppLog.i("TAG","不刷新头像");
+            }else{
+                AppLog.i("TAG","刷新头像:"+userAvatarsBean.getAvatar());
+                DrawableUtils.loadingImg(mContext,liveViewHodler.touristItem,userAvatarsBean.getAvatar());
+             //   DrawableUtils.displayImg(mContext,liveViewHodler.touristItem,userAvatarsBean.getAvatar());
+                // Glide.with(mContext).load(userAvatarsBean.getAvatar()).placeholder(R.drawable.androidloading).into(liveViewHodler.touristItem);
+                liveViewHodler.touristItem.setTag(userAvatarsBean.getAvatar());
+            }
+
         }
         if(LiveConstant.result.size()>0){
             for(LiveManagerListBean bean :LiveConstant.result){

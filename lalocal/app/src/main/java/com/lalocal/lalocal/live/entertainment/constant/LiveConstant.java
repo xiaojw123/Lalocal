@@ -43,4 +43,20 @@ public class LiveConstant {
     //视频方向
     public  static int DEFAULT_DIRECTION=1;
 
+
+    //礼物
+
+    public static final String WATER="009";
+    public static final String FRUIT="008";
+    public static final String STAR="007";
+    public static final String SUN_CREAM="006";
+    public static final String GLASSES="005";
+    public static final String FACE="004";
+    public static final String PLAN="003";
+    public static final String TRAVELLINGCASE="002";
+    public static final String ROSE="001";
+
+
+
+
 }

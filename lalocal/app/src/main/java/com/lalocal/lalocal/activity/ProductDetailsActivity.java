@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -622,11 +621,9 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO,String.valueOf(specialToH5Bean.getTargetId()));
-        sharePopupWindow.showShareWindow();
-        sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
-                Gravity.BOTTOM, 0, 0);
-
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext);
+        sharePopupWindow.showShareWindow(shareVO);
+        sharePopupWindow.show();
     }
 
 

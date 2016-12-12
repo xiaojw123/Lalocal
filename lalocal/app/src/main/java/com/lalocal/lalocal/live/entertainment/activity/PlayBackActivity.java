@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -200,11 +199,9 @@ public class PlayBackActivity extends BaseActivity {
                 break;
             case R.id.playback_top_share:
                 if (shareVO != null) {
-                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this, shareVO);
-                    shareActivity.showShareWindow();
-
-                    shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
-                            Gravity.BOTTOM, 0, 0);
+                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this);
+                    shareActivity.showShareWindow(shareVO);
+                    shareActivity.show();
                 } else {
                     Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
                 }
@@ -339,11 +336,8 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onClickShare() {
             if (shareVO != null) {
-                SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this, shareVO);
-                shareActivity.showShareWindow();
-
-                shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
-                        Gravity.BOTTOM, 0, 0);
+                SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this);
+                shareActivity.showShareWindow(shareVO);
             } else {
                 Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
             }

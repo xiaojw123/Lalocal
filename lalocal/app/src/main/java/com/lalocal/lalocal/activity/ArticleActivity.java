@@ -165,11 +165,9 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-
-        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO, targetID);
-        shareActivity.showShareWindow();
-        shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
-                Gravity.BOTTOM, 0, 0);
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext);
+        shareActivity.showShareWindow(shareVO);
+        shareActivity.show();
     }
 
     //判断二维码是否下载过

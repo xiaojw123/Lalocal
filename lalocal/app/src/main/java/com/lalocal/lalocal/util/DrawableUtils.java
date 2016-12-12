@@ -4,10 +4,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.MyApplication;
@@ -21,6 +23,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -56,6 +59,30 @@ public class DrawableUtils {
         displayImg(context, img, url, radius, drawable, null);
     }
 
+  //  public static void displayAvatar
+
+    public static void loadingImg(Context context , final ImageView img, String url){
+        if (TextUtils.isEmpty(url)) {
+            img.setImageResource(DRAWABLE_NULL);
+            return;
+        }
+        if (loader == null) {
+            loader = ImageLoader.getInstance();
+        }
+        if (!loader.isInited()) {
+            loader.init(getConfiguration(context));
+        }
+        loader.loadImage(url,new SimpleImageLoadingListener(){
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                        img.setImageBitmap(loadedImage);
+                    }
+                }
+        );
+
+    }
+
 
     public static void displayImg(Context context, ImageView img, String url, int radius, int drawable, ImageLoadingListener listener) {
         if (TextUtils.isEmpty(url)) {
@@ -77,8 +104,6 @@ public class DrawableUtils {
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
             loader.displayImage(fileUri, img, listener);
-
-
         }
     }
 
@@ -120,7 +145,7 @@ public class DrawableUtils {
 
         if (resID != -1) {
             builder.showImageForEmptyUri(resID);
-            builder.showImageOnLoading(resID);
+           builder.showImageOnLoading(resID);
             builder.showImageOnFail(resID);
         }
         if (radius > 0) {

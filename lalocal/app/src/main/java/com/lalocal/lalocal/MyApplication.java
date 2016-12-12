@@ -15,6 +15,7 @@ import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
 import com.lalocal.lalocal.live.base.util.sys.SystemUtil;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.WorkerThread;
+import com.lalocal.lalocal.live.entertainment.ui.ApngImageLoader;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.im.config.UserPreferences;
 import com.lalocal.lalocal.live.im.util.storage.StorageType;
@@ -82,7 +83,7 @@ import io.fabric.sdk.android.Fabric;
  * 此约定从2.1.3版本开始生效
  */
 public class MyApplication extends Application {
-    public static final boolean isDebug = true;
+    public static final boolean isDebug =true;
     private WorkerThread mWorkerThread;
 
     @Override
@@ -102,6 +103,9 @@ public class MyApplication extends Application {
 //        initUPsuh();
         //数据库
         intCountryDB();
+        //初始化Apng
+    //    initApngImageLoader();
+
         DemoCache.setContext(this);
         NIMClient.init(this, getLoginInfo(), getOptions());
         if (inMainProcess()) {
@@ -115,6 +119,15 @@ public class MyApplication extends Application {
             FlavorDependent.getInstance().onApplicationCreate();
         }
     }
+
+    private void initApngImageLoader() {
+        ApngImageLoader apngImageLoader = ApngImageLoader.getInstance();
+        apngImageLoader.setEnableDebugLog(false);
+        apngImageLoader.setEnableVerboseLog(false);
+        apngImageLoader.init(this);
+
+    }
+
 
     private void initUPsuh() {
         PushAgent mPushAgent = PushAgent.getInstance(this);

@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebView;
@@ -79,10 +78,9 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO, String.valueOf(targetId));
-        shareActivity.showShareWindow();
-        shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
-                Gravity.BOTTOM, 0, 0);
+        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this);
+        shareActivity.showShareWindow(shareVO);
+        shareActivity.show();
     }
 
     @Override

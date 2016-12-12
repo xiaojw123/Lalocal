@@ -24,7 +24,6 @@ public abstract class BaseDialog extends Dialog {
         super(context, cancelable, cancelListener);
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
