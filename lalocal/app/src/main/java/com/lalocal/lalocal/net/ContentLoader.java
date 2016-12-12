@@ -45,6 +45,7 @@ import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
@@ -1517,12 +1518,19 @@ public class ContentLoader {
      * @param masterName 被举报用户的昵称
      * @param channelId 当前直播间id
      */
-    public void getChannelReport(String content, String[] photos,
+    public void getChannelReport(int reportType, String content, String[] photos,
                                  String userId, String masterName, String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_CHANNEL_REPORT);
         }
-        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getChannelReport(), response, response);
+
+        // 主播端举报
+        String url = AppConfig.getChannelReport();
+        // 如果是用户端举报
+        if (reportType == Constants.REPORT_USER) {
+            url = AppConfig.getReport();
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, url, response, response);
         JSONObject jsonObject = new JSONObject();
 
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),

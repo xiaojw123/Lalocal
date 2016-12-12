@@ -27,6 +27,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.lalocal.lalocal.live.im.session.Container;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -449,7 +450,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                 // 举报
                 if(role==1){//主播端，举报
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_REPORT);
-                    toReportActivity();
+                    toReportActivity(Constants.REPORT_CHANNEL);
                 }else if(role==2){
                     if(isMaster){//关闭直播间
 
@@ -504,7 +505,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                 if(role==0||role==2){//用户端
                     // 举报
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_REPORT);
-                    toReportActivity();
+                    toReportActivity(Constants.REPORT_USER);
                 }else {//主播端 禁言
                     if(isMuted){
                         //解除禁言
@@ -624,13 +625,15 @@ public class CustomUserInfoDialog extends BaseDialog {
 
     }
     //去举报页面
-    public  void toReportActivity(){
+    public  void toReportActivity(int from){
         MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_REPORT);
         Intent intent = new Intent(mContext, ReportActivity.class);
         Bundle bundle = new Bundle();
+        AppLog.i("qn", "channel id is " + channelId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_CHANNEL_ID, channelId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_USER_ID, userId);
-        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME,nickName );
+        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME, nickName );
+        bundle.putInt(com.lalocal.lalocal.model.Constants.KEY_REPORT_FROM, from);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
 

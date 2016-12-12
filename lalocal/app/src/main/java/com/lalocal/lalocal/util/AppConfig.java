@@ -747,12 +747,21 @@ public class AppConfig {
     }
 
     /**
-     * 直播间举报
+     * 直播间举报，主播端
      * @return
      */
     public static String getChannelReport() {
-        AppLog.i("qn", "report url is " + baseUrl + "channels/report");
+        AppLog.i("qn", "channel report url is " + baseUrl + "channels/report");
         return baseUrl + "channels/report";
+    }
+
+    /**
+     * 举报：用户端
+     * @return
+     */
+    public static String getReport() {
+        AppLog.i("qn", "report url is " + baseUrl + "reports");
+        return baseUrl + "reports";
     }
 
     /**

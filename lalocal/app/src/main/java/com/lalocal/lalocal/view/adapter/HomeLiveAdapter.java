@@ -85,6 +85,20 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         this.notifyDataSetChanged();
     }
 
+    /**
+     * 刷新全部
+     * @param attention
+     * @param livingList
+     * @param playbackList
+     */
+    public void refreshAll(LiveUserBean attention, List<LiveRowsBean> livingList,
+                           List<LiveRowsBean> playbackList) {
+        this.mAttentionUser = attention;
+        this.mLivingList = livingList;
+        this.mPlaybackList = playbackList;
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder = null;
