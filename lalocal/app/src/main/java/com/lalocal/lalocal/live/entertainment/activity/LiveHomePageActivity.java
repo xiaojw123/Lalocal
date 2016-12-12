@@ -388,7 +388,7 @@ public class LiveHomePageActivity extends BaseActivity {
             String s = new Gson().toJson(liveUserInfosDataResp);
             userpageFollowNum.setText(String.valueOf(attentionNum));
             userpageFansNum.setText(String.valueOf(fansNum));
-            DrawableUtils.displayImg(LiveHomePageActivity.this, userpageHeadportraitImg, result.getAvatar());
+            DrawableUtils.displayImg(LiveHomePageActivity.this, userpageHeadportraitImg, result.getAvatarOrigin());
             if (!TextUtils.isEmpty(result.getDescription())) {
                 userpageLoginPrompt.setText(result.getDescription());
             }

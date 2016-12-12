@@ -12,7 +12,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.SearchItem;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -53,11 +52,9 @@ public class MoreRecyclerAdapter extends BaseRecyclerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         if (viewType == MODUEL_TYPE_ARTICLE) {
-            AppLog.print("游记type__");
             View view = inflater.inflate(R.layout.item_search_article, parent, false);
             return new ArticleHolder(view);
         } else if (viewType == MODUEL_TYPE_PRODUCT) {
-            AppLog.print("商品type__");
             View view = inflater.inflate(R.layout.search_result_item, parent, false);
             return new ProductHolder(view);
         }

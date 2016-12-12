@@ -85,20 +85,20 @@ public class MyMessageActivity extends BaseActivity {
                 MessageItem item = (MessageItem) obj;
                 switch (item.getTargetType()) {
                     case -1:
-                        TargetPage.gotoWebDetail(MyMessageActivity.this, item.getTargetUrl(),"");
+                        TargetPage.gotoWebDetail(MyMessageActivity.this, item.getTargetUrl(),"",false);
                         break;
                     case 1://文章
                     case 13://资讯
-                        TargetPage.gotoArticleDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()));
+                        TargetPage.gotoArticleDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()),false);
                         break;
                     case 2://产品
-                        TargetPage.gotoProductDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()), item.getTargetType());
+                        TargetPage.gotoProductDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()), item.getTargetType(),false);
                         break;
                     case 9://线路
-                        TargetPage.gotoRouteDetail(MyMessageActivity.this, item.getTargetId());
+                        TargetPage.gotoRouteDetail(MyMessageActivity.this, item.getTargetId(),false);
                         break;
                     case 10://专题
-                        TargetPage.gotoSpecialDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()));
+                        TargetPage.gotoSpecialDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()),false);
                         break;
                 }
 

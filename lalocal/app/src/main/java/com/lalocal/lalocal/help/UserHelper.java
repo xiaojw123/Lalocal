@@ -24,9 +24,8 @@ import org.litepal.crud.DataSupport;
  */
 public class UserHelper {
     //保存收藏 ，订单，优惠券使用记录
-    public static int NOTICE_VALUE=0;
     static SharedPreferences sp;
-    static String CUSTOM_ALIAS_TPYE = "USER_ID";
+    static String CUSTOM_ALIAS_TPYE = "LALOCAL";
 
     private static void initSPref(Context context) {
         if (sp == null && context != null) {
@@ -42,8 +41,7 @@ public class UserHelper {
     }
 
     public static void updateSignOutInfo(Context context) {
-        // TODO: 2016/12/7 umsg
-//        removeUserAlias(context);
+        removeUserAlias(context);
         MobHelper.singOff();
         AuthPreferences.clearUserInfo();
         DemoCache.clear();
@@ -77,8 +75,7 @@ public class UserHelper {
     public static void saveLoginInfo(Context context, Bundle bundle) {
         int userid = bundle.getInt(KeyParams.USERID, -1);
         boolean isLogin = bundle.getBoolean(KeyParams.IS_LOGIN);
-        // TODO: 2016/12/7 umsg
-//        addUserAlias(context, userid);
+        addUserAlias(context, userid);
         initSPref(context);
         SharedPreferences.Editor editor = sp.edit();
         if (!isLogin) {

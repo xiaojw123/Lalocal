@@ -31,6 +31,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.PushAgent;
 import com.umeng.socialize.UMShareAPI;
 /*
 *
@@ -49,8 +50,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: 2016/12/7 umsg
-//        PushAgent.getInstance(this).onAppStart();
+        PushAgent.getInstance(this).onAppStart();
     }
 
 
