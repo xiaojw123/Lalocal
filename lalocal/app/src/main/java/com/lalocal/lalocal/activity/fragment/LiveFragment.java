@@ -97,6 +97,9 @@ public class LiveFragment extends BaseFragment {
     private static final int INIT = 0x01;
     private static final int PREPARE_LVIE = 0x02;
 
+    // 是否第一次进入页面
+    private boolean isFirstEnter = true;
+
     // -权限控制
     // SD卡读写权限
     private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
@@ -110,7 +113,6 @@ public class LiveFragment extends BaseFragment {
             Manifest.permission.CAMERA,
             Manifest.permission.RECORD_AUDIO
     };
-
 
     public LiveFragment() {
     }
@@ -309,7 +311,14 @@ public class LiveFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mXrvLive.setRefreshing(true);
+
+        if (isFirstEnter) {
+            isFirstEnter = false;
+            mXrvLive.setRefreshing(true);
+        } else {
+            // 刷新我的关注
+            setAdapter(REFRESH_MY_ATTENTION);
+        }
     }
 
     @OnClick({R.id.btn_takelive})
@@ -371,7 +380,6 @@ public class LiveFragment extends BaseFragment {
         @Override
         public void onResponseFailed(String message, int requestCode) {
             super.onResponseFailed(message, requestCode);
-
 
             isRefresh = false;
             isLoadingMore = false;

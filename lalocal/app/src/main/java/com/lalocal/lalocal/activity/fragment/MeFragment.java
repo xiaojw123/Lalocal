@@ -37,6 +37,7 @@ import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.view.ArcImageView;
 import com.lalocal.lalocal.view.ReboundScrollView;
 import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.adapter.MeItemAdapter;
@@ -77,7 +78,7 @@ MeFragment extends BaseFragment {
     @BindView(R.id.home_me_verified)
     TextView verified_tv;
     @BindView(R.id.home_me_headportrait_img)
-    ImageView headImg;
+    ArcImageView headImg;
     @BindView(R.id.home_me_login_prompt)
     TextView loginPrompt;
     @BindView(R.id.home_me_author_tag)
@@ -241,7 +242,8 @@ MeFragment extends BaseFragment {
             if (TextUtils.isEmpty(email)) {
                 verified_tv.setText("未绑定");
             }
-            String avatar = user.getAvatar();
+//            String avatar = user.getAvatar();
+            String avatar = user.getAvatarOrigin();
             if (!TextUtils.isEmpty(avatar)) {
                 DrawableUtils.displayImg(getActivity(), headImg, avatar);
 //                DrawableUtils.displayImg(getActivity(),headArcImg,avatar);

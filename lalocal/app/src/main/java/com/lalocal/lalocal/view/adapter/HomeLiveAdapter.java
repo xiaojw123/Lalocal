@@ -193,9 +193,6 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
          * @param bean
          */
         public void initData(final LiveUserBean bean) {
-            int id = -1;
-            int userId = -1;
-            boolean isScanned = false;
             if (bean != null) {
                 layoutUser.setVisibility(View.VISIBLE);
                 // 获取头像

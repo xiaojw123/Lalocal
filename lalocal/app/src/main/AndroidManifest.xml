@@ -361,6 +361,7 @@
         <activity android:name=".me.TargetWebActivity" />
         <activity android:name=".activity.GlobalSearchActivity"/>
         <activity android:name=".activity.DestinationActivity"/>
+        <activity android:name=".test.TestGlobalSearchActivity"/>
     </application>
 
 </manifest>

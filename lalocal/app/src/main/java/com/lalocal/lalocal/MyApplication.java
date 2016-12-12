@@ -89,9 +89,9 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppLog.print("Application create start");
         initLogManager();
         Config.IsToastTip = true;
-        AppLog.print("MyApplication onCreate___");
         AppCrashHandler.getInstance(this);
         if (isDebug) {
             Bugtags.start("165db764bcad149e50e319635e6a614c", this, Bugtags.BTGInvocationEventBubble);
@@ -99,15 +99,18 @@ public class MyApplication extends Application {
             startFabric();
             startUmeng();
         }
-        // TODO: 2016/12/7 umsg
-//        initUPsuh();
+        initUPsuh();
+        AppLog.print("initUPush");
+
         //数据库
         intCountryDB();
+        AppLog.print("initDB");
         //初始化Apng
     //    initApngImageLoader();
-
         DemoCache.setContext(this);
+        AppLog.print("init Live Cache");
         NIMClient.init(this, getLoginInfo(), getOptions());
+        AppLog.print("init NIMClient");
         if (inMainProcess()) {
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
@@ -118,6 +121,7 @@ public class MyApplication extends Application {
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
         }
+        AppLog.print("Application create end");
     }
 
     private void initApngImageLoader() {
@@ -161,45 +165,49 @@ public class MyApplication extends Application {
             @Override
             public void launchApp(Context context, UMessage uMessage) {
                 AppLog.print("UMessage____launchApp");
-                super.launchApp(context,uMessage);
-                Map<String, String> data = uMessage.extra;
-                if (data != null && data.size() > 0) {
-                    String targetType = data.get("targetType");
-                    String targetId = data.get("targetId");
-                    String targetUrl = data.get("targetUrl");
-                    String targetName = data.get("targetName");
-                    if (targetType != null) {
-                        switch (targetType) {
-                            case TargetType.URL://链接
-                                TargetPage.gotoWebDetail(context, targetUrl, targetName);
-                                break;
-                            case TargetType.USER://用户
-                                TargetPage.gotoUser(context, targetId);
-                                break;
-                            case TargetType.ARTICLE://文章
-                            case TargetType.INFORMATION://资讯
-                                TargetPage.gotoArticleDetail(context, targetId);
-                                break;
-                            case TargetType.PRODUCT://产品
-                                TargetPage.gotoProductDetail(context, targetId, Integer.parseInt(targetType));
-                                break;
-                            case TargetType.ROUTE://线路
-                                TargetPage.gotoRouteDetail(context, Integer.parseInt(targetId));
-                                break;
-                            case TargetType.SPECIAL://专题
-                                TargetPage.gotoSpecialDetail(context, targetId);
-                                break;
-                            case TargetType.LIVE_VIDEO://直播-视频
-                                TargetPage.gotoLive(context, targetId);
-                                break;
-                            case TargetType.LIVE_PALY_BACK://回放
-                                TargetPage.gotoPlayBack(context, targetId);
-                                break;
-
-                        }
+                if (uMessage != null) {
+                    Map<String, String> data = uMessage.extra;
+                    for (Map.Entry entry:data.entrySet()){
+                        AppLog.print("key:"+entry.getKey()+", value:"+entry.getValue()+"\n");
                     }
+                    if (data != null && data.size() > 0) {
+                        String targetType = data.get("targetType");
+                        String targetId = data.get("targetId");
+                        String targetUrl = data.get("targetUrl");
+                        String targetName = data.get("targetName");
+                        AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
+                        if (targetType != null) {
+                            switch (targetType) {
+                                case TargetType.URL://链接
+                                    TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
+                                    break;
+                                case TargetType.USER://用户
+                                    TargetPage.gotoUser(context, targetId, true);
+                                    break;
+                                case TargetType.ARTICLE://文章
+                                case TargetType.INFORMATION://资讯
+                                    TargetPage.gotoArticleDetail(context, targetId, true);
+                                    break;
+                                case TargetType.PRODUCT://产品
+                                    TargetPage.gotoProductDetail(context, targetId, Integer.parseInt(targetType), true);
+                                    break;
+                                case TargetType.ROUTE://线路
+                                    TargetPage.gotoRouteDetail(context, Integer.parseInt(targetId), true);
+                                    break;
+                                case TargetType.SPECIAL://专题
+                                    TargetPage.gotoSpecialDetail(context, targetId, true);
+                                    break;
+                                case TargetType.LIVE_VIDEO://直播视频
+                                    TargetPage.gotoLive(context, targetId, true);
+                                    break;
+                                case TargetType.LIVE_PALY_BACK://回放
+                                    TargetPage.gotoPlayBack(context, targetId, true);
+                                    break;
 
+                            }
+                        }
 
+                    }
                 }
             }
 

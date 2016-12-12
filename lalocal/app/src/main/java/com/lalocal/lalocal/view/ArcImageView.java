@@ -19,6 +19,8 @@ import android.widget.ImageView;
  */
 
 public class ArcImageView extends ImageView {
+    private static final  float SCALE_X=1.0f;
+    private static final  float SCALE_Y=0.93f;
     private Paint mPaintBitmap = new Paint(Paint.ANTI_ALIAS_FLAG);
     BitmapShader shader;
     Matrix matrix = new Matrix();
@@ -46,8 +48,8 @@ public class ArcImageView extends ImageView {
 //            float scale = Math.max(getWidth() * 1.0f / bmp.getWidth(), getHeight()
 //                    * 1.0f / bmp.getHeight());
 //            matrix.setScale(scale, scale);
-            float scaleX =getWidth()*1.0f/bmp.getWidth();
-            float scaleY=getHeight()*1.0f/bmp.getHeight();
+            float scaleX =getWidth()*SCALE_X/bmp.getWidth();
+            float scaleY=getHeight()*SCALE_Y/bmp.getHeight();
             matrix.setScale(scaleX, scaleY);
             shader.setLocalMatrix(matrix);
             mPaintBitmap.setShader(shader);

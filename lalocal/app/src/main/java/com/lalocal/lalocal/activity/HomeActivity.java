@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -7,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +22,9 @@ import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
+import com.lalocal.lalocal.live.permission.MPermission;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
+import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
@@ -32,7 +37,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+
 public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
+    private static final int READ_WRITE_SDCARD_CODE=0x126;
 
     @BindView(R.id.home_tab_live)
     ImageView mImgTabLive;
@@ -63,6 +71,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     public static final int FRAGMENT_FIND = 0x02;
     public static final int FRAGMENT_ME = 0x03;
     public int mCurFragment = FRAGMENT_LIVE;
+    String mUpgradeUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +121,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             case R.id.home_tab_search:
                 Intent intent = new Intent(this, GlobalSearchActivity.class);
                 startActivity(intent);
+//                Intent intent = new Intent(this, TestGlobalSearchActivity.class);
+//                startActivity(intent);
                 break;
         }
     }
@@ -341,17 +352,42 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             @Override
             public void clickRightButton(View view) {
                 forceDailog.dismiss();
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
-                    update(dowloadUrl);
-                } else {
-                    Toast.makeText(HomeActivity.this, "无可用存储空间",
-                            Toast.LENGTH_SHORT).show();
-                }
+                requestSDCardPermission(dowloadUrl);
             }
         });
         forceDailog.show();
     }
+
+    private void requestSDCardPermission(String url) {
+        mUpgradeUrl=url;
+        MPermission.with(HomeActivity.this)
+                .addRequestCode(READ_WRITE_SDCARD_CODE)
+                .permissions(READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .request();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    @OnMPermissionGranted(READ_WRITE_SDCARD_CODE)
+    public void onPermissionGranted() {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
+            update(mUpgradeUrl);
+        } else {
+            Toast.makeText(HomeActivity.this, "无可用存储空间",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @OnMPermissionDenied(READ_WRITE_SDCARD_CODE)
+    public void onPermissionDenied() {
+        Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
+
+    }
+
 
     public String getUpdateContent(List<String> msgList) {
         StringBuffer sb = new StringBuffer();
@@ -391,13 +427,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             public void clickRightButton(View view) {
 
                 normalDialog.dismiss();
-                if (Environment.getExternalStorageState().equals(
-                        Environment.MEDIA_MOUNTED)) {
-                    update(dowloadUrl);
-                } else {
-                    Toast.makeText(HomeActivity.this, "无可用存储空间",
-                            Toast.LENGTH_SHORT).show();
-                }
+                requestSDCardPermission(dowloadUrl);
             }
         });
         normalDialog.show();
