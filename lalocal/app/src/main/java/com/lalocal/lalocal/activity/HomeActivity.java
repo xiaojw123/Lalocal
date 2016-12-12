@@ -26,6 +26,7 @@ import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.VersionResult;
+import com.lalocal.lalocal.test.TestGlobalSearchActivity;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.wevey.selector.dialog.DialogOnClickListener;
@@ -119,10 +120,10 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showFragment(FRAGMENT_ME);
                 break;
             case R.id.home_tab_search:
-                Intent intent = new Intent(this, GlobalSearchActivity.class);
-                startActivity(intent);
-//                Intent intent = new Intent(this, TestGlobalSearchActivity.class);
+//                Intent intent = new Intent(this, GlobalSearchActivity.class);
 //                startActivity(intent);
+                Intent intent = new Intent(this, TestGlobalSearchActivity.class);
+                startActivity(intent);
                 break;
         }
     }
@@ -384,8 +385,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     @OnMPermissionDenied(READ_WRITE_SDCARD_CODE)
     public void onPermissionDenied() {
-        Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, getResources().getString(R.string.live_read_write_external_storage), Toast.LENGTH_SHORT).show();
     }
 
 

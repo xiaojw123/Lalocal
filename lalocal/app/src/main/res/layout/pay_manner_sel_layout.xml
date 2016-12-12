@@ -28,10 +28,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/alipay"
             android:drawableLeft="@drawable/shape"
             android:drawablePadding="@dimen/dimen_size_10_dp"
+            android:gravity="center"
+            android:text="@string/alipay"
             android:textColor="@color/color_1a"
             android:textSize="@dimen/text_size_15_sp" />
 
@@ -59,10 +59,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:drawableLeft="@drawable/wechatpay_ic"
+            android:drawablePadding="@dimen/dimen_size_10_dp"
             android:gravity="center"
             android:text="@string/weixin"
-            android:drawablePadding="@dimen/dimen_size_10_dp"
-            android:drawableLeft="@drawable/wechatpay_ic"
             android:textColor="@color/color_1a"
             android:textSize="@dimen/text_size_15_sp" />
 
@@ -88,16 +88,38 @@
         android:paddingEnd="@dimen/dimen_size_15_dp"
         android:paddingStart="@dimen/dimen_size_15_dp">
 
-            <!--android:drawableLeft="@drawable/cmbkb_logo"-->
-        <TextView
+        <!--android:drawableLeft="@drawable/cmbkb_logo"-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/cmb"-->
+        <!--android:drawableLeft="@drawable/cmbc_ic"-->
+        <!--android:drawablePadding="@dimen/dimen_size_10_dp"-->
+        <!--android:textColor="@color/color_1a"-->
+        <!--android:textSize="@dimen/text_size_15_sp" />-->
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="@string/cmb"
-            android:drawableLeft="@drawable/cmbc_ic"
-            android:drawablePadding="@dimen/dimen_size_10_dp"
-            android:textColor="@color/color_1a"
-            android:textSize="@dimen/text_size_15_sp" />
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/cmbc_ic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_size_10_dp"
+                android:text="@string/cmb"
+                android:textColor="@color/color_1a"
+                android:textSize="@dimen/text_size_15_sp" />
+
+        </LinearLayout>
+
 
         <ImageView
             android:id="@+id/pay_manner_cmb_cb"
