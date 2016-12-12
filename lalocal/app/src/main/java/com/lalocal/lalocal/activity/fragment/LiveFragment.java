@@ -114,7 +114,6 @@ public class LiveFragment extends BaseFragment {
             Manifest.permission.RECORD_AUDIO
     };
 
-
     public LiveFragment() {
     }
 
