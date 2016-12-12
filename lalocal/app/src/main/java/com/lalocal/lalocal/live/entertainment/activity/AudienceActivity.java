@@ -416,7 +416,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         loadingPage = findViewById(R.id.live_loading_page);
         blurView = (BlurImageView) loadingPage.findViewById(R.id.loading_page_bg);
         audienceOver.setVisibility(View.GONE);
-
         loadingPageLayout = (LinearLayout) loadingPage.findViewById(R.id.xlistview_header_anim);
         //获取屏幕高度
         screenHeight = this.getWindowManager().getDefaultDisplay().getHeight();

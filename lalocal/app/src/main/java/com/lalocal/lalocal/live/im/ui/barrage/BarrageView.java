@@ -38,7 +38,6 @@ public class BarrageView extends RelativeLayout{
 
     private static final String TAG = "BarrageView";
     private static final int DEFAULT_RANDOM_COLOR_NUM = 10;
-
     private static final boolean OUTPUT_LOG = true;
     private  int padding;
 

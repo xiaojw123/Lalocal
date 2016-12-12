@@ -237,7 +237,7 @@
             <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
                 android:id="@+id/barrageView_test"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/live_height_65dp"
+                android:layout_height="75dp"
                 android:paddingBottom="@dimen/live_padding_5dp"
                 android:layout_above="@+id/messageListView"
                 ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
