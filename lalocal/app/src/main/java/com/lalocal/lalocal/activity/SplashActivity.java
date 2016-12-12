@@ -21,6 +21,7 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.TargetPage;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -66,6 +67,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_layout);
+        AppLog.print("splash create");
         welImg = (ImageView) findViewById(R.id.wel_img);
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
         welImg.setOnClickListener(this);
@@ -122,36 +124,36 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                         switch (targetType){
                             case -1://链接
                                 removeUpdateTime();
-                                TargetPage.gotoWebDetail(this, welImg.getTargetUrl(),welImg.getTargetName());
+                                TargetPage.gotoWebDetail(this, welImg.getTargetUrl(),welImg.getTargetName(),false);
                                 break;
                             case 0://用户
                                 removeUpdateTime();
-                                TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()));
+                                TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()),false);
                                 break;
                             case 1://文章
                             case 13://资讯
                                 removeUpdateTime();
-                                TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()));
+                                TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()),false);
                                 break;
                             case 2://产品
                                 removeUpdateTime();
-                                TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType);
+                                TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType,false);
                                 break;
                             case 9://线路
                                 removeUpdateTime();
-                                TargetPage.gotoRouteDetail(this, welImg.getTargetId());
+                                TargetPage.gotoRouteDetail(this, welImg.getTargetId(),false);
                                 break;
                             case 10://专题
                                 removeUpdateTime();
-                                TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()));
+                                TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()),false);
                                 break;
                             case 15://直播-视频
                                 removeUpdateTime();
-                                TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()));
+                                TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()),false);
                                 break;
                             case 20://回放
                                 removeUpdateTime();
-                                TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()));
+                                TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()),false);
                                 break;
                         }
                 }
@@ -259,13 +261,12 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             result = versionInfo.getResult();
             if (result != null) {
                 String apiUrl = result.getApiUrl();
-        //        AppConfig.setBaseUrl(apiUrl);
-//                if (UserHelper.isLogined(SplashActivity.this)) {
-                // TODO: 2016/12/7 umsg
-//                    mContentloader.getPushTags();
-//                } else {
+                AppConfig.setBaseUrl(apiUrl);
+                if (UserHelper.isLogined(SplashActivity.this)) {
+                    mContentloader.getPushTags();
+                } else {
                     mContentloader.getSystemConfigs();
-//                }
+                }
             } else {
                 Toast.makeText(SplashActivity.this, "系统服务异常", Toast.LENGTH_SHORT).show();
             }

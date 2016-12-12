@@ -41,6 +41,7 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
         pBar.setCancelable(false);
         pBar.setMessage("正在更新, 请稍候...");
         pBar.setProgress(0);
+        pBar.setMax(0);
         pBar.setProgressDrawable(mContext.getResources().getDrawable(R.drawable.progress_update_bg));
         pBar.show();
     }
@@ -53,7 +54,9 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
             urlConnection.setRequestMethod("GET");
             urlConnection.setConnectTimeout(70000);
             urlConnection.setReadTimeout(70000);
+            urlConnection.setRequestProperty("Connection", "Keep-Alive");
             int resCode = urlConnection.getResponseCode();
+            AppLog.print("url___"+params[0]+", resCode:"+resCode);
             if (resCode == HttpURLConnection.HTTP_OK) {
                 int length = urlConnection.getContentLength();
                 pBar.setMax((int) (length / Math.pow(1024, 2)));
@@ -71,18 +74,20 @@ public class UpdateTask extends AsyncTask<String, Integer, Void> {
                     byte[] buf = new byte[1024];   //这个是缓冲区，即一次读取10个比特，我弄的小了点，因为在本地，所以数值太大一 下就下载完了，看不出progressbar的效果。
                     int b;
                     int process = 0;
+                    AppLog.print("开始请求更新数据——————");
                     while ((b = is.read(buf)) != -1) {
                         fos.write(buf, 0, b);
                         process += b;
                         AppLog.print("progress__" + process);
                         pBar.setProgress((int) (process / Math.pow(1024, 2)));       //这里就是关键的实时更新进度了！
                     }
+                    AppLog.print("完成请求更新数据——————");
                     fos.flush();
                     fos.close();
                     is.close();
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             AppLog.print("update IOException ”\n“  class:" + e.getClass() + "\n" + "message:" + e.getMessage() + "\n" + "cause:" + e.getCause());
 //            e.printStackTrace();
         }

@@ -11,8 +11,18 @@ public class User implements Parcelable{
     String nickName;
     String email;
     String avatar;
+    String avatarOrigin;
     String token=null;
     int status=-1;
+
+    public String getAvatarOrigin() {
+        return avatarOrigin;
+    }
+
+    public void setAvatarOrigin(String avatarOrigin) {
+        this.avatarOrigin = avatarOrigin;
+    }
+
     ImUserInfo imUserInfo;
     String description;
     int role;
