@@ -43,7 +43,6 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-<<<<<<< HEAD
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">
@@ -60,6 +59,4 @@
       </state>
     </states>
   </component>
-=======
->>>>>>> c9f9b34def4f86a47a03a1a861bf5b4207560a4c
 </project>

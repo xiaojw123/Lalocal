@@ -173,20 +173,24 @@ public class PlayBackActivity extends BaseActivity {
                 if (UserHelper.isLogined(PlayBackActivity.this)) {
                     contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
                 } else {
-                    CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
-                    customDialog.setContent(getString(R.string.live_login_hint));
-                    customDialog.setCancelable(false);
-                    customDialog.setCancelable(false);
-                    customDialog.setCancelBtn(getString(R.string.live_canncel), null);
-                    customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
-                        @Override
-                        public void onDialogClickListener() {
-                            LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
-                        }
-                    });
-                    customDialog.show();
 
-                    DialogUtil.addDialog(customDialog);
+                    if(isUnDestroy){
+                        CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
+                        customDialog.setContent(getString(R.string.live_login_hint));
+                        customDialog.setCancelable(false);
+                        customDialog.setCancelable(false);
+                        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+                        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
+                            }
+                        });
+                        customDialog.show();
+
+                        DialogUtil.addDialog(customDialog);
+                    }
+
                 }
                 break;
             case R.id.playback_quit:
@@ -198,9 +202,8 @@ public class PlayBackActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.playback_top_share:
-                if (shareVO != null) {
-                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this);
-                    shareActivity.showShareWindow(shareVO);
+                if (shareVO != null&&isUnDestroy) {
+                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this,shareVO);
                     shareActivity.show();
                 } else {
                     Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
@@ -324,20 +327,39 @@ public class PlayBackActivity extends BaseActivity {
 
         @Override
         public void onClickCollect(ImageView view) {//收藏
-            if(praiseFlag){
-                AppLog.i("TAG","取消收藏。。。。。");
-                contentLoader.cancelParises(praiseId,targetId);
+            if(UserHelper.isLogined(PlayBackActivity.this)){
+                if(praiseFlag){
+                    AppLog.i("TAG","取消收藏。。。。。");
+                    contentLoader.cancelParises(praiseId,targetId);
+                }else{
+                    AppLog.i("TAG","添加收藏。。。。。");
+                    contentLoader.specialPraise(targetId,20);//收藏
+                }
             }else{
-                AppLog.i("TAG","添加收藏。。。。。");
-                contentLoader.specialPraise(targetId,20);//收藏
+                if(isUnDestroy){
+                    CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
+                    customDialog.setContent(getString(R.string.live_login_hint));
+                    customDialog.setCancelable(false);
+                    customDialog.setCancelable(false);
+                    customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+                    customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                        @Override
+                        public void onDialogClickListener() {
+                            LLoginActivity.startForResult(PlayBackActivity.this, RESQUEST_COD);
+                        }
+                    });
+                    customDialog.show();
+
+                    DialogUtil.addDialog(customDialog);
+                }
             }
         }
 
         @Override
         public void onClickShare() {
             if (shareVO != null) {
-                SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this);
-                shareActivity.showShareWindow(shareVO);
+                SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this,shareVO);
+               shareActivity.show();
             } else {
                 Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
             }
@@ -473,6 +495,7 @@ public class PlayBackActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        isUnDestroy=true;
         // 恢复播放
         if (videoList != null && videoList.size() > 0) {
             Log.i("TAF", "播放器activityhhehh ");
@@ -503,7 +526,6 @@ public class PlayBackActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        isUnDestroy = false;
         // 释放资源
         if ((videoPlayer.getVisibility()) == 0) {
             videoPlayer.close();
@@ -515,9 +537,13 @@ public class PlayBackActivity extends BaseActivity {
         super.onDestroy();
     }
 
+
     @Override
     protected void onStop() {
         super.onStop();
         DialogUtil.clear();
+        isUnDestroy = false;
     }
+
+
 }

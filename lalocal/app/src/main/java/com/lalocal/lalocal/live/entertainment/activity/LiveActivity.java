@@ -1038,9 +1038,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
-                            showSharePopuwindow(shareVO,"分享额了直播");
-                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
+                                    showSharePopuwindow(shareVO,"分享额了直播");
+                                }
+                            }
+                        });
                     }
                 }, 60000);
             }

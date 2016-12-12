@@ -126,8 +126,9 @@ public class CustomUserInfoDialog extends BaseDialog {
     @Override
     public void initView() {
         if(channelId==null){
-            userinfoBottomCenter.setVisibility(View.GONE);
-            userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+        //    userinfoBottomCenter.setVisibility(View.GONE);
+        //    userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+            userInfoLayoutBottom.setVisibility(View.GONE);
         }
         if(userId!=null&&userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己
             customDialogLiveHeaderLayout.setVisibility(View.GONE);
@@ -160,7 +161,6 @@ public class CustomUserInfoDialog extends BaseDialog {
                 userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
             }
         }
-
     }
 
     @Override
@@ -183,7 +183,6 @@ public class CustomUserInfoDialog extends BaseDialog {
                     AppLog.i("TAG","查看用户省份："+result.getRole()+"    accId:"+accId);
                     String description = result.getDescription();
                     Object status = result.getAttentionVO().getStatus();
-
                     if (status != null) {
                         double parseDouble = Double.parseDouble(String.valueOf(status));
                         userStatus = (int) parseDouble;//关注状态
@@ -628,6 +627,7 @@ public class CustomUserInfoDialog extends BaseDialog {
         MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_REPORT);
         Intent intent = new Intent(mContext, ReportActivity.class);
         Bundle bundle = new Bundle();
+        AppLog.i("TAG","用戶新係："+channelId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_CHANNEL_ID, channelId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_USER_ID, userId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME,nickName );

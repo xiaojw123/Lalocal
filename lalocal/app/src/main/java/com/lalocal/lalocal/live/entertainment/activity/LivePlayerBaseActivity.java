@@ -241,7 +241,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         if (!isInstallWeibo) {
             overLiveShareWeibo.setVisibility(View.GONE);
         }
-
     }
 
     private void checkManagerList() {
@@ -1413,7 +1412,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
     }
 
-
     /**************************
      * Module proxy
      ***************************/
@@ -1466,8 +1464,8 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
   protected  void showSharePopuwindow(SpecialShareVOBean shareVO, final String shareRemid){
       try {
           if(shareVO!=null&&LiveConstant.isUnDestory){
-              SharePopupWindow shareActivity = new SharePopupWindow(this);
-              shareActivity.showShareWindow(shareVO);
+              SharePopupWindow shareActivity = new SharePopupWindow(this,shareVO);
+
               shareActivity.setOnSuccessShare(new SharePopupWindow.OnSuccessShareListener() {
                   @Override
                   public void shareSuccess(SHARE_MEDIA share_media) {

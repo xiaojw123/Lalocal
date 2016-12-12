@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -23,6 +24,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -49,6 +51,11 @@ public class SharePopupWindow extends BaseDialog{
     private SpecialShareVOBean shareVO;
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ButterKnife.bind(this);
+    }
+    @Override
     public void initView() {
         getWindow().setGravity(Gravity.BOTTOM);
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -57,35 +64,38 @@ public class SharePopupWindow extends BaseDialog{
         //设置窗口高度为包裹内容
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(lp);
+        showShareWindow(shareVO);
     }
 
     @Override
     public int getLayoutId() {
         return R.layout.liveing_share_dialog;
     }
-
-    public SharePopupWindow(Context mContext) {
+    Context mContext;
+    public SharePopupWindow(Context mContext,SpecialShareVOBean shareVO) {
         super(mContext, R.style.share_dialog);
+        this.shareVO=shareVO;
+        this.mContext=mContext;
+
     }
 
     public void showShareWindow(SpecialShareVOBean shareVO) {
-
         this.shareVO = shareVO;
         boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(getContext(), "com.tencent.mm");
         boolean isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(getContext(), "com.sina.weibo");
         if (!isInstallMm1 && !isInstallWeibo) {
-            Toast.makeText(getContext(), "您尚未安装微博和微信，无法分享!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, "您尚未安装微博和微信，无法分享!", Toast.LENGTH_SHORT).show();
             dismiss();
         }
 
-        if (!isInstallMm1) {
+        if (!isInstallMm1&&liveingDialogShareFriends!=null&&liveingDialogShareWechat!=null) {
             liveingDialogShareFriends.setVisibility(View.GONE);
             liveingDialogShareWechat.setVisibility(View.GONE);
         }
-        if (!isInstallWeibo) {
+        if (!isInstallWeibo&&liveingDialogShareWeibo!=null) {
             liveingDialogShareWeibo.setVisibility(View.GONE);
         }
-        contentLoader = new ContentLoader(getContext());
+        contentLoader = new ContentLoader(mContext);
         contentLoader.setCallBack(new ICallBack() {
             @Override
             public void onShareStatistics(String json) {

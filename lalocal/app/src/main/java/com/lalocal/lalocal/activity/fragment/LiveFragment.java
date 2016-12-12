@@ -78,6 +78,7 @@ public class LiveFragment extends BaseFragment {
     private static final int REFRESH_MY_ATTENTION = 0x01;
     private static final int REFRESH_LIVING_LIST = 0x02;
     private static final int REFRESH_PLAYBACK_LIST = 0x03;
+    private static final int REFRESH_ALL = 0x04;
 
     // 推荐页直播录播标记
     public static final int LIVING = 0;
@@ -311,14 +312,15 @@ public class LiveFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        if (isFirstEnter) {
+//        if (isFirstEnter) {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
-        } else {
-            // 刷新我的关注
-            setAdapter(REFRESH_MY_ATTENTION);
-        }
+//        } else {
+//            // 刷新我的关注
+//            setAdapter(REFRESH_MY_ATTENTION);
+//        }
+
+
     }
 
     @OnClick({R.id.btn_takelive})
@@ -508,7 +510,7 @@ public class LiveFragment extends BaseFragment {
                 if (historyListBean != null) {
                     mPlaybackList.addAll(historyListBean.getRows());
                 }
-                setAdapter(INIT);
+                setAdapter(REFRESH_ALL);
             } else if (isLoadingMore) {
                 // 加载的时候去掉刷新
                 isLoadingMore = false;
@@ -570,6 +572,10 @@ public class LiveFragment extends BaseFragment {
                     // 重新setAdapter
                     mAdapter = null;
                     setAdapter(INITIAL);
+                    break;
+                case REFRESH_ALL:
+                    // 刷新直播回放列表
+                    mAdapter.refreshAll(mAttention, mLivingList, mPlaybackList);
                     break;
             }
         }

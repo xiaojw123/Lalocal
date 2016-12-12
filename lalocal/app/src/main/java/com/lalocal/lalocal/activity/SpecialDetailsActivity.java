@@ -25,6 +25,7 @@ import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.PariseResult;
@@ -156,9 +157,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.special_details_share_iv:
                 if (shareVO != null) {
-
-                    SharePopupWindow shareActivity = new SharePopupWindow(mContext);
-                    shareActivity.showShareWindow(shareVO);
+                    SharePopupWindow shareActivity = new SharePopupWindow(mContext,shareVO);
                     shareActivity.show();
                 }
                 break;
@@ -485,22 +484,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             AppLog.i("TAG","SpecialDetails:"+url);
             String[] split = url.split("\\?");
             String json = split[1];
-      /*    //生产环境开启
-           // targetType=1&targetId=230;
-            String[] split2=json.split("&");
-            String split3 = split2[0];
-            String[] split4 = split3.split("Type=");
-            String targetTy = split4[1];
-            String[] split1 = json.split("Id=");
-            String targetID = split1[1];
-            int targetIDD=Integer.parseInt(targetID);
-            int targetTY = Integer.parseInt(targetTy);
-*/
             SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
             AppLog.i("TAG", specialToH5Bean.toString());
-         /*   SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
-            specialToH5Bean.setTargetId(targetIDD);
-            specialToH5Bean.setTargetType(targetTY);*/
+            AppLog.i("TAG",String.valueOf(specialToH5Bean.getTargetType()));
             if (specialToH5Bean != null) {
                 switch (specialToH5Bean.getTargetType()) {
                     case 1:
@@ -525,6 +511,11 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                         Intent intent13 = new Intent(mContext, ArticleActivity.class);
                         intent13.putExtra("targetID", specialToH5Bean.getTargetId() + "");
                         startActivity(intent13);
+                        break;
+                    case 20:
+                        Intent intent14 = new Intent(mContext,PlayBackActivity.class);
+                        intent14.putExtra("id", specialToH5Bean.getTargetId() + "");
+                        startActivity(intent14);
                         break;
                 }
             }

@@ -621,8 +621,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext);
-        sharePopupWindow.showShareWindow(shareVO);
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext,shareVO);
         sharePopupWindow.show();
     }
 

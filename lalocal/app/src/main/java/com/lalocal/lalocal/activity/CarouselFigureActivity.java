@@ -78,8 +78,8 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this);
-        shareActivity.showShareWindow(shareVO);
+        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this,shareVO);
+
         shareActivity.show();
     }
 

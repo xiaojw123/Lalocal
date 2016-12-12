@@ -165,8 +165,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(mContext);
-        shareActivity.showShareWindow(shareVO);
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext,shareVO);
         shareActivity.show();
     }
 

@@ -1320,35 +1320,39 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private class ShowAttentionRunnable implements Runnable {//直播1分钟显示关注主播dialog
         @Override
         public void run() {
-            try{
-                if (overAttentionStatus == 0 && LiveConstant.isUnDestory&&audienceOver.getVisibility()!=View.VISIBLE) {
-                    final LiveAttentionPopuwindow popuwindow = new LiveAttentionPopuwindow(AudienceActivity.this);
-                    popuwindow.showAttentionPopu(liveRowsBean);
-                    popuwindow.setOnUserAttentionListener(new LiveAttentionPopuwindow.OnUserAttentionListener() {
-                        @Override
-                        public void getAttention() {
-                            if (container != null && container.account != null && creatorAccount != null) {
-                                LiveMessage liveMessage = new LiveMessage();
-                                liveMessage.setStyle(MessageType.text);
-                                liveMessage.setUserId(userId);
-                                liveMessage.setCreatorAccount(creatorAccount);
-                                liveMessage.setChannelId(channelId);
-                                IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "关注了主播!", roomId, AuthPreferences.getUserAccount(), liveMessage);
-                                AudienceActivity.this.sendMessage(imMessage, MessageType.text);
-                            }
-                            popuwindow.dismiss();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        if (overAttentionStatus == 0 && LiveConstant.isUnDestory&&audienceOver.getVisibility()!=View.VISIBLE) {
+                            LiveAttentionPopuwindow popuwindow = new LiveAttentionPopuwindow(AudienceActivity.this,liveRowsBean);
+                            popuwindow.setOnUserAttentionListener(new LiveAttentionPopuwindow.OnUserAttentionListener() {
+                                @Override
+                                public void getAttention() {
+                                    if (container != null && container.account != null && creatorAccount != null) {
+                                        LiveMessage liveMessage = new LiveMessage();
+                                        liveMessage.setStyle(MessageType.text);
+                                        liveMessage.setUserId(userId);
+                                        liveMessage.setCreatorAccount(creatorAccount);
+                                        liveMessage.setChannelId(channelId);
+                                        IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "关注了主播!", roomId, AuthPreferences.getUserAccount(), liveMessage);
+                                        AudienceActivity.this.sendMessage(imMessage, MessageType.text);
+                                    }
+                                }
+                                @Override
+                                public void goLoginActivity() {
+                                    showLoginViewDialog();
+                                }
+                            });
+                            popuwindow.show();
                         }
-
-                        @Override
-                        public void goLoginActivity() {
-                            showLoginViewDialog();
-                        }
-                    });
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        AppLog.i("TAG","暗黑风科技开发贷款发货贷款纠纷");
+                    }
                 }
+            });
 
-            }catch (Exception e){
-                e.printStackTrace();
-            }
         }
     }
 

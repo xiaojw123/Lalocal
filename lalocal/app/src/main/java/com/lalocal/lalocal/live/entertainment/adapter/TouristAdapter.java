@@ -61,8 +61,6 @@ public class TouristAdapter extends RecyclerView.Adapter {
             }else{
                 AppLog.i("TAG","刷新头像:"+userAvatarsBean.getAvatar());
                 DrawableUtils.loadingImg(mContext,liveViewHodler.touristItem,userAvatarsBean.getAvatar());
-             //   DrawableUtils.displayImg(mContext,liveViewHodler.touristItem,userAvatarsBean.getAvatar());
-                // Glide.with(mContext).load(userAvatarsBean.getAvatar()).placeholder(R.drawable.androidloading).into(liveViewHodler.touristItem);
                 liveViewHodler.touristItem.setTag(userAvatarsBean.getAvatar());
             }
 
