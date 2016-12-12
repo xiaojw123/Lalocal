@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -22,7 +20,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.text.NumberFormat;
@@ -91,13 +88,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 bg = DrawableUtils.tintDrawable(bg, ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.color_theme_tag_red)));
                 holder.layoutThemeTag.setBackgroundDrawable(bg);
             }
-            char[] tagTexts = tag.toCharArray();
-            LinearLayout wrapperLayout = (LinearLayout) holder.layoutThemeTag.getChildAt(0);
-            for (int i = 0; i < tagTexts.length; i++) {
-                TextView textView = (TextView) wrapperLayout.getChildAt(i);
-                textView.setText(String.valueOf(tagTexts[i]));
-                textView.setTextColor(tagColor);
+            if(tag!=null){
+
+                holder.tvTag.setText(tag);
+                holder.tvTag.setTextColor(tagColor);
             }
+
         }
 
         holder.tvThemeName.setText(name);
@@ -130,6 +126,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView tvThemeSubTitle;
         TextView tvReadNum;
         TextView tvPraiseNum;
+        TextView tvTag;
+        TextView tvThemeTag;
+
 
         public ThemeViewHolder(View view) {
             super(view);
@@ -140,7 +139,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tvThemeSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
             tvReadNum = (TextView) view.findViewById(R.id.tv_read_num);
             tvPraiseNum = (TextView) view.findViewById(R.id.tv_praise_num);
+            tvTag = (TextView) view.findViewById(R.id.tv_theme_tag);
             layoutThemeTag = (RelativeLayout) view.findViewById(R.id.layout_theme_tag);
+            tvThemeTag = (TextView) view.findViewById(R.id.tv_theme_tag);
         }
     }
 

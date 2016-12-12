@@ -422,7 +422,6 @@ public abstract class ICallBack {
      * @param json
      */
     public void onGetChannelReport(String json) {
-        AppLog.i("qn", "report json is " + json);
     }
 
 

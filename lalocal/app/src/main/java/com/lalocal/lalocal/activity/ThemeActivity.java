@@ -26,7 +26,6 @@ public class ThemeActivity extends BaseActivity {
     @BindView(R.id.rv_theme)
     XRecyclerView xRecyclerView;
 
-    private RecyclerAdapterWithHF mAdapter;
     private ThemeAdapter mThemeAdapter;
     private ContentLoader mContentLoader;
 
@@ -95,16 +94,12 @@ public class ThemeActivity extends BaseActivity {
                 if(isRefresh){
                     rowsBeanList.clear();
                 }
-                if(rowsBeanList.size()==0){
-                    rowsBeanList.addAll(0,rows);
-                } else {
+
                     rowsBeanList.addAll(rowsBeanList.size(), rows);
-                }
+
                 if(mThemeAdapter==null){
                     mThemeAdapter=new ThemeAdapter(ThemeActivity.this,rowsBeanList);
                     xRecyclerView.setAdapter(mThemeAdapter);
-
-
                 }else {
                     mThemeAdapter.setResh(rowsBeanList);
                 }

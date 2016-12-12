@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -125,12 +124,10 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		SpecialShareVOBean shareVO=new SpecialShareVOBean();
 		shareVO.setBitmap(bitmap3);
 
-		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this, shareVO);
-		shareActivity.showShareWindow();
+		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this);
+		shareActivity.showShareWindow(shareVO);
 		shareActivity.setCallBackListener(this);
-		shareActivity.showAtLocation(BigPictureActivity.this.findViewById(R.id.big_picture_main),
-				Gravity.BOTTOM, 0, 0);
-
+		shareActivity.show();
 	}
 
 	public static Bitmap drawTextToBitmap(Context gContext, Bitmap bitmap, String gText) {

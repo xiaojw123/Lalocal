@@ -122,10 +122,8 @@ public class ReportActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
-
         // 使用ButterKnife框架
         ButterKnife.bind(this);
-
         // 解析intent传入数据
         parseIntent();
         // 初始化视图
@@ -178,8 +176,13 @@ public class ReportActivity extends BaseActivity {
      * 初始化ContentLoader
      */
     private void initContentLoader() {
-        mContentLoader = new ContentLoader(ReportActivity.this);
-        mContentLoader.setCallBack(new MyCallBack());
+        try{
+            mContentLoader = new ContentLoader(this);
+            mContentLoader.setCallBack(new MyCallBack());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -477,6 +480,7 @@ public class ReportActivity extends BaseActivity {
                 if (result == null) {
                     AppLog.i("qn", "result null");
                     Toast.makeText(ReportActivity.this, "获取Token失败", Toast.LENGTH_SHORT).show();
+                    resetReport();
                     return;
                 }
 
@@ -512,6 +516,7 @@ public class ReportActivity extends BaseActivity {
             } else {
                 loading.setVisibility(View.GONE);
                 Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
+                resetReport();
             }
 
         }
@@ -519,6 +524,13 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
+            resetReport();
+        }
+
+        /**
+         * 重置举报
+         */
+        private void resetReport() {
             mCurUpload = 0;
             loading.setVisibility(View.GONE);
         }
@@ -526,7 +538,7 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onGetChannelReport(String json) {
             super.onGetChannelReport(json);
-
+            AppLog.i("TAG","举报成功："+json);
             try {
                 // json解析
                 JSONObject response = new JSONObject(json);
@@ -548,8 +560,7 @@ public class ReportActivity extends BaseActivity {
                 // 举报信息返回失败提示
                 Toast.makeText(ReportActivity.this, "举报响应出错了，请稍后再试", Toast.LENGTH_SHORT).show();
             } finally {
-                // 隐藏加载
-                loading.setVisibility(View.GONE);
+                resetReport();
             }
         }
     }

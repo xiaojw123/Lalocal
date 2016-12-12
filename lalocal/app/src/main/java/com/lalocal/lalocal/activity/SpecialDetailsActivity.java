@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -158,10 +157,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             case R.id.special_details_share_iv:
                 if (shareVO != null) {
 
-                    SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-                    shareActivity.showShareWindow();
-                    shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
-                            Gravity.BOTTOM, 0, 0);
+                    SharePopupWindow shareActivity = new SharePopupWindow(mContext);
+                    shareActivity.showShareWindow(shareVO);
+                    shareActivity.show();
                 }
                 break;
             case R.id.play_btn:

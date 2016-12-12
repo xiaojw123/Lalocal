@@ -5,7 +5,7 @@
     android:id="@+id/message_item_text_wang"
     android:clickable="true"
     android:paddingTop="@dimen/live_padding_2dp"
-   >
+    >
 
     <LinearLayout
         android:id="@+id/message_item_text_item"
@@ -21,31 +21,11 @@
             android:textSize="14sp"
             android:singleLine="false"
             android:layout_marginLeft="3dp"
-            android:lineSpacingExtra="@dimen/dimen_size_3_dp"
             android:textStyle="bold"
-            android:layout_gravity="center_vertical"
-            android:text="激发看得见风景梵蒂冈梵蒂冈的高高的郭德纲方法个电饭锅电饭锅电饭锅"
-            />
-
-        <ImageView
-            android:id="@+id/nim_message_item_iv"
-            android:layout_width="@dimen/dimen_size_25_dp"
-            android:layout_height="@dimen/dimen_size_25_dp"
             android:gravity="center_vertical"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/androidloading"
             />
-        <TextView
-            android:id="@+id/nim_message_item_text_body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:singleLine="false"
-            android:maxWidth="@dimen/max_text_bubble_width"
-            android:textStyle="bold"
-            android:textColor="@color/color_chat_content"
-            android:textSize="14sp"
-            />
+
 
 
 

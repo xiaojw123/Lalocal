@@ -67,16 +67,11 @@ public class LiveFragment extends BaseFragment {
     // 声明内容加载器
     private ContentLoader mContentLoader;
     // 我的关注
-    private LiveRowsBean mMyAttention;
-    // 我的关注
     private LiveUserBean mAttention;
     // 正在直播列表
     private List<LiveRowsBean> mLivingList = new ArrayList<>();
     // 直播回放列表
     private List<LiveRowsBean> mPlaybackList = new ArrayList<>();
-
-    // 模块数
-    private static final int PART_SIZE = 3;
 
     // -刷新类型
     private static final int INITIAL = 0X00;
@@ -88,14 +83,8 @@ public class LiveFragment extends BaseFragment {
     public static final int LIVING = 0;
     public static final int PLAYBACK = 1;
 
-    // 创建直播间id的key
-    public static final String CREATE_ROOMID = "createRoomId";
-
     // 第一次进入该页面
     private boolean isFirst = true;
-
-    // 刷新计数
-    private int mCountRefresh = 0;
 
     // 判断历史回放是否在刷新
     private boolean isRefresh = false;
@@ -155,13 +144,6 @@ public class LiveFragment extends BaseFragment {
         initLoader();
         // 初始化列表
         initXRecyclerView();
-        //创建日志文件夹
-        createLogFiles();
-    }
-
-    private void createLogFiles() {
-
-
     }
 
     /**
@@ -372,106 +354,6 @@ public class LiveFragment extends BaseFragment {
 
     private class MyCallBack extends ICallBack {
 
-//        @Override
-//        public void onGetHomeAttention(LiveRowsBean bean) {
-//            super.onGetHomeAttention(bean);
-//
-//            // 处理刷新状态
-//            dealRefresh();
-//
-//            // 恢复页码标记
-//            mCurPageNum = 1;
-//            // 获取数据
-//            mMyAttention = bean;
-//            if (mMyAttention == null) {
-//            }
-//            // 配置适配器
-//            setAdapter(REFRESH_MY_ATTENTION);
-//        }
-//
-//        @Override
-//        public void onLiveHomeList(LiveHomeListResp liveListDataResp, String attenFlag) {
-//            super.onLiveHomeList(liveListDataResp, attenFlag);
-//
-//            // 处理刷新状态
-//            dealRefresh();
-//
-//            // 恢复页码标记
-//            mCurPageNum = 1;
-//            // 如果接口状态正常
-//            if (liveListDataResp.getReturnCode() == 0) {
-//                // 先清空列表
-//                mLivingList.clear();
-//                // 获取数据
-//                mLivingList.addAll(liveListDataResp.getResult());
-//                // 配置适配器
-//                setAdapter(REFRESH_LIVING_LIST);
-//            }
-//        }
-//
-//        @Override
-//        public void onPlayBackList(String json, String attentionFlag) {
-//            super.onPlayBackList(json, attentionFlag);
-//
-//            // 获取接口数据
-//            LivePlayBackListResp liveHomeListResp = new Gson().fromJson(json, LivePlayBackListResp.class);
-//
-//            // 如果接口状态正常
-//            if (liveHomeListResp.getReturnCode() == 0) {
-//
-//                AppLog.i("rfe", "getReturnCode");
-//                LivePlayBackListResp.ResultBean bean = liveHomeListResp.getResult();
-//
-//                if (bean != null) {
-//                    // 如果是刷新
-//                    if (isRefresh) {
-//                        // 处理刷新状态
-//                        dealRefresh();
-//                        // 恢复页码标记
-//                        mCurPageNum = 1;
-//                        // 先清空列表
-//                        mPlaybackList.clear();
-//                        // 获取数据
-//                        mPlaybackList.addAll(bean.getRows());
-//                        // 配置适配器
-//                        setAdapter(REFRESH_PLAYBACK_LIST);
-//                    } else if (isLoadingMore) {
-//                        // 如果返回数据为空，则禁止加载更多
-//                        List<LiveRowsBean> rows = bean.getRows();
-//                        if (rows == null || rows.size() == 0) {
-//                            mXrvLive.setNoMore(true);
-//
-//                            isLoadingMore = false;
-//                            return;
-//                        }
-//                        // 加载完毕
-//                        mXrvLive.loadMoreComplete();
-//                        // 获取数据
-//                        mPlaybackList.addAll(bean.getRows());
-//                        // 配置适配器
-//                        setAdapter(REFRESH_PLAYBACK_LIST);
-//                    }
-//                } else {
-//                    // 如果是刷新
-//                    if (isRefresh) {
-//                        // 处理刷新状态
-//                        dealRefresh();
-//                        // 恢复页码标记
-//                        mCurPageNum = 1;
-//                        // 清空列表
-//                        mPlaybackList.clear();
-//                        // 配置适配器
-//                        setAdapter(REFRESH_PLAYBACK_LIST);
-//
-//                    } else if (isLoadingMore) { // 如果是加载更多，则表示没有更多数据
-//                        Toast.makeText(getActivity(), "没有更多数据咯~", Toast.LENGTH_SHORT).show();
-//                        mXrvLive.setNoMore(true);
-//                    }
-//                }
-//                isLoadingMore = false;
-//            }
-//        }
-        
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
@@ -638,33 +520,17 @@ public class LiveFragment extends BaseFragment {
                     // 刷新回放
                     setAdapter(REFRESH_PLAYBACK_LIST);
                 }
-            }
+            } else {
 
-            // 加载完毕
-            isLoadingMore = false;
-            // 刷新完毕
-            isRefresh = false;
-            // 刷新结束
-            mXrvLive.refreshComplete();
+                // 加载完毕
+                isLoadingMore = false;
+                // 刷新完毕
+                isRefresh = false;
+                // 刷新结束
+                mXrvLive.refreshComplete();
+            }
         }
     }
-
-//    /**
-//     * 处理刷新状态
-//     */
-//    private void dealRefresh() {
-//        if (isRefresh) {
-//            mCountRefresh++;
-//            if (mCountRefresh == PART_SIZE) {
-//                mCountRefresh = 0;
-//                isRefresh = false;
-//                isLoadingMore = false;
-//                mXrvLive.refreshComplete();
-//                mXrvLive.loadMoreComplete();
-//            }
-//        }
-//    }
-
 
     /**
      * 配置适配器
