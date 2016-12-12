@@ -91,13 +91,8 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 bg = DrawableUtils.tintDrawable(bg, ColorStateList.valueOf(ContextCompat.getColor(mContext, R.color.color_theme_tag_red)));
                 holder.layoutThemeTag.setBackgroundDrawable(bg);
             }
-            char[] tagTexts = tag.toCharArray();
-            LinearLayout wrapperLayout = (LinearLayout) holder.layoutThemeTag.getChildAt(0);
-            for (int i = 0; i < tagTexts.length; i++) {
-                TextView textView = (TextView) wrapperLayout.getChildAt(i);
-                textView.setText(String.valueOf(tagTexts[i]));
-                textView.setTextColor(tagColor);
-            }
+            holder.tvThemeTag.setText(tag);
+            holder.tvThemeTag.setTextColor(tagColor);
         }
 
         holder.tvThemeName.setText(name);
@@ -130,6 +125,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         TextView tvThemeSubTitle;
         TextView tvReadNum;
         TextView tvPraiseNum;
+        TextView tvThemeTag;
 
         public ThemeViewHolder(View view) {
             super(view);
@@ -141,6 +137,7 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             tvReadNum = (TextView) view.findViewById(R.id.tv_read_num);
             tvPraiseNum = (TextView) view.findViewById(R.id.tv_praise_num);
             layoutThemeTag = (RelativeLayout) view.findViewById(R.id.layout_theme_tag);
+            tvThemeTag = (TextView) view.findViewById(R.id.tv_theme_tag);
         }
     }
 

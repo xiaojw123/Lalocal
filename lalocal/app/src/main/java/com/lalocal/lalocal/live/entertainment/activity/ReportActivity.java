@@ -19,6 +19,8 @@ import com.android.volley.VolleyError;
 import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.MobEvent;
+import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
 import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
@@ -197,6 +199,7 @@ public class ReportActivity extends BaseActivity {
             btns.get(i).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     selectRadioBtn(btns, finalI);
                 }
             });
@@ -248,6 +251,7 @@ public class ReportActivity extends BaseActivity {
                 int lastIndex = mPhotoAdapter.getCount() - 1;
                 // 如果当前点击的是最后一张图片(“添加”图片)
                 if (position == lastIndex) {
+                    MobHelper.sendEevent(ReportActivity.this, MobEvent.LIVE_USER_REPORT_PICTURE);
                     // 启动GalleryFinal
                     startGlideGalleryFinal();
                 }
@@ -397,12 +401,14 @@ public class ReportActivity extends BaseActivity {
     void clickBtn(View v) {
         switch (v.getId()) {
             case R.id.btn_close_report:
+                MobHelper.sendEevent(this, MobEvent.LIVE_USER_REPORT_CANCEL);
                 ReportActivity.this.finish();
                 break;
             case R.id.btn_confirm_report:
                 loading.setVisibility(View.VISIBLE);
                 // 举报
                 report();
+                MobHelper.sendEevent(this, MobEvent.LIVE_USER_REPORT_SURE);
                 break;
         }
     }
@@ -471,6 +477,7 @@ public class ReportActivity extends BaseActivity {
                 if (result == null) {
                     AppLog.i("qn", "result null");
                     Toast.makeText(ReportActivity.this, "获取Token失败", Toast.LENGTH_SHORT).show();
+                    resetReport();
                     return;
                 }
 
@@ -506,6 +513,7 @@ public class ReportActivity extends BaseActivity {
             } else {
                 loading.setVisibility(View.GONE);
                 Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
+                resetReport();
             }
 
         }
@@ -513,6 +521,13 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
+            resetReport();
+        }
+
+        /**
+         * 重置举报
+         */
+        private void resetReport() {
             mCurUpload = 0;
             loading.setVisibility(View.GONE);
         }
@@ -542,8 +557,7 @@ public class ReportActivity extends BaseActivity {
                 // 举报信息返回失败提示
                 Toast.makeText(ReportActivity.this, "举报响应出错了，请稍后再试", Toast.LENGTH_SHORT).show();
             } finally {
-                // 隐藏加载
-                loading.setVisibility(View.GONE);
+                resetReport();
             }
         }
     }

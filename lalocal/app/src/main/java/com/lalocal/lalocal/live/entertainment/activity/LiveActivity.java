@@ -1,16 +1,19 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -120,7 +123,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     private View liveSettingLayout;//直播间底部设置栏
     protected View viewById;
-
     private TextView aucienceCount;
     private TextView overTime;
     private ImageView liveQuit;
@@ -169,6 +171,29 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private String logTime;
     private String logFile;
 
+    private static final int INIT = 0x01;
+    private static final String[] RW_SD_PERMISSIONS = new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
+    private ImgTokenResult imgToken;
+
+    private LiveingSharePopuwindow sharePop;
+
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void reminderUserPermission(int init) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+        } else {
+            // 初始化
+            initLocation();
+        }
+
+    }
 
     @Override
     protected int getActivityLayout() {
@@ -250,6 +275,23 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         locationClient.setLocationOption(getDefaultOption());
         // 设置定位监听
         locationClient.setLocationListener(locationListener);
+        startLocation();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        doNext(requestCode, grantResults);
+    }
+    private void doNext(int requestCode, int[] grantResults) {
+        if(LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE==requestCode){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 初始化
+                initLocation();
+            } else {
+                Toast.makeText(this, "没有地理位置权限", Toast.LENGTH_SHORT).show();
+            }
+        }
 
     }
 
@@ -322,7 +364,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void findViews() {
         super.findViews();
         //初始化定位
-        initLocation();
+        if (Build.VERSION.SDK_INT >= 22) {
+            // 请求用户权限
+            reminderUserPermission(INIT);
+        } else {
+            // 初始化
+            initLocation();
+        }
 
         backBtn = findView(R.id.BackBtn);
         modelLayout = (RelativeLayout) findViewById(R.id.live_view_top_layout);
@@ -409,7 +457,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     private void initCreateLiveLayout() {
-        startLocation();
+
         createLiveLayout = (RelativeLayout) findViewById(R.id.create_live_layout);
         createLiveLayout.setVisibility(View.VISIBLE);
         liveCreateRoomCloseIv = (ImageView) createLiveLayout.findViewById(R.id.live_create_room_close_iv);
@@ -542,12 +590,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         if (Constant.PRP_ENABLED) {
                             Constant.PRP_ENABLED = false;
                             ((TextView) view).setText(R.string.live_beauty_off);
+                            MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_BEAUTY_ON);
                         } else {
                             Constant.PRP_ENABLED = true;
                             ((TextView) view).setText(R.string.live_beauty_on);
+                            MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_BEAUTY_OFF);
                             ((TextView) view).setTextColor(getResources().getColor(R.color.live_beauty_on));
                         }
-                        MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_BEAUTY);
+
                         worker().enablePreProcessor();//美颜开闭切换
 
                         break;
@@ -571,7 +621,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private void shareLivePopu() {
         try{
             MobHelper.sendEevent(this, MobEvent.LIVE_USER_SHARE);
-            LiveingSharePopuwindow sharePop = new LiveingSharePopuwindow(LiveActivity.this);
+          /*  sharePop = new CustomShareDialog(LiveActivity.this);
+            sharePop.setOnLivingShareListener(new CustomShareDialog.LivingShareListener() {
+                @Override
+                public void sharePlatform(SHARE_MEDIA share_media) {
+                    isStartLiveShare = false;
+                    liveShare(share_media);
+                }
+            });
+            sharePop.show();*/
+            sharePop = new LiveingSharePopuwindow(LiveActivity.this);
             sharePop.showSharePopu();
             sharePop.showAtLocation(LiveActivity.this.findViewById(R.id.live_layout),
                     Gravity.BOTTOM, 0, 0);
@@ -656,6 +715,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     showInputTextView();
                     break;
                 case R.id.create_live_location_tv:
+                    MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_LOCACTION_BUTTON);
                     Intent intent = new Intent(LiveActivity.this, LiveLocationActivity.class);
                     startActivity(intent);
                     break;
@@ -687,6 +747,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             isFirstClick = false;
             roomName = liveRoomName.getText().toString().trim();
             if (TextUtils.isEmpty(roomName)) {
+                isFirstClick=true;
                 Toast.makeText(LiveActivity.this, "直播间标题不能为空!", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -755,14 +816,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onImgToken(ImgTokenBean imgTokenBean) {
             super.onImgToken(imgTokenBean);
             if (imgTokenBean.getReturnCode() == 0) {
-                ImgTokenResult imgToken = imgTokenBean.getResult();
-                uploadManager.put(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime,null, imgToken.getToken(), new UpCompletionHandler() {
+                imgToken = imgTokenBean.getResult();
+                uploadManager.put(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime,LogFileUtils.fileAgoraPath+logTime, imgToken.getToken(), new UpCompletionHandler() {
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         boolean ok = info.isOK();
                         AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
-                        AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败"));
-                        deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
+                        AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败")+"     文件名:"+Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
+
+                   //     deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
 
                     }
                 }, null);
@@ -986,15 +1048,17 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-
+        AppLog.i("TAG","开始直播陈公公。。。。。");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                AppLog.i("TAG","开始公。。。。。");
                 isStartLive = true;
                 if(liveRoomName!=null){
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(liveRoomName.getWindowToken(), 0);
                 }
+                AppLog.i("TAG","开始直播陈公公。。。。。");
                 isEnterRoom = true;
                 if (createLiveLayout != null) {
                     createLiveLayout.setVisibility(View.GONE);
@@ -1268,7 +1332,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             surfaceView.setZOrderOnTop(true);
             surfaceView.setZOrderMediaOverlay(true);
             int i = rtcEngine().setLogFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
-
             worker().preview(true, surfaceView, UserHelper.getUserId(LiveActivity.this));
         }
         worker().joinChannel(cname, UserHelper.getUserId(LiveActivity.this));
@@ -1277,7 +1340,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private void doConfigEngine(int cRole) {
 
         int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
-
         switch (LiveConstant.LIVE_DEFINITION) {
             case 1:
                 vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
@@ -1354,7 +1416,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_ANCHOR_SHARE_WECHAT2);
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享成功!", Toast.LENGTH_SHORT).show();
             }
-
+            if(sharePop!=null){
+                sharePop.dismiss();
+            }
         }
 
         @Override
@@ -1369,6 +1433,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 sendShareMessage("到朋友圈");
                 Toast.makeText(LiveActivity.this, "微信朋友圈分享失败!", Toast.LENGTH_SHORT).show();
             }
+            if(sharePop!=null){
+                sharePop.dismiss();
+            }
 
         }
 
@@ -1380,6 +1447,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 Toast.makeText(LiveActivity.this, "已取消微信分享!", Toast.LENGTH_SHORT).show();
             } else if (share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)) {
                 Toast.makeText(LiveActivity.this, "已取消微信朋友圈分享!", Toast.LENGTH_SHORT).show();
+            }
+            if(sharePop!=null){
+                sharePop.dismiss();
             }
 
         }
@@ -1441,7 +1511,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             }
         }
 
-        rtcEngine().enableLastmileTest();//启动网络质量检测
+    //    rtcEngine().enableLastmileTest();//启动网络质量检测
         if(isStartLive){
             //主播回来了
             LiveMessage liveMessage = new LiveMessage();

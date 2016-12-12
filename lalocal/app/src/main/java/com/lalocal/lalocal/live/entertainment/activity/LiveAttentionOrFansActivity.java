@@ -179,6 +179,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements CustomT
                 break;
             case R.id.attention_cancel_tv:
                 showSearchRows.clear();
+                allSearchRows.clear();
                 searchPages = 1;
                 isSearchFansOrAttention = false;
                 attentionSearchCet.setText("");
@@ -237,9 +238,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements CustomT
     public void onBackPressed() {
         setResult(AccountEidt1Activity.UPDATE_ME_DATA);
         super.onBackPressed();
-
     }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -310,9 +309,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements CustomT
                         Collections.sort(allRows, comp);
                     }
                     attentionOrFansRecyAdapter.refresh(allRows);
-
                 }
-
             }
         }
     }

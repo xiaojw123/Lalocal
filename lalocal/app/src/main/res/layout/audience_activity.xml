@@ -125,6 +125,7 @@
                         android:paddingLeft="@dimen/live_padding_5dp"
                         android:paddingRight="@dimen/live_padding_5dp"
                         android:drawablePadding="@dimen/live_padding_2dp"
+                        android:drawableLeft="@drawable/livecrown_16"
                         android:drawableRight="@drawable/livecrown_arrow"
                         android:text="@string/live_ranking_list"
                         />
@@ -197,9 +198,9 @@
                 android:textSize="@dimen/text_size_12_sp"
                 android:layout_above="@+id/live_nofitifation_layout"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/live_height_100dp"
+                android:layout_marginRight="@dimen/live_height_40dp"
                 android:background="@drawable/newmassagefrombottom"
-                android:visibility="gone"
+               android:visibility="gone"
                 />
             <LinearLayout
                 android:id="@+id/setting_bottom_layout"
@@ -230,8 +231,7 @@
                 android:fadingEdge="none"
                 android:listSelector="@android:color/transparent"
                 android:scrollbars="none"
-                android:stackFromBottom="true"
-                android:transcriptMode="alwaysScroll"
+
                 />
 
             <com.lalocal.lalocal.live.im.ui.barrage.BarrageView

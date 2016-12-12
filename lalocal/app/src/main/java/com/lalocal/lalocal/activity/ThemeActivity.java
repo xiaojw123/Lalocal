@@ -26,7 +26,6 @@ public class ThemeActivity extends BaseActivity {
     @BindView(R.id.rv_theme)
     XRecyclerView xRecyclerView;
 
-    private RecyclerAdapterWithHF mAdapter;
     private ThemeAdapter mThemeAdapter;
     private ContentLoader mContentLoader;
 

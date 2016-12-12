@@ -656,16 +656,13 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                                         Toast.makeText(LivePlayerBaseActivity.this,"你已被管理员禁言!",Toast.LENGTH_SHORT).show();
                                     }
                                     return;
-
                                 }
-
                                 @Override
                                 public void onException(Throwable exception) {
                                 }
                             });
                 }
             }
-
         }
 
         @Override
@@ -706,6 +703,11 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
                     @Override
                     public void showTouristInfo(UserAvatarsBean member, boolean isMasterAccount) {
+                        if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                            MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_USER);
+                        }else{
+                            MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_USER);
+                        }
 
                         if (LiveConstant.USER_INFO_FIRST_CLICK) {
                             LiveConstant.USER_INFO_FIRST_CLICK = false;
@@ -829,16 +831,14 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             switch (v.getId()) {
                 case R.id.live_master_info_layout:
                     if(UserHelper.isLogined(LivePlayerBaseActivity.this)){
-                        if(LivePlayerBaseActivity.this instanceof AudienceActivity){
-                            if(userId!=null&&channelId!=null){
-                                showUserInfoDialog(userId, channelId, true);
+                        if(userId!=null&&channelId!=null){
+
+                            if(LivePlayerBaseActivity.this instanceof  AudienceActivity){
+                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_ANCHOR);
                             }
-                        }else {
-                            if (firstClick){
-                                firstClick = false;
-                                contentLoader.liveGiftRanks(channelId);
-                            }
+                            showUserInfoDialog(userId, channelId, true);
                         }
+
                     }else {
                         showLoginViewDialog();
                     }
@@ -852,7 +852,14 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
                 case R.id.audience_score_layout:
                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_LIST);
-                    if (firstClick&&LivePlayerBaseActivity.this instanceof AudienceActivity) {
+                    if(firstClick){
+                        boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                        if (logineds) {
+                            firstClick = false;
+                            contentLoader.liveGiftRanks(channelId);
+                        }
+                    }
+                   /* if (firstClick&&LivePlayerBaseActivity.this instanceof AudienceActivity) {
                         boolean logineds = UserHelper.isLogined(LivePlayerBaseActivity.this);
                         if (logineds) {
                             firstClick = false;
@@ -860,7 +867,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                         } else {
                             showLoginViewDialog();
                         }
-                    }
+                    }*/
                     break;
                 case R.id.over_page_friends:
                     overLiveShareFriends.setSelected(true);
@@ -1195,6 +1202,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             enterRequest = NIMClient.getService(ChatRoomService.class).enterChatRoom(data);
             enterChatRoomRequestCallback = new EnterChatRoomRequestCallback();
             enterRequest.setCallback(enterChatRoomRequestCallback);
+
         }
     }
 
@@ -1218,6 +1226,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             AppLog.i("TAG", "登陆聊天室成功：" + code+"   "+member1.getMemberType());
             LiveConstant.enterRoom = true;
             initInputPanel(creatorAccount, channelId);
+            //监听网络
+        /*    NetListenerUtil.getPhoneState(LivePlayerBaseActivity.this);
+            NetListenerUtil.getWifiInfo(LivePlayerBaseActivity.this);*/
         }
 
         @Override
@@ -1274,9 +1285,13 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 if(roomId!=null&&liveNumber!=-1){
                     contentLoader.getLiveAvatar(channelId,liveNumber,isLiveMaster);
                 }
+
                 AppLog.i("TAG","调用获取直播间头像接口");
+           //     NetListenerUtil.getWifiInfo(LivePlayerBaseActivity.this);
+            //    NetListenerUtil.getPhoneState(LivePlayerBaseActivity.this);
             }else{
                 onlineCountText.setText(String.valueOf(produceRandom()+onlineCounts) + "人");
+             //   NetListenerUtil.getWifiInfo(LivePlayerBaseActivity.this);
             }
             handler.postDelayed(this, 2000);
         }
@@ -1404,6 +1419,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
             @Override
             public void ranListItemClick(RankUserBean rankUser) {
+                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_RANK_AVATAR_CLICK);
                 String userId = String.valueOf(rankUser.getId());
                 if(userId!=null){
                     contentLoader.getLiveUserInfo(userId);

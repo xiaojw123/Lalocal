@@ -95,49 +95,16 @@
             android:background="@drawable/nextsharemeeting_tag"
             android:layout_marginRight="@dimen/dimen_size_25_dp">
 
-            <!--<ImageView-->
-                <!--android:id="@+id/img_theme_tag"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:src="@drawable/nextsharemeeting_tag"/>-->
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_centerHorizontal="true">
                 <TextView
-                    android:id="@+id/tv_theme_tag_0"
+                    android:id="@+id/tv_theme_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_12_sp"
+                    android:ems="1"
+                    android:layout_centerHorizontal="true"
+                    android:lineSpacingExtra="@dimen/dimen_size_3_dp"
                     android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/dimen_size_2_dp"/>
-
-                <TextView
-                    android:id="@+id/tv_theme_tag_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_12_sp"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/dimen_size_2_dp"/>
-
-                <TextView
-                    android:id="@+id/tv_theme_tag_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_12_sp"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/dimen_size_2_dp"/>
-
-                <TextView
-                    android:id="@+id/tv_theme_tag_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_12_sp"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="@dimen/dimen_size_2_dp"/>
-            </LinearLayout>
+                    android:layout_marginTop="@dimen/dimen_size_3_dp"/>
         </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

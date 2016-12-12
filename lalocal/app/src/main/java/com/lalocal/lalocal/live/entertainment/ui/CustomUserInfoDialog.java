@@ -131,7 +131,7 @@ public class CustomUserInfoDialog extends BaseDialog {
             userinfoBottomCenter.setVisibility(View.GONE);
             userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
         }
-        if(userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己
+        if(userId!=null&&userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己
             customDialogLiveHeaderLayout.setVisibility(View.GONE);
             customDialogAudienceCloseLayout.setVisibility(View.VISIBLE);
             userinfoBottomLeft.setVisibility(View.GONE);
@@ -485,9 +485,19 @@ public class CustomUserInfoDialog extends BaseDialog {
                 }
                 break;
             case R.id.custom_dialog_close_iv_1:
+                if(role==1){
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_CANCEL);
+                }else{
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_CANCEL);
+                }
                 dismiss();
                 break;
             case R.id.userinfo_head_iv://进入用户主页
+                if(role==1){
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_AVATAR);
+                }else{
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_AVATAR);
+                }
                 intent = new Intent(mContext, LiveHomePageActivity.class);
                 intent.putExtra("userId", String.valueOf(userId));
                 mContext.startActivity(intent);
@@ -495,6 +505,7 @@ public class CustomUserInfoDialog extends BaseDialog {
             case R.id.userinfo_bottom_left:
                 if(role==0||role==2){//用户端
                     // 举报
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_REPORT);
                     toReportActivity();
                 }else {//主播端 禁言
                     if(isMuted){
@@ -510,8 +521,9 @@ public class CustomUserInfoDialog extends BaseDialog {
                         isMuted=true;
                         sendMessage("禁言了"+result.getNickName(),MessageType.ban);
                     }
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_PROHIBITION);
                 }
-                dismiss();
+
                 break;
             case R.id.userinfo_bottom_center:
                 if(role==0||role==2){//禁言
@@ -534,6 +546,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                             contentLoader.getUserMute(channelId,roomId,String.valueOf(UserHelper.getUserId(mContext)),userId,0);
                             sendMessage("禁言了"+result.getNickName(),MessageType.ban);
                         }
+
                     }
 
                 }else {//管理员设置
@@ -574,6 +587,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                             contentLoader.liveAccreditManager(channelId, String.valueOf(userId));
                         }
                     }
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_MANAGEMENT);
                 }
                 break;
             case R.id.userinfo_bottom_right://关注
@@ -581,6 +595,11 @@ public class CustomUserInfoDialog extends BaseDialog {
                     contentLoader.getAddAttention(String.valueOf(userId));
                 }else{//取消关注
                     contentLoader.getCancelAttention(String.valueOf(userId));
+                }
+                if(role==1){
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_ATTENTION);
+                }else {
+                    MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_ATTENTION);
                 }
                 break;
         }

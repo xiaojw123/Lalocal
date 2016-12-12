@@ -295,10 +295,12 @@
         <activity
             android:name=".live.entertainment.activity.AudienceActivity"
             android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode = "adjustResize"/>
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
@@ -321,7 +323,8 @@
         <activity android:name=".activity.LiveDetailActivity" />
         <activity android:name=".activity.AttentionActivity"/>
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
-        <activity android:name=".live.entertainment.activity.PlayBackActivity" />
+        <activity android:name=".live.entertainment.activity.PlayBackActivity"
+            android:screenOrientation="portrait"/>
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"

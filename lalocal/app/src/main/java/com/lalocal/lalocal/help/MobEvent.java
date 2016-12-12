@@ -165,7 +165,7 @@ public interface MobEvent {
     String SEARCH_HISTORY = "220_search_history";//搜索历史
     String SEARCH_HOT = "220_search_hot";//搜索热门
     String USER_LOGIN_BUTTON = "220_user_login_button";//个人页面登录按钮
-
-
-
+    String LIVE_USER_ANCHOR="220_live_user_anchor";//用户点主播头像
+    String LIVE_USER_USER= "220_live_user_user";//用户点用户头像
+    String LIVE_ANCHOR_USER="220_live_anchor_user";//主播点用户头像
 }
