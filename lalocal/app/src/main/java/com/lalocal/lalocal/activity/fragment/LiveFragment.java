@@ -91,6 +91,8 @@ public class LiveFragment extends BaseFragment {
     private boolean isRefresh = false;
     // 判断是否加载更多
     private boolean isLoadingMore = false;
+    // 判断是否刷新我的关注
+    private boolean isSyncAttention = false;
     // 当前分页页码
     private int mCurPageNum = 1;
 
@@ -313,13 +315,14 @@ public class LiveFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
 
-//        if (isFirstEnter) {
+        if (isFirstEnter) {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
-//        } else {
-//            // 刷新我的关注
-//            setAdapter(REFRESH_MY_ATTENTION);
-//        }
+        } else {
+            isSyncAttention = true;
+            // 刷新我的关注
+            getChannelIndexTotal(mCurPageNum);
+        }
     }
 
     @OnClick({R.id.btn_takelive})
@@ -487,7 +490,14 @@ public class LiveFragment extends BaseFragment {
         public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {
             super.onGetChannelIndexTotal(result, dateTime);
 
-            if (isRefresh) {
+            if (isSyncAttention) {
+                isSyncAttention = false;
+
+                // 获取我的关注
+                mAttention = result.getLastDynamicUser();
+                // 刷新我的关注
+                setAdapter(REFRESH_MY_ATTENTION);
+            } else if (isRefresh) {
                 // -刷新的时候去掉之前加载
                 isRefresh = false;
                 isLoadingMore = false;
