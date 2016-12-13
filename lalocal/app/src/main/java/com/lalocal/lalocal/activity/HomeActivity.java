@@ -120,9 +120,9 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 break;
             case R.id.home_tab_search:
                 Intent intent = new Intent(this, GlobalSearchActivity.class);
-                startActivity(intent);
-//                Intent intent = new Intent(this, TestGlobalSearchActivity.class);
-//                startActivity(intent);
+               startActivity(intent);
+             /*   Intent intent = new Intent(this, TestGlobalSearchActivity.class);
+                startActivity(intent);*/
                 break;
         }
     }
@@ -384,8 +384,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     @OnMPermissionDenied(READ_WRITE_SDCARD_CODE)
     public void onPermissionDenied() {
-        Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, getResources().getString(R.string.live_read_write_external_storage), Toast.LENGTH_SHORT).show();
     }
 
 

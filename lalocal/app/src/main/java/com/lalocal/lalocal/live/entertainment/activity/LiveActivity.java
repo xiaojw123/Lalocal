@@ -1042,7 +1042,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                             @Override
                             public void run() {
                                 if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
-                                    showSharePopuwindow(shareVO,"分享额了直播");
+                                    showSharePopuwindow(shareVO,"分享了直播");
                                 }
                             }
                         });

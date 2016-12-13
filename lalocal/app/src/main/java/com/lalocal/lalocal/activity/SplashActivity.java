@@ -120,42 +120,42 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 Object tagObj = welImg.getTag();
                 if (tagObj != null) {
                     WelcomeImg welImg = (WelcomeImg) tagObj;
-                    int targetType=welImg.getTargetType();
-                        switch (targetType){
-                            case -1://链接
-                                removeUpdateTime();
-                                TargetPage.gotoWebDetail(this, welImg.getTargetUrl(),welImg.getTargetName(),false);
-                                break;
-                            case 0://用户
-                                removeUpdateTime();
-                                TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()),false);
-                                break;
-                            case 1://文章
-                            case 13://资讯
-                                removeUpdateTime();
-                                TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()),false);
-                                break;
-                            case 2://产品
-                                removeUpdateTime();
-                                TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType,false);
-                                break;
-                            case 9://线路
-                                removeUpdateTime();
-                                TargetPage.gotoRouteDetail(this, welImg.getTargetId(),false);
-                                break;
-                            case 10://专题
-                                removeUpdateTime();
-                                TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()),false);
-                                break;
-                            case 15://直播-视频
-                                removeUpdateTime();
-                                TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()),false);
-                                break;
-                            case 20://回放
-                                removeUpdateTime();
-                                TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()),false);
-                                break;
-                        }
+                    int targetType = welImg.getTargetType();
+                    switch (targetType) {
+                        case -1://链接
+                            removeUpdateTime();
+                            TargetPage.gotoWebDetail(this, welImg.getTargetUrl(), welImg.getTargetName(), false);
+                            break;
+                        case 0://用户
+                            removeUpdateTime();
+                            TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()), false);
+                            break;
+                        case 1://文章
+                        case 13://资讯
+                            removeUpdateTime();
+                            TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()), false);
+                            break;
+                        case 2://产品
+                            removeUpdateTime();
+                            TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType, false);
+                            break;
+                        case 9://线路
+                            removeUpdateTime();
+                            TargetPage.gotoRouteDetail(this, welImg.getTargetId(), false);
+                            break;
+                        case 10://专题
+                            removeUpdateTime();
+                            TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()), false);
+                            break;
+                        case 15://直播-视频
+                            removeUpdateTime();
+                            TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()), false);
+                            break;
+                        case 20://回放
+                            removeUpdateTime();
+                            TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()), false);
+                            break;
+                    }
                 }
 
                 break;
@@ -218,39 +218,45 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         //添加tag 添加alias
         @Override
         public void onResponseGetTags(final List<String> tags) {
-            if (tags != null && tags.size() > 0) {
-                final PushAgent mPushAgent = PushAgent.getInstance(SplashActivity.this);
-                mPushAgent.getTagManager().list(new TagManager.TagListCallBack() {
-                    @Override
-                    public void onMessage(boolean isSuccess, List<String> result) {
-                        AppLog.print("获取 taglist");
-                        if (result != null && result.size() > 0) {
-                            for (String tag : tags) {// 1  5  6      4
-                                if (!result.contains(tag)) {
-                                    //add
-                                    mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+            try {
 
-                                        @Override
-                                        public void onMessage(boolean b, ITagManager.Result result) {
-                                            AppLog.print("添加 tag成功");
-                                        }
-                                    }, tag);
+
+                if (tags != null && tags.size() > 0) {
+                    final PushAgent mPushAgent = PushAgent.getInstance(SplashActivity.this);
+                    mPushAgent.getTagManager().list(new TagManager.TagListCallBack() {
+                        @Override
+                        public void onMessage(boolean isSuccess, List<String> result) {
+                            AppLog.print("获取 taglist");
+                            if (result != null && result.size() > 0) {
+                                for (String tag : tags) {// 1  5  6      4
+                                    if (!result.contains(tag)) {
+                                        //add
+                                        mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+
+                                            @Override
+                                            public void onMessage(boolean b, ITagManager.Result result) {
+                                                AppLog.print("添加 tag成功");
+                                            }
+                                        }, tag);
+                                    }
                                 }
+
+                            } else {
+                                String tagArray[] = new String[tags.size()];
+                                mPushAgent.getTagManager().add(new TagManager.TCallBack() {
+                                    @Override
+                                    public void onMessage(boolean b, ITagManager.Result result) {
+                                        AppLog.print("添加 tags成功");
+                                    }
+                                }, tags.toArray(tagArray));
                             }
 
-                        } else {
-                            String tagArray[] = new String[tags.size()];
-                            mPushAgent.getTagManager().add(new TagManager.TCallBack() {
-                                @Override
-                                public void onMessage(boolean b, ITagManager.Result result) {
-                                    AppLog.print("添加 tags成功");
-                                }
-                            }, tags.toArray(tagArray));
+
                         }
+                    });
+                }
+            } catch (Exception e) {
 
-
-                    }
-                });
             }
             mContentloader.getSystemConfigs();
         }
@@ -346,7 +352,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         startActivity(intent);
         finish();
     }
-
 
 
     public class SplashHandler extends Handler implements ImageLoadingListener {

@@ -185,9 +185,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     protected View topView;
     private TextView newMessageRemind;
     private boolean isFirstEnterRoom=true;
-
-
-
     protected abstract void checkNetInfo(String netType, int reminder);
 
     protected abstract void onConnected(); // 网络连上
