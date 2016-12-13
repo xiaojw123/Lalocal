@@ -1,6 +1,8 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.drawable.Drawable;
 import android.view.Gravity;
 import android.view.View;
@@ -38,9 +40,12 @@ public class LiveAttentionPopuwindow extends BaseDialog {
 
     private  ContentLoader contentLoader;
     private String userId;
-
-    public LiveAttentionPopuwindow(Context mContext) {
+    LiveRowsBean liveRowsBean;
+    Context mContext;
+    public LiveAttentionPopuwindow(Context mContext,LiveRowsBean liveRowsBean) {
         super(mContext, R.style.share_dialog);
+       this.liveRowsBean=liveRowsBean;
+        this.mContext=mContext;
     }
     @Override
     public void initView() {
@@ -51,6 +56,18 @@ public class LiveAttentionPopuwindow extends BaseDialog {
         //设置窗口高度为包裹内容
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         getWindow().setAttributes(lp);
+        showAttentionPopu(liveRowsBean);
+    }
+
+    private static Activity scanForActivity(Context cont) {
+        if (cont == null)
+            return null;
+        else if (cont instanceof Activity)
+            return (Activity) cont;
+        else if (cont instanceof ContextWrapper)
+            return scanForActivity(((ContextWrapper) cont).getBaseContext());
+
+        return null;
     }
 
     @Override
@@ -61,9 +78,9 @@ public class LiveAttentionPopuwindow extends BaseDialog {
 
     public void showAttentionPopu(LiveRowsBean liveRowsBean) {
         userId = String.valueOf(liveRowsBean.getUser().getId());
-        DrawableUtils.displayImg(getContext(),liveAttentionDialogHead,liveRowsBean.getUser().getAvatar());
+        DrawableUtils.displayImg(mContext,liveAttentionDialogHead,liveRowsBean.getUser().getAvatar());
         liveAttentionDialogName.setText(liveRowsBean.getUser().getNickName());
-        contentLoader = new ContentLoader(getContext());
+        contentLoader = new ContentLoader(mContext);
         AttentionCallBack attentionCallBack=new AttentionCallBack();
         contentLoader.setCallBack(attentionCallBack);
     }
@@ -75,7 +92,7 @@ public class LiveAttentionPopuwindow extends BaseDialog {
                 break;
             case R.id.live_attention_dialog_btn:
                 if(isAttention){
-                    if(UserHelper.isLogined(getContext())){
+                    if(UserHelper.isLogined(mContext)){
                         contentLoader.getAddAttention(userId);
                     }else{
                         //去弹登录dialog
@@ -87,6 +104,7 @@ public class LiveAttentionPopuwindow extends BaseDialog {
                 }else {
                     contentLoader.getCancelAttention(userId);
                 }
+                dismiss();
                 break;
         }
     }
@@ -108,7 +126,7 @@ public class LiveAttentionPopuwindow extends BaseDialog {
                     liveAttentionDialogBtn.setText("相互关注");
                     liveAttentionDialogBtn.setAlpha(0.6f);
                 }
-                Drawable drawable1 = getContext().getResources().getDrawable(R.drawable.followsb_ic_sel);
+                Drawable drawable1 = mContext.getResources().getDrawable(R.drawable.followsb_ic_sel);
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
                 liveAttentionDialogBtn.setCompoundDrawables(drawable1, null, null, null);
                 if(onUserAttentionListener!=null){
@@ -125,7 +143,7 @@ public class LiveAttentionPopuwindow extends BaseDialog {
                 isAttention=true;
                 liveAttentionDialogBtn.setText("关注");
                 liveAttentionDialogBtn.setAlpha(1.0f);
-                Drawable drawable1 = getContext().getResources().getDrawable(R.drawable.followsb_ic_unsel);
+                Drawable drawable1 =mContext.getResources().getDrawable(R.drawable.followsb_ic_unsel);
                 drawable1.setBounds(0, 0, drawable1.getMinimumWidth(), drawable1.getMinimumHeight());
                 liveAttentionDialogBtn.setCompoundDrawables(drawable1, null, null, null);
             }

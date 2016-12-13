@@ -35,6 +35,7 @@
                 android:layout_height="0.5dp"
                 android:background="@color/color_1a"
                 android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/dimen_size_15_dp"
                 android:alpha="0.2" />
 
             <RelativeLayout

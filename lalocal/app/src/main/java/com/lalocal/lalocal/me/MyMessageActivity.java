@@ -87,6 +87,9 @@ public class MyMessageActivity extends BaseActivity {
                     case -1:
                         TargetPage.gotoWebDetail(MyMessageActivity.this, item.getTargetUrl(),"",false);
                         break;
+                    case 0:
+                        TargetPage.gotoUser(MyMessageActivity.this, String.valueOf(item.getTargetId()), true);
+                        break;
                     case 1://文章
                     case 13://资讯
                         TargetPage.gotoArticleDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()),false);
@@ -100,6 +103,13 @@ public class MyMessageActivity extends BaseActivity {
                     case 10://专题
                         TargetPage.gotoSpecialDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()),false);
                         break;
+                    case 15:
+                        TargetPage.gotoLive(MyMessageActivity.this, String.valueOf(item.getTargetId()), true);
+                        break;
+                    case 20:
+                        TargetPage.gotoPlayBack(MyMessageActivity.this, String.valueOf(item.getTargetId()), true);
+                        break;
+
                 }
 
             }

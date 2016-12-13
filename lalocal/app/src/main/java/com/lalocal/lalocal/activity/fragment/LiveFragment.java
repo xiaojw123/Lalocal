@@ -314,7 +314,6 @@ public class LiveFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
         if (isFirstEnter) {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
@@ -448,11 +447,17 @@ public class LiveFragment extends BaseFragment {
 
             if (!TextUtils.isEmpty(photo)) {
                 ImageView imgPhoto = (ImageView) mRecommendPage.getView(R.id.img_recommendations);
-                Glide.with(getActivity()).load(photo).into(imgPhoto);
+                Glide.with(getActivity())
+                        .load(photo)
+                        .placeholder(R.drawable.androidloading)
+                        .into(imgPhoto);
             }
             if (!TextUtils.isEmpty(avatar)) {
                 ImageView imgAvatar = (ImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
-                Glide.with(getActivity()).load(avatar).into(imgAvatar);
+                Glide.with(getActivity())
+                        .load(avatar)
+                        .placeholder(R.drawable.androidloading)
+                        .into(imgAvatar);
             }
             if (TextUtils.isEmpty(nickname)) {
                 nickname = "一位不愿意透露姓名的网友";

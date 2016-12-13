@@ -137,6 +137,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
                 // 使用Glide加载商品图片，注意：如果存在自定义计算高度的图片，Glide不是很合适
 //                Glide.with(mContext)
 //                        .load(photoUrl)
+//                        .placeholder(R.drawable.androidloading)
 //                        .centerCrop()
 //                        .crossFade()
 //                        // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存

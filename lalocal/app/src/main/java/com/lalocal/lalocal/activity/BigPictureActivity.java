@@ -124,8 +124,8 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		SpecialShareVOBean shareVO=new SpecialShareVOBean();
 		shareVO.setBitmap(bitmap3);
 
-		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this);
-		shareActivity.showShareWindow(shareVO);
+		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this,shareVO);
+
 		shareActivity.setCallBackListener(this);
 		shareActivity.show();
 	}

@@ -88,6 +88,7 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
         // 使用Glide加载url图片
         Glide.with(mContext)
                 .load(photoUrl)
+                .placeholder(R.drawable.androidloading)
                 .centerCrop()
                 .crossFade()
                 // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存

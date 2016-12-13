@@ -213,7 +213,10 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 String avatar = bean.getAvatar();
                 // 如果接口有头像链接
                 if (!TextUtils.isEmpty(avatar)) {
-                    Glide.with(mContext).load(avatar).into(imgAvatar);
+                    Glide.with(mContext)
+                            .load(avatar)
+                            .placeholder(R.drawable.androidloading)
+                            .into(imgAvatar);
                 }
             } else {
                 layoutUser.setVisibility(View.INVISIBLE);
@@ -338,7 +341,10 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             tvAddress.setText(address);
 
             if (!TextUtils.isEmpty(photo)) {
-                Glide.with(mContext).load(photo).into(imgPhoto);
+                Glide.with(mContext)
+                        .load(photo)
+                        .placeholder(R.drawable.androidloading)
+                        .into(imgPhoto);
             }
 
             if (!TextUtils.isEmpty(lastMsg)) {
@@ -349,7 +355,10 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             }
 
             if (!TextUtils.isEmpty(avatar)) {
-                Glide.with(mContext).load(avatar).into(imgAvatar);
+                Glide.with(mContext)
+                        .load(avatar)
+                        .placeholder(R.drawable.androidloading)
+                        .into(imgAvatar);
             }
 
             if (TextUtils.isEmpty(nickname)) {
