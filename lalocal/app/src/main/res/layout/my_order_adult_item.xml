@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/my_oder_img"
+    android:layout_marginTop="@dimen/my_order_adult_item_top"
+  >
+
+    <TextView
+        android:id="@+id/my_order_adult_item_name"
+        style="@style/MyOrderTripPeopleTextStyle" />
+
+    <TextView
+        android:id="@+id/my_order_adult_item_discount"
+        style="@style/MyOrderTripPeopleTextStyle"
+        android:layout_gravity="right"
+        />
+</FrameLayout>

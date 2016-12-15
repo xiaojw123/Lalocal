@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/live_drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <RelativeLayout
+            android:id="@+id/player_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            >
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:gravity="right">
+            <ImageView
+                android:id="@+id/live_quit"
+                android:layout_width="@dimen/live_padding_30dp"
+                android:layout_height="@dimen/live_padding_30dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/live_padding_15dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/peopleliving_quit" />
+        </LinearLayout>
+        <include layout="@layout/live_loading_page"></include>
+
+    </RelativeLayout>
+
+    <!--    android:layout_gravity="right"
+        android:layout_marginLeft="-65dp"-->
+
+    <RelativeLayout
+        android:id="@+id/live_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:layout_marginLeft="-65dp"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/live_bg_gradient_top"></View>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:background="@drawable/live_bg_gradient_bottom"
+            android:layout_alignParentBottom="true"></View>
+
+        <RelativeLayout
+            android:id="@+id/top_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/live_padding_10dp">
+            <RelativeLayout
+                android:id="@+id/live_view_top_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_height_36dp"
+                >
+                <LinearLayout
+                    android:id="@+id/live_master_info_layout"
+                    android:layout_width="@dimen/live_height_100dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/live_emcee_info_shape"
+                    android:layout_marginLeft="@dimen/live_padding_13dp"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/live_emcee_head"
+                        android:layout_width="@dimen/live_height_36dp"
+                        android:layout_height="@dimen/live_height_36dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/androidloading" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/live_padding_5dp">
+
+                        <TextView
+                            android:id="@+id/live_emcee_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="LIVE"
+                            android:textStyle="italic"
+                            android:drawablePadding="@dimen/live_padding_5dp"
+                            android:paddingLeft="@dimen/live_padding_5dp"
+                            android:paddingRight="@dimen/live_padding_5dp"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/live_text_12sp" />
+                        <TextView
+                            android:id="@+id/live_online_count"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="@dimen/live_padding_5dp"
+                            android:paddingLeft="@dimen/live_padding_5dp"
+                            android:paddingRight="@dimen/live_padding_5dp"
+                            android:textStyle="italic"
+                            android:text="0"
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/live_text_12sp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/audience_score_layout"
+                    android:layout_width="60dp"
+                    android:layout_height="22dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="17dp"
+                    android:layout_toRightOf="@+id/live_master_info_layout"
+                    android:background="@drawable/live_emcee_info_shape">
+                    <TextView
+                        android:id="@+id/audience_score_tv"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:paddingLeft="@dimen/live_padding_5dp"
+                        android:paddingRight="@dimen/live_padding_5dp"
+                        android:drawablePadding="@dimen/live_padding_2dp"
+                        android:drawableLeft="@drawable/livecrown_16"
+                        android:drawableRight="@drawable/livecrown_arrow"
+                        android:text="@string/live_ranking_list"
+                        />
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/live_telecast_quit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:paddingRight="@dimen/live_padding_10dp"
+                    android:src="@drawable/peopleliving_quit"/>
+                <ImageView
+                    android:id="@+id/live_telecast_top_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/live_telecast_quit"
+                    android:paddingRight="@dimen/live_padding_20dp"
+                    android:src="@drawable/peopleliving_share"/>
+            </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/live_visitors_list_recy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/live_padding_15dp"
+                android:layout_below="@+id/live_view_top_layout"
+                android:paddingLeft="@dimen/live_padding_12dp"
+                android:paddingRight="@dimen/live_padding_12dp"
+                android:fadingEdge="none"
+                android:overScrollMode="never">
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:id="@+id/messageActivityBottomLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
+                <include layout="@layout/nim_message_activity_text_layout" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/live_nofitifation_layout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_height_30dp"
+                android:layout_above="@+id/messageActivityBottomLayout"
+                android:background="@color/live_notification"
+                android:paddingLeft="@dimen/live_padding_10dp"
+                android:layout_marginTop="@dimen/live_padding_5dp">
+                <com.lalocal.lalocal.live.im.ui.widget.MarqueeView
+                    android:id="@+id/live_notifitation_marquee_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true" >
+                </com.lalocal.lalocal.live.im.ui.widget.MarqueeView>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/new_message_remind"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:gravity="center"
+                android:textSize="@dimen/text_size_12_sp"
+                android:layout_above="@+id/live_nofitifation_layout"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/live_height_40dp"
+                android:background="@drawable/newmassagefrombottom"
+               android:visibility="gone"
+                />
+            <LinearLayout
+                android:id="@+id/setting_bottom_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                >
+                <include layout="@layout/live_telecast_bottom_tab"></include>
+            </LinearLayout>
+
+            <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
+                android:id="@+id/periscope"
+                android:layout_width="@dimen/live_height_70dp"
+                android:layout_height="@dimen/live_height_350dp"
+                android:layout_above="@id/setting_bottom_layout"
+                android:layout_alignParentBottom="true"
+                android:paddingBottom="@dimen/live_padding_20dp"
+                />
+            <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
+                android:id="@+id/messageListView"
+                style="@style/list_view"
+                android:layout_width="match_parent"
+                android:layout_marginRight="@dimen/live_height_100dp"
+                android:layout_height="200dp"
+                android:layout_above="@id/live_nofitifation_layout"
+                android:cacheColorHint="@android:color/transparent"
+                android:divider="@null"
+                android:fadingEdge="none"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none"
+
+                />
+
+            <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
+                android:id="@+id/barrageView_test"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:paddingBottom="@dimen/live_padding_5dp"
+                android:layout_above="@+id/messageListView"
+                ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
+
+            <include
+                android:id="@+id/gift_animation_view"
+                layout="@layout/gift_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_above="@id/barrageView_test"
+                 />
+
+            <include
+                android:id="@+id/gift_animation_view_up"
+                layout="@layout/gift_layout"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_above="@id/gift_animation_view"
+                 />
+        </RelativeLayout>
+        <include layout="@layout/audience_live_over_page"></include>
+        <include layout="@layout/gift_plan_layout"></include>
+    </RelativeLayout>
+
+
+</com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:idv="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true"
+    android:alpha="0.84"
+    android:background="#000000"
+    android:orientation="vertical">
+
+  <android.support.v4.view.ViewPager
+      android:id="@+id/audience_gift_vp"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/live_height_250dp"
+      >
+  </android.support.v4.view.ViewPager>
+
+    <com.lalocal.lalocal.live.entertainment.ui.IndicatorView
+        android:id="@+id/idv_banner"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        idv:indicatorInterval="10dp"
+        android:gravity="center_horizontal"
+        idv:normalDrawable="@drawable/icon_white_dot_normal"
+        idv:selectDrawable="@drawable/icon_white_dot_selected"
+
+      >
+
+    </com.lalocal.lalocal.live.entertainment.ui.IndicatorView>
+
+
+    <RelativeLayout
+        android:id="@+id/audience_gift_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:id="@+id/account_balance"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:drawableLeft="@drawable/monetary"
+            android:drawablePadding="@dimen/live_padding_5dp"
+            android:gravity="center"
+            android:paddingLeft="@dimen/live_padding_15dp"
+            android:text="0"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_15_sp" />
+
+        <TextView
+            android:id="@+id/audience_top_up_recharge"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/account_balance"
+            android:gravity="center"
+            android:paddingLeft="@dimen/live_padding_10dp"
+            android:text="充值"
+            android:textColor="@color/color_ffaa2a"
+            android:textSize="@dimen/text_size_15" />
+
+        <TextView
+            android:id="@+id/audience_gift_send"
+            android:layout_width="@dimen/live_height_81dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/color_ffaa2a"
+            android:gravity="center"
+            android:text="赠送"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
+
+</LinearLayout>

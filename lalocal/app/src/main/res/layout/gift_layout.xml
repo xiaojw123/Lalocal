@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/live_height_60dp"
+    android:layout_gravity="center"
+    tools:showIn="@layout/audience_activity"
+    android:visibility="invisible"
+  >
+ <!--   tools:showIn="@layout/audience_activity"
+    android:visibility="invisible"-->
+    <RelativeLayout
+        android:id="@+id/gift_layout"
+        android:layout_width="194dp"
+        android:layout_height="match_parent"
+       android:gravity="center"
+        android:layout_centerVertical="true"
+       >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_36dp"
+            android:background="@drawable/send_gift_bg"
+           android:layout_centerVertical="true"
+            android:orientation="horizontal">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/send_gift_avatar"
+                android:layout_width="@dimen/live_height_36dp"
+                android:layout_height="@dimen/live_height_36dp"
+                android:src="@drawable/androidloading"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+               android:gravity="center_vertical"
+                android:paddingLeft="@dimen/live_padding_10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/send_gift_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/send_gift_avatar_layout"
+                    android:ellipsize="end"
+                    android:maxLength="7"
+                    android:textSize="@dimen/live_text_12sp"
+                    android:textColor="#97d3e9"
+                    android:singleLine="true"
+                    android:text="啊哈就好就好"
+                    />
+                <TextView
+                    android:id="@+id/send_gift_name"
+                    android:layout_below="@+id/send_gift_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/live_text_12sp"
+                    android:textColor="@android:color/white"
+                    android:text="一朵花"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/send_gift_img"
+            android:layout_width="@dimen/live_height_60dp"
+            android:layout_height="@dimen/live_height_60dp"
+           android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@android:color/holo_blue_dark"
+            android:src="@drawable/rose3"
+            />
+    </RelativeLayout>
+
+    <com.lalocal.lalocal.view.StrokeTextView
+        android:id="@+id/send_gift_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/gift_layout"
+        android:textSize="28sp"
+        android:paddingLeft="@dimen/live_padding_10dp"
+        android:textColor="#f8e71c"
+
+       />
+</RelativeLayout>

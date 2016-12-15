@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/recommend_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/androidloading">
+
+    <ImageView
+        android:id="@+id/img_recommendations"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+
+    <com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout
+        android:id="@+id/periscope"
+        android:visibility="gone"
+        android:layout_width="80dp"
+        android:layout_height="250dp"
+        android:layout_marginBottom="113dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_40_dp"
+        android:layout_marginRight="@dimen/dimen_size_40_dp"
+        android:layout_centerVertical="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dimen_size_15_dp"
+            android:paddingTop="@dimen/dimen_size_20_dp"
+            android:paddingRight="@dimen/dimen_size_15_dp"
+            android:paddingBottom="@dimen/dimen_size_20_dp"
+            android:background="@drawable/bg_live_launch"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_recommendations_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:text="正在直播"
+                android:background="@drawable/bg_tag_playback"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_12_sp" />
+
+            <TextView
+                android:id="@+id/tv_recommendations_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标题加载中..."
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textStyle="bold"
+                android:textSize="@dimen/text_size_24_sp"
+                android:textColor="@color/color_191000"
+                android:layout_marginTop="@dimen/dimen_size_15_dp"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_5_dp"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/dimen_size_12_dp"
+                    android:layout_height="@dimen/dimen_size_12_dp"
+                    android:src="@drawable/peopleliving_location_darkic_02"
+                    android:layout_gravity="center_vertical"/>
+
+                <TextView
+                    android:id="@+id/tv_recommendations_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="正在定位..."
+                    android:textColor="@color/color_191000"
+                    android:textSize="@dimen/text_size_12_sp"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="By."
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@color/white"/>
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/img_recommendations_avatar"
+                android:layout_width="@dimen/dimen_size_16_dp"
+                android:layout_height="@dimen/dimen_size_16_dp"
+                android:layout_marginLeft="@dimen/dimen_size_10_dp"
+                android:src="@drawable/androidloading"
+                app:riv_corner_radius="99dp"
+                android:layout_gravity="center_vertical"/>
+
+            <TextView
+                android:id="@+id/tv_recommendations_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_size_6_dp"
+                android:maxLength="7"
+                android:text="id获取中..."
+                android:textSize="@dimen/text_size_12_sp"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/slide_indicator"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dimen_size_20_dp"/>
+
+    <View
+        android:id="@+id/view_click"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</RelativeLayout>

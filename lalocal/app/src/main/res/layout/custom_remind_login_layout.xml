@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+   android:layout_gravity="center"
+   android:background="@drawable/live_over_dialog_remind_bg">
+
+    <LinearLayout
+        android:id="@+id/custom_dialog_remind_layout"
+        android:layout_width="@dimen/live_height_250dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+      >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/remind_dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:visibility="gone"
+               android:paddingTop="@dimen/live_padding_15dp"
+                android:textColor="@color/black"
+               />
+
+            <TextView
+                android:id="@+id/remind_dialog_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:paddingTop="@dimen/live_padding_15dp"
+                android:paddingRight="@dimen/live_padding_10dp"
+                android:paddingLeft="@dimen/live_padding_10dp"
+                android:paddingBottom="@dimen/live_padding_15dp"
+
+                />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/ml_gray" ></View>
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+        <LinearLayout
+            android:id="@+id/choose_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+            <LinearLayout
+                android:id="@+id/remind_contiun_live"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/remind_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:text="取消"
+                    android:padding="@dimen/live_padding_10dp"
+                    android:textColor="@color/ml_gray"
+                    />
+            </LinearLayout>
+
+            <View
+                android:layout_width="0.5dp"
+                android:layout_height="match_parent"
+                android:background="@color/ml_gray"></View>
+            <LinearLayout
+                android:id="@+id/remind_over_live"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/remind_determine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                   android:text="确定"
+                    android:padding="@dimen/live_padding_10dp"
+                    android:textColor="@color/color_ffaa2a"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+    <LinearLayout
+        android:id="@+id/ok_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:gravity="center">
+        <TextView
+            android:id="@+id/remind_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="@dimen/live_padding_10dp"
+            android:text="确定"/>
+    </LinearLayout>
+</FrameLayout>
+    </LinearLayout>
+</LinearLayout>

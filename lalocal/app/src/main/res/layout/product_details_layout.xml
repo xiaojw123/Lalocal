@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<LinearLayout
+    android:id="@+id/product"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@android:color/white">
+
+    <com.lalocal.lalocal.view.MyScrollView
+        android:id="@+id/product_scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@android:color/white">
+            <RelativeLayout
+                android:id="@+id/product_details_phones"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/product_details_photo_height"
+                android:background="@android:color/white">
+                <ImageView
+                    android:id="@+id/product_details_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/product_details_photo_height"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/androidloading"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/product_title_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/product_details_title_tv"
+                android:textStyle="bold"
+                android:paddingLeft="@dimen/product_details_padding_left"
+                android:paddingBottom="@dimen/product_details_padding_bottom"
+                android:paddingTop="@dimen/register_user_protocal_top"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/product_details_padding_left"
+                android:paddingBottom="@dimen/product_details_padding_bottom"
+                android:background="@android:color/white">
+                <TextView
+                    android:id="@+id/product_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_20_sp"
+                    android:textColor="@color/color_ffaa2a"/>
+                <TextView
+                    android:paddingRight="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="  起"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginLeft="@dimen/product_details_padding_left"
+                android:layout_marginRight="@dimen/product_details_padding_left"
+                android:layerType="software"
+                android:background="@drawable/imag_line"></View>
+            <LinearLayout
+                android:id="@+id/product_content_value"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/product_details_interval"
+                android:paddingBottom="@dimen/product_details_interval"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                >
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:layout_marginLeft="@dimen/product_details_padding_left"
+                android:layout_marginRight="@dimen/product_details_padding_left"
+                android:layerType="software"
+                android:background="@drawable/imag_line"></View>
+
+            <LinearLayout
+                android:id="@+id/product_check_detail"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@android:color/white">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="查看详情"
+                    android:textColor="@android:color/black"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="5dp"
+                    android:src="@drawable/btnarrow"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="#dedede"></View>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="58dp"
+                android:background="@android:color/white"
+                >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/product_details_padding_left"
+                    android:layout_marginRight="@dimen/product_details_padding_left"
+                    android:layout_centerInParent="true"
+                    android:background="@android:color/darker_gray"></View>
+                <TextView
+                    android:id="@+id/product_service"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/white"
+                    android:layout_centerInParent="true"
+                    android:padding="10dp"
+                    />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/product_service_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@android:color/white"
+                >
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/product_purchase_notes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="20dp"
+                android:background="@android:color/white"
+                >
+
+            </LinearLayout>
+         <!--   <View
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:background="#dedede"></View>-->
+        </LinearLayout>
+    </com.lalocal.lalocal.view.MyScrollView>
+    <RelativeLayout
+        android:id="@+id/product_title_relayout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_actionbar_height"
+        android:background="@android:color/white"
+        android:alpha="0"
+        >
+        <com.lalocal.lalocal.view.CustomTitleView
+            android:id="@+id/product_title_back_ctv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:lineVisible="false"
+            />
+
+        <ImageView
+            android:id="@+id/product_customer_service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/serviceicon"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12dp"
+            />
+
+
+        <ImageView
+            android:layout_width="@dimen/recommend_title_img_wdith"
+            android:layout_height="@dimen/recommend_title_img_height"
+            android:layout_centerInParent="true"
+            android:src="@drawable/lalocallogo"
+            />
+    </RelativeLayout>
+        <include layout="@layout/product_title_layout"></include>
+    </RelativeLayout>
+
+
+
+
+        <include layout="@layout/product_details_bottom_layout"></include>
+
+
+</LinearLayout>
+    <include
+        layout="@layout/page_base_loading"
+        />
+
+</FrameLayout>

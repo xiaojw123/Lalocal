@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_marginTop="@dimen/dimen_size_15_dp"
+    >
+
+    <com.lalocal.lalocal.view.ShapeTextView
+        android:layout_width="@dimen/dimen_size_10_dp"
+        android:layout_height="@dimen/dimen_size_10_dp"
+        app:solid_color="@color/color_b3"
+        app:corner_radius="@dimen/dimen_size_10_dp"
+        android:layout_marginTop="@dimen/dimen_size_2_dp"
+        />
+    <TextView
+        android:id="@+id/item_instrucion_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_5_dp"
+        android:textSize="@dimen/text_size_16_sp"
+        />
+
+
+
+</LinearLayout>

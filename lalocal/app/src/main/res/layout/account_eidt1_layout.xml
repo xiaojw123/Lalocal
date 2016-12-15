@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_f8"
+    tools:context=".activity.AccountEidt1Activity">
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/account_eidt1_titleview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/edit_account"
+        android:background="@color/white"
+
+        />
+
+    <FrameLayout
+        android:id="@+id/account_edit_personalheader_fl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/account_eidt1_titleview"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/account_edit_personalheader_bottom"
+        android:layout_marginTop="@dimen/account_edit_personalheader_top"
+        >
+
+    <ImageView
+        android:id="@+id/account_edit_personalheader"
+        android:layout_width="@dimen/account_edit_personalheader_width"
+        android:layout_height="@dimen/account_edit_personalheader_width"
+        android:src="@drawable/home_me_personheadnormal"
+        android:scaleType="centerCrop" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_22_dp"
+            android:background="@color/color_black_b3000000"
+            android:textSize="@dimen/text_size_10_sp"
+            android:text="@string/edit_avatar"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:layout_gravity="bottom"
+            android:paddingLeft="@dimen/dimen_size_21_dp"
+            android:paddingRight="@dimen/dimen_size_21_dp"
+            android:drawableLeft="@drawable/camera_small_ic"
+            />
+            <!--android:drawableLeft="TODO:read 相机icon待添加"-->
+
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_below="@+id/account_edit_personalheader_fl"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            style="@style/CommonDeLineTheme"
+            />
+
+        <RelativeLayout
+            android:id="@+id/account_edit_nickname"
+            style="@style/AccoutEditItemTheme">
+
+            <TextView
+                style="@style/AcountEditItemTitle"
+                android:text="昵称" />
+
+            <TextView
+                android:id="@+id/account_edit_nickname_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right1"
+
+                />
+
+            <ImageView
+                android:id="@+id/arrow_right1"
+                style="@style/AcountEditItemArrowRight" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/CommonDeLineTheme"
+            />
+
+        <RelativeLayout
+            android:id="@+id/account_edit_sex"
+            style="@style/AccoutEditItemTheme">
+
+            <TextView
+                android:id="@+id/sex_text"
+                style="@style/AcountEditItemTitle"
+                android:text="@string/sex" />
+            <TextView
+                android:id="@+id/account_edit_sex_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right8"
+                />
+
+            <ImageView
+                android:id="@+id/arrow_right8"
+                style="@style/AcountEditItemArrowRight" />
+
+        </RelativeLayout>
+
+        <TextView
+            style="@style/CommonDeLineTheme"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/account_edit_description"
+            android:layout_height="wrap_content"
+            style="@style/AccoutEditItemTheme"
+            android:minHeight="@dimen/setting_about_us_height"
+            >
+
+            <TextView
+                android:id="@+id/account_edit_description_title"
+                style="@style/AcountEditItemTitle"
+                android:text="@string/person_description"
+                android:layout_alignTop="@+id/acount_edit_description_text"
+                />
+
+            <TextView
+                android:id="@+id/acount_edit_description_text"
+                style="@style/AcountEditItemContent"
+                android:layout_toLeftOf="@+id/arrow_right4"
+                android:layout_centerVertical="true"
+                android:maxWidth="@dimen/acount_edit_description_text_max_width"
+                android:maxLines="2"
+                android:ellipsize="end"
+            />
+
+            <ImageView
+                android:id="@+id/arrow_right4"
+                style="@style/AcountEditItemArrowRight"
+                android:layout_alignTop="@+id/acount_edit_description_text"
+                />
+        </RelativeLayout>
+        <TextView
+            style="@style/CommonDeLineTheme"
+
+            />
+
+
+    </LinearLayout>
+    >
+
+
+</RelativeLayout>

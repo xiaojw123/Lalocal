@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:attr="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:id="@+id/user_attention_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        attr:lineVisible="false"
+        app:title_name="关注(0)"
+        />
+    <LinearLayout
+        android:id="@+id/live_search_layout_font"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_35dp"
+        android:paddingTop="@dimen/live_padding_5dp"
+        android:background="@drawable/search_view_bg"
+        android:layout_marginLeft="@dimen/author_padding_15dp"
+        android:layout_marginRight="@dimen/author_padding_15dp"
+        android:gravity="center"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_14_sp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:drawableStart="@drawable/destination_icon_search"
+            android:layout_gravity="center"
+            android:drawablePadding="@dimen/dimen_size_8_dp"
+            />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <TextView
+            android:id="@+id/search_result_null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+
+            />
+
+        <com.lalocal.lalocal.view.xlistview.XListView
+            android:layout_marginTop="@dimen/live_padding_5dp"
+            android:id="@+id/live_attention_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+        </com.lalocal.lalocal.view.xlistview.XListView>
+
+    </RelativeLayout>
+</LinearLayout>

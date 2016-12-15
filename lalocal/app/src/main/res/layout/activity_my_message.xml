@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context="com.lalocal.lalocal.me.MyMessageActivity">
+
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/message" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_44_dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="赞与评论" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="通知" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/my_message_customer"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/my_message_customer_height"
+        android:paddingLeft="@dimen/dimen_size_17_dp"
+        android:paddingRight="@dimen/dimen_size_12_dp"
+        >
+
+        <ImageView
+            android:id="@+id/my_message_customer_img"
+            android:layout_width="@dimen/me_message_customer_img_width"
+            android:layout_height="@dimen/me_message_customer_img_width"
+            android:background="@drawable/customer_icon"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/my_message_customer_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_17_sp"
+            android:textColor="@color/color_66"
+            android:text="@string/contact_customer"
+            android:layout_toRightOf="@+id/my_message_customer_img"
+            android:layout_alignTop="@+id/my_message_customer_img"
+            android:layout_marginTop="@dimen/dimen_size_2_dp"
+            android:layout_marginLeft="@dimen/dimen_size_17_dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_12_sp"
+            android:textColor="@color/color_b3"
+            android:text="@string/look_over_the_record_of_commun_with_cutomer"
+            android:layout_alignLeft="@+id/my_message_customer_tv"
+            android:layout_alignBottom="@+id/my_message_customer_img"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/relpy_message_bg"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            />
+    </RelativeLayout>
+    <View
+        style="@style/CommonDeLineTheme"
+        android:layout_marginLeft="@dimen/dimen_size_20_dp"
+        android:layout_marginRight="@dimen/dimen_size_9_dp"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/my_message_rlv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_20_dp"
+        android:layout_marginRight="@dimen/dimen_size_9_dp"
+        />
+
+
+</LinearLayout>

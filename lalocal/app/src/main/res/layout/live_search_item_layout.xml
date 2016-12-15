@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/live_search_adapter_item_height">
+
+    <ImageView
+        android:id="@+id/live_search_item_photo"
+        android:layout_width="@dimen/live_search_item_photo_width"
+        android:layout_height="@dimen/live_search_item_photo_width"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        android:paddingBottom="@dimen/dimen_size_20_dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/androidloading" />
+
+    <LinearLayout
+        android:id="@+id/live_search_item_meeting_tag"
+        android:layout_width="@dimen/live_padding_30dp"
+        android:layout_height="@dimen/live_height_90dp"
+        android:layout_alignLeft="@+id/live_search_item_photo"
+        android:layout_alignTop="@+id/live_search_item_photo"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:background="@drawable/nowsharemeeting_tag"
+        android:gravity="center_horizontal"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/live_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="1"
+            android:paddingTop="@dimen/live_padding_6dp"
+            android:text="正在直播"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/live_text_12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/live_search_item_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/live_search_item_photo"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:layout_toRightOf="@+id/live_search_item_photo"
+        android:ellipsize="end"
+        android:lines="2"
+        android:textColor="@color/color_1a"
+        android:textSize="@dimen/text_size_15_sp" />
+
+    <TextView
+        android:id="@+id/live_search_onlinUser_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/live_search_item_title"
+        android:layout_below="@+id/live_search_item_title"
+        android:layout_marginTop="@dimen/live_search_onlinUser_num_top"
+        android:drawableLeft="@drawable/manypeople_dark"
+        android:drawablePadding="@dimen/dimen_size_5_dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_12_sp" />
+
+    <TextView
+        android:id="@+id/live_search_item_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/live_search_item_title"
+        android:layout_below="@+id/live_search_onlinUser_num"
+        android:layout_marginTop="@dimen/dimen_size_8_dp"
+        android:drawableLeft="@drawable/peopleliving_location_darkic"
+        android:drawablePadding="@dimen/dimen_size_5_dp"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_12_sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/live_search_item_photo"
+        android:layout_alignLeft="@+id/live_search_item_title"
+        android:layout_alignRight="@+id/live_search_item_title"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/live_search_item_useravatar"
+            android:layout_width="@dimen/live_search_item_useravatar_width"
+            android:layout_height="@dimen/live_search_item_useravatar_width"
+            android:scaleType="centerCrop"
+            android:src="@drawable/vistor_header_default" />
+
+        <TextView
+            android:id="@+id/live_search_item_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/live_search_item_usename_left"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_12_sp" />
+    </LinearLayout>
+
+    <View
+        style="@style/CommonDeLineTheme"
+        android:layout_alignLeft="@+id/live_search_item_title"
+        android:layout_alignParentBottom="true" />
+</RelativeLayout>
+

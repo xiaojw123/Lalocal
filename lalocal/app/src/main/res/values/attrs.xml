@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--RoundImageView style-->
+    <declare-styleable name="RoundImageView">
+        <attr name="type" />
+        <attr name="borderColor" />
+        <attr name="borderWidths" />
+        <attr name="rectRoundRadius" />
+    </declare-styleable>
+    <attr name="type">
+        <enum name="none" value="0" />
+        <enum name="circle" value="1" />
+        <enum name="rounded_rect" value="2" />
+    </attr>
+    <attr name="borderColor" format="color" />
+    <attr name="borderWidths" format="dimension" />
+    <attr name="rectRoundRadius" format="dimension" />
+    <!--CustomEditText style-->
+    <declare-styleable name="CustomEditText">
+        <attr name="text_hint" format="string"/>
+        <attr name="maxLen" format="integer"/>
+        <attr name="dights" format="string"/>
+        <attr name="isPsw" format="boolean"/>
+        <attr name="clearVisible" format="boolean"/>
+    </declare-styleable>
+    <declare-styleable name="CustomTitleView">
+        <attr name="title_name" format="string"/>
+        <attr name="lineVisible" format="boolean"/>
+        <attr name="backVisible" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="GifView">
+        <attr name="gif" format="reference" />
+        <attr name="paused" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="CustomTheme">
+        <attr name="gifViewStyle" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="CustomTextView">
+        <attr name="drawable_width" format="dimension"/>
+        <attr name="drawable_height" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="ShapeTextView">
+        <attr name="stroke_width" format="dimension"/>
+        <attr name="corner_radius" format="dimension"/>
+        <attr name="solid_color" format="color"/>
+        <attr name="stroke_color" format="color"/>
+    </declare-styleable>
+
+    <!-- 圆的颜色  弧形进度圈的颜色  圆的厚度  中间百分比文字的颜色 中间百分比文字的大小-->
+    <declare-styleable name="RoundProgress">
+        <attr name="roundColor" format="color"/>
+        <attr name="roundProgressColor" format="color"/>
+        <attr name="roundWidth" format="dimension"/>
+        <attr name="percentTextColor" format="color"/>
+        <attr name="percentTextSize" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="MyEditText">
+        <attr name="my_title" format="string"/>
+        <attr name="is_password" format="boolean"/>
+        <attr name="my_maxLen" format="integer"/>
+        <attr name="hint" format="string"/>
+        <attr name="clearEanble" format="boolean"/>
+        <attr name="my_background" format="reference"/>
+        <attr name="my_width" format="dimension"/>
+    </declare-styleable>
+    <declare-styleable name="LCustomLayout">
+        <attr name="l_title" format="string"/>
+        <attr name="l_des" format="string"/>
+        <attr name="l_titleVisible" format="boolean"/>
+
+    </declare-styleable>
+
+    <declare-styleable name="ScaleView">
+        <attr name="scale" format="float" />
+        <attr name="solid" format="integer">
+            <enum name="solid_width" value="-1" />
+            <enum name="solid_height" value="-2" />
+        </attr>
+    </declare-styleable>
+
+
+    <attr name="text" format="string" />
+    <attr name="textColor" format="color|reference" />
+    <attr name="textSize" format="dimension" />
+    <attr name="lineSpacingExtra" format="dimension" />
+    <attr name="lineSpacingMultiplier" format="float" />
+    <attr name="maxLines" format="integer" />
+    <declare-styleable name="VerticalTextView">
+        <attr name="text"/>
+        <attr name="textColor"/>
+        <attr name="textSize"/>
+        <attr name="lineSpacingExtra"/>
+        <attr name="lineSpacingMultiplier"/>
+        <attr name="maxLines"/>
+    </declare-styleable>
+
+    <!--阴影属性-->
+    <declare-styleable name="MyShadow">
+        <attr name="shadow_width" format="dimension|reference" />
+        <attr name="shadow_alpha" format="float|reference" />
+        <attr name="shadow_color" format="color|reference" />
+    </declare-styleable>
+
+    <attr name="progressButtonStyle" format="reference" />
+
+    <declare-styleable name="ProgressButton">
+        <attr name="pb_background" format="reference" />
+        <attr name="pb_BackgroundColor" format="color" />
+        <attr name="pb_TextSize" format="dimension" />
+        <attr name="pb_TextColor" format="color" />
+        <attr name="pb_text" format="string" />
+        <attr name="isOrangeBg" format="boolean"/>
+    </declare-styleable>
+
+</resources>

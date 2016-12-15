@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/live_telecast_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/live_height_50dp"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="center"
+    >
+
+
+    <TextView
+        android:id="@+id/live_telecast_input_text"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/live_height_30dp"
+        android:background="@drawable/live_emcee_info_shape"
+        android:paddingRight="@dimen/live_padding_15dp"
+        android:paddingLeft="@dimen/live_padding_15dp"
+        android:layout_marginLeft="@dimen/live_padding_10dp"
+        android:gravity="center"
+        android:layout_centerVertical="true"
+        android:text="@string/live_input"/>
+
+    <ImageView
+        android:id="@+id/live_telecast_setting"
+        android:layout_width="@dimen/live_height_30dp"
+        android:layout_height="@dimen/live_height_30dp"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/live_padding_20dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:src="@drawable/flipoverthecamera_small_btn" />
+    <ImageView
+        android:id="@+id/live_gift_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingRight="@dimen/live_padding_20dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/peopleliving_gift"
+        />
+
+</RelativeLayout>

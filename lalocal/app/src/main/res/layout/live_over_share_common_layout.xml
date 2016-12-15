@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerHorizontal="true"
+ >
+
+        <ImageView
+            android:id="@+id/over_page_friends"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_live_share_friends_selector"
+            />
+
+        <ImageView
+            android:id="@+id/over_page_weibo"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_live_share_weibo_selector"
+            />
+
+        <ImageView
+            android:id="@+id/over_page_weixin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_live_share_weixin_selector" />
+        <ImageView
+            android:id="@+id/over_page_qq"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/create_live_share_qq_selector"
+            android:visibility="gone"/>
+        <ImageView
+            android:id="@+id/over_page_qzone"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/create_live_share_qzone_selector"
+            android:visibility="gone"/>
+
+</LinearLayout>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item  type="id" name="targetId">0x30</item>
+    <!--<item type="id" name="orderDetailId">0x31</item>-->
+    <item type="id" name="moreSearchItemId">0x32</item>
+    <item type="id" name="areaDetialItem">0x32</item>
+    <item type="id" name="routeDateItem">0x32</item>
+   
+    <item name="adapter_item_tag_key" type="id">0x0001</item>
+    
+    
+    <item type="id" name="giftdatabean">0x32</item>
+    <item type="id" name="search_id">0x24</item>
+    <item type="id" name="pageNum"/>
+    <item type="id" name="toalPages"/>
+    <item name="tag_image" type="id" />
+</resources>

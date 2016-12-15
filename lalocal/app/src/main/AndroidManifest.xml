@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.lalocal.lalocal">
+
+    <!-- 地理位置权限 -->
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 分享权限 -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!-- 高德地图 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 环信 -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" /> -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- laloacal service chat -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.NFC" />
+    <!-- 网易视频云推流 -->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <permission
+        android:name="com.lalocal.lalocal.permission.RECEIVE_MSG"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="com.lalocal.lalocal.permission.RECEIVE_MSG" />
+    <!-- 直播权限声明 -->
+    <!-- 允许程序使用PowerManager WakeLocks以防止处理器休眠或者屏幕锁屏 -->
+
+    <uses-permission android:name="android.permission.SET_DEBUG_APP" />
+    <!-- 声明程序使用OpenGL ES 2.0 -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/icon"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity
+            android:name=".activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserProtocolActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AccountEidt1Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AboutUsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.AccountEidt2Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.EmailBoundActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.SpecialDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.BigPictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ArticleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProductDetailsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.ProductCheckDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CarouselFigureActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.OrderActivity" />
+        <activity android:name=".activity.ArticleTestAct" >
+
+        </activity>
+        <activity
+            android:name=".activity.SplashActivity"
+            android:theme="@style/SplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".live.entertainment.activity.TestActivity">
+
+        </activity>
+        <!-- 友盟 -->
+        <activity
+            android:name="com.umeng.socialize.editorpage.ShareActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.UMDefault" />
+        <!-- lalocoal-release -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="57885600e0f55a60d5000b3f" />
+        <meta-data
+            android:name="UMENG_MESSAGE_SECRET"
+            android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
+        <!-- //lalocal-debug -->
+         <!--<meta-data-->
+         <!--android:name="UMENG_APPKEY"-->
+         <!--android:value="5806d2df67e58ef11a000e36" />-->
+         <!--<meta-data-->
+         <!--android:name="UMENG_MESSAGE_SECRET"-->
+         <!--android:value="9b462862fd10e9e8872745ec67df7718"/>-->
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <!-- <activity -->
+        <!-- android:name=".WBShareActivity" -->
+        <!-- android:configChanges="keyboardHidden|orientation" -->
+        <!-- android:screenOrientation="portrait"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" /> -->
+
+
+        <!-- <category android:name="android.intent.category.DEFAULT" /> -->
+        <!-- </intent-filter> -->
+        <!-- </activity> -->
+        <!-- <activity -->
+        <!-- android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser" -->
+        <!-- android:configChanges="keyboardHidden|orientation" -->
+        <!-- android:exported="false" -->
+        <!-- android:windowSoftInputMode="adjustResize" /> -->
+
+
+        <!-- <service -->
+        <!-- android:name="com.sina.weibo.sdk.net.DownloadService" -->
+        <!-- android:exported="false" /> -->
+
+        <activity android:name=".activity.TravelPersonActivity" />
+        <activity android:name=".activity.BaseActivity" />
+        <!-- //fabric config -->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="e56a6336a6ae8ee217f64a62e29bd01203f377a0" />
+
+        <activity android:name=".activity.EmptActivity" />
+
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="release_lalocal" />
+
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_CHANNEL" -->
+        <!-- android:value="${CATEGORY}" /> -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="1e017a0e358e7dcc6793beda9888be87" />
+
+        <service android:name="com.amap.api.location.APSService" />
+
+        <activity android:name=".test.TestActivity" />
+        <activity android:name=".activity.DestinationAreaActivity" />
+        <activity android:name=".activity.RouteDetailActivity" />
+        <activity android:name=".activity.BookActivity" />
+        <activity android:name=".activity.PayActivity" />
+
+        <!-- ping++ -->
+        <!-- Ping++ SDK -->
+        <activity
+            android:name="com.pingplusplus.android.PaymentActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- 微信支付 -->
+        <activity-alias
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:targetActivity="com.pingplusplus.android.PaymentActivity" />
+
+        <!-- 支付宝 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind" />
+        <activity
+            android:name="com.alipay.sdk.auth.AuthActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|adjustPan" />
+        <!-- qq分享授权 -->
+        <activity
+            android:name="com.tencent.tauth.AuthActivity"
+            android:launchMode="singleTask"
+            android:noHistory="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="tencent1105529194" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.tencent.connect.common.AssistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <!-- 银联支付 sdk -->
+        <activity
+            android:name="com.unionpay.uppay.PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize" />
+
+        <!-- 网易视频云推流 -->
+        <!-- 声明网络信息查询服务 -->
+        <service android:name=".service.NetInfoService" />
+        <!-- 声明伴音功能服务 -->
+        <service android:name=".service.MixAudioService" />
+        <!-- 声明直播异常报警服务 -->
+        <service android:name=".service.AlertService" />
+
+        <receiver android:name="com.netease.pushservice.receiver.PushServiceBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_BATTERY_CHANGED" />
+            </intent-filter>
+        </receiver>
+        <!-- lalocal-release -->
+         <meta-data
+         android:name="com.netease.nim.appKey"
+         android:value="4cbe3856032ad3755da23525e596405f" />
+        <!-- lalocal-debug -->
+        <!--<meta-data-->
+            <!--android:name="com.netease.nim.appKey"-->
+            <!--android:value="efc9614a32336704ec2577f2129929fb" />-->
+        <!-- 声明云信后台服务 -->
+        <service
+            android:name="com.netease.nimlib.service.NimService"
+            android:process=":core" />
+        <service
+            android:name="com.netease.nimlib.service.NimService$Aux"
+            android:process=":core" />
+
+        <!-- 云信SDK的监视系统启动和网络变化的广播接收器，用户开机自启动以及网络变化时候重新登录 -->
+        <receiver
+            android:name="com.netease.nimlib.service.NimReceiver"
+            android:exported="false"
+            android:process=":core">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+
+        <!-- 云信进程间通信receiver -->
+        <receiver android:name="com.netease.nimlib.service.ResponseReceiver" />
+        <!-- android:windowSoftInputMode="stateHidden|adjustResize" -->
+        <activity
+            android:name=".live.entertainment.activity.AudienceActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".live.entertainment.activity.LiveActivity"
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode = "adjustResize"/>
+        <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
+        <activity
+            android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
+            android:hardwareAccelerated="false"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden" />
+        <activity android:name=".activity.PayCompleteActivity" />
+        <activity android:name=".activity.MyWalletActivity" />
+        <activity android:name=".activity.MyDiamondActivity" />
+        <activity android:name=".activity.MyTravelTicketActivity" />
+        <activity android:name=".activity.RechargeActivity" />
+        <activity android:name=".activity.ExchangeActivity" />
+        <activity android:name=".activity.ChargePayActivity" />
+        <activity android:name=".activity.MyCouponActivity" />
+        <activity android:name=".activity.ThemeActivity" />
+        <activity android:name=".activity.MyFavoriteActivity" />
+        <activity android:name=".activity.MyOrderActivity" />
+        <activity android:name=".activity.PersonalIntroActivity" />
+        <activity android:name=".activity.MyLiveActivity" />
+        <activity android:name=".activity.LiveDetailActivity" />
+        <activity android:name=".activity.AttentionActivity"/>
+        <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
+        <activity android:name=".live.entertainment.activity.PlayBackActivity"
+            android:screenOrientation="portrait"/>
+        <!-- GlideModule -->
+        <meta-data
+            android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
+            android:value="GlideModule" />
+        <activity android:name=".live.entertainment.activity.ReportActivity" />
+        <activity android:name=".activity.MyArticleActivity" />
+        <activity android:name=".me.LLoginActivity" />
+        <activity android:name=".me.LPEmailBound2Activity" />
+        <activity android:name=".me.LPEmailBoundActivity" />
+        <activity android:name=".me.LEmailLoginActivity" />
+        <activity android:name=".me.LRegister2Activity" />
+        <activity android:name=".activity.CurrencyInstructionActivity" />
+        <activity android:name=".me.LRegister1Activity" />
+        <activity android:name=".me.LPasswordForget2Activity" />
+        <activity android:name=".me.LPasswordForget1Activity" />
+        <activity android:name=".me.LPasswordModifyActivity" />
+        <activity android:name=".me.AccountSecurityActivity" />
+        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity>
+
+        <activity android:name=".me.PhoneBindActivity" />
+        <activity android:name=".activity.CmbPayActivity" />
+        <activity
+            android:name="cmb.pb.ui.PBKeyboardActivity"
+            android:theme="@style/CmbDialogStyleBottom" />
+
+        <service
+            android:name="cmb.pb.cmbsafe.CmbService"
+            android:exported="false" />
+        <activity android:name=".me.MyMessageActivity" />
+        <activity android:name=".me.TargetWebActivity" />
+        <activity android:name=".activity.GlobalSearchActivity"/>
+        <activity android:name=".activity.DestinationActivity"/>
+        <activity android:name=".test.TestGlobalSearchActivity"/>
+    </application>
+
+</manifest>

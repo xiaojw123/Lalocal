@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+    <View
+        android:id="@+id/pop_coupon_headerview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_actionbar_height"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_size_15_dp">
+
+        <EditText
+            android:id="@+id/pop_coupon_edt"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_coupon_exchage_btn_hegiht"
+            android:background="@drawable/register_edit_bg"
+            android:hint=" 请输入优惠码"
+            android:textColor="@color/color_b3"
+            android:textColorHint="@color/color_b3"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <!--<Button-->
+            <!--android:id="@+id/pop_coupon_excharge_btn"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/my_coupon_exchage_btn_hegiht"-->
+            <!--android:layout_marginTop="@dimen/dimen_size_15_dp"-->
+            <!--android:background="@drawable/orange_corner_btn_bg"-->
+            <!--android:text="@string/exchange"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="@dimen/text_size_16_sp" />-->
+
+        <com.lalocal.lalocal.view.ProgressButton
+            android:id="@+id/pop_coupon_excharge_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/my_coupon_exchage_btn_hegiht"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
+            app:pb_text="@string/exchange"
+            app:pb_TextColor="@color/white"
+            app:pb_TextSize="@dimen/text_size_16_sp" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/pop_blank_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_90_black"
+        />
+
+</LinearLayout>

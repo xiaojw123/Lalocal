@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/register_edit_height">
+
+    <EditText
+        android:id="@+id/input_edit"
+        style="@style/RegisterEditTheme"
+        android:paddingRight="40dp"
+        />
+
+    <Button
+        android:id="@+id/clear_btn"
+        android:layout_width="@dimen/register_clear_btn_width"
+        android:layout_height="@dimen/register_clear_btn_height"
+        android:layout_gravity="right|center_vertical"
+        android:layout_marginRight="@dimen/register_clear_btn_right"
+        android:background="@drawable/icon_clear"
+        android:visibility="gone" />
+</FrameLayout>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_60dp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            android:src="@drawable/tittlehighline"
+
+            />
+
+        <TextView
+            android:id="@+id/live_list_item_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLength="15"
+            android:paddingLeft="@dimen/live_padding_5dp"
+            android:singleLine="true"
+            android:textSize="@dimen/live_text_16sp" />
+
+        <TextView
+            android:id="@+id/live_list_item_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/live_padding_5dp"
+            android:paddingBottom="@dimen/live_padding_2dp"
+            android:paddingLeft="@dimen/live_padding_5dp"
+            android:paddingRight="@dimen/live_padding_5dp"
+            android:paddingTop="@dimen/live_padding_2dp"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_12_sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_250dp">
+
+        <ImageView
+            android:id="@+id/item_live_cover_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/androidloading" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@drawable/image_bg_gradient"></View>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/live_compere_head_portrait"
+            android:layout_width="@dimen/live_height_36dp"
+            android:layout_height="@dimen/live_height_36dp"
+            android:layout_marginLeft="@dimen/live_padding_15dp"
+            android:layout_marginTop="@dimen/live_padding_20dp"
+            android:scaleType="centerCrop"
+
+            android:src="@drawable/androidloading" />
+
+        <TextView
+            android:id="@+id/item_live_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginTop="@dimen/live_padding_20dp"
+            android:layout_toRightOf="@+id/live_compere_head_portrait"
+            android:ellipsize="end"
+            android:maxLength="15"
+            android:paddingLeft="@dimen/live_padding_8dp"
+            android:singleLine="true"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_14_sp" />
+
+        <TextView
+            android:id="@+id/item_live_adress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_live_name"
+            android:layout_toRightOf="@+id/live_compere_head_portrait"
+            android:drawableLeft="@drawable/peopleliving_location_light"
+            android:paddingLeft="@dimen/live_padding_8dp"
+            android:textColor="#aaffffff"
+
+            />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

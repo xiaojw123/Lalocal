@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?><!--搜索-->
+
+<LinearLayout android:id="@+id/live_search_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <FrameLayout
+            android:id="@+id/live_search_fl"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_30dp"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            android:layout_marginLeft="@dimen/dimen_size_15_dp"
+            android:layout_marginRight="@dimen/dimen_size_15_dp"
+            android:layout_marginTop="@dimen/dimen_size_10_dp"
+            android:background="@drawable/live_search_bg">
+
+            <TextView
+                android:id="@+id/live_search_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
+                android:text="@string/search"
+                android:drawableLeft="@drawable/searchbar_searchicon"
+                android:textColor="@color/color_b3"
+                android:textSize="@dimen/text_size_15_sp" />
+        </FrameLayout>
+
+    </LinearLayout>

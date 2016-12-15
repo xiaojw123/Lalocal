@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_faf7f2"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.activity.GlobalSearchActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/global_search_layout_height"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dimen_size_15_dp"
+        android:paddingRight="@dimen/dimen_size_15_dp">
+
+
+        <com.lalocal.lalocal.view.ClearEditText
+            android:id="@+id/gsearch_edit"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_30_dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dimen_size_5_dp"
+            android:layout_marginRight="@dimen/dimen_size_13_dp"
+            android:layout_toLeftOf="@+id/gsearch_cancel_tv"
+            android:background="@color/color_faf6f0"
+            android:hint="@string/input_key_word"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="@dimen/dimen_size_10_dp"
+            android:singleLine="true"
+            android:textColorHint="@color/color_50191000"
+            android:textCursorDrawable="@drawable/cursor_color_orange"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <TextView
+            android:id="@+id/gsearch_cancel_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:text="@string/cancel"
+            android:textColor="@color/color_50191000"
+            android:textSize="@dimen/text_size_16_sp" />
+
+    </RelativeLayout>
+
+    <View style="@style/CommonDeLineTheme" />
+    <LinearLayout
+        android:id="@+id/gsearch_tab_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/gsearch_tab_live"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tab1"
+                style="@style/GSearchTabTextStyle"
+                android:text="@string/liveplay" />
+
+            <View
+                style="@style/GSearchTabIndexStyle"
+                android:layout_below="@+id/tab1" />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/gsearch_tab_user"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tab2"
+                style="@style/GSearchTabTextStyle"
+                android:text="@string/user"
+
+                />
+
+            <View
+                style="@style/GSearchTabIndexStyle"
+                android:layout_below="@+id/tab2" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/gsearch_tab_special"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tab4"
+                style="@style/GSearchTabTextStyle"
+                android:text="@string/special"
+
+                />
+
+            <View
+                style="@style/GSearchTabIndexStyle"
+                android:layout_below="@+id/tab4" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/gsearch_tab_travelnote"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tab3"
+                style="@style/GSearchTabTextStyle"
+                android:text="@string/travel_note" />
+
+            <View
+                style="@style/GSearchTabIndexStyle"
+                android:layout_below="@+id/tab3" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/gsearch_tab_goods"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <TextView
+                android:id="@+id/tab5"
+                style="@style/GSearchTabTextStyle"
+                android:text="@string/goods" />
+
+            <View
+                style="@style/GSearchTabIndexStyle"
+                android:layout_below="@+id/tab5" />
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/gsearch_result_xrv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:background="@color/white"
+            />
+        <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/gsearch_result_vp"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+
+        <LinearLayout
+            android:id="@+id/gsearch_hint_cotainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/dimen_size_15_dp"
+            />
+
+
+
+        <TextView
+            android:id="@+id/gsearch_result_empty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_size_40_dp"
+            android:layout_marginRight="@dimen/dimen_size_40_dp"
+            android:layout_marginTop="@dimen/gsearch_result_empty_top"
+            android:gravity="center_horizontal"
+            android:text="@string/g_search_result_empt"
+            android:textColor="@color/color_50191000"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+
+
+
+</LinearLayout>
