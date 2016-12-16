@@ -73,5 +73,14 @@ public class Constants {
     public static final String KEY_USER_ID = "user_id";
     public static final String KEY_MASTER_NAME = "master_name";
     public static final String KEY_CHANNEL_ID = "channel_id";
+    public static final String KEY_REPORT_FROM = "report_from";
 
+    // -举报类型
+    // 主播举报
+    public static final int REPORT_CHANNEL = 0;
+    // 用户举报
+    public static final int REPORT_USER = 1;
+
+    // 直播首页分类 热门直播
+    public static final int CATEGORY_HOT_LIVE = -999;
 }

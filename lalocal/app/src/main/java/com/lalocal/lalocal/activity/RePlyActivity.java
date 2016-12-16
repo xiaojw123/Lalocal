@@ -49,7 +49,6 @@ public class RePlyActivity extends BaseActivity {
     boolean setColor = true;
     private TextWatcher watcher = new TextWatcher() {
 
-
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

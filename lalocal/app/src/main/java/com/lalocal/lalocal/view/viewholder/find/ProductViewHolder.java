@@ -1,4 +1,4 @@
-package com.lalocal.lalocal.view.viewholder;
+package com.lalocal.lalocal.view.viewholder.find;
 
 import android.content.Context;
 import android.content.Intent;

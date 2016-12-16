@@ -142,7 +142,7 @@ public class PlayBackActivity extends BaseActivity {
             public void itemClick() {
                 //TODO 回复评论
                 Intent intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
-                intent.putExtra("title", "编辑评论");
+                intent.putExtra(KeyParams.REPLY_TITLE, "编辑评论");
                 startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
             }
         });

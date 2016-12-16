@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" 
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+   >
     <LinearLayout
         android:id="@+id/reply_title"
         android:layout_width="match_parent"
@@ -46,6 +48,7 @@
         android:maxLength="140"
         android:gravity="top"
         android:layout_below="@+id/reply_title"
+
         android:textSize="@dimen/text_size_15_sp"
         android:lineSpacingExtra="@dimen/live_padding_2dp"
         android:padding="@dimen/live_padding_15dp"

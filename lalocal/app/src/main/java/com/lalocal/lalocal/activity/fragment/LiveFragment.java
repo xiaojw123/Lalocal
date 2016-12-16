@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -30,16 +31,20 @@ import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
+import com.lalocal.lalocal.model.CategoryBean;
 import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
+import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.RecommendLayout;
+import com.lalocal.lalocal.view.adapter.CategoryAdapter;
 import com.lalocal.lalocal.view.adapter.HomeLiveAdapter;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -61,13 +66,21 @@ public class LiveFragment extends BaseFragment {
     FloatingActionButton mBtnTakeLive;
     @BindView(R.id.recommend_page)
     RecommendLayout mRecommendPage;
+    @BindView(R.id.rv_top_category)
+    RecyclerView mRvTopCategory;
 
     // 适配器
     private HomeLiveAdapter mAdapter;
+    // 顶部目录适配器
+    private CategoryAdapter mCateAdapter;
     // 声明内容加载器
     private ContentLoader mContentLoader;
     // 我的关注
     private LiveUserBean mAttention;
+    // 广告列表
+    private List<RecommendAdResultBean> mAdList = new ArrayList<>();
+    // 分类列表
+    private List<CategoryBean> mCategoryList = new ArrayList<>();
     // 正在直播列表
     private List<LiveRowsBean> mLivingList = new ArrayList<>();
     // 直播回放列表
@@ -78,7 +91,8 @@ public class LiveFragment extends BaseFragment {
     private static final int REFRESH_MY_ATTENTION = 0x01;
     private static final int REFRESH_LIVING_LIST = 0x02;
     private static final int REFRESH_PLAYBACK_LIST = 0x03;
-    private static final int REFRESH_ALL = 0x04;
+    private static final int REFRESH_LIVE = 0x04;
+    private static final int REFRESH_ALL = 0x05;
 
     // 推荐页直播录播标记
     public static final int LIVING = 0;
@@ -91,6 +105,10 @@ public class LiveFragment extends BaseFragment {
     private boolean isRefresh = false;
     // 判断是否加载更多
     private boolean isLoadingMore = false;
+    // 判断是否刷新我的关注
+    private boolean isSyncAttention = false;
+    // 判断是否在切换分类
+    private boolean isSwitchCate = false;
     // 当前分页页码
     private int mCurPageNum = 1;
 
@@ -100,6 +118,22 @@ public class LiveFragment extends BaseFragment {
 
     // 是否第一次进入页面
     private boolean isFirstEnter = true;
+
+    // 选中的分类项
+    private int mSelCategory = 0;
+    // 当前分类id
+    private int mCategoryId = Constants.CATEGORY_HOT_LIVE;
+
+    // 分类点击事件
+    private OnCategoryItemClickListener mListener;
+
+    // 标记分类栏所在的列表下标
+    private int mCategoryIndex = 2;
+
+    // 不同category下的数据列表
+    private List<ChannelIndexTotalResult> mResults = new ArrayList<>();
+
+    private View mRootView;
 
     // -权限控制
     // SD卡读写权限
@@ -121,10 +155,17 @@ public class LiveFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_live, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_live, container, false);
+
+        return mRootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         // 使用ButterKnife框架
-        ButterKnife.bind(this, view);
+        ButterKnife.bind(this, mRootView);
 
         if (Build.VERSION.SDK_INT >= 22) {
             // 请求用户权限
@@ -133,8 +174,6 @@ public class LiveFragment extends BaseFragment {
             // 初始化
             init();
         }
-
-        return view;
     }
 
     /**
@@ -167,7 +206,7 @@ public class LiveFragment extends BaseFragment {
         mContentLoader.setCallBack(new MyCallBack());
 
         // 获取直播首页数据
-        getChannelIndexTotal(1);
+        getChannelIndexTotal(1, mCategoryId);
         // 获取每日推荐数据
         mContentLoader.getDailyRecommendations(Constants.OPEN_APP_TO_SCAN);
     }
@@ -175,8 +214,14 @@ public class LiveFragment extends BaseFragment {
     /**
      * 获取直播首页数据
      */
-    private void getChannelIndexTotal(int curPage) {
-        // 获取
+    private void getChannelIndexTotal(int curPage, int categoryId) {
+        // 分类编号
+        String catId = String.valueOf(categoryId);
+        // 如果是热门直播，则不传值
+        if (categoryId == Constants.CATEGORY_HOT_LIVE) {
+            catId = "";
+        }
+        // 获取用户id
         int userId = UserHelper.getUserId(getActivity());
         // 时间戳键值对的key基
         String baseKey = "live_index_timestamp_scan_";
@@ -187,7 +232,7 @@ public class LiveFragment extends BaseFragment {
             dateTime = SPCUtils.getString(getActivity(), (baseKey + String.valueOf(userId)));
         }
         // 获取直播首页数据
-        mContentLoader.getChannelIndexTotal(curPage, 10, "", dateTime);
+        mContentLoader.getChannelIndexTotal(curPage, 10, catId, dateTime);
     }
 
     /**
@@ -206,11 +251,13 @@ public class LiveFragment extends BaseFragment {
             @Override
             public void onRefresh() {
 
-                mXrvLive.setNoMore(false);
+//                mXrvLive.setNoMore(false);
 
                 if (isRefresh == false) {
+                    mSelCategory = 0;
+                    mCategoryId = Constants.CATEGORY_HOT_LIVE;
                     isRefresh = true;
-                    getChannelIndexTotal(1);
+                    getChannelIndexTotal(1, mCategoryId);
                 }
             }
 
@@ -221,7 +268,7 @@ public class LiveFragment extends BaseFragment {
                     isLoadingMore = true;
                     // 页码+1
                     mCurPageNum++;
-                    getChannelIndexTotal(mCurPageNum);
+                    getChannelIndexTotal(mCurPageNum, mCategoryId);
                 }
             }
         });
@@ -242,6 +289,25 @@ public class LiveFragment extends BaseFragment {
                         break;
                 }
                 return false;
+            }
+        });
+
+        /**
+         * 滚动事件，达到分类栏悬停的效果
+         */
+        mXrvLive.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
+
+                int position = layoutManager.findFirstVisibleItemPosition();
+                if (position > mCategoryIndex) {
+                    mRvTopCategory.setVisibility(View.VISIBLE);
+                } else {
+                    mRvTopCategory.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -312,15 +378,14 @@ public class LiveFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-//        if (isFirstEnter) {
+        if (isFirstEnter) {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
-//        } else {
-//            // 刷新我的关注
-//            setAdapter(REFRESH_MY_ATTENTION);
-//        }
-
-
+        } else {
+            isSyncAttention = true;
+            // 刷新我的关注
+            getChannelIndexTotal(mCurPageNum, mCategoryId);
+        }
     }
 
     @OnClick({R.id.btn_takelive})
@@ -329,7 +394,6 @@ public class LiveFragment extends BaseFragment {
             case R.id.btn_takelive:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-
                     prepareLive();
                 } else {
                     // 提示用户开启直播权限
@@ -339,6 +403,9 @@ public class LiveFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 准备直播
+     */
     private void prepareLive() {
         boolean isLogin = UserHelper.isLogined(getActivity());
         if (isLogin) {
@@ -348,6 +415,9 @@ public class LiveFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 显示登录提示对话框
+     */
     private void showLoginDialog() {
         CustomChatDialog customDialog = new CustomChatDialog(getActivity());
         customDialog.setContent(getString(R.string.live_login_hint));
@@ -369,8 +439,9 @@ public class LiveFragment extends BaseFragment {
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
 
+
             if (isLoadingMore) {
-               isLoadingMore = false;
+                isLoadingMore = false;
                 mXrvLive.loadMoreComplete();
             }
             if (isRefresh) {
@@ -379,23 +450,23 @@ public class LiveFragment extends BaseFragment {
             }
         }
 
-        @Override
-        public void onResponseFailed(String message, int requestCode) {
-            super.onResponseFailed(message, requestCode);
-
-            isRefresh = false;
-            isLoadingMore = false;
-            mXrvLive.refreshComplete();
-        }
-
-        @Override
-        public void onResponseFailed(int returnCode, String message) {
-            super.onResponseFailed(returnCode, message);
-
-            isRefresh = false;
-            isLoadingMore = false;
-            mXrvLive.refreshComplete();
-        }
+//        @Override
+//        public void onResponseFailed(String message, int requestCode) {
+//            super.onResponseFailed(message, requestCode);
+//
+//            isRefresh = false;
+//            isLoadingMore = false;
+//            mXrvLive.refreshComplete();
+//        }
+//
+//        @Override
+//        public void onResponseFailed(int returnCode, String message) {
+//            super.onResponseFailed(returnCode, message);
+//
+//            isRefresh = false;
+//            isLoadingMore = false;
+//            mXrvLive.refreshComplete();
+//        }
 
         @Override
         public void onGetDailyRecommend(RecommendationsBean bean) {
@@ -446,11 +517,17 @@ public class LiveFragment extends BaseFragment {
 
             if (!TextUtils.isEmpty(photo)) {
                 ImageView imgPhoto = (ImageView) mRecommendPage.getView(R.id.img_recommendations);
-                Glide.with(getActivity()).load(photo).into(imgPhoto);
+                Glide.with(getActivity())
+                        .load(photo)
+                        .placeholder(R.drawable.androidloading)
+                        .into(imgPhoto);
             }
             if (!TextUtils.isEmpty(avatar)) {
                 ImageView imgAvatar = (ImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
-                Glide.with(getActivity()).load(avatar).into(imgAvatar);
+                Glide.with(getActivity())
+                        .load(avatar)
+                        .placeholder(R.drawable.androidloading)
+                        .into(imgAvatar);
             }
             if (TextUtils.isEmpty(nickname)) {
                 nickname = "一位不愿意透露姓名的网友";
@@ -488,29 +565,68 @@ public class LiveFragment extends BaseFragment {
         public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {
             super.onGetChannelIndexTotal(result, dateTime);
 
-            if (isRefresh) {
-                // -刷新的时候去掉之前加载
-                isRefresh = false;
-                isLoadingMore = false;
-                mXrvLive.refreshComplete();
-                mXrvLive.loadMoreComplete();
-                // 加载页标记为第1页
-                mCurPageNum = 1;
-
+            if (isSyncAttention) {
+                isSyncAttention = false;
                 // 获取我的关注
                 mAttention = result.getLastDynamicUser();
-
-                // 获取正在直播的列表
-                mLivingList.clear();
-                mLivingList.addAll(result.getChannelList());
-
-                // 获取回放列表
-                ChannelIndexTotalResult.HistoryListBean historyListBean = result.getHistoryList();
-                mPlaybackList.clear();
-                if (historyListBean != null) {
-                    mPlaybackList.addAll(historyListBean.getRows());
-                }
-                setAdapter(REFRESH_ALL);
+                // 刷新我的关注
+                setAdapter(REFRESH_MY_ATTENTION);
+//            } else if (isSwitchCate) {
+//
+//                isSwitchCate = false;
+//                // -刷新的时候去掉之前加载
+//                isRefresh = false;
+//                isLoadingMore = false;
+//                mXrvLive.refreshComplete();
+//                mXrvLive.loadMoreComplete();
+//                // 加载页标记为第1页
+//                mCurPageNum = 1;
+//
+//                // 获取正在直播的列表
+//                mLivingList.clear();
+//                mLivingList.addAll(result.getChannelList());
+//
+//                // 获取回放列表
+//                ChannelIndexTotalResult.HistoryListBean historyListBean = result.getHistoryList();
+//                mPlaybackList.clear();
+//                if (historyListBean != null) {
+//                    mPlaybackList.addAll(historyListBean.getRows());
+//                }
+//                setAdapter(REFRESH_LIVE);
+//            } else if (isRefresh) {
+//                // -刷新的时候去掉之前加载
+//                isRefresh = false;
+//                isLoadingMore = false;
+//                mXrvLive.refreshComplete();
+//                mXrvLive.loadMoreComplete();
+//                // 加载页标记为第1页
+//                mCurPageNum = 1;
+//
+//                // 获取我的关注
+//                mAttention = result.getLastDynamicUser();
+//
+//                // 获取广告列表
+//                mAdList.clear();
+//                mAdList.addAll(result.getAdvertisingList());
+//
+//                // 获取分类列表，“热门分类”手动添加
+//                mCategoryList.clear();
+//                CategoryBean categoryBean = new CategoryBean();
+//                categoryBean.setId(Constants.CATEGORY_HOT_LIVE);
+//                mCategoryList.add(categoryBean);
+//                mCategoryList.addAll(result.getCategoryList());
+//
+//                // 获取正在直播的列表
+//                mLivingList.clear();
+//                mLivingList.addAll(result.getChannelList());
+//
+//                // 获取回放列表
+//                ChannelIndexTotalResult.HistoryListBean historyListBean = result.getHistoryList();
+//                mPlaybackList.clear();
+//                if (historyListBean != null) {
+//                    mPlaybackList.addAll(historyListBean.getRows());
+//                }
+//                setAdapter(REFRESH_ALL);
             } else if (isLoadingMore) {
                 // 加载的时候去掉刷新
                 isLoadingMore = false;
@@ -532,12 +648,48 @@ public class LiveFragment extends BaseFragment {
                 }
             } else {
 
-                // 加载完毕
-                isLoadingMore = false;
-                // 刷新完毕
+//                // 加载完毕
+//                isLoadingMore = false;
+//                // 刷新完毕
+//                isRefresh = false;
+//                // 刷新结束
+//                mXrvLive.refreshComplete();
+
+                AppLog.i("fsa", "else");
+                // -刷新的时候去掉之前加载
                 isRefresh = false;
-                // 刷新结束
+                isLoadingMore = false;
                 mXrvLive.refreshComplete();
+                mXrvLive.loadMoreComplete();
+                // 加载页标记为第1页
+                mCurPageNum = 1;
+
+                // 获取我的关注
+                mAttention = result.getLastDynamicUser();
+
+                // 获取广告列表
+                mAdList.clear();
+                mAdList.addAll(result.getAdvertisingList());
+
+                // 获取分类列表，“热门分类”手动添加
+                mCategoryList.clear();
+                CategoryBean categoryBean = new CategoryBean();
+                categoryBean.setId(Constants.CATEGORY_HOT_LIVE);
+                mCategoryList.add(categoryBean);
+                mCategoryList.addAll(result.getCategoryList());
+                AppLog.i("fsa", "ad size is " + mCategoryList.size());
+
+                // 获取正在直播的列表
+                mLivingList.clear();
+                mLivingList.addAll(result.getChannelList());
+
+                // 获取回放列表
+                ChannelIndexTotalResult.HistoryListBean historyListBean = result.getHistoryList();
+                mPlaybackList.clear();
+                if (historyListBean != null) {
+                    mPlaybackList.addAll(historyListBean.getRows());
+                }
+                setAdapter(REFRESH_ALL);
             }
         }
     }
@@ -549,11 +701,18 @@ public class LiveFragment extends BaseFragment {
      */
     public void setAdapter(int refreshType) {
 
+        // 同步分类栏的下标
+        syncCategoryIndex();
+
         if (mAdapter == null) {
+            mListener = new OnCategoryItemClickListener();
             // 初始化适配器，此时mLivingList和mPlaybackList数据为空
-            mAdapter = new HomeLiveAdapter(getActivity(), mAttention, mLivingList, mPlaybackList);
+            mAdapter = new HomeLiveAdapter(getActivity(), mAdList, mAttention, mCategoryList, mLivingList,
+                    mPlaybackList, mListener, mRvTopCategory);
             // 刷新数据
             mXrvLive.setAdapter(mAdapter);
+            // 配置顶部目录适配器
+            setCategoryAdapter();
         } else {
             switch (refreshType) {
                 case REFRESH_MY_ATTENTION:
@@ -565,7 +724,7 @@ public class LiveFragment extends BaseFragment {
                     mAdapter.refreshLivingList(mLivingList);
                     break;
                 case REFRESH_PLAYBACK_LIST:
-                    // 刷新直播回放列表
+                    // 刷新回放列表
                     mAdapter.refreshPlaybackList(mPlaybackList);
                     break;
                 case INITIAL:
@@ -573,10 +732,76 @@ public class LiveFragment extends BaseFragment {
                     mAdapter = null;
                     setAdapter(INITIAL);
                     break;
+                case REFRESH_LIVE:
+                    // 刷新直播和回放列表
+                    mAdapter.refreshLive(mLivingList, mPlaybackList);
+                    // 配置顶部目录适配器
+                    setCategoryAdapter();
+                    break;
                 case REFRESH_ALL:
                     // 刷新直播回放列表
-                    mAdapter.refreshAll(mAttention, mLivingList, mPlaybackList);
+                    mAdapter.refreshAll(mAdList, mAttention, mCategoryList, mLivingList,
+                            mPlaybackList);
+                    // 配置顶部目录适配器
+                    setCategoryAdapter();
                     break;
+            }
+        }
+    }
+
+    /**
+     * 设置目录适配器
+     */
+    private void setCategoryAdapter() {
+        if (mCateAdapter == null) {
+            // 初始化分类适配器
+            mCateAdapter = new CategoryAdapter(getActivity(), mCategoryList, mListener, mRvTopCategory);
+            // 初始化布局管理器
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            // 设置为横向
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            // 设置布局管理器
+            mRvTopCategory.setLayoutManager(layoutManager);
+            // 设置适配器
+            mRvTopCategory.setAdapter(mCateAdapter);
+        } else {
+            mCateAdapter.setSelected(mSelCategory);
+        }
+    }
+
+    /**
+     * 同步分类栏的下标
+     */
+    private void syncCategoryIndex() {
+        mCategoryIndex = 2;
+        int id = UserHelper.getUserId(getActivity());
+        if (id == -1) {
+            mCategoryIndex--;
+        }
+        if (mAdList == null || mAdList.size() == 0) {
+            mCategoryIndex--;
+        }
+    }
+
+    private class OnCategoryItemClickListener implements CategoryAdapter.MyOnItemClickListener {
+
+        @Override
+        public void onItemClick(View view, int position) {
+            if (mCategoryList.size() > 0) { //  && position != mSelCategory
+
+                // 获取选中的分类
+                CategoryBean categoryBean = mCategoryList.get(position);
+                // 获取分类id
+                mCategoryId = categoryBean.getId();
+                // 得到选中的分类的下标
+                mSelCategory = position;
+                // 加载分页重置为1
+                mCurPageNum = 1;
+
+                mAdapter.getCateAdapter().setSelected(mSelCategory);
+                // 获取数据
+                getChannelIndexTotal(mCurPageNum, mCategoryId);
+
             }
         }
     }

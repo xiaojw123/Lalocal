@@ -11,13 +11,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_top_category"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/color_fa"
+        android:visibility="gone"/>
+
     <com.lalocal.lalocal.view.RecommendLayout
         android:id="@+id/recommend_page"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:visibility="gone" />
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/btn_takelive"
@@ -28,12 +36,12 @@
         android:layout_marginBottom="@dimen/dimen_size_20_dp"
         android:layout_marginRight="@dimen/dimen_size_20_dp"
         android:padding="0dp"
-        app:paddingStart="0dp"
-        app:paddingEnd="0dp"
+        android:scaleType="fitXY"
         android:src="@drawable/takelive_btn"
         app:fab_colorNormal="@android:color/transparent"
         app:fab_colorPressed="@android:color/transparent"
         app:fab_colorRipple="@android:color/transparent"
-        android:scaleType="fitXY"
-        app:fab_shadow="false"/>
+        app:fab_shadow="false"
+        app:paddingEnd="0dp"
+        app:paddingStart="0dp" />
 </RelativeLayout>

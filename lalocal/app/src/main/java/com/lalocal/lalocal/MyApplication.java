@@ -85,7 +85,6 @@ import io.fabric.sdk.android.Fabric;
 public class MyApplication extends Application {
     public static final boolean isDebug =true;
     private WorkerThread mWorkerThread;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -387,6 +386,4 @@ public class MyApplication extends Application {
         }
         mWorkerThread = null;
     }
-
-
 }

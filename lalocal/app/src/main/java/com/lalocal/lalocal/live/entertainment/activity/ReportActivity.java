@@ -22,6 +22,7 @@ import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
+import com.lalocal.lalocal.live.entertainment.agora.Constant;
 import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
 import com.lalocal.lalocal.model.Constants;
@@ -118,6 +119,9 @@ public class ReportActivity extends BaseActivity {
     // 文件名称的数组
     private String[] mPhotos;
 
+    // 举报来自（主播/用户）
+    private int mReportFrom = Constants.REPORT_CHANNEL;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +164,8 @@ public class ReportActivity extends BaseActivity {
         // 获取当前所在的直播间id
         mChannelId = bundle.getString(Constants.KEY_CHANNEL_ID);
         AppLog.i("qn", "channelId is " + mChannelId);
+        // 获取举报来源
+        mReportFrom = bundle.getInt(Constants.KEY_REPORT_FROM);
     }
 
     /**
@@ -439,7 +445,7 @@ public class ReportActivity extends BaseActivity {
             // 初始化图片名称字符串数组
             mPhotos = new String[0];
             // 将举报信息上传服务器
-            mContentLoader.getChannelReport(mContent, mPhotos, mUserId, mMasterName, mChannelId);
+            mContentLoader.getChannelReport(mReportFrom, mContent, mPhotos, mUserId, mMasterName, mChannelId);
             return;
         }
         for (int i = 0; i < size; i++) {
@@ -511,7 +517,7 @@ public class ReportActivity extends BaseActivity {
                     // 清空上传成功的列表
                     mUploadSuccess.clear();
                     // 将举报信息上传服务器
-                    mContentLoader.getChannelReport(mContent, mPhotos, mUserId, mMasterName, mChannelId);
+                    mContentLoader.getChannelReport(mReportFrom, mContent, mPhotos, mUserId, mMasterName, mChannelId);
                 }
             } else {
                 loading.setVisibility(View.GONE);
@@ -554,7 +560,9 @@ public class ReportActivity extends BaseActivity {
                     ReportActivity.this.finish();
                 } else {
                     // 显示举报失败信息
-                    Toast.makeText(ReportActivity.this, "举报信息上传失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ReportActivity.this, "您已举报过此内容，请勿重复举报", Toast.LENGTH_SHORT).show();
+                    // 退出举报页面
+                    ReportActivity.this.finish();
                 }
             } catch (JSONException e) {
                 // 举报信息返回失败提示
