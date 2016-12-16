@@ -18,7 +18,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.format.Time;
 import android.view.Gravity;
 import android.view.SurfaceView;
 import android.view.View;
@@ -54,8 +53,8 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChallengeListviewDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomNewUserInforDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomToast;
-import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
 import com.lalocal.lalocal.live.entertainment.ui.MasterMoreSettingPopuWindow;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.thirdparty.live.LivePlayer;
@@ -87,6 +86,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.Timer;
@@ -281,7 +281,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 // 初始化
                 initLocation();
             } else {
-                Toast.makeText(this, "没有地理位置权限", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.no_location_permison), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -316,8 +316,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 } else {
                     if (createLiveLocationTv != null) {
                         AppLog.i("TAG","定位是吧的地理位置:"+LiveActivity.liveLocation);
-                        createLiveLocationTv.setText("Lalocal神秘之地");
-                        LiveActivity.liveLocation = "Lalocal神秘之地";
+                        createLiveLocationTv.setText(getString(R.string.lolacal_no_location));
+                        LiveActivity.liveLocation = getString(R.string.lolacal_no_location);
                     }
 
                 }
@@ -528,20 +528,16 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void showUserInfoDialog(String userId, final String channelId,boolean isMaster) {
         if (LiveConstant.isUnDestory) {
-            CustomUserInfoDialog dialog = new CustomUserInfoDialog(this, container,userId, channelId,LiveConstant.ROLE, isMaster,creatorAccount,roomId);
+            CustomNewUserInforDialog dialog=new CustomNewUserInforDialog(this, container,userId, channelId,LiveConstant.ROLE, isMaster,creatorAccount,roomId);
+
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     LiveConstant.USER_INFO_FIRST_CLICK = true;
                 }
             });
-            dialog.setOnLiveRoomContentListener(new CustomUserInfoDialog.OnLiveRoomContentListener() {
-                @Override
-                public void getClickContent(String content) {
-                    marqueeView.start(content);
-                }
-            });
             dialog.show();
+
         }
     }
 
@@ -595,7 +591,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         break;
                     case R.id.live_share_pop:
                         MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_USER_SHARE);
-                        showSharePopuwindow(shareVO,"分享了直播");
+                        showSharePopuwindow(shareVO,getString(R.string.share_live));
                         break;
                     case R.id.live_send_message_pop:
                         showInputTextView();
@@ -614,7 +610,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void closeLiveNotifi() {
         endLive();
-        Toast.makeText(this,"直播间被管理员关闭",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,getString(R.string.live_room_close_to_manager),Toast.LENGTH_SHORT).show();
     }
 
 
@@ -713,15 +709,15 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             roomName = liveRoomName.getText().toString().trim();
             if (TextUtils.isEmpty(roomName)) {
                 isFirstClick=true;
-                Toast.makeText(LiveActivity.this, "直播间标题不能为空!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LiveActivity.this, getString(R.string.live_room_title_no_null), Toast.LENGTH_SHORT).show();
                 return;
             }
             if(LiveActivity.locationY==false){
                 isFirstClick=true;
-                Toast.makeText(LiveActivity.this, "没有获取位置信息，请手动输入！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LiveActivity.this, getString(R.string.not_get_location_please_input), Toast.LENGTH_SHORT).show();
                 return;
             }
-            inputStartLive.setText("准备中...");
+            inputStartLive.setText(getString(R.string.prepare_start_live));
             isClickStartLiveBtn = true;
             startTime = System.currentTimeMillis();
             AppLog.i("TAG","创建直播的地理位置:"+LiveActivity.liveLocation);
@@ -788,8 +784,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         boolean ok = info.isOK();
                         AppLog.i("TAG","上产日志回调1"+ key + ",\r\n " + info + ",\r\n " + res);
                         AppLog.i("TAG","上产日志回调："+(ok==true?"成功":"失败")+"     文件名:"+Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
-
-                        //     deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
+                        deleteFile(Environment.getExternalStorageDirectory()+"/"+LogFileUtils.fileAgoraPath+logTime);
 
                     }
                 }, null);
@@ -811,7 +806,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void onCheckManager(LiveManagerBean liveManagerBean) {
             super.onCheckManager(liveManagerBean);
             if (liveManagerBean.getResult() != 0) {
-                Toast.makeText(LiveActivity.this, "对方为管理员!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LiveActivity.this, getString(R.string.him_is_manager), Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -945,7 +940,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveMessage.setCreatorAccount(creatorAccount);
         liveMessage.setUserId(userId);
         if (container != null && container.account != null) {
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播了哈哈哈哈哈哈", roomId, AuthPreferences.getUserAccount(), liveMessage);
+            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "结束直播", roomId, AuthPreferences.getUserAccount(), liveMessage);
             sendMessage(imMessage, MessageType.leaveLive);
         }
         if (isLeaveChannel) {
@@ -1010,7 +1005,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
 
-
+    public static final int SHARE_CODE=0x00;
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
         AppLog.i("TAG","开始直播陈公公。。。。。");
@@ -1038,14 +1033,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
-                                    showSharePopuwindow(shareVO,"分享了直播");
-                                }
-                            }
-                        });
+                        handler.sendEmptyMessage(SHARE_CODE);
                     }
                 }, 60000);
             }
@@ -1090,6 +1078,19 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            switch (msg.what){
+                case SHARE_CODE:
+                    if(LiveConstant.isUnDestory&&liveFinishLayout.getVisibility()!=View.VISIBLE){
+                        showSharePopuwindow(shareVO,getString(R.string.share_live));
+                    }
+                    break;
+                case AGAINLOGINIM:
+                    againLoginIm();
+                    break;
+
+
+
+            }
         }
     };
 
@@ -1111,10 +1112,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             public void run() {
                 againLoginIm();
             }
-        });
+       });
 
     }
-
+public static final int AGAINLOGINIM=0x01;
     private void againLoginIm() {
         AppLog.i("TAG", "直播連接中斷连接中断回调");
 
@@ -1136,7 +1137,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        againLoginIm();
+                      handler.sendEmptyMessage(AGAINLOGINIM);
                     }
                 }, 1000);
                 AppLog.i("TAG", "LiveActivity,直播中断重登账号失败" + i);
@@ -1148,7 +1149,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        againLoginIm();
+                      handler.sendEmptyMessage(AGAINLOGINIM);
                     }
                 }, 1000);
             }
@@ -1326,20 +1327,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             worker().preview(false, null, 0);
         }
     }
-
     public  void  logFile(){
-        Time time = new Time("GMT+8");
-        time.setToNow();
-        int year = time.year;
-        int month = time.month;
-        int monthDay = time.monthDay;
-        logTime = year+"_"+month+"_"+monthDay+"_"+channelId+"_"+liveNumber+"_"+ UserHelper.getUserId(this)+".log";
+        SimpleDateFormat formatter = new SimpleDateFormat ("yyyy_MM_dd");
+        Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+        logTime= formatter.format(curDate)+"_"+channelId+"_"+liveNumber+"_"+ UserHelper.getUserId(this)+".log";
         LogFileUtils.makeAgoraFilePath(logTime);
-
-
     }
-
-
 
     private void finishLive() {
         if (isStartLive) {
@@ -1396,7 +1389,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             liveMessage.setUserId(userId);
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "回来了", roomId, creatorAccount, liveMessage);
+            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, getString(R.string.come_back), roomId, creatorAccount, liveMessage);
             sendMessage(imMessage,MessageType.text);
         }
     }
@@ -1414,7 +1407,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             liveMessage.setUserId(userId);
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
-            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, "离开了一会", roomId, creatorAccount, liveMessage);
+            IMMessage imMessage = SendMessageUtil.sendMessage(container.account, getString(R.string.leave_master), roomId, creatorAccount, liveMessage);
             sendMessage(imMessage,MessageType.text);
         }
     }

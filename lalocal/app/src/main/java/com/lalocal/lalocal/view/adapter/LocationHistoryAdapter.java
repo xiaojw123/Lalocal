@@ -37,7 +37,6 @@ public class LocationHistoryAdapter extends BaseRecyclerAdapter {
         this.datas = datas;
         this.context = context;
         res = context.getResources();
-
     }
 
     public void updateItems(List<SparseArray<String>> datas) {
@@ -131,7 +130,6 @@ public class LocationHistoryAdapter extends BaseRecyclerAdapter {
         SparseArray<String> sp = datas.get(position);
         return sp.keyAt(0);
     }
-
     @Override
     public int getItemCount() {
         return datas == null ? 0 : datas.size();

@@ -74,6 +74,7 @@ public class Constants {
     public static final String KEY_MASTER_NAME = "master_name";
     public static final String KEY_CHANNEL_ID = "channel_id";
     public static final String KEY_REPORT_FROM = "report_from";
+    public static final String KEY_ARTICLE_ID = "article_id";
 
     // -举报类型
     // 主播举报

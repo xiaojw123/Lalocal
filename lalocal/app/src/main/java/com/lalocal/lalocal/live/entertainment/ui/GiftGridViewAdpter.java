@@ -66,7 +66,6 @@ public class GiftGridViewAdpter extends BaseAdapter {
             holder.giftSendCount.setVisibility(View.GONE);
             holder.giftItemBg.setBackgroundResource(0);
         }else {
-
             holder.giftSendCount.setVisibility(View.VISIBLE);
             holder.giftItemBg.setBackgroundResource(R.drawable.gift_sel);
         }

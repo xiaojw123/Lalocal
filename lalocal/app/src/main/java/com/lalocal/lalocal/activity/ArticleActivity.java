@@ -31,6 +31,7 @@ import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.SpecialAuthorBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
@@ -123,7 +124,11 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
             case R.id.article_btn_comment:
                 //评论
-                Toast.makeText(mContext, "评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
+
+                Intent commentIntent = new Intent(ArticleActivity.this, ArticleCommentActivity.class);
+                commentIntent.putExtra(Constants.KEY_ARTICLE_ID, targetID);
+                ArticleActivity.this.startActivity(commentIntent);
                 break;
             case R.id.article_btn_share:
                 //分享

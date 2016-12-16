@@ -3,7 +3,6 @@ package com.lalocal.lalocal.live.entertainment.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,11 +15,11 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.ScaleImageView;
@@ -361,7 +360,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
     private class MyCallBack extends ICallBack {
 
         @Override
-        public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+        public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
             if (liveRowsBean != null) {
                 Intent intent=new Intent(mContext,PlayBackActivity.class);

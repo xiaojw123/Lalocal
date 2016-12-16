@@ -54,5 +54,8 @@ public interface KeyParams {
     public static final int PAGE_TYPE_WALLET=0x11;
 
 
-
+    public static final  String REPLY_CONTENT="reply_content";
+    public static final String REPLY_TITLE="reply_title";
+    public static final int REPLY_RESULTCODE=300;
+    public static final int REPLY_REQUESTCODE=301;
 }

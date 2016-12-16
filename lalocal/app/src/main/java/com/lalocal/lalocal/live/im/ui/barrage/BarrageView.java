@@ -111,13 +111,15 @@ public class BarrageView extends RelativeLayout{
         }
         // create text view
         poll = textCache.poll();
+        if(poll==null){
+            return;
+        }
         if (linearLayout == null) {
             linearLayout = buildTextView(poll, availableLine);
 
         } else {
             linearLayout = reuseTextView(linearLayout, poll, availableLine);
         }
-
         // run
         buildTranslationAnimator(linearLayout, availableLine,poll).start();
     }

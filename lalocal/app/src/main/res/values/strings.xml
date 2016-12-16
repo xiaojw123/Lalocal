@@ -233,6 +233,7 @@
     <string name="no_live">没有搜索到相关直播</string>
     <string name="start_live">开始直播</string>
 
+
     <!--直播-->
     <string name="live_login_hint">您还没有登录,请登录!</string>
     <string name="live_login_imm">马上登录</string>
@@ -334,6 +335,67 @@
     <string name="super_manager_close_liveroom_ok">我就关了咋地</string>
     <string name="super_manager_ban_long">踢出直播间</string>
     <string name="live_report">举报</string>
+    <string name="system_announ">系统公告： </string>
+    <string name="player_complete">播放完成!</string>
+    <string name="unlogin_chatroom_again_login">没有登录聊天室，请退出重进!</string>
+    <string name="share_live">分享了直播</string>
+    <string name="tickout_live_room">你已被管理员踢出直播间!</string>
+    <string name="attention_live_e">关注了主播!</string>
+    <string name="like_master">给主播点了个赞</string>
+    <string name="live_master_1">给主播点了个赞1</string>
+    <string name="play_back_no_share">此视频暂不可分享!!</string>
+    <string name="play_back_compelet">视频播放完成!</string>
+    <string name="play_back_all_compelet">视频全部播放完毕!</string>
+    <string name="play_back_next">视频播放完毕，正加载下一段视频...</string>
+    <string name="play_back_first">已经是第一段视频了!</string>
+    <string name="play_back_no_up">没有上一段视频!</string>
+    <string name="play_back_play_first">播放第一段视频</string>
+    <string name="play_back_loading_up">正在加载上一段视频....</string>
+    <string name="play_back_loading_down">正在加载下一段视频....</string>
+    <string name="play_back_no_next">没有下一段视频</string>
+    <string name="lolacal_no_location">LALOCAL神秘之地</string>
+    <string name="no_location_permison">没有地理位置权限!</string>
+    <string name="live_room_close_to_manager">直播间被管理员关闭!</string>
+    <string name="live_room_title_no_null">直播间标题不能为空!</string>
+    <string name="not_get_location_please_input">没有获取位置信息，请手动输入!</string>
+    <string name="prepare_start_live">准备中...</string>
+    <string name="him_is_manager">对方为管理员!</string>
+    <string name="come_back">回来了!</string>
+    <string name="leave_master">离开了一会儿!</string>
+    <string name="liveing">正在直播： </string>
+    <string name="connectting_chatroom">正在连接聊天室...</string>
+    <string name="connect_chatroom_fuial">聊天室登录失败，正在重新连接...</string>
+    <string name="user_tourist">该用户为游客!</string>
+    <string name="you_ban">你已被管理员禁言!</string>
+    <string name="welcome_live">欢迎</string>
+    <string name="enter_room">进入直播间</string>
+    <string name="you">你</string>
+    <string name="share_rank">分享了榜单</string>
+    <string name="share_sina">到新浪微博</string>
+    <string name="share_weixin">到微信</string>
+    <string name="share_weiclcle">到朋友圈</string>
+    <string name="new_massage">新消息</string>
+    <string name="ban">禁言了</string>
+    <string name="relieve">解除了</string>
+    <string name="de_ban">的禁言</string>
+    <string name="jiang">将</string>
+    <string name="setting_manage">授权为管理员</string>
+    <string name="cancel_le">取消了</string>
+    <string name="de_manager">"的管理员权限</string>
+    <string name="send_gift_">给主播送了</string>
+    <string name="ge">个</string>
+    <string name="master_aplit">主播 :  ,.,  </string>
+    <string name="me_split">我 :  ,.,  </string>
+    <string name="sou_quan">授权</string>
+    <string name="wei_manager">为管理员</string>
+    <string name="manager_quanxian">管理员权限</string>
+    <string name="other_funcation">其他功能</string>
+    <string name="private_letter_no">私信(需关注)</string>
+    <string name="private_letter">私信</string>
+    <string name="play_back_jianjie">视频简介</string>
+    <string name="edit_up_content">编辑以上内容</string>
+    <string name="review">评  论</string>
+
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>
     <string name="live_read_write_external_storage">SD卡读写权限未开启,请尝试在手机应用权限管理中打开权限!</string>
