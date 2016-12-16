@@ -35,6 +35,8 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.me.LRegister1Activity;
 import com.lalocal.lalocal.model.AreaItem;
@@ -1392,8 +1394,19 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+    //历史直播评论
+    public  void getPlayBackLiveReview(String targetId,int targetType,int pageSize,int pageNumber){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PLAY_BACK_DETAILES);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackReview(targetId,targetType,pageSize,pageNumber),response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
 
-    //历史直播详情
+    }
+
+
+    //删除历史直播详情
     public void deleteLiveHistory(int id) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HISTORY_DELETE);
@@ -2198,6 +2211,9 @@ public class ContentLoader {
                         break;
                     case RequestCode.GET_CHANNEL_INDEX_TOTAL:
                         responseChannelIndexTotal(json);
+                        break;
+                    case RequestCode.PLAY_BACK_DETAILES:
+                        responsePlayBack(jsonObj);
                         break;
                 }
             } catch (JSONException e) {
@@ -3077,8 +3093,15 @@ public class ContentLoader {
         private void responPlayBackDetails(JSONObject jsonObj) {
             AppLog.i("TAG", "历史直播详情:" + jsonObj.toString());
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
-            LiveRowsBean liveRowsBean = new Gson().fromJson(resultJson.toString(), LiveRowsBean.class);
+            PlayBackResultBean liveRowsBean = new Gson().fromJson(resultJson.toString(), PlayBackResultBean.class);
             callBack.onPlayBackDetails(liveRowsBean);
+        }
+
+        //历史直播回放评论
+        private void responsePlayBack(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
+            callBack.onPlayBackReviewDetails(reviewResultBean);
         }
 
         //临时禁言
@@ -3238,6 +3261,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -3716,6 +3740,7 @@ public class ContentLoader {
         int LIVE_AVATAR = 243;
         int USER_LEAVE_ROOM = 244;
         int VALIDATE_MSGS = 245;
+        int PLAY_BACK_DETAILES=246;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

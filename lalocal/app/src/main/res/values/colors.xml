@@ -88,6 +88,13 @@
     <color name="live_im_item_name_color">#a98b25</color>
     <color name="live_beauty_on">#f5a623</color>
     <color name="live_im_item_content">#ffffff</color>
+    <color name="color_0076ff">#0076ff</color>
+    <color name="color_8f8e94">#8f8e94</color>
+    <color name="color_4d4d4d">#4d4d4d</color>
+    <color name="color_fe3824">#fe3824</color>
+    <color name="color_190f00">#190f00</color>
+    <color name="color_70190f00">#70190f00</color>
+    <color name="color_0065b2">#0065b2</color>
     <!--umeng-->
     <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
     <color name="umeng_socialize_divider">#E6E6E6</color>

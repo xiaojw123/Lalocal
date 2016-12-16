@@ -117,7 +117,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
             }
         });
 
-        headInfos.setText("公告： "+content);
+        headInfos.setText(context.getString(R.string.system_announ)+content);
         headInfos.setVisibility(View.GONE);
         infoRemind.setText(title);
         infoRemind.setVisibility(View.GONE);
@@ -192,7 +192,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         if(!needScrollToBottom){
             ++LiveConstant.newMessageCount;
             newView.setVisibility(View.VISIBLE);
-            newView.setText(LiveConstant.newMessageCount+"新消息");
+            newView.setText(LiveConstant.newMessageCount+context.getString(R.string.new_massage));
 
         }else{
             LiveConstant.newMessageCount=0;

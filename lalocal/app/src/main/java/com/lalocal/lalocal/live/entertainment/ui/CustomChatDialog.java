@@ -24,7 +24,7 @@ public class CustomChatDialog extends BaseDialog implements View.OnClickListener
     String title, determine, cancel,okText,content;
 
     public CustomChatDialog(Context context) {
-        super(context);
+        super(context,R.style.setting_dialog);
     }
 
     @Override

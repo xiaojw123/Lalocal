@@ -19,7 +19,7 @@ import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomNewUserInforDialog;
 import com.lalocal.lalocal.live.entertainment.ui.VerticalImageSpan;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.me.LLoginActivity;
@@ -70,7 +70,7 @@ public class MsgViewHolderChat extends TViewHolder{
         String adminSendMsgNickName=null;
         String giftCount=null;
         String giftName=null;
-        String textColor=null;
+        String  textColor="#99190f00";
         disableSendMsgUserId=null;
         adminSendMsgUserId=null;
         nameText.setCompoundDrawables(null,null,null,null);
@@ -152,7 +152,7 @@ public class MsgViewHolderChat extends TViewHolder{
                 }
                 if(UserHelper.isLogined(context)){
                     if(LiveConstant.isUnDestory){
-                        CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
+                        CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                         dialog.show();
                     }
                 }else {
@@ -185,39 +185,32 @@ public class MsgViewHolderChat extends TViewHolder{
         switch (styles){
             case "0":
                 itemContent = message.getContent();
-                textColor="#99190f00";
                 break;
             case "1":
                 itemContent=message.getContent();
-                textColor="#99190f00";
                 break;
             case "2"://点赞
-                itemContent="给主播点了个赞";
-                textColor="#99190f00";
-                break;
+                itemContent=context.getString(R.string.like_master);
+              break;
             case "6"://禁言
-                itemContent="禁言了"+disableSendMsgNickName;
-                textColor="#99190f00";
+                itemContent=context.getString(R.string.ban)+disableSendMsgNickName;
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "7":
-                itemContent= "解除了"+disableSendMsgNickName+"的禁言";
-                textColor="#99190f00";
+                itemContent=context.getString(R.string.relieve)+disableSendMsgNickName+context.getString(R.string.de_ban);
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "8":
-                itemContent= "将"+adminSendMsgNickName+"授权为管理员";
+                itemContent= context.getString(R.string.jiang)+adminSendMsgNickName+context.getString(R.string.setting_manage);
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
-                textColor="#99190f00";
                 break;
             case "9":
-                itemContent="取消了"+adminSendMsgNickName+"的管理员权限";
-                textColor="#99190f00";
+                itemContent=context.getString(R.string.cancel_le)+adminSendMsgNickName+context.getString(R.string.de_manager);
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "10":
               final   GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
-                itemContent="给主播送了"+giftCount+"个"+giftName;
+                itemContent=context.getString(R.string.send_gift_)+giftCount+context.getString(R.string.ge)+giftName;
                 textColor="#ffffff";
                 messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
                 messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
@@ -225,7 +218,6 @@ public class MsgViewHolderChat extends TViewHolder{
                 return;
             case "12":
                 itemContent= message.getContent();
-                textColor="#99190f00";
                 break;
         }
         AppLog.i("TAG","creatorAccount:"+creatorAccount+"    itemContent:"+itemContent);
@@ -300,15 +292,15 @@ public class MsgViewHolderChat extends TViewHolder{
         if (message.getMsgType() != MsgTypeEnum.notification) {
             if(message.getRemoteExtension() != null) {
                 if(styles.equals("101")||styles.equals("100")){
-                    contentItem="主播 :  ,.,  "+itemContent;
+                    contentItem=context.getString(R.string.master_aplit)+itemContent;
                     messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
                 }else {
                     String fromAccount = message.getFromAccount();
                     String account = DemoCache.getAccount();
                     if(fromAccount!=null&&fromAccount.equals(account)){
-                        contentItem="我 :  ,.,  "+itemContent;
+                        contentItem=context.getString(R.string.me_split)+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
-                        contentItem="主播 :  ,.,  "+itemContent;
+                        contentItem=context.getString(R.string.master_aplit)+itemContent;
                         messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                         textColor="#99190f00";
                     } else{

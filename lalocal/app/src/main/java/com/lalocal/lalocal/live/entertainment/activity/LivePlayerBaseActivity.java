@@ -87,7 +87,6 @@ import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
-import com.netease.nimlib.sdk.chatroom.constant.MemberType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
@@ -104,7 +103,6 @@ import com.umeng.socialize.media.UMImage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -185,6 +183,12 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     protected View topView;
     private TextView newMessageRemind;
     private boolean isFirstEnterRoom=true;
+    boolean isLiveMaster;
+    OnLinesRunnable   onLInesRunnable=null;
+    boolean isOnLineUsersCountChange = true;
+    private int liveNumber;
+    boolean firstClick = true;//排行榜
+    private Handler handler = new Handler();
     protected abstract void checkNetInfo(String netType, int reminder);
 
     protected abstract void onConnected(); // 网络连上
@@ -197,15 +201,14 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
     protected abstract void initParam(); // 初始化推流/拉流参数，具体在子类中实现
 
+    protected abstract void masterOnLineStatus(boolean b);
 
-    private static Map<MemberType, Integer> compMap = new HashMap<>();
-
+    protected abstract void showFinishLayout(boolean b, int i);
 
     @Override
     protected void showKeyboardDelayed(View focus) {
         super.showKeyboardDelayed(focus);
     }
-
 
     @Override
     protected void initUIandEvent() {
@@ -228,17 +231,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     }
 
 
-    private void checkSharePlatform() {
-        boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(this, "com.tencent.mm");
-        boolean  isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(this, "com.sina.weibo");
-        if(!isInstallMm1){
-            overLiveShareFriends.setVisibility(View.GONE);
-            overLiveShareWeixin.setVisibility(View.GONE);
-        }
-        if (!isInstallWeibo) {
-            overLiveShareWeibo.setVisibility(View.GONE);
-        }
-    }
 
     private void checkManagerList() {
         contentLoader.getLiveManagerList(channelId);//查看管理员列表
@@ -252,6 +244,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             if (data != null) {
                 AppLog.i("TAG", "直播基类登录回调rere：" + resultCode);
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
+
                 NIMClient.getService(AuthService.class).logout();
             }
         }
@@ -277,9 +270,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         avatar = liveRowsBean.getUser().getAvatar();
         String title = liveRowsBean.getTitle();
         if(LivePlayerBaseActivity.this instanceof  LiveActivity){
-            title="开始直播";
+            title=getString(R.string.start_live);
         }else{
-            title="正在直播： "+title;
+            title=getString(R.string.liveing)+title;
         }
         container = new Container(this, roomId, SessionTypeEnum.ChatRoom, this);
         if (messageListPanel == null) {
@@ -305,7 +298,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             if (statusCode != StatusCode.LOGINED) {
                 DemoCache.setLoginStatus(false);
                 if (statusCode == StatusCode.UNLOGIN||statusCode==StatusCode.NET_BROKEN) {
-
                     getHandler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -336,31 +328,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         }
     };
 
-    //检测网络类型
-    public static final String NET_TYPE_WIFI = "wifi";
-    public static final String NET_TYPE_RESTS = "rests";
-    private BroadcastReceiver myNetReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-                netInfo = mConnectivityManager.getActiveNetworkInfo();
-                if (netInfo != null && netInfo.isAvailable()) {
-                    String name = netInfo.getTypeName();
-                    NetworkInfo.State state = netInfo.getState();
-                    if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                        checkNetInfo(NET_TYPE_WIFI, 0);
-                    } else {
-                        if (LiveConstant.NET_CHECK == 0) {
-                            checkNetInfo(NET_TYPE_RESTS, 0);
-                        }
 
-                    }
-                }
-            }
-        }
-    };
 
     //检测聊天室登录状态
     Observer<ChatRoomStatusChangeData> onlineStatus = new Observer<ChatRoomStatusChangeData>() {
@@ -370,7 +338,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 DemoCache.setLoginChatRoomStatus(false);
                 AppLog.i("TAG", "聊天室正在连接中");
                 if (marqueeView != null) {
-                    marqueeView.start("正在连接聊天室...");
+                    marqueeView.start(getString(R.string.connectting_chatroom));
                 }
 
             } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
@@ -388,7 +356,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
                 onOnlineStatusChanged(false);
                 if (marqueeView != null) {
-                    marqueeView.start("聊天室登录失败，正在重新连接...");
+                    marqueeView.start(getString(R.string.connect_chatroom_fuial));
                 }
 
             }
@@ -429,8 +397,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         liveGiftImg = (ImageView) findViewById(R.id.live_gift_img);
         quit = (ImageView) findViewById(R.id.live_telecast_quit);
         newMessageRemind = (TextView) findViewById(R.id.new_message_remind);
-        CustomLinearLayoutManager linearLayoutManager = new CustomLinearLayoutManager(LivePlayerBaseActivity.this, CustomLinearLayoutManager.HORIZONTAL, false);
-        touristList.setLayoutManager(linearLayoutManager);
+
         onlineCountText = findView(R.id.live_online_count);
         scoreLayout = (RelativeLayout) findViewById(R.id.audience_score_layout);
         giftPlaneUp = (ImageView) findViewById(R.id.gift_plane_up);
@@ -472,41 +439,13 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             }
         });
 
-        touristList.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    isScrollStop = true;
-                } else {
-                    isScrollStop = false;
-                }
-            }
-        });
-
-        touristList.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        mIsTouchUP = false;
-                        break;
-                    case MotionEvent.ACTION_MOVE:
-                        mIsTouchUP = false;
-                        break;
-                    default:
-                        mIsTouchUP = true;
-                        break;
-                }
-                return false;
-
-            }
-        });
-
+        CustomLinearLayoutManager linearLayoutManager = new CustomLinearLayoutManager(LivePlayerBaseActivity.this, CustomLinearLayoutManager.HORIZONTAL, false);
+        touristList.setLayoutManager(linearLayoutManager);
+        tourisAdapter = new TouristAdapter(LivePlayerBaseActivity.this, null);
+        touristList.setAdapter(tourisAdapter);
+        tourisListListener();//直播间头像监听
 
         scoreLayout.setOnClickListener(clickListener);
-
         masterInfoLayout = (LinearLayout) findViewById(R.id.live_master_info_layout);
         masterInfoLayout.setOnClickListener(clickListener);
 
@@ -516,31 +455,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
         drawerLayout = (DrawerLayout) findViewById(R.id.live_drawer_layout);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
+        drawerLayoutListener();//drawerLayout开关监听
 
-        drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                // TODO Auto-generated method stub
-                super.onDrawerSlide(drawerView, slideOffset);
-                drawerLayout.bringChildToFront(drawerView);
-                drawerLayout.requestLayout();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                palyerLayout.requestLayout();
-
-            }
-        });
     }
-    Set<UserAvatarsBean> userAvatarsBeanSet=new HashSet<>();
-    List<UserAvatarsBean> allUserAvatars=new ArrayList<>();
     protected abstract void showStatusUnUsual();
     public class MyCallBack extends ICallBack {
 
@@ -557,110 +474,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             if(code==0){
                 final ChatRoomMessage message = (ChatRoomMessage) msg;
                 if (msg != null) {
-                    NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
-                            .setCallback(new RequestCallback<Void>() {
-                                @Override
-                                public void onSuccess(Void param) {
-                                    switch (messageType) {
-                                        case MessageType.barrage:
-                                            String content = msg.getContent();
-                                            Map<String, Object> remoteExtension = msg.getRemoteExtension();
-                                            if (remoteExtension != null) {
-                                                Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
-                                                while (iterator.hasNext()) {
-                                                    Map.Entry<String, Object> next = iterator.next();
-                                                    String key = next.getKey();
-                                                    Object value = next.getValue();
-                                                    if ("userId".equals(key)) {
-                                                        messageUserId = value.toString();
-                                                    }
-                                                }
-                                            }
-                                            barrageView.init(new BarrageConfig());
-                                            if (content != null) {
-                                                BarrageViewBean barrageViewBean = new BarrageViewBean();
-                                                barrageViewBean.setUserId(messageUserId);
-                                                barrageViewBean.setContent(content);
-                                                barrageViewBean.setSenderName("我");
-                                                barrageViewBean.setAvator(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
-                                                barrageView.addTextBarrage(barrageViewBean);
-                                            }
-                                            barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
-                                                @Override
-                                                public void getUserId(String userId) {
-                                                    showUserInfoDialog(userId, channelId ,false);
-                                                }
-                                            });
-                                            messageListPanel.onMsgSend(message);
-                                            if(LivePlayerBaseActivity.this instanceof AudienceActivity){
-                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_BARRAGE);
-                                            }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
-                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_BARRAGE);
-                                            }
-
-                                            break;
-                                        case MessageType.gift:
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.ban:
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.relieveBan:
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.cancel:
-                                            if(channelId!=null){
-                                                contentLoader.getLiveManagerList(channelId);
-                                            }
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.managerLive:
-                                            if(channelId!=null){
-                                                contentLoader.getLiveManagerList(channelId);
-                                            }
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.leaveLive:
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.challenge:
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.text:
-                                            if(LivePlayerBaseActivity.this instanceof AudienceActivity){
-                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_EDIT);
-                                            }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
-                                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_EDIT);
-                                            }
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.closeLive:
-                                            messageListPanel.onMsgSend(message);
-                                            break;
-                                        case MessageType.kickOut:
-
-                                            break;
-                                        case MessageType.like:
-                                            if(message.getContent().equals("给主播点了个赞")){
-                                                messageListPanel.onMsgSend(message);
-                                            }else{
-                                                break;
-                                            }
-                                            break;
-                                    }
-                                }
-
-                                @Override
-                                public void onFailed(int code) {
-                                    if(code==13004){
-                                        Toast.makeText(LivePlayerBaseActivity.this,"你已被管理员禁言!",Toast.LENGTH_SHORT).show();
-                                    }
-                                    return;
-                                }
-                                @Override
-                                public void onException(Throwable exception) {
-                                }
-                            });
+                    sendGreenMessage(message);
                 }
             }
         }
@@ -673,10 +487,8 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                LiveConstant.result= liveManagerListResp.getResult();
                 isOnLineUsersCountChange=true;
                 AppLog.i("TAG","查看直播间管理员列表");
-
             }
         }
-
         @Override
         public void onLiveRoomAvatar(LiveRoomAvatarSortResp.ResultBean result) {
             super.onLiveRoomAvatar(result);
@@ -684,53 +496,15 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             onlineCounts=number;
             onlineCountText.setText(String.valueOf(number) + "人");
             List<UserAvatarsBean> userAvatars = result.getUserAvatars();
-            if (isFirstLoadding) {
-
-                tourisAdapter = new TouristAdapter(LivePlayerBaseActivity.this, userAvatars);
-                LiveConstant.refreshManager=true;
-                touristList.setAdapter(tourisAdapter);
-                isFirstLoadding = false;
-                tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
-                    @Override
-                    public void showTouristInfo(UserAvatarsBean member, boolean isMasterAccount) {
-                        if(LivePlayerBaseActivity.this instanceof AudienceActivity){
-                            MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_USER);
-                        }else{
-                            MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_USER);
-                        }
-
-                        if (LiveConstant.USER_INFO_FIRST_CLICK) {
-                            LiveConstant.USER_INFO_FIRST_CLICK = false;
-                            boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
-                            if (!isLogin) {
-                                showLoginViewDialog();
-                            } else {
-                                String userIdItem =String.valueOf(member.getId());
-                                inputPanel.hideInputMethod();
-                                if (!isMasterAccount) {
-                                    if ("-1".equals(userIdItem) || userIdItem == null || userIdItem.length() == 0) {
-                                        LiveConstant.USER_INFO_FIRST_CLICK = true;
-                                        Toast.makeText(LivePlayerBaseActivity.this, "该用户为游客!", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-                                    showUserInfoDialog(userIdItem, channelId ,false);
-                                }
-                            }
-                        }
-                    }
-                });
-
-            } else if (userAvatars.size() > 0) {
+            if(userAvatars!=null&&userAvatars.size()>0){
                 tourisAdapter.refresh(userAvatars);
             }
-
         }
 
         @Override
         public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
             super.onGiftRanks(liveGiftRanksResp);
             if (liveGiftRanksResp.getReturnCode() == 0) {
-
                 List<TotalRanksBean> currentRanks = liveGiftRanksResp.getResult().getCurrentRanks();
                 if (currentRanks != null && currentRanks.size() > 0) {
                     for (int i = 0; i < currentRanks.size(); i++) {
@@ -774,8 +548,9 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             }
         }
 
-
     }
+
+
 
     int totalGold = 0;
 
@@ -808,8 +583,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     /***************************
      * 监听
      ****************************/
-    boolean firstClick = true;//排行榜
-    boolean userInfoFirstclick = true;
 
     View.OnClickListener clickListener = new View.OnClickListener() {
 
@@ -980,7 +753,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 case MessageType.like:
                     periscopeLayout.addHeart();
                 //   marqueeView.start(((ChatRoomMessage) message).getChatRoomMessageExtension().getSenderNick() + "  给主播点了个赞");
-                    if(message.getContent().equals("给主播点了个赞")){
+                    if(message.getContent().equals(getString(R.string.like_master))){
                         messageListPanel.onIncomingMessage(messages);
                     }
                     break;
@@ -1091,7 +864,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             while (iterator.hasNext()) {
                 Object key = iterator.next();
                 Object value = targetNicks.get(key);
-                marqueeView.start("欢迎" + key.toString() + "进入直播间");
+                marqueeView.start(getString(R.string.welcome_live) + key.toString() + getString(R.string.enter_room));
 
             }
         }
@@ -1131,14 +904,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         return map;
     }
 
-
-
-    protected abstract void masterOnLineStatus(boolean b);
-
-    protected abstract void showFinishLayout(boolean b, int i);
-
-
-
     /**************************
      * 断网重连
      ****************************/
@@ -1151,7 +916,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             NIMClient.getService(AuthService.class).logout();
             DemoCache.setLoginChatRoomStatus(false);
             onDisconnected();
-            //    MobHelper.sendEevent(getActivity(), MobEvent.MY_WALLET);
         }
     }
 
@@ -1224,9 +988,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
             finish();
         }
     }
-    boolean isLiveMaster;
-    OnLinesRunnable   onLInesRunnable=null;
-    private int liveNumber;
+
     private void getRoomUsersCount() {
         if(channelId!=null){
             contentLoader.getLiveManagerList(channelId);
@@ -1283,23 +1045,18 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
     }
 
-
-
-
-
     private void onLoginDone() {
         enterRequest = null;
         DialogMaker.dismissProgressDialog();
     }
 
-    boolean isOnLineUsersCountChange = true;
 
 
     private void clearChatRoom() {
         ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
         finish();
     }
-    private Handler handler = new Handler();
+
     // 初始化礼物布局
     protected void findGiftLayout() {
         giftAnimationViewDown = findView(R.id.gift_animation_view);
@@ -1308,47 +1065,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
         giftPlaneAnimation = new GiftPlaneAnimation(anchorHeadImg, userHeadImg, giftPlaneUp, giftPlaneBg, this, avatar);
     }
 
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (inputPanel != null) {
-            inputPanel.hideInputMethod();
-            inputPanel.collapse(false);
-        }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        if (messageListPanel != null) {
-            messageListPanel.onResume();
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DialogUtil.clear();
-        if (inputPanel != null && inputPanel.collapse(true)) {
-        }
-        if (messageListPanel != null && messageListPanel.onBackPressed()) {
-        }
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        registerObservers(false);
-        DemoCache.setLoginChatRoomStatus(false);
-        unregisterReceiver(myNetReceiver);
-        AppLog.i("TAG", "直播基类走了onDestroy");
-
-        adapter = null;
-    }
 
     @Override
     public void onInputPanelExpand() {
@@ -1385,8 +1101,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
 
             @Override
             public void shareBtn(SpecialShareVOBean shareVO) {
-                showSharePopuwindow(shareVO,"分享了榜单");
-
+                showSharePopuwindow(shareVO,getString(R.string.share_rank));
             }
 
             @Override
@@ -1394,11 +1109,10 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_RANK_AVATAR_CLICK);
                 String userId = String.valueOf(rankUser.getId());
                 if(userId!=null){
-                    contentLoader.getLiveUserInfo(userId);
+                    showUserInfoDialog(userId, channelId ,false);
                 }
             }
         });
-
         giftsRankPopuWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -1468,13 +1182,13 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                   public void shareSuccess(SHARE_MEDIA share_media) {
                       String content=null;
                       if(share_media.equals(SHARE_MEDIA.SINA)){
-                          content="到新浪微博";
+                          content=getString(R.string.share_sina);
                           MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_SHARE_WEIBO);
                       }else if(share_media.equals(SHARE_MEDIA.WEIXIN)){
-                          content="到微信";
+                          content=getString(R.string.share_weixin);
                           MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_SHARE_WECHAT1);
                       }else if(share_media.equals(SHARE_MEDIA.WEIXIN_CIRCLE)){
-                          content="到朋友圈";
+                          content=getString(R.string.share_weiclcle);
                           MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_SHARE_WECHAT2);
                       }
 
@@ -1494,9 +1208,251 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
           AppLog.i("TAG","直播间分享错误");
       }
 
+    }
+
+    private void sendGreenMessage(final ChatRoomMessage message) {
+
+        try {
+            NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+                    .setCallback(new RequestCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void param) {
+                            switch (messageType) {
+                                case MessageType.barrage:
+                                    String content = msg.getContent();
+                                    Map<String, Object> remoteExtension = msg.getRemoteExtension();
+                                    if (remoteExtension != null) {
+                                        Iterator<Map.Entry<String, Object>> iterator = remoteExtension.entrySet().iterator();
+                                        while (iterator.hasNext()) {
+                                            Map.Entry<String, Object> next = iterator.next();
+                                            String key = next.getKey();
+                                            Object value = next.getValue();
+                                            if ("userId".equals(key)) {
+                                                messageUserId = value.toString();
+                                            }
+                                        }
+                                    }
+                                    barrageView.init(new BarrageConfig());
+                                    if (content != null) {
+                                        BarrageViewBean barrageViewBean = new BarrageViewBean();
+                                        barrageViewBean.setUserId(messageUserId);
+                                        barrageViewBean.setContent(content);
+                                        barrageViewBean.setSenderName(getString(R.string.me));
+                                        barrageViewBean.setAvator(UserHelper.getUserAvatar(LivePlayerBaseActivity.this));
+                                        barrageView.addTextBarrage(barrageViewBean);
+                                    }
+                                    barrageView.setOnBarrageClickListener(new BarrageView.OnBarrageClickListener() {
+                                        @Override
+                                        public void getUserId(String userId) {
+                                            showUserInfoDialog(userId, channelId ,false);
+                                        }
+                                    });
+                                    messageListPanel.onMsgSend(message);
+                                    if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                                        MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_BARRAGE);
+                                    }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                        MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_BARRAGE);
+                                    }
+
+                                    break;
+                                case MessageType.gift:
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.ban:
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.relieveBan:
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.cancel:
+                                    if(channelId!=null){
+                                        contentLoader.getLiveManagerList(channelId);
+                                    }
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.managerLive:
+                                    if(channelId!=null){
+                                        contentLoader.getLiveManagerList(channelId);
+                                    }
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.leaveLive:
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.challenge:
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.text:
+                                    if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                                        MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_EDIT);
+                                    }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                        MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_EDIT);
+                                    }
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.closeLive:
+                                    messageListPanel.onMsgSend(message);
+                                    break;
+                                case MessageType.kickOut:
+
+                                    break;
+                                case MessageType.like:
+                                    if(message.getContent().equals(getString(R.string.like_master))){
+                                        messageListPanel.onMsgSend(message);
+                                    }else{
+                                        break;
+                                    }
+                                    break;
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(int code) {
+                            if(code==13004){
+                                Toast.makeText(LivePlayerBaseActivity.this,getString(R.string.you_ban),Toast.LENGTH_SHORT).show();
+                            }
+                            return;
+                        }
+                        @Override
+                        public void onException(Throwable exception) {
+                        }
+                    });
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
     }
+
+    private void drawerLayoutListener() {
+        drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                // TODO Auto-generated method stub
+                super.onDrawerSlide(drawerView, slideOffset);
+                drawerLayout.bringChildToFront(drawerView);
+                drawerLayout.requestLayout();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                palyerLayout.requestLayout();
+
+            }
+        });
+    }
+
+    private void checkSharePlatform() {
+        boolean isInstallMm1 = CheckWeixinAndWeibo.checkAPPInstall(this, "com.tencent.mm");
+        boolean  isInstallWeibo = CheckWeixinAndWeibo.checkAPPInstall(this, "com.sina.weibo");
+        if(!isInstallMm1){
+            overLiveShareFriends.setVisibility(View.GONE);
+            overLiveShareWeixin.setVisibility(View.GONE);
+        }
+        if (!isInstallWeibo) {
+            overLiveShareWeibo.setVisibility(View.GONE);
+        }
+    }
+
+
+    private void tourisListListener() {
+        tourisAdapter.setOnTouristItemClickListener(new TouristAdapter.OnTouristItemClickListener() {
+            @Override
+            public void showTouristInfo(UserAvatarsBean member, boolean isMasterAccount) {
+                if(LivePlayerBaseActivity.this instanceof AudienceActivity){
+                    MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_USER);
+                }else{
+                    MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_USER);
+                }
+
+                if (LiveConstant.USER_INFO_FIRST_CLICK) {
+                    LiveConstant.USER_INFO_FIRST_CLICK = false;
+                    boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                    if (!isLogin) {
+                        showLoginViewDialog();
+                    } else {
+                        String userIdItem =String.valueOf(member.getId());
+                        inputPanel.hideInputMethod();
+                        if (!isMasterAccount) {
+                            if ("-1".equals(userIdItem) || userIdItem == null || userIdItem.length() == 0) {
+                                LiveConstant.USER_INFO_FIRST_CLICK = true;
+                                Toast.makeText(LivePlayerBaseActivity.this, getString(R.string.user_tourist), Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                            showUserInfoDialog(userIdItem, channelId ,false);
+                        }
+                    }
+                }
+            }
+        });
+
+
+        touristList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    isScrollStop = true;
+                } else {
+                    isScrollStop = false;
+                }
+            }
+        });
+        touristList.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mIsTouchUP = false;
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mIsTouchUP = false;
+                        break;
+                    default:
+                        mIsTouchUP = true;
+                        break;
+                }
+                return false;
+
+            }
+        });
+    }
+
+
+    //检测网络类型
+    public static final String NET_TYPE_WIFI = "wifi";
+    public static final String NET_TYPE_RESTS = "rests";
+    private BroadcastReceiver myNetReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+                ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                netInfo = mConnectivityManager.getActiveNetworkInfo();
+                if (netInfo != null && netInfo.isAvailable()) {
+                    String name = netInfo.getTypeName();
+                    NetworkInfo.State state = netInfo.getState();
+                    if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                        checkNetInfo(NET_TYPE_WIFI, 0);
+                    } else {
+                        if (LiveConstant.NET_CHECK == 0) {
+                            checkNetInfo(NET_TYPE_RESTS, 0);
+                        }
+
+                    }
+                }
+            }
+        }
+    };
+
 
     @Override
     protected void onStop() {
@@ -1509,5 +1465,46 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
     protected void onStart() {
         super.onStart();
         LiveConstant.isUnDestory = true;
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (inputPanel != null) {
+            inputPanel.hideInputMethod();
+            inputPanel.collapse(false);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (messageListPanel != null) {
+            messageListPanel.onResume();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DialogUtil.clear();
+        if (inputPanel != null && inputPanel.collapse(true)) {
+        }
+        if (messageListPanel != null && messageListPanel.onBackPressed()) {
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        registerObservers(false);
+        DemoCache.setLoginChatRoomStatus(false);
+        unregisterReceiver(myNetReceiver);
+        AppLog.i("TAG", "直播基类走了onDestroy");
+
+        adapter = null;
     }
 }

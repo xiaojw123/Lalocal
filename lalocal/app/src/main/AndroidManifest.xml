@@ -127,6 +127,7 @@
         <activity android:name=".live.entertainment.activity.TestActivity">
 
         </activity>
+        <activity android:name=".activity.RePlyActivity"></activity>
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -267,13 +268,13 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-         <meta-data
+      <!--   <meta-data
          android:name="com.netease.nim.appKey"
-         android:value="4cbe3856032ad3755da23525e596405f" />
+         android:value="4cbe3856032ad3755da23525e596405f" />-->
         <!-- lalocal-debug -->
-        <!--<meta-data-->
-            <!--android:name="com.netease.nim.appKey"-->
-            <!--android:value="efc9614a32336704ec2577f2129929fb" />-->
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="efc9614a32336704ec2577f2129929fb" />
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -329,6 +330,7 @@
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
         <activity android:name=".live.entertainment.activity.PlayBackActivity"
             android:screenOrientation="portrait"/>
+        <activity android:name=".live.entertainment.activity.PlayBackNewActivity"></activity>
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"

@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
  * Created by android on 2016/10/14.
  */
 public abstract class BaseDialog extends Dialog {
-    private  Context context;
+
     public BaseDialog(Context context) {
         super(context, R.style.live_dialog);
     }

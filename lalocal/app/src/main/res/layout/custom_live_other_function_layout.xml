@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <LinearLayout
+        android:id="@+id/live_other_function_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginRight="@dimen/live_padding_10dp"
+        android:layout_marginLeft="@dimen/live_padding_10dp"
+        android:background="@drawable/live_other_funtion_bg"
+        android:layout_marginBottom="@dimen/live_padding_8dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_56dp"
+            android:gravity="center"
+            android:textSize="@dimen/live_text_13sp"
+            android:textColor="@color/color_8f8e94"
+            android:text="其他功能"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/color_4d4d4d"
+            ></View>
+
+           <TextView
+               android:id="@+id/live_other_function_report"
+               android:layout_width="match_parent"
+               android:layout_height="@dimen/live_height_56dp"
+               android:textColor="@color/color_0076ff"
+               android:textSize="@dimen/text_size_20_sp"
+               android:text="@string/live_report"
+               android:gravity="center"
+               />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/color_4d4d4d"
+            ></View>
+
+        <TextView
+            android:id="@+id/live_other_function_common"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_56dp"
+            android:textSize="@dimen/text_size_20_sp"
+            android:gravity="center"
+            android:visibility="gone"
+            />
+        <LinearLayout
+            android:id="@+id/live_other_function_bottom_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_4d4d4d"
+                ></View>
+
+            <TextView
+                android:id="@+id/live_other_function_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_height_56dp"
+                android:textSize="@dimen/text_size_20_sp"
+                android:gravity="center"
+
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/live_other_function_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_56dp"
+        android:layout_marginLeft="@dimen/live_padding_10dp"
+        android:layout_marginRight="@dimen/live_padding_10dp"
+        android:text="取消"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_20_sp"
+        android:background="@drawable/live_other_funtion_cancel"
+        android:textColor="@color/color_0076ff"/>
+</LinearLayout>

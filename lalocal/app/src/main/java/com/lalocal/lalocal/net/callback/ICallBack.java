@@ -12,6 +12,8 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
@@ -61,7 +63,6 @@ import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
-import com.lalocal.lalocal.util.AppLog;
 
 import java.util.List;
 
@@ -340,7 +341,7 @@ public abstract class ICallBack {
     public void onLiveHomeArea(LiveHomeAreaResp liveHomeAreaResp) {
     }
     //历史回放详情
-    public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+    public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
     }
     public void onGetChannelRecord(ChannelRecord record){
 
@@ -465,4 +466,7 @@ public abstract class ICallBack {
     }
 
     public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {}
+
+    public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
+    }
 }
