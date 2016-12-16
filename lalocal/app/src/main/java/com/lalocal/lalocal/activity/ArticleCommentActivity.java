@@ -2,17 +2,20 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomXRecyclerView;
+import com.lalocal.lalocal.view.adapter.ArticleCommentListAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,6 +32,8 @@ public class ArticleCommentActivity extends BaseActivity {
 
     // 内容加载器
     private ContentLoader mContentLoader;
+    // 适配器
+    private ArticleCommentListAdapter mAdapter;
 
     // 文章id
     private String mArticleId;
@@ -45,6 +50,8 @@ public class ArticleCommentActivity extends BaseActivity {
         parseIntent();
         // 初始化ContentLoader
         initLoader();
+        // 初始化XRecyclerView
+        initXRecyclerView();
     }
 
     /**
@@ -70,6 +77,36 @@ public class ArticleCommentActivity extends BaseActivity {
         mContentLoader.setCallBack(new MyCallBack());
         // 请求
         mContentLoader.getArticleComments(mArticleId, 1);
+    }
+
+    /**
+     * 初始化XRecyclerView
+     */
+    private void initXRecyclerView() {
+        // 初始化适配器
+        mAdapter = new ArticleCommentListAdapter(this);
+        // 实例化布局管理器
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        // 添加布局管理器
+        xrvArticleComments.setLayoutManager(layoutManager);
+        // 设置可下拉刷新
+        xrvArticleComments.setPullRefreshEnabled(true);
+        // 设置可加载更多
+        xrvArticleComments.setLoadingMoreEnabled(true);
+        // 设置适配器
+        xrvArticleComments.setAdapter(mAdapter);
+        // 设置监听事件
+        xrvArticleComments.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                xrvArticleComments.refreshComplete();
+            }
+
+            @Override
+            public void onLoadMore() {
+                xrvArticleComments.loadMoreComplete();
+            }
+        });
     }
 
     private class MyCallBack extends ICallBack {

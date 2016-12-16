@@ -37,13 +37,14 @@ public class CategoryAdapter extends RecyclerView.Adapter {
 
     private RecyclerView mRecyclerView;
 
-    public CategoryAdapter(Context context, List<CategoryBean> categoryList, MyOnItemClickListener listener, RecyclerView recyclerView) {
+    public CategoryAdapter(Context context, List<CategoryBean> categoryList, MyOnItemClickListener listener, RecyclerView recyclerView, int selected) {
         mContext = context;
         mListener = listener;
         mRecyclerView = recyclerView;
-        AppLog.i("nlxf", "recyclerview is " + (mRecyclerView == null ? "null" : "not null"));
+        mSelected = selected;
+        AppLog.i("sls", "recyclerview is " + (mRecyclerView == null ? "null" : "not null"));
 
-        AppLog.i("lsck", "CategoryAdapter :listener is " + (listener == null ? "null" : "not null"));
+        AppLog.i("sls", "CategoryAdapter :listener is " + (listener == null ? "null" : "not null"));
 
         if (categoryList != null && categoryList.size() > 0) {
             mCategoryList.clear();
@@ -65,6 +66,7 @@ public class CategoryAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // 获取分类bean
         CategoryBean categoryBean = mCategoryList.get(position);
+        AppLog.i("sls", "onBindView " + mSelected);
         // 判断当前分类是否选中
         boolean isSelected = (position == mSelected ? true : false);
         AppLog.i("sls", "onBindViewHolder " + mSelected + "; isSelected " + isSelected);
@@ -79,6 +81,7 @@ public class CategoryAdapter extends RecyclerView.Adapter {
      */
     public void setSelected(int selected) {
         mSelected = selected;
+        this.notifyDataSetChanged();
         AppLog.i("sls", "Mselected is " + mSelected);
     }
 

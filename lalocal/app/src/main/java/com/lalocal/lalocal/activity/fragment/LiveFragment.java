@@ -107,8 +107,6 @@ public class LiveFragment extends BaseFragment {
     private boolean isLoadingMore = false;
     // 判断是否刷新我的关注
     private boolean isSyncAttention = false;
-    // 判断是否在切换分类
-    private boolean isSwitchCate = false;
     // 当前分页页码
     private int mCurPageNum = 1;
 
@@ -124,14 +122,8 @@ public class LiveFragment extends BaseFragment {
     // 当前分类id
     private int mCategoryId = Constants.CATEGORY_HOT_LIVE;
 
-    // 分类点击事件
-    private OnCategoryItemClickListener mListener;
-
     // 标记分类栏所在的列表下标
     private int mCategoryIndex = 2;
-
-    // 不同category下的数据列表
-    private List<ChannelIndexTotalResult> mResults = new ArrayList<>();
 
     private View mRootView;
 
@@ -565,6 +557,7 @@ public class LiveFragment extends BaseFragment {
         public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {
             super.onGetChannelIndexTotal(result, dateTime);
 
+            AppLog.i("sls", "enter onGetChannelIndexTotal");
             if (isSyncAttention) {
                 isSyncAttention = false;
                 // 获取我的关注
@@ -689,6 +682,7 @@ public class LiveFragment extends BaseFragment {
                 if (historyListBean != null) {
                     mPlaybackList.addAll(historyListBean.getRows());
                 }
+                AppLog.i("sls", "onGetChannelIndexTotal aflter data got");
                 setAdapter(REFRESH_ALL);
             }
         }
@@ -705,14 +699,12 @@ public class LiveFragment extends BaseFragment {
         syncCategoryIndex();
 
         if (mAdapter == null) {
-            mListener = new OnCategoryItemClickListener();
+            OnCategoryItemClickListener listener = new OnCategoryItemClickListener();
             // 初始化适配器，此时mLivingList和mPlaybackList数据为空
-            mAdapter = new HomeLiveAdapter(getActivity(), mAdList, mAttention, mCategoryList, mLivingList,
-                    mPlaybackList, mListener, mRvTopCategory);
+            mAdapter = new HomeLiveAdapter(getActivity(), mAdList, mAttention, mCategoryList, mSelCategory, mLivingList,
+                    mPlaybackList, listener, mRvTopCategory);
             // 刷新数据
             mXrvLive.setAdapter(mAdapter);
-            // 配置顶部目录适配器
-            setCategoryAdapter();
         } else {
             switch (refreshType) {
                 case REFRESH_MY_ATTENTION:
@@ -733,29 +725,32 @@ public class LiveFragment extends BaseFragment {
                     setAdapter(INITIAL);
                     break;
                 case REFRESH_LIVE:
+                    AppLog.i("sls", "REFRESH_LIVE");
                     // 刷新直播和回放列表
                     mAdapter.refreshLive(mLivingList, mPlaybackList);
-                    // 配置顶部目录适配器
-                    setCategoryAdapter();
+                    AppLog.i("sls", "after refresh live");
                     break;
                 case REFRESH_ALL:
                     // 刷新直播回放列表
-                    mAdapter.refreshAll(mAdList, mAttention, mCategoryList, mLivingList,
+                    mAdapter.refreshAll(mAdList, mAttention, mCategoryList, mSelCategory, mLivingList,
                             mPlaybackList);
-                    // 配置顶部目录适配器
-                    setCategoryAdapter();
                     break;
             }
         }
+
+        // 配置顶部目录适配器
+        setCategoryAdapter();
     }
 
     /**
      * 设置目录适配器
      */
     private void setCategoryAdapter() {
+
         if (mCateAdapter == null) {
+            OnCategoryItemClickListener itemClickListener = new OnCategoryItemClickListener();
             // 初始化分类适配器
-            mCateAdapter = new CategoryAdapter(getActivity(), mCategoryList, mListener, mRvTopCategory);
+            mCateAdapter = new CategoryAdapter(getActivity(), mCategoryList, itemClickListener, mRvTopCategory, mSelCategory);
             // 初始化布局管理器
             LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
             // 设置为横向
@@ -765,6 +760,7 @@ public class LiveFragment extends BaseFragment {
             // 设置适配器
             mRvTopCategory.setAdapter(mCateAdapter);
         } else {
+            AppLog.i("sls", "else setSelected");
             mCateAdapter.setSelected(mSelCategory);
         }
     }
@@ -797,11 +793,8 @@ public class LiveFragment extends BaseFragment {
                 mSelCategory = position;
                 // 加载分页重置为1
                 mCurPageNum = 1;
-
-                mAdapter.getCateAdapter().setSelected(mSelCategory);
                 // 获取数据
                 getChannelIndexTotal(mCurPageNum, mCategoryId);
-
             }
         }
     }
