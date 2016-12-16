@@ -14,19 +14,22 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.RePlyActivity;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.entertainment.adapter.PlayBackReviewAdapter;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewRowsBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
+import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
+import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
+import com.lalocal.lalocal.view.SharePopupWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,14 +83,18 @@ public class PlayBackActivity extends BaseActivity {
     private ContentLoader contentLoader;
     private int pageNumber;
     private int userId;
+    private boolean praiseFlag;
+    private Object praiseId;
+    private SpecialShareVOBean shareVO;
+    private int praiseNum;
+    private int shareNum;
+    private int commentNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.play_back_new_activity);
         ButterKnife.bind(this);
-        ActivityManager.removePlayBackCurrent();
-        ActivityManager.addPlayBackActivity(this);
         contentLoader = new ContentLoader(this);
         MyCallBack myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
@@ -105,7 +112,7 @@ public class PlayBackActivity extends BaseActivity {
             AppLog.i("TAG", "获取评论内容:" + stringExtra);
         }
     }
-
+    boolean isAttentions;
     private void initXRecyclerView() {
         final CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
         layoutManager.setOrientation(CustomLinearLayoutManager.VERTICAL);
@@ -145,22 +152,56 @@ public class PlayBackActivity extends BaseActivity {
                 intent.putExtra(KeyParams.REPLY_TITLE, "编辑评论");
                 startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
             }
+
+            @Override
+            public void attentionBtnClick(boolean isAttention, TextView textView) {
+                    contentLoader.getAddAttention(String.valueOf(userId));
+                    textView.setText("已关注");
+                    textView.setBackgroundResource(R.drawable.play_back_info);
+                    textView.setCompoundDrawables(null,null,null,null);
+            }
         });
     }
 
-    @OnClick({R.id.back_btn, R.id.enter_playback_layout, R.id.reply_write_iv})
+    @OnClick({R.id.back_btn, R.id.enter_playback_layout, R.id.reply_write_iv,R.id.play_back_bottom_table_collect_layout,R.id.play_back_bottom_table_reply_layout,R.id.play_back_bottom_table_transmit_layout,R.id.play_back_bottom_table_like_layout})
     public void clickBtn(View view) {
+        Intent intent=null;
         switch (view.getId()) {
             case R.id.back_btn:
                 finish();
                 break;
             case R.id.enter_playback_layout:
                 // TODO 视频回放
+                intent = new Intent(PlayBackActivity.this, PlayBackNewActivity.class);
+                intent.putExtra("id",intentId);
+                startActivity(intent);
+                finish();
                 break;
             case R.id.reply_write_iv:
-                Intent intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
+                intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
                 intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
                 startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                break;
+            case R.id.play_back_bottom_table_collect_layout:
+                if(praiseFlag&&praiseId != null){//取消
+                    contentLoader.cancelParises(praiseId, Integer.parseInt(intentId));//取消赞
+                }else{//点赞
+                    contentLoader.specialPraise(Integer.parseInt(intentId),20);
+                }
+                break;
+            case R.id.play_back_bottom_table_reply_layout:
+               intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
+                intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
+                startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                break;
+            case R.id.play_back_bottom_table_transmit_layout:
+                if(shareVO!=null){
+                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this,shareVO);
+                    shareActivity.show();
+                }
+                break;
+            case R.id.play_back_bottom_table_like_layout:
+
                 break;
 
         }
@@ -191,14 +232,66 @@ public class PlayBackActivity extends BaseActivity {
     List<PlayBackReviewRowsBean> allRows = new ArrayList<>();
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
+            super.onLiveCancelAttention(liveCancelAttention);
+            if(liveCancelAttention.getReturnCode()==0){
+
+            }
+        }
+
+        @Override
+        public void onInputPariseResult(PariseResult pariseResult) {//点赞结果
+            super.onInputPariseResult(pariseResult);
+            if (pariseResult.getReturnCode() == 0) {
+                praiseId = pariseResult.getResult();
+                praiseFlag = true;
+
+                praiseNum = praiseNum + 1;
+                playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
+                playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
+
+            }
+
+        }
+
+        @Override
+        public void onPariseResult(PariseResult pariseResult) {//取消赞返回结果
+            super.onPariseResult(pariseResult);
+            if (pariseResult.getReturnCode() == 0) {
+                praiseFlag = false;
+                praiseNum = praiseNum - 1;
+                playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
+                playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
+
+            }
+        }
+
         @Override
         public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
             if (liveRowsBean != null) {
                 String photo = liveRowsBean.getPhoto();
-                int praiseNum = liveRowsBean.getPraiseNum();
-                int shareNum = liveRowsBean.getShareNum();
+                praiseNum = liveRowsBean.getPraiseNum();
+                shareNum = liveRowsBean.getShareNum();
+                commentNum = liveRowsBean.getCommentNum();
                 userId = liveRowsBean.getUser().getId();
+                shareVO = liveRowsBean.getShareVO();
+                playBackBottomTableReplyCount.setText(String.valueOf(commentNum));
+                playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
+                praiseFlag = liveRowsBean.isPraiseFlag();
+                praiseId = liveRowsBean.getPraiseId();
+                if(liveRowsBean.isPraiseFlag()){
+                    playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                    playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
+                    playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
+                }else{
+                    playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
+                    playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
+                }
                 if (photo != null) {
                     DrawableUtils.loadingImg(PlayBackActivity.this, videoCover, QiniuUtils.centerCrop(photo, DensityUtil.getWindowWidth(PlayBackActivity.this), DensityUtil.dip2px(PlayBackActivity.this, 258)));
                 }
@@ -206,8 +299,9 @@ public class PlayBackActivity extends BaseActivity {
                 if (reviewRefresh) {
                     xRecyclerView.refreshComplete();
                 }
-                contentLoader.getLiveUserInfo(String.valueOf(userId));
                 playBackReviewAdapter.setRefreshVideoInfo(liveRowsBean);
+                contentLoader.getLiveUserInfo(String.valueOf(userId));
+
             }
         }
 

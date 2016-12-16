@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -106,13 +106,26 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     videoInfoHolder.playBackTitle.setText(liveRowsBean.getTitle());
                 }
                 videoInfoHolder.playBackAttentionMaster.setText(isAttention == true ? "已关注" : "关注");
-                GradientDrawable bgShape = (GradientDrawable) videoInfoHolder.playBackAttentionMaster.getBackground();
                 if (isAttention) {
-                    //  bgShape.getPaint().setColor(mContext.getResources().getColor(R.color.color_60b3));
+                    videoInfoHolder.playBackAttentionMaster.setBackgroundResource(R.drawable.play_back_info);
                     videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(null, null, null, null);
                 } else {
-                    //   bgShape.getPaint().setColor(mContext.getResources().getColor(R.color.color_ffaa2a));
-                    videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(mContext.getResources().getDrawable(R.drawable.live_attention_dialog_attention_bg), null, null, null);
+                    videoInfoHolder.playBackAttentionMaster.setBackgroundResource(R.drawable.play_back_info_un_attention_bg);
+                    Drawable drawable = mContext.getResources().getDrawable(R.drawable.add);
+                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                    videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(drawable, null, null, null);
+                }
+                if(!isAttention){
+                    isAttention=true;
+                    videoInfoHolder.playBackAttentionMaster.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            if(onReviewItemClickListener!=null){
+                                onReviewItemClickListener.attentionBtnClick(isAttention,videoInfoHolder.playBackAttentionMaster);
+                            }
+                        }
+                    });
                 }
                 videoInfoHolder.playBackLocation.setText(liveRowsBean.getAddress());
                 videoInfoHolder.playNum.setText(liveRowsBean.getReadNum() + "次播放");
@@ -287,6 +300,7 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
 
     public interface OnReviewItemClickListener {
         void itemClick();
+        void attentionBtnClick(boolean isAttention,TextView textView);
     }
 
     public void setOnReviewItemClickListener(OnReviewItemClickListener onReviewItemClickListener) {

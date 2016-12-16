@@ -12,6 +12,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.model.AreaItem;
@@ -468,5 +469,9 @@ public abstract class ICallBack {
     public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {}
 
     public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
+    }
+
+    public void onPlayBackMsgDetails(PlayBackMsgResultBean msgResultBean) {
+
     }
 }
