@@ -778,4 +778,16 @@ public class AppConfig {
         AppLog.i("fghd", "getChannelIndexTotlal url is " + url);
         return url;
     }
+
+    /**
+     * 获取文章评论
+     * @param articleId 文章编号
+     * @param pageNum 页码，分页加载
+     * @return
+     */
+    public static String getArticleComments(String articleId, String pageNum) {
+        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1&pageSize=10&pageNumber=" + pageNum;
+        AppLog.i("articleComments", "the url is " + url);
+        return url;
+    }
 }

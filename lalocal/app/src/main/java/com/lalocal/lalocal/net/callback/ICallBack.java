@@ -465,4 +465,6 @@ public abstract class ICallBack {
     }
 
     public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {}
+
+    public void onGetArticleComments(String json) {}
 }

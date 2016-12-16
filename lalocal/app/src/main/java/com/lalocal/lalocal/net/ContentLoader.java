@@ -1577,6 +1577,21 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
+    /**
+     * 获取文章评论列表
+     * @param articleId
+     * @param pageNum
+     */
+    public void getArticleComments(int articleId, int pageNum)  {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ARTICLE_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(
+                String.valueOf(articleId), String.valueOf(pageNum)), response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -2206,6 +2221,9 @@ public class ContentLoader {
                         break;
                     case RequestCode.GET_CHANNEL_INDEX_TOTAL:
                         responseChannelIndexTotal(json);
+                        break;
+                    case RequestCode.GET_ARTICLE_COMMENTS:
+                        responseArticleComments(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -3239,6 +3257,14 @@ public class ContentLoader {
             AppLog.i("rfs", "接口 11 ");
         }
 
+        /**
+         * 相应文章评论列表
+         * @param json
+         */
+        private void responseArticleComments(String json) {
+            callBack.onGetArticleComments(json);
+        }
+
         @Override
         public void onDialogClickListener() {
             Intent intent = new Intent(context, LRegister1Activity.class);
@@ -3733,6 +3759,7 @@ public class ContentLoader {
         int GET_DAILY_RECOMMENDATIONS = 305;
         int GET_CHANNEL_REPORT = 306;
         int GET_CHANNEL_INDEX_TOTAL = 307;
+        int GET_ARTICLE_COMMENTS = 308;
     }
 
 }

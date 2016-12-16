@@ -112,9 +112,7 @@
             android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity" />
-        <activity android:name=".activity.ArticleTestAct" >
-
-        </activity>
+        <activity android:name=".activity.ArticleTestAct"></activity>
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -124,9 +122,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".live.entertainment.activity.TestActivity">
-
-        </activity>
+        <activity android:name=".live.entertainment.activity.TestActivity"></activity>
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -140,12 +136,12 @@
             android:name="UMENG_MESSAGE_SECRET"
             android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
         <!-- //lalocal-debug -->
-         <!--<meta-data-->
-         <!--android:name="UMENG_APPKEY"-->
-         <!--android:value="5806d2df67e58ef11a000e36" />-->
-         <!--<meta-data-->
-         <!--android:name="UMENG_MESSAGE_SECRET"-->
-         <!--android:value="9b462862fd10e9e8872745ec67df7718"/>-->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_APPKEY" -->
+        <!-- android:value="5806d2df67e58ef11a000e36" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="UMENG_MESSAGE_SECRET" -->
+        <!-- android:value="9b462862fd10e9e8872745ec67df7718"/> -->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -267,13 +263,13 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-         <meta-data
-         android:name="com.netease.nim.appKey"
-         android:value="4cbe3856032ad3755da23525e596405f" />
+        <meta-data
+            android:name="com.netease.nim.appKey"
+            android:value="4cbe3856032ad3755da23525e596405f" />
         <!-- lalocal-debug -->
-        <!--<meta-data-->
-            <!--android:name="com.netease.nim.appKey"-->
-            <!--android:value="efc9614a32336704ec2577f2129929fb" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.netease.nim.appKey" -->
+        <!-- android:value="efc9614a32336704ec2577f2129929fb" /> -->
         <!-- 声明云信后台服务 -->
         <service
             android:name="com.netease.nimlib.service.NimService"
@@ -305,7 +301,7 @@
             android:name=".live.entertainment.activity.LiveActivity"
             android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode = "adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".live.entertainment.activity.LiveHomePageActivity" />
         <activity
             android:name=".live.entertainment.activity.LiveAttentionOrFansActivity"
@@ -325,14 +321,16 @@
         <activity android:name=".activity.PersonalIntroActivity" />
         <activity android:name=".activity.MyLiveActivity" />
         <activity android:name=".activity.LiveDetailActivity" />
-        <activity android:name=".activity.AttentionActivity"/>
+        <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
-        <activity android:name=".live.entertainment.activity.PlayBackActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".live.entertainment.activity.PlayBackActivity"
+            android:screenOrientation="portrait" />
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
+
         <activity android:name=".live.entertainment.activity.ReportActivity" />
         <activity android:name=".activity.MyArticleActivity" />
         <activity android:name=".me.LLoginActivity" />
@@ -346,8 +344,7 @@
         <activity android:name=".me.LPasswordForget1Activity" />
         <activity android:name=".me.LPasswordModifyActivity" />
         <activity android:name=".me.AccountSecurityActivity" />
-        <activity android:name=".live.entertainment.activity.LiveLocationActivity"></activity>
-
+        <activity android:name=".live.entertainment.activity.LiveLocationActivity" />
         <activity android:name=".me.PhoneBindActivity" />
         <activity android:name=".activity.CmbPayActivity" />
         <activity
@@ -357,11 +354,13 @@
         <service
             android:name="cmb.pb.cmbsafe.CmbService"
             android:exported="false" />
+
         <activity android:name=".me.MyMessageActivity" />
         <activity android:name=".me.TargetWebActivity" />
-        <activity android:name=".activity.GlobalSearchActivity"/>
-        <activity android:name=".activity.DestinationActivity"/>
-        <activity android:name=".test.TestGlobalSearchActivity"/>
+        <activity android:name=".activity.GlobalSearchActivity" />
+        <activity android:name=".activity.DestinationActivity" />
+        <activity android:name=".test.TestGlobalSearchActivity" />
+        <activity android:name=".activity.ArticleCommentActivity"></activity>
     </application>
 
 </manifest>
