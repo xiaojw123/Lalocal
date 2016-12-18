@@ -27,11 +27,11 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     // 列表控件
     private RecyclerView mRecyclerView;
-    // 声明分类适配器
-    private CategoryAdapter mAdapter;
     // 外部分类列表控件
     private RecyclerView mRvOutside;
-
+    // 分类栏适配器
+    private  CategoryAdapter mAdapter;
+    // 列表控件滚动的位置
     private int mScrollDistance = 0;
 
     public CategoryViewHolder(Context context, View itemView, RecyclerView rvOutside) {
@@ -51,14 +51,6 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
         // 同步里外两个recyclerview的滑动
         syncScroll(mRecyclerView, mRvOutside);
-    }
-
-    /**
-     * 返回CategoryAdapter
-     * @return
-     */
-    public CategoryAdapter getCateAdapter() {
-        return mAdapter;
     }
 
     /**
@@ -98,8 +90,8 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
      * 初始化数据
      * @param categoryList
      */
-    public void initData(List<CategoryBean> categoryList, CategoryAdapter.MyOnItemClickListener listener) {
-        AppLog.i("lsck", "CategorViewHolder: initData listener is " + (listener == null ? "null" : "not null"));
+    public void initData(List<CategoryBean> categoryList, int selected, CategoryAdapter.MyOnItemClickListener listener) {
+        AppLog.i("sls", "CategorViewHolder: initData listener is " + (listener == null ? "null" : "not null"));
         // 判断列表数据是否为空
         if (categoryList == null || categoryList.size() == 0) {
             return;
@@ -113,9 +105,14 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         // 添加分类列表
         mCategoryList.addAll(categoryList);
 
-        // 初始化适配器
-        mAdapter = new CategoryAdapter(mContext, mCategoryList, listener, mRecyclerView);
-        // 设置适配器
-        mRecyclerView.setAdapter(mAdapter);
+        if (mAdapter == null) {
+            // 初始化适配器
+            mAdapter = new CategoryAdapter(mContext, mCategoryList, listener, mRecyclerView, selected);
+            // 设置适配器
+            mRecyclerView.setAdapter(mAdapter);
+        } else {
+            // 刷新适配器
+            mAdapter.setSelected(selected);
+        }
     }
 }

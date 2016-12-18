@@ -474,4 +474,8 @@ public abstract class ICallBack {
     public void onPlayBackMsgDetails(PlayBackMsgResultBean msgResultBean) {
 
     }
+
+
+    public void onGetArticleComments(String json) {}
+
 }

@@ -59,23 +59,25 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     private List<LiveRowsBean> mLivingList = new ArrayList<>();
     private List<LiveRowsBean> mPlaybackList = new ArrayList<>();
 
-    private CategoryAdapter mCateAdapter = null;
-
     // 分类项点击事件
     private CategoryAdapter.MyOnItemClickListener mCategoryItemListener;
 
     private RecyclerView mRvTopCategory;
 
+    // 分类栏选中状态
+    private int mCateSelected = 0;
+
     // 分类栏Viewholder
     private RecyclerView.ViewHolder mCategoryHolder;
 
     public HomeLiveAdapter(Context context, List<RecommendAdResultBean> adList, LiveUserBean attention,
-                           List<CategoryBean> categoryList, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList,
+                           List<CategoryBean> categoryList, int cateSelected, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList,
                            CategoryAdapter.MyOnItemClickListener categoryItemListener, RecyclerView rvTopCategory) {
         AppLog.i("lsck", "listener is " + (categoryItemListener == null ? "null" : "not null"));
         this.mContext = context;
         this.mAttentionUser = attention;
         this.mRvTopCategory = rvTopCategory;
+        this.mCateSelected = cateSelected;
 
         if (adList != null && adList.size() > 0) {
             this.mAdList = adList;
@@ -128,6 +130,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      * @param playbackList
      */
     public void refreshLive(List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
+        AppLog.i("sls", "refreshLive");
         this.mLivingList = livingList;
         this.mPlaybackList = playbackList;
         this.notifyDataSetChanged();
@@ -142,12 +145,13 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      * @param playbackList
      */
     public void refreshAll(List<RecommendAdResultBean> adList, LiveUserBean attention, List<CategoryBean> categoryList,
-                           List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
+                           int cateSelected, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
         this.mAdList = adList;
         this.mAttentionUser = attention;
         this.mCategoryList = categoryList;
         this.mLivingList = livingList;
         this.mPlaybackList = playbackList;
+        this.mCateSelected = cateSelected;
         this.notifyDataSetChanged();
     }
 
@@ -165,6 +169,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 holder = new AttentionViewHolder(mContext, view);
                 break;
             case CATEGORY:
+                AppLog.i("sls", "CATEGORY ONcREATE");
                 // 保存分类栏，防止其中的RecyclerView的滑动距离未保存
                 if (mCategoryHolder == null) {
                     view = LayoutInflater.from(mContext).inflate(R.layout.live_categories, parent, false);
@@ -192,7 +197,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 ((AttentionViewHolder) holder).initData(mAttentionUser);
                 break;
             case CATEGORY:
-                ((CategoryViewHolder) holder).initData(mCategoryList, mCategoryItemListener);
+                AppLog.i("sls", "CAETGORY onBIndV");
+                ((CategoryViewHolder) holder).initData(mCategoryList, mCateSelected, mCategoryItemListener);
                 break;
             case LIVING_ITEM:
                 int livingIndex = getIndex(position);
@@ -205,13 +211,6 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         }
     }
 
-    public CategoryAdapter getCateAdapter() {
-        if (mCategoryHolder != null) {
-            return ((CategoryViewHolder) mCategoryHolder).getCateAdapter();
-        }
-        return null;
-    }
-
     @Override
     public int getItemCount() {
         int preCount = getPreCount();
@@ -219,28 +218,35 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     }
 
     public int getIndex(int position) {
-//        int index = position;
-//        if (mAttentionUser == null) {
-//            if (index >= mLivingList.size()) {
-//                index -= mLivingList.size();
-//            }
-//        } else {
-//            if (index > 0) {
-//                index--;
-//            }
-//            if (index >= mLivingList.size()) {
-//                index -= mLivingList.size();
-//            }
-//        }
         int index = position;
         int preCount = getPreCount();
         if (preCount <= index) {
             index -= preCount;
             if (index >= mLivingList.size()) {
                 index -= mLivingList.size();
+                // 以重复加载最后一项的缺陷弥补崩溃
+                if (index >= mPlaybackList.size()) {
+                    return mPlaybackList.size() - 1;
+                }
             }
+            return index;
         }
-        return index;
+        return 0;
+    }
+
+    /**
+     * 获取直播首页非直播、回放的item数量（即：广告、我的关注、分类栏）
+     * @return
+     */
+    private int getPreCount() {
+        int preCount = 1;
+        if (mAdList.size() > 0) {
+            preCount++;
+        }
+        if (mAttentionUser != null) {
+            preCount++;
+        }
+        return preCount;
     }
 
     /**
@@ -268,165 +274,18 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             mTypes.add(LIVING_ITEM);
         }
 
+        // 防止崩溃信息的发生
+        if (position >= mTypes.size() + mPlaybackList.size()) {
+            return -1;
+        }
+
         if (position >= mTypes.size()) {
             return PLAYBACK_ITEM;
         } else {
             return mTypes.get(position);
         }
 
-//        int userId = UserHelper.getUserId(mContext);
-//        if (userId == -1) {
-//            if (position < mLivingList.size()) {
-//                return LIVING_ITEM;
-//            } else {
-//                return PLAYBACK_ITEM;
-//            }
-//        } else {
-//            if (position == 0) {
-//                return MY_ATTENTION;
-//            } else if (position <= mLivingList.size()) {
-//                return LIVING_ITEM;
-//            } else {
-//                return PLAYBACK_ITEM;
-//            }
-//        }
-
-//        if (position == 0) {
-//            if (mAdList.size() > 0) {
-//                return ADVERTISEMENT;
-//            } else if (userId != -1) {
-//                return MY_ATTENTION;
-//            } else {
-//                return CATEGORY;
-//            }
-//        } else if (position == 1) {
-//            int type = getItemViewType(0);
-//            if (type == ADVERTISEMENT) {
-//                if (userId == -1) {
-//                    return CATEGORY;
-//                } else {
-//                    return MY_ATTENTION;
-//                }
-//            } else if (type == MY_ATTENTION) {
-//                return CATEGORY;
-//            } else if (mLivingList.size() > 0) {
-//                return LIVING_ITEM;
-//            } else {
-//                return PLAYBACK_ITEM;
-//            }
-//        } else if (position == 2) {
-//            int type = getItemViewType(1);
-//            if (type == MY_ATTENTION) {
-//                return CATEGORY;
-//            } else if (type == CATEGORY) {
-//                if (mLivingList.size() > 0) {
-//                    return LIVING_ITEM;
-//                } else {
-//                    return PLAYBACK_ITEM;
-//                }
-//            } else if (type == LIVING_ITEM) {
-//                if (mLivingList.size() > 1) {
-//                    return LIVING_ITEM;
-//                } else {
-//                    return PLAYBACK_ITEM;
-//                }
-//            } else {
-//                return PLAYBACK_ITEM;
-//            }
-//        } else { // if (position >= 3)
-//            int preCount = getPreCount();
-//
-//            if (position < (preCount + mLivingList.size())) {
-//                return LIVING_ITEM;
-//            } else {
-//                return PLAYBACK_ITEM;
-//            }
-//        }
     }
-
-    /**
-     * 获取直播首页非直播、回放的item数量（即：广告、我的关注、分类栏）
-     * @return
-     */
-    private int getPreCount() {
-        int preCount = 1;
-        if (mAdList.size() > 0) {
-            preCount++;
-        }
-        if (mAttentionUser != null) {
-            preCount++;
-        }
-        return preCount;
-    }
-
-    /**
-     * 我的关注视图容器
-     */
-//    private class AttentionViewHolder extends RecyclerView.ViewHolder {
-//
-//        // 我的关注
-//        private CardView cvAttention;
-//        // 用户layout
-//        private RelativeLayout layoutUser;
-//        // 我的关注头像
-//        private ImageView imgAvatar;
-//
-//        public AttentionViewHolder(View itemView) {
-//            super(itemView);
-//
-//            // -关联控件
-//            imgAvatar = (ImageView) itemView.findViewById(R.id.img_avatar);
-//            layoutUser = (RelativeLayout) itemView.findViewById(R.id.layout_attention_user);
-//            cvAttention = (CardView) itemView.findViewById(R.id.card_view_attention);
-//
-//        }
-//
-//        /**
-//         * 初始化数据
-//         *
-//         * @param bean
-//         */
-//        public void initData(final LiveUserBean bean) {
-//            if (bean != null) {
-//                layoutUser.setVisibility(View.VISIBLE);
-//                // 获取头像
-//                String avatar = bean.getAvatar();
-//                // 如果接口有头像链接
-//                if (!TextUtils.isEmpty(avatar)) {
-//                    Glide.with(mContext)
-//                            .load(avatar)
-//                            .placeholder(R.drawable.androidloading)
-//                            .into(imgAvatar);
-//                }
-//            } else {
-//                layoutUser.setVisibility(View.INVISIBLE);
-//            }
-//
-//            // 我的关注点击事件
-//            cvAttention.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    // 获取用户id
-//                    int userId = UserHelper.getUserId(mContext);
-//                    // 如果用户为登录状态
-//                    if (userId != -1) {
-//                        // 获取接口的时间key
-//                        String baseGetKey = "live_index_timestamp_get_";
-//                        // 查看消息的时间key
-//                        String baseScanKey = "live_index_timestamp_scan_";
-//                        // 获取最近一次拉取接口的时间戳
-//                        String dateTime = SPCUtils.getString(mContext, baseGetKey + String.valueOf(userId));
-//                        // 将拉取接口的时间戳存到最近一次查看消息的时间戳键值对里
-//                        SPCUtils.put(mContext, baseScanKey + String.valueOf(userId), dateTime);
-//                    }
-//
-//                    // 跳转我的关注页面查看更多关注
-//                    mContext.startActivity(new Intent(mContext, AttentionActivity.class));
-//                }
-//            });
-//        }
-//
-//    }
 
     /**
      * 回放、正在直播共用同一个ViewHolder
