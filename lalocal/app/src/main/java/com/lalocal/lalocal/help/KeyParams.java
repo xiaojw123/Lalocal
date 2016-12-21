@@ -10,6 +10,8 @@ public interface KeyParams {
     public static final  String DATE_TIME="dateTime";
     public static final  String TARGE_URL="target_url";
     public static final  String TARGE_TITLE="target_title";
+    public static final  String TARGET_ID = "target_id";
+    public static final String TARGET_TYPE = "target_type";
     public static  final String UID_PARAMS="social_uid_params";
     public static final  String SOCIAL_PARAMS="social_params";
     public static final  String USER="user";
@@ -56,6 +58,10 @@ public interface KeyParams {
 
     public static final  String REPLY_CONTENT="reply_content";
     public static final String REPLY_TITLE="reply_title";
+    public static final String REPLY_TYPE = "reply_type";
+    public static final String REPLY_PARENT_ID = "reply_parent_id";
     public static final int REPLY_RESULTCODE=300;
     public static final int REPLY_REQUESTCODE=301;
+    public static final int REPLY_TYPE_NEW = 400; // 发起评论
+    public static final int REPLY_TYPE_REPLY = 401; // 回复评论
 }
