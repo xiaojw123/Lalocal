@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.me;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -7,12 +8,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.AppConfig;
+import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.CustomTitleView;
 
 /**
@@ -38,8 +39,8 @@ public class TargetWebActivity extends BaseActivity {
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setUseWideViewPort(false);
-        webView.loadUrl(getTargeUrl());
-        webView.setWebViewClient(new TargetWebviewClient());
+        webView.loadUrl(AppConfig.getH5Url(this,getTargeUrl()));
+        webView.setWebViewClient(new TargetWebviewClient(this));
     }
 
     private void cloaseVideo() {
@@ -53,7 +54,11 @@ public class TargetWebActivity extends BaseActivity {
         cloaseVideo();
     }
 
-    class TargetWebviewClient extends WebViewClient {
+    class TargetWebviewClient extends CommonWebClient {
+        public TargetWebviewClient(Context context) {
+            super(context);
+        }
+
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {
             super.onPageStarted(view, url, favicon);
@@ -66,12 +71,12 @@ public class TargetWebActivity extends BaseActivity {
             hidenLoadingAnimation();
         }
 
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            AppLog.print("url____" + url);
-            view.loadUrl(url);
-            return true;
-        }
+//        @Override
+//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+//            AppLog.print("url____" + url);
+//            view.loadUrl(url);
+//            return true;
+//        }
     }
 
     @Override

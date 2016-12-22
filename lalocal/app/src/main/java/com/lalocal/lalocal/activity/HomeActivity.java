@@ -26,7 +26,6 @@ import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.VersionResult;
-import com.lalocal.lalocal.test.TestGlobalSearchActivity;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
 import com.wevey.selector.dialog.DialogOnClickListener;
@@ -120,12 +119,14 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showFragment(FRAGMENT_ME);
                 break;
             case R.id.home_tab_search:
-//                Intent intent = new Intent(this, GlobalSearchActivity.class);
-//                startActivity(intent);
-                Intent intent = new Intent(this, TestGlobalSearchActivity.class);
-                startActivity(intent);
+                gotoSearch();
                 break;
         }
+    }
+
+    private void gotoSearch() {
+        Intent intent = new Intent(this, GlobalSearchActivity.class);
+        startActivity(intent);
     }
 
 

@@ -72,8 +72,16 @@
                     style="@style/DesAreaNavMenuStye"
                     android:layout_marginLeft="@dimen/des_area_nav_menu2_left"
                     android:text="@string/freewarker"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    />
 
+                <TextView
+                    android:id="@+id/des_areanav_menu_pickup"
+                    style="@style/DesAreaNavMenuStye"
+                    android:layout_marginLeft="@dimen/des_area_nav_menu2_left"
+                    android:text="@string/pickup"
+                    android:visibility="gone"
+                    />
             </LinearLayout>
 
             <TextView

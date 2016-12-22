@@ -115,6 +115,7 @@
     <string name="strategy">攻略</string>
     <string name="packagetour">精品游</string>
     <string name="freewarker">自由行</string>
+    <string name="pickup">接送机</string>
     <string name="lacoalplay">当地玩乐</string>
     <string name="route_overview">行程概览</string>
     <string name="buy">购买</string>
@@ -381,5 +382,13 @@
     <string name="g_search_result_empt">该标签下没有搜索结果，看看其他标签或换一个关键词试试</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notification">通知</string>
+    <string name="comment_and_praise">赞与评论</string>
+    <string name="private_message">私信</string>
+    <string name="ignore_no_read">忽略未读</string>
+    <string name="attent_im">私信的（需关注）</string>
+    <string name="lalocal_helper">乐可小助手</string>
+    <string name="lalocal_helper_tip">欢迎加入乐可大家庭, 我是你永远的朋友（因为你删不掉我，有任何产品上的问题都可以问我，在下边选择你要问的类型↓ ↓ ↓</string>
+
 
 </resources>

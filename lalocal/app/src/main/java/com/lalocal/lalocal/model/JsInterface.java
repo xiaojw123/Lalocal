@@ -19,6 +19,8 @@ public class JsInterface {
     public JsInterface(Context context){
         mContext=context;
     }
+
+
     @JavascriptInterface
     public void postMessage(String callback, String message) {
         AppLog.print("postMessage@param  callback:" + callback + "\nmessage:" + message);

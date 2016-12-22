@@ -112,6 +112,7 @@ public class MyApplication extends Application {
         NIMClient.init(this, getLoginInfo(), getOptions());
         AppLog.print("init NIMClient");
         if (inMainProcess()) {
+            // TODO: 2016/12/15 im
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
             // init tools
@@ -189,10 +190,10 @@ public class MyApplication extends Application {
                                     TargetPage.gotoArticleDetail(context, targetId, true);
                                     break;
                                 case TargetType.PRODUCT://产品
-                                    TargetPage.gotoProductDetail(context, targetId, Integer.parseInt(targetType), true);
+                                    TargetPage.gotoProductDetail(context, targetId, targetType, true);
                                     break;
                                 case TargetType.ROUTE://线路
-                                    TargetPage.gotoRouteDetail(context, Integer.parseInt(targetId), true);
+                                    TargetPage.gotoRouteDetail(context,targetId, true);
                                     break;
                                 case TargetType.SPECIAL://专题
                                     TargetPage.gotoSpecialDetail(context, targetId, true);

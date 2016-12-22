@@ -10,7 +10,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
  */
 
 public class BaseFragment extends Fragment {
-    ContentLoader mContentloader;
+  public   ContentLoader mContentloader;
     public void setLoaderCallBack(ICallBack callBack) {
         if (mContentloader == null) {
             mContentloader = new ContentLoader(getActivity());

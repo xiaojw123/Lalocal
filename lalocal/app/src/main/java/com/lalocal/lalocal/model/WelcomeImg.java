@@ -18,8 +18,8 @@ public class WelcomeImg {
     private int second;
     private List<String> futureList;
     private String targetUrl;
-    private int targetType=-2;
-    private int targetId;
+    private String targetType;
+    private String targetId;
     private String targetName;
 
     public String getTargetName() {
@@ -38,19 +38,19 @@ public class WelcomeImg {
         this.targetUrl = targetUrl;
     }
 
-    public int getTargetType() {
+    public String getTargetType() {
         return targetType;
     }
 
-    public void setTargetType(int targetType) {
+    public void setTargetType(String targetType) {
         this.targetType = targetType;
     }
 
-    public int getTargetId() {
+    public String getTargetId() {
         return targetId;
     }
 
-    public void setTargetId(int targetId) {
+    public void setTargetId(String targetId) {
         this.targetId = targetId;
     }
 

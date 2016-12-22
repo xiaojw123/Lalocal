@@ -16,11 +16,12 @@ public  abstract  class BaseRecyclerAdapter extends RecyclerView.Adapter{
     }
 
 
-    class EmptViewHolder extends RecyclerView.ViewHolder{
+  public   class EmptViewHolder extends RecyclerView.ViewHolder{
         public EmptViewHolder(View itemView) {
             super(itemView);
         }
     }
+
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {

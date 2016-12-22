@@ -23,6 +23,7 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.im.ChatActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.LiveArticleVPAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
@@ -92,6 +93,8 @@ public class LiveHomePageActivity extends BaseActivity {
     ScrollView nestedScrollView;
     @BindView(R.id.homepage_head)
     CustomTitleView homepageHead;
+    @BindView(R.id.master_im)
+    TextView masterIm;
     @BindView(R.id.master_attention)
     TextView masterAttention;
     @BindView(R.id.master_attention_layout)
@@ -185,9 +188,12 @@ public class LiveHomePageActivity extends BaseActivity {
 //        }
     }
 
-    @OnClick({R.id.userpage_atten_tab, R.id.userpage_fans_tab, R.id.master_attention, R.id.master_attention_layout, R.id.tv_article, R.id.tv_live})
+    @OnClick({R.id.master_im, R.id.userpage_atten_tab, R.id.userpage_fans_tab, R.id.master_attention, R.id.master_attention_layout, R.id.tv_article, R.id.tv_live})
     public void clickButton(View view) {
         switch (view.getId()) {
+            case R.id.master_im:
+                ChatActivity.start(this,result.getAccId(),result.getNickName(),result.getAvatar(),0);
+                break;
             case R.id.userpage_atten_tab:
                 Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);
                 intent.putExtra("liveType", "0");
@@ -398,15 +404,23 @@ public class LiveHomePageActivity extends BaseActivity {
                 double parseDouble = Double.parseDouble(String.valueOf(statusa));
                 int status = (int) parseDouble;
                 if (status == 0) {
+                    masterAttention.setEnabled(true);
+                    masterIm.setEnabled(false);
                     masterAttention.setText("关注");
-                    masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
+//                    masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
 
                 } else if (status == 1) {
+                    AppLog.print("status:1");
+                    masterAttention.setEnabled(false);
+                    masterIm.setEnabled(true);
                     masterAttention.setText("已关注");
-                    masterAttention.setTextColor(Color.BLACK);
+//                    masterAttention.setTextColor(Color.BLACK);
                 } else if (status == 2) {
+                    AppLog.print("status:2");
+                    masterAttention.setEnabled(false);
+                    masterIm.setEnabled(true);
                     masterAttention.setText("已相互关注");
-                    masterAttention.setTextColor(Color.BLACK);
+//                    masterAttention.setTextColor(Color.BLACK);
                 }
             } else {
                 // Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
@@ -422,15 +436,19 @@ public class LiveHomePageActivity extends BaseActivity {
                 if (status == 1) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已关注");
+                    masterAttention.setEnabled(false);
+                    masterIm.setEnabled(true);
                     fansNum = fansNum + 1;
                     userpageFansNum.setText(String.valueOf(fansNum));
-                    masterAttention.setTextColor(Color.BLACK);
+//                    masterAttention.setTextColor(Color.BLACK);
                 } else if (status == 2) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已相互关注");
+                    masterAttention.setEnabled(false);
+                    masterIm.setEnabled(true);
                     fansNum = fansNum + 1;
                     userpageFansNum.setText(String.valueOf(fansNum));
-                    masterAttention.setTextColor(Color.BLACK);
+//                    masterAttention.setTextColor(Color.BLACK);
                 }
             }
         }
@@ -442,8 +460,10 @@ public class LiveHomePageActivity extends BaseActivity {
             if (liveCancelAttention.getReturnCode() == 0) {
                 Toast.makeText(LiveHomePageActivity.this, "已取消关注", Toast.LENGTH_SHORT).show();
                 masterAttention.setText("关注");
-                masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
-                fansNum=fansNum - 1;
+                masterAttention.setEnabled(true);
+                masterIm.setEnabled(false);
+//                masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
+                fansNum = fansNum - 1;
                 userpageFansNum.setText(String.valueOf(fansNum));
             }
         }

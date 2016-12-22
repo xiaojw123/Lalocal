@@ -21,6 +21,7 @@ import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.TargetPage;
+import com.lalocal.lalocal.help.TargetType;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.permission.MPermission;
@@ -120,41 +121,43 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
                 Object tagObj = welImg.getTag();
                 if (tagObj != null) {
                     WelcomeImg welImg = (WelcomeImg) tagObj;
-                    int targetType = welImg.getTargetType();
-                    switch (targetType) {
-                        case -1://链接
-                            removeUpdateTime();
-                            TargetPage.gotoWebDetail(this, welImg.getTargetUrl(), welImg.getTargetName(), false);
-                            break;
-                        case 0://用户
-                            removeUpdateTime();
-                            TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()), false);
-                            break;
-                        case 1://文章
-                        case 13://资讯
-                            removeUpdateTime();
-                            TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()), false);
-                            break;
-                        case 2://产品
-                            removeUpdateTime();
-                            TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType, false);
-                            break;
-                        case 9://线路
-                            removeUpdateTime();
-                            TargetPage.gotoRouteDetail(this, welImg.getTargetId(), false);
-                            break;
-                        case 10://专题
-                            removeUpdateTime();
-                            TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()), false);
-                            break;
-                        case 15://直播-视频
-                            removeUpdateTime();
-                            TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()), false);
-                            break;
-                        case 20://回放
-                            removeUpdateTime();
-                            TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()), false);
-                            break;
+                    String targetType = welImg.getTargetType();
+                    if (!TextUtils.isEmpty(targetType)) {
+                        switch (targetType) {
+                            case TargetType.URL://链接
+                                removeUpdateTime();
+                                TargetPage.gotoWebDetail(this, welImg.getTargetUrl(), welImg.getTargetName(), false);
+                                break;
+                            case TargetType.USER://用户
+                                removeUpdateTime();
+                                TargetPage.gotoUser(this, String.valueOf(welImg.getTargetId()), false);
+                                break;
+                            case TargetType.ARTICLE://文章
+                            case TargetType.INFORMATION://资讯
+                                removeUpdateTime();
+                                TargetPage.gotoArticleDetail(this, String.valueOf(welImg.getTargetId()), false);
+                                break;
+                            case TargetType.PRODUCT://产品
+                                removeUpdateTime();
+                                TargetPage.gotoProductDetail(this, String.valueOf(welImg.getTargetId()), targetType, false);
+                                break;
+                            case TargetType.ROUTE://线路
+                                removeUpdateTime();
+                                TargetPage.gotoRouteDetail(this, welImg.getTargetId(), false);
+                                break;
+                            case TargetType.SPECIAL://专题
+                                removeUpdateTime();
+                                TargetPage.gotoSpecialDetail(this, String.valueOf(welImg.getTargetId()), false);
+                                break;
+                            case TargetType.LIVE_VIDEO://直播-视频
+                                removeUpdateTime();
+                                TargetPage.gotoLive(this, String.valueOf(welImg.getTargetId()), false);
+                                break;
+                            case TargetType.LIVE_PALY_BACK://回放
+                                removeUpdateTime();
+                                TargetPage.gotoPlayBack(this, String.valueOf(welImg.getTargetId()), false);
+                                break;
+                        }
                     }
                 }
 

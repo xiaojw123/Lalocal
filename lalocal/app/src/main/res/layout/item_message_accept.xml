@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dimen_size_5_dp"
+    android:paddingLeft="@dimen/dimen_size_15_dp"
+    >
+
+    <TextView
+        android:id="@+id/item_message_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        />
+
+    <com.lalocal.lalocal.view.ShapeTextView
+        android:id="@+id/item_message_accept_tv"
+        android:layout_gravity="left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/color_190f00"
+        app:corner_radius="@dimen/dimen_size_6_dp"
+        android:textSize="@dimen/text_size_16_sp"
+        app:solid_color="@color/white"
+        android:paddingTop="@dimen/dimen_size_11_dp"
+        android:paddingBottom="@dimen/dimen_size_11_dp"
+        android:paddingLeft="@dimen/dimen_size_12_dp"
+        android:paddingRight="@dimen/dimen_size_10_dp"
+        android:maxWidth="@dimen/item_message_text_max_width"
+        />
+
+    <com.lalocal.lalocal.view.RoundImageView
+        android:id="@+id/item_message_accept_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:rectRoundRadius="@dimen/dimen_size_6_dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="left"
+        app:type="rounded_rect"
+        android:visibility="gone"
+        />
+
+
+
+
+
+</FrameLayout>

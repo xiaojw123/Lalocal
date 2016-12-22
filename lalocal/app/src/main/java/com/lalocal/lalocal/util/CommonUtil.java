@@ -1,19 +1,25 @@
 package com.lalocal.lalocal.util;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.im.LalocalHelperActivity;
 import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
@@ -36,25 +42,49 @@ public class CommonUtil {
     public static int RESULT_DIALOG = 0;
     public static int REMIND_BACK = 0;
 
-    public  static  String LONGITUDE="";
-    public static   String LATITUDE="";
+    public static String LONGITUDE = "";
+    public static String LATITUDE = "";
 
-    public static  void startCustomService(final Context context){
-        CustomDialog dialog=new CustomDialog(context);
-        dialog.setTitle("提示");
-        dialog.setMessage("是否要联系客服");
-        dialog.setSurceBtn("确认", new CustomDialog.CustomDialogListener() {
-            @Override
-            public void onDialogClickListener() {
-                callPhone(context, AppConfig.FOREIGEN_PHONE);
-            }
-        });
-        dialog.setCancelBtn("取消",null);
-        dialog.show();
 
+    public static String getFileUri(String path) {
+
+        return "file:///" + path;
     }
 
-    public static  void callPhone(Context context,String phone) {
+
+    @SuppressLint("NewApi")
+    public static boolean checkDeviceHasNavigationBar(Context activity) {
+
+        //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
+        boolean hasMenuKey = ViewConfiguration.get(activity)
+                .hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap
+                .deviceHasKey(KeyEvent.KEYCODE_BACK);
+
+        if (!hasMenuKey && !hasBackKey) {
+            // 做任何你需要做的,这个设备有一个导航栏
+            return true;
+        }
+        return false;
+    }
+
+
+    public static int getNavigationBarHeight(Context context) {
+        int height = 0;
+        if (checkDeviceHasNavigationBar(context)) {
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            height = resources.getDimensionPixelSize(resourceId);
+        }
+        return height;
+    }
+
+
+    public static void startCustomService(Context context) {
+        LalocalHelperActivity.start(context);
+    }
+
+    public static void callPhone(Context context, String phone) {
         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
@@ -187,13 +217,14 @@ public class CommonUtil {
     }
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener) {
-
         CustomDialog dialog = new CustomDialog(context);
         dialog.setCancelable(false);
         dialog.setTitle(context.getResources().getString(R.string.prompt));
         dialog.setNeturalBtn(context.getResources().getString(R.string.sure), listener);
         dialog.setMessage(message);
         dialog.show();
+
+
     }
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener, ProgressButton pb) {
@@ -213,7 +244,6 @@ public class CommonUtil {
         Toast toast = Toast.makeText(context, message, duration);
         toast.show();
     }
-
 
 
     /**
