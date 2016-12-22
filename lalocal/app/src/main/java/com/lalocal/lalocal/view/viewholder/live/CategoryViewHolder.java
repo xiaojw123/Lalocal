@@ -36,17 +36,17 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     public CategoryViewHolder(Context context, View itemView, RecyclerView rvOutside) {
         super(itemView);
 
+        AppLog.i("scs", "CategoryViewHolder");
+        AppLog.i("dsp", "CategoryViewHolder");
         mContext = context;
         mRvOutside = rvOutside;
 
-        itemView.setFocusable(false);
         // 关联控件
         mRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_category);
         // 初始化RecyclerView
         LinearLayoutManager layoutManager =  new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.setFocusable(false);
 
         // 同步里外两个recyclerview的滑动
         syncScroll(mRecyclerView, mRvOutside);
@@ -58,6 +58,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
      * @param rv2
      */
     private void syncScroll(final RecyclerView rv1, final RecyclerView rv2) {
+        AppLog.i("scs", "syncScroll");
         rv1.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -65,6 +66,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 //                    rv2.scrollBy(dx, dy);
                     int scroll1 = rv1.getScrollY();
                     mScrollDistance = scroll1;
+                    AppLog.i("scs", "inside " + mScrollDistance);
                     int scroll2 = rv2.getScrollY();
                     rv2.scrollBy(dx, scroll1 - scroll2);
                 }
@@ -79,6 +81,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
                     int scroll1 = rv1.getScrollY();
                     int scroll2 = rv2.getScrollY();
                     mScrollDistance = scroll2;
+                    AppLog.i("scs", "outside " + mScrollDistance);
                     rv1.scrollBy(dx, scroll2 - scroll1);
                 }
             }
@@ -90,14 +93,18 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
      * @param categoryList
      */
     public void initData(List<CategoryBean> categoryList, int selected, CategoryAdapter.MyOnItemClickListener listener) {
+        AppLog.i("sct", "caviho initData " + selected);
         AppLog.i("sls", "CategorViewHolder: initData listener is " + (listener == null ? "null" : "not null"));
+        AppLog.i("dsp", "CategoryViewHolder initData");
         // 判断列表数据是否为空
         if (categoryList == null || categoryList.size() == 0) {
+            AppLog.i("dps", "categoryList null");
             return;
         }
 
-        LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-        manager.scrollToPositionWithOffset(0, mScrollDistance);
+        AppLog.i("dps", "categoryList not null");
+//        LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+//        manager.scrollToPositionWithOffset(0, mScrollDistance);
 
         // 清空列表
         mCategoryList.clear();
@@ -105,12 +112,26 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         mCategoryList.addAll(categoryList);
 
         if (mAdapter == null) {
+            AppLog.i("dps", "categoryAdapter null categoryList.size is " + categoryList.size());
+            AppLog.i("sct", "mAdapter null " + selected);
             // 初始化适配器
             mAdapter = new CategoryAdapter(mContext, mCategoryList, listener, mRecyclerView, selected);
             // 设置适配器
             mRecyclerView.setAdapter(mAdapter);
         } else {
+            AppLog.i("dps", "categoryAdapter not null categoryList.size is " + categoryList.size());
+            AppLog.i("sct", "mAdapter not null " + selected);
             // 刷新适配器
+            mAdapter.setSelected(selected);
+        }
+    }
+
+    /**
+     * 设置选中的分类栏
+     * @param selected
+     */
+    public void setSelected(int selected) {
+        if (mAdapter != null) {
             mAdapter.setSelected(selected);
         }
     }

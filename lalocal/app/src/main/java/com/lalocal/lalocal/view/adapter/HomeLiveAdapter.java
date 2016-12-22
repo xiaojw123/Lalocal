@@ -123,6 +123,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     /**
      * 刷新直播和回放
+     *
      * @param livingList
      * @param playbackList
      */
@@ -135,6 +136,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     /**
      * 刷新所有
+     *
      * @param adList
      * @param attention
      * @param categoryList
@@ -143,6 +145,11 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      */
     public void refreshAll(List<RecommendAdResultBean> adList, LiveUserBean attention, List<CategoryBean> categoryList,
                            int cateSelected, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
+
+        AppLog.i("dsp", "refreshAll()");
+        AppLog.i("cnt", "ad " + adList.size() + "; attention " + (attention == null ? "null" : "not null")
+                + "; cate " + categoryList.size() + "; cateSel " + cateSelected + "; living " + livingList.size() + "; playBack " + playbackList.size());
+        AppLog.i("sct", "refreshAll " + cateSelected);
         this.mAdList = adList;
         this.mAttentionUser = attention;
         this.mCategoryList = categoryList;
@@ -152,6 +159,16 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         this.notifyDataSetChanged();
     }
 
+    /**
+     * 设置选中项
+     * @param selected
+     */
+    public void setSelected(int selected) {
+        if (mCategoryHolder != null) {
+            ((CategoryViewHolder)mCategoryHolder).setSelected(selected);
+        }
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder = null;
@@ -159,16 +176,18 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         switch (viewType) {
             case ADVERTISEMENT:
                 view = LayoutInflater.from(mContext).inflate(R.layout.live_advertisement_slider_item, parent, false);
-                holder = new ADViewHolder(mContext, view, (XRecyclerView)parent);
+                holder = new ADViewHolder(mContext, view, (XRecyclerView) parent);
                 break;
             case MY_ATTENTION:
                 view = LayoutInflater.from(mContext).inflate(R.layout.live_my_attention_item, parent, false);
                 holder = new AttentionViewHolder(mContext, view);
                 break;
             case CATEGORY:
-                AppLog.i("sls", "CATEGORY ONcREATE");
+                AppLog.i("dsp", "CATGEORY onCreate");
                 // 保存分类栏，防止其中的RecyclerView的滑动距离未保存
                 if (mCategoryHolder == null) {
+                    AppLog.i("dsp", "mCategoryHolder not null");
+                    AppLog.i("sls", "CATEGORY ONcREATE");
                     view = LayoutInflater.from(mContext).inflate(R.layout.live_categories, parent, false);
                     mCategoryHolder = new CategoryViewHolder(mContext, view, mRvTopCategory);
                     mCategoryHolder.setIsRecyclable(false);
@@ -188,13 +207,14 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (getItemViewType(position)) {
             case ADVERTISEMENT:
-                ((ADViewHolder)holder).initData(mAdList);
+                ((ADViewHolder) holder).initData(mAdList);
                 break;
             case MY_ATTENTION:
                 ((AttentionViewHolder) holder).initData(mAttentionUser);
                 break;
             case CATEGORY:
-                AppLog.i("sls", "CAETGORY onBIndV");
+                AppLog.i("sct", "CATEGORY " + mCateSelected);
+                AppLog.i("dsp", "CAETGORY onBind mCategoryListlsiz");
                 ((CategoryViewHolder) holder).initData(mCategoryList, mCateSelected, mCategoryItemListener);
                 break;
             case LIVING_ITEM:
@@ -203,6 +223,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 break;
             case PLAYBACK_ITEM:
                 int playbackIndex = getIndex(position);
+                AppLog.i("cnt", "position " + position + "; index " + playbackIndex);
                 ((LiveViewHolder) holder).initData(mPlaybackList.get(playbackIndex));
                 break;
         }
@@ -211,7 +232,9 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         int preCount = getPreCount();
-        return preCount + mLivingList.size() + mPlaybackList.size();
+        int count = preCount + mLivingList.size() + mPlaybackList.size();
+        AppLog.i("cnt", "count " + count);
+        return count;
     }
 
     public int getIndex(int position) {
@@ -233,6 +256,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     /**
      * 获取直播首页非直播、回放的item数量（即：广告、我的关注、分类栏）
+     *
      * @return
      */
     private int getPreCount() {
@@ -240,7 +264,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         if (mAdList.size() > 0) {
             preCount++;
         }
-        if (mAttentionUser != null) {
+        if (UserHelper.isLogined(mContext)) {
             preCount++;
         }
         return preCount;
@@ -248,6 +272,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
     /**
      * 根据对应的bean和list是否有数据对item的类型进行判断
+     *
      * @param position
      * @return
      */
@@ -340,11 +365,12 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             final int id = bean.getId();
 
             LiveUserBean user = bean.getUser();
-            String avatar =null;
-            String nickname=null;
-            if(user!=null){
-                avatar = user.getAvatar();
-                nickname = user.getNickName();
+
+            String avatar = null;
+            String nickname = null;
+            if (user != null) {
+                user.getAvatar();
+                user.getNickName();
             }
 
             if (TextUtils.isEmpty(title)) {

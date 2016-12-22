@@ -36,7 +36,9 @@ public class CategoryAdapter extends RecyclerView.Adapter {
 
     private RecyclerView mRecyclerView;
 
-    public CategoryAdapter(Context context, List<CategoryBean> categoryList, MyOnItemClickListener listener, RecyclerView recyclerView, int selected) {
+    public CategoryAdapter(Context context, List<CategoryBean> categoryList, MyOnItemClickListener listener,
+                           RecyclerView recyclerView, int selected) {
+        AppLog.i("dsp", "CategoryAdapter constructor ");
         mContext = context;
         mListener = listener;
         mRecyclerView = recyclerView;
@@ -46,13 +48,17 @@ public class CategoryAdapter extends RecyclerView.Adapter {
         AppLog.i("sls", "CategoryAdapter :listener is " + (listener == null ? "null" : "not null"));
 
         if (categoryList != null && categoryList.size() > 0) {
+            AppLog.i("dsp", "category list is " + categoryList.size());
             mCategoryList.clear();
             mCategoryList.addAll(categoryList);
+        } else {
+            AppLog.i("dsp", "category list is null");
         }
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        AppLog.i("dsp", "CategoryAdapter onCreateViewHolder ");
         // 加载item视图
         View view = LayoutInflater.from(mContext).inflate(R.layout.live_category_item, parent, false);
         // 初始化视图容器
@@ -63,25 +69,29 @@ public class CategoryAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        AppLog.i("dsp", "onBIndViewHolder");
         // 获取分类bean
         CategoryBean categoryBean = mCategoryList.get(position);
-        AppLog.i("sls", "onBindView " + mSelected);
+        AppLog.i("dsp", "CategoryBean null");
+        AppLog.i("sct", "onBindView " + mSelected);
         // 判断当前分类是否选中
         boolean isSelected = (position == mSelected ? true : false);
         AppLog.i("sls", "onBindViewHolder " + mSelected + "; isSelected " + isSelected);
         // 初始化数据
-        ((MyViewHolder)holder).initData(categoryBean, isSelected);
+        ((MyViewHolder) holder).initData(categoryBean, isSelected);
     }
 
     /**
      * 设置选中的分类item
      * 注意：在MyViewHolder initData之前调用
+     *
      * @param selected
      */
     public void setSelected(int selected) {
+        AppLog.i("sct", "setSelected " + selected);
         mSelected = selected;
         this.notifyDataSetChanged();
-        AppLog.i("sls", "Mselected is " + mSelected);
+        AppLog.i("dsp", "CategoryAdapter setSelected is " + mSelected);
     }
 
     @Override
@@ -133,16 +143,19 @@ public class CategoryAdapter extends RecyclerView.Adapter {
 
         /**
          * 初始化数据
+         *
          * @param category
          * @param isSelected
          */
         public void initData(CategoryBean category, boolean isSelected) {
             AppLog.i("sls", "isSelec data is " + isSelected);
+            AppLog.i("dsp", "CategoryViewHolder initData()");
             // 获取分类的id
             int id = category.getId();
 
             // 如果是“热门直播”（接口未给出热门直播的数据，因此 将其id标记为-1）
             if (id == Constants.CATEGORY_HOT_LIVE) {
+                AppLog.i("dsp", "Constants.CATEGORY_HOT_LIVE");
                 // 如果选中
                 if (isSelected) {
                     mImgCategory.setImageResource(R.drawable.category_hot_live_sel);
@@ -152,11 +165,14 @@ public class CategoryAdapter extends RecyclerView.Adapter {
                 // 填充分类名称
                 mTvCategory.setText("热门直播");
             } else {
+                AppLog.i("dsp", "Constants.CATEGORY_HOT_LIVE else ");
                 String photo = "";
                 // 如果选中
                 if (isSelected) {
+                    AppLog.i("dsp", "isSelected");
                     photo = category.getPhoto();
                 } else { // 如果未选中
+                    AppLog.i("dsp", "isSelected else");
                     photo = category.getPrePhoto();
                 }
                 // 加载分类图片

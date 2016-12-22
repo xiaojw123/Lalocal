@@ -197,8 +197,14 @@ public class LiveFragment extends BaseFragment {
         // 设置回调接口
         mContentLoader.setCallBack(new MyCallBack());
 
-        // 获取直播首页数据
-        getChannelIndexTotal(1, mCategoryId);
+        // 选中的分类重置
+        mSelCategory = 0;
+        // 设置分类的id为热门直播
+        mCategoryId = Constants.CATEGORY_HOT_LIVE;
+        // 当前请求页为第一页
+        mCurPageNum = 1;
+        // 数据请求
+        getChannelIndexTotal(mCurPageNum, mCategoryId);
         // 获取每日推荐数据
         mContentLoader.getDailyRecommendations(Constants.OPEN_APP_TO_SCAN);
     }
@@ -248,7 +254,8 @@ public class LiveFragment extends BaseFragment {
                     mSelCategory = 0;
                     mCategoryId = Constants.CATEGORY_HOT_LIVE;
                     isRefresh = true;
-                    getChannelIndexTotal(1, mCategoryId);
+                    mCurPageNum = 1;
+                    getChannelIndexTotal(mCurPageNum, mCategoryId);
                 }
             }
 
@@ -294,13 +301,44 @@ public class LiveFragment extends BaseFragment {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
 
                 int position = layoutManager.findFirstVisibleItemPosition();
-                if (position > mCategoryIndex) {
-                    mRvTopCategory.setVisibility(View.VISIBLE);
+                AppLog.i("psn", "position i s " + position);
+                AppLog.i("psn", "category index is " + mCategoryIndex);
+                if (mCategoryIndex > 0) {
+                    if (position > mCategoryIndex) {
+                        mRvTopCategory.setVisibility(View.VISIBLE);
+                    } else {
+                        mRvTopCategory.setVisibility(View.GONE);
+                    }
                 } else {
-                    mRvTopCategory.setVisibility(View.GONE);
+                    int scrollY = getScollYDistance(mXrvLive);
+                    AppLog.i("psn", "scroll y = " + scrollY);
+                    if (scrollY <= DensityUtil.dip2px(getActivity(), 100)) {
+                        mRvTopCategory.setVisibility(View.GONE);
+                    } else {
+                        mRvTopCategory.setVisibility(View.VISIBLE);
+                    }
                 }
             }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
         });
+
+    }
+
+    private int getScollYDistance(XRecyclerView xRecyclerView) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) xRecyclerView.getLayoutManager();
+        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+        View firstVisiableChildView = layoutManager.findViewByPosition(firstVisibleItemPosition);
+        if (firstVisiableChildView != null) {
+            int itemHeight = firstVisiableChildView.getHeight();
+            return (firstVisibleItemPosition) * itemHeight - firstVisiableChildView.getTop();
+        } else {
+            return 0;
+        }
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -440,24 +478,6 @@ public class LiveFragment extends BaseFragment {
                 mXrvLive.refreshComplete();
             }
         }
-
-//        @Override
-//        public void onResponseFailed(String message, int requestCode) {
-//            super.onResponseFailed(message, requestCode);
-//
-//            isRefresh = false;
-//            isLoadingMore = false;
-//            mXrvLive.refreshComplete();
-//        }
-//
-//        @Override
-//        public void onResponseFailed(int returnCode, String message) {
-//            super.onResponseFailed(returnCode, message);
-//
-//            isRefresh = false;
-//            isLoadingMore = false;
-//            mXrvLive.refreshComplete();
-//        }
 
         @Override
         public void onGetDailyRecommend(RecommendationsBean bean) {
@@ -648,6 +668,7 @@ public class LiveFragment extends BaseFragment {
 //                mXrvLive.refreshComplete();
 
                 AppLog.i("fsa", "else");
+                AppLog.i("dsp", "else ");
                 // -刷新的时候去掉之前加载
                 isRefresh = false;
                 isLoadingMore = false;
@@ -730,15 +751,15 @@ public class LiveFragment extends BaseFragment {
                     AppLog.i("sls", "after refresh live");
                     break;
                 case REFRESH_ALL:
+                    AppLog.i("dsp", "REFRESH_ALL");
                     // 刷新直播回放列表
                     mAdapter.refreshAll(mAdList, mAttention, mCategoryList, mSelCategory, mLivingList,
                             mPlaybackList);
+                    // 配置顶部目录适配器
+                    setCategoryAdapter();
                     break;
             }
         }
-
-        // 配置顶部目录适配器
-        setCategoryAdapter();
     }
 
     /**
@@ -747,6 +768,7 @@ public class LiveFragment extends BaseFragment {
     private void setCategoryAdapter() {
 
         if (mCateAdapter == null) {
+            AppLog.i("dsp", "mCateAdapter null");
             OnCategoryItemClickListener itemClickListener = new OnCategoryItemClickListener();
             // 初始化分类适配器
             mCateAdapter = new CategoryAdapter(getActivity(), mCategoryList, itemClickListener, mRvTopCategory, mSelCategory);
@@ -759,6 +781,7 @@ public class LiveFragment extends BaseFragment {
             // 设置适配器
             mRvTopCategory.setAdapter(mCateAdapter);
         } else {
+            AppLog.i("dsp", "mCateAdapter not null");
             AppLog.i("sls", "else setSelected");
             mCateAdapter.setSelected(mSelCategory);
         }
@@ -784,16 +807,22 @@ public class LiveFragment extends BaseFragment {
         public void onItemClick(View view, int position) {
             if (mCategoryList.size() > 0) { //  && position != mSelCategory
 
+                AppLog.i("dsp", "position is " + position);
                 // 获取选中的分类
                 CategoryBean categoryBean = mCategoryList.get(position);
                 // 获取分类id
                 mCategoryId = categoryBean.getId();
                 // 得到选中的分类的下标
                 mSelCategory = position;
+                AppLog.i("slt", "positoin is " + position);
                 // 加载分页重置为1
                 mCurPageNum = 1;
                 // 获取数据
                 getChannelIndexTotal(mCurPageNum, mCategoryId);
+                // 设置选中的分类栏
+                if (mAdapter != null) {
+                    mAdapter.setSelected(mSelCategory);
+                }
             }
         }
     }

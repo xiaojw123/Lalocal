@@ -23,6 +23,8 @@ import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
+import com.lalocal.lalocal.model.CommentRowBean;
+import com.lalocal.lalocal.model.CommentOperateResp;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
@@ -475,7 +477,10 @@ public abstract class ICallBack {
 
     }
 
+    public void onGetArticleComments(List<CommentRowBean> commentList) {}
 
-    public void onGetArticleComments(String json) {}
+    public void onSendComment(CommentOperateResp commentOperateResp) {}
+
+    public void onDeleteComment(CommentOperateResp commentOperateResp) {}
 
 }

@@ -14,7 +14,9 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AttentionActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveUserBean;
+import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.SPCUtils;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 /**
  * Created by wangjie on 2016/12/14.
@@ -28,7 +30,7 @@ public class AttentionViewHolder extends RecyclerView.ViewHolder {
     // 用户layout
     private RelativeLayout layoutUser;
     // 我的关注头像
-    private ImageView imgAvatar;
+    private RoundedImageView imgAvatar;
     // 上下文
     private Context mContext;
 
@@ -40,10 +42,12 @@ public class AttentionViewHolder extends RecyclerView.ViewHolder {
         itemView.setFocusable(false);
 
         // -关联控件
-        imgAvatar = (ImageView) itemView.findViewById(R.id.img_avatar);
+        imgAvatar = (RoundedImageView) itemView.findViewById(R.id.img_avatar);
         layoutUser = (RelativeLayout) itemView.findViewById(R.id.layout_attention_user);
         cvAttention = (CardView) itemView.findViewById(R.id.card_view_attention);
 
+        // 设置圆形头像
+        imgAvatar.setCornerRadius(DensityUtil.dip2px(mContext, 60));
     }
 
     /**

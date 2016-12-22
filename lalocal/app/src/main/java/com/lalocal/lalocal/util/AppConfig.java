@@ -790,12 +790,31 @@ public class AppConfig {
     /**
      * 获取文章评论
      * @param articleId 文章编号
-     * @param pageNum 页码，分页加载
      * @return
      */
-    public static String getArticleComments(String articleId, String pageNum) {
-        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1&pageSize=10&pageNumber=" + pageNum;
+    public static String getArticleComments(int articleId) {
+//        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1&pageSize=10&pageNumber=" + pageNum;
+        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
         AppLog.i("articleComments", "the url is " + url);
+        return url;
+    }
+
+    /**
+     * 获取发表评论的url
+     * @return
+     */
+    public static String getSendingCommentsUrl() {
+        return baseUrl + "comments";
+    }
+
+    /**
+     * 获取删除评论的url
+     * @param commentId
+     * @return
+     */
+    public static String getDeletingCommentUrl(int commentId) {
+        String url = baseUrl + "comments/" + commentId;
+        AppLog.i("deleteComments", "url is " + url);
         return url;
     }
 }

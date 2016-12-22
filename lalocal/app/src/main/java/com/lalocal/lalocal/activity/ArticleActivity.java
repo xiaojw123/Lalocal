@@ -127,7 +127,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 //                Toast.makeText(mContext, "评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
 
                 Intent commentIntent = new Intent(ArticleActivity.this, ArticleCommentActivity.class);
-                commentIntent.putExtra(Constants.KEY_ARTICLE_ID, targetID);
+                commentIntent.putExtra(Constants.KEY_ARTICLE_ID, Integer.parseInt(targetID));
                 ArticleActivity.this.startActivity(commentIntent);
                 break;
             case R.id.article_btn_share:

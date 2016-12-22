@@ -51,6 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:text="快来发表第一条评论吧~"
+            android:textSize="@dimen/text_size_16_sp"
             android:visibility="gone"/>
 
         <com.lalocal.lalocal.view.CustomXRecyclerView
