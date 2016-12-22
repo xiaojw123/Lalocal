@@ -35,6 +35,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
@@ -1398,6 +1399,14 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+    public void getPlayBackMsg(String historyId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PLAY_BACK_MSG);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackMsg(historyId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
     //历史直播评论
     public  void getPlayBackLiveReview(String targetId,int targetType,int pageSize,int pageNumber){
         if (callBack != null) {
@@ -2314,6 +2323,9 @@ public class ContentLoader {
                     case RequestCode.PLAY_BACK_DETAILES:
                         responsePlayBack(jsonObj);
                         break;
+                    case RequestCode.PLAY_BACK_MSG:
+                        responsePlayBackMsg(json);
+                        break;
                     case RequestCode.SEND_COMMENTS:
                         responseSendingComments(json);
                         break;
@@ -3211,6 +3223,13 @@ public class ContentLoader {
             PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
             callBack.onPlayBackReviewDetails(reviewResultBean);
         }
+        //历史回放消息
+        private void responsePlayBackMsg(String json) {
+
+            PlayBackMsgResultBean msgResultBean = new Gson().fromJson(json, PlayBackMsgResultBean.class);
+            callBack.onPlayBackMsgDetails(msgResultBean);
+        }
+
 
         //临时禁言
         private void responseUserMute(String json) {
@@ -3407,6 +3426,7 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
+
 
 
 
@@ -3887,6 +3907,7 @@ public class ContentLoader {
         int USER_LEAVE_ROOM = 244;
         int VALIDATE_MSGS = 245;
         int PLAY_BACK_DETAILES=246;
+        int PLAY_BACK_MSG=247;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

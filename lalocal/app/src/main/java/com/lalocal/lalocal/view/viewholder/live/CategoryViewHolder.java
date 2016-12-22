@@ -9,7 +9,6 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.CategoryBean;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.CategoryAdapter;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         // 关联控件
         mRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_category);
         // 初始化RecyclerView
-        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+        LinearLayoutManager layoutManager =  new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
 

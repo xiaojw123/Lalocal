@@ -26,6 +26,5 @@
             android:layout_gravity="center_horizontal"
             android:textColor="@color/color_home_live_category_text"
             android:layout_marginTop="@dimen/dimen_size_6_dp"/>
-
     </LinearLayout>
 </RelativeLayout>

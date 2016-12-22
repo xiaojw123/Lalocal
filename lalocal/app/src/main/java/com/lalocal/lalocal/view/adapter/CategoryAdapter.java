@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,7 +135,6 @@ public class CategoryAdapter extends RecyclerView.Adapter {
             mTvCategory = (TextView) itemView.findViewById(R.id.tv_category);
             mLayoutClick = (LinearLayout) itemView.findViewById(R.id.layout_click);
             mLayoutClick.setOnClickListener(this);
-
             mContainer.setFocusable(false);
             mImgCategory.setFocusable(false);
             mTvCategory.setFocusable(false);
@@ -155,7 +153,7 @@ public class CategoryAdapter extends RecyclerView.Adapter {
             // 获取分类的id
             int id = category.getId();
 
-            // 如果是“热门直播”（接口未给出热门直播的数据，因此将其id标记为-1）
+            // 如果是“热门直播”（接口未给出热门直播的数据，因此 将其id标记为-1）
             if (id == Constants.CATEGORY_HOT_LIVE) {
                 AppLog.i("dsp", "Constants.CATEGORY_HOT_LIVE");
                 // 如果选中
@@ -193,9 +191,8 @@ public class CategoryAdapter extends RecyclerView.Adapter {
         public void onClick(View v) {
             if (mListener != null) {
                 int position = getAdapterPosition();
+                int size = getItemCount();
                 mListener.onItemClick(v, position);
-
-
             }
         }
     }

@@ -37,11 +37,10 @@ public class PlayBackPlayer extends RelativeLayout {
     private VideoPlayCallbackImpl mVideoPlayCallback;//回调函数
     private boolean isPlayerStatus;
     private View mProgressBarView;//加载中按钮
-    // private View mCloseBtnView;//关闭按钮
     private Uri mUri;//网络视频路径
 
     //是否自动隐藏控制栏
-    private boolean mAutoHideController = true;
+    private boolean mAutoHideController = false;
 
     private Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -68,63 +67,12 @@ public class PlayBackPlayer extends RelativeLayout {
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
                     showOrHideController();
-                  /*  if (!mVideoView.isPlaying()){
-                        return false;
-                    }
-                    float downX =  event.getRawX();
-                    touchLastX = downX;
-                    position = mVideoView.getCurrentPosition();
-                    touchPosition=position;
-                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);*/
+
                     break;
                 case MotionEvent.ACTION_MOVE:
-                  /*  Log.i("TAg", "ACTION_MOVE: "+touchPosition);
-                    float currentX =  event.getRawX();
-                    float currentY = event.getRawY();
-                    float deltaX = currentX - touchLastX;
-                    float deltaXAbs  =  Math.abs(deltaX);
-                    if (!mVideoView.isPlaying()){
-                        return false;
-                    }
-                    if (deltaXAbs>10){
-                        if (touchStatusView.getVisibility()!=View.VISIBLE){
-                            touchStatusView.setVisibility(View.VISIBLE);
-                        }
-                        touchLastX = currentX;
-                        if (deltaX > 1) {
-                            position += touchStep;
-                            if (position > duration) {
-                                position = duration;
-                            }
-                            touchPosition = position;
-                            touchStatusImg.setImageResource(R.drawable.ic_fast_forward_white_24dp);
-                            int[] time = getMinuteAndSecond(position);
-                            touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
-                        } else if (deltaX < -1) {
-                            position -= touchStep;
-                            if (position < 0) {
-                                position = 0;
-                            }
-                            touchPosition = position;
-                            touchStatusImg.setImageResource(R.drawable.ic_fast_rewind_white_24dp);
-                            int[] time = getMinuteAndSecond(position);
-                            touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
-                            mVideoView.seekTo(position);
-                        }
-                    }*/
+
                     break;
                 case MotionEvent.ACTION_UP:
-                   /* if (!mVideoView.isPlaying()){
-                        return false;
-                    }
-                    Log.i("TAg", "ACTION_UP: "+touchPosition);
-                    touchStatusView.setVisibility(View.GONE);
-                    if (touchPosition!=-1){
-                        mVideoView.seekTo(touchPosition);
-                        touchPosition = -1;
-                        Log.i("TAg", "ACTION_UP: "+touchPosition+"哈哈哈哈哈哈哈哈");
-
-                    }*/
                     break;
 
             }
@@ -176,14 +124,11 @@ public class PlayBackPlayer extends RelativeLayout {
             }
         }
 
-
-
         @Override
         public void onClickCollect(ImageView iv) {
             if(mVideoPlayCallback!=null){
                 mVideoPlayCallback.onClickCollect(iv);
             }
-
         }
 
         @Override
@@ -275,7 +220,9 @@ public class PlayBackPlayer extends RelativeLayout {
             mVideoView.pause();
             return getSeek();
         }else {
+            Log.i("TAF","播放器playerpauseds333333333");
             return 0;
+
         }
 
 
@@ -439,6 +386,9 @@ public class PlayBackPlayer extends RelativeLayout {
         int[] time = getMinuteAndSecond(duration);
         formatTotalTime = String.format("%02d:%02d", time[0], time[1]);
         mMediaController.setPlayProgressTxt(playTime, allTime);
+        mVideoPlayCallback.getprogressDuration(playTime);
+        Log.i("TAG","播放时间回调:"+playTime);
+
     }
 
     /**
@@ -449,7 +399,6 @@ public class PlayBackPlayer extends RelativeLayout {
         int playTime = mVideoView.getCurrentPosition();
         int loadProgress = mVideoView.getBufferPercentage();
         int progress = playTime * 100 / allTime;
-
         mMediaController.setProgressBar(progress, loadProgress);
     }
 

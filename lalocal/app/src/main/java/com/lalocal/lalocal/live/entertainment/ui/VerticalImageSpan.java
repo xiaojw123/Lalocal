@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -16,6 +17,9 @@ public class VerticalImageSpan extends ImageSpan {
         super(drawable);
     }
 
+    public VerticalImageSpan(Bitmap bitmap) {
+        super(bitmap);
+    }
     public int getSize(Paint paint, CharSequence text, int start, int end,
                        Paint.FontMetricsInt fontMetricsInt) {
         Drawable drawable = getDrawable();

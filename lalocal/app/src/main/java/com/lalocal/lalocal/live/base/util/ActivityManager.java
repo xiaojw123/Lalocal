@@ -3,7 +3,7 @@ package com.lalocal.lalocal.live.base.util;
 import android.app.Activity;
 
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
 
 import java.util.Stack;
 
@@ -23,11 +23,11 @@ public class ActivityManager {
         return appManager;
     }
 
-    private static Stack<PlayBackActivity> playBackActivityStack = new Stack<PlayBackActivity>();
+    private static Stack<PlayBackNewActivity> playBackActivityStack = new Stack<PlayBackNewActivity>();
     private static Stack<AudienceActivity> audienceActivityStack =new Stack<AudienceActivity>();
 
 
-    public static void addPlayBackActivity(PlayBackActivity activity) {
+    public static void addPlayBackActivity(PlayBackNewActivity activity) {
         playBackActivityStack.add(activity);
     }
 

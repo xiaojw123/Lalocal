@@ -19,4 +19,5 @@ public interface VideoPlayCallbackImpl {
     void  onClickBefore(ImageView view);
     void onClickNext(ImageView view);
     void showLoadingPage(boolean isShow);
+    void getprogressDuration(long duration);
 }

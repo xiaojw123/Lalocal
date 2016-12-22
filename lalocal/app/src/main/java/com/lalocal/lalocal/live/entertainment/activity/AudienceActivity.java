@@ -872,9 +872,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }catch (Exception e){
             e.printStackTrace();
         }
-
-
-
     }
 
 

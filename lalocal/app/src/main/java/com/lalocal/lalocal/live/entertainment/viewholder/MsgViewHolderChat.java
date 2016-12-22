@@ -1,8 +1,10 @@
 package com.lalocal.lalocal.live.entertainment.viewholder;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -25,6 +27,7 @@ import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -224,68 +227,41 @@ public class MsgViewHolderChat extends TViewHolder{
         setNameTextView(creatorAccount,itemContent,textColor,styles,null);
     }
 
-    private void textviewImageContent(final String text,final String textColor,final GiftBean messageToGiftBean,final TextView tv){
-        Drawable drawable =null;
-        switch (messageToGiftBean.getCode()){
-            case LiveConstant.ROSE:
-               drawable=context.getResources().getDrawable(R.drawable.gift_rose_48);
-            break;
-            case LiveConstant.GLASSES:
-                drawable=context.getResources().getDrawable(R.drawable.gift_glasses_48);
-             break;
-            case LiveConstant.PLAN:
-                drawable=context.getResources().getDrawable(R.drawable.gift_plane_48);
-                break;
-            case LiveConstant.FACE:
-                drawable=context.getResources().getDrawable(R.drawable.gift_face_48);
-                break;
-            case LiveConstant.TRAVELLINGCASE:
-                drawable=context.getResources().getDrawable(R.drawable.gift_travellingcase_48);
-                break;
-            case LiveConstant.STAR:
-                drawable=context.getResources().getDrawable(R.drawable.gift_start_48);
-                break;
-            case LiveConstant.FRUIT:
-                drawable=context.getResources().getDrawable(R.drawable.gift_fruit_48);
-                break;
-            case LiveConstant.WATER:
-                drawable=context.getResources().getDrawable(R.drawable.gift_water_48);
-                break;
-            case LiveConstant.SUN_CREAM:
-                drawable=context.getResources().getDrawable(R.drawable.gift_sun_cream_48);
-                break;
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void textviewImageContent(final String text, final String textColor, final GiftBean messageToGiftBean, final TextView tv){
+        try {
+            String[] textContent = text.split(",.,");
+            String nameText = textContent[0]+" ";
+            String contentText = " "+textContent[1];
+            String substring = nameText.substring(0, nameText.length() - 1);
+            String str=substring+contentText+"!";
+            int length = substring.length();
+            Bitmap bitmap = DrawableUtils.loadingBitMap(messageToGiftBean.getGiftImage());
+            int i = DensityUtil.dip2px(context, 60);
+            Bitmap small = DensityUtil.small(bitmap,i,i);
+            VerticalImageSpan span = new VerticalImageSpan(small);
+            final SpannableStringBuilder style=new SpannableStringBuilder(str);
+            style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv.setText(style);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        AppLog.i("TAG","礼物条目内容："+(drawable==null?"为空":"不为空")+text+"   ||||:"+messageToGiftBean.getGiftName());
-        int i = DensityUtil.dip2px(context, 25);
-        drawable.setBounds(0,0,i, i);
-        String[] textContent = text.split(",.,");
-        String nameText = textContent[0];
-        String contentText = textContent[1];
-        String substring = nameText.substring(0, nameText.length() - 1);
-        String str=substring+contentText+"!";
-        int length = substring.length();
-        VerticalImageSpan span= new VerticalImageSpan(drawable);
 
-        final SpannableStringBuilder style=new SpannableStringBuilder(str);
-        style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tv.setText(style);
     }
-
     private SpannableStringBuilder textviewSetContent(String text, String textColor) {
         String[] textContent = text.split(",.,");
-        String nameText = textContent[0];
-        String contentText = textContent[1];
+        String nameText = textContent[0] + " ";
+        String contentText = " " + textContent[1];
         String substring = nameText.substring(0, nameText.length() - 1);
-        String str=substring+contentText;
+        String str = substring + contentText;
         int length = substring.length();
-        SpannableStringBuilder style=new SpannableStringBuilder(str);
+        SpannableStringBuilder style = new SpannableStringBuilder(str);
         style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return  style;
+        style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length + 1, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return style;
     }
-
 
     public void setNameTextView(String creatorAccount,String itemContent,String textColor,String styles,GiftBean messageToGiftBean) {
         String contentItem=null;

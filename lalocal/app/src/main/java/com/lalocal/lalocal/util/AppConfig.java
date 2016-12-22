@@ -330,6 +330,10 @@ public class AppConfig {
     public static final String getPlayBackLiveDetails(int id) {
         return baseUrl + "channels/historys/" + id;
     }
+    //回放消息展示
+    public static final String getPlayBackMsg(String historyId){
+        return  baseUrl+"channels/historys/"+historyId+"/msgs";
+    }
     //历史直播评论  comments?targetId=5317&targetType=20&pageSize=10&pageNumber=1
     public  static final String getPlayBackReview(String targetId,int targetType,int pageSize,int pageNumber){
         return  baseUrl+"comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;

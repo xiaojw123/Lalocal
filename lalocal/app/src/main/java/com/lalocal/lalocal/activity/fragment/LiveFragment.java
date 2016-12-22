@@ -242,7 +242,6 @@ public class LiveFragment extends BaseFragment {
         mXrvLive.setPullRefreshEnabled(true);
         mXrvLive.setLoadingMoreEnabled(true);
         mXrvLive.setDefaultHeaderText("轻轻下拉刷新，用力下拉进入推荐");
-
         mBtnTakeLive.attachToRecyclerView(mXrvLive);
 
         mXrvLive.setLoadingListener(new XRecyclerView.LoadingListener() {

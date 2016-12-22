@@ -61,6 +61,13 @@ public class DrawableUtils {
 
   //  public static void displayAvatar
 
+    public static  Bitmap loadingBitMap(String url){
+        if (loader == null) {
+            loader = ImageLoader.getInstance();
+        }
+         return loader.loadImageSync(url);
+    }
+
     public static void loadingImg(Context context , final ImageView img, String url){
         if (TextUtils.isEmpty(url)) {
             img.setImageResource(DRAWABLE_NULL);
