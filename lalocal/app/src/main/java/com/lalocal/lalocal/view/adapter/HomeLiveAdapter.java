@@ -222,10 +222,12 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 break;
             case LIVING_ITEM:
                 int livingIndex = getIndex(position);
+                AppLog.i("ctg", "LIVING ITEM " + position + "/" + livingIndex);
                 ((LiveViewHolder) holder).initData(mLivingList.get(livingIndex));
                 break;
             case PLAYBACK_ITEM:
                 int playbackIndex = getIndex(position);
+                AppLog.i("ctg", "LIVING ITEM " + position + "/" + playbackIndex);
                 AppLog.i("cnt", "position " + position + "; index " + playbackIndex);
                 ((LiveViewHolder) holder).initData(mPlaybackList.get(playbackIndex));
                 break;
@@ -243,17 +245,26 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     public int getIndex(int position) {
         int index = position;
         int preCount = getPreCount();
+        AppLog.i("ctg", "postion " + position + "; preCount " + preCount);
+
         if (preCount <= index) {
+            AppLog.i("ctg", "1");
             index -= preCount;
+            AppLog.i("ctg", "2 - index " + index);
             if (index >= mLivingList.size()) {
+                AppLog.i("ctg", "3 - size " + mLivingList.size());
                 index -= mLivingList.size();
+                AppLog.i("ctg", "4 - index " + index);
                 // 以重复加载最后一项的缺陷弥补崩溃
                 if (index >= mPlaybackList.size()) {
+                    AppLog.i("ctg", "5 - size " + mPlaybackList.size());
                     return mPlaybackList.size() - 1;
                 }
+                AppLog.i("ctg", "6");
             }
             return index;
         }
+        AppLog.i("ctg", "7");
         return 0;
     }
 
@@ -295,7 +306,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             mTypes.add(MY_ATTENTION);
         }
         mTypes.add(CATEGORY);
-        if (mLivingList.size() > 0) {
+        for (int i = 0; i < mLivingList.size(); i++) {
             mTypes.add(LIVING_ITEM);
         }
 
