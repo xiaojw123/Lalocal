@@ -514,6 +514,7 @@ public class ReportActivity extends BaseActivity {
                     mCurUpload = 0;
                     // 将上传成功的图片列表传入数组
                     mPhotos = new String[mUploadSuccess.size()];
+                    mPhotos = (String[]) mUploadSuccess.toArray();
                     // 清空上传成功的列表
                     mUploadSuccess.clear();
                     // 将举报信息上传服务器
