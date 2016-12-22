@@ -45,7 +45,7 @@
         android:id="@+id/reply_content"
         android:layout_width="match_parent"
         android:layout_height="@dimen/live_height_150dp"
-        android:background="@color/color_fa"
+
         android:maxLength="140"
         android:gravity="top"
         android:layout_below="@+id/reply_title"

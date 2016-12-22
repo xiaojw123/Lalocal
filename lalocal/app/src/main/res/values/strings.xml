@@ -395,6 +395,13 @@
     <string name="play_back_jianjie">视频简介</string>
     <string name="edit_up_content">编辑以上内容</string>
     <string name="review">评  论</string>
+    <string name="change_live_cover">更换直播封面</string>
+    <string name="change_cover_reminder">与直播主题不相关的封面请慎重使用</string>
+    <string name="title">标题</string>
+    <string name="post_loaction">地理位置</string>
+    <string name="video_lightspot">视频亮点</string>
+    <string name="video_lightspot_hint">请填写视频中精彩部分的介绍</string>
+    <string name="post_alter_ok">确认更改</string>
 
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>

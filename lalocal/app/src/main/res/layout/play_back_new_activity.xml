@@ -112,7 +112,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
             <ImageView
                 android:id="@+id/play_back_bottom_table_like_img"
                 android:layout_width="wrap_content"

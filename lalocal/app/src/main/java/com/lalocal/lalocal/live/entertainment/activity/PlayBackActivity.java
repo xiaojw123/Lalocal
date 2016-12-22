@@ -19,6 +19,7 @@ import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewRowsBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.PariseResult;
@@ -89,6 +90,7 @@ public class PlayBackActivity extends BaseActivity {
     private int praiseNum;
     private int shareNum;
     private int commentNum;
+    private int replyId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +101,6 @@ public class PlayBackActivity extends BaseActivity {
         MyCallBack myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
         intentId = getIntent().getStringExtra("id");
-        // contentLoader.getLiveUserInfo(userId);
         AppLog.i("TAG", "获取回放视屏Id:" + intentId);
         initXRecyclerView();
     }
@@ -108,8 +109,10 @@ public class PlayBackActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == KeyParams.REPLY_REQUESTCODE && resultCode == KeyParams.REPLY_RESULTCODE) {
-            String stringExtra = data.getStringExtra(KeyParams.REPLY_CONTENT);
-            AppLog.i("TAG", "获取评论内容:" + stringExtra);
+            if(allRows!=null){
+                allRows.clear();
+            }
+            contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
     }
     boolean isAttentions;
@@ -178,9 +181,17 @@ public class PlayBackActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.reply_write_iv:
-                intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
-                intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
-                startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                if(replyId!=0){
+                    intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
+                    bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
+                    bundle.putInt(KeyParams.TARGET_ID, replyId);
+                    bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
+                    intent.putExtras(bundle);
+                    intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
+                    startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+            }
                 break;
             case R.id.play_back_bottom_table_collect_layout:
                 if(praiseFlag&&praiseId != null){//取消
@@ -279,12 +290,13 @@ public class PlayBackActivity extends BaseActivity {
                 commentNum = liveRowsBean.getCommentNum();
                 userId = liveRowsBean.getUser().getId();
                 shareVO = liveRowsBean.getShareVO();
+                replyId = liveRowsBean.getId();
                 playBackBottomTableReplyCount.setText(String.valueOf(commentNum));
                 playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
                 praiseFlag = liveRowsBean.isPraiseFlag();
                 praiseId = liveRowsBean.getPraiseId();
+                playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
                 if(liveRowsBean.isPraiseFlag()){
-                    playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
                     playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
                     playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
                 }else{

@@ -60,8 +60,19 @@ public interface KeyParams {
     public static final String REPLY_TITLE="reply_title";
     public static final String REPLY_TYPE = "reply_type";
     public static final String REPLY_PARENT_ID = "reply_parent_id";
+    public static final String POST_TITLE="post_title";
+    public static final String POST_LOCATION="post_location";
+    public static final String POST_PHOTO="post_photo";
+    public static final String POST_HISTORY_ID="post_history_id";
+    public static final String POST_GET_LOCATION="post_get_location";
     public static final int REPLY_RESULTCODE=300;
     public static final int REPLY_REQUESTCODE=301;
+    public static final int POST_REQUESTCODE=302;
+    public static final int POST_RESULTCODE=303;
+    public static final int LOCATION_RESULTCODE=304;
+    public static final int LOCATION_REQUESTCODE=305;
+
+
     public static final int REPLY_TYPE_NEW = 400; // 发起评论
     public static final int REPLY_TYPE_REPLY = 401; // 回复评论
 }

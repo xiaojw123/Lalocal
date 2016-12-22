@@ -18,13 +18,13 @@ public class QiniuUtils {
     /**
      * 等比缩放后居中裁剪
      * @param url 图片链接
-<<<<<<< HEAD
+
      * @param width 最小宽度 单位：px
      * @param height 最小高度 单位：px
-=======
+
      * @param width 最小宽度
      * @param height 最小高度
->>>>>>> 2e3d25b2f3d1215b2562b2912bc8b88ee9c6f196
+
      * @return
      */
     public static String centerCrop(String url, int width, int height) {
@@ -64,7 +64,6 @@ public class QiniuUtils {
      */
     public static boolean uploadSimpleFile(String filePath, String fileName, String token) {
         final boolean[] isSuccess = {false};
-        final String[] link = new String[1];
         UploadManager uploadManager = new UploadManager();
         uploadManager.put(filePath, fileName, token,
                 new UpCompletionHandler() {
@@ -77,4 +76,20 @@ public class QiniuUtils {
                 }, null);
         return isSuccess[0];
     }
+
+    public static boolean uploadSimpleFile(byte[] bytesImg, String fileName, final String token) {
+        final boolean[] isSuccess = {false};
+        UploadManager uploadManager = new UploadManager();
+        uploadManager.put(bytesImg, fileName, token,
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                        if (info.statusCode == 200) {
+                            isSuccess[0] = true;
+                        }
+                    }
+                }, null);
+        return isSuccess[0];
+    }
+
 }

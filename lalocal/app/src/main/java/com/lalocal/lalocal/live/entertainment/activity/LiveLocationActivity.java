@@ -3,6 +3,7 @@ package com.lalocal.lalocal.live.entertainment.activity;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Build;
@@ -33,6 +34,7 @@ import com.amap.api.services.poisearch.PoiResult;
 import com.amap.api.services.poisearch.PoiSearch;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.LiveHistoryItem;
@@ -55,7 +57,6 @@ import butterknife.OnClick;
  * Created by android on 2016/11/18.
  */
 public class LiveLocationActivity extends BaseActivity implements View.OnLayoutChangeListener,PoiSearch.OnPoiSearchListener {
-
     @BindView(R.id.live_location_title_back)
     ImageView liveLocationTitleBack;
     @BindView(R.id.live_location_complete)
@@ -88,6 +89,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
     private double longitude;
     private double latitude;
     private PoiSearch.Query query;
+    String locationInfo=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,6 +206,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     LiveActivity.latitude=String.valueOf(longitude);
                     String result = loc.getCountry() + "·" + loc.getProvince() + "·" + loc.getCity();
                     LiveActivity.liveLocation=result;
+                    locationInfo=result;
                     liveLocationTv.setText("当前地位: " + result);
                     AppLog.i("TAG", "获取详细地理位置信息" + loc.getAddress() + "    " + loc.getAoiName());
                     //获取周边相似位置
@@ -299,14 +302,19 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
         hintAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClickListener(View view, int position) {
+                Intent intent = new Intent();
                 String text = (String) view.getTag();
                 LiveActivity.liveLocation = text;
+                locationInfo=text;
+                intent.putExtra(KeyParams.POST_GET_LOCATION,text);
                 LiveActivity.locationY=true;
                 try{
                     List<LiveHistoryItem> all = DataSupport.findAll(LiveHistoryItem.class);
                     if(all!=null&&all.size()>0){
                         for(LiveHistoryItem historyItem: all){
                             if(historyItem.getName().equals(text.trim())){
+
+                                setResult(KeyParams.LOCATION_RESULTCODE,intent);
                                 finish();
                                 return;
                             }
@@ -319,6 +327,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 LiveHistoryItem item = new LiveHistoryItem();
                 item.setName(LiveActivity.liveLocation);
                 item.save();
+                setResult(KeyParams.LOCATION_RESULTCODE,intent);
                 finish();
             }
         });
@@ -327,6 +336,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
 
     @OnClick({R.id.live_location_no, R.id.live_input_location_tv, R.id.live_location_complete, R.id.live_again_location,R.id.live_location_title_back})
     public void clickBtn(View view) {
+        Intent intent=null;
         switch (view.getId()) {
             case R.id.live_location_title_back:
                 MobHelper.sendEevent(this, MobEvent.LIVE_LOCATION_BACK);
@@ -341,6 +351,8 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 break;
             case R.id.live_input_location_tv:
                 String trim = liveLocationInputEt.getText().toString().trim();
+                intent=new Intent();
+                intent.putExtra(KeyParams.POST_GET_LOCATION,trim);
                 if(trim.length()>0){
                     LiveActivity.locationY=true;
                     LiveActivity.liveLocation =trim;
@@ -349,6 +361,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                         if(all!=null&&all.size()>0){
                             for(LiveHistoryItem historyItem:all){
                                 if(historyItem.getName().equals(trim)){
+                                    setResult(KeyParams.LOCATION_RESULTCODE,intent);
                                     finish();
                                     return;
                                 }
@@ -360,7 +373,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-
+                    setResult(KeyParams.LOCATION_RESULTCODE,intent);
                     finish();
                 }else{
                     LiveActivity.locationY=false;
@@ -369,6 +382,9 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 break;
             case R.id.live_location_complete:
                 MobHelper.sendEevent(this, MobEvent.LIVE_LOCATION_SURRE);
+                intent=new Intent();
+                intent.putExtra(KeyParams.POST_GET_LOCATION,locationInfo);
+                setResult(KeyParams.LOCATION_RESULTCODE,intent);
                 finish();
                 break;
             case R.id.live_again_location:

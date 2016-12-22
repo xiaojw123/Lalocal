@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -12,18 +13,19 @@ import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.activity.PostVideoActivity;
 import com.lalocal.lalocal.activity.RePlyActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewRowsBean;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -140,8 +142,15 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     videoInfoHolder.editContent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            videoInfoHolder.playBackTitle.setEnabled(true);
-                            videoInfoHolder.playBackTitleContent.setEnabled(true);
+                          //TODO 去编辑标题PostVideoActivity
+                            Intent intent = new Intent(mContext, PostVideoActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(KeyParams.POST_LOCATION, liveRowsBean.getAddress());
+                            bundle.putString(KeyParams.POST_PHOTO, liveRowsBean.getPhoto());
+                            bundle.putString(KeyParams.POST_TITLE, liveRowsBean.getTitle());
+                            bundle.putInt(KeyParams.POST_HISTORY_ID,liveRowsBean.getId());
+                            intent.putExtras(bundle);
+                            ((Activity)mContext).startActivityForResult(intent, KeyParams.POST_REQUESTCODE);
                         }
                     });
                 } else {//他人视频
@@ -160,7 +169,12 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     public void onClick(View v) {
                         //TODO 去编辑评论页面
                         Intent intent = new Intent(mContext, RePlyActivity.class);
-                        intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
+                        Bundle bundle = new Bundle();
+                        bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
+                        bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
+                        bundle.putInt(KeyParams.TARGET_ID, liveRowsBean.getId());
+                        bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
+                        intent.putExtras(bundle);
                         ((Activity)mContext).startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
                     }
                 });
@@ -172,7 +186,7 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 reviewHolder.reviewName.setText(playBackReviewRowsBean.getUser().getNickName());
                 reviewHolder.reviewTime.setText(playBackReviewRowsBean.getDateTime());
                 reviewHolder.reviewContent.setText(playBackReviewRowsBean.getContent());
-                // reviewHolder.reviewLike.setText(playBackReviewRowsBean.);
+
                 LiveUserBean targetUser = playBackReviewRowsBean.getTargetUser();
                 if (targetUser != null) {
                     reviewHolder.reviewReplyTv.setVisibility(View.VISIBLE);
@@ -219,11 +233,11 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
 
     class VideoInfoHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.play_back_title)
-        EditText playBackTitle;
+        TextView playBackTitle;
         @BindView(R.id.play_back_old_title)
         TextView playBackOldTitle;
         @BindView(R.id.play_back_title_content)
-        EditText playBackTitleContent;
+        TextView playBackTitleContent;
         @BindView(R.id.paly_back_my_head_iv)
         CircleImageView palyBackMyHeadIv;
         @BindView(R.id.play_back_my_name)

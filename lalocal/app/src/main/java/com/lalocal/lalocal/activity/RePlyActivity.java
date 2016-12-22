@@ -181,6 +181,9 @@ public class RePlyActivity extends BaseActivity {
                 String message = commentOperateResp.getMessage();
                 if (TextUtils.equals(message, "success")) {
                     Toast.makeText(RePlyActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent();
+                    intent.putExtra(KeyParams.REPLY_CONTENT,"success");
+                    setResult(KeyParams.REPLY_RESULTCODE,intent);
                     RePlyActivity.this.finish();
                     return;
                 }
