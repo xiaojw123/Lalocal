@@ -825,6 +825,9 @@ public class LiveFragment extends BaseFragment {
                 if (mAdapter != null) {
                     mAdapter.setSelected(mSelCategory);
                 }
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
+                layoutManager.scrollToPosition(0);
             }
         }
     }
