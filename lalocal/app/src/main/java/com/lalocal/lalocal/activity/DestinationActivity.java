@@ -81,6 +81,7 @@ public class DestinationActivity extends BaseActivity implements View.OnClickLis
                 Intent intent=new Intent(DestinationActivity.this, DestinationAreaActivity.class);
                 intent.putExtra(DestinationAreaActivity.AREA_ID,item.getId());
                 intent.putExtra(DestinationAreaActivity.AREA_NAME,item.getName());
+                intent.putExtra(DestinationAreaActivity.YITU8_URL,item.getYitu8Url());
                 startActivity(intent);
             }
 

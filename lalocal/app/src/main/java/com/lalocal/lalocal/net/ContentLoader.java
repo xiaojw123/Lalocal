@@ -75,6 +75,7 @@ import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.PraiseComment;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RechargeItem;
@@ -127,6 +128,7 @@ import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_ORDER_STATUS
 import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_PAY_STATUS;
 import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_PUSH_LOGS;
 import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_SEARCH_RESULT;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_USERS_SERVICE;
 
 
 /**
@@ -153,6 +155,31 @@ public class ContentLoader {
 
         this.callBack = callBack;
     }
+
+    public void getPraiseComment(int pageNum){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_PRAISE_COMMENT);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getPraiseCommentUrl(pageNum),response,response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getUsersService(){
+        if (callBack!=null){
+            response=new ContentResponse(GET_USERS_SERVICE);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(),response,response);
+        requestQueue.add(request);
+    }
+    public void getUsersService(int type){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_USER_SERVICE);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(type),response,response);
+        requestQueue.add(request);
+    }
+
 
     public void getMessageCount() {
         if (callBack != null) {
@@ -661,7 +688,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ROUTE_DETAILS);
         }
-        AppLog.print("request url____" + AppConfig.getRouteDetailsUrl(id));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getRouteDetailsUrl(id), response, response);
         request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
@@ -749,6 +775,14 @@ public class ContentLoader {
         AppLog.print("areadProudcts_____url=" + AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId), response, response);
         request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getYiTu8Citys(int id){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_YITU8_CITY);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getYiTu8City(id),response,response);
         requestQueue.add(request);
     }
 
@@ -1923,6 +1957,23 @@ public class ContentLoader {
 
                 }
                 switch (resultCode) {
+                    case RequestCode.GET_PRAISE_COMMENT:
+                        responseGetPraiseComment(jsonObj);
+                        break;
+
+                    case RequestCode.GET_USERS_SERVICE:
+                       JSONArray resutJarray=jsonObj.optJSONArray(ResultParams.REULST);
+                        callBack.onGetUsersSerice(resutJarray);
+                       break;
+                    case RequestCode.GET_USER_SERVICE:
+                        JSONObject sercieResultJobj=jsonObj.optJSONObject(ResultParams.REULST);
+                        callBack.onGetUser(sercieResultJobj);
+                        break;
+
+                    case RequestCode.GET_YITU8_CITY:
+                        JSONArray jsonArray=jsonObj.optJSONArray(ResultParams.REULST);
+                        callBack.onGetYitu8City(jsonArray.length()>0);
+                        break;
 
                     case RequestCode.GET_MESSAGE_COUNT:
                         String res = jsonObj.optString(ResultParams.REULST);
@@ -2340,6 +2391,13 @@ public class ContentLoader {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseGetPraiseComment(JSONObject jsonObj) {
+            String resultJson=jsonObj.optString(ResultParams.REULST);
+            Gson gson=new Gson();
+            PraiseComment pc=gson.fromJson(resultJson,PraiseComment.class);
+            callBack.onGetPraiseComment(pc);
         }
 
         private void responseGetGSpecialSearch(JSONObject jsonObj) {
@@ -3858,6 +3916,10 @@ public class ContentLoader {
         int GET_G_SPECIAL_SEARCH = 169;
         int GET_G_USER_SEARCH = 170;
         int GET_MESSAGE_COUNT = 171;
+        int GET_YITU8_CITY=172;
+        int GET_USERS_SERVICE=173;
+        int GET_USER_SERVICE=174;
+        int GET_PRAISE_COMMENT=175;
 
 
         int RECOMMEND = 200;

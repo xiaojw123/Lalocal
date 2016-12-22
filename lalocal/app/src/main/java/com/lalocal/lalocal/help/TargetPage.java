@@ -2,6 +2,7 @@ package com.lalocal.lalocal.help;
 
 import android.content.Context;
 import android.content.Intent;
+import android.text.TextUtils;
 
 import com.lalocal.lalocal.activity.ArticleActivity;
 import com.lalocal.lalocal.activity.MyCouponActivity;
@@ -82,11 +83,11 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoProductDetail(Context context, String targetId, int targetType,boolean isMessage) {
+    public static void gotoProductDetail(Context context, String targetId, String targetType,boolean isMessage) {
         Intent intent = new Intent(context, ProductDetailsActivity.class);
         SpecialToH5Bean bean = new SpecialToH5Bean();
         bean.setTargetId(Integer.parseInt(targetId));
-        bean.setTargetType(targetType);
+        bean.setTargetType(Integer.parseInt(targetType));
         intent.putExtra("productdetails", bean);
         if (isMessage) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -113,13 +114,50 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoRouteDetail(Context context, int targetId,boolean isMessage) {
+    public static void gotoRouteDetail(Context context, String targetId,boolean isMessage) {
         Intent intent = new Intent(context, RouteDetailActivity.class);
-        intent.putExtra(RouteDetailActivity.DETAILS_ID, targetId);
+        intent.putExtra(RouteDetailActivity.DETAILS_ID, Integer.parseInt(targetId));
         if (isMessage) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         context.startActivity(intent);
     }
+
+    public static void gotoTargetPage(Context context,String targetType,String targetId,String targetUrl,String targetName){
+        if (TextUtils.isEmpty(targetType)){
+            return;
+        }
+        switch (targetType) {
+            case TargetType.URL://链接
+                TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
+                break;
+            case TargetType.USER://用户
+                TargetPage.gotoUser(context, targetId, true);
+                break;
+            case TargetType.ARTICLE://文章
+            case TargetType.INFORMATION://资讯
+                TargetPage.gotoArticleDetail(context, targetId, true);
+                break;
+            case TargetType.PRODUCT://产品
+                TargetPage.gotoProductDetail(context, targetId, targetType, true);
+                break;
+            case TargetType.ROUTE://线路
+                TargetPage.gotoRouteDetail(context,targetId, true);
+                break;
+            case TargetType.SPECIAL://专题
+                TargetPage.gotoSpecialDetail(context, targetId, true);
+                break;
+            case TargetType.LIVE_VIDEO://直播视频
+                TargetPage.gotoLive(context, targetId, true);
+                break;
+            case TargetType.LIVE_PALY_BACK://回放
+                TargetPage.gotoPlayBack(context, targetId, true);
+                break;
+
+        }
+
+
+    }
+
 
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_lalocal_helper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_faf8f3"
+    tools:context="com.lalocal.lalocal.im.LalocalHelperActivity">
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/lalocal_helper"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:id="@+id/lalocal_helper_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/white_conrner_bg"
+        android:layout_marginTop="@dimen/dimen_size_10_dp"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:layout_marginRight="@dimen/dimen_size_10_dp"
+        android:paddingLeft="@dimen/dimen_size_10_dp"
+        android:paddingTop="@dimen/dimen_size_10_dp"
+        android:paddingRight="@dimen/dimen_size_10_dp"
+        android:paddingBottom="@dimen/dimen_size_30_dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_16_sp"
+            android:textColor="@color/color_191000"
+            android:text="@string/lalocal_helper_tip"
+            android:lineSpacingExtra="@dimen/dimen_size_5_dp"
+            />
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

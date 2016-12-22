@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dimen_size_15_dp"
+    android:paddingTop="@dimen/dimen_size_16_dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dimen_size_12_dp"
+        android:paddingRight="@dimen/dimen_size_12_dp">
+
+        <com.lalocal.lalocal.live.im.ui.widget.CircleImageView
+            android:id="@+id/item_praise_comment_avatar"
+            android:layout_width="@dimen/dimen_size_30_dp"
+            android:layout_height="@dimen/dimen_size_30_dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/test_img" />
+
+        <TextView
+            android:id="@+id/item_praise_comment_action"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_size_15_dp"
+            android:layout_toRightOf="@+id/item_praise_comment_avatar"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="四月里KY 赞了"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/text_size_12_sp"
+            android:layout_toLeftOf="@+id/item_comment_img"
+            />
+        <ImageView
+            android:id="@+id/item_comment_img"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/index_article_btn_relpy"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/item_praise_comment_action_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/item_praise_comment_action"
+            android:layout_below="@+id/item_praise_comment_action"
+            android:layout_marginTop="@dimen/dimen_size_4_dp"
+            android:text="2013 11 33"
+            android:textColor="@color/color_b3"
+            android:textSize="@dimen/text_size_9_sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_comment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dimen_size_15_dp"
+        android:layout_marginLeft="@dimen/dimen_size_12_dp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:text="好有意思，下次也要去。"
+        android:textColor="@color/color_66"
+        android:textSize="@dimen/text_size_14_sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_fa"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/dimen_size_12_dp"
+        android:paddingRight="@dimen/dimen_size_12_dp">
+        <TextView
+            android:id="@+id/item_reply_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_66"
+            android:textSize="@dimen/text_size_14_sp"
+            android:text="我 回复 四月里KY：一定要去去海边。"
+            android:layout_marginTop="@dimen/dimen_size_6_dp"
+            android:layout_marginBottom="@dimen/dimen_size_10_dp"
+            />
+        <LinearLayout
+            android:id="@+id/item_praise_comment_item"
+            android:layout_width="match_parent"
+            android:layout_height="69dp"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            >
+
+
+
+            <FrameLayout
+                android:layout_width="92dp"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/item_praise_comment_img"
+                    android:layout_width="92dp"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/test_img"
+                    />
+                <Button
+                    android:id="@+id/item_praise_comment_play"
+                    android:layout_width="@dimen/dimen_size_30_dp"
+                    android:layout_height="@dimen/dimen_size_30_dp"
+                    android:background="@drawable/home_living_playbtn"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/item_praise_comment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_size_5_dp"
+                android:layout_marginTop="@dimen/dimen_size_12_dp"
+                android:textSize="@dimen/text_size_15_sp"
+                android:textColor="@color/color_66"
+                android:text="除了去看歌剧院"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

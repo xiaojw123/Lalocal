@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.lalocal.lalocal.help.UserHelper;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -35,9 +37,19 @@ public class AppConfig {
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
- //   private static String baseUrl = "http://api.lalocal.cn/api/";
-        private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+    //   private static String baseUrl = "http://api.lalocal.cn/api/";
+    private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
+    public static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+    //获取h5 url地址
+    public static String getH5Url(Context context,String baseH5Url) {
+        int userId = UserHelper.getUserId(context);
+        String token = UserHelper.getToken(context);
+        String device = CommonUtil.getDevice();
+        String devcieId = CommonUtil.getUUID(context);
+        String version = AppConfig.getVersionName(context);
+        return String.format(AppConfig.BOOK_URL_FORMART, baseH5Url, userId, token, version, device, devcieId);
+    }
 
     public static String getWelcommeImgs() {
         return baseUrl + "system/welcomeImgs";
@@ -94,9 +106,10 @@ public class AppConfig {
     public static String getCouponItemsUrl() {
         return baseUrl + "coupons?";
     }
-    public static String getAvaileCouponItemUrl(String productionId){
 
-        return baseUrl+"coupons/available?productionId="+productionId;
+    public static String getAvaileCouponItemUrl(String productionId) {
+
+        return baseUrl + "coupons/available?productionId=" + productionId;
     }
 
     //我的订单接口 GET_MY_ORDER_ITEMS
@@ -127,14 +140,15 @@ public class AppConfig {
 
         return baseUrl + "users/bindEmail";
     }
+
     //用户端离开直播间
-    public  static  final String  getUserLeaveRoom(String channels){
-        return  baseUrl+"channels/"+channels+"/leave";
+    public static final String getUserLeaveRoom(String channels) {
+        return baseUrl + "channels/" + channels + "/leave";
     }
 
     //获取直播间头像  http://dev.lalocal.cn/api/channels/14/stats?number=7&isMaster=false
-    public  static  final String getLiveRoomAvatar(String roomId,int number,boolean isMaster){
-        return baseUrl+"channels/"+roomId+"/stats?number="+number+"&isMaster="+isMaster;
+    public static final String getLiveRoomAvatar(String roomId, int number, boolean isMaster) {
+        return baseUrl + "channels/" + roomId + "/stats?number=" + number + "&isMaster=" + isMaster;
     }
 
 
@@ -320,6 +334,7 @@ public class AppConfig {
     public static final String getLiveHotList(String areaId, String attentionFlag) {
         return baseUrl + "channels/index?area=" + areaId + "&attentionFlag=" + attentionFlag;
     }
+
     //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
     public static final String getPlayBackLive(String areaId, int pageNumber, String attentionFlag) {
         //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
@@ -344,16 +359,18 @@ public class AppConfig {
     }
 
     //禁言
-    public  static final String getMute(){
-        return baseUrl+"channels/mute";
+    public static final String getMute() {
+        return baseUrl + "channels/mute";
     }
+
     //永久禁言
-    public  static final String getPerpetualMute(){
-        return baseUrl+"users/block/";
+    public static final String getPerpetualMute() {
+        return baseUrl + "users/block/";
     }
+
     //发送消息
-    public static  final String sendMessage(){
-        return baseUrl+"system/msgs/validate";
+    public static final String sendMessage() {
+        return baseUrl + "system/msgs/validate";
     }
 
     public static String getBaseUrl() {
@@ -507,6 +524,11 @@ public class AppConfig {
         }
         return url;
     }
+
+    public static String getYiTu8City(int id) {
+        return baseUrl + "yitu8/+" + id + "/city";
+    }
+
 
     public static String getRouteDetailsUrl(int id) {
         return baseUrl + "routes/" + id;
@@ -719,8 +741,9 @@ public class AppConfig {
     public static String getGSepicalSearchUrl(String name, int pageNum, int pageSize) {
         return baseUrl + "tags/search/themes?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
     }
-    public static String getGUserSearchUrl(int pageSize,int pageNum,String nickName){
-        return baseUrl+"users?pageSize="+pageSize+"&pageNumber="+pageNum+"&nickName="+encodeString(nickName);
+
+    public static String getGUserSearchUrl(int pageSize, int pageNum, String nickName) {
+        return baseUrl + "users?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + encodeString(nickName);
     }
 
     public static String encodeString(String name) {
@@ -733,12 +756,14 @@ public class AppConfig {
         return encodeName;
 
     }
-    public static String getMessageCount(){
-        return baseUrl+"dynamics/amount";
+
+    public static String getMessageCount() {
+        return baseUrl + "dynamics/amount";
     }
 
     /**
      * 首页我的关注接口
+     *
      * @return
      */
     public static String getHomeAttention() {
@@ -747,6 +772,7 @@ public class AppConfig {
 
     /**
      * 获取每日推荐
+     *
      * @return
      */
     public static String getDailyRecommendations(int type) {
@@ -755,7 +781,12 @@ public class AppConfig {
     }
 
     /**
+<<<<<<< HEAD
+     * 直播间举报
+     *
+=======
      * 直播间举报，主播端
+>>>>>>> fa39781f34b8528672b8a9b10e4d9c5b34597a73
      * @return
      */
     public static String getChannelReport() {
@@ -774,6 +805,7 @@ public class AppConfig {
 
     /**
      * 2.2版本直播首页接口
+     *
      * @param pageNum
      * @param pageSize
      * @param categoryId
@@ -816,5 +848,16 @@ public class AppConfig {
         String url = baseUrl + "comments/" + commentId;
         AppLog.i("deleteComments", "url is " + url);
         return url;
+    }
+
+    public static String getUsersServiceUrl(){
+        return baseUrl+"users/service";
+    }
+
+    public static String getUsersServiceUrl(int type){
+        return  baseUrl+"users/"+type+"/service ";
+    }
+    public static String getPraiseCommentUrl(int pageNum){
+        return  baseUrl+"dynamics?pageSize=10&pageNumber="+pageNum;
     }
 }

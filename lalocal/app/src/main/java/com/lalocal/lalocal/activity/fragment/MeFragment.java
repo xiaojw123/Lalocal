@@ -23,6 +23,7 @@ import com.lalocal.lalocal.activity.MyFavoriteActivity;
 import com.lalocal.lalocal.activity.MyLiveActivity;
 import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
+import com.lalocal.lalocal.activity.PersonalMessageActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
@@ -30,7 +31,6 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveAttentionOrFansActivity;
 import com.lalocal.lalocal.me.LLoginActivity;
-import com.lalocal.lalocal.me.MyMessageActivity;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.MeItem;
 import com.lalocal.lalocal.model.User;
@@ -99,7 +99,7 @@ MeFragment extends BaseFragment {
     RecyclerView itemRlv;
     @BindView(R.id.fragment_me_rsv)
     ReboundScrollView reboundScrollView;
-//    @BindView(R.id.home_me_headportrait_arcimg)
+    //    @BindView(R.id.home_me_headportrait_arcimg)
 //    ArcImageView headArcImg;
     MeItemAdapter itemAdapter;
 
@@ -134,7 +134,7 @@ MeFragment extends BaseFragment {
     private List<MeItem> getMeItems(boolean hasArticle) {
         List<MeItem> items = new ArrayList<>();
         MeItem item1 = new MeItem(MeItemAdapter.ITEM_MY_LIVE, "我的直播", R.drawable.mylive_ic);
-        MeItem item2 = new MeItem(MeItemAdapter.ITEM_MY_MESSAGE, "我的消息", R.drawable.mymassage_ic);
+        MeItem item2 = new MeItem(MeItemAdapter.ITEM_MY_MESSAGE, "私信", R.drawable.mymassage_ic);
         MeItem item3 = new MeItem(MeItemAdapter.ITEM_MY_FAVOR, "我的收藏", R.drawable.mycollect_ic);
         MeItem item4 = new MeItem(MeItemAdapter.ITEM_MY_WALLET, "我的钱包", R.drawable.mywallet_ic);
         MeItem item5 = new MeItem(MeItemAdapter.ITEM_MY_ORDER, "我的订单", R.drawable.myorder_ic);
@@ -221,19 +221,22 @@ MeFragment extends BaseFragment {
                 switch (status) {
                     case 0:
                         verified_tv.setActivated(true);
-                        verified_tv.setText(getResources().getString(R.string.verified));
+//                        verified_tv.setText(getResources().getString(R.string.verified));
+                        verified_tv.setText(getResourceString(R.string.verified));
                         break;
                     case -1:
                         verified_tv.setActivated(false);
-                        verified_tv.setText(getResources().getString(R.string.no_verified));
+//                        verified_tv.setText(getResources().getString(R.string.no_verified));
+                        verified_tv.setText(getResourceString(R.string.no_verified));
                         break;
                     case 1:
                         verified_tv.setActivated(false);
-                        verified_tv.setText(getResources().getString(R.string.user_black));
+//                        verified_tv.setText(getResources().getString(R.string.user_black));
+                        verified_tv.setText(getResourceString(R.string.user_black));
                         break;
                     case 2:
                         verified_tv.setActivated(false);
-                        verified_tv.setText(getResources().getString(R.string.user_forbiden));
+                        verified_tv.setText(getResourceString(R.string.user_forbiden));
                         break;
                 }
                 hidenArticeTag();
@@ -263,6 +266,14 @@ MeFragment extends BaseFragment {
 
     }
 
+    public String getResourceString(int id) {
+        if (isAdded()) {
+            return getString(id);
+        }
+        return null;
+    }
+
+
     public void showArticleTag() {
         authorTag.setVisibility(View.VISIBLE);
         itemAdapter.updateItems(getMeItems(true));
@@ -291,7 +302,7 @@ MeFragment extends BaseFragment {
                     case MeItemAdapter.ITEM_MY_MESSAGE://我的消息
                         MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
                         if (UserHelper.isLogined(getActivity())) {
-                            gotoMyItemPage(MyMessageActivity.class);
+                            gotoMyItemPage(PersonalMessageActivity.class);
                         } else {
                             gotoLoginPage();
                         }
