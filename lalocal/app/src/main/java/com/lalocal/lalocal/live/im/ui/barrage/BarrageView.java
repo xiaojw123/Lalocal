@@ -38,7 +38,6 @@ public class BarrageView extends RelativeLayout{
 
     private static final String TAG = "BarrageView";
     private static final int DEFAULT_RANDOM_COLOR_NUM = 10;
-
     private static final boolean OUTPUT_LOG = true;
     private  int padding;
 
@@ -112,13 +111,15 @@ public class BarrageView extends RelativeLayout{
         }
         // create text view
         poll = textCache.poll();
+        if(poll==null){
+            return;
+        }
         if (linearLayout == null) {
             linearLayout = buildTextView(poll, availableLine);
 
         } else {
             linearLayout = reuseTextView(linearLayout, poll, availableLine);
         }
-
         // run
         buildTranslationAnimator(linearLayout, availableLine,poll).start();
     }

@@ -27,6 +27,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.lalocal.lalocal.live.im.session.Container;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfoResultBean;
@@ -126,8 +127,9 @@ public class CustomUserInfoDialog extends BaseDialog {
     @Override
     public void initView() {
         if(channelId==null){
-            userinfoBottomCenter.setVisibility(View.GONE);
-            userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+        //    userinfoBottomCenter.setVisibility(View.GONE);
+        //    userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
+            userInfoLayoutBottom.setVisibility(View.GONE);
         }
         if(userId!=null&&userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){//我自己
             customDialogLiveHeaderLayout.setVisibility(View.GONE);
@@ -160,7 +162,6 @@ public class CustomUserInfoDialog extends BaseDialog {
                 userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
             }
         }
-
     }
 
     @Override
@@ -183,7 +184,6 @@ public class CustomUserInfoDialog extends BaseDialog {
                     AppLog.i("TAG","查看用户省份："+result.getRole()+"    accId:"+accId);
                     String description = result.getDescription();
                     Object status = result.getAttentionVO().getStatus();
-
                     if (status != null) {
                         double parseDouble = Double.parseDouble(String.valueOf(status));
                         userStatus = (int) parseDouble;//关注状态
@@ -373,32 +373,32 @@ public class CustomUserInfoDialog extends BaseDialog {
                         if(chatRoomMembers!=null&&chatRoomMembers.size()>0){
                             for(ChatRoomMember chatRoom:chatRoomMembers ){
                                 isMuted= chatRoom.isTempMuted();
-                                AppLog.i("TAG","用户信息8");
+
                                 if(role==0||role==2){
                                     if(!userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){
                                         userinfoBottomCenter.setVisibility(View.VISIBLE);
                                         if(role==0&&accId.equals(LiveConstant.creatorAccid)){//他是主播
                                             userinfoBottomCenter.setVisibility(View.GONE);
-                                            AppLog.i("TAG","用户信息9");
+
                                         }else {
                                             if(isMuted){
-                                                AppLog.i("TAG","用户信息10");
+
                                                 userinfoBottomCenter.setText(mContext.getString(R.string.live_relieve_ban));
                                             }else{
-                                                AppLog.i("TAG","用户信息11");
+
                                                 userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
                                             }
-                                            AppLog.i("TAG","用户信息12");
+
                                         }
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
                                     }
                                 }else if(role==1){
-                                    AppLog.i("TAG","用户信息13");
+
                                     if(isMuted){
-                                        AppLog.i("TAG","用户信息14");
+
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_relieve_ban));
                                     }else{
-                                        AppLog.i("TAG","用户信息15");
+
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_ban));
                                     }
                                 }
@@ -406,7 +406,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                             }
                         }else{
                             if(role==1) {
-                                AppLog.i("TAG","用户信息16");
+
                                 userinfoBottomLeft.setText(mContext.getString(R.string.live_ban));
                             }else{
                                 if(role==0||role==2) {
@@ -414,10 +414,8 @@ public class CustomUserInfoDialog extends BaseDialog {
                                         userinfoBottomCenter.setVisibility(View.VISIBLE);
                                         if (role == 0 && accId.equals(LiveConstant.creatorAccid)) {//他是主播
                                             userinfoBottomCenter.setVisibility(View.GONE);
-                                            AppLog.i("TAG", "用户信息17");
                                         } else {
                                             userinfoBottomCenter.setText(mContext.getString(R.string.live_ban));
-                                            AppLog.i("TAG", "用户信息18");
                                         }
                                         userinfoBottomLeft.setText(mContext.getString(R.string.live_report));
                                     }
@@ -426,7 +424,6 @@ public class CustomUserInfoDialog extends BaseDialog {
 
                                 }
                         }
-                        AppLog.i("TAG","查看用户是否被禁言ddddd："+i);
                     }
 
 
@@ -449,7 +446,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                 // 举报
                 if(role==1){//主播端，举报
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_REPORT);
-                    toReportActivity();
+                    toReportActivity(Constants.REPORT_CHANNEL);
                 }else if(role==2){
                     if(isMaster){//关闭直播间
 
@@ -504,7 +501,7 @@ public class CustomUserInfoDialog extends BaseDialog {
                 if(role==0||role==2){//用户端
                     // 举报
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_USER_REPORT);
-                    toReportActivity();
+                    toReportActivity(Constants.REPORT_USER);
                 }else {//主播端 禁言
                     if(isMuted){
                         //解除禁言
@@ -624,13 +621,15 @@ public class CustomUserInfoDialog extends BaseDialog {
 
     }
     //去举报页面
-    public  void toReportActivity(){
+    public  void toReportActivity(int from){
         MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_REPORT);
         Intent intent = new Intent(mContext, ReportActivity.class);
         Bundle bundle = new Bundle();
+        AppLog.i("qn", "channel id is " + channelId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_CHANNEL_ID, channelId);
         bundle.putString(com.lalocal.lalocal.model.Constants.KEY_USER_ID, userId);
-        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME,nickName );
+        bundle.putString(com.lalocal.lalocal.model.Constants.KEY_MASTER_NAME, nickName );
+        bundle.putInt(com.lalocal.lalocal.model.Constants.KEY_REPORT_FROM, from);
         intent.putExtras(bundle);
         mContext.startActivity(intent);
 

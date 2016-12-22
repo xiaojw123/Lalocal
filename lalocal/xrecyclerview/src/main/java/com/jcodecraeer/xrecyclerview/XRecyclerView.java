@@ -43,6 +43,8 @@ public class XRecyclerView extends RecyclerView {
     private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
     private Adapter mAdapter;
 
+    private RecyclerView recyclerView;
+
     public XRecyclerView(Context context) {
         this(context, null);
     }

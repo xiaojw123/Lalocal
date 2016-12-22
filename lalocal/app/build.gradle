@@ -109,6 +109,7 @@ dependencies {
     compile 'com.github.sahasbhop:formatted-log:0.0.5'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile files('libs/nim-basesdk-3.2.0.jar')
+    compile project(':pldroidplayer')
 }
 
 

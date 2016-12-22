@@ -101,6 +101,7 @@ public class TextureVideoPlayer extends RelativeLayout {
         int[] time = getMinuteAndSecond(duration);
         formatTotalTime = String.format("%02d:%02d", time[0], time[1]);
         mMediaController.setPlayProgressTxt(playTime, allTime);
+        mVideoPlayCallback.getprogressDuration(playTime);
     }
     private void updatePlayProgress() {
         int allTime = mVideoView.getDuration();
@@ -286,6 +287,7 @@ public class TextureVideoPlayer extends RelativeLayout {
             mVideoView.pause();
         return getSeek();
         }else {
+            Log.i("TAF","播放器player pause22222");
             return 0;
         }
 

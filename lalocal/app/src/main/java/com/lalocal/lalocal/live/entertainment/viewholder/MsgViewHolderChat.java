@@ -1,8 +1,10 @@
 package com.lalocal.lalocal.live.entertainment.viewholder;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -19,12 +21,13 @@ import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomNewUserInforDialog;
 import com.lalocal.lalocal.live.entertainment.ui.VerticalImageSpan;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
@@ -70,7 +73,7 @@ public class MsgViewHolderChat extends TViewHolder{
         String adminSendMsgNickName=null;
         String giftCount=null;
         String giftName=null;
-        String textColor=null;
+        String  textColor="#99190f00";
         disableSendMsgUserId=null;
         adminSendMsgUserId=null;
         nameText.setCompoundDrawables(null,null,null,null);
@@ -152,7 +155,7 @@ public class MsgViewHolderChat extends TViewHolder{
                 }
                 if(UserHelper.isLogined(context)){
                     if(LiveConstant.isUnDestory){
-                        CustomUserInfoDialog dialog = new CustomUserInfoDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
+                        CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                         dialog.show();
                     }
                 }else {
@@ -185,39 +188,32 @@ public class MsgViewHolderChat extends TViewHolder{
         switch (styles){
             case "0":
                 itemContent = message.getContent();
-                textColor="#99190f00";
                 break;
             case "1":
                 itemContent=message.getContent();
-                textColor="#99190f00";
                 break;
             case "2"://点赞
-                itemContent="给主播点了个赞";
-                textColor="#99190f00";
-                break;
+                itemContent=context.getString(R.string.like_master);
+              break;
             case "6"://禁言
-                itemContent="禁言了"+disableSendMsgNickName;
-                textColor="#99190f00";
+                itemContent=context.getString(R.string.ban)+disableSendMsgNickName;
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "7":
-                itemContent= "解除了"+disableSendMsgNickName+"的禁言";
-                textColor="#99190f00";
+                itemContent=context.getString(R.string.relieve)+disableSendMsgNickName+context.getString(R.string.de_ban);
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "8":
-                itemContent= "将"+adminSendMsgNickName+"授权为管理员";
+                itemContent= context.getString(R.string.jiang)+adminSendMsgNickName+context.getString(R.string.setting_manage);
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
-                textColor="#99190f00";
                 break;
             case "9":
-                itemContent="取消了"+adminSendMsgNickName+"的管理员权限";
-                textColor="#99190f00";
+                itemContent=context.getString(R.string.cancel_le)+adminSendMsgNickName+context.getString(R.string.de_manager);
                 messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                 break;
             case "10":
               final   GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
-                itemContent="给主播送了"+giftCount+"个"+giftName;
+                itemContent=context.getString(R.string.send_gift_)+giftCount+context.getString(R.string.ge)+giftName;
                 textColor="#ffffff";
                 messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
                 messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
@@ -225,90 +221,62 @@ public class MsgViewHolderChat extends TViewHolder{
                 return;
             case "12":
                 itemContent= message.getContent();
-                textColor="#99190f00";
                 break;
         }
         AppLog.i("TAG","creatorAccount:"+creatorAccount+"    itemContent:"+itemContent);
         setNameTextView(creatorAccount,itemContent,textColor,styles,null);
     }
 
-    private void textviewImageContent(final String text,final String textColor,final GiftBean messageToGiftBean,final TextView tv){
-        Drawable drawable =null;
-        switch (messageToGiftBean.getCode()){
-            case LiveConstant.ROSE:
-               drawable=context.getResources().getDrawable(R.drawable.gift_rose_48);
-            break;
-            case LiveConstant.GLASSES:
-                drawable=context.getResources().getDrawable(R.drawable.gift_glasses_48);
-             break;
-            case LiveConstant.PLAN:
-                drawable=context.getResources().getDrawable(R.drawable.gift_plane_48);
-                break;
-            case LiveConstant.FACE:
-                drawable=context.getResources().getDrawable(R.drawable.gift_face_48);
-                break;
-            case LiveConstant.TRAVELLINGCASE:
-                drawable=context.getResources().getDrawable(R.drawable.gift_travellingcase_48);
-                break;
-            case LiveConstant.STAR:
-                drawable=context.getResources().getDrawable(R.drawable.gift_start_48);
-                break;
-            case LiveConstant.FRUIT:
-                drawable=context.getResources().getDrawable(R.drawable.gift_fruit_48);
-                break;
-            case LiveConstant.WATER:
-                drawable=context.getResources().getDrawable(R.drawable.gift_water_48);
-                break;
-            case LiveConstant.SUN_CREAM:
-                drawable=context.getResources().getDrawable(R.drawable.gift_sun_cream_48);
-                break;
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private void textviewImageContent(final String text, final String textColor, final GiftBean messageToGiftBean, final TextView tv){
+        try {
+            String[] textContent = text.split(",.,");
+            String nameText = textContent[0]+" ";
+            String contentText = " "+textContent[1];
+            String substring = nameText.substring(0, nameText.length() - 1);
+            String str=substring+contentText+"!";
+            int length = substring.length();
+            Bitmap bitmap = DrawableUtils.loadingBitMap(messageToGiftBean.getGiftImage());
+            int i = DensityUtil.dip2px(context, 60);
+            Bitmap small = DensityUtil.small(bitmap,i,i);
+            VerticalImageSpan span = new VerticalImageSpan(small);
+            final SpannableStringBuilder style=new SpannableStringBuilder(str);
+            style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            tv.setText(style);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        AppLog.i("TAG","礼物条目内容："+(drawable==null?"为空":"不为空")+text+"   ||||:"+messageToGiftBean.getGiftName());
-        int i = DensityUtil.dip2px(context, 25);
-        drawable.setBounds(0,0,i, i);
-        String[] textContent = text.split(",.,");
-        String nameText = textContent[0];
-        String contentText = textContent[1];
-        String substring = nameText.substring(0, nameText.length() - 1);
-        String str=substring+contentText+"!";
-        int length = substring.length();
-        VerticalImageSpan span= new VerticalImageSpan(drawable);
 
-        final SpannableStringBuilder style=new SpannableStringBuilder(str);
-        style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tv.setText(style);
     }
-
     private SpannableStringBuilder textviewSetContent(String text, String textColor) {
         String[] textContent = text.split(",.,");
-        String nameText = textContent[0];
-        String contentText = textContent[1];
+        String nameText = textContent[0] + " ";
+        String contentText = " " + textContent[1];
         String substring = nameText.substring(0, nameText.length() - 1);
-        String str=substring+contentText;
+        String str = substring + contentText;
         int length = substring.length();
-        SpannableStringBuilder style=new SpannableStringBuilder(str);
+        SpannableStringBuilder style = new SpannableStringBuilder(str);
         style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return  style;
+        style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length + 1, str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        return style;
     }
-
 
     public void setNameTextView(String creatorAccount,String itemContent,String textColor,String styles,GiftBean messageToGiftBean) {
         String contentItem=null;
         if (message.getMsgType() != MsgTypeEnum.notification) {
             if(message.getRemoteExtension() != null) {
                 if(styles.equals("101")||styles.equals("100")){
-                    contentItem="主播 :  ,.,  "+itemContent;
+                    contentItem=context.getString(R.string.master_aplit)+itemContent;
                     messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
                 }else {
                     String fromAccount = message.getFromAccount();
                     String account = DemoCache.getAccount();
                     if(fromAccount!=null&&fromAccount.equals(account)){
-                        contentItem="我 :  ,.,  "+itemContent;
+                        contentItem=context.getString(R.string.me_split)+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
-                        contentItem="主播 :  ,.,  "+itemContent;
+                        contentItem=context.getString(R.string.master_aplit)+itemContent;
                         messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
                         textColor="#99190f00";
                     } else{

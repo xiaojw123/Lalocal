@@ -105,7 +105,7 @@
                     android:id="@+id/item_praise_comment_play"
                     android:layout_width="@dimen/dimen_size_30_dp"
                     android:layout_height="@dimen/dimen_size_30_dp"
-                    android:background="@drawable/home_living_play_btn"
+                    android:background="@drawable/home_living_playbtn"
                     android:layout_gravity="center"
                     android:visibility="gone"
                     />

@@ -415,14 +415,17 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
     //轮播图
     private void showphotos(List<RecommendAdResultBean> list) {
-
-        View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.product_viewpager, null);
-
-        CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
-        if (list.size() > 0) {
-            ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
+        try {
+            View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.product_viewpager, null);
+            CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
+            if (list.size() > 0) {
+                ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
+            }
+            phones.addView(inflate);
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        phones.addView(inflate);
+
     }
 
     //产品详情介绍
@@ -615,8 +618,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext);
-        sharePopupWindow.showShareWindow(shareVO);
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext,shareVO);
         sharePopupWindow.show();
     }
 

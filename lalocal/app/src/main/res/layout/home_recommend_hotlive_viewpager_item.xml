@@ -48,7 +48,7 @@
                     android:layout_height="@dimen/home_recommend_play_icon_size"
                     android:layout_centerInParent="true"
                     android:background="@android:color/transparent"
-                    android:src="@drawable/home_living_play_btn" />
+                    android:src="@drawable/home_living_playbtn" />
             </RelativeLayout>
 
             <TextView

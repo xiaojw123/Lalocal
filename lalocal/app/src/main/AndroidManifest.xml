@@ -3,7 +3,6 @@
     package="com.lalocal.lalocal">
 
     <!-- 地理位置权限 -->
-
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -123,6 +122,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".live.entertainment.activity.TestActivity" />
+        <activity android:name=".activity.RePlyActivity"></activity>
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -323,9 +323,9 @@
         <activity android:name=".activity.LiveDetailActivity" />
         <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
-        <activity
-            android:name=".live.entertainment.activity.PlayBackActivity"
-            android:screenOrientation="portrait" />
+        <activity android:name=".live.entertainment.activity.PlayBackActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".live.entertainment.activity.PlayBackNewActivity"/>
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
@@ -354,7 +354,6 @@
         <service
             android:name="cmb.pb.cmbsafe.CmbService"
             android:exported="false" />
-
         <activity android:name=".me.NotificationActivity" />
         <activity android:name=".me.TargetWebActivity" />
         <activity android:name=".activity.GlobalSearchActivity" />
@@ -366,6 +365,7 @@
         <activity android:name=".im.LalocalHelperActivity" />
         <activity android:name=".me.PraiseCommentActivity" />
         <activity android:name=".im.NimChatActivity"></activity>
+        <activity android:name=".activity.ArticleCommentActivity"></activity>
     </application>
 
 </manifest>

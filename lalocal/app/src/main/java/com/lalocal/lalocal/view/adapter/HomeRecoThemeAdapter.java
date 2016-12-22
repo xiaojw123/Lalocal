@@ -3,7 +3,6 @@ package com.lalocal.lalocal.view.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +17,8 @@ import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.util.DensityUtil;
-import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
-import com.lalocal.lalocal.view.viewholder.SubThemeViewHolder;
-import com.lalocal.lalocal.view.viewholder.ThemeViewHolder;
-import com.makeramen.roundedimageview.RoundedImageView;
+import com.lalocal.lalocal.view.viewholder.find.SubThemeViewHolder;
 
 import java.util.List;
 
@@ -88,6 +83,7 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
         // 使用Glide加载url图片
         Glide.with(mContext)
                 .load(photoUrl)
+                .placeholder(R.drawable.androidloading)
                 .centerCrop()
                 .crossFade()
                 // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存

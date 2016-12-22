@@ -95,7 +95,6 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
     @OnMPermissionDenied(PERMISSION_STGAT_CODE)
     public void onPermissionDenied() {
         Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
-
     }
 
     @Override

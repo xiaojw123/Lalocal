@@ -345,7 +345,14 @@ public class AppConfig {
     public static final String getPlayBackLiveDetails(int id) {
         return baseUrl + "channels/historys/" + id;
     }
-
+    //回放消息展示
+    public static final String getPlayBackMsg(String historyId){
+        return  baseUrl+"channels/historys/"+historyId+"/msgs";
+    }
+    //历史直播评论  comments?targetId=5317&targetType=20&pageSize=10&pageNumber=1
+    public  static final String getPlayBackReview(String targetId,int targetType,int pageSize,int pageNumber){
+        return  baseUrl+"comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
+    }
     //上报日志 http://dev.lalocal.cn/api/system/logs/app
     public static final String uploadLogs() {
         return baseUrl + "system/logs/app";
@@ -605,8 +612,8 @@ public class AppConfig {
     //用户历史直播
     public static String getUserLiveUrl(int userid, int pageNum) {
         String url = baseUrl + "channels/users/" + userid + "/historys?pageNumber=" + pageNum + "&pageSize=10";
+        AppLog.i("hs", "url is " + url);
         return url;
-
     }
 
     //用户明细
@@ -774,13 +781,26 @@ public class AppConfig {
     }
 
     /**
+<<<<<<< HEAD
      * 直播间举报
      *
+=======
+     * 直播间举报，主播端
+>>>>>>> fa39781f34b8528672b8a9b10e4d9c5b34597a73
      * @return
      */
     public static String getChannelReport() {
-        AppLog.i("qn", "report url is " + baseUrl + "channels/report");
+        AppLog.i("qn", "channel report url is " + baseUrl + "channels/report");
         return baseUrl + "channels/report";
+    }
+
+    /**
+     * 举报：用户端
+     * @return
+     */
+    public static String getReport() {
+        AppLog.i("qn", "report url is " + baseUrl + "reports");
+        return baseUrl + "reports";
     }
 
     /**
@@ -795,7 +815,38 @@ public class AppConfig {
     public static String getChannelIndexTotal(String pageNum, String pageSize, String categoryId, String dateTime) {
         String url = baseUrl + "channels/index/total?pageNumber=" + pageNum + "&pageSize=" +
                 pageSize + "&categoryId=" + categoryId + "&dateTime=" + dateTime;
-        AppLog.i("channelIndex", url);
+        AppLog.i("fghd", "getChannelIndexTotlal url is " + url);
+        return url;
+    }
+
+    /**
+     * 获取文章评论
+     * @param articleId 文章编号
+     * @return
+     */
+    public static String getArticleComments(int articleId) {
+//        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1&pageSize=10&pageNumber=" + pageNum;
+        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
+        AppLog.i("articleComments", "the url is " + url);
+        return url;
+    }
+
+    /**
+     * 获取发表评论的url
+     * @return
+     */
+    public static String getSendingCommentsUrl() {
+        return baseUrl + "comments";
+    }
+
+    /**
+     * 获取删除评论的url
+     * @param commentId
+     * @return
+     */
+    public static String getDeletingCommentUrl(int commentId) {
+        String url = baseUrl + "comments/" + commentId;
+        AppLog.i("deleteComments", "url is " + url);
         return url;
     }
 

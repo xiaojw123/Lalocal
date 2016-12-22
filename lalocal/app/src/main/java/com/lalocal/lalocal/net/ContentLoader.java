@@ -35,6 +35,9 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.me.LRegister1Activity;
 import com.lalocal.lalocal.model.AreaItem;
@@ -46,6 +49,10 @@ import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
+import com.lalocal.lalocal.model.CommentRowBean;
+import com.lalocal.lalocal.model.CommentOperateResp;
+import com.lalocal.lalocal.model.CommentsResp;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
@@ -1426,8 +1433,27 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+    public void getPlayBackMsg(String historyId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PLAY_BACK_MSG);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackMsg(historyId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+    //历史直播评论
+    public  void getPlayBackLiveReview(String targetId,int targetType,int pageSize,int pageNumber){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PLAY_BACK_DETAILES);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackReview(targetId,targetType,pageSize,pageNumber),response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
 
-    //历史直播详情
+    }
+
+
+    //删除历史直播详情
     public void deleteLiveHistory(int id) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HISTORY_DELETE);
@@ -1556,12 +1582,19 @@ public class ContentLoader {
      * @param masterName 被举报用户的昵称
      * @param channelId  当前直播间id
      */
-    public void getChannelReport(String content, String[] photos,
+    public void getChannelReport(int reportType, String content, String[] photos,
                                  String userId, String masterName, String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_CHANNEL_REPORT);
         }
-        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getChannelReport(), response, response);
+
+        // 主播端举报
+        String url = AppConfig.getChannelReport();
+        // 如果是用户端举报
+        if (reportType == Constants.REPORT_USER) {
+            url = AppConfig.getReport();
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, url, response, response);
         JSONObject jsonObject = new JSONObject();
 
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
@@ -1600,6 +1633,92 @@ public class ContentLoader {
         ContentRequest contentRequest = new ContentRequest(AppConfig.getChannelIndexTotal(String.valueOf(pageNum), String.valueOf(pageSize), categoryId, dateTime),
                 response, response);
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 获取文章评论列表
+     * @param articleId
+     */
+    public void getArticleComments(int articleId)  {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ARTICLE_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(articleId), response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 发表评论
+     * @param content 评论内容
+     * @param targetId
+     * @param targetType
+     */
+    public void sendComments(String content, int targetId, int targetType) {
+        AppLog.i("ReplyA", "content is " + content + "; targetId is " + targetId + "; targetType is " + targetType);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SEND_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getSendingCommentsUrl(),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("ReplyA", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("content", content);
+            jsonObject.put("targetId", targetId);
+            jsonObject.put("targetType", targetType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 发表评论
+     * @param content 评论内容
+     * @param parentId
+     */
+    public void replyComments(String content, int parentId) {
+        AppLog.i("ReplyA", "content is " + content + "; parentId is " + parentId);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.REPLY_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getSendingCommentsUrl(),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("ReplyA", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("content", content);
+            jsonObject.put("parentId", parentId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 删除评论
+     * @param commentId
+     */
+    public void deleteComment(int commentId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.DELETE_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.getDeletingCommentUrl(commentId),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
     }
 
@@ -2249,6 +2368,23 @@ public class ContentLoader {
                         break;
                     case RequestCode.GET_CHANNEL_INDEX_TOTAL:
                         responseChannelIndexTotal(json);
+                        break;
+                    case RequestCode.GET_ARTICLE_COMMENTS:
+                        responseArticleComments(json);
+                    case RequestCode.PLAY_BACK_DETAILES:
+                        responsePlayBack(jsonObj);
+                        break;
+                    case RequestCode.PLAY_BACK_MSG:
+                        responsePlayBackMsg(json);
+                        break;
+                    case RequestCode.SEND_COMMENTS:
+                        responseSendingComments(json);
+                        break;
+                    case RequestCode.REPLY_COMMENTS:
+                        responseSendingComments(json);
+                        break;
+                    case RequestCode.DELETE_COMMENTS:
+                        responseDeleteComments(json);
                         break;
                 }
             } catch (JSONException e) {
@@ -3135,9 +3271,23 @@ public class ContentLoader {
         private void responPlayBackDetails(JSONObject jsonObj) {
             AppLog.i("TAG", "历史直播详情:" + jsonObj.toString());
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
-            LiveRowsBean liveRowsBean = new Gson().fromJson(resultJson.toString(), LiveRowsBean.class);
+            PlayBackResultBean liveRowsBean = new Gson().fromJson(resultJson.toString(), PlayBackResultBean.class);
             callBack.onPlayBackDetails(liveRowsBean);
         }
+
+        //历史直播回放评论
+        private void responsePlayBack(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
+            callBack.onPlayBackReviewDetails(reviewResultBean);
+        }
+        //历史回放消息
+        private void responsePlayBackMsg(String json) {
+
+            PlayBackMsgResultBean msgResultBean = new Gson().fromJson(json, PlayBackMsgResultBean.class);
+            callBack.onPlayBackMsgDetails(msgResultBean);
+        }
+
 
         //临时禁言
         private void responseUserMute(String json) {
@@ -3289,6 +3439,44 @@ public class ContentLoader {
             AppLog.i("rfs", "接口 11 ");
         }
 
+        /**
+         * 相应文章评论列表
+         * @param json
+         */
+        private void responseArticleComments(String json) {
+            AppLog.i("articleComments", "response json is " + json);
+            CommentsResp commentsResp = new Gson().fromJson(json, CommentsResp.class);
+            if (commentsResp.getReturnCode() == 0) {
+                CommentsResp.ResultBean resultBean = commentsResp.getResult();
+                if (resultBean == null)
+                    return;
+                List<CommentRowBean> commentList = resultBean.getRows();
+                if (commentList != null) {
+                    callBack.onGetArticleComments(commentList);
+                }
+            }
+        }
+
+        /**
+         * 响应评论发表
+         * @param json
+         */
+        private void responseSendingComments(String json) {
+
+            AppLog.i("ReplyA", "res json is " + json);
+            CommentOperateResp commentOperateResp = new Gson().fromJson(json, CommentOperateResp.class);
+            callBack.onSendComment(commentOperateResp);
+        }
+
+        /**
+         * 响应删除评论
+         * @param json
+         */
+        private void responseDeleteComments(String json) {
+            CommentOperateResp commentOperateResp = new Gson().fromJson(json, CommentOperateResp.class);
+            callBack.onDeleteComment(commentOperateResp);
+        }
+
         @Override
         public void onDialogClickListener() {
             Intent intent = new Intent(context, LRegister1Activity.class);
@@ -3296,6 +3484,8 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
+
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -3778,6 +3968,8 @@ public class ContentLoader {
         int LIVE_AVATAR = 243;
         int USER_LEAVE_ROOM = 244;
         int VALIDATE_MSGS = 245;
+        int PLAY_BACK_DETAILES=246;
+        int PLAY_BACK_MSG=247;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;
@@ -3787,6 +3979,10 @@ public class ContentLoader {
         int GET_DAILY_RECOMMENDATIONS = 305;
         int GET_CHANNEL_REPORT = 306;
         int GET_CHANNEL_INDEX_TOTAL = 307;
+        int GET_ARTICLE_COMMENTS = 308;
+        int SEND_COMMENTS = 309;
+        int REPLY_COMMENTS = 310;
+        int DELETE_COMMENTS = 311;
     }
 
 }
