@@ -116,7 +116,7 @@ public class AttentionActivity extends BaseActivity {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 AppLog.print("onScrollStateChanged  newState_____" + newState);
-                int scollYDistance = getScollYDistance();
+                int scollYDistance = getScrollYDistance();
                 if (scollYDistance > 0 && isFirstGetData) {
                     startScollYDistance = scollYDistance;
                     isFirstGetData = false;
@@ -129,14 +129,14 @@ public class AttentionActivity extends BaseActivity {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                int scollYDistance = getScollYDistance();
+                int scollYDistance = getScrollYDistance();
                 int scollDy = 50 - DensityUtil.px2dip(AttentionActivity.this, (scollYDistance - startScollYDistance));
                 AppLog.print("onScrolled firstVisibleItemPosition____" + firstVisibleItemPosition + "____scollDy____" + scollDy);
             }
         });
     }
 
-    private int getScollYDistance() {
+    private int getScrollYDistance() {
         LinearLayoutManager layoutManager = (LinearLayoutManager) xRecyclerView.getLayoutManager();
         firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
         View firstVisiableChildView = layoutManager.findViewByPosition(firstVisibleItemPosition);

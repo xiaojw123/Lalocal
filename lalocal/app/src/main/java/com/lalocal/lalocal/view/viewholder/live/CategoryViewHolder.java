@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.CategoryBean;
 import com.lalocal.lalocal.util.AppLog;
@@ -59,16 +60,18 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
      */
     private void syncScroll(final RecyclerView rv1, final RecyclerView rv2) {
         AppLog.i("scs", "syncScroll");
+        AppLog.i("scs", "rv1 " + rv1 + "; rv2 " + rv2);
         rv1.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (recyclerView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE) {
-//                    rv2.scrollBy(dx, dy);
-                    int scroll1 = rv1.getScrollY();
-                    mScrollDistance = scroll1;
-                    AppLog.i("scs", "inside " + mScrollDistance);
-                    int scroll2 = rv2.getScrollY();
-                    rv2.scrollBy(dx, scroll1 - scroll2);
+                    AppLog.i("scs", "inside dx " + dx);
+                    int scroll1 = getScrollXDistance(rv1);
+                    int scroll2 = getScrollXDistance(rv2);
+                    int delta = scroll1 - scroll2;
+                    AppLog.i("scs", "in 1 " + scroll1 + "; 2 " + scroll2 + "; de " + delta);
+                    rv2.scrollBy(delta, dy);
+                    AppLog.i("scs", "rv2 is " + (rv2 == null ? "null" : rv2) + "; scroll is " + delta);
                 }
             }
         });
@@ -77,15 +80,26 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 if (recyclerView.getScrollState() != RecyclerView.SCROLL_STATE_IDLE) {
-//                    rv1.scrollBy(dx, dy);
-                    int scroll1 = rv1.getScrollY();
-                    int scroll2 = rv2.getScrollY();
-                    mScrollDistance = scroll2;
-                    AppLog.i("scs", "outside " + mScrollDistance);
-                    rv1.scrollBy(dx, scroll2 - scroll1);
+                    int scroll1 = getScrollXDistance(rv1);
+                    int scroll2 = getScrollXDistance(rv2);
+                    int delta = scroll2 - scroll1;
+                    AppLog.i("scs", "out 1 " + scroll1 + "; 2 " + scroll2 + "; de " + delta);
+                    rv1.scrollBy(delta, dy);
                 }
             }
         });
+    }
+
+    private int getScrollXDistance(RecyclerView recyclerView) {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+        int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+        View firstVisiableChildView = layoutManager.findViewByPosition(firstVisibleItemPosition);
+        if (firstVisiableChildView != null) {
+            int itemHeight = firstVisiableChildView.getWidth();
+            return (firstVisibleItemPosition) * itemHeight - firstVisiableChildView.getLeft();
+        } else {
+            return 0;
+        }
     }
 
     /**

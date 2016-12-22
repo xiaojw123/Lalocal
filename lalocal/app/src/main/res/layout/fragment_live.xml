@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@color/color_fa"
-        android:visibility="gone"/>
+        android:visibility="invisible"/>
 
     <com.lalocal.lalocal.view.RecommendLayout
         android:id="@+id/recommend_page"

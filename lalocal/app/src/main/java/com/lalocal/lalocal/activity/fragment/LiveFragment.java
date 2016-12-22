@@ -307,13 +307,13 @@ public class LiveFragment extends BaseFragment {
                     if (position > mCategoryIndex) {
                         mRvTopCategory.setVisibility(View.VISIBLE);
                     } else {
-                        mRvTopCategory.setVisibility(View.GONE);
+                        mRvTopCategory.setVisibility(View.INVISIBLE);
                     }
                 } else {
-                    int scrollY = getScollYDistance(mXrvLive);
+                    int scrollY = getScrollYDistance(mXrvLive);
                     AppLog.i("psn", "scroll y = " + scrollY);
                     if (scrollY <= DensityUtil.dip2px(getActivity(), 100)) {
-                        mRvTopCategory.setVisibility(View.GONE);
+                        mRvTopCategory.setVisibility(View.INVISIBLE);
                     } else {
                         mRvTopCategory.setVisibility(View.VISIBLE);
                     }
@@ -329,7 +329,7 @@ public class LiveFragment extends BaseFragment {
 
     }
 
-    private int getScollYDistance(XRecyclerView xRecyclerView) {
+    private int getScrollYDistance(XRecyclerView xRecyclerView) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) xRecyclerView.getLayoutManager();
         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
         View firstVisiableChildView = layoutManager.findViewByPosition(firstVisibleItemPosition);
@@ -725,6 +725,8 @@ public class LiveFragment extends BaseFragment {
                     mPlaybackList, listener, mRvTopCategory);
             // 刷新数据
             mXrvLive.setAdapter(mAdapter);
+            // 分类栏滚动到顶部再滚动回来
+//            initCategory();
         } else {
             switch (refreshType) {
                 case REFRESH_MY_ATTENTION:
