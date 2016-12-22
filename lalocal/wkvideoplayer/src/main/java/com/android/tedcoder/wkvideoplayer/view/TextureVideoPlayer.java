@@ -287,6 +287,7 @@ public class TextureVideoPlayer extends RelativeLayout {
             mVideoView.pause();
         return getSeek();
         }else {
+            Log.i("TAF","播放器player pause22222");
             return 0;
         }
 

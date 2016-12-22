@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -126,7 +125,6 @@ public class CategoryAdapter extends RecyclerView.Adapter {
             mTvCategory = (TextView) itemView.findViewById(R.id.tv_category);
             mLayoutClick = (LinearLayout) itemView.findViewById(R.id.layout_click);
             mLayoutClick.setOnClickListener(this);
-
             mContainer.setFocusable(false);
             mImgCategory.setFocusable(false);
             mTvCategory.setFocusable(false);
@@ -143,7 +141,7 @@ public class CategoryAdapter extends RecyclerView.Adapter {
             // 获取分类的id
             int id = category.getId();
 
-            // 如果是“热门直播”（接口未给出热门直播的数据，因此将其id标记为-1）
+            // 如果是“热门直播”（接口未给出热门直播的数据，因此 将其id标记为-1）
             if (id == Constants.CATEGORY_HOT_LIVE) {
                 // 如果选中
                 if (isSelected) {
@@ -176,27 +174,9 @@ public class CategoryAdapter extends RecyclerView.Adapter {
         @Override
         public void onClick(View v) {
             if (mListener != null) {
-                int position = getAdapterPosition();int size = getItemCount();
-
-//                AppLog.i("ddddd", "position is " + position);
-//                LinearLayoutManager manager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
-//                int firstVisible = manager.findFirstCompletelyVisibleItemPosition();
-//                int lastVisible = manager.findLastCompletelyVisibleItemPosition();
-//                View childView = mRecyclerView.getChildAt(position);
-//                AppLog.i("ddddd", "child view is " + (childView == null ? "null" : "not null"));
-//                int scrollDistance = childView.getMeasuredWidth();
-//                AppLog.i("ddddd", "scrollDistance is " + scrollDistance);
-//                if (position == firstVisible && position != 0) {
-//                    AppLog.i("ddddd", "left " + position + "; first:" + firstVisible);
-//                    mRecyclerView.smoothScrollBy(scrollDistance, 0);
-//                } else if (position == lastVisible && position != size - 1) {
-//                    AppLog.i("ddddd", "right " + position + "; last:" + lastVisible);
-//                    mRecyclerView.smoothScrollBy(-scrollDistance, 0);
-//                }
-
+                int position = getAdapterPosition();
+                int size = getItemCount();
                 mListener.onItemClick(v, position);
-
-
             }
         }
     }

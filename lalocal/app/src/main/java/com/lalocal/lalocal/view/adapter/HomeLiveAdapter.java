@@ -2,7 +2,6 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -10,13 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.AttentionActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
@@ -331,15 +328,24 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
          * @param bean
          */
         public void initData(final LiveRowsBean bean) {
+            if(bean==null){
+                return;
+            }
+
             String title = bean.getTitle();
             String address = bean.getAddress();
             String photo = bean.getPhoto();
             String lastMsg = bean.getLastMsg();
             final int targetType = bean.getTargetType();
             final int id = bean.getId();
+
             LiveUserBean user = bean.getUser();
-            String avatar = user.getAvatar();
-            String nickname = user.getNickName();
+            String avatar =null;
+            String nickname=null;
+            if(user!=null){
+                avatar = user.getAvatar();
+                nickname = user.getNickName();
+            }
 
             if (TextUtils.isEmpty(title)) {
                 title = "木有标题哦~";

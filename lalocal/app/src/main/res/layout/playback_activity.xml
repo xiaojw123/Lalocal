@@ -1,40 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/play_layout"
-    android:background="@android:color/holo_blue_dark">
-
-    <RelativeLayout
+   >
+    <com.pili.pldroid.player.widget.PLVideoTextureView
+        android:id="@+id/VideoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center" ></com.pili.pldroid.player.widget.PLVideoTextureView>
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer
-            android:id="@+id/video_player"
+
+        <LinearLayout
+            android:id="@+id/loading_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="0dp"
-            android:layout_margin="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:gravity="center"
             android:layout_centerInParent="true"
-            >
-        </com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer>
-
-        <com.android.tedcoder.wkvideoplayer.view.PlayBackPlayer
-            android:id="@+id/video_view_player"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="0dp"
-            android:layout_margin="0dp"
-            android:gravity="center"
-            android:layout_centerInParent="true"></com.android.tedcoder.wkvideoplayer.view.PlayBackPlayer>
-
+            android:visibility="gone"
+            android:orientation="vertical">
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:text="缓冲中..."
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
            >
-
             <LinearLayout
                 android:id="@+id/playback_master_info_layout"
                 android:layout_width="@dimen/live_height_110dp"
@@ -96,21 +101,20 @@
 
         </RelativeLayout>
 
-        <com.lalocal.lalocal.live.entertainment.ui.MessageListViewEx
+        <ListView
             android:id="@+id/msgListview"
             style="@style/list_view"
             android:layout_width="match_parent"
             android:layout_marginRight="@dimen/live_height_100dp"
             android:layout_height="200dp"
-            android:layout_above="@id/live_nofitifation_layout"
             android:cacheColorHint="@android:color/transparent"
             android:divider="@null"
             android:fadingEdge="none"
             android:listSelector="@android:color/transparent"
-            android:layout_alignParentBottom="true"
-            android:background="@android:color/holo_blue_dark"
-            android:layout_marginBottom="@dimen/live_height_100dp"
+           android:layout_gravity="bottom"
+            android:layout_marginBottom="@dimen/live_height_70dp"
             android:scrollbars="none"
+            android:transcriptMode="alwaysScroll"
             />
 
         <RelativeLayout
@@ -140,5 +144,5 @@
                     />
             </LinearLayout>
         </RelativeLayout>
-    </RelativeLayout>
-</LinearLayout>
+    </FrameLayout>
+</FrameLayout>

@@ -49,7 +49,7 @@ public class LiveConstant {
     public static final String WATER="009";
     public static final String FRUIT="008";
     public static final String STAR="007";
-    public static final String SUN_CREAM="006";
+    public static final String UMBRELLA="006";
     public static final String GLASSES="005";
     public static final String FACE="004";
     public static final String PLAN="003";

@@ -22,7 +22,6 @@ import java.util.TimeZone;
  */
 public  class PlayBackMediaController extends FrameLayout  implements SeekBar.OnSeekBarChangeListener, View.OnClickListener {
 
-
     private View mMenuViewPlaceHolder;
     private TextView mTimeTxt;
     private SeekBar mProgressSeekBar;

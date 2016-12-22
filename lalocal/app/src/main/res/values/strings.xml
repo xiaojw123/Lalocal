@@ -384,8 +384,8 @@
     <string name="de_manager">"的管理员权限</string>
     <string name="send_gift_">给主播送了</string>
     <string name="ge">个</string>
-    <string name="master_aplit">主播 :  ,.,  </string>
-    <string name="me_split">我 :  ,.,  </string>
+    <string name="master_aplit">主播 : ,.,</string>
+    <string name="me_split">我 : ,.,</string>
     <string name="sou_quan">授权</string>
     <string name="wei_manager">为管理员</string>
     <string name="manager_quanxian">管理员权限</string>

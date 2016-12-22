@@ -247,7 +247,6 @@ public class PlayBackActivity extends BaseActivity {
             if (pariseResult.getReturnCode() == 0) {
                 praiseId = pariseResult.getResult();
                 praiseFlag = true;
-
                 praiseNum = praiseNum + 1;
                 playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
                 playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
