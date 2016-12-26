@@ -108,9 +108,12 @@ public class LiveFragment extends BaseFragment {
     // 判断是否加载更多
     private boolean isLoadingMore = false;
     // 判断是否刷新我的关注
-    private boolean isSyncAttention = false;
+//    private boolean isSyncAttention = false;
     // 当前分页页码
     private int mCurPageNum = 1;
+
+    // 判断是不是已经调用了onResume方法
+    private boolean isResume = false;
 
     // -标记
     private static final int INIT = 0x01;
@@ -403,6 +406,13 @@ public class LiveFragment extends BaseFragment {
             // 隐藏推荐页
             mRecommendPage.hide();
             mRecommendPage.setFocusable(false);
+        } else if (!hidden && !isResume) {
+            // 如果仅仅是fragment的tab切换，则刷新页面，不更改列表定位
+            refreshWithSolidPosition();
+        }
+
+        if (isResume) {
+            isResume = false;
         }
     }
 
@@ -413,10 +423,31 @@ public class LiveFragment extends BaseFragment {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
         } else {
-            isSyncAttention = true;
-            // 刷新我的关注
-            getChannelIndexTotal(mCurPageNum, mCategoryId);
+//            isSyncAttention = true;
+            refreshWithSolidPosition();
         }
+    }
+
+    /**
+     * 获取热门直播
+     * 刷新页面，不更改列表定位
+     */
+    private void refreshWithSolidPosition() {
+        // 已回调过onResume()方法
+        isResume = true;
+        // 默认为热门直播的id，自定义的，因为热门直播分类的tab是本地的，访问接口的categoryId=""，
+        // 所以定义一个标记，实际访问的时候用空字符串
+        mCategoryId = Constants.CATEGORY_HOT_LIVE;
+        // 当前页为0
+        mCurPageNum = 0;
+        // 当前选中的分类栏下标为0
+        mSelCategory = 0;
+        // 设置选中的分类栏
+        if (mAdapter != null) {
+            mAdapter.setSelected(mSelCategory);
+        }
+        // 刷新我的关注
+        getChannelIndexTotal(mCurPageNum, mCategoryId);
     }
 
     @OnClick({R.id.btn_takelive})
@@ -582,12 +613,12 @@ public class LiveFragment extends BaseFragment {
             super.onGetChannelIndexTotal(result, dateTime);
 
             AppLog.i("sls", "enter onGetChannelIndexTotal");
-            if (isSyncAttention) {
-                isSyncAttention = false;
-                // 获取我的关注
-                mAttention = result.getLastDynamicUser();
-                // 刷新我的关注
-                setAdapter(REFRESH_MY_ATTENTION);
+//            if (isSyncAttention) {
+//                isSyncAttention = false;
+//                // 获取我的关注
+//                mAttention = result.getLastDynamicUser();
+//                // 刷新我的关注
+//                setAdapter(REFRESH_MY_ATTENTION);
 //            } else if (isSwitchCate) {
 //
 //                isSwitchCate = false;
@@ -644,7 +675,8 @@ public class LiveFragment extends BaseFragment {
 //                    mPlaybackList.addAll(historyListBean.getRows());
 //                }
 //                setAdapter(REFRESH_ALL);
-            } else if (isLoadingMore) {
+//            } else
+                if (isLoadingMore) {
                 // 加载的时候去掉刷新
                 isLoadingMore = false;
                 isRefresh = false;

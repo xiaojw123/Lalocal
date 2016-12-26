@@ -327,6 +327,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      */
     private class LiveViewHolder extends RecyclerView.ViewHolder {
 
+        // 容器最外部控件
+        LinearLayout layoutContainer;
         // 主标题
         TextView tvTitle;
         // 定位
@@ -349,6 +351,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
             itemView.setFocusable(false);
 
+            layoutContainer = (LinearLayout) itemView.findViewById(R.id.layout_live_container);
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
             tvAddress = (TextView) itemView.findViewById(R.id.tv_address);
             tvNickname = (TextView) itemView.findViewById(R.id.tv_nickname);
@@ -370,6 +373,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 return;
             }
 
+            layoutContainer.setFocusable(false);
             String title = bean.getTitle();
             String address = bean.getAddress();
             String photo = bean.getPhoto();
