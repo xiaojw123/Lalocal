@@ -88,7 +88,7 @@ public class TestChatActivity extends BaseActivity implements View.OnClickListen
         type = getIntent().getIntExtra(SERVICE_TYPE, DEFAULT_TYPE);
         if (type != DEFAULT_TYPE) {
             setLoaderCallBack(new ChatCallBack());
-            mContentloader.getUsersService(type);
+//            mContentloader.getUsersService(type);
         } else {
             chatTv.setTitle(getNickName());
         }

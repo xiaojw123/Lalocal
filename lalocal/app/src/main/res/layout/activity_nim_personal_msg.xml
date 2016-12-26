@@ -115,78 +115,13 @@
             <View style="@style/CommonDeLineTheme" />
 
 
-            <RelativeLayout
-                android:id="@+id/my_immessage_assistant"
+            <fragment
+                android:id="@+id/nim_personal_msg_fragment"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/my_immessage_item_height"
+                android:layout_height="match_parent"
+                android:name="com.lalocal.lalocal.activity.fragment.PersonalMessageFragment"
                 android:layout_marginTop="@dimen/dimen_size_10_dp"
-                android:background="@color/white"
-                android:paddingLeft="@dimen/dimen_size_15_dp"
-                android:paddingRight="@dimen/dimen_size_15_dp">
-
-                <ImageView
-                    android:id="@+id/my_immessage_customer_avatar"
-                    android:layout_width="@dimen/dimen_size_60_dp"
-                    android:layout_height="@dimen/dimen_size_60_dp"
-                    android:layout_centerVertical="true"
-                    android:padding="@dimen/dimen_size_5_dp"
-                    android:src="@drawable/local_head" />
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/dimen_size_5_dp"
-                    android:layout_toRightOf="@+id/my_immessage_customer_avatar">
-
-                    <com.lalocal.lalocal.view.ShapeTextView
-                        android:id="@+id/official_stv"
-                        android:layout_width="34dp"
-                        android:layout_height="16dp"
-                        android:layout_marginTop="@dimen/dimen_size_3_dp"
-                        android:gravity="center"
-                        android:text="官方"
-                        android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_12_sp"
-                        app:corner_radius="@dimen/dimen_size_2_dp"
-                        app:solid_color="@color/color_ffaa2a" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignTop="@+id/official_stv"
-                        android:layout_marginLeft="@dimen/dimen_size_5_dp"
-                        android:layout_toRightOf="@+id/official_stv"
-                        android:text="乐可小助手"
-                        android:textColor="@color/color_191000" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/official_stv"
-                        android:layout_marginTop="@dimen/dimen_size_8_dp"
-                        android:text="你好我是乐可小助手，欢迎你的到来"
-                        android:textColor="@color/color_60190f00" />
-
-                </RelativeLayout>
-
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/my_immessage_user_list"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white" />
-
-            </RelativeLayout>
-            <View style="@style/CommonDeLineTheme" />
-
+                />
 
         </LinearLayout>
 

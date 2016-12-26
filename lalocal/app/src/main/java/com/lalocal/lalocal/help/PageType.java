@@ -16,6 +16,7 @@ public interface PageType {
      int  PAGE_BOOK_BIND=0x22;
      int  PAGE_CHARGE=0x23;
      int  PAGE_DESTIATION=0x24;
+     int  PAGE_LIVE_HOME=0x25;
 
 
 

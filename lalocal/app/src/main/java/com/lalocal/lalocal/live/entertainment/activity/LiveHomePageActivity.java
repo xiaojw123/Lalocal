@@ -23,7 +23,7 @@ import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.im.ChatActivity;
+import com.lalocal.lalocal.im.NimChatActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.LiveArticleVPAdapter;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
@@ -192,7 +192,7 @@ public class LiveHomePageActivity extends BaseActivity {
     public void clickButton(View view) {
         switch (view.getId()) {
             case R.id.master_im:
-                ChatActivity.start(this,result.getAccId(),result.getNickName(),result.getAvatar(),0);
+                NimChatActivity.start(this,result.getAccId(),result.getNickName());
                 break;
             case R.id.userpage_atten_tab:
                 Intent intent = new Intent(LiveHomePageActivity.this, LiveAttentionOrFansActivity.class);

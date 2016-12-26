@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context="com.lalocal.lalocal.me.PraiseCommentActivity">
     <com.lalocal.lalocal.view.CustomTitleView
         android:layout_width="match_parent"
@@ -16,7 +17,6 @@
         android:id="@+id/praise_comment_xrl"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         />
 
 
