@@ -24,6 +24,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.CommentRowBean;
 import com.lalocal.lalocal.model.LiveUserBean;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.adapter.ArticleCommentListAdapter;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -125,11 +126,12 @@ public class ArticleCommentViewHolder extends RecyclerView.ViewHolder implements
 
         // 如果评论人头像不为空
         if (!TextUtils.isEmpty(avatar)) {
-            // 填充评论人头像
-            Glide.with(mContext)
-                    .load(avatar)
-                    .placeholder(R.drawable.androidloading)
-                    .into(mRoundAvatar);
+            // 填充评论人头像,Glide与RoundedImageView一起使用，会使圆角消失
+//            Glide.with(mContext)
+//                    .load(avatar)
+//                    .placeholder(R.drawable.androidloading)
+//                    .into(mRoundAvatar);
+            DrawableUtils.displayImg(mContext, mRoundAvatar, avatar, R.drawable.androidloading);
         }
         // 如果有评论时间
         if (!TextUtils.isEmpty(commentTime)) {

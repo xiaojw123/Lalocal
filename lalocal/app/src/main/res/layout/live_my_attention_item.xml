@@ -61,12 +61,12 @@
                             android:layout_width="@dimen/dimen_size_25_dp"
                             android:layout_height="@dimen/dimen_size_25_dp"
                             android:src="@drawable/androidloading"
-                            app:riv_corner_radius="99dp"/>
+                            app:riv_oval="true"/>
 
                         <com.makeramen.roundedimageview.RoundedImageView
                             android:layout_width="@dimen/dimen_size_6_dp"
                             android:layout_height="@dimen/dimen_size_6_dp"
-                            app:riv_corner_radius="6dp"
+                            app:riv_oval="true"
                             android:layout_alignParentRight="true"
                             android:src="@android:color/holo_red_dark"/>
                     </RelativeLayout>
