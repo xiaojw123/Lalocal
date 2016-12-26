@@ -26,12 +26,24 @@
             android:gravity="center">
 
             <TextView
-                android:id="@+id/master_attention"
-                android:layout_width="match_parent"
+                android:id="@+id/master_im"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:text="@string/attent_im"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:enabled="false"
+                android:textColor="@color/im_attention_textcolor"
+                />
+
+            <TextView
+                android:id="@+id/master_attention"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="关注"
-                android:textColor="#ffaa2a" />
+                android:textColor="@color/im_attention_textcolor" />
         </LinearLayout>
     </LinearLayout>
 

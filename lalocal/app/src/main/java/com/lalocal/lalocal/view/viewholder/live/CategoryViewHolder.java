@@ -30,7 +30,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
     // 外部分类列表控件
     private RecyclerView mRvOutside;
     // 分类栏适配器
-    private  CategoryAdapter mAdapter;
+    private CategoryAdapter mAdapter;
     // 列表控件滚动的位置
     private int mScrollDistance = 0;
 
@@ -45,7 +45,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         // 关联控件
         mRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_category);
         // 初始化RecyclerView
-        LinearLayoutManager layoutManager =  new LinearLayoutManager(mContext);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -55,6 +55,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * 同步两个RecyclerView的滑动
+     *
      * @param rv1
      * @param rv2
      */
@@ -104,6 +105,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * 初始化数据
+     *
      * @param categoryList
      */
     public void initData(List<CategoryBean> categoryList, int selected, CategoryAdapter.MyOnItemClickListener listener) {
@@ -142,11 +144,56 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * 设置选中的分类栏
+     *
      * @param selected
      */
     public void setSelected(int selected) {
         if (mAdapter != null) {
             mAdapter.setSelected(selected);
+            suitRecyclerView(mRecyclerView, mRvOutside, selected, mCategoryList.size());
+        }
+    }
+
+    /**
+     * 点击可视最左侧，列表向左滑动一个item的距离；反之向右滑动一个item的距离
+     */
+    private void suitRecyclerView(RecyclerView rv1, RecyclerView rv2, int selected, int size) {
+        LinearLayoutManager layoutManager1 = (LinearLayoutManager) rv1.getLayoutManager();
+        LinearLayoutManager layoutManager2 = (LinearLayoutManager) rv2.getLayoutManager();
+
+        // 列表第一个可见的下标
+        int firstVisible = layoutManager1.findFirstVisibleItemPosition();
+        // 列表第一个完全可见的下标
+        int firstCompletlyVisible = layoutManager1.findFirstCompletelyVisibleItemPosition();
+        // 列表最后一个可见的下标
+        int lastVisible = layoutManager1.findLastVisibleItemPosition();
+        // 列表最后一个完全可见的下标
+        int lastCompletlyVisible = layoutManager1.findLastCompletelyVisibleItemPosition();
+
+        // 粗略计算一屏宽度显示多少个item
+        int delta = lastCompletlyVisible - firstVisible;
+
+        // 如果点击最左边可见的item，列表左移
+        if (firstCompletlyVisible >= firstVisible && selected <= firstCompletlyVisible) {
+            if (selected >= 1) {
+                layoutManager1.scrollToPosition(selected - 1);
+                layoutManager2.scrollToPosition(selected - 1);
+            } else {
+                layoutManager1.scrollToPosition(selected);
+                layoutManager2.scrollToPosition(selected);
+            }
+        }
+        // 如果点击最右边可见的item，列表右移
+        else if (lastCompletlyVisible <= lastVisible && selected >= lastCompletlyVisible) {
+            if (selected < size - 1) {
+                int target = selected + 1 - delta;
+                layoutManager1.scrollToPosition(target);
+                layoutManager2.scrollToPosition(target);
+            } else {
+                int target = selected - delta;
+                layoutManager1.scrollToPosition(target);
+                layoutManager2.scrollToPosition(target);
+            }
         }
     }
 }

@@ -33,7 +33,6 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -51,6 +50,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /**
  * Created by lenovo on 2016/6/22.
  */
@@ -58,7 +58,6 @@ import java.util.List;
 public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
         View.OnClickListener, CustomTitleView.onBackBtnClickListener {
 
-    private static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
 
@@ -278,14 +277,9 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         if (result != null) {
             String orderUrl = result.orderUrl;
             if (!TextUtils.isEmpty(orderUrl)) {
-                int userId = UserHelper.getUserId(this);
-                String token = UserHelper.getToken(this);
-                String device = CommonUtil.getDevice();
-                String devcieId = CommonUtil.getUUID(this);
-                String version = AppConfig.getVersionName(this);
                 Intent intent = new Intent();
                 intent.setClass(this, BookActivity.class);
-                intent.putExtra(BookActivity.BOOK_URL, String.format(BOOK_URL_FORMART, orderUrl, userId, token, version, device, devcieId));
+                intent.putExtra(BookActivity.BOOK_URL, orderUrl);
                 startActivity(intent);
             }
         }

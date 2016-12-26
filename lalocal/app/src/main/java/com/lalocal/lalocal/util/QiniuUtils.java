@@ -58,7 +58,7 @@ public class QiniuUtils {
     /**
      * 上传简单文件
      * @param filePath 文件路径
-     * @param fileName 指定上传到七牛云上后图片的文件名
+     * @param fileName 指定上传到七牛云上后图片的文件名，后台获取token的时候有fileName
      * @param token 从服务端获取的token
      * @return 图片是否上传成功
      */

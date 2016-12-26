@@ -3,6 +3,7 @@ package com.lalocal.lalocal.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
@@ -13,6 +14,7 @@ import android.webkit.WebViewClient;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.JsInterface;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
@@ -47,7 +49,7 @@ public class BookActivity extends BaseActivity {
         ws.setAllowFileAccess(true); // 允许访问文件
         ws.setLoadWithOverviewMode(true);
         ws.setDisplayZoomControls(false);
-        mPreOrderWv.loadUrl(url);
+        mPreOrderWv.loadUrl(AppConfig.getH5Url(this,url));
 //        url = "http://www.jianshu.com/p/8bc9a4af771f";
     }
 
@@ -145,6 +147,18 @@ public class BookActivity extends BaseActivity {
         }
 
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        AppLog.print("keyDown__keycode___"+keyCode);
+        if (keyCode == KeyEvent.KEYCODE_BACK && mPreOrderWv.canGoBack()) {
+            AppLog.print("keyBack___webview goback");
+            mPreOrderWv.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

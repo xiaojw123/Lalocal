@@ -23,6 +23,8 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.PageType;
+import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
@@ -46,10 +48,14 @@ import butterknife.OnClick;
 public class DestinationAreaActivity extends BaseActivity {
     public static final String AREA_ID = "area_id";
     public static final String AREA_NAME = "area_name";
+    public static final String YITU8_URL = "yitu8_url";
+
     @BindView(R.id.destion_search_btn)
     Button searchBtn;
     @BindView(R.id.destination_area_title)
     CustomTitleView destinationAreaTitle;
+    @BindView(R.id.des_areanav_menu_pickup)
+    TextView desAreanavMenuPickup;
     @BindView(R.id.des_areanav_menu_hot)
     TextView desAreanavMenuHot;
     @BindView(R.id.des_areanav_menu_strategy)
@@ -80,6 +86,7 @@ public class DestinationAreaActivity extends BaseActivity {
     SiftPoupWindow poupWindow;
     @BindView(R.id.destination_area_emptv)
     TextView destinationAreaEmpView;
+    String yiut8Url;
 
 
     @Override
@@ -88,6 +95,7 @@ public class DestinationAreaActivity extends BaseActivity {
         setContentView(R.layout.destination_area_layout);
         ButterKnife.bind(this);
         String areaName = getIntent().getStringExtra(AREA_NAME);
+        yiut8Url = getIntent().getStringExtra(YITU8_URL);
         destinationAreaTitle.setTitle(String.format(areaTile, areaName));
         desAreaItemsXlv.setPullRefreshEnable(true);
         desAreaItemsXlv.setOnItemClickListener(areaDetailClickListener);
@@ -105,6 +113,7 @@ public class DestinationAreaActivity extends BaseActivity {
         loader.getDesAreaRoutes(10, 1, areaId, 2);
         loader.getAreaProducts(10, 1, areaId, 0, -1);
         loader.getAreaProducts(10, 1, areaId, 1, -1);
+        loader.getYiTu8Citys(areaId);
     }
 
 
@@ -144,7 +153,7 @@ public class DestinationAreaActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if (poupWindow!=null&&poupWindow.isShowing()) {
+        if (poupWindow != null && poupWindow.isShowing()) {
             poupWindow.dismiss();
         }
         super.onDestroy();
@@ -158,6 +167,15 @@ public class DestinationAreaActivity extends BaseActivity {
         int toalPages;
         boolean isLoadMore;
 
+        @Override
+        public void onGetYitu8City(boolean hasCity) {
+            if (hasCity) {
+                desAreanavMenuPickup.setVisibility(View.VISIBLE);
+            } else {
+                desAreanavMenuPickup.setVisibility(View.GONE);
+            }
+
+        }
 
         @Override
         public void onGetHotItems(List<SearchItem> items, int type) {
@@ -218,18 +236,6 @@ public class DestinationAreaActivity extends BaseActivity {
             }
         }
 
-        public void hidenEmptView() {
-            if (destinationAreaEmpView != null && destinationAreaEmpView.getVisibility() == View.VISIBLE) {
-                destinationAreaEmpView.setVisibility(View.GONE);
-            }
-
-        }
-
-        public void showEmptView() {
-            if (destinationAreaEmpView != null && destinationAreaEmpView.getVisibility() != View.VISIBLE) {
-                destinationAreaEmpView.setVisibility(View.VISIBLE);
-            }
-        }
 
         @Override
         public void onError(VolleyError error) {
@@ -425,6 +431,21 @@ public class DestinationAreaActivity extends BaseActivity {
         }
     }
 
+
+    public void hidenEmptView() {
+        if (destinationAreaEmpView != null && destinationAreaEmpView.getVisibility() == View.VISIBLE) {
+            destinationAreaEmpView.setVisibility(View.GONE);
+        }
+
+    }
+
+    public void showEmptView() {
+        if (destinationAreaEmpView != null && destinationAreaEmpView.getVisibility() != View.VISIBLE) {
+            destinationAreaEmpView.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     private AdapterView.OnItemClickListener areaDetailClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -456,7 +477,7 @@ public class DestinationAreaActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.des_areanav_menu_hot, R.id.des_areanav_menu_strategy, R.id.des_areanav_menu_packagetour, R.id.des_areanav_menu_freewarker, R.id.des_areanav_menu_lacoalplay})
+    @OnClick({R.id.des_areanav_menu_pickup, R.id.des_areanav_menu_hot, R.id.des_areanav_menu_strategy, R.id.des_areanav_menu_packagetour, R.id.des_areanav_menu_freewarker, R.id.des_areanav_menu_lacoalplay})
     public void onClick(View view) {
 //        clearItems();
         switch (view.getId()) {
@@ -516,6 +537,15 @@ public class DestinationAreaActivity extends BaseActivity {
                     desAreaItemsXlv.setAdapter(freeAdpater);
                 }
                 loader.getAreaProducts(10, 1, areaId, 1, -1);
+                break;
+            case R.id.des_areanav_menu_pickup:
+                if (UserHelper.isLogined(this)) {
+                    Intent intent = new Intent(this, BookActivity.class);
+                    intent.putExtra(BookActivity.BOOK_URL, yiut8Url);
+                    startActivity(intent);
+                } else {
+                    LLoginActivity.start(DestinationAreaActivity.this);
+                }
                 break;
         }
     }

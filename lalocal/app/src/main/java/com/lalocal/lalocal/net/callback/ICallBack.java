@@ -46,6 +46,7 @@ import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.PraiseComment;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RechargeItem;
@@ -66,7 +67,8 @@ import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
-
+import org.json.JSONArray;
+import org.json.JSONObject;
 import java.util.List;
 
 /**
@@ -470,6 +472,18 @@ public abstract class ICallBack {
 
     public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {}
 
+    public void onGetYitu8City(boolean hasCity){
+
+    };
+    public void onGetUsersSerice(JSONArray resutJarray){
+
+    }
+    public void onGetUser(JSONObject resultJobj){
+
+    }
+    public void onGetPraiseComment(PraiseComment praiseComment){
+
+    }
     public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
     }
 

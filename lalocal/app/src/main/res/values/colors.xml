@@ -164,7 +164,9 @@
     <color name="color_f6cf4e">#F6CF4E</color>
     <color name="color_faf6f0">#FAF6F0</color>
     <color name="color_f5a623">#f5a623</color>
-    <color name="color_faf8f3">#faf8f3</color>
-
+    <color name="color_20190f00">#20190F00</color>
+    <color name="color_60190f00">#60190F00</color>
+    <color name="color_ff3030">#FFFF3030</color>
+    <color name="color_faf8f3">#FFFAF8F3</color>
     <color name="color_home_live_category_text">#190F00</color>
 </resources>

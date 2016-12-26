@@ -53,7 +53,7 @@
                     android:id="@+id/order_detail_img"
                     android:layout_width="@dimen/order_detail_img_width"
                     android:layout_height="@dimen/order_detail_img_width"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
 
                 <!--android:layout_width="@dimen/order_detail_title_wdith"-->
                 <TextView

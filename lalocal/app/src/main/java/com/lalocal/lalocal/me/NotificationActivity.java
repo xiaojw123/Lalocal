@@ -26,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MyMessageActivity extends BaseActivity {
+public class NotificationActivity extends BaseActivity {
 
     @BindView(R.id.my_message_customer)
     RelativeLayout myMessageCustomer;
@@ -38,9 +38,9 @@ public class MyMessageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_message);
+        setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
-        myMessageRlv.setLayoutManager(new LinearLayoutManager(MyMessageActivity.this));
+        myMessageRlv.setLayoutManager(new LinearLayoutManager(NotificationActivity.this));
         myMessageRlv.setHasFixedSize(true);
         try {
             mItems = DataSupport.findAll(MessageItem.class);
@@ -72,7 +72,7 @@ public class MyMessageActivity extends BaseActivity {
         public void onGetPushLogs(String date, List<MessageItem> items) {
             mItems.addAll(items);
             DataSupport.saveAll(mItems);
-            UserHelper.updateDateTime(MyMessageActivity.this, date);
+            UserHelper.updateDateTime(NotificationActivity.this, date);
             MyMessageAdapter messageAdapter = new MyMessageAdapter(mItems);
             messageAdapter.setOnItemClickListener(this);
             myMessageRlv.setAdapter(messageAdapter);
@@ -85,29 +85,29 @@ public class MyMessageActivity extends BaseActivity {
                 MessageItem item = (MessageItem) obj;
                 switch (item.getTargetType()) {
                     case -1:
-                        TargetPage.gotoWebDetail(MyMessageActivity.this, item.getTargetUrl(),"",false);
+                        TargetPage.gotoWebDetail(NotificationActivity.this, item.getTargetUrl(),"",false);
                         break;
                     case 0:
-                        TargetPage.gotoUser(MyMessageActivity.this, String.valueOf(item.getTargetId()), true);
+                        TargetPage.gotoUser(NotificationActivity.this, String.valueOf(item.getTargetId()), true);
                         break;
                     case 1://文章
                     case 13://资讯
-                        TargetPage.gotoArticleDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()),false);
+                        TargetPage.gotoArticleDetail(NotificationActivity.this, String.valueOf(item.getTargetId()),false);
                         break;
                     case 2://产品
-                        TargetPage.gotoProductDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()), item.getTargetType(),false);
+                        TargetPage.gotoProductDetail(NotificationActivity.this, String.valueOf(item.getTargetId()), String.valueOf(item.getTargetType()),false);
                         break;
                     case 9://线路
-                        TargetPage.gotoRouteDetail(MyMessageActivity.this, item.getTargetId(),false);
+                        TargetPage.gotoRouteDetail(NotificationActivity.this, String.valueOf(item.getTargetId()),false);
                         break;
                     case 10://专题
-                        TargetPage.gotoSpecialDetail(MyMessageActivity.this, String.valueOf(item.getTargetId()),false);
+                        TargetPage.gotoSpecialDetail(NotificationActivity.this, String.valueOf(item.getTargetId()),false);
                         break;
                     case 15:
-                        TargetPage.gotoLive(MyMessageActivity.this, String.valueOf(item.getTargetId()), true);
+                        TargetPage.gotoLive(NotificationActivity.this, String.valueOf(item.getTargetId()), true);
                         break;
                     case 20:
-                        TargetPage.gotoPlayBack(MyMessageActivity.this, String.valueOf(item.getTargetId()), true);
+                        TargetPage.gotoPlayBack(NotificationActivity.this, String.valueOf(item.getTargetId()), true);
                         break;
 
                 }

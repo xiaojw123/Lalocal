@@ -111,7 +111,7 @@
             android:name=".activity.CarouselFigureActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity" />
-        <activity android:name=".activity.ArticleTestAct"></activity>
+        <activity android:name=".activity.ArticleTestAct" />
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -121,9 +121,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity android:name=".live.entertainment.activity.TestActivity"></activity>
         <activity android:name=".activity.RePlyActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" ></activity>
+
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -264,10 +266,9 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-
-      <!--   <meta-data
-         android:name="com.netease.nim.appKey"
-         android:value="4cbe3856032ad3755da23525e596405f" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.netease.nim.appKey" -->
+        <!-- android:value="4cbe3856032ad3755da23525e596405f" /> -->
         <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"
@@ -325,10 +326,9 @@
         <activity android:name=".activity.LiveDetailActivity" />
         <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
-
         <activity android:name=".live.entertainment.activity.PlayBackActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".live.entertainment.activity.PlayBackNewActivity"></activity>
+        <activity android:name=".live.entertainment.activity.PlayBackNewActivity"/>
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
@@ -358,15 +358,19 @@
         <service
             android:name="cmb.pb.cmbsafe.CmbService"
             android:exported="false" />
-
-        <activity android:name=".me.MyMessageActivity" />
+        <activity android:name=".me.NotificationActivity" />
         <activity android:name=".me.TargetWebActivity" />
         <activity android:name=".activity.GlobalSearchActivity" />
         <activity android:name=".activity.DestinationActivity" />
         <activity android:name=".test.TestGlobalSearchActivity" />
+        <activity android:name=".activity.PersonalMessageActivity" />
+        <activity android:name=".im.ChatActivity" />
+        <activity android:name=".im.WatchMessagePictureActivity" />
+        <activity android:name=".im.LalocalHelperActivity" />
+        <activity android:name=".me.PraiseCommentActivity" />
+        <activity android:name=".im.NimChatActivity"></activity>
         <activity android:name=".activity.ArticleCommentActivity"></activity>
-        <activity android:name=".activity.PostVideoActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <activity android:name=".activity.PostVideoActivity"></activity>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />

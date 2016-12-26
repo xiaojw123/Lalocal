@@ -98,6 +98,15 @@
         <!--android:drawablePadding="@dimen/dimen_size_10_dp"-->
         <!--android:textColor="@color/color_1a"-->
         <!--android:textSize="@dimen/text_size_15_sp" />-->
+
+
+        <ImageView
+            android:id="@+id/pay_manner_cmb_cb"
+            android:layout_width="@dimen/pay_check_rb_width"
+            android:layout_height="@dimen/pay_check_rb_width"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/pay_manner_checkbox_bg" />
+
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,14 +128,6 @@
                 android:textSize="@dimen/text_size_15_sp" />
 
         </LinearLayout>
-
-
-        <ImageView
-            android:id="@+id/pay_manner_cmb_cb"
-            android:layout_width="@dimen/pay_check_rb_width"
-            android:layout_height="@dimen/pay_check_rb_width"
-            android:layout_gravity="right|center_vertical"
-            android:background="@drawable/pay_manner_checkbox_bg" />
 
     </FrameLayout>
 

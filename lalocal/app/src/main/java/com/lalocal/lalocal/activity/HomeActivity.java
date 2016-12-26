@@ -119,12 +119,14 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
                 showFragment(FRAGMENT_ME);
                 break;
             case R.id.home_tab_search:
-                Intent intent = new Intent(this, GlobalSearchActivity.class);
-               startActivity(intent);
-             /*   Intent intent = new Intent(this, TestGlobalSearchActivity.class);
-                startActivity(intent);*/
+                gotoSearch();
                 break;
         }
+    }
+
+    private void gotoSearch() {
+        Intent intent = new Intent(this, GlobalSearchActivity.class);
+        startActivity(intent);
     }
 
 

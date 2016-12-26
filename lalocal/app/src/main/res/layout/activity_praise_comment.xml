@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_praise_comment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lalocal.lalocal.me.PraiseCommentActivity">
+    <com.lalocal.lalocal.view.CustomTitleView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:title_name="@string/comment_and_praise"
+        />
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/praise_comment_xrl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        />
+
+
+
+</LinearLayout>

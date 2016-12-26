@@ -1,19 +1,13 @@
 package com.lalocal.lalocal.activity;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -37,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.lalocal.lalocal.R.id.exchage_btn;
-import static com.lalocal.lalocal.R.id.exchage_score_edit;
+
 
 public class ExchangeActivity extends BaseActivity implements TextWatcher, CustomTitleView.onBackBtnClickListener, ViewTreeObserver.OnGlobalLayoutListener {
     private static String FORMART_EXCHARGE_PROMPT = "%1$d游票马上要兑换成%2$s乐钻啦";
@@ -45,7 +39,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     TextView exchageScoreNumTv;
     @BindView(R.id.exchage_gold_num_tv)
     TextView exchageGoldNumTv;
-    @BindView(exchage_score_edit)
+    @BindView(R.id.exchage_score_edit)
     EditText exchageScoreEdit;
     @BindView(exchage_btn)
     Button exchageBtn;
@@ -59,7 +53,6 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     int scale;
     WalletContent mWalletCont;
     int lastHeight;
-    boolean hasNavigationBar;
     int navigationBarHeight;
 
 
@@ -68,10 +61,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         super.onCreate(savedInstanceState);
         setContentView(R.layout.exchange_layout);
         ButterKnife.bind(this);
-        hasNavigationBar = checkDeviceHasNavigationBar(this);
-        if (hasNavigationBar) {
-            navigationBarHeight = getNavigationBarHeight();
-        }
+        navigationBarHeight = CommonUtil.getNavigationBarHeight(this);
         setLoaderCallBack(new ExchangeCallBack());
         exchargeBtnParams = (RelativeLayout.LayoutParams) exchageBtn.getLayoutParams();
         parentLayout.getViewTreeObserver().addOnGlobalLayoutListener(this);
@@ -85,12 +75,6 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
         }
     }
 
-    private int getNavigationBarHeight() {
-        Resources resources = getResources();
-        int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-        int height = resources.getDimensionPixelSize(resourceId);
-        return height;
-    }
 
     private void updateView() {
         if (mWalletCont != null) {
@@ -109,10 +93,10 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
                     long socre = Long.parseLong(socreText);
                     socre *= 100;
                     final long finalSocre = socre;
-                    if (finalSocre>mWalletCont.getScore()){
-                        CustomDialog dialog=new CustomDialog(this);
+                    if (finalSocre > mWalletCont.getScore()) {
+                        CustomDialog dialog = new CustomDialog(this);
                         dialog.setMessage("小主的钱袋里面没有这么多游票");
-                        dialog.setNeturalBtn("知道了",null);
+                        dialog.setNeturalBtn("知道了", null);
                         dialog.show();
                         return;
                     }
@@ -170,21 +154,6 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
 
     }
 
-    @SuppressLint("NewApi")
-    public static boolean checkDeviceHasNavigationBar(Context activity) {
-
-        //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
-        boolean hasMenuKey = ViewConfiguration.get(activity)
-                .hasPermanentMenuKey();
-        boolean hasBackKey = KeyCharacterMap
-                .deviceHasKey(KeyEvent.KEYCODE_BACK);
-
-        if (!hasMenuKey && !hasBackKey) {
-            // 做任何你需要做的,这个设备有一个导航栏
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void onGlobalLayout() {
@@ -199,7 +168,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
             return;
         }
         if (height > navigationBarHeight) {
-            exchargeBtnParams.bottomMargin = height-navigationBarHeight;
+            exchargeBtnParams.bottomMargin = height - navigationBarHeight;
         } else {
             exchargeBtnParams.bottomMargin = 0;
         }
