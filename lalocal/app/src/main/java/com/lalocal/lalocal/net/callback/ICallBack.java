@@ -481,6 +481,9 @@ public abstract class ICallBack {
     public void onGetUser(JSONObject resultJobj){
 
     }
+    public void onGetUser(JSONObject resultJobj,int type){
+
+    }
     public void onGetPraiseComment(PraiseComment praiseComment){
 
     }

@@ -1,5 +1,7 @@
 package com.lalocal.lalocal.me;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +35,10 @@ public class NotificationActivity extends BaseActivity {
     @BindView(R.id.my_message_rlv)
     RecyclerView myMessageRlv;
     List<MessageItem> mItems;
+    public static  void start(Context context){
+        Intent intent = new Intent(context, NotificationActivity.class);
+        context.startActivity(intent);
+    }
 
 
     @Override

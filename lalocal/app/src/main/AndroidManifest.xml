@@ -366,6 +366,7 @@
         <activity android:name=".me.PraiseCommentActivity" />
         <activity android:name=".im.NimChatActivity"></activity>
         <activity android:name=".activity.ArticleCommentActivity"></activity>
+        <activity android:name=".activity.NimPersonalMessageActivity"/>
     </application>
 
 </manifest>

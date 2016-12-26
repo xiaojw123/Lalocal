@@ -13,6 +13,7 @@ import com.lalocal.lalocal.im.view.ImageGestureListener;
 import com.lalocal.lalocal.im.view.MultiTouchZoomableImageView;
 import com.lalocal.lalocal.live.im.util.media.BitmapDecoder;
 import com.lalocal.lalocal.live.im.util.media.ImageUtil;
+import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -20,12 +21,13 @@ public class WatchMessagePictureActivity extends BaseActivity {
     public static final String IM_MESSAGE = "img_msg";
     MultiTouchZoomableImageView img;
 
-    public static void start(Context context,IMMessage imMessage){
-        Intent intent=new Intent(context,WatchMessagePictureActivity.class);
-        intent.putExtra(IM_MESSAGE,imMessage);
+    public static void start(Context context, IMMessage imMessage) {
+        Intent intent = new Intent(context, WatchMessagePictureActivity.class);
+        intent.putExtra(IM_MESSAGE, imMessage);
         context.startActivity(intent);
 
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,19 +38,23 @@ public class WatchMessagePictureActivity extends BaseActivity {
     }
 
     private void setThumbnail() {
-        IMMessage  message = (IMMessage) getIntent().getSerializableExtra(IM_MESSAGE);
+        IMMessage message = (IMMessage) getIntent().getSerializableExtra(IM_MESSAGE);
         FileAttachment fileAttachment = (FileAttachment) message.getAttachment();
-        String path = fileAttachment.getPath();
-        if (!TextUtils.isEmpty(path)) {
-            Bitmap bitmap = BitmapDecoder.decodeSampledForDisplay(path);
-            bitmap = ImageUtil.rotateBitmapInNeeded(path, bitmap);
-            if (bitmap != null) {
-                img.setImageBitmap(bitmap);
-                return;
+        if (fileAttachment != null) {
+            String thumbPath = fileAttachment.getThumbPath();
+            AppLog.print("setThumbnail path_____" + thumbPath);
+            if (!TextUtils.isEmpty(thumbPath)) {
+                Bitmap bitmap = BitmapDecoder.decodeSampledForDisplay(thumbPath);
+                bitmap = ImageUtil.rotateBitmapInNeeded(thumbPath, bitmap);
+                if (bitmap != null) {
+                    img.setImageBitmap(bitmap);
+                    return;
+                }
             }
         }
         img.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(R.drawable.androidloading));
     }
+
     // 设置图片点击事件
     protected void onImageViewFound(BaseZoomableImageView imageView) {
         imageView.setImageGestureListener(new ImageGestureListener() {
@@ -68,6 +74,7 @@ public class WatchMessagePictureActivity extends BaseActivity {
             }
         });
     }
+
     // 图片单击
     protected void onImageViewTouched() {
         finish();

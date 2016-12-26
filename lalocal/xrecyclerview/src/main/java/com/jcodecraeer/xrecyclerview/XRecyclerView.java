@@ -59,6 +59,7 @@ public class XRecyclerView extends RecyclerView {
     }
 
     private void init() {
+        setOverScrollMode(OVER_SCROLL_NEVER);
         if (pullRefreshEnabled) {
             mRefreshHeader = new ArrowRefreshHeader(getContext());
             mRefreshHeader.setProgressStyle(mRefreshProgressStyle);
