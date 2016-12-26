@@ -611,7 +611,6 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                 case R.id.live_telecast_top_setting:
                     liveCommonSetting();
                     break;
-
                 case R.id.audience_score_layout:
                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_LIST);
                     if(firstClick){
@@ -641,9 +640,7 @@ public abstract class  LivePlayerBaseActivity extends TActivity implements Modul
                     overLiveShareWeibo.setSelected(false);
                     overLiveShareWeixin.setSelected(true);
                     liveShare(SHARE_MEDIA.WEIXIN);
-
                     break;
-
             }
         }
     };

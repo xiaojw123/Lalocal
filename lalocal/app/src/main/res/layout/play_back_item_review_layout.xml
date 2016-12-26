@@ -34,7 +34,6 @@
                     android:textColor="@color/color_0065b2"
                     android:textSize="@dimen/live_text_15sp"
                     android:maxEms="15"
-                    android:text="肌肤呼和U戹"
                     android:singleLine="true"
                     android:ellipsize="end"
                    />
@@ -58,7 +57,7 @@
                 android:drawablePadding="@dimen/live_padding_5dp"
                 android:gravity="center"
                 android:layout_marginRight="@dimen/live_padding_15dp"
-
+                android:visibility="gone"
                 android:drawableRight="@drawable/bottom_unlike"/>
         </RelativeLayout>
 

@@ -163,6 +163,10 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
             collect.setOnClickListener(this);
         }
         thinkCollect = (TextView) v.findViewById(R.id.think_collect);
+
+        TextView inputText= (TextView) v.findViewById(R.id.input_text);
+        inputText.setOnClickListener(this);
+
     }
 
     @Override
@@ -183,6 +187,8 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
         } else if (i == R.id.live_telecast_collect) {
             mMediaControl.onClickCollect(collect);
 
+        }else if(i==R.id.input_text){
+            mMediaControl.inputPrivate();
         }
     }
     //是否收藏
@@ -620,6 +626,8 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
         void onClickBefore(ImageView imageView);
         void onClickNext(ImageView imageView);
         void getprogressDuration(long duration);
+
+        void  inputPrivate();
 
     }
 

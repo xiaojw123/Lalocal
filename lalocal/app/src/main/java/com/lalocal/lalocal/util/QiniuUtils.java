@@ -18,13 +18,13 @@ public class QiniuUtils {
     /**
      * 等比缩放后居中裁剪
      * @param url 图片链接
-<<<<<<< HEAD
+
      * @param width 最小宽度 单位：px
      * @param height 最小高度 单位：px
-=======
+
      * @param width 最小宽度
      * @param height 最小高度
->>>>>>> 2e3d25b2f3d1215b2562b2912bc8b88ee9c6f196
+
      * @return
      */
     public static String centerCrop(String url, int width, int height) {
@@ -58,13 +58,12 @@ public class QiniuUtils {
     /**
      * 上传简单文件
      * @param filePath 文件路径
-     * @param fileName 指定上传到七牛云上后图片的文件名
+     * @param fileName 指定上传到七牛云上后图片的文件名，后台获取token的时候有fileName
      * @param token 从服务端获取的token
      * @return 图片是否上传成功
      */
     public static boolean uploadSimpleFile(String filePath, String fileName, String token) {
         final boolean[] isSuccess = {false};
-        final String[] link = new String[1];
         UploadManager uploadManager = new UploadManager();
         uploadManager.put(filePath, fileName, token,
                 new UpCompletionHandler() {
@@ -77,4 +76,22 @@ public class QiniuUtils {
                 }, null);
         return isSuccess[0];
     }
+
+    public static boolean uploadSimpleFile(byte[] bytesImg, final String fileName, final String token) {
+        final boolean[] isSuccess = {false};
+        UploadManager uploadManager = new UploadManager();
+        uploadManager.put(bytesImg, fileName, token,
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                        AppLog.i("TAG","key:"+key+"     fileName:"+fileName+"    info:"+info.statusCode+(response==null?"     空":response.toString()));
+                        if (info.statusCode == 200) {
+                            isSuccess[0] = true;
+
+                        }
+                    }
+                }, null);
+        return isSuccess[0];
+    }
+
 }

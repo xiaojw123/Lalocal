@@ -500,4 +500,7 @@ public abstract class ICallBack {
 
     public void onDeleteComment(CommentOperateResp commentOperateResp) {}
 
+    public void onAlterHistoryPlayBack(int returnCode) {
+
+    }
 }

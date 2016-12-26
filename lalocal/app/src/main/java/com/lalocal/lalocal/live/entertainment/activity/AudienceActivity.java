@@ -232,6 +232,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 liveTitle = liveRowsBean.getTitle();
                 channelId = String.valueOf(liveRowsBean.getId());
                 cname = liveRowsBean.getCname();
+
                 liveStatus = String.valueOf(liveRowsBean.getStatus());
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
