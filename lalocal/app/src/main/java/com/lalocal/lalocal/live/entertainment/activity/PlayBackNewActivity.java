@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.base.util.DialogUtil;
@@ -292,6 +294,7 @@ public class PlayBackNewActivity extends BaseActivity {
                 if(mVideoView!=null){
                     mVideoView.stopPlayback();
                 }
+                setResult(KeyParams.PLAYER_OVER_FIRST_RESULTCODE,new Intent());
                 finish();
                 break;
             case R.id.playback_top_share:

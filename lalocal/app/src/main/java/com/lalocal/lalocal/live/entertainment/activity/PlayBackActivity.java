@@ -54,7 +54,7 @@ import butterknife.OnClick;
  */
 public class PlayBackActivity extends BaseActivity {
 
-
+public static final  String PLAYER_OVER_FIRST="player_over_first";
     @BindView(R.id.video_cover)
     ImageView videoCover;
     @BindView(R.id.back_btn)
@@ -130,6 +130,13 @@ public class PlayBackActivity extends BaseActivity {
             allRows.clear();
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
+        }
+
+        if(requestCode==KeyParams.PLAYER_OVER_FIRST_REQUESTCODE&&resultCode==KeyParams.PLAYER_OVER_FIRST_RESULTCODE){
+
+            //第一次返回。。。。
+
+
         }
     }
     boolean isAttentions;
@@ -234,8 +241,13 @@ public class PlayBackActivity extends BaseActivity {
                 // TODO 视频回放
                 Intent intent = new Intent(PlayBackActivity.this, PlayBackNewActivity.class);
                 intent.putExtra("id",intentId);
+         /*   if(!SPCUtils.getBoolean(PlayBackActivity.this,PLAYER_OVER_FIRST)){
                 startActivity(intent);
-                finish();
+            }else{
+                SPCUtils.put(PlayBackActivity.this,PLAYER_OVER_FIRST,true);
+                startActivityForResult(intent,KeyParams.PLAYER_OVER_FIRST_REQUESTCODE);
+            }*/
+                startActivityForResult(intent,KeyParams.PLAYER_OVER_FIRST_REQUESTCODE);
                 break;
             case R.id.reply_write_iv:
                 if(UserHelper.isLogined(PlayBackActivity.this)){

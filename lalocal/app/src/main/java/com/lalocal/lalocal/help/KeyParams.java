@@ -72,6 +72,8 @@ public interface KeyParams {
     public static final int POST_RESULTCODE=303;
     public static final int LOCATION_RESULTCODE=304;
     public static final int LOCATION_REQUESTCODE=305;
+    public static final int PLAYER_OVER_FIRST_REQUESTCODE=306;
+    public static final int PLAYER_OVER_FIRST_RESULTCODE=307;
 
 
     public static final int REPLY_TYPE_NEW = 400; // 发起评论
