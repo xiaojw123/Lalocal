@@ -31,7 +31,7 @@
         android:layout_marginLeft="@dimen/live_padding_15dp"
         android:layout_marginRight="@dimen/live_padding_15dp"
         >
-        <EditText
+        <TextView
             android:id="@+id/play_back_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
             android:layout_marginTop="@dimen/live_padding_5dp"
            />
 
-        <EditText
+        <TextView
             android:id="@+id/play_back_title_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

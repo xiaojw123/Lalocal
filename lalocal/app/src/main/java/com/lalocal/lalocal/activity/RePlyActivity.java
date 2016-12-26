@@ -89,7 +89,6 @@ public class RePlyActivity extends BaseActivity {
             }
         }
     }
-
     /**
      * 初始化视图
      */
@@ -97,9 +96,10 @@ public class RePlyActivity extends BaseActivity {
         // 设置标题
         replyTitleContent.setText(mTitle);
         // 设置输入控件的文本监听事件
+        replyContent.setFocusable(true);
+        replyContent.requestFocus();
         replyContent.addTextChangedListener(watcher);
     }
-
     /**
      * 初始化ContentLoader
      */
@@ -107,7 +107,6 @@ public class RePlyActivity extends BaseActivity {
         contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
     }
-
     /**
      * 初始化文本监听器
      */
@@ -181,6 +180,9 @@ public class RePlyActivity extends BaseActivity {
                 String message = commentOperateResp.getMessage();
                 if (TextUtils.equals(message, "success")) {
                     Toast.makeText(RePlyActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent();
+                    intent.putExtra(KeyParams.REPLY_CONTENT,"success");
+                    setResult(KeyParams.REPLY_RESULTCODE,intent);
                     RePlyActivity.this.finish();
                     return;
                 }

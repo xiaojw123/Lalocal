@@ -1452,6 +1452,17 @@ public class ContentLoader {
 
     }
 
+    //修改历史回放
+    public void getAlterPlayBack(int historyId,String title,String photo,String description,String address){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.ALTER_PLAY_BACK);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.PUT,AppConfig.getAlterPlayBack(historyId),response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getAlterPlayBack(title,photo, description,address));
+        requestQueue.add(request);
+    }
+
 
     //删除历史直播详情
     public void deleteLiveHistory(int id) {
@@ -2386,6 +2397,9 @@ public class ContentLoader {
                     case RequestCode.DELETE_COMMENTS:
                         responseDeleteComments(json);
                         break;
+                    case RequestCode.ALTER_PLAY_BACK:
+                        responseAlterHistoryPlayBack(jsonObj);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -3116,7 +3130,7 @@ public class ContentLoader {
 
         //修改直播间
         private void responseAlterLiveRoom(String json) {
-
+            AppLog.i("TAG","修改直播间："+json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             callBack.onAlterLiveRoom(createLiveRoomDataResp);
         }
@@ -3277,15 +3291,28 @@ public class ContentLoader {
 
         //历史直播回放评论
         private void responsePlayBack(JSONObject jsonObj) {
+            AppLog.i("TAG","历史回放评论:"+jsonObj.toString());
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
             PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
             callBack.onPlayBackReviewDetails(reviewResultBean);
         }
         //历史回放消息
         private void responsePlayBackMsg(String json) {
-
+            AppLog.i("TAG","回放历史消息:"+json);
             PlayBackMsgResultBean msgResultBean = new Gson().fromJson(json, PlayBackMsgResultBean.class);
             callBack.onPlayBackMsgDetails(msgResultBean);
+        }
+        //修改历史回放
+        private void responseAlterHistoryPlayBack(JSONObject jsonObj) {
+
+            try {
+                int anInt = jsonObj.getInt(ResultParams.RESULT_CODE);
+                callBack.onAlterHistoryPlayBack(anInt);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
 
@@ -3641,6 +3668,21 @@ public class ContentLoader {
         return jsonObject.toString();
     }
 
+    //修改历史回放
+    private String getAlterPlayBack(String title,String photo,String description,String address){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", title);
+            jsonObject.put("photo", photo);
+            jsonObject.put("description", description);
+            jsonObject.put("address", address);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
     //查看用户是否为管理员
     public String getUserIdentityStatus(String userID, String channelId) {
         AppLog.i("TAG", "getUserIdentityStatus" + "userID:" + userID + "channelId:" + channelId);
@@ -3970,6 +4012,7 @@ public class ContentLoader {
         int VALIDATE_MSGS = 245;
         int PLAY_BACK_DETAILES=246;
         int PLAY_BACK_MSG=247;
+        int ALTER_PLAY_BACK=248;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

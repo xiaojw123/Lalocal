@@ -121,8 +121,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".live.entertainment.activity.TestActivity" />
-        <activity android:name=".activity.RePlyActivity"></activity>
+
+        <activity android:name=".live.entertainment.activity.TestActivity"></activity>
+        <activity android:name=".activity.RePlyActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" ></activity>
+
         <!-- 友盟 -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -331,7 +334,8 @@
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
 
-        <activity android:name=".live.entertainment.activity.ReportActivity" />
+        <activity android:name=".live.entertainment.activity.ReportActivity"
+            ></activity>>
         <activity android:name=".activity.MyArticleActivity" />
         <activity android:name=".me.LLoginActivity" />
         <activity android:name=".me.LPEmailBound2Activity" />
@@ -366,6 +370,10 @@
         <activity android:name=".me.PraiseCommentActivity" />
         <activity android:name=".im.NimChatActivity"></activity>
         <activity android:name=".activity.ArticleCommentActivity"></activity>
+        <activity android:name=".activity.PostVideoActivity"></activity>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

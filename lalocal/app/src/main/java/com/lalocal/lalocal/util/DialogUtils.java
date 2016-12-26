@@ -1,6 +1,5 @@
 package com.lalocal.lalocal.util;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -44,7 +43,7 @@ public class DialogUtils {
      * @param iconId
      * @param title
      */
-    public void createListDialog(Context context, int iconId, String title,
+    public static  void createListDialog(Context context, int iconId, String title,
                                  String[] items, DialogInterface.OnClickListener listener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         if (iconId > 0) {

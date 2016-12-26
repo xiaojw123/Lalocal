@@ -195,6 +195,7 @@ public class AppConfig {
     }
 
 
+
     //直播列表
     public static String getLiveListUrl() {
         return baseUrl + "channels?";
@@ -344,6 +345,11 @@ public class AppConfig {
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public static final String getPlayBackLiveDetails(int id) {
         return baseUrl + "channels/historys/" + id;
+    }
+
+    //修改历史回放 http://dev.lalocal.cn/api/channels/historys/1
+    public static final String getAlterPlayBack(int historyId){
+        return baseUrl+"channels/historys/"+historyId;
     }
     //回放消息展示
     public static final String getPlayBackMsg(String historyId){

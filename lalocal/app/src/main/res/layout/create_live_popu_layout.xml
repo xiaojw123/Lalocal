@@ -3,13 +3,15 @@
     android:id="@+id/create_live_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone">
+    >
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/live_loading_anim_" />
     <View
+        android:id="@+id/create_layout_bg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/live_notification"></View>
@@ -34,54 +36,49 @@
         android:textColor="@color/live_start_nomal_tv"
         android:textSize="@dimen/text_size_16_sp" />
 
-    <EditText
-        android:id="@+id/live_room_name"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/live_height_50dp"
-        android:layout_above="@+id/input_start_live"
-        android:background="@null"
-        android:gravity="center_vertical"
-        android:hint="为直播间取个名字"
-        android:layerType="software"
-        android:maxLength="20"
-        android:paddingLeft="@dimen/live_padding_15dp"
-        android:textColor="@android:color/white"
-        android:textColorHint="@color/live_text_color"
-        android:textSize="@dimen/text_size_16_sp"
-        android:windowSoftInputMode="stateVisible" />
-
-    <TextView
-        android:id="@+id/live_text_title_count"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/live_height_50dp"
-        android:layout_above="@+id/input_start_live"
-        android:layout_alignParentRight="true"
-        android:gravity="bottom"
-        android:text="0/20"
-        android:textColor="@android:color/white"
-        android:textSize="@dimen/live_text_10sp" />
 
     <RelativeLayout
+        android:layout_above="@+id/input_start_live"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/live_room_name">
+       >
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/create_live_head_iv"
-            android:layout_width="@dimen/live_height_60dp"
-            android:layout_height="@dimen/live_height_60dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/live_padding_15dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/androidloading" />
+        <RelativeLayout
+            android:id="@+id/live_cover_layout"
+            android:layout_width="@dimen/live_height_100dp"
+            android:layout_height="@dimen/live_height_100dp"
+            android:layout_marginLeft="@dimen/live_padding_15dp">
+            <ImageView
+                android:id="@+id/create_live_head_iv"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/home_me_personheadnormal"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_size_22_dp"
+                android:background="@color/color_black_b3000000"
+                android:textSize="@dimen/text_size_10_sp"
+                android:text="@string/edit_cover"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:layout_alignParentBottom="true"
+                android:paddingLeft="@dimen/live_padding_20dp"
+                android:paddingRight="@dimen/live_padding_20dp"
+                android:drawableLeft="@drawable/camera_small_ic"
+                />
+
+        </RelativeLayout>
+
+
 
         <TextView
             android:id="@+id/create_live_location_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/live_padding_10dp"
-            android:layout_toRightOf="@+id/create_live_head_iv"
+            android:layout_toRightOf="@+id/live_cover_layout"
             android:background="@drawable/live_create_location_bg"
             android:drawablePadding="@dimen/live_padding_5dp"
             android:drawableRight="@drawable/arrow_nextpage_right_ic"
@@ -94,57 +91,95 @@
             android:singleLine="true"
             android:text="正在获取位置信息..." />
 
-        <!--  <ImageView
-              android:id="@+id/create_live_share_friends"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/create_live_location_tv"
-              android:layout_toRightOf="@+id/create_live_head_iv"
-              android:paddingTop="11dp"
-              android:paddingLeft="@dimen/live_padding_10dp"
-              android:src="@drawable/create_live_share_friends_selector"/>
-          <ImageView
-              android:id="@+id/create_live_share_wechat"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/create_live_location_tv"
-              android:layout_toRightOf="@+id/create_live_share_friends"
-              android:paddingTop="11dp"
-              android:paddingLeft="@dimen/live_padding_10dp"
-              android:src="@drawable/create_live_share_weixin_selector"/>
 
-          <ImageView
-              android:id="@+id/create_live_share_weibo"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/create_live_location_tv"
-              android:layout_toRightOf="@+id/create_live_share_wechat"
-              android:paddingTop="11dp"
-              android:paddingLeft="@dimen/live_padding_10dp"
-              android:src="@drawable/create_live_share_weibo_selector"/>
 
-          <ImageView
-              android:id="@+id/create_live_share_qq"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/create_live_location_tv"
-              android:layout_toRightOf="@+id/create_live_share_weibo"
-              android:paddingTop="11dp"
-              android:paddingLeft="@dimen/live_padding_10dp"
-              android:src="@drawable/qq_create_unsel"
-              android:visibility="gone"/>
+        <TextView
+            android:id="@+id/live_definition_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/live_definition_bg"
+            android:text="网络: 高清"
+            android:drawableRight="@drawable/triangle_unsel"
+            android:drawablePadding="@dimen/live_padding_3dp"
+            android:paddingLeft="@dimen/live_padding_5dp"
+            android:paddingRight="@dimen/live_padding_5dp"
+            android:layout_marginTop="@dimen/live_padding_5dp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_below="@+id/create_live_location_tv"
+            android:layout_toRightOf="@+id/live_cover_layout"
+            />
+        <LinearLayout
+            android:id="@+id/live_definition_choose_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/live_create_location_bg"
+            android:padding="@dimen/live_padding_5dp"
+            android:layout_marginTop="@dimen/live_padding_5dp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_below="@+id/create_live_location_tv"
+            android:layout_toRightOf="@+id/live_cover_layout"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
 
-          <ImageView
-              android:id="@+id/create_live_share_qzone"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_below="@+id/create_live_location_tv"
-              android:layout_toRightOf="@+id/create_live_share_qq"
-              android:paddingTop="11dp"
-              android:paddingLeft="@dimen/live_padding_10dp"
-              android:src="@drawable/qzone_create_unsel"
-              android:visibility="gone"/>-->
+            <TextView
+                android:id="@+id/live_definition_choose_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="网络: 高清"
+                android:drawableRight="@drawable/triangle_sel"
+                android:drawablePadding="@dimen/live_padding_3dp"
+                android:background="@android:color/white"
+                />
+
+            <TextView
+                android:id="@+id/live_definition_choose_down"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="网络: 流畅"
+                android:paddingTop="@dimen/live_padding_5dp"
+                android:drawablePadding="@dimen/live_padding_3dp"
+                android:background="@android:color/white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                />
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/live_room_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_50dp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_toRightOf="@+id/live_cover_layout"
+            android:layout_below="@+id/live_definition_choose"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:hint="为直播间取个名字"
+            android:layerType="software"
+            android:maxLength="20"
+            android:textColor="@android:color/white"
+            android:textColorHint="@color/live_text_color"
+            android:textSize="@dimen/text_size_16_sp"
+
+          />
+
+        <TextView
+            android:id="@+id/live_text_title_count"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/live_height_50dp"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_toRightOf="@+id/live_cover_layout"
+            android:layout_below="@+id/live_definition_choose"
+            android:layout_alignParentRight="true"
+            android:gravity="bottom|right"
+            android:text="0/20"
+            android:textColor="@android:color/white"
+            android:paddingRight="@dimen/live_padding_5dp"
+            android:textSize="@dimen/live_text_10sp" />
+
     </RelativeLayout>
+
 
 
 </RelativeLayout>
