@@ -42,10 +42,12 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.RecommendLayout;
 import com.lalocal.lalocal.view.adapter.CategoryAdapter;
 import com.lalocal.lalocal.view.adapter.HomeLiveAdapter;
+import com.makeramen.roundedimageview.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -534,13 +536,16 @@ public class LiveFragment extends BaseFragment {
                         .into(imgPhoto);
             }
             if (!TextUtils.isEmpty(avatar)) {
-                ImageView imgAvatar = (ImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
-                Glide.with(getActivity())
-                        .load(avatar)
-                        .placeholder(R.drawable.androidloading)
-                        .into(imgAvatar);
+                RoundedImageView imgAvatar = (RoundedImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
+                // Glide与RoundedImage一起使用会导致圆角消失
+//                Glide.with(getActivity())
+//                        .load(avatar)
+//                        .placeholder(R.drawable.androidloading)
+//                        .into(imgAvatar);
+                DrawableUtils.displayImg(getActivity(), imgAvatar, avatar, R.drawable.androidloading);
             }
             if (TextUtils.isEmpty(nickname)) {
+
                 nickname = "一位不愿意透露姓名的网友";
             }
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);

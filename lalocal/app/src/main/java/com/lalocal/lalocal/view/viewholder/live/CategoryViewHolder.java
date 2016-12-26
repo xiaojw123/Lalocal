@@ -161,6 +161,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         LinearLayoutManager layoutManager1 = (LinearLayoutManager) rv1.getLayoutManager();
         LinearLayoutManager layoutManager2 = (LinearLayoutManager) rv2.getLayoutManager();
 
+        AppLog.i("srs", "rv1 " + rv1 + "; rv2 " + rv2 + "; selected " + selected + "; size " + size);
         // 列表第一个可见的下标
         int firstVisible = layoutManager1.findFirstVisibleItemPosition();
         // 列表第一个完全可见的下标
@@ -169,30 +170,39 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         int lastVisible = layoutManager1.findLastVisibleItemPosition();
         // 列表最后一个完全可见的下标
         int lastCompletlyVisible = layoutManager1.findLastCompletelyVisibleItemPosition();
+        AppLog.i("srs", "firstVisible " + firstVisible + "; firstComVIsible " + firstCompletlyVisible
+                + ";lastVisible " + lastVisible + "; lastComVisible " + lastCompletlyVisible);
 
         // 粗略计算一屏宽度显示多少个item
         int delta = lastCompletlyVisible - firstVisible;
+        AppLog.i("srs", "delta " + delta);
 
         // 如果点击最左边可见的item，列表左移
         if (firstCompletlyVisible >= firstVisible && selected <= firstCompletlyVisible) {
+            AppLog.i("srs", "点击左侧");
             if (selected >= 1) {
+                AppLog.i("srs", "zuo 1");
                 layoutManager1.scrollToPosition(selected - 1);
                 layoutManager2.scrollToPosition(selected - 1);
             } else {
+                AppLog.i("srs", "zuo 2");
                 layoutManager1.scrollToPosition(selected);
                 layoutManager2.scrollToPosition(selected);
             }
         }
         // 如果点击最右边可见的item，列表右移
         else if (lastCompletlyVisible <= lastVisible && selected >= lastCompletlyVisible) {
+            AppLog.i("srs", "点击右侧");
             if (selected < size - 1) {
+                AppLog.i("srs", "you 1");
                 int target = selected + 1 - delta;
-                layoutManager1.scrollToPosition(target);
-                layoutManager2.scrollToPosition(target);
+                layoutManager1.scrollToPositionWithOffset(target, 0);
+                layoutManager2.scrollToPositionWithOffset(target, 0);
             } else {
+                AppLog.i("srs", "you 2");
                 int target = selected - delta;
-                layoutManager1.scrollToPosition(target);
-                layoutManager2.scrollToPosition(target);
+                layoutManager1.scrollToPositionWithOffset(target, 0);
+                layoutManager2.scrollToPositionWithOffset(target, 0);
             }
         }
     }

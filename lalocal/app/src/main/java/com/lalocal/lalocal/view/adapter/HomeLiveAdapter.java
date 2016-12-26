@@ -27,10 +27,12 @@ import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.viewholder.live.ADViewHolder;
 import com.lalocal.lalocal.view.viewholder.live.AttentionViewHolder;
 import com.lalocal.lalocal.view.viewholder.live.CategoryViewHolder;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -332,7 +334,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         // 主播ID
         TextView tvNickname;
         // 主播头像
-        ImageView imgAvatar;
+        RoundedImageView imgAvatar;
         // 直播图片
         ImageView imgPhoto;
         // 情况描述
@@ -350,7 +352,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
             tvAddress = (TextView) itemView.findViewById(R.id.tv_address);
             tvNickname = (TextView) itemView.findViewById(R.id.tv_nickname);
-            imgAvatar = (ImageView) itemView.findViewById(R.id.img_avatar);
+            imgAvatar = (RoundedImageView) itemView.findViewById(R.id.img_avatar);
             imgPhoto = (ImageView) itemView.findViewById(R.id.img_photo);
             tvLastMsg = (TextView) itemView.findViewById(R.id.tv_last_msg);
             tvType = (TextView) itemView.findViewById(R.id.tv_type);
@@ -409,10 +411,12 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             }
 
             if (!TextUtils.isEmpty(avatar)) {
-                Glide.with(mContext)
-                        .load(avatar)
-                        .placeholder(R.drawable.androidloading)
-                        .into(imgAvatar);
+                // 使用Glide，RoudedImageView无法显示圆角
+//                Glide.with(mContext)
+//                        .load(avatar)
+//                        .placeholder(R.drawable.androidloading)
+//                        .into(imgAvatar);
+                DrawableUtils.displayImg(mContext, imgAvatar, avatar, R.drawable.androidloading);
             }
 
             if (TextUtils.isEmpty(nickname)) {
