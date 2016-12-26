@@ -402,6 +402,7 @@
     <string name="video_lightspot">视频亮点</string>
     <string name="video_lightspot_hint">请填写视频中精彩部分的介绍</string>
     <string name="post_alter_ok">确认更改</string>
+    <string name="edit_cover">编辑封面</string>
 
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>

@@ -63,7 +63,6 @@ public class PlayBackNewActivity extends BaseActivity {
     private static final int MESSAGE_ID_RECONNECTING = 0x01;
     @BindView(R.id.VideoView)
     PLVideoTextureView mVideoView;
-
     @BindView(R.id.playback_emcee_head)
     CircleImageView playbackEmceeHead;
     @BindView(R.id.playback_emcee_name)
@@ -290,7 +289,6 @@ public class PlayBackNewActivity extends BaseActivity {
                 }
                 break;
             case R.id.playback_quit://退出回放
-                Toast.makeText(PlayBackNewActivity.this,"点击关闭",Toast.LENGTH_SHORT).show();
                 if(mVideoView!=null){
                     mVideoView.stopPlayback();
                 }
@@ -335,6 +333,13 @@ public class PlayBackNewActivity extends BaseActivity {
             long msgAt = startAtLong + duration;
             AppLog.i("TAG","播放时间。。。。："+msgAt);
             getMsgInfo(msgAt);
+        }
+
+        @Override
+        public void inputPrivate() {
+            //TODO 私信主播
+            showToastTips("私信主播。。。。");
+
         }
     };
 
@@ -580,7 +585,6 @@ public class PlayBackNewActivity extends BaseActivity {
                 Toast.makeText(PlayBackNewActivity.this,tips,Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 
     private boolean mIsActivityPaused = true;
@@ -600,8 +604,6 @@ public class PlayBackNewActivity extends BaseActivity {
                 sendReconnectMessage();
                 return;
             }
-
-          // TODO  VideoView.setVideoPath(mVideoPath);
             loadingView.setVisibility(View.GONE);
             mVideoView.setVideoPath(videoList.get(0).getUrl());
             mVideoView.start();

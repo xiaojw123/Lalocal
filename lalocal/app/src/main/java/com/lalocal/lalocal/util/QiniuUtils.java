@@ -77,15 +77,17 @@ public class QiniuUtils {
         return isSuccess[0];
     }
 
-    public static boolean uploadSimpleFile(byte[] bytesImg, String fileName, final String token) {
+    public static boolean uploadSimpleFile(byte[] bytesImg, final String fileName, final String token) {
         final boolean[] isSuccess = {false};
         UploadManager uploadManager = new UploadManager();
         uploadManager.put(bytesImg, fileName, token,
                 new UpCompletionHandler() {
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject response) {
+                        AppLog.i("TAG","key:"+key+"     fileName:"+fileName+"    info:"+info.statusCode+(response==null?"     空":response.toString()));
                         if (info.statusCode == 200) {
                             isSuccess[0] = true;
+
                         }
                     }
                 }, null);

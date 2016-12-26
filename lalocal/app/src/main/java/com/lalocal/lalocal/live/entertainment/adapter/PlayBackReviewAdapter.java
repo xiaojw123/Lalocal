@@ -2,6 +2,7 @@ package com.lalocal.lalocal.live.entertainment.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -23,8 +24,12 @@ import com.lalocal.lalocal.activity.PostVideoActivity;
 import com.lalocal.lalocal.activity.RePlyActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewRowsBean;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DrawableUtils;
@@ -39,8 +44,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by android on 2016/12/14.
  */
 public class PlayBackReviewAdapter extends RecyclerView.Adapter {
-
-
     private Context mContext;
     private PlayBackResultBean liveRowsBean;
     private List<PlayBackReviewRowsBean> reviewRows;
@@ -89,8 +92,15 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
             View reviewTitle = LayoutInflater.from(parent.getContext()).inflate(R.layout.play_back_review_layout, null);
             return new ReviewTitle(reviewTitle);
         } else if (viewType == REVIEW_LIST) {
-            View reviewListLayout = LayoutInflater.from(parent.getContext()).inflate(R.layout.play_back_item_review_layout, null);
-            return new ReviewHolder(reviewListLayout);
+            if (reviewRows.size() == 0) {
+                View replyNull = LayoutInflater.from(parent.getContext()).inflate(R.layout.reply_list_null_layout, null);
+                return new ReplyNull(replyNull);
+            } else {
+
+                View reviewListLayout = LayoutInflater.from(parent.getContext()).inflate(R.layout.play_back_item_review_layout, null);
+                return new ReviewHolder(reviewListLayout);
+            }
+
         }
         return null;
     }
@@ -117,18 +127,24 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                     videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(drawable, null, null, null);
                 }
-                if(!isAttention){
-                    isAttention=true;
-                    videoInfoHolder.playBackAttentionMaster.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            if(onReviewItemClickListener!=null){
-                                onReviewItemClickListener.attentionBtnClick(isAttention,videoInfoHolder.playBackAttentionMaster);
+                videoInfoHolder.playBackAttentionMaster.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(UserHelper.isLogined(mContext)){
+                            if (onReviewItemClickListener != null && !isAttention) {
+                                isAttention = true;
+                                onReviewItemClickListener.attentionBtnClick(isAttention, videoInfoHolder.playBackAttentionMaster);
+                            }
+                        }else{
+                            if(LiveConstant.USER_INFO_FIRST_CLICK){
+                                LiveConstant.USER_INFO_FIRST_CLICK = false;
+                                showLoginViewDialog();
                             }
                         }
-                    });
-                }
+
+                    }
+                });
+
                 videoInfoHolder.playBackLocation.setText(liveRowsBean.getAddress());
                 videoInfoHolder.playNum.setText(liveRowsBean.getReadNum() + "次播放");
                 if (liveRowsBean.getDescription() != null) {
@@ -142,15 +158,16 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     videoInfoHolder.editContent.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                          //TODO 去编辑标题PostVideoActivity
+                            // 去编辑标题PostVideoActivity
                             Intent intent = new Intent(mContext, PostVideoActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString(KeyParams.POST_LOCATION, liveRowsBean.getAddress());
                             bundle.putString(KeyParams.POST_PHOTO, liveRowsBean.getPhoto());
                             bundle.putString(KeyParams.POST_TITLE, liveRowsBean.getTitle());
-                            bundle.putInt(KeyParams.POST_HISTORY_ID,liveRowsBean.getId());
+                            bundle.putInt(KeyParams.POST_HISTORY_ID, liveRowsBean.getId());
+                            bundle.putString(KeyParams.POST_VIDEO_INFO, liveRowsBean.getDescription());
                             intent.putExtras(bundle);
-                            ((Activity)mContext).startActivityForResult(intent, KeyParams.POST_REQUESTCODE);
+                            ((Activity) mContext).startActivityForResult(intent, KeyParams.POST_REQUESTCODE);
                         }
                     });
                 } else {//他人视频
@@ -162,47 +179,81 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 }
                 break;
             case REVIEW_TITLE:
-                ReviewTitle reviewTitle=(ReviewTitle)holder;
+                ReviewTitle reviewTitle = (ReviewTitle) holder;
                 reviewTitle.replyTitleLayout.setVisibility(View.VISIBLE);
                 reviewTitle.replyWriteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //TODO 去编辑评论页面
-                        Intent intent = new Intent(mContext, RePlyActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
-                        bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
-                        bundle.putInt(KeyParams.TARGET_ID, liveRowsBean.getId());
-                        bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
-                        intent.putExtras(bundle);
-                        ((Activity)mContext).startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+
+                        if(UserHelper.isLogined(mContext)){
+                            Intent intent = new Intent(mContext, RePlyActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
+                            bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
+                            bundle.putInt(KeyParams.TARGET_ID, liveRowsBean.getId());
+                            bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
+                            intent.putExtras(bundle);
+                            ((Activity) mContext).startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                        }else{
+                            if(LiveConstant.USER_INFO_FIRST_CLICK){
+                                LiveConstant.USER_INFO_FIRST_CLICK=false;
+                                showLoginViewDialog();
+                            }
+                        }
+
                     }
                 });
                 break;
             case REVIEW_LIST:
-                ReviewHolder reviewHolder = (ReviewHolder) holder;
-                PlayBackReviewRowsBean playBackReviewRowsBean = reviewRows.get(getPosition(position));
-                DrawableUtils.loadingImg(mContext, reviewHolder.palyBackReviewHeadIv, playBackReviewRowsBean.getUser().getAvatar());
-                reviewHolder.reviewName.setText(playBackReviewRowsBean.getUser().getNickName());
-                reviewHolder.reviewTime.setText(playBackReviewRowsBean.getDateTime());
-                reviewHolder.reviewContent.setText(playBackReviewRowsBean.getContent());
+                if(reviewRows.size()==0){
 
-                LiveUserBean targetUser = playBackReviewRowsBean.getTargetUser();
-                if (targetUser != null) {
-                    reviewHolder.reviewReplyTv.setVisibility(View.VISIBLE);
-                    PlayBackReviewRowsBean partentComment = playBackReviewRowsBean.getPartentComment();
-                    reviewHolder.reviewReplyTv.setText(textviewSetContent(targetUser.getNickName(), partentComment.getContent()));
-                } else {
-                    reviewHolder.reviewReplyTv.setVisibility(View.GONE);
-                }
-                reviewHolder.reviewItemLyout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (onReviewItemClickListener != null) {
-                            onReviewItemClickListener.itemClick();
-                        }
+                    ReplyNull replyNull=(ReplyNull)holder;
+
+                }else{
+
+                    ReviewHolder reviewHolder = (ReviewHolder) holder;
+                    final PlayBackReviewRowsBean playBackReviewRowsBean = reviewRows.get(getPosition(position));
+                    DrawableUtils.loadingImg(mContext, reviewHolder.palyBackReviewHeadIv, playBackReviewRowsBean.getUser().getAvatar());
+                    reviewHolder.reviewName.setText(playBackReviewRowsBean.getUser().getNickName());
+                    reviewHolder.reviewTime.setText(playBackReviewRowsBean.getDateTime());
+                    reviewHolder.reviewContent.setText(playBackReviewRowsBean.getContent());
+
+                    final LiveUserBean targetUser = playBackReviewRowsBean.getTargetUser();
+                    if (targetUser != null) {
+                        reviewHolder.reviewReplyTv.setVisibility(View.VISIBLE);
+                        PlayBackReviewRowsBean partentComment = playBackReviewRowsBean.getPartentComment();
+                        reviewHolder.reviewReplyTv.setText(textviewSetContent(targetUser.getNickName(), partentComment.getContent()));
+                    } else {
+                        reviewHolder.reviewReplyTv.setVisibility(View.GONE);
                     }
-                });
+                    reviewHolder.reviewItemLyout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if(UserHelper.isLogined(mContext)){
+                                if (onReviewItemClickListener != null) {
+                                    onReviewItemClickListener.itemClick(playBackReviewRowsBean.getId(), playBackReviewRowsBean.getUser().getId(), playBackReviewRowsBean.getUser().getNickName());
+                                }
+                            }else{
+                                if(LiveConstant.USER_INFO_FIRST_CLICK){
+                                    LiveConstant.USER_INFO_FIRST_CLICK=false;
+                                    showLoginViewDialog();
+                                }
+
+                            }
+
+                        }
+                    });
+                    reviewHolder.palyBackReviewHeadIv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+                            intent.putExtra("userId",String.valueOf(playBackReviewRowsBean.getUser().getId()));
+                            mContext.startActivity(intent);
+                        }
+                    });
+                }
+
                 break;
         }
     }
@@ -225,11 +276,22 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
         ImageView replyWriteIv;
         @BindView(R.id.reply_title_layout)
         RelativeLayout replyTitleLayout;
+
         public ReviewTitle(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
+
+    class ReplyNull extends RecyclerView.ViewHolder {
+        @BindView(R.id.reply_null_tv)
+        TextView replyNullTv;
+        public ReplyNull(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
+    }
+
 
     class VideoInfoHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.play_back_title)
@@ -265,6 +327,27 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
         }
     }
 
+    public void showLoginViewDialog() {
+            final CustomChatDialog customDialog = new CustomChatDialog(mContext);
+            customDialog.setContent(mContext.getString(R.string.live_login_hint));
+            customDialog.setCancelable(false);
+            customDialog.setCancelBtn(mContext.getString(R.string.live_canncel), null);
+            customDialog.setSurceBtn(mContext.getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                @Override
+                public void onDialogClickListener() {
+                    LLoginActivity.startForResult(mContext, 701);
+                }
+            });
+            customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialog) {
+                    LiveConstant.USER_INFO_FIRST_CLICK = true;
+                }
+            });
+            customDialog.show();
+        }
+
+
     class ReviewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.paly_back_review_head_iv)
         CircleImageView palyBackReviewHeadIv;
@@ -296,13 +379,15 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
             return reviewRows.size() + 1;
         } else if (liveRowsBean != null && reviewRows == null) {
             return 2;
+        } else if (liveRowsBean != null && reviewRows != null && reviewRows.size() == 0) {
+            return 3;
         } else {
             return reviewRows.size() + 2;
         }
     }
 
     private int getPosition(int pos) {
-        if (liveRowsBean != null && reviewRows != null && reviewRows.size() > 0) {
+        if (liveRowsBean != null && reviewRows != null) {
             return pos - 2;
         }
         return 0;
@@ -313,8 +398,9 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
     private OnReviewItemClickListener onReviewItemClickListener;
 
     public interface OnReviewItemClickListener {
-        void itemClick();
-        void attentionBtnClick(boolean isAttention,TextView textView);
+        void itemClick(int targetId, int userId, String userName);
+
+        void attentionBtnClick(boolean isAttention, TextView textView);
     }
 
     public void setOnReviewItemClickListener(OnReviewItemClickListener onReviewItemClickListener) {

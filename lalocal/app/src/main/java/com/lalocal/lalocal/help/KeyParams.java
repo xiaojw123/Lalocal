@@ -65,6 +65,7 @@ public interface KeyParams {
     public static final String POST_PHOTO="post_photo";
     public static final String POST_HISTORY_ID="post_history_id";
     public static final String POST_GET_LOCATION="post_get_location";
+    public static final String POST_VIDEO_INFO="post_video_info";
     public static final int REPLY_RESULTCODE=300;
     public static final int REPLY_REQUESTCODE=301;
     public static final int POST_REQUESTCODE=302;

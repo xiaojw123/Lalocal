@@ -3,6 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_fa"
    >
     <RelativeLayout
         android:id="@+id/reply_title"
@@ -40,6 +41,7 @@
         android:layout_height="@dimen/live_height_150dp"
         android:paddingLeft="@dimen/live_padding_15dp"
         android:gravity="center_vertical"
+        android:background="@color/white"
        >
         
         <ImageView
@@ -47,6 +49,7 @@
             android:layout_width="@dimen/live_height_100dp"
             android:layout_height="@dimen/live_height_100dp"
             android:src="@drawable/androidloading"
+            android:scaleType="centerCrop"
             />
 
         <TextView
@@ -76,6 +79,7 @@
         android:layout_height="@dimen/live_height_50dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:background="@color/white"
         android:paddingLeft="@dimen/live_padding_15dp">
 
         <TextView
@@ -95,7 +99,7 @@
             android:ellipsize="end"
             android:textColor="@color/color_190f00"
             android:layout_gravity="right|center_vertical"
-
+            android:background="@null"
             android:paddingRight="@dimen/live_padding_30dp"/>
     </LinearLayout>
 
@@ -111,6 +115,7 @@
         android:layout_height="@dimen/live_height_50dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:background="@color/white"
         android:paddingLeft="@dimen/live_padding_15dp">
 
         <TextView
@@ -145,6 +150,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:background="@color/white"
         android:paddingLeft="@dimen/live_padding_15dp"
         android:paddingRight="@dimen/live_padding_15dp">
 

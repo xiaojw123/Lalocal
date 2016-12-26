@@ -1,24 +1,33 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.activity.RePlyActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.PlayBackReviewAdapter;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewRowsBean;
+import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
+import com.lalocal.lalocal.me.LLoginActivity;
+import com.lalocal.lalocal.model.CommentOperateResp;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
@@ -28,6 +37,7 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DialogUtils;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
@@ -55,6 +65,7 @@ public class PlayBackActivity extends BaseActivity {
     XRecyclerView xRecyclerView;
     @BindView(R.id.review_title)
     TextView reviewTitle;
+
     @BindView(R.id.reply_write_iv)
     ImageView replyWriteIv;
     @BindView(R.id.reply_title_layout)
@@ -114,8 +125,15 @@ public class PlayBackActivity extends BaseActivity {
             }
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
+
+        if(requestCode==KeyParams.POST_REQUESTCODE&&resultCode==KeyParams.POST_RESULTCODE){
+            allRows.clear();
+            contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
+            contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
+        }
     }
     boolean isAttentions;
+    private String[] mDialogItems = new String[] {"回复", "举报"};
     private void initXRecyclerView() {
         final CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
         layoutManager.setOrientation(CustomLinearLayoutManager.VERTICAL);
@@ -149,11 +167,14 @@ public class PlayBackActivity extends BaseActivity {
 
         playBackReviewAdapter.setOnReviewItemClickListener(new PlayBackReviewAdapter.OnReviewItemClickListener() {
             @Override
-            public void itemClick() {
+            public void itemClick(int targetId,int userId,String userName) {
                 //TODO 回复评论
-                Intent intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
-                intent.putExtra(KeyParams.REPLY_TITLE, "编辑评论");
-                startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                if(userId== UserHelper.getUserId(PlayBackActivity.this)){
+                    showDeleteDialog(targetId);
+                }else {
+                    showReplyDialog(targetId,userId,userName);
+
+                }
             }
 
             @Override
@@ -166,32 +187,66 @@ public class PlayBackActivity extends BaseActivity {
         });
     }
 
+    private void showReplyDialog(final int targetId, final int userId, final String userName) {
+        DialogUtils.createListDialog(PlayBackActivity.this,0,null,mDialogItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==0){
+                    //回复
+                    Intent intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KeyParams.REPLY_TITLE, "回复 " + userName);
+                    bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_REPLY);
+                    bundle.putInt(KeyParams.REPLY_PARENT_ID, targetId);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                }else{
+                    //举报
+                    Toast.makeText(PlayBackActivity.this,"举报功能暂未开启!",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void showDeleteDialog(final int targetId) {
+        new AlertDialog.Builder(this)
+                .setItems(new String[]{"删除"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: 删除评论
+                        allRows.clear();
+                        contentLoader.deleteComment(targetId);
+                    }
+                }).show();
+
+    }
+
+
+
     @OnClick({R.id.back_btn, R.id.enter_playback_layout, R.id.reply_write_iv,R.id.play_back_bottom_table_collect_layout,R.id.play_back_bottom_table_reply_layout,R.id.play_back_bottom_table_transmit_layout,R.id.play_back_bottom_table_like_layout})
     public void clickBtn(View view) {
-        Intent intent=null;
+
         switch (view.getId()) {
             case R.id.back_btn:
                 finish();
                 break;
             case R.id.enter_playback_layout:
                 // TODO 视频回放
-                intent = new Intent(PlayBackActivity.this, PlayBackNewActivity.class);
+                Intent intent = new Intent(PlayBackActivity.this, PlayBackNewActivity.class);
                 intent.putExtra("id",intentId);
                 startActivity(intent);
                 finish();
                 break;
             case R.id.reply_write_iv:
-                if(replyId!=0){
-                    intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
-                    bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
-                    bundle.putInt(KeyParams.TARGET_ID, replyId);
-                    bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
-                    intent.putExtras(bundle);
-                    intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
-                    startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
-            }
+                if(UserHelper.isLogined(PlayBackActivity.this)){
+                    toRePlyActivity();
+                }else{
+                    if(LiveConstant.USER_INFO_FIRST_CLICK){
+                        LiveConstant.USER_INFO_FIRST_CLICK = false;
+                        showLoginViewDialog();
+                    }
+                }
+
                 break;
             case R.id.play_back_bottom_table_collect_layout:
                 if(praiseFlag&&praiseId != null){//取消
@@ -201,9 +256,15 @@ public class PlayBackActivity extends BaseActivity {
                 }
                 break;
             case R.id.play_back_bottom_table_reply_layout:
-               intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
-                intent.putExtra(KeyParams.REPLY_TITLE, "发起评论");
-                startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+
+                if(UserHelper.isLogined(PlayBackActivity.this)){
+                    toRePlyActivity();
+                }else{
+                    if(LiveConstant.USER_INFO_FIRST_CLICK){
+                        LiveConstant.USER_INFO_FIRST_CLICK = false;
+                        showLoginViewDialog();
+                    }
+                }
                 break;
             case R.id.play_back_bottom_table_transmit_layout:
                 if(shareVO!=null){
@@ -217,6 +278,42 @@ public class PlayBackActivity extends BaseActivity {
 
         }
     }
+
+    private void toRePlyActivity() {
+        if(replyId!=0){
+            Intent intent=new Intent(PlayBackActivity.this, RePlyActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
+            bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
+            bundle.putInt(KeyParams.TARGET_ID, replyId);
+            bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+        }
+
+    }
+
+    public void showLoginViewDialog() {
+        final CustomChatDialog customDialog = new CustomChatDialog(this);
+        customDialog.setContent(getString(R.string.live_login_hint));
+        customDialog.setCancelable(false);
+        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                LLoginActivity.startForResult(PlayBackActivity.this, 701);
+            }
+        });
+        customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                LiveConstant.USER_INFO_FIRST_CLICK = true;
+            }
+        });
+        customDialog.show();
+    }
+
+
 
     public class XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
         @Override
@@ -243,6 +340,22 @@ public class PlayBackActivity extends BaseActivity {
     List<PlayBackReviewRowsBean> allRows = new ArrayList<>();
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onDeleteComment(CommentOperateResp commentOperateResp) {
+            super.onDeleteComment(commentOperateResp);
+            if (commentOperateResp.getReturnCode() == 0) {
+                String message = commentOperateResp.getMessage();
+                if (TextUtils.equals(message, "success")) {
+                    Toast.makeText(PlayBackActivity.this, "评论删除成功", Toast.LENGTH_SHORT).show();
+                    // 请求评论
+                    contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
+                    return;
+                }
+            }
+
+            Toast.makeText(PlayBackActivity.this, "评论删除失败，请稍后再试~", Toast.LENGTH_SHORT).show();
+        }
 
         @Override
         public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
@@ -304,6 +417,7 @@ public class PlayBackActivity extends BaseActivity {
                     playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
                 }
                 if (photo != null) {
+                    AppLog.i("TAG","获取图片地址:"+photo);
                     DrawableUtils.loadingImg(PlayBackActivity.this, videoCover, QiniuUtils.centerCrop(photo, DensityUtil.getWindowWidth(PlayBackActivity.this), DensityUtil.dip2px(PlayBackActivity.this, 258)));
                 }
                 detailsRefresh = true;
@@ -312,16 +426,18 @@ public class PlayBackActivity extends BaseActivity {
                 }
                 playBackReviewAdapter.setRefreshVideoInfo(liveRowsBean);
                 contentLoader.getLiveUserInfo(String.valueOf(userId));
-
             }
         }
-
         @Override
         public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
             super.onPlayBackReviewDetails(reviewResultBean);
             if (reviewResultBean != null) {
                 List<PlayBackReviewRowsBean> rows = reviewResultBean.getRows();
                 if (rows == null) {
+                    reviewRefresh = true;
+                    if (detailsRefresh) {
+                        xRecyclerView.refreshComplete();
+                    }
                     return;
                 }
                 allRows.addAll(rows);

@@ -30,9 +30,13 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
-import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -81,6 +85,7 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
     private boolean isSuccess;
     private int historyId;
     private String dataLoaction;
+    private String intentVideoInfo;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,15 +158,22 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
             intentTitle = bundle.getString(KeyParams.POST_TITLE);
             intentPhoto = bundle.getString(KeyParams.POST_PHOTO);
             historyId = bundle.getInt(KeyParams.POST_HISTORY_ID);
+            intentVideoInfo = bundle.getString(KeyParams.POST_VIDEO_INFO);
         }
     }
 
     private void initView() {
         DrawableUtils.loadingImg(this,postCoverIv,intentPhoto);
         postTitle.setText(intentTitle);
+        if(intentTitle!=null){
+            postTitle.setSelection(intentTitle.length());
+        }
         postLaoction.setText(intentLocation);
+        if(intentVideoInfo!=null&&intentVideoInfo.trim().length()>0){
+            postVideoLightSpot.setText(intentLocation);
+        }
         postVideoLightSpot.addTextChangedListener(watcher);
-        contentService.getImgToken();
+
     }
 
     @OnClick({R.id.post_back,R.id.post_laoction,R.id.post_cover_iv, R.id.post_alter_ok_tv})
@@ -182,11 +194,12 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
                 dialog.show();
                 break;
             case R.id.post_alter_ok_tv:
+                AppLog.i("TAG","回放修f改提交");
                 //提交修改内容
                 if(bitmap!=null){
                     contentService.getImgToken();
                 }else{
-                    contentService.getAlterPlayBack(historyId,postTitle.getText().toString(),new String[0],postVideoLightSpot.getText().toString(),dataLoaction==null?intentLocation:dataLoaction);
+                    contentService.getAlterPlayBack(historyId,postTitle.getText().toString(),null,postVideoLightSpot.getText().toString(),dataLoaction==null?intentLocation:dataLoaction);
                 }
 
                 break;
@@ -222,18 +235,38 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
             ImgTokenResult result = imgTokenBean.getResult();
             String filename = result.getFilename();
             String token = result.getToken();
-            String[] strings = new String[1];
-            strings[0]=filename;
-            isSuccess = QiniuUtils.uploadSimpleFile(bytesImg, filename, token);
-            if(isSuccess){
-                contentService.getAlterPlayBack(historyId,postTitle.getText().toString(),strings,postVideoLightSpot.getText().toString(),dataLoaction==null?intentLocation:dataLoaction);
-            }
+            upLoadQiNiu(bytesImg,filename, token);
         }
 
+        @Override
+        public void onAlterHistoryPlayBack(int returnCode) {
+            super.onAlterHistoryPlayBack(returnCode);
+            if(returnCode==0){
+                setResult(KeyParams.POST_RESULTCODE,new Intent());
+                finish();
+            }else {
+                Toast.makeText(PostVideoActivity.this,"修改失败，请重新操作",Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
+    private void upLoadQiNiu(byte[] bytesImg, final String filename, String token) {
 
+        UploadManager uploadManager = new UploadManager();
+        uploadManager.put(bytesImg, filename, token,
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject response) {
+                        AppLog.i("TAG","key:"+key+"     fileName:"+filename+"    info:"+info.statusCode+(response==null?"     空":response.toString()));
+                        if (info.statusCode == 200) {
+                            contentService.getAlterPlayBack(historyId,postTitle.getText().toString(),filename,postVideoLightSpot.getText().toString(),dataLoaction==null?intentLocation:dataLoaction);
 
+                        }else {
+                            Toast.makeText(PostVideoActivity.this,"图片上传失败，请重新操作",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, null);
+    }
 
 
     private TextWatcher watcher = new TextWatcher(){

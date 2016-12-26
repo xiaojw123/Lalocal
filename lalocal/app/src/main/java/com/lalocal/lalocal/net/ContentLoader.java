@@ -1419,7 +1419,7 @@ public class ContentLoader {
     }
 
     //修改历史回放
-    public void getAlterPlayBack(int historyId,String title,String[] photo,String description,String address){
+    public void getAlterPlayBack(int historyId,String title,String photo,String description,String address){
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_PLAY_BACK);
         }
@@ -2347,7 +2347,7 @@ public class ContentLoader {
                         responseDeleteComments(json);
                         break;
                     case RequestCode.ALTER_PLAY_BACK:
-                        responseAlterHistoryPlayBack(json);
+                        responseAlterHistoryPlayBack(jsonObj);
                         break;
                 }
             } catch (JSONException e) {
@@ -3072,7 +3072,7 @@ public class ContentLoader {
 
         //修改直播间
         private void responseAlterLiveRoom(String json) {
-
+            AppLog.i("TAG","修改直播间："+json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             callBack.onAlterLiveRoom(createLiveRoomDataResp);
         }
@@ -3233,19 +3233,28 @@ public class ContentLoader {
 
         //历史直播回放评论
         private void responsePlayBack(JSONObject jsonObj) {
+            AppLog.i("TAG","历史回放评论:"+jsonObj.toString());
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
             PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
             callBack.onPlayBackReviewDetails(reviewResultBean);
         }
         //历史回放消息
         private void responsePlayBackMsg(String json) {
-
+            AppLog.i("TAG","回放历史消息:"+json);
             PlayBackMsgResultBean msgResultBean = new Gson().fromJson(json, PlayBackMsgResultBean.class);
             callBack.onPlayBackMsgDetails(msgResultBean);
         }
         //修改历史回放
-        private void responseAlterHistoryPlayBack(String json) {
-            AppLog.i("TAG","修改历史回放:"+json);
+        private void responseAlterHistoryPlayBack(JSONObject jsonObj) {
+
+            try {
+                int anInt = jsonObj.getInt(ResultParams.RESULT_CODE);
+                callBack.onAlterHistoryPlayBack(anInt);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
 
 
@@ -3602,7 +3611,7 @@ public class ContentLoader {
     }
 
     //修改历史回放
-    private String getAlterPlayBack(String title,String[] photo,String description,String address){
+    private String getAlterPlayBack(String title,String photo,String description,String address){
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
