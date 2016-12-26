@@ -17,8 +17,11 @@ import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.model.RecommendRowsBean;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
+import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.view.viewholder.find.SubThemeViewHolder;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.List;
 
@@ -52,7 +55,7 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
                 R.layout.home_recommend_theme_viewpager_item, null);
         // 关联控件
         SubThemeViewHolder holder = new SubThemeViewHolder();
-        holder.imgTheme = (ImageView) view.findViewById(R.id.img_theme);
+        holder.imgTheme = (RoundedImageView) view.findViewById(R.id.img_theme);
         holder.tvSpecialName = (TextView) view.findViewById(R.id.tv_theme_name);
         holder.tvSpecialSubTitle = (TextView) view.findViewById(R.id.tv_theme_sub_title);
         holder.tvReadQuantity = (TextView) view.findViewById(R.id.tv_read_quantity);
@@ -80,15 +83,16 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
         String saveQuantity = CommonUtil.formatNumWithComma(bean.getPraiseNum());
 
 
-        // 使用Glide加载url图片
-        Glide.with(mContext)
-                .load(photoUrl)
-                .placeholder(R.drawable.androidloading)
-                .centerCrop()
-                .crossFade()
-                // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(holder.imgTheme);
+        // 使用Glide加载url图片, Glide与RoundedImage一起使用会导致圆角消失
+//        Glide.with(mContext)
+//                .load(photoUrl)
+//                .placeholder(R.drawable.androidloading)
+//                .centerCrop()
+//                .crossFade()
+//                // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
+//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+//                .into(holder.imgTheme);
+        DrawableUtils.displayImg(mContext, holder.imgTheme, photoUrl, R.drawable.androidloading);
 
         // 设置名字
         holder.tvSpecialName.setText(name);

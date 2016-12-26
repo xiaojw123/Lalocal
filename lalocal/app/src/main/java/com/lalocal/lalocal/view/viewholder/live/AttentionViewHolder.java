@@ -15,6 +15,7 @@ import com.lalocal.lalocal.activity.AttentionActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -46,8 +47,6 @@ public class AttentionViewHolder extends RecyclerView.ViewHolder {
         layoutUser = (RelativeLayout) itemView.findViewById(R.id.layout_attention_user);
         cvAttention = (CardView) itemView.findViewById(R.id.card_view_attention);
 
-        // 设置圆形头像
-        imgAvatar.setCornerRadius(DensityUtil.dip2px(mContext, 60));
     }
 
     /**
@@ -62,10 +61,12 @@ public class AttentionViewHolder extends RecyclerView.ViewHolder {
             String avatar = bean.getAvatar();
             // 如果接口有头像链接
             if (!TextUtils.isEmpty(avatar)) {
-                Glide.with(mContext)
-                        .load(avatar)
-                        .placeholder(R.drawable.androidloading)
-                        .into(imgAvatar);
+                // Glide与RoundedImageView一起使用会使圆角消失
+//                Glide.with(mContext)
+//                        .load(avatar)
+//                        .placeholder(R.drawable.androidloading)
+//                        .into(imgAvatar);
+                DrawableUtils.displayImg(mContext, imgAvatar, avatar, R.drawable.androidloading);
             }
         } else {
             layoutUser.setVisibility(View.INVISIBLE);

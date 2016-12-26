@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <merger version="3"><dataSet config="main"><source path="D:\Git_lalocal\lalocal\PushSDK\src\main\shaders"/></dataSet><dataSet config="release"><source path="D:\Git_lalocal\lalocal\PushSDK\build-types\release\shaders"/></dataSet></merger>
+=======
+<merger version="3"><dataSet config="main"><source path="E:\workspace\AndroidStudio\lalocal_Android\lalocal\PushSDK\src\main\shaders"/></dataSet><dataSet config="release"><source path="E:\workspace\AndroidStudio\lalocal_Android\lalocal\PushSDK\build-types\release\shaders"/></dataSet></merger>
+>>>>>>> 32115ca1aee33a01e294ae85974c63bb3a5367d0

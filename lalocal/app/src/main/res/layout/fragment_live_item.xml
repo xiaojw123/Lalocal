@@ -106,7 +106,7 @@
                     android:layout_width="@dimen/dimen_size_16_dp"
                     android:layout_height="@dimen/dimen_size_16_dp"
                     android:src="@drawable/androidloading"
-                    app:riv_corner_radius="99dp"
+                    app:riv_oval="true"
                     android:layout_marginRight="@dimen/dimen_size_15_dp"/>
             </LinearLayout>
         </RelativeLayout>

@@ -70,7 +70,6 @@ public class HomeRecoLiveAdapter extends PagerAdapter {
             DrawableUtils.displayImg(context, liveViewHolder.imgLivePic, liveRowsBean.getPhoto(), R.drawable.androidloading);
         } else if (!TextUtils.isEmpty(photo)) {
             DrawableUtils.displayImg(context, liveViewHolder.imgLivePic, user.getAvatarOrigin(), R.drawable.androidloading);
-
         }
        // liveViewHolder.imgLivePic.setScaleType(ImageView.ScaleType.CENTER_CROP);
         // 如果图片链接一致，说明是公告视频，下方显示地理位置
