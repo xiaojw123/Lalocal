@@ -44,20 +44,6 @@
 
     </RelativeLayout>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/yellow_fill_darkborder_tips_bg">
-        <TextView
-            android:id="@+id/video_reply_hint_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="减肥的房价肯定会发空间"
-           android:padding="@dimen/live_padding_5dp"
-           />
-
-    </LinearLayout>
 
 
     <LinearLayout
