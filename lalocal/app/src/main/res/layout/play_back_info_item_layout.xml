@@ -111,11 +111,17 @@
         android:layout_height="@dimen/live_height_50dp"
         android:layout_marginTop="@dimen/live_padding_21dp"
         android:gravity="center_vertical">
+        <View
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/color_b3"></View>
         <TextView
             android:id="@+id/edit_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:layout_below="@+id/line"
             android:text="@string/edit_up_content"
             android:textSize="@dimen/text_size_14_sp"
             android:textColor="@color/color_ffaa2a"
@@ -127,6 +133,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/live_padding_15dp"
                 android:layout_marginLeft="@dimen/live_padding_15dp"
+                android:layout_below="@+id/line"
                 android:gravity="center_vertical"
                android:orientation="horizontal">
 

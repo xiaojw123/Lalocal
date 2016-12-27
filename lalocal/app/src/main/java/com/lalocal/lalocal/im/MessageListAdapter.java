@@ -2,6 +2,7 @@ package com.lalocal.lalocal.im;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,8 @@ import com.bumptech.glide.Glide;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.TimeUtil;
 import com.lalocal.lalocal.util.AppLog;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
@@ -26,6 +29,7 @@ import java.util.List;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<IMMessage> mMessageList;
+
     public MessageListAdapter(List<IMMessage> messageList) {
         mMessageList = messageList;
     }
@@ -71,10 +75,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             } else if (msgType == MsgTypeEnum.image) {
                 msgHolder.sendImg.setVisibility(View.VISIBLE);
                 msgHolder.sendTv.setVisibility(View.GONE);
-                FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
-                if (fileAttachment != null) {
-                    Glide.with(mContext).load(fileAttachment.getPath()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).into(msgHolder.sendImg);
-                }
+                loadImg(imMessage, msgHolder.sendImg);
                 msgHolder.sendImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -92,13 +93,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             } else if (msgType == MsgTypeEnum.image) {
                 msgHolder.acceptImg.setVisibility(View.VISIBLE);
                 msgHolder.acceptTv.setVisibility(View.GONE);
-                FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
-                AppLog.print("fileAttachMent__" + fileAttachment);
-                if (fileAttachment != null) {
-                    AppLog.print("url____" + fileAttachment.getUrl());
-                    Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).into(msgHolder.acceptImg);
-
-                }
+//                FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
+//                AppLog.print("fileAttachMent__" + fileAttachment);
+//                if (fileAttachment != null) {
+//                    AppLog.print("url____" + fileAttachment.getUrl());
+//                    Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).into(msgHolder.acceptImg);
+//                    String thumbPath = fileAttachment.getThumbPath();
+//                    if (TextUtils.isEmpty(thumbPath)) {
+//                        AppLog.print("");
+//                        NIMClient.getService(MsgService.class).downloadAttachment(imMessage, true);
+//                    }
+//                }
+                loadImg(imMessage, msgHolder.acceptImg);
                 msgHolder.acceptImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -108,12 +114,34 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             }
 
         }
+
+
         if (needShowTime(imMessage, anchor)) {
             msgHolder.timeTv.setVisibility(View.VISIBLE);
             msgHolder.timeTv.setText(TimeUtil.getTimeShowString(imMessage.getTime(), false));
-        }else{
+        } else {
             msgHolder.timeTv.setVisibility(View.GONE);
         }
+
+
+    }
+
+    private void loadImg(IMMessage imMessage, ImageView img) {
+        FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
+        if (fileAttachment != null) {
+            Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).into(img);
+            String thumbPath = fileAttachment.getThumbPath();
+            if (TextUtils.isEmpty(thumbPath)) {
+                NIMClient.getService(MsgService.class).downloadAttachment(imMessage, true);
+            }
+        }
+    }
+
+    /**
+     * 下载附件/缩略图
+     */
+    protected void downloadAttachment(IMMessage message) {
+            AppLog.print("IMMessage____message");
 
     }
 

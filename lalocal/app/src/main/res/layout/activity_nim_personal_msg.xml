@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_faf8f3"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+
+        <com.lalocal.lalocal.view.CustomTitleView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title_name="@string/private_message" />
+
+        <TextView
+            android:id="@+id/my_immessage_ignoreread_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:paddingRight="@dimen/dimen_size_10_dp"
+            android:text="@string/ignore_no_read"
+            android:textColor="@color/color_60190f00"
+            android:textSize="@dimen/text_size_14_sp" />
+    </FrameLayout>
+
+    <com.lalocal.lalocal.view.ReboundScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <FrameLayout
+                android:id="@+id/my_immessage_notification"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/my_immessage_item_height"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/dimen_size_15_dp"
+                android:paddingRight="@dimen/dimen_size_15_dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawableLeft="@drawable/notification_ic"
+                    android:drawablePadding="@dimen/dimen_size_10_dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/notification"
+                    android:textColor="@color/color_190f00"
+                    android:textSize="@dimen/text_size_16_sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@drawable/arrow_right" />
+
+            </FrameLayout>
+
+            <View style="@style/CommonDeLineTheme" />
+
+            <FrameLayout
+                android:id="@+id/my_immessage_praise_and_comment"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/my_immessage_item_height"
+                android:background="@color/white"
+                android:paddingLeft="@dimen/dimen_size_15_dp"
+                android:paddingRight="@dimen/dimen_size_15_dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:drawableLeft="@drawable/commentandprise_ic"
+                    android:drawablePadding="@dimen/dimen_size_10_dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/comment_and_praise"
+                    android:textColor="@color/color_190f00" />
+
+                <com.lalocal.lalocal.view.ShapeEditText
+                    android:id="@+id/my_immessage_praise_and_comment_num"
+                    android:layout_width="@dimen/dimen_size_22_dp"
+                    android:layout_height="@dimen/dimen_size_22_dp"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_marginRight="@dimen/dimen_size_16_dp"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_12_sp"
+                    app:corner_radius="@dimen/dimen_size_11_dp"
+                    android:visibility="invisible"
+                    app:solid_color="@color/color_ff3030" />
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:src="@drawable/arrow_right" />
+
+
+            </FrameLayout>
+
+            <View style="@style/CommonDeLineTheme" />
+
+
+            <fragment
+                android:id="@+id/nim_personal_msg_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:name="com.lalocal.lalocal.activity.fragment.PersonalMessageFragment"
+                android:layout_marginTop="@dimen/dimen_size_10_dp"
+                />
+
+        </LinearLayout>
+
+
+    </com.lalocal.lalocal.view.ReboundScrollView>
+
+
+</LinearLayout>

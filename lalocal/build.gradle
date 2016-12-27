@@ -3,14 +3,14 @@ ext {
     configuration = [
             package          : "com.lalocal.lalocal",
             buildToolsVersion: "23.0.3",
-            compileVersion   : 23,
+            compileVersion   : 24,
             minSdk           : 14,
             targetSdk        : 23,
             version_code     : 221,
             version_name     : "2.2.1"
     ]
     libraries = [
-            support: "24.2.0",
+            support: "25.1.0",
     ]
 }
 buildscript {

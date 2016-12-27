@@ -310,9 +310,6 @@ public class PlayBackNewActivity extends BaseActivity {
     }
 
 
-
-
-
     long playDuration;
     private MediaController.MediaControlImpl mMediaControlImpl=new MediaController.MediaControlImpl(){
 
@@ -342,7 +339,6 @@ public class PlayBackNewActivity extends BaseActivity {
         public void inputPrivate() {
             //TODO 私信主播
             showToastTips("私信主播。。。。");
-
         }
     };
 

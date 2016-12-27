@@ -172,9 +172,10 @@ public class ContentLoader {
         ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(),response,response);
         requestQueue.add(request);
     }
-    public void getUsersService(int type){
+    public void getUsersService(int type,int index){
         if (callBack!=null){
             response=new ContentResponse(RequestCode.GET_USER_SERVICE);
+            response.setChildIndex(index);
         }
         ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(type),response,response);
         requestQueue.add(request);
@@ -1818,11 +1819,15 @@ public class ContentLoader {
         private CompoundButton switchBtn;
         private ProgressButton mProgressButton;
         private String chargeChannel;
+        private  int childIndex;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
 
+        public void setChildIndex(int index){
+            childIndex=index;
+        }
 
         public void setChargeChannel(String channel) {
             chargeChannel = channel;
@@ -1979,6 +1984,7 @@ public class ContentLoader {
                     case RequestCode.GET_USER_SERVICE:
                         JSONObject sercieResultJobj=jsonObj.optJSONObject(ResultParams.REULST);
                         callBack.onGetUser(sercieResultJobj);
+                        callBack.onGetUser(sercieResultJobj,childIndex);
                         break;
 
                     case RequestCode.GET_YITU8_CITY:

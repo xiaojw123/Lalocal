@@ -55,6 +55,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CustomUserInfoDialog extends BaseDialog {
     @BindView(R.id.custom_dialog_close_iv)
     ImageView customDialogCloseIv;
+    @BindView(R.id.master_info_bg_top)
+    ImageView masterInfoBgTop;
     @BindView(R.id.custom_dialog_report)
     TextView customDialogReport;
     @BindView(R.id.custom_dialog_live_header_layout)
@@ -197,9 +199,10 @@ public class CustomUserInfoDialog extends BaseDialog {
                     }
                     DrawableUtils.displayImg(mContext,userinfoHeadIv,avatar);
                     userinfoNickTv.setText(nickName);
-
                     if(accId.equals(LiveConstant.creatorAccid)){//主播
                         masterInfoSignature.setText(LiveConstant.liveTitle);
+                        masterInfoSignature.setBackgroundResource(R.drawable.live_humancard_rectangle);
+                        masterInfoBgTop.setImageResource(R.drawable.live_humancard_triangle_yellow);
                     }else{
                         if (!TextUtils.isEmpty(description)) {
                             masterInfoSignature.setText(description);

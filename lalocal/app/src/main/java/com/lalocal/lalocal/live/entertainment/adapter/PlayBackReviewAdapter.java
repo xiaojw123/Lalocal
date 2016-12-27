@@ -96,7 +96,6 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 View replyNull = LayoutInflater.from(parent.getContext()).inflate(R.layout.reply_list_null_layout, null);
                 return new ReplyNull(replyNull);
             } else {
-
                 View reviewListLayout = LayoutInflater.from(parent.getContext()).inflate(R.layout.play_back_item_review_layout, null);
                 return new ReviewHolder(reviewListLayout);
             }

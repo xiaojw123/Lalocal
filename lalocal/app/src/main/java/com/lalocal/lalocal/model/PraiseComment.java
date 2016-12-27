@@ -59,10 +59,90 @@ public class PraiseComment {
     }
 
     public void setRows(List<RowsBean> rows) {
+
+
         this.rows = rows;
     }
 
-    public static class ParentDynamics{
+    public static class TargetUserVO{
+
+
+        /**
+         * id : 10337
+         * nickName : 微微微微微微赞赞赞赞赞赞赞赞哇哇哇哇哇啊
+         * email : yangningning@mddtrip.cn
+         * avatar : http://media.lalocal.cn/2016121409573016492231278780?imageMogr2/auto-orient/strip/thumbnail/!200x200r/gravity/Center/crop/200x200
+         * description : 12345678901234567890123456789012345678901234567890
+         * avatarOrigin : http://media.lalocal.cn/2016121409573016492231278780
+         * sortValue : 463719
+         */
+
+        private int id;
+        private String nickName;
+        private String email;
+        private String avatar;
+        private String description;
+        private String avatarOrigin;
+        private int sortValue;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
+        public String getNickName() {
+            return nickName;
+        }
+
+        public void setNickName(String nickName) {
+            this.nickName = nickName;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            this.description = description;
+        }
+
+        public String getAvatarOrigin() {
+            return avatarOrigin;
+        }
+
+        public void setAvatarOrigin(String avatarOrigin) {
+            this.avatarOrigin = avatarOrigin;
+        }
+
+        public int getSortValue() {
+            return sortValue;
+        }
+
+        public void setSortValue(int sortValue) {
+            this.sortValue = sortValue;
+        }
+    }
+
+    public static class ParentDynamics {
 
 
         /**
@@ -77,7 +157,7 @@ public class PraiseComment {
          */
 
         private OpUserVOBean opUserVO;
-        private Object targetUserVO;
+        private TargetUserVO targetUserVO;
         private int opType;
         private int opId;
         private String content;
@@ -93,11 +173,11 @@ public class PraiseComment {
             this.opUserVO = opUserVO;
         }
 
-        public Object getTargetUserVO() {
+        public TargetUserVO getTargetUserVO() {
             return targetUserVO;
         }
 
-        public void setTargetUserVO(Object targetUserVO) {
+        public void setTargetUserVO(TargetUserVO targetUserVO) {
             this.targetUserVO = targetUserVO;
         }
 
@@ -177,6 +257,10 @@ public class PraiseComment {
             }
 
             public String getNickName() {
+                if (nickName.length() > 9) {
+                    String name = nickName.substring(0, 9);
+                    return name + "...";
+                }
                 return nickName;
             }
 
@@ -359,7 +443,7 @@ public class PraiseComment {
             }
 
             public String getNickName() {
-                if (nickName==null){
+                if (nickName == null) {
                     return "";
                 }
                 return nickName;

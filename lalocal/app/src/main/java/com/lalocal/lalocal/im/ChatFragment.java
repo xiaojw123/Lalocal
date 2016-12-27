@@ -2,6 +2,8 @@ package com.lalocal.lalocal.im;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,7 +11,6 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +21,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -29,7 +31,11 @@ import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.BaseFragment;
+import com.lalocal.lalocal.activity.fragment.PersonalMessageFragment;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.FileSaveUtil;
@@ -59,12 +65,11 @@ import java.util.List;
  * Created by xiaojw on 2016/12/21.
  */
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener, CustomTitleView.onBackBtnClickListener {
     private static final int IMAGE_SIZE = 100 * 1024;// 300kb
     private static final int LOAD_MESSAGE_COUNT = 20;
     private static final int PEMISSION_CODE_SDCARD = 0x11;
     private static final int PHOTO_REQUEST_GALLERY = 2;
-    public static final String ACCID = "accid";
     RecyclerView mXRecyclerView;
     EditText mMsgEdit;
     CustomTitleView chatTv;
@@ -72,13 +77,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     ImageView sendImg;
     MessageListAdapter msgAdapter;
     FrameLayout moreOpLayout;
+    Button cancelBtn, myselfBtn;
     List<IMMessage> mMessageList = new ArrayList<>();
     RelativeLayout rootView;
     int navigationBarHeight, lastHeight;
     boolean isMoreAdd, isSoftKeyShow, isFirstload;
     String accId, nickName;
+    int pageType;
+    boolean hasCancel;
+    FragmentManager fm;
+    PersonalMessageFragment lastFragment;
 
-    @Nullable
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_chat, container, false);
@@ -89,10 +99,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return view;
     }
 
+    public void setLastFragment(PersonalMessageFragment lastFragment) {
+        this.lastFragment = lastFragment;
+    }
+
     @Override
     public void onDestroyView() {
+        AppLog.print("chatFragemtn destroyview____");
         registerStatusObserve(false);
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        AppLog.print("chatFragemtn onDestroy____");
     }
 
     private void registerStatusObserve(boolean flag) {
@@ -101,14 +122,31 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    private void initParams() {
+    public void initParams() {
         navigationBarHeight = CommonUtil.getNavigationBarHeight(getActivity());
         Bundle bundle = getArguments();
-        nickName = bundle.getString(KeyParams.NICKNAME);
-        accId = bundle.getString(ACCID);
+        if (bundle != null) {
+            pageType = bundle.getInt(KeyParams.PAGE_TYPE, PageType.PAGE_DEFAULT);
+            nickName = bundle.getString(KeyParams.NICKNAME);
+            accId = bundle.getString(KeyParams.ACCID);
+            hasCancel = bundle.getBoolean(KeyParams.HAST_CANCLE);
+            AppLog.print("initParams____nickName__" + nickName + ", accid__" + accId);
+        }
+    }
+
+    public void updateView(Bundle bundle) {
+        if (bundle != null) {
+            nickName = bundle.getString(KeyParams.NICKNAME);
+            accId = bundle.getString(KeyParams.ACCID);
+            AppLog.print("initParams____nickName__" + nickName + ", accid__" + accId);
+        }
+        chatTv.setTitle(nickName);
+        loadDataFromRemote();
     }
 
     private void initView(View contentView) {
+        cancelBtn = (Button) contentView.findViewById(R.id.chat_cancel_btn);
+        myselfBtn = (Button) contentView.findViewById(R.id.chat_myself_btn);
         chatTv = (CustomTitleView) contentView.findViewById(R.id.chat_ctv);
         rootView = (RelativeLayout) contentView.findViewById(R.id.activity_chat_root);
         moreOpLayout = (FrameLayout) contentView.findViewById(R.id.chat_more_layout);
@@ -121,20 +159,51 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mXRecyclerView.setOnTouchListener(this);
         msgAdapter = new MessageListAdapter(mMessageList);
         mXRecyclerView.setAdapter(msgAdapter);
+        cancelBtn.setOnClickListener(this);
+        myselfBtn.setOnClickListener(this);
         mMsgSendTv.setOnClickListener(this);
         mMsgAddTv.setOnClickListener(this);
         sendImg.setOnClickListener(this);
+        chatTv.setOnCustomClickLister(this);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
         chatTv.setTitle(nickName);
+        if (hasCancel) {
+            cancelBtn.setVisibility(View.VISIBLE);
+            myselfBtn.setVisibility(View.GONE);
+        } else {
+            cancelBtn.setVisibility(View.GONE);
+            myselfBtn.setVisibility(View.VISIBLE);
+        }
     }
-
-
 
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.chat_cancel_btn:
+                if (getActivity() instanceof AudienceActivity) {
+                    if (isSoftKeyShow) {
+                        KeyboardUtil.hidenSoftKey(mMsgEdit);
+                    }
+                    if (fm == null) {
+                        fm = getFragmentManager();
+                    }
+                    FragmentTransaction ft = fm.beginTransaction();
+                    ft.hide(this);
+                    ft.hide(lastFragment);
+                    ft.commit();
+                }
+                break;
+            case R.id.chat_myself_btn:
+                Intent intent = new Intent(getActivity(), LiveHomePageActivity.class);
+                String userid = "";
+                if (!TextUtils.isEmpty(accId)) {
+                    userid = accId.substring(accId.indexOf("_") + 1);
+                }
+                intent.putExtra("userId", userid);
+                getActivity().startActivity(intent);
+                break;
             case R.id.chat_more_send_img:
                 sendImg();
                 break;
@@ -285,6 +354,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     private void sendText(String sessionId, String text) {
+        AppLog.print("sendText ssid___" + sessionId);
         if (isSoftKeyShow) {
             KeyboardUtil.hidenSoftKey(mMsgEdit);
         }
@@ -349,8 +419,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-
-
     private void loadDataFromRemote() {
         NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), LOAD_MESSAGE_COUNT, true)
                 .setCallback(callback);
@@ -369,20 +437,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private IMMessage anchor() {
         return ChatRoomMessageBuilder.createEmptyChatRoomMessage(accId, 0);
     }
+
     private Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage imMessage) {
+            AppLog.print("msg statut onEvent__");
             MsgStatusEnum status = imMessage.getStatus();
             if (status == MsgStatusEnum.success) {
+                AppLog.print("msg statut enum___success__");
                 mMsgEdit.setText(null);
                 mMessageList.add(imMessage);
                 msgAdapter.updateItems(mMessageList);
             }
-
-
         }
     };
-   private Observer<List<IMMessage>> incomingMessageObserver =
+    private Observer<List<IMMessage>> incomingMessageObserver =
             new Observer<List<IMMessage>>() {
                 @Override
                 public void onEvent(List<IMMessage> messages) {
@@ -421,5 +490,24 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     };
 
 
+    @Override
+    public void onBackClick() {
+        if (!isAdded()) {
+            return;
+        }
+        if (isSoftKeyShow) {
+            KeyboardUtil.hidenSoftKey(mMsgEdit);
+        }
+        if (getActivity() instanceof AudienceActivity) {
+            if (fm == null) {
+                fm = getFragmentManager();
+            }
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.hide(this);
+            ft.commit();
+        } else {
+            getActivity().finish();
+        }
+    }
 
 }

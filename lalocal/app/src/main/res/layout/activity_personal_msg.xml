@@ -29,9 +29,11 @@
             android:textSize="@dimen/text_size_14_sp" />
     </FrameLayout>
 
-    <ScrollView
+    <com.lalocal.lalocal.view.ReboundScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -189,7 +191,7 @@
         </LinearLayout>
 
 
-    </ScrollView>
+    </com.lalocal.lalocal.view.ReboundScrollView>
 
 
 </LinearLayout>

@@ -23,7 +23,7 @@ import com.lalocal.lalocal.activity.MyFavoriteActivity;
 import com.lalocal.lalocal.activity.MyLiveActivity;
 import com.lalocal.lalocal.activity.MyOrderActivity;
 import com.lalocal.lalocal.activity.MyWalletActivity;
-import com.lalocal.lalocal.activity.PersonalMessageActivity;
+import com.lalocal.lalocal.activity.NimPersonalMessageActivity;
 import com.lalocal.lalocal.activity.SettingActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
@@ -302,7 +302,8 @@ MeFragment extends BaseFragment {
                     case MeItemAdapter.ITEM_MY_MESSAGE://我的消息
                         MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
                         if (UserHelper.isLogined(getActivity())) {
-                            gotoMyItemPage(PersonalMessageActivity.class);
+//                            gotoMyItemPage(PersonalMessageActivity.class);
+                            gotoMyItemPage(NimPersonalMessageActivity.class);
                         } else {
                             gotoLoginPage();
                         }
