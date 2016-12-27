@@ -34,8 +34,9 @@ import com.lalocal.lalocal.activity.fragment.BaseFragment;
 import com.lalocal.lalocal.activity.fragment.PersonalMessageFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
-import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.FileSaveUtil;
@@ -167,12 +168,18 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         chatTv.setOnCustomClickLister(this);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
         chatTv.setTitle(nickName);
-        if (hasCancel) {
+        if (pageType == PageType.PAGE_PLAY_BACK) {
+            chatTv.setBackVisible(false);
             cancelBtn.setVisibility(View.VISIBLE);
             myselfBtn.setVisibility(View.GONE);
         } else {
-            cancelBtn.setVisibility(View.GONE);
-            myselfBtn.setVisibility(View.VISIBLE);
+            if (hasCancel) {
+                cancelBtn.setVisibility(View.VISIBLE);
+                myselfBtn.setVisibility(View.GONE);
+            } else {
+                cancelBtn.setVisibility(View.GONE);
+                myselfBtn.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -182,7 +189,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         int id = v.getId();
         switch (id) {
             case R.id.chat_cancel_btn:
-                if (getActivity() instanceof AudienceActivity) {
+                if (getActivity() instanceof LivePlayerBaseActivity ||getActivity() instanceof PlayBackNewActivity) {
                     if (isSoftKeyShow) {
                         KeyboardUtil.hidenSoftKey(mMsgEdit);
                     }
@@ -191,7 +198,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     }
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.hide(this);
-                    ft.hide(lastFragment);
+                    if (lastFragment != null) {
+                        ft.hide(lastFragment);
+                    }
                     ft.commit();
                 }
                 break;
@@ -498,7 +507,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (isSoftKeyShow) {
             KeyboardUtil.hidenSoftKey(mMsgEdit);
         }
-        if (getActivity() instanceof AudienceActivity) {
+        if (getActivity() instanceof LivePlayerBaseActivity) {
             if (fm == null) {
                 fm = getFragmentManager();
             }

@@ -28,6 +28,7 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
     onBackBtnClickListener listener, cListener;
     Context context;
     TextView title_tv;
+    ImageView backImg;
     boolean isFinishEanble = true;
 
     public CustomTitleView(Context context) {
@@ -47,7 +48,7 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         boolean backVisible = a.getBoolean(R.styleable.CustomTitleView_backVisible, true);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_title_layout, this);
-        ImageView backImg = (ImageView) findViewById(R.id.titleview_back_img);
+        backImg = (ImageView) findViewById(R.id.titleview_back_img);
         title_tv = (TextView) findViewById(R.id.titleview_title_tv);
         View line = findViewById(R.id.titleview_line);
         backImg.setOnClickListener(this);
@@ -71,6 +72,15 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
 
     public void setOnCustomClickLister(onBackBtnClickListener listener) {
         cListener = listener;
+    }
+
+    public void setBackVisible(boolean isVisble) {
+        if (isVisble) {
+            backImg.setVisibility(VISIBLE);
+        } else {
+            backImg.setVisibility(GONE);
+        }
+
     }
 
     public void setTitle(String titleName) {

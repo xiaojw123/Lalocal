@@ -266,9 +266,9 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-        <!-- <meta-data -->
-        <!-- android:name="com.netease.nim.appKey" -->
-        <!-- android:value="4cbe3856032ad3755da23525e596405f" /> -->
+         <!--<meta-data-->
+         <!--android:name="com.netease.nim.appKey"-->
+         <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
         <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"

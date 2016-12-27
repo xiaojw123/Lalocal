@@ -1643,6 +1643,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         super.onDestroy();
     }
 
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

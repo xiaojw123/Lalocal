@@ -32,8 +32,17 @@ public class PlayBackResultBean {
         private int commentNum;
         private List<VideoListBean> videoList;
         private List<?> userAvatars;
+        private String createrAccId;
 
-        public int getId() {
+    public String getCreaterAccId() {
+        return createrAccId;
+    }
+
+    public void setCreaterAccId(String createrAccId) {
+        this.createrAccId = createrAccId;
+    }
+
+    public int getId() {
             return id;
         }
 

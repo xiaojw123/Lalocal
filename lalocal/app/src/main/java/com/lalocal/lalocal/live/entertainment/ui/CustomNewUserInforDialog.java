@@ -278,7 +278,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 //TODO 私信入口
                 dismiss();
                 if (mContext instanceof AudienceActivity) {
-                    ((AudienceActivity) mContext).gotoPersonalMessage(accId, nickName);
+                    ((AudienceActivity) mContext).gotoPersonalMessage(true,accId, nickName);
                 }
                 break;
             case R.id.userinfo_bottom_right://关注
