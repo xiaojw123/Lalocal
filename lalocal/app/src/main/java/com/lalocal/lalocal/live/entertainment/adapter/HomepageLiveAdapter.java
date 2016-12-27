@@ -349,9 +349,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
                     loader.setCallBack(new MyCallBack());
                     int id = bean.getId();
                     loader.getPlayBackLiveDetails(id);
-//                    AppLog.i("ttttt", "LiveRowsBean:[id:" + bean.getId() + ";title:" + bean.getTitle()
-//                        +";photo:"+bean.getPhoto()+";userId:"+bean.getUser().getId()+";nickName:"+bean.getUser().getNickName());
-//                    PlayBackActivity.start(mContext, bean);
+
                 }
             });
         }

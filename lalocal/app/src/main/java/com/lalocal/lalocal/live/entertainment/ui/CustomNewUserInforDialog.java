@@ -53,6 +53,8 @@ public class CustomNewUserInforDialog extends BaseDialog {
     RelativeLayout customDialogLiveHeaderLayout;
     @BindView(R.id.custom_dialog_close_iv_1)
     ImageView customDialogCloseIv1;
+    @BindView(R.id.master_info_bg_top)
+    ImageView masterInfoBgTop;
     @BindView(R.id.custom_dialog_audience_close_layout)
     RelativeLayout customDialogAudienceCloseLayout;
     @BindView(R.id.userinfo_header_layout)
@@ -152,14 +154,17 @@ public class CustomNewUserInforDialog extends BaseDialog {
                         if (userStatus == 0) {
                             userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
                             userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
+                            userinfoBottomLeft.setAlpha(0.5f);
                             userinfoBottomLeft.setEnabled(false);
                         } else if (userStatus == 1) {
                             userinfoBottomRight.setText(mContext.getString(R.string.live_attention_ok));
                             userinfoBottomLeft.setText(mContext.getString(R.string.private_letter));
+                            userinfoBottomLeft.setAlpha(1.0f);
                             userinfoBottomLeft.setEnabled(true);
                         } else if (userStatus == 2) {
                             userinfoBottomRight.setText(mContext.getString(R.string.live_attention_mutual));
                             userinfoBottomLeft.setText(mContext.getString(R.string.private_letter));
+                            userinfoBottomLeft.setAlpha(1.0f);
                             userinfoBottomLeft.setEnabled(true);
                         }
                     }
@@ -168,6 +173,8 @@ public class CustomNewUserInforDialog extends BaseDialog {
 
                     if (accId.equals(LiveConstant.creatorAccid)) {//主播
                         masterInfoSignature.setText(LiveConstant.liveTitle);
+                        masterInfoSignature.setBackgroundResource(R.drawable.live_user_info_signature_bg);
+                        masterInfoBgTop.setImageResource(R.drawable.live_humancard_triangle_yellow);
                     } else {
                         if (!TextUtils.isEmpty(description)) {
                             masterInfoSignature.setText(description);
@@ -193,6 +200,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 userStatus = 0;
                 userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
                 userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
+                userinfoBottomLeft.setAlpha(0.5f);
                 userinfoBottomLeft.setEnabled(false);
                 --fansNum;
                 liveFans.setText(String.valueOf(fansNum));
@@ -208,12 +216,14 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 if (userStatus == 0) {
                     userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
                     userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
+                    userinfoBottomLeft.setAlpha(0.5f);
                     userinfoBottomLeft.setEnabled(false);
                 } else if (userStatus == 1) {
                     ++fansNum;
                     userinfoBottomRight.setText(mContext.getString(R.string.live_attention_ok));
                     liveFans.setText(String.valueOf(fansNum));
                     userinfoBottomLeft.setText(mContext.getString(R.string.private_letter));
+                    userinfoBottomLeft.setAlpha(1.0f);
                     userinfoBottomLeft.setEnabled(true);
                     if (isMaster) {
                         sendMessage(getContext().getString(R.string.attention_live_e), MessageType.text);
@@ -223,6 +233,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                     userinfoBottomRight.setText(mContext.getString(R.string.live_attention_mutual));
                     liveFans.setText(String.valueOf(fansNum));
                     userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
+                    userinfoBottomLeft.setAlpha(0.5f);
                     userinfoBottomLeft.setEnabled(false);
                     if (isMaster) {
                         sendMessage(getContext().getString(R.string.attention_live_e), MessageType.text);
@@ -267,7 +278,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 //TODO 私信入口
                 dismiss();
                 if (mContext instanceof AudienceActivity) {
-                    ((AudienceActivity) mContext).gotoPersonalMessage(accId, nickName);
+                    ((AudienceActivity) mContext).gotoPersonalMessage(true,accId, nickName);
                 }
                 break;
             case R.id.userinfo_bottom_right://关注

@@ -82,7 +82,7 @@
                         android:src="@drawable/home_me_personheadnormal"
                         />
 
-                    <TextView
+                  <!--  <TextView
                         android:id="@+id/userpage_verified"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
                         android:padding="@dimen/dimen_size_3_dp"
                         android:text="@string/verified"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/text_size_10_sp" />
+                        android:textSize="@dimen/text_size_10_sp" />-->
 
                     <ImageView
                         android:id="@+id/userpage_author_tag"

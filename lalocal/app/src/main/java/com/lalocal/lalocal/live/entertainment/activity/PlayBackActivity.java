@@ -40,6 +40,7 @@ import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DialogUtils;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
+import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ import butterknife.OnClick;
  */
 public class PlayBackActivity extends BaseActivity {
 
-
+public static final  String PLAYER_OVER_FIRST="player_over_first";
     @BindView(R.id.video_cover)
     ImageView videoCover;
     @BindView(R.id.back_btn)
@@ -65,7 +66,8 @@ public class PlayBackActivity extends BaseActivity {
     XRecyclerView xRecyclerView;
     @BindView(R.id.review_title)
     TextView reviewTitle;
-
+    @BindView(R.id.tips_close_iv)
+    ImageView tipsCloseIv;
     @BindView(R.id.reply_write_iv)
     ImageView replyWriteIv;
     @BindView(R.id.reply_title_layout)
@@ -74,6 +76,10 @@ public class PlayBackActivity extends BaseActivity {
     TextView playBackBottomTableReplyCount;
     @BindView(R.id.play_back_bottom_table_reply_layout)
     LinearLayout playBackBottomTableReplyLayout;
+    @BindView(R.id.reply_tips_layout)
+    LinearLayout replyTipsLayout;
+    @BindView(R.id.page_base_loading)
+    LinearLayout pageBaseLoading;
     @BindView(R.id.play_back_bottom_table_tranmit_count)
     TextView playBackBottomTableTranmitCount;
     @BindView(R.id.play_back_bottom_table_transmit_layout)
@@ -102,7 +108,6 @@ public class PlayBackActivity extends BaseActivity {
     private int shareNum;
     private int commentNum;
     private int replyId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,6 +136,11 @@ public class PlayBackActivity extends BaseActivity {
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
+
+        if(requestCode==KeyParams.PLAYER_OVER_FIRST_REQUESTCODE&&resultCode==KeyParams.PLAYER_OVER_FIRST_RESULTCODE){
+            replyTipsLayout.setVisibility(View.VISIBLE);
+            //第一次返回。。。。
+        }
     }
     boolean isAttentions;
     private String[] mDialogItems = new String[] {"回复", "举报"};
@@ -149,7 +159,6 @@ public class PlayBackActivity extends BaseActivity {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
             }
 
             @Override
@@ -223,7 +232,8 @@ public class PlayBackActivity extends BaseActivity {
 
 
 
-    @OnClick({R.id.back_btn, R.id.enter_playback_layout, R.id.reply_write_iv,R.id.play_back_bottom_table_collect_layout,R.id.play_back_bottom_table_reply_layout,R.id.play_back_bottom_table_transmit_layout,R.id.play_back_bottom_table_like_layout})
+    @OnClick({R.id.back_btn, R.id.enter_playback_layout, R.id.reply_write_iv,R.id.play_back_bottom_table_collect_layout,
+            R.id.play_back_bottom_table_reply_layout,R.id.play_back_bottom_table_transmit_layout,R.id.play_back_bottom_table_like_layout,R.id.tips_close_iv})
     public void clickBtn(View view) {
 
         switch (view.getId()) {
@@ -234,8 +244,12 @@ public class PlayBackActivity extends BaseActivity {
                 // TODO 视频回放
                 Intent intent = new Intent(PlayBackActivity.this, PlayBackNewActivity.class);
                 intent.putExtra("id",intentId);
+            if(!SPCUtils.getBoolean(PlayBackActivity.this,PLAYER_OVER_FIRST)){
+                SPCUtils.put(PlayBackActivity.this,PLAYER_OVER_FIRST,true);
+                startActivityForResult(intent,KeyParams.PLAYER_OVER_FIRST_REQUESTCODE);
+            }else{
                 startActivity(intent);
-                finish();
+            }
                 break;
             case R.id.reply_write_iv:
                 if(UserHelper.isLogined(PlayBackActivity.this)){
@@ -256,7 +270,9 @@ public class PlayBackActivity extends BaseActivity {
                 }
                 break;
             case R.id.play_back_bottom_table_reply_layout:
-
+                if(SPCUtils.getBoolean(PlayBackActivity.this,PLAYER_OVER_FIRST)){
+                    replyTipsLayout.setVisibility(View.GONE);
+                }
                 if(UserHelper.isLogined(PlayBackActivity.this)){
                     toRePlyActivity();
                 }else{
@@ -273,9 +289,10 @@ public class PlayBackActivity extends BaseActivity {
                 }
                 break;
             case R.id.play_back_bottom_table_like_layout:
-
                 break;
-
+            case R.id.tips_close_iv:
+                replyTipsLayout.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -396,37 +413,45 @@ public class PlayBackActivity extends BaseActivity {
         @Override
         public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            if (liveRowsBean != null) {
-                String photo = liveRowsBean.getPhoto();
-                praiseNum = liveRowsBean.getPraiseNum();
-                shareNum = liveRowsBean.getShareNum();
-                commentNum = liveRowsBean.getCommentNum();
-                userId = liveRowsBean.getUser().getId();
-                shareVO = liveRowsBean.getShareVO();
-                replyId = liveRowsBean.getId();
-                playBackBottomTableReplyCount.setText(String.valueOf(commentNum));
-                playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
-                praiseFlag = liveRowsBean.isPraiseFlag();
-                praiseId = liveRowsBean.getPraiseId();
-                playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
-                if(liveRowsBean.isPraiseFlag()){
-                    playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
-                    playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
-                }else{
-                    playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
-                    playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
+            try{
+                if (liveRowsBean != null) {
+                    String photo = liveRowsBean.getPhoto();
+                    praiseNum = liveRowsBean.getPraiseNum();
+                    shareNum = liveRowsBean.getShareNum();
+                    commentNum = liveRowsBean.getCommentNum();
+                    userId = liveRowsBean.getUser().getId();
+                    shareVO = liveRowsBean.getShareVO();
+                    replyId = liveRowsBean.getId();
+                    playBackBottomTableReplyCount.setText(String.valueOf(commentNum));
+                    playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
+                    praiseFlag = liveRowsBean.isPraiseFlag();
+                    praiseId = liveRowsBean.getPraiseId();
+                    playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                    if(liveRowsBean.isPraiseFlag()){
+                        playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
+                        playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
+                    }else{
+                        playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
+                        playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
+                    }
+                    if (photo != null) {
+                        AppLog.i("TAG","获取图片地址:"+photo);
+                        DrawableUtils.loadingImg(PlayBackActivity.this, videoCover, QiniuUtils.centerCrop(photo, DensityUtil.getWindowWidth(PlayBackActivity.this), DensityUtil.dip2px(PlayBackActivity.this, 258)));
+                    }
+                    detailsRefresh = true;
+                    if (reviewRefresh) {
+                        xRecyclerView.refreshComplete();
+                        if(pageBaseLoading.getVisibility()==View.VISIBLE){
+                            pageBaseLoading.setVisibility(View.GONE);
+                        }
+                    }
+                    playBackReviewAdapter.setRefreshVideoInfo(liveRowsBean);
+                    contentLoader.getLiveUserInfo(String.valueOf(userId));
                 }
-                if (photo != null) {
-                    AppLog.i("TAG","获取图片地址:"+photo);
-                    DrawableUtils.loadingImg(PlayBackActivity.this, videoCover, QiniuUtils.centerCrop(photo, DensityUtil.getWindowWidth(PlayBackActivity.this), DensityUtil.dip2px(PlayBackActivity.this, 258)));
-                }
-                detailsRefresh = true;
-                if (reviewRefresh) {
-                    xRecyclerView.refreshComplete();
-                }
-                playBackReviewAdapter.setRefreshVideoInfo(liveRowsBean);
-                contentLoader.getLiveUserInfo(String.valueOf(userId));
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
         @Override
         public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
@@ -447,6 +472,9 @@ public class PlayBackActivity extends BaseActivity {
                 reviewRefresh = true;
                 if (detailsRefresh) {
                     xRecyclerView.refreshComplete();
+                    if(pageBaseLoading.getVisibility()==View.VISIBLE){
+                        pageBaseLoading.setVisibility(View.GONE);
+                    }
                 }
 
             }

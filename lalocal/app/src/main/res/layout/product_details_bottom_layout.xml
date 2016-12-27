@@ -35,7 +35,7 @@
             android:paddingLeft="8dp"
             android:scaleType="centerCrop"
             android:layout_gravity="center"
-            android:src="@drawable/index_article_btn_share"/>
+            android:src="@drawable/transmit"/>
 
 
         <LinearLayout

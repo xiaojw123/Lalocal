@@ -2,8 +2,6 @@ package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -29,12 +26,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.RechargeActivity;
-import com.lalocal.lalocal.activity.fragment.PersonalMessageFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.im.ChatFragment;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.base.util.DialogUtil;
@@ -141,7 +136,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private TextView masterName;
     private boolean isLocation = false;
     private String liveTitle;
-    private FrameLayout fragmentCotainer;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -418,7 +412,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     }
 
     private void initView() {
-        fragmentCotainer = (FrameLayout) findViewById(R.id.audience_fragment_container);
         viewById = findViewById(R.id.live_layout);
         viewById.setOnClickListener(buttonClickListener);
         loadingPage = findViewById(R.id.live_loading_page);
@@ -551,6 +544,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         registerObservers(false);
         super.onDestroy();
     }
+
 
     @Override
     public void onBackPressed() {
@@ -1476,38 +1470,4 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
         return super.onKeyDown(keyCode, event);
     }
-
-    public void gotoPersonalMessage(String accId, String nickName) {
-        fragmentCotainer.setVisibility(View.VISIBLE);
-        if (fm == null) {
-            fm = getFragmentManager();
-        }
-        FragmentTransaction ft = fm.beginTransaction();
-        if (chatFragment != null) {
-            ft.show(personalMsgFragment);
-            ft.show(chatFragment);
-        } else {
-            personalMsgFragment = new PersonalMessageFragment();
-            chatFragment = new ChatFragment();
-            Bundle perMsgBundle = new Bundle();
-            perMsgBundle.putBoolean(KeyParams.HAST_TITLE, true);
-            personalMsgFragment.setNextFragment(chatFragment);
-            personalMsgFragment.setArguments(perMsgBundle);
-            chatFragment.setLastFragment(personalMsgFragment);
-            Bundle bundle = new Bundle();
-            bundle.putString(KeyParams.ACCID, accId);
-            bundle.putString(KeyParams.NICKNAME, nickName);
-            bundle.putBoolean(KeyParams.HAST_CANCLE, true);
-            chatFragment.setArguments(bundle);
-            AppLog.print("fragment___" + chatFragment);
-            ft.add(R.id.audience_fragment_container, personalMsgFragment);
-            ft.add(R.id.audience_fragment_container, chatFragment);
-        }
-        ft.commit();
-    }
-
-    FragmentManager fm;
-    ChatFragment chatFragment;
-    PersonalMessageFragment personalMsgFragment;
-
 }

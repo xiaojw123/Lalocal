@@ -15,6 +15,8 @@ public  class LiveUserBean implements Parcelable {
     private String avatarOrigin;
     private int sortValue;
 
+
+
     public int getId() {
         return id;
     }

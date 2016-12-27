@@ -7,7 +7,8 @@
   >
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -17,6 +18,7 @@
                 app:layout_marginLeftPercent="10%"
                 app:layout_marginRightPercent="10%"
                 app:layout_marginBottomPercent="22%"
+
                 >
                 <FrameLayout
                     android:id="@+id/userinfo_header_layout"
@@ -67,19 +69,35 @@
                     android:textSize="@dimen/live_text_16sp" />
 
 
-                <TextView
-                    android:id="@+id/master_info_signature"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:layout_gravity="center"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:maxLines="4"
                     android:paddingLeft="@dimen/author_padding_25dp"
                     android:paddingRight="@dimen/author_padding_25dp"
-                    android:textColor="@color/color_b3b3b3"
-                    android:textSize="@dimen/live_text_13sp" />
+                    android:orientation="vertical"
+                    android:gravity="center">
+                    <ImageView
+                        android:id="@+id/master_info_bg_top"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/live_humancard_triangle_grey"
+                        android:paddingBottom="-1dp"
+                        ></ImageView>
+                    <TextView
+                        android:id="@+id/master_info_signature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:maxLines="4"
+                        android:background="@drawable/live_user_signature_gray_bg"
+                        android:padding="@dimen/live_padding_5dp"
+                        android:textColor="@color/color_190f00"
+                        android:textSize="@dimen/live_text_13sp" />
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,6 +138,11 @@
                             android:text="0" />
                     </LinearLayout>
                 </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.2dp"
+                    android:background="@color/color_b3b3b3"
+                    ></View>
                 <LinearLayout
                     android:id="@+id/user_info_layout_bottom"
                     android:layout_width="match_parent"

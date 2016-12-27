@@ -152,7 +152,17 @@
                     android:layout_gravity="center"
                     android:layout_toLeftOf="@+id/live_telecast_quit"
                     android:paddingRight="@dimen/live_padding_20dp"
-                    android:src="@drawable/peopleliving_share" />
+                    android:src="@drawable/peopleliving_share"/>
+
+                <ImageView
+                    android:id="@+id/live_telecast_top_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_toLeftOf="@+id/live_telecast_top_setting"
+                    android:paddingRight="@dimen/dimen_size_30_dp"
+                    android:src="@drawable/live_message"
+                    />
             </RelativeLayout>
 
             <android.support.v7.widget.RecyclerView
@@ -271,7 +281,8 @@
             android:id="@+id/audience_fragment_container"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            />
     </RelativeLayout>
 
 

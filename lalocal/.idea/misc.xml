@@ -27,13 +27,6 @@
       </value>
     </option>
   </component>
-<<<<<<< HEAD
-<<<<<<< HEAD
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 32115ca1aee33a01e294ae85974c63bb3a5367d0
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
@@ -50,9 +43,6 @@
   <component name="ProjectType">
     <option name="id" value="Android" />
   </component>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
   <component name="masterDetails">
     <states>
       <state key="ProjectJDKs.UI">
@@ -69,10 +59,4 @@
       </state>
     </states>
   </component>
-=======
-=======
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" assert-keyword="true" jdk-15="true" project-jdk-name="1.8" project-jdk-type="JavaSDK" />
->>>>>>> 7e662995558f6f99000701901e14faae79c7527a
->>>>>>> 8c4458723f48a5cc28e1c718395799f9816d262c
->>>>>>> c6898c306e4bcab532b3748d14c357fd5e2268fd
 </project>

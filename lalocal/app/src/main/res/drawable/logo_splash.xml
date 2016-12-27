@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-<!--
 
     <item android:drawable="@color/white" />
 
@@ -12,22 +11,21 @@
     android:src="@drawable/startpage"
     />
     </item>
--->
 
     <!-- 360首发splash-->
-    <item android:drawable="@color/white" />
-    <item>
-        <bitmap
-            android:src="@drawable/startpage"
-            android:gravity="center_vertical"
-            />
-    </item>
+    <!--<item android:drawable="@color/white" />-->
+    <!--<item>-->
+        <!--<bitmap-->
+            <!--android:src="@drawable/startpage"-->
+            <!--android:gravity="center_vertical"-->
+            <!--/>-->
+    <!--</item>-->
 
-    <item android:bottom="@dimen/dimen_size_60_dp">
-        <bitmap
-            android:gravity="bottom"
-            android:src="@drawable/logo_360" />
+    <!--<item android:bottom="@dimen/dimen_size_60_dp">-->
+        <!--<bitmap-->
+            <!--android:gravity="bottom"-->
+            <!--android:src="@drawable/logo_360" />-->
 
-    </item>
+    <!--</item>-->
 
 </layer-list>

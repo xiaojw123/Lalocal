@@ -103,51 +103,6 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         }
     }
 
-//    class CarouseLWebViewClient extends WebViewClient {
-//        @Override
-//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//            AppLog.print("webviewclient url____" + url);
-////            webviewclient url____lalocal://app?{"targetType": "19","targetId": "","targetUrl": ""}
-//            if (url.startsWith("lalocal:")) {
-//                int startIndex = url.indexOf("?") + 1;
-//                String jsonData = url.substring(startIndex, url.length());
-//                try {
-//                    JSONObject jsonObject = new JSONObject(jsonData);
-//                    String targetType = jsonObject.optString("targetType");
-//                    String targetId = jsonObject.optString("targetId");
-//                    if (!TextUtils.isEmpty(targetType)) {
-//                        if ("19".equals(targetType)) {
-//                            if (UserHelper.isLogined(CarouselFigureActivity.this)) {
-//                                Intent intent = new Intent(CarouselFigureActivity.this, MyCouponActivity.class);
-//                                intent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
-//                                startActivity(intent);
-//                            } else {
-//                                LLoginActivity.start(CarouselFigureActivity.this);
-//                            }
-//                            return true;
-//                        } else if ("15".equals(targetType)) {
-//                            Intent intent = new Intent(CarouselFigureActivity.this, AudienceActivity.class);
-//                            intent.putExtra("id", targetId);
-//                            startActivity(intent);
-//                            return true;
-//                        } else if ("20".equals(targetType)) {
-//                            Intent intent = new Intent(CarouselFigureActivity.this, PlayBackActivity.class);
-//                            intent.putExtra("id", targetId);
-//                            startActivity(intent);
-//                            return true;
-//                        }
-//                    }
-//
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//
-//            return super.shouldOverrideUrlLoading(view, url);
-//        }
-//    }
-
 
 
 }

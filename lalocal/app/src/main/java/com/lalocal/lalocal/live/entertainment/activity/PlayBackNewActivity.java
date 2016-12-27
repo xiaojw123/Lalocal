@@ -1,5 +1,10 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import butterknife.BindView;
+
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +23,10 @@ import android.widget.Toast;
 import com.cunoraz.gifview.library.GifView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.im.ChatFragment;
 import com.lalocal.lalocal.live.base.util.ActivityManager;
 import com.lalocal.lalocal.live.base.util.DialogUtil;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
@@ -54,6 +62,8 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import openlive.agora.io.pldroidplayer.utils.Utils;
 import openlive.agora.io.pldroidplayer.utils.widget.MediaController;
+
+import static com.lalocal.lalocal.R.id.playback_fragment_container;
 
 /**
  * Created by android on 2016/12/21.
@@ -102,13 +112,17 @@ public class PlayBackNewActivity extends BaseActivity {
     private PlayBackMsgResultBean.ResultBean thisPoll;
     private long thisSendAt;
     private PlayBackMsgAdapter playBackMsgAdapter;
-    private List<PlayBackMsgResultBean.ResultBean> msgList=new ArrayList<>();
+    private List<PlayBackMsgResultBean.ResultBean> msgList = new ArrayList<>();
     private int userId;
     private MediaController mMediaController;
     private ContentLoader contentLoader;
     private MyCallBack myCallBack;
     private String intentId;
     private View loadingView;
+    private String accid;
+    private String nickName;
+    FrameLayout framentCotainer;
+    int resId = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,11 +139,12 @@ public class PlayBackNewActivity extends BaseActivity {
         intentId = getIntent().getStringExtra("id");
         contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
         contentLoader.getPlayBackMsg(intentId);
+        framentCotainer = (FrameLayout) findViewById(playback_fragment_container);
         loadingView = findViewById(R.id.loading_view);
         mVideoView.setBufferingIndicator(loadingView);
-        mMediaController = new MediaController(this, true,false);
+        mMediaController = new MediaController(this, true, false);
         mMediaController.setInstantSeeking(true);
-        mMediaController.setMediaControl( mMediaControlImpl);
+        mMediaController.setMediaControl(mMediaControlImpl);
         mVideoView.setMediaController(mMediaController);
         mVideoView.setOnCompletionListener(mOnCompletionListener);
         mVideoView.setOnErrorListener(mOnErrorListener);
@@ -155,7 +170,7 @@ public class PlayBackNewActivity extends BaseActivity {
                     thisSendAt = msgListResult.get(0).getSendAt();
                     items.addAll(msgListResult);
                     // 消息记录:1481876276240
-                    AppLog.i("TAG", "消息记录:" + thisSendAt + ""+"发送人:"+msgListResult.get(0).getFromNick()+"   聊天内容:"+msgListResult.get(0).getContent());
+                    AppLog.i("TAG", "消息记录:" + thisSendAt + "" + "发送人:" + msgListResult.get(0).getFromNick() + "   聊天内容:" + msgListResult.get(0).getContent());
                 }
 
             }
@@ -203,12 +218,13 @@ public class PlayBackNewActivity extends BaseActivity {
     }
 
     private void playBackCollectStatus(boolean praiseFlag) {
-        if(mMediaController!=null){
+        if (mMediaController != null) {
             mMediaController.setCollect(praiseFlag);
         }
     }
 
     private void parseIntent(PlayBackResultBean liveRowsBean) {
+        accid = liveRowsBean.getCreaterAccId();
         videoList = liveRowsBean.getVideoList();
         user = liveRowsBean.getUser();
         shareVO = liveRowsBean.getShareVO();
@@ -219,6 +235,7 @@ public class PlayBackNewActivity extends BaseActivity {
         String startAt = liveRowsBean.getStartAt();
         String endAt = liveRowsBean.getEndAt();
         userId = user.getId();
+        nickName = user.getNickName();
         startAtLong = stringToDate(startAt, "yyyy-MM-dd HH:mm:ss");
         long endAtLong = stringToDate(endAt, "yyyy-MM-dd HH:mm:ss");
         // 回放视频开始和结束的时间:1481876214000      end:1481877415000
@@ -228,8 +245,9 @@ public class PlayBackNewActivity extends BaseActivity {
         initListview();
         initData(liveRowsBean);
     }
+
     private void initListview() {
-        playBackMsgAdapter = new PlayBackMsgAdapter(this,null,userId);
+        playBackMsgAdapter = new PlayBackMsgAdapter(this, null, userId);
         msgListview.setAdapter(playBackMsgAdapter);
     }
 
@@ -250,9 +268,9 @@ public class PlayBackNewActivity extends BaseActivity {
         }
 
 
-        if(direction==0){//横屏
+        if (direction == 0) {//横屏
             mVideoView.setDisplayOrientation(450);
-        }else{//竖屏
+        } else {//竖屏
             mVideoView.setDisplayOrientation(0);
         }
         mVideoView.setDisplayAspectRatio(PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT);
@@ -289,9 +307,10 @@ public class PlayBackNewActivity extends BaseActivity {
                 }
                 break;
             case R.id.playback_quit://退出回放
-                if(mVideoView!=null){
+                if (mVideoView != null) {
                     mVideoView.stopPlayback();
                 }
+                setResult(KeyParams.PLAYER_OVER_FIRST_RESULTCODE,new Intent());
                 finish();
                 break;
             case R.id.playback_top_share:
@@ -307,16 +326,14 @@ public class PlayBackNewActivity extends BaseActivity {
     }
 
 
-
-
-
     long playDuration;
-    private MediaController.MediaControlImpl mMediaControlImpl=new MediaController.MediaControlImpl(){
+    private MediaController.MediaControlImpl mMediaControlImpl = new MediaController.MediaControlImpl() {
 
         @Override
         public void onClickCollect(ImageView imageView) {
             clickCollectBtn();
         }
+
         @Override
         public void onClickBefore(ImageView imageView) {
             clickBefore();
@@ -329,22 +346,35 @@ public class PlayBackNewActivity extends BaseActivity {
 
         @Override
         public void getprogressDuration(long duration) {
-            playDuration=duration;
+            playDuration = duration;
             long msgAt = startAtLong + duration;
-            AppLog.i("TAG","播放时间。。。。："+msgAt);
+            AppLog.i("TAG", "播放时间。。。。：" + msgAt);
             getMsgInfo(msgAt);
         }
 
         @Override
         public void inputPrivate() {
             //TODO 私信主播
-            showToastTips("私信主播。。。。");
-
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            if (chatFragment == null) {
+                chatFragment = new ChatFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(KeyParams.ACCID, accid);
+                bundle.putString(KeyParams.NICKNAME, nickName);
+                bundle.putInt(KeyParams.PAGE_TYPE, PageType.PAGE_PLAY_BACK);
+                chatFragment.setArguments(bundle);
+                ft.add(R.id.playback_fragment_container, chatFragment);
+            } else {
+                ft.show(chatFragment);
+            }
+            ft.commit();
         }
     };
+    private ChatFragment chatFragment;
 
 
-    private PLMediaPlayer.OnPreparedListener mOnPreparedListener=new PLMediaPlayer.OnPreparedListener(){
+    private PLMediaPlayer.OnPreparedListener mOnPreparedListener = new PLMediaPlayer.OnPreparedListener() {
 
         @Override
         public void onPrepared(PLMediaPlayer plMediaPlayer) {
@@ -352,8 +382,8 @@ public class PlayBackNewActivity extends BaseActivity {
                 @Override
                 public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
-                        if (videoList != null && videoList.size()==1) {
-                                mMediaController.setPlayerCountStatus(false);
+                        if (videoList != null && videoList.size() == 1) {
+                            mMediaController.setPlayerCountStatus(false);
                         }
                         playbackLoadingPage.setVisibility(View.GONE);
                         mMediaController.setCollect(praiseFlag);
@@ -369,7 +399,7 @@ public class PlayBackNewActivity extends BaseActivity {
     private PLMediaPlayer.OnCompletionListener mOnCompletionListener = new PLMediaPlayer.OnCompletionListener() {
         @Override
         public void onCompletion(PLMediaPlayer plMediaPlayer) {
-          //TODO 播放完成
+            //TODO 播放完成
             if (videoList == null || videoList.size() == 0) {
                 return;
             }
@@ -391,61 +421,60 @@ public class PlayBackNewActivity extends BaseActivity {
     };
 
 
-
-    private PLMediaPlayer.OnErrorListener mOnErrorListener = new PLMediaPlayer.OnErrorListener(){
+    private PLMediaPlayer.OnErrorListener mOnErrorListener = new PLMediaPlayer.OnErrorListener() {
 
         @Override
         public boolean onError(PLMediaPlayer plMediaPlayer, int errorCode) {
             boolean isNeedReconnect = false;
             switch (errorCode) {
                 case PLMediaPlayer.ERROR_CODE_INVALID_URI:
-                    AppLog.i("TAG","视频播放错误码:Invalid URL !:ERROR_CODE_INVALID_URI");
+                    AppLog.i("TAG", "视频播放错误码:Invalid URL !:ERROR_CODE_INVALID_URI");
                     break;
                 case PLMediaPlayer.ERROR_CODE_404_NOT_FOUND:
 
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_404_NOT_FOUND:404 resource not found !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_404_NOT_FOUND:404 resource not found !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_CONNECTION_REFUSED:
 
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_CONNECTION_REFUSED:Connection refused !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_CONNECTION_REFUSED:Connection refused !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_CONNECTION_TIMEOUT:
                     isNeedReconnect = true;
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_CONNECTION_TIMEOUT:Connection timeout !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_CONNECTION_TIMEOUT:Connection timeout !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_EMPTY_PLAYLIST:
                     showToastTips("Empty playlist !");
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_EMPTY_PLAYLIST:Empty playlist !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_EMPTY_PLAYLIST:Empty playlist !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_STREAM_DISCONNECTED:
                     showToastTips("Stream disconnected !");
                     isNeedReconnect = true;
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_STREAM_DISCONNECTED:Stream disconnected !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_STREAM_DISCONNECTED:Stream disconnected !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_IO_ERROR:
                     isNeedReconnect = true;
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_IO_ERROR:Network IO Error !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_IO_ERROR:Network IO Error !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_UNAUTHORIZED:
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_UNAUTHORIZED:Unauthorized Error !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_UNAUTHORIZED:Unauthorized Error !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_PREPARE_TIMEOUT:
                     isNeedReconnect = true;
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_PREPARE_TIMEOUT:Prepare timeout !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_PREPARE_TIMEOUT:Prepare timeout !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_READ_FRAME_TIMEOUT:
                     isNeedReconnect = true;
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_READ_FRAME_TIMEOUT:Read frame timeout !");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_READ_FRAME_TIMEOUT:Read frame timeout !");
                     break;
                 case PLMediaPlayer.ERROR_CODE_HW_DECODE_FAILURE:
                     isNeedReconnect = true;
-                    AppLog.i("TAG","视频播放错误码:ERROR_CODE_HW_DECODE_FAILURE");
+                    AppLog.i("TAG", "视频播放错误码:ERROR_CODE_HW_DECODE_FAILURE");
                     break;
                 case PLMediaPlayer.MEDIA_ERROR_UNKNOWN:
-                    AppLog.i("TAG","视频播放错误码:MEDIA_ERROR_UNKNOWN");
+                    AppLog.i("TAG", "视频播放错误码:MEDIA_ERROR_UNKNOWN");
                     break;
                 default:
-                    AppLog.i("TAG","视频播放错误码:default:unknown error !");
+                    AppLog.i("TAG", "视频播放错误码:default:unknown error !");
                     break;
             }
 
@@ -463,9 +492,9 @@ public class PlayBackNewActivity extends BaseActivity {
 
 
     private void getMsgInfo(long msgAt) {
-        if(thisSendAt!=0){
+        if (thisSendAt != 0) {
             if (msgAt > thisSendAt) {
-                if(thisPoll!=null){
+                if (thisPoll != null) {
                     msgList.add(thisPoll);
                     playBackMsgAdapter.addItemMsg(msgList);
                 }
@@ -473,7 +502,7 @@ public class PlayBackNewActivity extends BaseActivity {
                 if (thisPoll != null) {
                     thisSendAt = thisPoll.getSendAt();
                     getMsgInfo(msgAt);
-                }else{
+                } else {
 
                 }
             }
@@ -558,7 +587,7 @@ public class PlayBackNewActivity extends BaseActivity {
 
 
     private void positionChangeListener(int position) {
-        if(videoList.size()>1){
+        if (videoList.size() > 1) {
             if (videoList.size() == position + 1) {
                 mMediaController.setBefore(1.0f, true);
                 mMediaController.setNext(0.4f, false);
@@ -578,11 +607,12 @@ public class PlayBackNewActivity extends BaseActivity {
         mHandler.removeCallbacksAndMessages(null);
         mHandler.sendMessageDelayed(mHandler.obtainMessage(MESSAGE_ID_RECONNECTING), 3000);
     }
+
     private void showToastTips(final String tips) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(PlayBackNewActivity.this,tips,Toast.LENGTH_SHORT).show();
+                Toast.makeText(PlayBackNewActivity.this, tips, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -632,7 +662,9 @@ public class PlayBackNewActivity extends BaseActivity {
         mVideoView.pause();
         mIsActivityPaused = true;
     }
+
     boolean isUnDestroy = true;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -652,5 +684,6 @@ public class PlayBackNewActivity extends BaseActivity {
         super.onDestroy();
         mVideoView.stopPlayback();
     }
+
 
 }
