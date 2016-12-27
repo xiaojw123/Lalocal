@@ -385,9 +385,10 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
             String avatar = null;
             String nickname = null;
+
             if (user != null) {
-                user.getAvatar();
-                user.getNickName();
+                avatar = user.getAvatar();
+                nickname = user.getNickName();
             }
 
             if (TextUtils.isEmpty(title)) {
