@@ -17,6 +17,7 @@ public interface PageType {
      int  PAGE_CHARGE=0x23;
      int  PAGE_DESTIATION=0x24;
      int  PAGE_LIVE_HOME=0x25;
+     int  PAGE_PLAY_BACK=0x26;
 
 
 

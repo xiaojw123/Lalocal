@@ -149,4 +149,14 @@
             </LinearLayout>
         </RelativeLayout>
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/playback_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="bottom"
+       />
+
+
+
 </FrameLayout>
