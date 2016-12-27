@@ -1,7 +1,10 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
+import butterknife.BindView;
+
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -307,6 +310,7 @@ public class PlayBackNewActivity extends BaseActivity {
                 if (mVideoView != null) {
                     mVideoView.stopPlayback();
                 }
+                setResult(KeyParams.PLAYER_OVER_FIRST_RESULTCODE,new Intent());
                 finish();
                 break;
             case R.id.playback_top_share:

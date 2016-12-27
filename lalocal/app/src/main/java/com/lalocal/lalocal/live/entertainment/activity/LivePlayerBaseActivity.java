@@ -560,8 +560,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
 
     }
-
-
     int totalGold = 0;
 
     protected void loginIMServer(final String imccId, String imToken) {

@@ -28,7 +28,6 @@
             android:layout_marginTop="@dimen/live_padding_10dp"
             android:src="@drawable/backdarkbg_circle"/>
     </RelativeLayout>
-
     <RelativeLayout
         android:layout_below="@+id/enter_playback_layout"
         android:layout_width="match_parent"
@@ -40,10 +39,40 @@
             android:paddingBottom="@dimen/live_height_50dp"
             >
         </com.jcodecraeer.xrecyclerview.XRecyclerView>
-
         <include layout="@layout/play_back_review_layout"></include>
-
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/reply_tips_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/live_height_50dp"
+        android:layout_marginLeft="@dimen/live_height_35dp"
+        android:background="@drawable/yellow_fill_dark_tips"
+        android:paddingLeft="@dimen/live_padding_5dp"
+        android:paddingRight="@dimen/live_padding_5dp"
+        android:visibility="gone"
+        >
+        <TextView
+            android:id="@+id/tips_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/live_padding_2dp"
+            android:gravity="center"
+            android:textSize="@dimen/live_text_10sp"
+            android:layout_marginBottom="@dimen/live_padding_2dp"
+            android:text="视频中有亮点或者槽点吗?你有相对主播说的话吗?"/>
+
+        <ImageView
+            android:id="@+id/tips_close_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/closetagdark"
+            android:layout_marginBottom="@dimen/live_padding_2dp"
+            />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -127,6 +156,11 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <include
+        layout="@layout/page_base_loading"
+        />
+
 
 
 
