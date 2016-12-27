@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -55,8 +54,8 @@ public class LiveHomePageActivity extends BaseActivity {
 
     @BindView(R.id.userpage_headportrait_img)
     ImageView userpageHeadportraitImg;
-    @BindView(R.id.userpage_verified)
-    TextView userpageVerified;
+   /* @BindView(R.id.userpage_verified)
+    TextView userpageVerified;*/
     @BindView(R.id.userpage_author_tag)
     ImageView userpageAuthorTag;
     @BindView(R.id.userpage_username)
@@ -363,30 +362,30 @@ public class LiveHomePageActivity extends BaseActivity {
 
 
             if (result.getRole() == 1) {
-                userpageVerified.setText("专栏作者");
+            /*    userpageVerified.setText("专栏作者");
                 userpageVerified.setTextColor(Color.WHITE);
-                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
+                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));*/
                 isAuthor = true;
                 userpageAuthorTag.setVisibility(View.VISIBLE);
-                userpageVerified.setVisibility(View.GONE);
+            //    userpageVerified.setVisibility(View.GONE);
                 // 显示文章
                 layoutArticlePart.setVisibility(View.VISIBLE);
             } else if (result.getRole() == -1) {
-                userpageVerified.setText("管理员");
+           /*     userpageVerified.setText("管理员");
                 userpageVerified.setTextColor(Color.WHITE);
-                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));
+                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));*/
 
                 isAuthor = false;
                 userpageAuthorTag.setVisibility(View.GONE);
-                userpageVerified.setVisibility(View.VISIBLE);
+            //    userpageVerified.setVisibility(View.VISIBLE);
                 // 隐藏文章
                 layoutArticlePart.setVisibility(View.GONE);
             } else {
-                userpageVerified.setText("未验证");
+            /*    userpageVerified.setText("未验证");
                 userpageVerified.setTextColor(Color.BLACK);
-                userpageVerified.setBackgroundColor(Color.parseColor("#999999"));
+                userpageVerified.setBackgroundColor(Color.parseColor("#999999"));*/
                 userpageAuthorTag.setVisibility(View.GONE);
-                userpageVerified.setVisibility(View.VISIBLE);
+              //  userpageVerified.setVisibility(View.VISIBLE);
                 isAuthor = false;
                 // 隐藏文章
                 layoutArticlePart.setVisibility(View.GONE);

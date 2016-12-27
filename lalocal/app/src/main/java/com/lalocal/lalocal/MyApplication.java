@@ -93,7 +93,7 @@ public class MyApplication extends Application {
         Config.IsToastTip = true;
         AppCrashHandler.getInstance(this);
         if (isDebug) {
-            Bugtags.start("165db764bcad149e50e319635e6a614c", this, Bugtags.BTGInvocationEventBubble);
+            Bugtags.start("19f79e144b295411ef4b402ae7157a5a", this, Bugtags.BTGInvocationEventBubble);
         } else {
             startFabric();
             startUmeng();
