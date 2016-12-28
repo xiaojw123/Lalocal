@@ -85,18 +85,40 @@
                         android:src="@drawable/live_humancard_triangle_grey"
                         android:paddingBottom="-1dp"
                         ></ImageView>
-                    <TextView
-                        android:id="@+id/master_info_signature"
+                    <LinearLayout
+                        android:id="@+id/master_info_signature_layout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:ellipsize="end"
-                        android:gravity="center"
-                        android:maxLines="4"
+                        android:orientation="vertical"
                         android:background="@drawable/live_user_signature_gray_bg"
-                        android:padding="@dimen/live_padding_5dp"
-                        android:textColor="@color/color_190f00"
-                        android:textSize="@dimen/live_text_13sp" />
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/live_padding_5dp">
+                        <TextView
+                            android:id="@+id/master_info_signature"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:ellipsize="end"
+                            android:maxLines="4"
+                            android:textColor="@color/color_190f00"
+                            android:text="仿佛看见黄金客户可换可交换"
+                            android:textSize="@dimen/live_text_13sp" />
+                        <TextView
+                            android:id="@+id/master_info_location"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:paddingTop="@dimen/live_padding_5dp"
+                            android:textSize="@dimen/live_text_10sp"
+                            android:drawableLeft="@drawable/peopleliving_location_darkic_02"
+                            android:drawablePadding="@dimen/live_padding_3dp"
+                            android:alpha="0.6"
+                            android:text="发卡行可好看"
+                            android:visibility="gone"
+                            />
+
+                    </LinearLayout>
+
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"

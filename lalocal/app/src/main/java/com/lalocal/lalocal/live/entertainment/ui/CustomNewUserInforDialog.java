@@ -79,6 +79,11 @@ public class CustomNewUserInforDialog extends BaseDialog {
     TextView userinfoBottomRight;
     @BindView(R.id.user_info_layout_bottom)
     LinearLayout userInfoLayoutBottom;
+    @BindView(R.id.master_info_location)
+    TextView masterInfoLocation;
+    @BindView(R.id.master_info_signature_layout)
+    LinearLayout masterInfoSignatureLayout;
+
     private String userId;
     private Context mContext;
     boolean isMuted;//是否禁言
@@ -172,9 +177,11 @@ public class CustomNewUserInforDialog extends BaseDialog {
                     userinfoNickTv.setText(nickName);
 
                     if (accId.equals(LiveConstant.creatorAccid)) {//主播
-                        masterInfoSignature.setText(LiveConstant.liveTitle);
-                        masterInfoSignature.setBackgroundResource(R.drawable.live_user_info_signature_bg);
+                        masterInfoSignature.setText("正在直播 ： "+LiveConstant.liveTitle);
+                        masterInfoSignatureLayout.setBackgroundResource(R.drawable.live_user_info_signature_bg);
                         masterInfoBgTop.setImageResource(R.drawable.live_humancard_triangle_yellow);
+                        masterInfoLocation.setVisibility(View.VISIBLE);
+                        masterInfoLocation.setText(LiveConstant.liveLocation);
                     } else {
                         if (!TextUtils.isEmpty(description)) {
                             masterInfoSignature.setText(description);

@@ -787,12 +787,7 @@ public class AppConfig {
     }
 
     /**
-<<<<<<< HEAD
-     * 直播间举报
-     *
-=======
      * 直播间举报，主播端
->>>>>>> fa39781f34b8528672b8a9b10e4d9c5b34597a73
      * @return
      */
     public static String getChannelReport() {
@@ -829,10 +824,11 @@ public class AppConfig {
      * 获取文章评论
      * @param articleId 文章编号
      * @return
+     * "comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
      */
-    public static String getArticleComments(int articleId) {
-//        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1&pageSize=10&pageNumber=" + pageNum;
-        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
+    public static String getArticleComments(int articleId,int pageNum) {
+        String url = baseUrl + "comments?targetId="+ articleId+"&targetType=1&pageSize=10&pageNumber="+pageNum;
+     //   String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
         AppLog.i("articleComments", "the url is " + url);
         return url;
     }

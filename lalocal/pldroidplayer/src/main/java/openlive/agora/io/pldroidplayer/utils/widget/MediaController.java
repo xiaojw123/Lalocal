@@ -431,7 +431,7 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
                 mLastSeekBarRunnable = new Runnable() {
                     @Override
                     public void run() {
-                        Log.d("TAG","反倒是客服很快收到货福克斯的福克斯的家伙");
+
                         mPlayer.seekTo(newposition);
                     }
                 };
@@ -499,6 +499,15 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
             mWindow.setHeight(LayoutParams.WRAP_CONTENT);
         }
         initControllerView(mRoot);
+    }
+
+    public  void setHideContro(){
+        mWindow.setFocusable(false);
+        mRoot.setVisibility(View.INVISIBLE);
+    }
+    public  void showContro(){
+        mWindow.setFocusable(false);
+        mRoot.setVisibility(View.VISIBLE);
     }
 
     @Override

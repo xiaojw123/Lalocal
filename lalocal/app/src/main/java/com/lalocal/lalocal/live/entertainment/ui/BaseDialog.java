@@ -42,6 +42,11 @@ public abstract class BaseDialog extends Dialog {
     }
 
     @Override
+    public void setOnShowListener(OnShowListener listener) {
+        super.setOnShowListener(listener);
+    }
+
+    @Override
     public void setOnDismissListener(OnDismissListener listener) {
         super.setOnDismissListener(listener);
         closeCurrent();

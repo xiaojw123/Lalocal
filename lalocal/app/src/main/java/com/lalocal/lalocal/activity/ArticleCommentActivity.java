@@ -16,20 +16,16 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.DemoCache;
-import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
-import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
-import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.CommentOperateResp;
 import com.lalocal.lalocal.model.CommentRowBean;
+import com.lalocal.lalocal.model.CommentsResp;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.ArticleCommentListAdapter;
 
 import java.util.ArrayList;
@@ -46,34 +42,28 @@ public class ArticleCommentActivity extends BaseActivity {
     @BindView(R.id.tv_tip)
     TextView tvTip;
     @BindView(R.id.xrv_article_comments)
-    CustomXRecyclerView xrvArticleComments;
+    XRecyclerView xrvArticleComments;
 
     // 内容加载器
     private ContentLoader mContentLoader;
     // 适配器
     private ArticleCommentListAdapter mAdapter;
-
     // 文章id
     private int mArticleId;
-
-    // 当前加载页
-//    private int mCurPage = 1;
-
-    // 是否在刷新
-    private boolean isRefresh;
-    // 是否在加载
-    private boolean isLoadMore;
-
     // 评论列表
     private List<CommentRowBean> mCommentList = new ArrayList<>();
 
     // 评论列表item点击事件
     private ArticleCommentListAdapter.MyOnItemClickListener mItemClickListener;
 
+    public static final int  REPLY_REQUESTCODE=110;
+
     // 标签
     private static final int REPLY = 0;
     private static final int REPORT = 1;
     private String[] mDialogItems = new String[] {"回复", "举报"};
+    private int pageNumber;
+    private int totalPages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,120 +105,94 @@ public class ArticleCommentActivity extends BaseActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        // 请求评论
-        mContentLoader.getArticleComments(mArticleId);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==ArticleCommentActivity.REPLY_REQUESTCODE&&resultCode==KeyParams.REPLY_RESULTCODE){
+            if(mCommentList!=null){
+                mCommentList.clear();
+                mContentLoader.getArticleComments(mArticleId,1);
+            }
+        }
     }
 
     /**
      * 初始化XRecyclerView
      */
+    boolean isRefresh = false;
     private void initXRecyclerView() {
         // 实例化布局管理器
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        CustomLinearLayoutManager layoutManager=new CustomLinearLayoutManager(this);
         // 添加布局管理器
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         xrvArticleComments.setLayoutManager(layoutManager);
-        // 设置可下拉刷新
-        xrvArticleComments.setPullRefreshEnabled(false);
-        // 设置不可加载更多
-        xrvArticleComments.setLoadingMoreEnabled(false);
         // 设置监听事件
-//        xrvArticleComments.setLoadingListener(new XRecyclerView.LoadingListener() {
-//            @Override
-//            public void onRefresh() {
-//                xrvArticleComments.refreshComplete();
+        xrvArticleComments.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                if(mCommentList!=null){
+                    mCommentList.clear();
+                }
+                isRefresh=true;
+                mContentLoader.getArticleComments(mArticleId,1);
+            }
+            @Override
+            public void onLoadMore() {
+                isRefresh=false;
+                if(totalPages>=(pageNumber+1)){
+                    mContentLoader.getArticleComments(mArticleId,pageNumber+1);
+                }else{
+                    xrvArticleComments.setNoMore(true);
+                }
+            }
+        });
+        // 设置可下拉刷新
+        xrvArticleComments.setPullRefreshEnabled(true);
+        // 设置不可加载更多
+        xrvArticleComments.setLoadingMoreEnabled(true);
+        xrvArticleComments.setRefreshing(true);
+        mAdapter = new ArticleCommentListAdapter(this, null);
+        xrvArticleComments.setAdapter(mAdapter);
+        MyArticleItemClickListener myArticleItemClickListener = new MyArticleItemClickListener();
+        mAdapter.setOnItemClickListener(myArticleItemClickListener);
 
-//                if (isRefresh == false) {
-//                    // 正在刷新
-//                    isRefresh = true;
-                    // 不再加载
-//                    isLoadMore = false;
-                    // 重置当前加载页
-//                    mCurPage = 1;
-                    // 请求
-//                    mContentLoader.getArticleComments(mArticleId);
-//                }
-//            }
-
-//            @Override
-//            public void onLoadMore() {
-//                if (isLoadMore = false) {
-//                    // 正在加载更多
-//                    isLoadMore = true;
-//                    // 不再刷新
-//                    isRefresh = false;
-//                    // 加载页+1
-//                    mCurPage++;
-//                    // 请求
-//                    mContentLoader.getArticleComments(mArticleId, mCurPage);
-//                }
-//            }
-//        });
     }
 
     private class MyCallBack extends ICallBack {
-
         @Override
-        public void onGetArticleComments(List<CommentRowBean> commentList) {
-            super.onGetArticleComments(commentList);
-
-//            if (isRefresh) {
-//
-//                // 重置标记
-//                isRefresh = false;
-//                // 刷新结束
-//                xrvArticleComments.refreshComplete();
-//                // 加载结束
-//                xrvArticleComments.loadMoreComplete();
-//
-//                // 清空评论列表
-//                mCommentList.clear();
-//                // 填充评论列表
-//                mCommentList.addAll(commentList);
-//            } else if (isLoadMore) {
-//
-//                // 重置标记
-//                isLoadMore = false;
-//
-//                // 结束刷新
-//                xrvArticleComments.refreshComplete();
-//
-//                // 已加载完毕
-//                if (commentList.size() <= 0) {
-//                    // 添加footer，已加载完毕
-//                    xrvArticleComments.setNoMore(true);
-//
-//                    return;
-//                } else {
-//                    // 加载结束
-//                    xrvArticleComments.loadMoreComplete();
-//
-//                    // 添加获取的评论列表
-//                    mCommentList.addAll(commentList);
-//                }
-//            } else {
-                // 清空评论列表
-                mCommentList.clear();
-                // 填充评论列表
-                mCommentList.addAll(commentList);
-//            }
-
-            // 设置适配器
-            setAdapter();
+        public void onGetArticleComments(CommentsResp.ResultBean resultBean) {
+            super.onGetArticleComments(resultBean);
+            if(resultBean!=null){
+                pageNumber = resultBean.getPageNumber();
+                totalPages = resultBean.getTotalPages();
+                if(isRefresh){
+                    xrvArticleComments.refreshComplete();
+                }else{
+                    if(pageNumber==totalPages){
+                        xrvArticleComments.setNoMore(true);
+                    }else{
+                        xrvArticleComments.loadMoreComplete();
+                    }
+                }
+                mCommentList.addAll(resultBean.getRows());
+                if(mCommentList.size()>0){
+                    setShowList(true);
+                }else{
+                    setShowList(false);
+                }
+                mAdapter.refreshList(mCommentList);
+            }else{
+                setShowList(false);
+            }
         }
-
         @Override
         public void onDeleteComment(CommentOperateResp commentOperateResp) {
             super.onDeleteComment(commentOperateResp);
-
             if (commentOperateResp.getReturnCode() == 0) {
                 String message = commentOperateResp.getMessage();
                 if (TextUtils.equals(message, "success")) {
                     Toast.makeText(ArticleCommentActivity.this, "评论删除成功", Toast.LENGTH_SHORT).show();
-
                     // 请求评论
-                    mContentLoader.getArticleComments(mArticleId);
+                    mContentLoader.getArticleComments(mArticleId,1);
                     return;
                 }
             }
@@ -241,45 +205,7 @@ public class ArticleCommentActivity extends BaseActivity {
             super.onError(volleyError);
 
             // 重置xrecyclerview刷新加载状态
-            resetStatus();
-        }
-    }
 
-    /**
-     * 重置xrecyclerview刷新加载状态
-     */
-    private void resetStatus() {
-//        isRefresh = false;
-//        isLoadMore = false;
-//        xrvArticleComments.refreshComplete();
-//        xrvArticleComments.loadMoreComplete();
-    }
-
-    /**
-     * 设置适配器
-     */
-    public void setAdapter() {
-        if (mCommentList.size() <= 0) {
-            // 隐藏列表
-            setShowList(false);
-        } else {
-            // 显示列表
-            setShowList(true);
-
-            // 如果适配器不存在
-            if (mAdapter == null) {
-                // 初始化适配器
-                mAdapter = new ArticleCommentListAdapter(this, mCommentList);
-                // 初始化item点击事件
-                mItemClickListener = new MyArticleItemClickListener();
-                // 设置item点击事件
-                mAdapter.setOnItemClickListener(mItemClickListener);
-                // 设置适配器
-                xrvArticleComments.setAdapter(mAdapter);
-            } else {
-                // 刷新列表
-                mAdapter.refreshList(mCommentList);
-            }
         }
     }
 
@@ -373,7 +299,7 @@ public class ArticleCommentActivity extends BaseActivity {
                                 bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_REPLY);
                                 bundle.putInt(KeyParams.REPLY_PARENT_ID, commentId);
                                 replyIntent.putExtras(bundle);
-                                ArticleCommentActivity.this.startActivity(replyIntent);
+                                ArticleCommentActivity.this.startActivityForResult(replyIntent,ArticleCommentActivity.REPLY_REQUESTCODE);
                                 break;
                             case REPORT:
                                 Toast.makeText(ArticleCommentActivity.this, "举报功能尚未开放~", Toast.LENGTH_SHORT).show();
@@ -388,13 +314,36 @@ public class ArticleCommentActivity extends BaseActivity {
      */
     private void showDeleteDialog(final int commentId) {
         new AlertDialog.Builder(this)
-                .setItems(new String[]{"删除"}, new DialogInterface.OnClickListener() {
+                .setItems(new String[]{"删除","取消"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: 删除评论
-                        mContentLoader.deleteComment(commentId);
+                        if(which==0){
+                            showHintDialog(commentId);
+                        }
                     }
                 }).show();
+    }
+
+
+    public void showHintDialog(final int targetId){
+        final CustomChatDialog customChatDialog = new CustomChatDialog(ArticleCommentActivity.this);
+        customChatDialog.setTitle(getString(R.string.live_hint));
+        customChatDialog.setContent("确定要删除当前评论吗?");
+        customChatDialog.setCancelable(false);
+        customChatDialog.setCancelBtn("取消", new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+            }
+        });
+        customChatDialog.setSurceBtn("确认", new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                mCommentList.clear();
+                mContentLoader.deleteComment(targetId);
+            }
+        });
+        customChatDialog.show();
     }
 
     @OnClick({R.id.img_back, R.id.img_write_comment})
@@ -411,7 +360,7 @@ public class ArticleCommentActivity extends BaseActivity {
                 bundle.putInt(KeyParams.TARGET_ID, mArticleId);
                 bundle.putInt(KeyParams.TARGET_TYPE, Constants.TARGET_TYPE_ARTICLE);
                 replyIntent.putExtras(bundle);
-                startActivity(replyIntent);
+                startActivityForResult(replyIntent,ArticleCommentActivity.REPLY_REQUESTCODE);
                 break;
         }
     }

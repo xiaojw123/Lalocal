@@ -161,16 +161,17 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
             intentVideoInfo = bundle.getString(KeyParams.POST_VIDEO_INFO);
         }
     }
-
     private void initView() {
         DrawableUtils.loadingImg(this,postCoverIv,intentPhoto);
         postTitle.setText(intentTitle);
         if(intentTitle!=null){
-            postTitle.setSelection(intentTitle.length());
+            AppLog.i("TAG","获取标题长度:"+intentTitle.length());
+            postTitle.setSelection(postTitle.getText().length());
+
         }
         postLaoction.setText(intentLocation);
         if(intentVideoInfo!=null&&intentVideoInfo.trim().length()>0){
-            postVideoLightSpot.setText(intentLocation);
+            postVideoLightSpot.setText(intentVideoInfo);
         }
         postVideoLightSpot.addTextChangedListener(watcher);
 

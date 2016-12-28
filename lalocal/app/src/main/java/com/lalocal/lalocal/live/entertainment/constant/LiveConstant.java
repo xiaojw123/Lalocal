@@ -25,6 +25,7 @@ public class LiveConstant {
     public  static  boolean refreshManager=false;//当为true时才检测直播间用户列表是否有管理员
     public static  String creatorAccid="";//创建直播的云信id；
     public  static  String liveTitle="";
+    public static  String liveLocation="";
     public  static List<LiveManagerListBean> result=new ArrayList<>();
 
     public  static boolean enterRoom=false;

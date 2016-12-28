@@ -42,6 +42,7 @@ import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,6 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
         AppLog.i("TAG", "获取回放视屏Id:" + intentId);
         initXRecyclerView();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -128,11 +128,14 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
             if(allRows!=null){
                 allRows.clear();
             }
+            contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
 
         if(requestCode==KeyParams.POST_REQUESTCODE&&resultCode==KeyParams.POST_RESULTCODE){
-            allRows.clear();
+            if(allRows!=null){
+                allRows.clear();
+            }
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
@@ -144,6 +147,7 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
     }
     boolean isAttentions;
     private String[] mDialogItems = new String[] {"回复", "举报"};
+
     private void initXRecyclerView() {
         final CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
         layoutManager.setOrientation(CustomLinearLayoutManager.VERTICAL);
@@ -165,7 +169,6 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                AppLog.i("TAG", "firstVisibleItemPosition：" + firstVisibleItemPosition);
                 if (firstVisibleItemPosition > 1) {
                     replyTitleLayout.setVisibility(View.VISIBLE);
                 } else {
@@ -177,12 +180,13 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
         playBackReviewAdapter.setOnReviewItemClickListener(new PlayBackReviewAdapter.OnReviewItemClickListener() {
             @Override
             public void itemClick(int targetId,int userId,String userName) {
-                //TODO 回复评论
-                if(userId== UserHelper.getUserId(PlayBackActivity.this)){
-                    showDeleteDialog(targetId);
-                }else {
-                    showReplyDialog(targetId,userId,userName);
-
+                // 回复评论
+                if(!isOnStop){
+                    if(userId== UserHelper.getUserId(PlayBackActivity.this)){
+                        showDeleteDialog(targetId);
+                    }else {
+                        showReplyDialog(targetId,userId,userName);
+                    }
                 }
             }
 
@@ -219,15 +223,40 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
 
     private void showDeleteDialog(final int targetId) {
         new AlertDialog.Builder(this)
-                .setItems(new String[]{"删除"}, new DialogInterface.OnClickListener() {
+                .setItems(new String[]{"删除","取消"}, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         // TODO: 删除评论
-                        allRows.clear();
-                        contentLoader.deleteComment(targetId);
+                        if(which==0){
+                            showHintDialog(targetId);
+                        }else {
+
+                        }
+
                     }
                 }).show();
 
+    }
+
+
+  public void showHintDialog(final int targetId){
+      final CustomChatDialog customChatDialog = new CustomChatDialog(PlayBackActivity.this);
+      customChatDialog.setTitle(getString(R.string.live_hint));
+      customChatDialog.setContent("确定要删除当前评论吗?");
+      customChatDialog.setCancelable(false);
+      customChatDialog.setCancelBtn("取消", new CustomChatDialog.CustomDialogListener() {
+          @Override
+          public void onDialogClickListener() {
+          }
+      });
+      customChatDialog.setSurceBtn("确认", new CustomChatDialog.CustomDialogListener() {
+          @Override
+          public void onDialogClickListener() {
+              allRows.clear();
+              contentLoader.deleteComment(targetId);
+          }
+      });
+      customChatDialog.show();
     }
 
 
@@ -285,6 +314,12 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
             case R.id.play_back_bottom_table_transmit_layout:
                 if(shareVO!=null){
                     SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this,shareVO);
+                    shareActivity.setOnSuccessShare(new SharePopupWindow.OnSuccessShareListener() {
+                        @Override
+                        public void shareSuccess(SHARE_MEDIA share_media) {
+                            playBackBottomTableTranmitCount.setText(String.valueOf(shareNum)+1);
+                        }
+                    });
                     shareActivity.show();
                 }
                 break;
@@ -494,5 +529,16 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
         }
     }
 
+    boolean isOnStop=false;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        isOnStop=true;
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isOnStop=false;
+    }
 }

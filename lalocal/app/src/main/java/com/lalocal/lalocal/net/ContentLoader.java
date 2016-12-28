@@ -49,7 +49,6 @@ import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
-import com.lalocal.lalocal.model.CommentRowBean;
 import com.lalocal.lalocal.model.CommentOperateResp;
 import com.lalocal.lalocal.model.CommentsResp;
 import com.lalocal.lalocal.model.Constants;
@@ -1652,11 +1651,11 @@ public class ContentLoader {
      * 获取文章评论列表
      * @param articleId
      */
-    public void getArticleComments(int articleId)  {
+    public void getArticleComments(int articleId,int pageNum)  {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ARTICLE_COMMENTS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(articleId), response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(articleId,pageNum), response, response);
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
     }
@@ -2388,6 +2387,7 @@ public class ContentLoader {
                         break;
                     case RequestCode.GET_ARTICLE_COMMENTS:
                         responseArticleComments(json);
+                        break;
                     case RequestCode.PLAY_BACK_DETAILES:
                         responsePlayBack(jsonObj);
                         break;
@@ -3042,7 +3042,11 @@ public class ContentLoader {
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
-                NIMClient.getService(AuthService.class).logout();
+               try {
+                   NIMClient.getService(AuthService.class).logout();
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
                 DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
@@ -3310,11 +3314,9 @@ public class ContentLoader {
         }
         //修改历史回放
         private void responseAlterHistoryPlayBack(JSONObject jsonObj) {
-
             try {
                 int anInt = jsonObj.getInt(ResultParams.RESULT_CODE);
                 callBack.onAlterHistoryPlayBack(anInt);
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -3481,12 +3483,14 @@ public class ContentLoader {
             CommentsResp commentsResp = new Gson().fromJson(json, CommentsResp.class);
             if (commentsResp.getReturnCode() == 0) {
                 CommentsResp.ResultBean resultBean = commentsResp.getResult();
-                if (resultBean == null)
+                callBack.onGetArticleComments(resultBean);
+
+               /* if (resultBean == null)
                     return;
                 List<CommentRowBean> commentList = resultBean.getRows();
                 if (commentList != null) {
                     callBack.onGetArticleComments(commentList);
-                }
+                }*/
             }
         }
 
@@ -3694,8 +3698,8 @@ public class ContentLoader {
         AppLog.i("TAG", "getUserIdentityStatus" + "userID:" + userID + "channelId:" + channelId);
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId", Integer.parseInt(userID));
-            jsonObject.put("channelId", Integer.parseInt(channelId));
+            jsonObject.put("userId", Integer.parseInt(userID.trim()));
+            jsonObject.put("channelId", Integer.parseInt(channelId.trim()));
 
         } catch (JSONException e) {
             e.printStackTrace();

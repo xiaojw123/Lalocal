@@ -45,7 +45,11 @@ public class UserHelper {
         MobHelper.singOff();
         AuthPreferences.clearUserInfo();
         DemoCache.clear();
-        NIMClient.getService(AuthService.class).logout();
+        try {
+            NIMClient.getService(AuthService.class).logout();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         DemoCache.setLoginStatus(false);
         DataSupport.deleteAll(MessageItem.class);
         Bundle bundle = new Bundle();

@@ -88,6 +88,11 @@ public class CustomOtherFunctionDialog extends BaseDialog {
         if (channelId != null) {
             contentLoader.getLiveManagerList(channelId);//查看管理员列表
         }
+
+        if (role==1){//主播
+
+
+        }
     }
 
     private int managerResult;
@@ -187,10 +192,12 @@ public class CustomOtherFunctionDialog extends BaseDialog {
                         liveOtherFunctionCommon.setText(mContext.getString(R.string.live_ban));
                         isMuted = false;
                         contentLoader.getUserMute(channelId, roomId, String.valueOf(UserHelper.getUserId(mContext)), userId, 1);
+                        sendMessage("解禁",MessageType.relieveBan);
                     } else {//禁言
                         contentLoader.getUserMute(channelId, roomId, String.valueOf(UserHelper.getUserId(mContext)), userId, 0);
                         liveOtherFunctionCommon.setText(mContext.getString(R.string.live_relieve_ban));
                         isMuted = true;
+                        sendMessage("禁言",MessageType.ban);
                     }
                 break;
             case R.id.live_other_function_report:

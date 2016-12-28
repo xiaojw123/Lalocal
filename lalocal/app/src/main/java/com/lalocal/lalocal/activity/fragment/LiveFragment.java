@@ -61,7 +61,6 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class LiveFragment extends BaseFragment {
-
     @BindView(R.id.xrv_live)
     XRecyclerView mXrvLive;
     @BindView(R.id.btn_takelive)
@@ -418,7 +417,6 @@ public class LiveFragment extends BaseFragment {
             getChannelIndexTotal(mCurPageNum, mCategoryId);
         }
     }
-
     @OnClick({R.id.btn_takelive})
     void click(View v) {
         switch (v.getId()) {
@@ -433,7 +431,6 @@ public class LiveFragment extends BaseFragment {
                 break;
         }
     }
-
     /**
      * 准备直播
      */
@@ -445,7 +442,6 @@ public class LiveFragment extends BaseFragment {
             showLoginDialog();
         }
     }
-
     /**
      * 显示登录提示对话框
      */
@@ -463,14 +459,10 @@ public class LiveFragment extends BaseFragment {
         });
         customDialog.show();
     }
-
     private class MyCallBack extends ICallBack {
-
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
-
-
             if (isLoadingMore) {
                 isLoadingMore = false;
                 mXrvLive.loadMoreComplete();
@@ -545,7 +537,6 @@ public class LiveFragment extends BaseFragment {
                 DrawableUtils.displayImg(getActivity(), imgAvatar, avatar, R.drawable.androidloading);
             }
             if (TextUtils.isEmpty(nickname)) {
-
                 nickname = "一位不愿意透露姓名的网友";
             }
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);

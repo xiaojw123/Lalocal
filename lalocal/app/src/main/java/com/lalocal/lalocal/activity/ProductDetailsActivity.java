@@ -226,7 +226,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 //去客服页面
                 break;
             case R.id.product_btn_like:
-                //TODO 收藏
+                // 收藏
                 MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIKE);
                 if (result != null) {
                     //取消收藏
@@ -239,7 +239,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 }
                 break;
             case R.id.product_btn_share:
-                //TODO 分享
+                // 分享
                 MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_SHARE);
                 if (result != null) {
                     SpecialShareVOBean shareVO = result.shareVO;
@@ -247,7 +247,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 }
                 break;
             case R.id.product_details_reserve:
-                //TODO 预定
+                // 预定
                 MobHelper.sendEevent(this,MobEvent.PRODUCT_BOOKING);
                 if (UserHelper.isLogined(this)) {
                     contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this),v);
@@ -256,7 +256,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 }
                 break;
             case R.id.product_check_detail:
-                //TODO 查看详情
+                // 查看详情
                 if (result != null && result.url != null) {
                     String url = result.url;
                     Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);

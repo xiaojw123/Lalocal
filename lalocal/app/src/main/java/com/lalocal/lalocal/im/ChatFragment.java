@@ -196,6 +196,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     if (fm == null) {
                         fm = getFragmentManager();
                     }
+                    if(closeFragmentClickListener!=null){
+                        closeFragmentClickListener.closeClick();
+                    }
                     FragmentTransaction ft = fm.beginTransaction();
                     ft.hide(this);
                     if (lastFragment != null) {
@@ -236,6 +239,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
 
     }
+    CloseFragmentClickListener closeFragmentClickListener;
+    public void setOnCloseFragmentClickListener(CloseFragmentClickListener closeFragmentClickListener) {
+               this.closeFragmentClickListener=closeFragmentClickListener;
+             }
+    public interface CloseFragmentClickListener {
+        void closeClick();
+             }
+
 
     private void sendImg() {
         int readCode = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);

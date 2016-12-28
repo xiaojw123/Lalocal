@@ -27,13 +27,8 @@ public class ArticleCommentListAdapter extends RecyclerView.Adapter {
     private MyOnItemClickListener mItemClickListener;
 
     public ArticleCommentListAdapter(Context context, List<CommentRowBean> commentList) {
-        mContext = context;
-
-        // 评论列表
-        if (commentList.size() > 0) {
-            mCommentList.clear();
-            mCommentList.addAll(commentList);
-        }
+        this.mContext = context;
+        this.mCommentList=commentList;
     }
 
     /**
@@ -41,8 +36,7 @@ public class ArticleCommentListAdapter extends RecyclerView.Adapter {
      * @param commentList
      */
     public void refreshList(List<CommentRowBean> commentList) {
-        mCommentList.clear();
-        mCommentList.addAll(commentList);
+        this.mCommentList=commentList;
         this.notifyDataSetChanged();
     }
 
@@ -63,7 +57,7 @@ public class ArticleCommentListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        return mCommentList.size();
+        return mCommentList==null?0:mCommentList.size();
     }
 
     /**

@@ -1,7 +1,5 @@
 package com.lalocal.lalocal.live.entertainment.activity;
 
-import butterknife.BindView;
-
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -33,7 +31,7 @@ import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.entertainment.ui.CustomUserInfoDialog;
+import com.lalocal.lalocal.live.entertainment.ui.CustomNewUserInforDialog;
 import com.lalocal.lalocal.live.entertainment.ui.PlayBackMsgAdapter;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.me.LLoginActivity;
@@ -189,7 +187,7 @@ public class PlayBackNewActivity extends BaseActivity {
                     status = (int) parseDouble;
                 }
                 if (isUnDestroy) {
-                    CustomUserInfoDialog dialog = new CustomUserInfoDialog(PlayBackNewActivity.this, null, String.valueOf(id), intentId, 0, false, null, null);
+                    CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(PlayBackNewActivity.this, null, String.valueOf(id), intentId, 0, false, null, null);
                     dialog.show();
                 }
 
@@ -355,6 +353,8 @@ public class PlayBackNewActivity extends BaseActivity {
         @Override
         public void inputPrivate() {
             //TODO 私信主播
+
+            mMediaController.setHideContro();
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             if (chatFragment == null) {
@@ -365,6 +365,13 @@ public class PlayBackNewActivity extends BaseActivity {
                 bundle.putInt(KeyParams.PAGE_TYPE, PageType.PAGE_PLAY_BACK);
                 chatFragment.setArguments(bundle);
                 ft.add(R.id.playback_fragment_container, chatFragment);
+
+                chatFragment.setOnCloseFragmentClickListener(new ChatFragment.CloseFragmentClickListener() {
+                    @Override
+                    public void closeClick() {
+                        mMediaController.showContro();
+                    }
+                });
             } else {
                 ft.show(chatFragment);
             }

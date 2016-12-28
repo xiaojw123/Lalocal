@@ -33,7 +33,7 @@
             android:layout_centerVertical="true"
             android:paddingLeft="8dp"
             android:paddingRight="20dp"
-            android:src="@drawable/index_article_btn_share" />
+            android:src="@drawable/transmit" />
     </RelativeLayout>
 
     <WebView

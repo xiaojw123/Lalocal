@@ -132,7 +132,6 @@ public class MsgViewHolderChat extends TViewHolder{
                             if("giftName".equals(key1)){
                                 giftName = value1.toString();
                             }
-
                         }
                     }
                 }
@@ -153,7 +152,7 @@ public class MsgViewHolderChat extends TViewHolder{
                 }else{
                     userId1=userId;
                 }
-                if(UserHelper.isLogined(context)){
+                if(UserHelper.isLogined(context)&&userId1!=null&&channelId!=null){
                     if(LiveConstant.isUnDestory){
                         CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                         dialog.show();
@@ -229,25 +228,32 @@ public class MsgViewHolderChat extends TViewHolder{
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void textviewImageContent(final String text, final String textColor, final GiftBean messageToGiftBean, final TextView tv){
-        try {
-            String[] textContent = text.split(",.,");
-            String nameText = textContent[0]+" ";
-            String contentText = " "+textContent[1];
-            String substring = nameText.substring(0, nameText.length() - 1);
-            String str=substring+contentText+"!";
-            int length = substring.length();
-            Bitmap bitmap = DrawableUtils.loadingBitMap(messageToGiftBean.getGiftImage());
-            int i = DensityUtil.dip2px(context, 60);
-            Bitmap small = DensityUtil.small(bitmap,i,i);
-            VerticalImageSpan span = new VerticalImageSpan(small);
-            final SpannableStringBuilder style=new SpannableStringBuilder(str);
-            style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            tv.setText(style);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+            try {
+                AppLog.i("TAG","礼物消息内容:"+text);
+                String[] textContent = text.split(",.,");
+                String nameText = textContent[0]+" ";
+                String contentText = " "+textContent[1];
+                String substring = nameText.substring(0, nameText.length() - 1);
+                String str=substring+contentText+"!";
+                int length = substring.length();
+                Bitmap bitmap = DrawableUtils.loadingBitMap(messageToGiftBean.getGiftImage());
+                int i = DensityUtil.dip2px(context, 60);
+                Bitmap small = DensityUtil.small(bitmap,i,i);
+                VerticalImageSpan span = new VerticalImageSpan(small);
+                final SpannableStringBuilder style=new SpannableStringBuilder(str);
+                style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if(style==null||style.length()==0){
+                   tv.setText(textviewSetContent(text,textColor));
+                }else {
+                    tv.setText(style);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+                AppLog.i("TAG","礼物消息显示失败。。。。");
+            }
+
 
     }
     private SpannableStringBuilder textviewSetContent(String text, String textColor) {

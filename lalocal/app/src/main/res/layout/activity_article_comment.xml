@@ -55,7 +55,7 @@
             android:textSize="@dimen/text_size_16_sp"
             android:visibility="gone"/>
 
-        <com.lalocal.lalocal.view.CustomXRecyclerView
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/xrv_article_comments"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

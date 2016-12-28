@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.text.TextUtils;
 
 import com.lalocal.lalocal.activity.ArticleActivity;
+import com.lalocal.lalocal.activity.ArticleCommentActivity;
 import com.lalocal.lalocal.activity.MyCouponActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
@@ -14,6 +15,7 @@ import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.me.TargetWebActivity;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 
 /**
@@ -123,6 +125,13 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
+    public static  void gotoArticleComment(Context context,String targetId){
+        Intent commentIntent = new Intent(context, ArticleCommentActivity.class);
+        commentIntent.putExtra(Constants.KEY_ARTICLE_ID,Integer.parseInt(targetId));
+        context.startActivity(commentIntent);
+
+    }
+
     public static void gotoTargetPage(Context context,String targetType,String targetId,String targetUrl,String targetName){
         if (TextUtils.isEmpty(targetType)){
             return;
@@ -152,6 +161,9 @@ public class TargetPage {
                 break;
             case TargetType.LIVE_PALY_BACK://回放
                 TargetPage.gotoPlayBack(context, targetId, true);
+                break;
+            case TargetType.COMMENT://评论
+                TargetPage.gotoArticleComment(context,targetId);
                 break;
 
         }
