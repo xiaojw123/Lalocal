@@ -19,7 +19,7 @@ import com.lalocal.lalocal.im.ChatFragment;
 import com.lalocal.lalocal.im.LalocalHelperActivity;
 import com.lalocal.lalocal.im.NimChatActivity;
 import com.lalocal.lalocal.im.view.adapter.RecentContactAdapter;
-import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.model.RecentContactInfo;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
@@ -55,9 +55,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View contentView = inflater.inflate(R.layout.fragment_personal_msg, container, false);
         initView(contentView);
-        //  创建观察者对象
-        NIMClient.getService(MsgService.class).queryRecentContacts()
-                .setCallback(requestCallbackWrapper);
         return contentView;
     }
 
@@ -97,12 +94,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
 
     private void updateRecentContacts(List<RecentContact> recents) {
         AppLog.print("requestCallbackWrapper onResult recents___len___" + recents.size());
-        List<NimUserInfo> mUsers = NIMClient.getService(UserService.class).getAllUserInfo();
-        for (NimUserInfo info : mUsers) {
-            AppLog.print("xxUser:ccId__" + info.getAccount() + " name__" + info.getName() + ", avatar=" + info.getAvatar() + "");
-        }
-
-
         final List<RecentContactInfo> infoList = new ArrayList<>();
         List<String> ssidlist = new ArrayList<>();
         Out:
@@ -190,7 +181,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
             Bundle bundle = new Bundle();
             bundle.putString(KeyParams.ACCID, info.getAccount());
             bundle.putString(KeyParams.NICKNAME, info.getNickName());
-            if (getActivity() instanceof AudienceActivity) {
+            if (getActivity() instanceof LivePlayerBaseActivity) {
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 chatFragment.updateView(bundle);
@@ -205,22 +196,37 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     @Override
     public void onResume() {
         super.onResume();
+        AppLog.print("personalMessage__onResume___");
+        registerNimService(true);
+    }
+
+    private void queryContacts() {
+        NIMClient.getService(MsgService.class).queryRecentContacts()
+                .setCallback(requestCallbackWrapper);
+    }
+
+    public void registerNimService(boolean flag) {
+        //  注册/注销观察者
         NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, true);
-        // 进入最近联系人列表界面，建议放在onResume中
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.P2P);
+                .observeRecentContact(messageObserver, flag);
+        if (flag) {
+            // 进入最近联系人列表界面，建议放在onResume中
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.P2P);
+            queryContacts();
+        } else {
+            // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.P2P);
+        }
+
+
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //  注册/注销观察者
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeRecentContact(messageObserver, false);
-        // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.P2P);
+        AppLog.print("personalMessage__onPause___");
+        registerNimService(false);
     }
-
 
     //  创建观察者对象
     Observer<List<RecentContact>> messageObserver =
@@ -247,5 +253,17 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
                 LalocalHelperActivity.start(getActivity());
                 break;
         }
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        AppLog.print("onHiddenChanged————————hiden___" + hidden);
+        if (!hidden) {
+            registerNimService(true);
+        }else{
+            registerNimService(false);
+        }
+
     }
 }

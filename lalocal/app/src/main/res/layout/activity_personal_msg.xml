@@ -17,16 +17,16 @@
             android:layout_height="wrap_content"
             app:title_name="@string/private_message" />
 
-        <TextView
-            android:id="@+id/my_immessage_ignoreread_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="right"
-            android:gravity="center_vertical"
-            android:paddingRight="@dimen/dimen_size_10_dp"
-            android:text="@string/ignore_no_read"
-            android:textColor="@color/color_60190f00"
-            android:textSize="@dimen/text_size_14_sp" />
+        <!--<TextView-->
+            <!--android:id="@+id/my_immessage_ignoreread_tv"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_gravity="right"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:paddingRight="@dimen/dimen_size_10_dp"-->
+            <!--android:text="@string/ignore_no_read"-->
+            <!--android:textColor="@color/color_60190f00"-->
+            <!--android:textSize="@dimen/text_size_14_sp" />-->
     </FrameLayout>
 
     <com.lalocal.lalocal.view.ReboundScrollView

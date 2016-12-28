@@ -636,7 +636,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void showUserInfoDialog(String userId, final String channelId, boolean isMaster) {
         if (LiveConstant.isUnDestory) {
-            CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(this, container, userId, channelId, LiveConstant.ROLE, isMaster, creatorAccount, roomId);
+            CustomNewUserInforDialog  dialog= new CustomNewUserInforDialog(this, container, userId, channelId, LiveConstant.ROLE, isMaster, creatorAccount, roomId);
 
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
@@ -644,6 +644,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     LiveConstant.USER_INFO_FIRST_CLICK = true;
                 }
             });
+            dialog.setDialogStatusListener(this);
             dialog.show();
 
         }

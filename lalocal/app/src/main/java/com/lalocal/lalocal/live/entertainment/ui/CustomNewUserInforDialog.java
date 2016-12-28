@@ -16,10 +16,11 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
+import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
 import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
@@ -284,8 +285,8 @@ public class CustomNewUserInforDialog extends BaseDialog {
             case R.id.userinfo_bottom_left:
                 //TODO 私信入口
                 dismiss();
-                if (mContext instanceof AudienceActivity) {
-                    ((AudienceActivity) mContext).gotoPersonalMessage(true,accId, nickName);
+                if (mContext instanceof LivePlayerBaseActivity) {
+                    ((LivePlayerBaseActivity) mContext).gotoPersonalMessage(true, accId, nickName);
                 }
                 break;
             case R.id.userinfo_bottom_right://关注
@@ -354,6 +355,20 @@ public class CustomNewUserInforDialog extends BaseDialog {
 
     }
 
+    @Override
+    public void show() {
+        if (statusListener != null) {
+            statusListener.onImHiden();
+        }
+        super.show();
+    }
+
+    public void setDialogStatusListener(MessageUpdateListener statusListener) {
+        this.statusListener = statusListener;
+
+    }
+
+    MessageUpdateListener statusListener;
 
     @Override
     public int getLayoutId() {

@@ -465,7 +465,7 @@ public abstract class ICallBack {
     public void onGetGSpecialSearch(String key,int pageNum, int toalPages, List<RecommendRowsBean> beanList){
 
     }
-    public void onGetMessageCount(String msgCount){
+    public void onGetMessageCount(int msgCount){
 
     }
 

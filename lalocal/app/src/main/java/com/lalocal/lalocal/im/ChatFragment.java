@@ -13,7 +13,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.BaseFragment;
 import com.lalocal.lalocal.activity.fragment.PersonalMessageFragment;
@@ -37,6 +37,7 @@ import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
+import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.FileSaveUtil;
@@ -66,12 +67,12 @@ import java.util.List;
  * Created by xiaojw on 2016/12/21.
  */
 
-public class ChatFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener, CustomTitleView.onBackBtnClickListener {
+public class ChatFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener, CustomTitleView.onBackBtnClickListener, XRecyclerView.LoadingListener {
     private static final int IMAGE_SIZE = 100 * 1024;// 300kb
-    private static final int LOAD_MESSAGE_COUNT = 20;
+    private static final int LOAD_MESSAGE_COUNT = 10;
     private static final int PEMISSION_CODE_SDCARD = 0x11;
     private static final int PHOTO_REQUEST_GALLERY = 2;
-    RecyclerView mXRecyclerView;
+    XRecyclerView mXRecyclerView;
     EditText mMsgEdit;
     CustomTitleView chatTv;
     TextView mMsgAddTv, mMsgSendTv;
@@ -88,20 +89,25 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     boolean hasCancel;
     FragmentManager fm;
     PersonalMessageFragment lastFragment;
+    LinearLayoutManager layoutManager;
+    MessageUpdateListener unReadUpdateListener;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_chat, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
         initParams();
         initView(view);
-        loadDataFromRemote();
         registerStatusObserve(true);
         return view;
     }
 
     public void setLastFragment(PersonalMessageFragment lastFragment) {
         this.lastFragment = lastFragment;
+    }
+
+    public void setUnReadUpdateListener(MessageUpdateListener unReadUpdateListener) {
+        this.unReadUpdateListener = unReadUpdateListener;
     }
 
     @Override
@@ -142,7 +148,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             AppLog.print("initParams____nickName__" + nickName + ", accid__" + accId);
         }
         chatTv.setTitle(nickName);
-        loadDataFromRemote();
+        limit = 10;
+        isRoot=true;
+        loadDataFromRemote(limit);
     }
 
     private void initView(View contentView) {
@@ -155,11 +163,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mMsgAddTv = (TextView) contentView.findViewById(R.id.chat_add_stv);
         mMsgEdit = (EditText) contentView.findViewById(R.id.chat_edit);
         mMsgSendTv = (TextView) contentView.findViewById(R.id.chat_send_tv);
-        mXRecyclerView = (RecyclerView) contentView.findViewById(R.id.chat_xrlv);
-        mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mXRecyclerView = (XRecyclerView) contentView.findViewById(R.id.chat_xrlv);
+        mXRecyclerView.setRefreshing(true);
+        mXRecyclerView.setLoadingMoreEnabled(false);
+        mXRecyclerView.setLoadingListener(this);
+        layoutManager = new LinearLayoutManager(getActivity());
+        mXRecyclerView.setLayoutManager(layoutManager);
         mXRecyclerView.setOnTouchListener(this);
         msgAdapter = new MessageListAdapter(mMessageList);
         mXRecyclerView.setAdapter(msgAdapter);
+        mXRecyclerView.setRefreshing(true);
         cancelBtn.setOnClickListener(this);
         myselfBtn.setOnClickListener(this);
         mMsgSendTv.setOnClickListener(this);
@@ -189,7 +202,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         int id = v.getId();
         switch (id) {
             case R.id.chat_cancel_btn:
-                if (getActivity() instanceof LivePlayerBaseActivity ||getActivity() instanceof PlayBackNewActivity) {
+                if (getActivity() instanceof LivePlayerBaseActivity || getActivity() instanceof PlayBackNewActivity) {
                     if (isSoftKeyShow) {
                         KeyboardUtil.hidenSoftKey(mMsgEdit);
                     }
@@ -233,6 +246,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     Toast.makeText(getActivity(), "不能发送空的内容", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                mMsgEdit.setText(null);
                 sendText(accId, text);
                 break;
         }
@@ -279,6 +293,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
 
     private void searchPhotoBum() {
+        if (moreOpLayout.getVisibility() == View.VISIBLE) {
+            moreOpLayout.setVisibility(View.GONE);
+        }
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.putExtra("crop", "true");
         intent.putExtra("scale", "true");
@@ -362,6 +379,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public void sendImg(String sessionId, File file) {
+        AppLog.print("sendImg____sessionId___");
         // 创建图片消息
         IMMessage message = MessageBuilder.createImageMessage(
                 sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
@@ -421,37 +439,51 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onResume() {
         super.onResume();
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeReceiveMessage(incomingMessageObserver, true);
-        // 进入聊天界面，建议放在onResume中
-        NIMClient.getService(MsgService.class).setChattingAccount(accId, SessionTypeEnum.P2P);
+        AppLog.print("chatFragment_onResume__");
+        reigisterNimService(true);
+    }
 
+    public void reigisterNimService(boolean flag) {
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeReceiveMessage(incomingMessageObserver, flag);
+        if (flag) {
+            // 进入聊天界面，建议放在onResume中
+            NIMClient.getService(MsgService.class).setChattingAccount(accId, SessionTypeEnum.P2P);
+            if (unReadUpdateListener != null) {
+                unReadUpdateListener.onUnReadUpate();
+            }
+        } else {
+            // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.P2P);
+        }
 
     }
+
 
     @Override
     public void onPause() {
         super.onPause();
-        NIMClient.getService(MsgServiceObserve.class)
-                .observeReceiveMessage(incomingMessageObserver, false);
-        // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
-        NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.None);
+        reigisterNimService(false);
     }
 
 
-    private void loadDataFromRemote() {
-        NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), LOAD_MESSAGE_COUNT, true)
+    private void loadDataFromRemote(int limit) {
+        NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), limit, true)
                 .setCallback(callback);
     }
 
 
     private void updateMessages(List<IMMessage> param) {
+        AppLog.print("updateMessages___");
         mMessageList.addAll(param);
         msgAdapter.updateItems(mMessageList);
-        int len = mMessageList.size();
-        if (len > 0) {
-            mXRecyclerView.scrollToPosition(len - 1);
+        AppLog.print("scrollToPosition__");
+        if (isRoot) {
+            isRoot=false;
+            layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
         }
+//        mXRecyclerView.scrollToPosition(msgAdapter.getItemCount()-1);
+//        AppLog.print("measure___"+mXRecyclerView.getMeasuredHeight());
     }
 
     private IMMessage anchor() {
@@ -464,10 +496,11 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             AppLog.print("msg statut onEvent__");
             MsgStatusEnum status = imMessage.getStatus();
             if (status == MsgStatusEnum.success) {
-                AppLog.print("msg statut enum___success__");
-                mMsgEdit.setText(null);
-                mMessageList.add(imMessage);
-                msgAdapter.updateItems(mMessageList);
+                AppLog.print("msg statut enum___success__len msg___len__" + mMessageList.size());
+                if (!mMessageList.contains(imMessage)) {
+                    mMessageList.add(imMessage);
+                    msgAdapter.updateItems(mMessageList);
+                }
             }
         }
     };
@@ -477,6 +510,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 public void onEvent(List<IMMessage> messages) {
                     // 处理新收到的消息，为了上传处理方便，SDK 保证参数 messages 全部来自同一个聊天对象。
                     AppLog.print("incomingMessageObserver___len:" + messages.size());
+                    isRoot=true;
                     updateMessages(messages);
                 }
 
@@ -485,6 +519,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private RequestCallback<List<IMMessage>> callback = new RequestCallback<List<IMMessage>>() {
         @Override
         public void onSuccess(List<IMMessage> param) {
+            AppLog.print("IMMessage len___" + param.size());
+            if (isRefresh) {
+                isRefresh = false;
+                if (lastParams != null && lastParams.size() > 0) {
+                    if (mMessageList.containsAll(lastParams)) {
+                        mMessageList.removeAll(lastParams);
+                    }
+                }
+                mXRecyclerView.refreshComplete();
+            }
+            lastParams = param;
             Collections.reverse(param);
             if (isFirstload && mMessageList.size() > 0) {
                 for (IMMessage message : param) {
@@ -500,14 +545,21 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         @Override
         public void onFailed(int code) {
-
+            resetRefresh();
         }
 
         @Override
         public void onException(Throwable exception) {
-
+            resetRefresh();
         }
     };
+
+    private void resetRefresh() {
+        if (isRefresh) {
+            isRefresh = false;
+            mXRecyclerView.refreshComplete();
+        }
+    }
 
 
     @Override
@@ -530,4 +582,30 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        AppLog.print("onHiddenChanged————————hiden___" + hidden);
+        if (!hidden) {
+            reigisterNimService(true);
+        } else {
+            reigisterNimService(false);
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        isRefresh = true;
+        loadDataFromRemote(limit);
+        limit += 10;
+    }
+
+    @Override
+    public void onLoadMore() {
+
+    }
+
+    List<IMMessage> lastParams;
+    int limit = 10;
+    boolean isRefresh,isRoot=true;
 }

@@ -121,10 +121,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".live.entertainment.activity.TestActivity"></activity>
-        <activity android:name=".activity.RePlyActivity"
-            android:windowSoftInputMode="stateVisible|adjustPan" ></activity>
+        <activity android:name=".live.entertainment.activity.TestActivity" />
+        <activity
+            android:name=".activity.RePlyActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan" />
 
         <!-- 友盟 -->
         <activity
@@ -266,9 +266,9 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-         <!--<meta-data-->
-         <!--android:name="com.netease.nim.appKey"-->
-         <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.netease.nim.appKey" -->
+        <!-- android:value="4cbe3856032ad3755da23525e596405f" /> -->
         <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"
@@ -326,16 +326,17 @@
         <activity android:name=".activity.LiveDetailActivity" />
         <activity android:name=".activity.AttentionActivity" />
         <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
-        <activity android:name=".live.entertainment.activity.PlayBackActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".live.entertainment.activity.PlayBackNewActivity"/>
+        <activity
+            android:name=".live.entertainment.activity.PlayBackActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".live.entertainment.activity.PlayBackNewActivity" />
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
             android:value="GlideModule" />
 
-        <activity android:name=".live.entertainment.activity.ReportActivity"
-            ></activity>>
+        <activity android:name=".live.entertainment.activity.ReportActivity" />
+        >
         <activity android:name=".activity.MyArticleActivity" />
         <activity android:name=".me.LLoginActivity" />
         <activity android:name=".me.LPEmailBound2Activity" />
@@ -358,6 +359,7 @@
         <service
             android:name="cmb.pb.cmbsafe.CmbService"
             android:exported="false" />
+
         <activity android:name=".me.NotificationActivity" />
         <activity android:name=".me.TargetWebActivity" />
         <activity android:name=".activity.GlobalSearchActivity" />
@@ -368,13 +370,16 @@
         <activity android:name=".im.WatchMessagePictureActivity" />
         <activity android:name=".im.LalocalHelperActivity" />
         <activity android:name=".me.PraiseCommentActivity" />
-        <activity android:name=".im.NimChatActivity"></activity>
-        <activity android:name=".activity.ArticleCommentActivity"></activity>
-        <activity android:name=".activity.NimPersonalMessageActivity"/>
-        <activity android:name=".activity.PostVideoActivity"></activity>
+        <activity android:name=".im.NimChatActivity" />
+        <activity android:name=".activity.ArticleCommentActivity" />
+        <activity android:name=".activity.NimPersonalMessageActivity" />
+        <activity android:name=".activity.PostVideoActivity" />
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".im.ContactBaseActivity"></activity>
     </application>
 
 </manifest>

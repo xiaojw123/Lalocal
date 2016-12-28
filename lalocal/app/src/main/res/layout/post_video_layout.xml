@@ -95,11 +95,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/live_text_16sp"
-            android:maxLength="12"
+            android:maxLength="20"
             android:ellipsize="end"
             android:textColor="@color/color_190f00"
             android:layout_gravity="right|center_vertical"
             android:background="@null"
+            android:text="年发放很快就恢复快几号放假客户哈会计师会计"
             android:paddingRight="@dimen/live_padding_30dp"/>
     </LinearLayout>
 

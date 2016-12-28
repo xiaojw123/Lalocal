@@ -50,6 +50,7 @@ import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
 import com.lalocal.lalocal.model.CommentOperateResp;
+import com.lalocal.lalocal.model.CommentRowBean;
 import com.lalocal.lalocal.model.CommentsResp;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ConsumeRecord;
@@ -171,7 +172,7 @@ public class ContentLoader {
         ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(),response,response);
         requestQueue.add(request);
     }
-    public void getUsersService(int type,int index){
+    public  void getUsersService(int type,int index){
         if (callBack!=null){
             response=new ContentResponse(RequestCode.GET_USER_SERVICE);
             response.setChildIndex(index);
@@ -1993,7 +1994,11 @@ public class ContentLoader {
 
                     case RequestCode.GET_MESSAGE_COUNT:
                         String res = jsonObj.optString(ResultParams.REULST);
-                        callBack.onGetMessageCount(res);
+                        int count=0;
+                        if (!TextUtils.isEmpty(res)){
+                            count=Integer.parseInt(res);
+                        }
+                        callBack.onGetMessageCount(count);
                         break;
 
                     case RequestCode.GET_G_SPECIAL_SEARCH:

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -59,6 +60,16 @@
             android:layout_marginRight="@dimen/dimen_size_15_dp"
             android:clickable="true"
             android:src="@drawable/home_myself_ic" />
+        <com.lalocal.lalocal.view.ShapeTextView
+            android:id="@+id/home_unread_tv"
+            android:layout_width="@dimen/dimen_size_6_dp"
+            android:layout_height="@dimen/dimen_size_6_dp"
+            app:corner_radius="@dimen/dimen_size_3_dp"
+            app:solid_color="@color/color_ff6f6f"
+            android:layout_alignTop="@+id/home_tab_me"
+            android:layout_alignRight="@+id/home_tab_me"
+            android:visibility="invisible"
+            />
 
         <ImageView
             android:id="@+id/home_tab_search"
