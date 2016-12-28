@@ -24,9 +24,7 @@
             android:id="@+id/back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/live_padding_15dp"
-            android:layout_marginTop="@dimen/live_padding_10dp"
-            android:padding="@dimen/live_padding_10dp"
+            android:padding="@dimen/live_padding_15dp"
             android:src="@drawable/backdarkbg_circle"/>
     </RelativeLayout>
     <RelativeLayout

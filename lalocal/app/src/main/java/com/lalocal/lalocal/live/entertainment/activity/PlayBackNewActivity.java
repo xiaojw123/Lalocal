@@ -121,6 +121,7 @@ public class PlayBackNewActivity extends BaseActivity {
     private String nickName;
     FrameLayout framentCotainer;
     int resId = 123;
+    private FragmentTransaction ft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,6 +148,7 @@ public class PlayBackNewActivity extends BaseActivity {
         mVideoView.setOnCompletionListener(mOnCompletionListener);
         mVideoView.setOnErrorListener(mOnErrorListener);
         mVideoView.setOnPreparedListener(mOnPreparedListener);
+
         playbackQuit.setClickable(true);
     }
 
@@ -356,7 +358,7 @@ public class PlayBackNewActivity extends BaseActivity {
 
             mMediaController.setHideContro();
             FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
+            ft = fm.beginTransaction();
             if (chatFragment == null) {
                 chatFragment = new ChatFragment();
                 Bundle bundle = new Bundle();

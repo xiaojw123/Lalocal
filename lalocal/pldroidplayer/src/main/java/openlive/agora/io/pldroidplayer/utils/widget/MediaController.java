@@ -347,7 +347,7 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
                     .toString();
         }
     }
-
+    
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         show(sDefaultTimeout);
@@ -431,7 +431,6 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
                 mLastSeekBarRunnable = new Runnable() {
                     @Override
                     public void run() {
-
                         mPlayer.seekTo(newposition);
                     }
                 };
@@ -502,20 +501,21 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
     }
 
     public  void setHideContro(){
+        mWindow.dismiss();
+        mShowing = false;
         mWindow.setFocusable(false);
-        mRoot.setVisibility(View.INVISIBLE);
+        mRoot.setVisibility(INVISIBLE);
     }
     public  void showContro(){
-        mWindow.setFocusable(false);
-        mRoot.setVisibility(View.VISIBLE);
+        show(sDefaultTimeout);
+        mWindow.setFocusable(true);
+        mRoot.setVisibility(VISIBLE);
     }
-
     @Override
     public void setMediaPlayer(MediaPlayerControl player) {
         mPlayer = player;
         updatePausePlay();
     }
-
     @Override
     public void show() {
         show(sDefaultTimeout);
