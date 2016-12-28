@@ -15,6 +15,8 @@ public class SpectialDataResultBean {
     public String description;
     public SpecialBannerBean banner;
     public String url;
+    public int readNum;
+    public int praiseNum;
     public SpecialShareVOBean shareVO;
     public boolean praiseFlag;
     public Object praiseId;

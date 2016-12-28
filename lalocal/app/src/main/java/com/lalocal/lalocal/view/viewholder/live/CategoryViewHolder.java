@@ -42,6 +42,7 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
         mContext = context;
         mRvOutside = rvOutside;
 
+        itemView.setFocusable(false);
         // 关联控件
         mRecyclerView = (RecyclerView) itemView.findViewById(R.id.rv_category);
         // 初始化RecyclerView

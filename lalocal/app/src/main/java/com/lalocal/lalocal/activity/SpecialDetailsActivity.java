@@ -20,6 +20,7 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
@@ -89,15 +90,18 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private int praiseId;
     private String h5Url;
     private View mPlayBtnView;
-    private RelativeLayout relativeLayout;
-    private View line;
+
+
     private boolean isPause;
     private SecretTextView textContent;
     private SecretTextView textName;
     private int bannerType = 5;
     public static final int RESULT_PLAY = 0;
     private String videoUrl;//视频播放地址
-    private CustomTitleView backTitleView;
+    private ImageView backTitleView;
+    private TextView readTv;
+    private TextView collectTv;
+    private LinearLayout bottomLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +110,10 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         initView();
         initData();
     }
-
     private void initView() {
-        backTitleView = (CustomTitleView) findViewById(R.id.special_details_ctv);
-        detailsLike = (ShineButton) findViewById(R.id.special_details_like_iv);
-        detailsShare = (ImageView) findViewById(R.id.special_details_share_iv);
+        backTitleView = (ImageView) findViewById(R.id.special_details_ctv);
+        detailsLike = (ShineButton) findViewById(R.id.article_btn_like);
+        detailsShare = (ImageView) findViewById(R.id.article_btn_share);
         loadingPage = (LinearLayout) findViewById(R.id.loading_page);
         mainUi = (LinearLayout) findViewById(R.id.special_main_ui);
         mScrollview = (MyScrollView) findViewById(R.id.special_scrollview);
@@ -121,22 +124,23 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         main = (LinearLayout) findViewById(R.id.mian);
         videoView = (SuperVideoPlayer) findViewById(R.id.video_player_item_1);
         banerContent = (RelativeLayout) findViewById(R.id.special_title_content);
-        line = findViewById(R.id.special_line);
-        relativeLayout = (RelativeLayout) findViewById(R.id.reLayout);
+        bottomLayout = (LinearLayout) findViewById(R.id.article_bottom_layout);
+        readTv = (TextView) findViewById(R.id.article_read_tv);
+        collectTv = (TextView) findViewById(R.id.article_collect_tv);
         mPlayBtnView = findViewById(R.id.play_btn);
-        backTitleView.setOnBackClickListener(this);
+        findViewById(R.id.article_btn_comment).setVisibility(View.GONE);
+        backTitleView.setOnClickListener(this);
         mPlayBtnView.setOnClickListener(this);
         detailsLike.setOnClickListener(this);
         detailsShare.setOnClickListener(this);
         mScrollview.setScrollViewListener(this);
         videoView.setVideoPlayCallback(mVideoPlayCallback);
-
-
     }
 
     private void initData() {
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
+        AppLog.i("TAG","专题详情:"+rowId);
         String url = AppConfig.getSepcailDetailUrl() + rowId;
         if (rowId != null) {
             contentService1 = new ContentLoader(this);
@@ -148,14 +152,14 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.special_details_like_iv:
+            case R.id.article_btn_like:
                 if (praiseFlag) {
                     contentService1.cancelParises(praiseId1, targetId);//取消赞
                 } else {
                     contentService1.specialPraise(targetId, 10);//点赞
                 }
                 break;
-            case R.id.special_details_share_iv:
+            case R.id.article_btn_share:
                 if (shareVO != null) {
                     SharePopupWindow shareActivity = new SharePopupWindow(mContext,shareVO);
                     shareActivity.show();
@@ -166,6 +170,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.fullscreen_back_btn:
                 hideFullScreen();
+                break;
+            case R.id.special_details_ctv:
+                finish();
                 break;
 
         }
@@ -214,6 +221,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 praiseFlag = spectialDetailsResp.result.praiseFlag;
                 description = spectialDetailsResp.result.description;
                 targetId = spectialDetailsResp.result.id;
+                readTv.setText("阅读 "+spectialDetailsResp.result.readNum);
+                collectTv.setText("· 收藏 "+spectialDetailsResp.result.praiseNum);
                 List<SpecialGroupsBean> groups = spectialDetailsResp.result.groups;
                 for (int i = 0; i < groups.size(); i++) {
                     targetType1 = groups.get(i).targetType;
@@ -396,9 +405,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private void hideFullScreen() {
         isFullScreen = true;
         specialWebView.setVisibility(View.VISIBLE);
-        relativeLayout.setVisibility(View.VISIBLE);
+        bottomLayout.setVisibility(View.VISIBLE);
         main.setBackgroundColor(Color.WHITE);
-        line.setVisibility(View.VISIBLE);
+
         heightLayout.setVisibility(View.GONE);
         heightLayout.removeAllViews();
         videoView.setPageType(MediaController.PageType.SHRINK);
@@ -410,9 +419,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         videoView.setPageType(MediaController.PageType.EXPAND);
         isFullScreen=false;
         specialWebView.setVisibility(View.GONE);
-        relativeLayout.setVisibility(View.GONE);
+        bottomLayout.setVisibility(View.GONE);
         main.setBackgroundColor(Color.BLACK);
-        line.setVisibility(View.GONE);
+
         heightLayout = (LinearLayout) findViewById(R.id.height_layout);
         View inflate = View.inflate(mContext, R.layout.fullsreen_back_layout, null);
         ImageView playerBack = (ImageView) inflate.findViewById(R.id.fullscreen_back_btn);
