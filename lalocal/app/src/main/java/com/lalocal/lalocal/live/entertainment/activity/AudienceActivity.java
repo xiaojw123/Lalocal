@@ -774,6 +774,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 LiveConstant.USER_INFO_FIRST_CLICK = true;
             }
         });
+        dialog.setDialogStatusListener(this);
         dialog.show();
 
     }

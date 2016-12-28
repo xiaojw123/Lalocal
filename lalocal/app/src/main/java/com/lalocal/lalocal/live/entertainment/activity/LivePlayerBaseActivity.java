@@ -46,6 +46,7 @@ import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.entertainment.helper.GiftAnimations;
 import com.lalocal.lalocal.live.entertainment.helper.GiftPlaneAnimation;
+import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
 import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
@@ -100,8 +101,11 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
@@ -120,7 +124,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * 直播端和观众端的基类
  */
-public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler {
+public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler, MessageUpdateListener {
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
     // 聊天室信息
     protected String roomId;
@@ -194,6 +198,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     private int liveNumber;
     boolean firstClick = true;//排行榜
     private Handler handler = new Handler();
+    private TextView unReadTv;
 
     protected abstract void checkNetInfo(String netType, int reminder);
 
@@ -231,9 +236,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         contentLoader.setCallBack(myCallBack);
         LiveConstant.USER_INFO_FIRST_CLICK = true;
         findViews();
+        updateUnReadMsg();
         checkSharePlatform();//检测手机安装分享平台
         registerNetStatus();
-
     }
 
 
@@ -395,6 +400,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected void findViews() {
         msgImg = (ImageView) findViewById(R.id.live_telecast_top_message);
+        unReadTv = (TextView) findViewById(R.id.audience_immessage_count);
         topView = findViewById(R.id.top_view);
         palyerLayout = (RelativeLayout) findViewById(R.id.player_layout);
         barrageView = (BarrageView) findViewById(R.id.barrageView_test);
@@ -560,6 +566,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         }
 
     }
+
     int totalGold = 0;
 
     protected void loginIMServer(final String imccId, String imToken) {
@@ -1487,6 +1494,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     protected void onPause() {
         super.onPause();
+        AppLog.print("livePlayer onPause___");
+        registerMsgServicesObser(false);
         if (inputPanel != null) {
             inputPanel.hideInputMethod();
             inputPanel.collapse(false);
@@ -1494,14 +1503,17 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-
+        AppLog.print("livePlayer onResume___");
+        registerMsgServicesObser(true);
         if (messageListPanel != null) {
             messageListPanel.onResume();
         }
     }
+
 
     @Override
     public void onBackPressed() {
@@ -1525,15 +1537,17 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     public void gotoPersonalMessage(boolean chatVisible, String accId, String nickName) {
-        if (fm == null) {
-            fm = getFragmentManager();
-        }
+        FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+        Bundle chatBundle = new Bundle();
+        chatBundle.putString(KeyParams.ACCID, accId);
+        chatBundle.putString(KeyParams.NICKNAME, nickName);
         if (chatFragment != null) {
             ft.show(personalMsgFragment);
             if (!chatVisible) {
                 ft.hide(chatFragment);
             } else {
+                chatFragment.updateView(chatBundle);
                 ft.show(chatFragment);
             }
         } else {
@@ -1544,11 +1558,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             personalMsgFragment.setNextFragment(chatFragment);
             personalMsgFragment.setArguments(perMsgBundle);
             chatFragment.setLastFragment(personalMsgFragment);
-            Bundle bundle = new Bundle();
-            bundle.putString(KeyParams.ACCID, accId);
-            bundle.putString(KeyParams.NICKNAME, nickName);
-            bundle.putBoolean(KeyParams.HAST_CANCLE, true);
-            chatFragment.setArguments(bundle);
+            chatFragment.setUnReadUpdateListener(this);
+            chatBundle.putBoolean(KeyParams.HAST_CANCLE, true);
+            chatFragment.setArguments(chatBundle);
             AppLog.print("fragment___" + chatFragment);
             ft.add(R.id.audience_fragment_container, personalMsgFragment);
             ft.add(R.id.audience_fragment_container, chatFragment);
@@ -1559,10 +1571,59 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         ft.commit();
     }
 
+    @Override
+    public void onImHiden() {
+        if (chatFragment == null || personalMsgFragment == null) {
+            return;
+        }
+        if (chatFragment.isHidden() && personalMsgFragment.isHidden()) {
+            return;
+        }
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        if (chatFragment != null && !chatFragment.isHidden()) {
+            ft.hide(chatFragment);
+        }
+        if (personalMsgFragment != null && !personalMsgFragment.isHidden()) {
+            ft.hide(personalMsgFragment);
+        }
+        ft.commit();
+    }
+
     private String accId;
     private String nickName;
-    FragmentManager fm;
     ChatFragment chatFragment;
     PersonalMessageFragment personalMsgFragment;
 
+
+    public void updateUnReadMsg() {
+        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+        AppLog.print("unReadNum____"+unreadNum);
+        if (unreadNum > 0) {
+            String fomartCount = unreadNum > 99 ? unreadNum + "+" : String.valueOf(unreadNum);
+            unReadTv.setVisibility(View.VISIBLE);
+            unReadTv.setText(fomartCount);
+        } else {
+            unReadTv.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void registerMsgServicesObser(boolean flag) {
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, flag);
+    }
+    //  创建观察者对象
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    AppLog.print("messageObserver____onEvent___");
+                    updateUnReadMsg();
+                }
+            };
+
+    @Override
+    public void onUnReadUpate() {
+        updateUnReadMsg();
+    }
 }

@@ -33,7 +33,6 @@ import com.pingplusplus.android.PingppLog;
 import com.umeng.analytics.MobclickAgent;
 import com.umeng.message.IUmengRegisterCallback;
 import com.umeng.message.PushAgent;
-import com.umeng.message.UmengMessageHandler;
 import com.umeng.message.UmengNotificationClickHandler;
 import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.Config;
@@ -109,6 +108,8 @@ public class MyApplication extends Application {
         DemoCache.setContext(this);
         AppLog.print("init Live Cache");
         NIMClient.init(this, getLoginInfo(), getOptions());
+        //关闭通知栏提醒
+        NIMClient.toggleNotification(false);
         AppLog.print("init NIMClient");
         if (inMainProcess()) {
             // TODO: 2016/12/15 im
@@ -134,119 +135,122 @@ public class MyApplication extends Application {
 
 
     private void initUPsuh() {
-        PushAgent mPushAgent = PushAgent.getInstance(this);
-        UmengMessageHandler messageHandler = new UmengMessageHandler() {
-            /**
-             * 自定义消息的回调方法
-             * */
-            @Override
-            public void dealWithCustomMessage(final Context context, final UMessage msg) {
-                AppLog.print("dealWithCustomMessage____");
-                super.dealWithCustomMessage(context, msg);
-            }
+        try {
+            PushAgent mPushAgent = PushAgent.getInstance(this);
+//        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+//            /**
+//             * 自定义消息的回调方法
+//             * */
+//            @Override
+//            public void dealWithCustomMessage(final Context context, final UMessage msg) {
+//                AppLog.print("dealWithCustomMessage____");
+//                super.dealWithCustomMessage(context, msg);
+//            }
+//
+//            @Override
+//            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+//                super.dealWithNotificationMessage(context, uMessage);
+//            }
+//        };
+//        mPushAgent.setMessageHandler(messageHandler);
+            UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+                //打开链接
+                @Override
+                public void openUrl(Context context, UMessage uMessage) {
+                    AppLog.print("UMessage____openUrl__text__" + uMessage.text);
+                    super.openUrl(context, uMessage);
+                }
 
-            @Override
-            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
-                super.dealWithNotificationMessage(context, uMessage);
-            }
-        };
-        mPushAgent.setMessageHandler(messageHandler);
-
-
-        UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
-            //打开链接
-            @Override
-            public void openUrl(Context context, UMessage uMessage) {
-                AppLog.print("UMessage____openUrl__text__" + uMessage.text);
-                super.openUrl(context, uMessage);
-            }
-
-            //打开应用
-            @Override
-            public void launchApp(Context context, UMessage uMessage) {
-                AppLog.print("UMessage____launchApp");
-                if (uMessage != null) {
-                    Map<String, String> data = uMessage.extra;
-                    for (Map.Entry entry:data.entrySet()){
-                        AppLog.print("key:"+entry.getKey()+", value:"+entry.getValue()+"\n");
-                    }
-                    if (data != null && data.size() > 0) {
-                        String targetType = data.get("targetType");
-                        String targetId = data.get("targetId");
-                        String targetUrl = data.get("targetUrl");
-                        String targetName = data.get("targetName");
-                        AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
-                        if (targetType != null) {
-                            switch (targetType) {
-                                case TargetType.URL://链接
-                                    TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
-                                    break;
-                                case TargetType.USER://用户
-                                    TargetPage.gotoUser(context, targetId, true);
-                                    break;
-                                case TargetType.ARTICLE://文章
-                                case TargetType.INFORMATION://资讯
-                                    TargetPage.gotoArticleDetail(context, targetId, true);
-                                    break;
-                                case TargetType.PRODUCT://产品
-                                    TargetPage.gotoProductDetail(context, targetId, targetType, true);
-                                    break;
-                                case TargetType.ROUTE://线路
-                                    TargetPage.gotoRouteDetail(context,targetId, true);
-                                    break;
-                                case TargetType.SPECIAL://专题
-                                    TargetPage.gotoSpecialDetail(context, targetId, true);
-                                    break;
-                                case TargetType.LIVE_VIDEO://直播视频
-                                    TargetPage.gotoLive(context, targetId, true);
-                                    break;
-                                case TargetType.LIVE_PALY_BACK://回放
-                                    TargetPage.gotoPlayBack(context, targetId, true);
-                                    break;
-
-                            }
+                //打开应用
+                @Override
+                public void launchApp(Context context, UMessage uMessage) {
+                    AppLog.print("UMessage____launchApp");
+                    if (uMessage != null) {
+                        Map<String, String> data = uMessage.extra;
+                        if (data==null||data.size()<1){
+                            return;
                         }
+                        for (Map.Entry entry:data.entrySet()){
+                            AppLog.print("key:"+entry.getKey()+", value:"+entry.getValue()+"\n");
+                        }
+                        if (data != null && data.size() > 0) {
+                            String targetType = data.get("targetType");
+                            String targetId = data.get("targetId");
+                            String targetUrl = data.get("targetUrl");
+                            String targetName = data.get("targetName");
+                            AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
+                            if (targetType != null) {
+                                switch (targetType) {
+                                    case TargetType.URL://链接
+                                        TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
+                                        break;
+                                    case TargetType.USER://用户
+                                        TargetPage.gotoUser(context, targetId, true);
+                                        break;
+                                    case TargetType.ARTICLE://文章
+                                    case TargetType.INFORMATION://资讯
+                                        TargetPage.gotoArticleDetail(context, targetId, true);
+                                        break;
+                                    case TargetType.PRODUCT://产品
+                                        TargetPage.gotoProductDetail(context, targetId, targetType, true);
+                                        break;
+                                    case TargetType.ROUTE://线路
+                                        TargetPage.gotoRouteDetail(context,targetId, true);
+                                        break;
+                                    case TargetType.SPECIAL://专题
+                                        TargetPage.gotoSpecialDetail(context, targetId, true);
+                                        break;
+                                    case TargetType.LIVE_VIDEO://直播视频
+                                        TargetPage.gotoLive(context, targetId, true);
+                                        break;
+                                    case TargetType.LIVE_PALY_BACK://回放
+                                        TargetPage.gotoPlayBack(context, targetId, true);
+                                        break;
 
+                                }
+                            }
+
+                        }
                     }
                 }
-            }
 
-            //打开指定页面
-            @Override
-            public void openActivity(Context context, UMessage uMessage) {
-                AppLog.print("UMessage____openActivity");
-                super.openActivity(context, uMessage);
-            }
+                //打开指定页面
+                @Override
+                public void openActivity(Context context, UMessage uMessage) {
+                    AppLog.print("UMessage____openActivity");
+                    super.openActivity(context, uMessage);
+                }
 
-            //自定义行为
-            @Override
-            public void dealWithCustomAction(Context context, UMessage msg) {
-                AppLog.print("UMessage____dealWithCustomAction");
-                super.dealWithCustomAction(context, msg);
-//                for (Map.Entry<String, String> entry : msg.extra.entrySet()) {
-//                    String key = entry.getKey();
-//                    String value = entry.getValue();
-//                    AppLog.print("Application__dealWithCustomAction@ key:"+key+", value:"+value);
-//                }
-            }
-        };
-        mPushAgent.setNotificationClickHandler(notificationClickHandler);
+                //自定义行为
+                @Override
+                public void dealWithCustomAction(Context context, UMessage msg) {
+                    AppLog.print("UMessage____dealWithCustomAction");
+                    super.dealWithCustomAction(context, msg);
+    //                for (Map.Entry<String, String> entry : msg.extra.entrySet()) {
+    //                    String key = entry.getKey();
+    //                    String value = entry.getValue();
+    //                    AppLog.print("Application__dealWithCustomAction@ key:"+key+", value:"+value);
+    //                }
+                }
+            };
+            mPushAgent.setNotificationClickHandler(notificationClickHandler);
 //注册推送服务，每次调用register方法都会回调该接口c
-        mPushAgent.register(new IUmengRegisterCallback() {
+            mPushAgent.register(new IUmengRegisterCallback() {
 
-            @Override
-            public void onSuccess(String deviceToken) {
-                //注册成功会返回device token
-                AppLog.print("uPush deviceToken____" + deviceToken);
-            }
+                @Override
+                public void onSuccess(String deviceToken) {
+                    //注册成功会返回device token
+                    AppLog.print("uPush deviceToken____" + deviceToken);
+                }
 
-            @Override
-            public void onFailure(String s, String s1) {
+                @Override
+                public void onFailure(String s, String s1) {
 
-            }
-        });
-
-
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void initLogManager() {

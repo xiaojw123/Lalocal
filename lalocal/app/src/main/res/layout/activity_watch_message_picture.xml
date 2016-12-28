@@ -4,6 +4,7 @@
     android:id="@+id/activity_watch_message_picture"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/black"
     tools:context="com.lalocal.lalocal.im.WatchMessagePictureActivity">
     <com.lalocal.lalocal.im.view.MultiTouchZoomableImageView
         android:id="@+id/watch_image_view"

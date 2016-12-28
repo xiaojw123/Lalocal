@@ -43,6 +43,11 @@ import com.lalocal.lalocal.view.ShapeTextView;
 import com.lalocal.lalocal.view.adapter.MeItemAdapter;
 import com.lalocal.lalocal.view.decoration.DividerGridItemDecoration;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +107,7 @@ MeFragment extends BaseFragment {
     //    @BindView(R.id.home_me_headportrait_arcimg)
 //    ArcImageView headArcImg;
     MeItemAdapter itemAdapter;
+    int commUnReadCount;
 
 
     @Override
@@ -171,7 +177,10 @@ MeFragment extends BaseFragment {
         super.onHiddenChanged(hidden);
         AppLog.print("meFragment_onHiddenChanged____" + hidden);
         if (!hidden) {
+            registerMsgServicesObser(true);
             initLogin();
+        }else{
+            registerMsgServicesObser(false);
         }
     }
 
@@ -261,7 +270,7 @@ MeFragment extends BaseFragment {
                 loginLayout.setVisibility(View.GONE);
             }
             unLoginLayout.requestFocus();
-            updateMessageCount(null);
+            updateMessageCount(isLogined, 0);
         }
 
     }
@@ -303,7 +312,9 @@ MeFragment extends BaseFragment {
                         MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
                         if (UserHelper.isLogined(getActivity())) {
 //                            gotoMyItemPage(PersonalMessageActivity.class);
-                            gotoMyItemPage(NimPersonalMessageActivity.class);
+                            Intent intent = new Intent(getActivity(), NimPersonalMessageActivity.class);
+                            intent.putExtra(NimPersonalMessageActivity.COMMENT_COUNT,commUnReadCount);
+                            startActivity(intent);
                         } else {
                             gotoLoginPage();
                         }
@@ -417,8 +428,10 @@ MeFragment extends BaseFragment {
     class MeCallBack extends ICallBack {
 
         @Override
-        public void onGetMessageCount(String msgCount) {
-            updateMessageCount(msgCount);
+        public void onGetMessageCount(int msgCount) {
+            commUnReadCount =msgCount;
+            AppLog.print("onGetMessageCount____");
+            updateMessageCount(true,msgCount);
         }
 
         //只刷新验证状态————
@@ -430,21 +443,18 @@ MeFragment extends BaseFragment {
 
     }
 
-    private void updateMessageCount(String msgCount) {
-        if (!TextUtils.isEmpty(msgCount)) {
-            int msgC = Integer.parseInt(msgCount);
-            if (msgC > 0) {
-                if (itemAdapter != null) {
-                    List<MeItem> items = itemAdapter.getItems();
-                    MeItem item = items.get(1);
-                    if (item != null) {
-                        item.setMsgCount(msgCount);
-                        itemAdapter.notifyItemChanged(1);
-                    }
-                }
+    private void updateMessageCount(boolean isLogin, int msgCount) {
+        if (isLogin) {
+            msgCount += NIMClient.getService(MsgService.class).getTotalUnreadCount();
+            AppLog.print("msgCount____"+msgCount);
+        }
+        if (itemAdapter != null) {
+            List<MeItem> items = itemAdapter.getItems();
+            MeItem item = items.get(1);
+            if (item != null) {
+                item.setMsgCount(msgCount);
+                itemAdapter.notifyItemChanged(1);
             }
-
-
         }
 
 
@@ -469,5 +479,31 @@ MeFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerMsgServicesObser(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        registerMsgServicesObser(false);
+    }
+
+    public void registerMsgServicesObser(boolean flag) {
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, flag);
+    }
+
+    //  创建观察者对象
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    AppLog.print("messageObserver____onEvent___");
+                    updateMessageCount(UserHelper.isLogined(getActivity()),0);
+                }
+            };
 
 }
