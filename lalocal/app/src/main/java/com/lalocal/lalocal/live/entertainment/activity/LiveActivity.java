@@ -717,9 +717,31 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     //烧鸡管理员关闭直播间
     @Override
-    protected void closeLiveNotifi() {
+    protected void closeLiveNotifi(IMMessage message) {
         endLive();
-        Toast.makeText(this, getString(R.string.live_room_close_to_manager), Toast.LENGTH_SHORT).show();
+        try {
+            if (LiveConstant.isUnDestory&&firstWarning) {
+                firstWarning = false;
+                final CustomChatDialog customDialog = new CustomChatDialog(LiveActivity.this);
+                customDialog.setContent(message.getContent());
+                customDialog.setCancelable(false);
+                customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
+                        firstWarning = true;
+                    }
+                });
+                customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
+                customDialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

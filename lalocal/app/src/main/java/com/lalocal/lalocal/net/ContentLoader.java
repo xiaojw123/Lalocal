@@ -50,7 +50,6 @@ import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
 import com.lalocal.lalocal.model.CommentOperateResp;
-import com.lalocal.lalocal.model.CommentRowBean;
 import com.lalocal.lalocal.model.CommentsResp;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ConsumeRecord;
@@ -1219,6 +1218,19 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    //超级管理员关闭直播间
+
+    public  void getCloseLiveRoom(String channelId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CLOSE_LIVE_ROOM);
+        }
+
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCloseRoom(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getCloseRoomParams(channelId));
+        requestQueue.add(request);
+    }
+
 
     //删除管理员
     public void cancelManagerAccredit(String userId) {
@@ -2364,6 +2376,9 @@ public class ContentLoader {
                     case RequestCode.PERPETUAL_MUTE:
                         responsePerpetualMute(jsonObj);
                         break;
+                    case RequestCode.CLOSE_LIVE_ROOM:
+                        responseSuperManagerCloseRoom(jsonObj);
+                        break;
                     case RequestCode.LIVE_AVATAR:
                         responseLiveAvatar(json);
                         break;
@@ -3347,6 +3362,19 @@ public class ContentLoader {
             }
         }
 
+
+        //超管关闭直播间
+        private void responseSuperManagerCloseRoom(JSONObject jsonObj) {
+            AppLog.i("TAG", "超管关闭只播回调：" + jsonObj.toString());
+
+            try {
+                int code = jsonObj.optInt(ResultParams.REULST);
+                callBack.onSuperManagerCloseLive(code);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         //取消关注
         private void responseCancelAttention(String json) {
             LiveCancelAttention liveCancelAttention = new Gson().fromJson(json, LiveCancelAttention.class);
@@ -3529,7 +3557,6 @@ public class ContentLoader {
 
 
 
-
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
             phone, String description) {
         JSONObject jsonObj = new JSONObject();
@@ -3634,6 +3661,18 @@ public class ContentLoader {
 
     //永久禁言
     private String getMuteParams(String id) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+
+    }
+    //关闭直播间
+    private String getCloseRoomParams(String id) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("id", id);
@@ -4028,6 +4067,7 @@ public class ContentLoader {
         int PLAY_BACK_DETAILES=246;
         int PLAY_BACK_MSG=247;
         int ALTER_PLAY_BACK=248;
+        int CLOSE_LIVE_ROOM=249;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

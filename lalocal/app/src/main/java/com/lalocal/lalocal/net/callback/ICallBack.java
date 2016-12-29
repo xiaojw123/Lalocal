@@ -505,4 +505,8 @@ public abstract class ICallBack {
     public void onAlterHistoryPlayBack(int returnCode) {
 
     }
+
+    public void onSuperManagerCloseLive(int code) {
+
+    }
 }

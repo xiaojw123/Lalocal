@@ -42,15 +42,15 @@
             app:corner_radius="@dimen/dimen_size_6_dp"
             app:solid_color="#FF4990E2" />
 
-        <com.lalocal.lalocal.view.RoundImageView
+        <ImageView
             android:id="@+id/item_message_send_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:scaleType="centerCrop"
             android:visibility="gone"
-            app:rectRoundRadius="@dimen/dimen_size_6_dp"
-            app:type="rounded_rect" />
+            android:src="@drawable/androidloading"
+            />
 
 
         <com.lalocal.lalocal.view.ShapeTextView
@@ -69,15 +69,14 @@
             app:corner_radius="@dimen/dimen_size_6_dp"
             app:solid_color="@color/white" />
 
-        <com.lalocal.lalocal.view.RoundImageView
+        <ImageView
             android:id="@+id/item_message_accept_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:scaleType="centerCrop"
+            android:src="@drawable/androidloading"
             android:visibility="gone"
-            app:rectRoundRadius="@dimen/dimen_size_6_dp"
-            app:type="rounded_rect"
             />
 
     </FrameLayout>
