@@ -85,6 +85,8 @@ public class CustomNewUserInforDialog extends BaseDialog {
     TextView masterInfoLocation;
     @BindView(R.id.master_info_signature_layout)
     LinearLayout masterInfoSignatureLayout;
+    @BindView(R.id.user_info_root_layout)
+    LinearLayout userInfoRootLayout;
 
     private String userId;
     private Context mContext;
@@ -254,9 +256,12 @@ public class CustomNewUserInforDialog extends BaseDialog {
     }
 
 
-    @OnClick({R.id.custom_dialog_report, R.id.custom_dialog_close_iv, R.id.custom_dialog_close_iv_1, R.id.userinfo_head_iv, R.id.userinfo_bottom_left, R.id.userinfo_bottom_right})
+    @OnClick({R.id.custom_dialog_report, R.id.custom_dialog_close_iv,R.id.user_info_root_layout,R.id.custom_dialog_close_iv_1, R.id.userinfo_head_iv, R.id.userinfo_bottom_left, R.id.userinfo_bottom_right})
     public void clickBtn(View view) {
         switch (view.getId()) {
+            case R.id.user_info_root_layout:
+                dismiss();
+                break;
             case R.id.custom_dialog_close_iv:
                 if (role == 1) {
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_CANCEL);

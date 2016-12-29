@@ -45,6 +45,19 @@ public class CommonUtil {
     public static String LONGITUDE = "";
     public static String LATITUDE = "";
 
+    //根据userid获取accid
+    public static String getAccId(int userId) {
+        return "user_" + userId;
+    }
+
+    //根据accid获取userid
+    public static String getUserId(String accId) {
+        String userid = "";
+        if (!TextUtils.isEmpty(accId)) {
+            userid = accId.substring(accId.indexOf("_") + 1);
+        }
+        return userid;
+    }
 
     public static String getFileUri(String path) {
 
@@ -304,8 +317,6 @@ public class CommonUtil {
         NumberFormat nf = NumberFormat.getNumberInstance();
         return nf.format(num);
     }
-
-
 
 
 }

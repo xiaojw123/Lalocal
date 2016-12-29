@@ -472,7 +472,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         drawerLayout = (DrawerLayout) findViewById(R.id.live_drawer_layout);
         drawerLayout.setScrimColor(Color.TRANSPARENT);
         drawerLayoutListener();//drawerLayout开关监听
-
     }
 
     protected abstract void showStatusUnUsual();
@@ -622,9 +621,10 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             if (userId != null && channelId != null) {
                                 if (LivePlayerBaseActivity.this instanceof AudienceActivity) {
                                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_ANCHOR);
+                                    showUserInfoDialog(userId, channelId, true);
+                                }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                    contentLoader.liveGiftRanks(channelId);
                                 }
-                                showUserInfoDialog(userId, channelId, true);
-
                             } else {
                                 LiveConstant.USER_INFO_FIRST_CLICK = true;
                             }
@@ -1641,10 +1641,4 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         updateUnReadMsg();
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent event) {
-        onImHiden();
-        return super.dispatchTouchEvent(event);
-
-    }
 }

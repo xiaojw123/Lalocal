@@ -83,8 +83,8 @@
         android:paddingLeft="@dimen/live_padding_15dp">
 
         <TextView
-            android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+
             android:layout_height="wrap_content"
             android:text="@string/title"
             android:textSize="@dimen/live_text_16sp"
@@ -92,15 +92,19 @@
 
         <EditText
             android:id="@+id/post_title"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:textSize="@dimen/live_text_16sp"
             android:maxLength="20"
             android:ellipsize="end"
+            android:singleLine="true"
+            android:paddingLeft="@dimen/live_padding_20dp"
             android:textColor="@color/color_190f00"
             android:layout_gravity="right|center_vertical"
             android:background="@null"
-            android:text="年发放很快就恢复快几号放假客户哈会计师会计"
+            android:hint="20字内,亲输入..."
+            android:textColorHint="@color/color_70190f00"
             android:paddingRight="@dimen/live_padding_30dp"/>
     </LinearLayout>
 

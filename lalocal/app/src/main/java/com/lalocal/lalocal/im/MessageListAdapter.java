@@ -41,9 +41,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
-    public void setLayoutManager(LinearLayoutManager layoutManager) {
-        this.layoutManager = layoutManager;
-    }
 
 
     @Override
@@ -128,13 +125,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             msgHolder.timeTv.setText(TimeUtil.getTimeShowString(imMessage.getTime(), false));
         } else {
             msgHolder.timeTv.setVisibility(View.GONE);
-        }
-        if (position == getItemCount()-1) {
-            AppLog.print("last size___");
-            if (layoutManager != null) {
-                AppLog.print("scoll___to pos_");
-                layoutManager.scrollToPositionWithOffset(getItemCount() - 1, 0);
-            }
         }
 
 
