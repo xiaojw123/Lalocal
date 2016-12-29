@@ -409,6 +409,7 @@ public class LiveFragment extends BaseFragment {
         } else if (!hidden && !isResume) {
             // 如果仅仅是fragment的tab切换，则刷新页面，不更改列表定位
             refreshWithSolidPosition();
+            mBtnTakeLive.show();
         }
 
         if (isResume) {
@@ -426,6 +427,7 @@ public class LiveFragment extends BaseFragment {
 //            isSyncAttention = true;
             refreshWithSolidPosition();
         }
+        mBtnTakeLive.show();
     }
 
     /**
@@ -584,7 +586,7 @@ public class LiveFragment extends BaseFragment {
             if (type == LIVING) {
                 mRecommendPage.setText(R.id.tv_recommendations_type, "正在直播");
             } else if (type == PLAYBACK) {
-                mRecommendPage.setText(R.id.tv_recommendations_type, "精彩回放");
+                mRecommendPage.setText(R.id.tv_recommendations_type, "回放");
             } else {
                 mRecommendPage.setText(R.id.tv_recommendations_type, "精彩推荐");
             }
@@ -791,6 +793,10 @@ public class LiveFragment extends BaseFragment {
                     break;
                 case REFRESH_ALL:
                     AppLog.i("dsp", "REFRESH_ALL");
+                    // 如果分类不为热门直播
+                    if (mCategoryId != Constants.CATEGORY_HOT_LIVE) {
+                        mLivingList.clear();
+                    }
                     // 刷新直播回放列表
                     mAdapter.refreshAll(mAdList, mAttention, mCategoryList, mSelCategory, mLivingList,
                             mPlaybackList);

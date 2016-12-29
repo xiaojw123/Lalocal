@@ -280,6 +280,7 @@ public class MyApplication extends Application {
 
         // 配置保存图片，文件，log等数据的目录
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim/";
+        AppLog.i("pxt", sdkPath);
         options.sdkStorageRootPath = sdkPath;
         // 配置数据库加密秘钥
         options.databaseEncryptKey = "NETEASE";
