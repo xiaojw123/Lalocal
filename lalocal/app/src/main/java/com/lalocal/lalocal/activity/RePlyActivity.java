@@ -139,20 +139,27 @@ public class RePlyActivity extends BaseActivity {
         }
     };
 
+    boolean isFirstClick=true;
+
     @OnClick({R.id.reply_send, R.id.reply_back})
     public void clickBtn(View v) {
         switch (v.getId()) {
             case R.id.reply_send:
                 if (length > 0) {
-                    if (mReplyType == KeyParams.REPLY_TYPE_NEW) {
-                        // 请求发送评论
-                        contentService.sendComments(mContent, mTargetId, mTargetType);
-                    } else if (mReplyType == KeyParams.REPLY_TYPE_REPLY) {
-                        // 请求发送回复评论
-                        contentService.replyComments(mContent, mParentId);
-                    } else {
-                        Toast.makeText(this, "获取文章信息失败，请稍后再试~", Toast.LENGTH_SHORT).show();
+                    if(isFirstClick){
+                        isFirstClick=false;
+                        if (mReplyType == KeyParams.REPLY_TYPE_NEW) {
+                            // 请求发送评论
+                            contentService.sendComments(mContent, mTargetId, mTargetType);
+                        } else if (mReplyType == KeyParams.REPLY_TYPE_REPLY) {
+                            // 请求发送回复评论
+                            contentService.replyComments(mContent, mParentId);
+                        } else {
+                            isFirstClick=true;
+                            Toast.makeText(this, "获取文章信息失败，请稍后再试~", Toast.LENGTH_SHORT).show();
+                        }
                     }
+
                 } else {
                     Toast.makeText(this, "请输入有效内容~", Toast.LENGTH_SHORT).show();
                 }
@@ -175,7 +182,6 @@ public class RePlyActivity extends BaseActivity {
         @Override
         public void onSendComment(CommentOperateResp commentOperateResp) {
             super.onSendComment(commentOperateResp);
-
             if (commentOperateResp.getReturnCode() == 0) {
                 String message = commentOperateResp.getMessage();
                 if (TextUtils.equals(message, "success")) {
@@ -187,7 +193,7 @@ public class RePlyActivity extends BaseActivity {
                     return;
                 }
             }
-
+            isFirstClick=true;
             Toast.makeText(RePlyActivity.this, "评论发表失败，请稍后再试~", Toast.LENGTH_SHORT).show();
         }
     }

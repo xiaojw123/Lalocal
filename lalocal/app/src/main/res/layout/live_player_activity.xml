@@ -23,6 +23,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:fillViewport="true">
+
             </RelativeLayout>
 
             <ImageView
@@ -158,7 +159,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="17dp"
                         android:layout_toRightOf="@+id/live_master_info_layout"
-                        android:background="@drawable/live_emcee_info_shape"
+                        android:visibility="gone"
                         >
                         <ImageView
                             android:id="@+id/network_hint_iv"
@@ -178,6 +179,7 @@
                             android:drawableLeft="@drawable/livecrown_16"
                             android:drawableRight="@drawable/livecrown_arrow"
                             android:text="@string/live_ranking_list"
+                            android:visibility="gone"
                             />
                     </RelativeLayout>
                     <ImageView
@@ -188,6 +190,8 @@
                         android:layout_alignParentRight="true"
                         android:paddingRight="@dimen/live_padding_10dp"
                         android:src="@drawable/peopleliving_quit"/>
+
+
                     <ImageView
                         android:id="@+id/live_telecast_top_setting"
                         android:layout_width="wrap_content"
@@ -196,6 +200,33 @@
                         android:layout_toLeftOf="@+id/live_telecast_quit"
                         android:paddingRight="@dimen/live_padding_20dp"
                         android:src="@drawable/anotherfunction_unsel"/>
+
+                    <com.lalocal.lalocal.view.ShapeTextView
+                        android:id="@+id/audience_immessage_count"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dimen_size_20_dp"
+                        android:layout_alignRight="@+id/live_telecast_top_message"
+                        android:layout_alignTop="@+id/live_telecast_top_message"
+                        android:layout_marginRight="@dimen/dimen_size_3_dp"
+                        android:gravity="center"
+                        android:minWidth="@dimen/dimen_size_20_dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_12_sp"
+                        app:corner_radius="@dimen/dimen_size_10_dp"
+                        app:solid_color="@color/color_ff3030"
+                        android:visibility="invisible"
+                        />
+
+                    <ImageView
+                        android:id="@+id/live_telecast_top_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_toLeftOf="@+id/live_telecast_top_setting"
+                        android:paddingRight="@dimen/dimen_size_15_dp"
+                        android:src="@drawable/live_message"
+                        />
 
                 </RelativeLayout>
                 <android.support.v7.widget.RecyclerView
@@ -336,6 +367,12 @@
                 <include layout="@layout/gift_plan_layout"></include>
 
             </RelativeLayout>
+            <FrameLayout
+                android:id="@+id/audience_fragment_container"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_alignParentBottom="true"
+                />
 
         </RelativeLayout>
 

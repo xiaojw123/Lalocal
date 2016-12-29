@@ -106,7 +106,6 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         switch (getItemViewType(position)) {
             case VIDEO_INFO:
                 final VideoInfoHolder videoInfoHolder = (VideoInfoHolder) holder;
@@ -151,7 +150,7 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 }
                 if (liveRowsBean.getUser().getId() == UserHelper.getUserId(mContext)) {//我自己的视频回放
                     videoInfoHolder.playBackAttentionLayout.setVisibility(View.GONE);
-                    videoInfoHolder.editContent.setVisibility(View.VISIBLE);
+                    videoInfoHolder.editLayout.setVisibility(View.VISIBLE);
                     videoInfoHolder.playBackMyName.setText(liveRowsBean.getUser().getNickName());
                     DrawableUtils.loadingImg(mContext, videoInfoHolder.palyBackMyHeadIv, liveRowsBean.getUser().getAvatar());
                     videoInfoHolder.editContent.setOnClickListener(new View.OnClickListener() {
@@ -171,10 +170,29 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     });
                 } else {//他人视频
                     videoInfoHolder.playBackAttentionLayout.setVisibility(View.VISIBLE);
-                    videoInfoHolder.editContent.setVisibility(View.GONE);
+                    videoInfoHolder.editLayout.setVisibility(View.GONE);
                     videoInfoHolder.playBackIsMeLayout.setVisibility(View.GONE);
                     DrawableUtils.loadingImg(mContext, videoInfoHolder.palyBackByHeadIv, liveRowsBean.getUser().getAvatar());
                     videoInfoHolder.playBackByName.setText(liveRowsBean.getUser().getNickName());
+                    videoInfoHolder.playBackByName.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // 去个人页面
+                            Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+                            intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
+                            mContext.startActivity(intent);
+                        }
+                    });
+                    videoInfoHolder.palyBackByHeadIv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // 去个人页面
+                            Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+                            intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
+                            mContext.startActivity(intent);
+                        }
+                    });
+
                 }
                 break;
             case REVIEW_TITLE:
@@ -183,8 +201,7 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 reviewTitle.replyWriteIv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //TODO 去编辑评论页面
-
+                        // 去编辑评论页面
                         if(UserHelper.isLogined(mContext)){
                             Intent intent = new Intent(mContext, RePlyActivity.class);
                             Bundle bundle = new Bundle();
@@ -206,14 +223,20 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 break;
             case REVIEW_LIST:
                 if(reviewRows.size()==0){
-
-                    ReplyNull replyNull=(ReplyNull)holder;
-
+                    try {
+                        ReplyNull replyNull=(ReplyNull)holder;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }else{
-
                     ReviewHolder reviewHolder = (ReviewHolder) holder;
                     final PlayBackReviewRowsBean playBackReviewRowsBean = reviewRows.get(getPosition(position));
-                    DrawableUtils.loadingImg(mContext, reviewHolder.palyBackReviewHeadIv, playBackReviewRowsBean.getUser().getAvatar());
+
+                    reviewHolder.palyBackReviewHeadIv.setTag(playBackReviewRowsBean.getUser().getAvatar());
+                    if(reviewHolder.palyBackReviewHeadIv.getTag()!=null&&reviewHolder.palyBackReviewHeadIv.getTag().equals(playBackReviewRowsBean.getUser().getAvatar())){
+                       // DrawableUtils.loadingImg(mContext, reviewHolder.palyBackReviewHeadIv, playBackReviewRowsBean.getUser().getAvatar());
+                        DrawableUtils.displayImg(mContext, reviewHolder.palyBackReviewHeadIv, playBackReviewRowsBean.getUser().getAvatar());
+                    }
                     reviewHolder.reviewName.setText(playBackReviewRowsBean.getUser().getNickName());
                     reviewHolder.reviewTime.setText(playBackReviewRowsBean.getDateTime());
                     reviewHolder.reviewContent.setText(playBackReviewRowsBean.getContent());
@@ -257,16 +280,14 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
         }
     }
 
-
     private SpannableStringBuilder textviewSetContent(String nickName, String content) {
         int nameLength = nickName.length() + 1;
         int contentLength = content.length();
         SpannableStringBuilder style = new SpannableStringBuilder(nickName + ":" + content);
         style.setSpan(new ForegroundColorSpan(mContext.getResources().getColor(R.color.color_0065b2)), 0, nameLength - 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.BLACK), nameLength - 1, nameLength + contentLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        style.setSpan(new ForegroundColorSpan(Color.parseColor("#70190f00")), nameLength - 1, nameLength + contentLength, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return style;
     }
-
 
     class ReviewTitle extends RecyclerView.ViewHolder {
         @BindView(R.id.review_title)
@@ -319,6 +340,8 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
         TextView playBackLocation;
         @BindView(R.id.play_num)
         TextView playNum;
+        @BindView(R.id.edit_layout)
+        RelativeLayout editLayout;
 
         public VideoInfoHolder(View itemView) {
             super(itemView);

@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
@@ -28,6 +29,11 @@ import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.model.RecentContact;
 import com.wevey.selector.dialog.DialogOnClickListener;
 import com.wevey.selector.dialog.NormalAlertDialog;
 
@@ -39,8 +45,8 @@ import butterknife.OnClick;
 
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 
-public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener {
-    private static final int READ_WRITE_SDCARD_CODE=0x126;
+public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmentListener{
+    private static final int READ_WRITE_SDCARD_CODE = 0x126;
 
     @BindView(R.id.home_tab_live)
     ImageView mImgTabLive;
@@ -54,6 +60,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     View mTabLiveSelected;
     @BindView(R.id.home_tab_find_selected)
     View mTabFindSelected;
+    @BindView(R.id.home_unread_tv)
+    TextView unReadTv;
 
     public static final String VERSION_RESULT = "version_result";
     ViewGroup lastSelectedTab;
@@ -82,6 +90,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         ButterKnife.bind(this);
         // 显示直播fragment
         showFragment(FRAGMENT_LIVE);
+        updateUnReadMsg();
         // 检查更新
         checkUpdate();
     }
@@ -361,7 +370,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     }
 
     private void requestSDCardPermission(String url) {
-        mUpgradeUrl=url;
+        mUpgradeUrl = url;
         MPermission.with(HomeActivity.this)
                 .addRequestCode(READ_WRITE_SDCARD_CODE)
                 .permissions(READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -373,6 +382,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
+
     @OnMPermissionGranted(READ_WRITE_SDCARD_CODE)
     public void onPermissionGranted() {
         if (Environment.getExternalStorageState().equals(
@@ -514,12 +524,14 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     protected void onStart() {
         super.onStart();
         AppLog.print("onStart___");
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         AppLog.print("onPause___");
+        registerMsgServicesObser(false);
 
     }
 
@@ -527,6 +539,8 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     protected void onResume() {
         super.onResume();
         AppLog.print("onResume___");
+        registerMsgServicesObser(true);
+        updateUnReadMsg();
     }
 
     @Override
@@ -539,6 +553,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
 
     @Override
     protected void onDestroy() {
+        NIMClient.toggleNotification(true);
         super.onDestroy();
 
     }
@@ -561,5 +576,32 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         super.onNewIntent(intent);
         AppLog.print("onNewIntent____");
         setIntent(intent);
+    }
+
+
+
+    //  创建观察者对象
+    Observer<List<RecentContact>> messageObserver =
+            new Observer<List<RecentContact>>() {
+                @Override
+                public void onEvent(List<RecentContact> messages) {
+                    AppLog.print("messageObserver____onEvent___");
+                    updateUnReadMsg();
+                }
+            };
+
+    public void registerMsgServicesObser(boolean flag) {
+        NIMClient.getService(MsgServiceObserve.class)
+                .observeRecentContact(messageObserver, flag);
+    }
+
+    public void updateUnReadMsg() {
+        int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
+        if (unreadNum > 0) {
+            unReadTv.setVisibility(View.VISIBLE);
+        } else {
+            unReadTv.setVisibility(View.INVISIBLE);
+        }
+
     }
 }

@@ -165,10 +165,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         String id = getIntent().getStringExtra("id");
         contentLoaderAudience.liveDetails(id);
         contentLoaderAudience.liveGiftStore();
-
         LiveConstant.ROLE = 0;
-
-
     }
 
     @Override
@@ -226,12 +223,12 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 liveTitle = liveRowsBean.getTitle();
                 channelId = String.valueOf(liveRowsBean.getId());
                 cname = liveRowsBean.getCname();
-
                 liveStatus = String.valueOf(liveRowsBean.getStatus());
                 shareVO = liveRowsBean.getShareVO();
                 roomId = String.valueOf(liveRowsBean.getRoomId());
                 LiveConstant.ROOM_ID = roomId;
                 LiveConstant.liveTitle = liveRowsBean.getTitle();
+                LiveConstant.liveLocation=liveRowsBean.getAddress();
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
                 int onlineUser = liveRowsBean.getOnlineUser();
                 url = liveRowsBean.getPullUrl();
@@ -251,7 +248,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 if ("0".equals(liveStatus)) {
                     showFinishLayout(true, 2);
                 }
-
                 if ("1".equals(playType)) {
                     hideBtn(onlineUser);
                 }
@@ -774,6 +770,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 LiveConstant.USER_INFO_FIRST_CLICK = true;
             }
         });
+        dialog.setDialogStatusListener(this);
         dialog.show();
 
     }
@@ -1025,7 +1022,6 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 }
             });
         }
-
     }
 
     private int sendTotal;
@@ -1045,14 +1041,13 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             if (sendTotal > 0) {
                 contentLoaderAudience.liveSendGifts(channelId, userId, nickname, id, String.valueOf(sendTotal));
             }
-
         }
     }
 
     private void startSendGiftsAnimation(GiftDataResultBean giftDataResultBean, int sendTotal) {
         final String code = giftDataResultBean.getCode();
         AppLog.i("TAG", "startSendGiftsAnimation:" + code);
-        String messageContent = "给主播送了" + ("001".equals(code) ? "鲜花" : ("002".equals(code) ? "行李箱" : ("003".equals(code) ? "飞机" : "神秘礼物")));
+        String messageContent = "给主播送了" + sendTotal+"个"+senGiftContent(giftDataResultBean.getId());
         LiveMessage liveMessage = new LiveMessage();
         GiftBean giftBean = new GiftBean();
         giftBean.setUserName(UserHelper.getUserName(AudienceActivity.this));
@@ -1077,7 +1072,33 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
         sendMessage(giftMessage, MessageType.gift);
         giftStorePopuWindow.dismiss();
+    }
 
+    private  String  senGiftContent(int giftId){
+        switch (giftId){
+            case 1:
+                return "玫瑰";
+            case 2:
+                return "行李箱";
+            case 3:
+                return "飞机";
+            case 4:
+                return "笑脸";
+            case 5:
+                return "太阳镜";
+            case 6:
+                return "遮阳扇";
+            case 7:
+                return "星星";
+            case 8:
+                return "果盘";
+            case 9:
+                return "矿泉水";
+            case 10:
+                return "圣诞树";
+           default:
+               return "神秘礼物";
+        }
     }
 
     private void finishLive() {
@@ -1303,7 +1324,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     }
 
     int uid;
-
+    boolean isShowAttentionDialog=true;
     private void doRenderRemoteUi(final int uid) {
         runOnUiThread(new Runnable() {
             @Override
@@ -1343,7 +1364,10 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                 if (showAttentionRunnable == null) {
                     showAttentionRunnable = new ShowAttentionRunnable();
                 }
-                handler.postDelayed(showAttentionRunnable, 60000);
+                if(isShowAttentionDialog){
+                    isShowAttentionDialog=false;
+                    handler.postDelayed(showAttentionRunnable,60000);
+                }
                 if (audienceOver != null) {
                     isAudienceOver = true;
                     audienceOver.setVisibility(View.GONE);

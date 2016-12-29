@@ -70,9 +70,10 @@ public class DrawableUtils {
 
     public static void loadingImg(Context context , final ImageView img, String url){
         if (TextUtils.isEmpty(url)) {
-            img.setImageResource(DRAWABLE_NULL);
+            AppLog.i("TAG","图片URl为空");
             return;
         }
+        img.setImageResource(DRAWABLE_NULL);
         if (loader == null) {
             loader = ImageLoader.getInstance();
         }

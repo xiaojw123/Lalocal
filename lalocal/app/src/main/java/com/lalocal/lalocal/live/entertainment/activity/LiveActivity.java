@@ -636,7 +636,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void showUserInfoDialog(String userId, final String channelId, boolean isMaster) {
         if (LiveConstant.isUnDestory) {
-            CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(this, container, userId, channelId, LiveConstant.ROLE, isMaster, creatorAccount, roomId);
+            CustomNewUserInforDialog  dialog= new CustomNewUserInforDialog(this, container, userId, channelId, LiveConstant.ROLE, isMaster, creatorAccount, roomId);
 
             dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                 @Override
@@ -644,6 +644,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     LiveConstant.USER_INFO_FIRST_CLICK = true;
                 }
             });
+            dialog.setDialogStatusListener(this);
             dialog.show();
 
         }
@@ -1136,7 +1137,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private void endLive() {
         AppLog.i("TAG", "主播端走了，endLive");
         DialogUtil.clear();
-        liveContentLoader.cancelLiveRoom(channelId);
+        if(channelId!=null){
+            liveContentLoader.cancelLiveRoom(channelId);
+        }
         LiveMessage liveMessage = new LiveMessage();
         liveMessage.setStyle(MessageType.leaveLive);
         liveMessage.setCreatorAccount(creatorAccount);
@@ -1501,7 +1504,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
     private void doConfigEngine(int cRole) {
-
         int vProfile = IRtcEngineEventHandler.VideoProfile.VIDEO_PROFILE_720P;
         switch (LiveConstant.LIVE_DEFINITION) {
             case 1:

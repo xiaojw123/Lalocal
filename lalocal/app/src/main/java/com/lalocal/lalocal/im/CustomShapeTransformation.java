@@ -2,10 +2,12 @@ package com.lalocal.lalocal.im;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.view.Display;
@@ -14,6 +16,8 @@ import android.view.WindowManager;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
+
+import static android.R.attr.radius;
 
 /**
  * Created by Mao Jiqing on 2016/11/4.
@@ -41,7 +45,7 @@ public class CustomShapeTransformation extends BitmapTransformation {
         Drawable shape = ContextCompat.getDrawable(mContext, mShapeRes);
         int width = toTransform.getWidth();
         int height = toTransform.getHeight();
-        if(height != 0){
+        if (height != 0) {
             double scale = (width * 1.00) / height;
             if (width >= height) {
                 width = getBitmapWidth();
@@ -50,7 +54,7 @@ public class CustomShapeTransformation extends BitmapTransformation {
                 height = getBitmapHeight();
                 width = (int) (height * scale);
             }
-        }else{
+        } else {
             width = 100;
             height = 100;
         }
@@ -73,6 +77,39 @@ public class CustomShapeTransformation extends BitmapTransformation {
         canvas.drawBitmap(transformed, 0, 0, mPaint);
         return bitmap;
     }
+
+    private  Bitmap roundCrop(BitmapPool pool, Bitmap source) {
+        if (source == null) return null;
+
+        int width = source.getWidth();
+        int height = source.getHeight();
+        if (height != 0) {
+            double scale = (width * 1.00) / height;
+            if (width >= height) {
+                width = getBitmapWidth();
+                height = (int) (width / scale);
+            } else {
+                height = getBitmapHeight();
+                width = (int) (height * scale);
+            }
+        } else {
+            width = 100;
+            height = 100;
+        }
+        Bitmap result = pool.get(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+        if (result == null) {
+            result = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(result);
+        Paint paint = new Paint();
+        paint.setShader(new BitmapShader(source, BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP));
+        paint.setAntiAlias(true);
+        RectF rectF = new RectF(0f, 0f, source.getWidth(), source.getHeight());
+        canvas.drawRoundRect(rectF, radius, radius, paint);
+        return result;
+    }
+
 
     @Override
     public String getId() {

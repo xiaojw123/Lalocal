@@ -3,7 +3,6 @@ package com.lalocal.lalocal.view.adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,10 +57,11 @@ public class MeItemAdapter extends BaseRecyclerAdapter {
                 drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
                 itemHolder.meTv.setCompoundDrawables(null, drawable, null, null);
                 if (item.getId() == ITEM_MY_MESSAGE) {
-                    String msgCount = item.getMsgCount();
-                    if (!TextUtils.isEmpty(msgCount)) {
+                    int msgCount = item.getMsgCount();
+                    if (msgCount > 0) {
                         itemHolder.msgCountTv.setVisibility(View.VISIBLE);
-                        itemHolder.msgCountTv.setText(msgCount);
+                        String fomartCount = msgCount > 99 ? msgCount + "+" : String.valueOf(msgCount);
+                        itemHolder.msgCountTv.setText(fomartCount);
                     } else {
                         itemHolder.msgCountTv.setVisibility(View.GONE);
                     }

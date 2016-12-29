@@ -43,14 +43,14 @@
 
     </FrameLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/chat_xrlv"
         android:overScrollMode="never"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/chat_op_layout"
         android:layout_below="@+id/chat_title_container"
-        android:paddingBottom="@dimen/dimen_size_15_dp" />
+        />
 
 
     <LinearLayout

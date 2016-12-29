@@ -51,6 +51,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        AppLog.print("onBindViewHolder___position___"+position);
         if (mMessageList == null || mMessageList.size() < 1) {
             return;
         }
@@ -137,14 +138,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    /**
-     * 下载附件/缩略图
-     */
-    protected void downloadAttachment(IMMessage message) {
-            AppLog.print("IMMessage____message");
-
-    }
-
     private boolean needShowTime(IMMessage message, IMMessage anchor) {
         if (anchor == null) {
             return true;
@@ -166,6 +159,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
+        AppLog.print("getItemCount__"+mMessageList.size());
         return mMessageList != null && mMessageList.size() > 0 ? mMessageList.size() : 0;
     }
 

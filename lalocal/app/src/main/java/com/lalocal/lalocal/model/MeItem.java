@@ -8,7 +8,7 @@ public class MeItem {
    private int id;
    private String name;
    private int drawableId;
-   private String msgCount;
+   private int msgCount;
 
     public MeItem(int id,String name,int drawableId){
         this.id=id;
@@ -18,11 +18,11 @@ public class MeItem {
 
     }
 
-    public String getMsgCount() {
+    public int getMsgCount() {
         return msgCount;
     }
 
-    public void setMsgCount(String msgCount) {
+    public void setMsgCount(int msgCount) {
         this.msgCount = msgCount;
     }
 

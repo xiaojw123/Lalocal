@@ -16,10 +16,11 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
+import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
+import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
 import com.lalocal.lalocal.live.entertainment.helper.SendMessageUtil;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListBean;
@@ -79,6 +80,13 @@ public class CustomNewUserInforDialog extends BaseDialog {
     TextView userinfoBottomRight;
     @BindView(R.id.user_info_layout_bottom)
     LinearLayout userInfoLayoutBottom;
+    @BindView(R.id.master_info_location)
+    TextView masterInfoLocation;
+    @BindView(R.id.master_info_signature_layout)
+    LinearLayout masterInfoSignatureLayout;
+    @BindView(R.id.user_info_root_layout)
+    LinearLayout userInfoRootLayout;
+
     private String userId;
     private Context mContext;
     boolean isMuted;//是否禁言
@@ -172,9 +180,11 @@ public class CustomNewUserInforDialog extends BaseDialog {
                     userinfoNickTv.setText(nickName);
 
                     if (accId.equals(LiveConstant.creatorAccid)) {//主播
-                        masterInfoSignature.setText(LiveConstant.liveTitle);
-                        masterInfoSignature.setBackgroundResource(R.drawable.live_user_info_signature_bg);
+                        masterInfoSignature.setText("正在直播 ： "+LiveConstant.liveTitle);
+                        masterInfoSignatureLayout.setBackgroundResource(R.drawable.live_user_info_signature_bg);
                         masterInfoBgTop.setImageResource(R.drawable.live_humancard_triangle_yellow);
+                        masterInfoLocation.setVisibility(View.VISIBLE);
+                        masterInfoLocation.setText(LiveConstant.liveLocation);
                     } else {
                         if (!TextUtils.isEmpty(description)) {
                             masterInfoSignature.setText(description);
@@ -245,9 +255,12 @@ public class CustomNewUserInforDialog extends BaseDialog {
     }
 
 
-    @OnClick({R.id.custom_dialog_report, R.id.custom_dialog_close_iv, R.id.custom_dialog_close_iv_1, R.id.userinfo_head_iv, R.id.userinfo_bottom_left, R.id.userinfo_bottom_right})
+    @OnClick({R.id.custom_dialog_report, R.id.custom_dialog_close_iv,R.id.user_info_root_layout,R.id.custom_dialog_close_iv_1, R.id.userinfo_head_iv, R.id.userinfo_bottom_left, R.id.userinfo_bottom_right})
     public void clickBtn(View view) {
         switch (view.getId()) {
+            case R.id.user_info_root_layout:
+                dismiss();
+                break;
             case R.id.custom_dialog_close_iv:
                 if (role == 1) {
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_ANCHOR_CANCEL);
@@ -277,8 +290,8 @@ public class CustomNewUserInforDialog extends BaseDialog {
             case R.id.userinfo_bottom_left:
                 //TODO 私信入口
                 dismiss();
-                if (mContext instanceof AudienceActivity) {
-                    ((AudienceActivity) mContext).gotoPersonalMessage(true,accId, nickName);
+                if (mContext instanceof LivePlayerBaseActivity) {
+                    ((LivePlayerBaseActivity) mContext).gotoPersonalMessage(true, accId, nickName);
                 }
                 break;
             case R.id.userinfo_bottom_right://关注
@@ -347,6 +360,20 @@ public class CustomNewUserInforDialog extends BaseDialog {
 
     }
 
+    @Override
+    public void show() {
+        if (statusListener != null) {
+            statusListener.onImHiden();
+        }
+        super.show();
+    }
+
+    public void setDialogStatusListener(MessageUpdateListener statusListener) {
+        this.statusListener = statusListener;
+
+    }
+
+    MessageUpdateListener statusListener;
 
     @Override
     public int getLayoutId() {
