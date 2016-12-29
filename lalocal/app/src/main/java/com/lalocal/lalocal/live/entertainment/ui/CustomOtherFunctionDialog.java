@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.live.entertainment.ui;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -95,6 +96,31 @@ public class CustomOtherFunctionDialog extends BaseDialog {
     boolean isCancelManager = false;
 
     class MyCallBack extends ICallBack {
+        @Override
+        public void onSuperManagerCloseLive(int code) {
+            super.onSuperManagerCloseLive(code);
+            AppLog.i("TAG","超级管理员。。。。。。。。");
+            if (LiveConstant.isUnDestory) {
+                final CustomChatDialog customDialog = new CustomChatDialog(mContext);
+                customDialog.setContent("操作成功!");
+                customDialog.setCancelable(false);
+                customDialog.setOkBtn(mContext.getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
+                    }
+                });
+                customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //    finish();
+                    }
+                });
+                customDialog.show();
+            }
+
+
+        }
+
         @Override
         public void onManagerList(LiveManagerListResp liveManagerListResp) {
             super.onManagerList(liveManagerListResp);
@@ -249,13 +275,15 @@ public class CustomOtherFunctionDialog extends BaseDialog {
                         dialogNet.setCancelBtn(mContext.getString(R.string.super_manager_cancel_liveroom), new CustomChatDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
-
                             }
                         });
                         dialogNet.setSurceBtn(mContext.getString(R.string.super_manager_close_liveroom_ok), new CustomChatDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
-                               sendMessage("关闭直播间",MessageType.closeLive);
+                                if(channelId!=null){
+                                    contentLoader.getCloseLiveRoom(channelId);
+                                }
+                              // sendMessage("很抱歉,您的直播内容存在问题已被管理员关闭!",MessageType.closeLive);
                             }
                         });
                         dialogNet.show();

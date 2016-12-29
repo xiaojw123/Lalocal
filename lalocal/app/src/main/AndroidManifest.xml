@@ -373,7 +373,10 @@
         <activity android:name=".im.NimChatActivity" />
         <activity android:name=".activity.ArticleCommentActivity" />
         <activity android:name=".activity.NimPersonalMessageActivity" />
-        <activity android:name=".activity.PostVideoActivity" />
+        <activity android:name=".activity.PostVideoActivity"
+            android:windowSoftInputMode="stateHidden" >
+
+        </activity>
 
         <meta-data
             android:name="com.google.android.gms.version"

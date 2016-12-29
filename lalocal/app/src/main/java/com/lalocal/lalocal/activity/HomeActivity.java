@@ -1,14 +1,18 @@
 package com.lalocal.lalocal.activity;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -17,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.FindFragment;
 import com.lalocal.lalocal.activity.fragment.LiveFragment;
@@ -29,6 +37,7 @@ import com.lalocal.lalocal.live.permission.annotation.OnMPermissionGranted;
 import com.lalocal.lalocal.model.VersionResult;
 import com.lalocal.lalocal.thread.UpdateTask;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.msg.MsgService;
@@ -95,7 +104,135 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         NIMClient.toggleNotification(false);
         // 检查更新
         checkUpdate();
+        //初始化定位
+        if (Build.VERSION.SDK_INT >= 22) {
+            // 请求用户权限
+            reminderUserPermission(INIT);
+        } else {
+            // 初始化
+            initLocation();
+        }
+
     }
+
+    private static final int INIT = 0x01;
+    private static final String[] RW_SD_PERMISSIONS = new String[]{
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
+    @TargetApi(Build.VERSION_CODES.M)
+    private void reminderUserPermission(int init) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
+        } else {
+            // 初始化
+            initLocation();
+        }
+
+    }
+
+    private void doNext(int requestCode, int[] grantResults) {
+        if(LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE==requestCode){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // 初始化
+                initLocation();
+            } else {
+                Toast.makeText(this, "没有地理位置权限", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    private void initLocation() {
+        //初始化client
+        locationClient = new AMapLocationClient(this.getApplicationContext());
+        //设置定位参数
+        locationClient.setLocationOption(getDefaultOption());
+        // 设置定位监听
+        locationClient.setLocationListener(locationListener);
+        startLocation();
+    }
+
+
+    private AMapLocationClient locationClient = null;
+    private AMapLocationClientOption locationOption = new AMapLocationClientOption();
+
+    private void startLocation() {
+        //根据控件的选择，重新设置定位参数
+        resetOption();
+        // 设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 启动定位
+        locationClient.startLocation();
+    }
+
+    private void resetOption() {
+        // 设置是否需要显示地址信息
+        locationOption.setNeedAddress(true);
+        /**
+         * 设置是否优先返回GPS定位结果，如果30秒内GPS没有返回定位结果则进行网络定位
+         * 注意：只有在高精度模式下的单次定位有效，其他方式无效
+         */
+        locationOption.setGpsFirst(false);
+        // 设置是否开启缓存
+        locationOption.setLocationCacheEnable(true);
+        //设置是否等待设备wifi刷新，如果设置为true,会自动变为单次定位，持续定位时不要使用
+        locationOption.setOnceLocationLatest(true);
+        //设置是否使用传感器
+        locationOption.setSensorEnable(false);
+
+    }
+
+
+    /**
+     * 定位监听
+     */
+    AMapLocationListener locationListener = new AMapLocationListener() {
+
+        @Override
+        public void onLocationChanged(AMapLocation loc) {
+            try {
+                String errorInfo = loc.getErrorInfo();
+                if("success".equals(errorInfo)){
+                    CommonUtil.LATITUDE=String.valueOf(loc.getLatitude());
+                    CommonUtil.LONGITUDE=String.valueOf(loc.getLongitude());
+                    String result = loc.getCountry() + "·" + loc.getProvince() + "·" + loc.getCity();
+                    CommonUtil.LOCATION_RESULT=result;
+                    CommonUtil.LOCATION_Y =true;
+                }else{
+                    CommonUtil.LOCATION_Y = false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private AMapLocationClientOption getDefaultOption() {
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setNeedAddress(true);
+        mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        return mOption;
+    }
+
+
+
+
+
+
+
 
     /**
      * 检查更新
@@ -327,6 +464,15 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         showFragment(FRAGMENT_FIND);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (mFragLive != null) {
+            mFragLive.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     /**
      * 跳转到某一个Fragment
      *
@@ -383,6 +529,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        doNext(requestCode, grantResults);
     }
 
     @OnMPermissionGranted(READ_WRITE_SDCARD_CODE)
@@ -556,8 +703,16 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     @Override
     protected void onDestroy() {
         NIMClient.toggleNotification(true);
+        destroyLocation();
         super.onDestroy();
+    }
 
+    private void destroyLocation() {
+        if (null != locationClient) {
+            locationClient.onDestroy();
+            locationClient = null;
+
+        }
     }
 
     //立即登录----home  其他---me

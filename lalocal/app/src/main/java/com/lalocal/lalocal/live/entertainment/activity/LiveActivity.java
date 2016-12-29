@@ -7,7 +7,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -17,7 +16,6 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -36,12 +34,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.location.AMapLocation;
-import com.amap.api.location.AMapLocationClient;
-import com.amap.api.location.AMapLocationClientOption;
-import com.amap.api.location.AMapLocationListener;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
@@ -110,13 +105,11 @@ import io.agora.rtc.video.VideoCanvas;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.ActivityProxy, View.OnLayoutChangeListener, PhotoSelectDialog.OnDialogClickListener, CustomTitleView.onBackBtnClickListener {
     private static final String TAG = "LiveActivity";
+    public static final int LOCATION_REQUEST_CODE=500;
     private int screenHeight;
     private int keyHeight;
-    public static String liveLocation = "LALOCAL神秘之地";
-    public static String latitude = null;
-    public static String longitude = null;
-    public static boolean locationY = false;
     protected String channelId;
+
     private String roomName;//直播室名字
     boolean isEnterRoom = false;
     private boolean disconnected = false; // 是否断网（断网重连用）
@@ -168,18 +161,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private LinearLayout startLiveBegin;
     private UploadManager uploadManager;
     private int liveNumber;
-    private String fileNam;
     private String logTime;
-    private String logFile;
-
-    private static final int INIT = 0x01;
-    private static final String[] RW_SD_PERMISSIONS = new String[]{
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-    };
-    public static final String[] CAMERA_PERMISSIONS = new String[]{Manifest.permission.CAMERA};
-    private final int LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE = 100;
-    public final int LIVE_PERMISSION_CAMERA = 400;
     private ImgTokenResult imgToken;
     private TextView definitionChoose;
     private LinearLayout chooseLayout;
@@ -187,17 +169,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private TextView chooseDown;
 
 
-    @TargetApi(Build.VERSION_CODES.M)
-    private void reminderUserPermission(int init) {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
-        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(RW_SD_PERMISSIONS, LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE);
-        } else {
-            // 初始化
-            initLocation();
-        }
-    }
+
 
     @Override
     protected int getActivityLayout() {
@@ -223,6 +195,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==LOCATION_REQUEST_CODE&&resultCode== KeyParams.LOCATION_RESULTCODE){
+           // String locationInfo = data.getStringExtra(KeyParams.POST_GET_LOCATION);
+            AppLog.i("TAG","獲取返回地理位置:"+CommonUtil.LOCATION_RESULT+"    "+(CommonUtil.LOCATION_Y==true?"有":"无"));
+            if(createLiveLocationTv!=null){
+                createLiveLocationTv.setText(CommonUtil.LOCATION_RESULT);
+            }
+        }
+
         if (requestCode == PHOTO_REQUEST_GALLERY) {
             if (data != null) {
                 Uri uri = data.getData();
@@ -313,29 +293,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             if (TextUtils.isEmpty(roomName)) {
                 roomName = UserHelper.getUserName(this);
             }
-            liveContentLoader.alterLive(roomName, null, LiveActivity.liveLocation);
+            liveContentLoader.alterLive(roomName, null, CommonUtil.LOCATION_RESULT);
         }
 
     }
-
-
-    AMapLocationClient locationClient = null;
-
-    private void initLocation() {
-        //初始化client
-        locationClient = new AMapLocationClient(this.getApplicationContext());
-        //设置定位参数
-        locationClient.setLocationOption(getDefaultOption());
-        // 设置定位监听
-        locationClient.setLocationListener(locationListener);
-        startLocation();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         MPermission.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        doNext(requestCode, grantResults);
     }
     @OnMPermissionGranted(PERMISSION_STGAT_CODE)
     public void onPermissionGranted() {
@@ -347,18 +312,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         Toast.makeText(this, "权限被拒绝，无法继续往下执行", Toast.LENGTH_SHORT).show();
 
     }
-    private void doNext(int requestCode, int[] grantResults) {
-        if (LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE == requestCode) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // 初始化
-                initLocation();
-            } else {
-                Toast.makeText(this, getString(R.string.no_location_permison), Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
-
     private File tempFile;
     private static final int PHOTO_REQUEST_CAREMA = 1;
     private static final int PHOTO_REQUEST_GALLERY = 2;
@@ -384,82 +337,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     }
 
 
-    /**
-     * 定位监听
-     */
-    AMapLocationListener locationListener = new AMapLocationListener() {
-        @Override
-        public void onLocationChanged(AMapLocation loc) {
-            AppLog.i("TAG", "获取定位结果：" + loc.getErrorInfo() + "     " + loc.getErrorCode() + "    " + loc.getCountry() + "·" + loc.getProvince() + "·" + loc.getCity());
-            try {
-                String errorInfo = loc.getErrorInfo();
-                if ("success".equals(errorInfo)) {
-
-                    //解析定位结果
-                    LiveActivity.locationY = true;
-                    if (roomNameLength > 0 && LiveActivity.locationY == true) {
-                        inputStartLive.setTextColor(getResources().getColor(R.color.live_start_tv));
-                    } else {
-                        inputStartLive.setTextColor(getResources().getColor(R.color.live_start_nomal_tv));
-                    }
-                    LiveActivity.latitude = String.valueOf(loc.getLatitude());
-                    LiveActivity.longitude = String.valueOf(loc.getLongitude());
-                    String result = loc.getCountry() + "·" + loc.getProvince() + "·" + loc.getCity();
-                    if (createLiveLocationTv != null) {
-                        createLiveLocationTv.setText(result);
-                        LiveActivity.liveLocation = result;
-                    }
-                } else {
-                    if (createLiveLocationTv != null) {
-                        AppLog.i("TAG", "定位是吧的地理位置:" + LiveActivity.liveLocation);
-                        createLiveLocationTv.setText(getString(R.string.lolacal_no_location));
-                        LiveActivity.liveLocation = getString(R.string.lolacal_no_location);
-                    }
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    };
-
-    private AMapLocationClientOption getDefaultOption() {
-        AMapLocationClientOption mOption = new AMapLocationClientOption();
-        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
-        mOption.setNeedAddress(true);
-        mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
-        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
-        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
-        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
-        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
-        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
-        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
-        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
-        return mOption;
-    }
-
-
-    private void destroyLocation() {
-        if (null != locationClient) {
-            locationClient.onDestroy();
-            locationClient = null;
-
-        }
-    }
-
     protected void findViews() {
         super.findViews();
-        //初始化定位
-        if (Build.VERSION.SDK_INT >= 22) {
-            // 请求用户权限
-            reminderUserPermission(INIT);
-        } else {
-            // 初始化
-            initLocation();
-        }
-
         backBtn = findView(R.id.BackBtn);
         modelLayout = (RelativeLayout) findViewById(R.id.live_view_top_layout);
         startLiveBegin = (LinearLayout) findViewById(R.id.start_live_begin);
@@ -588,28 +467,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         });
     }
 
-    private AMapLocationClientOption locationOption = new AMapLocationClientOption();
-
-    private void startLocation() {
-        //根据控件的选择，重新设置定位参数
-        resetOption();
-        // 设置定位参数
-        locationClient.setLocationOption(locationOption);
-        // 启动定位
-        locationClient.startLocation();
-    }
-
-    private void resetOption() {
-        locationOption.setNeedAddress(true);
-        locationOption.setGpsFirst(false);
-        // 设置是否开启缓存
-        locationOption.setLocationCacheEnable(true);
-        //设置是否等待设备wifi刷新，如果设置为true,会自动变为单次定位，持续定位时不要使用
-        locationOption.setOnceLocationLatest(true);
-        //设置是否使用传感器
-        locationOption.setSensorEnable(false);
-    }
-
     private TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -624,7 +481,8 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         public void afterTextChanged(Editable s) {
             String liveRoomNameCount = liveRoomName.getText().toString().trim();
             roomNameLength = liveRoomNameCount.length();
-            if (roomNameLength > 0 && LiveActivity.locationY == true) {
+            AppLog.i("TAG","是否获取地理位置:"+(CommonUtil.LOCATION_Y==true?"是":"foe"));
+            if (roomNameLength > 0 && CommonUtil.LOCATION_Y == true) {
                 inputStartLive.setTextColor(getResources().getColor(R.color.live_start_tv));
             } else {
                 inputStartLive.setTextColor(getResources().getColor(R.color.live_start_nomal_tv));
@@ -717,9 +575,31 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     //烧鸡管理员关闭直播间
     @Override
-    protected void closeLiveNotifi() {
+    protected void closeLiveNotifi(IMMessage message) {
         endLive();
-        Toast.makeText(this, getString(R.string.live_room_close_to_manager), Toast.LENGTH_SHORT).show();
+        try {
+            if (LiveConstant.isUnDestory&&firstWarning) {
+                firstWarning = false;
+                final CustomChatDialog customDialog = new CustomChatDialog(LiveActivity.this);
+                customDialog.setContent(message.getContent());
+                customDialog.setCancelable(false);
+                customDialog.setOkBtn(getString(R.string.lvie_sure), new CustomChatDialog.CustomDialogListener() {
+                    @Override
+                    public void onDialogClickListener() {
+                        firstWarning = true;
+                    }
+                });
+                customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        finish();
+                    }
+                });
+                customDialog.show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -781,7 +661,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 case R.id.create_live_location_tv:
                     MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_LOCACTION_BUTTON);
                     Intent intent = new Intent(LiveActivity.this, LiveLocationActivity.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,LOCATION_REQUEST_CODE);
                     break;
                 case R.id.live_create_room_close_iv:
                     MobHelper.sendEevent(LiveActivity.this, MobEvent.LIVE_CANCEL);
@@ -839,7 +719,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                 Toast.makeText(LiveActivity.this, getString(R.string.live_room_title_no_null), Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (LiveActivity.locationY == false) {
+            if (CommonUtil.LOCATION_Y==false) {
                 isFirstClick = true;
                 Toast.makeText(LiveActivity.this, getString(R.string.not_get_location_please_input), Toast.LENGTH_SHORT).show();
                 return;
@@ -847,16 +727,11 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             inputStartLive.setText(getString(R.string.prepare_start_live));
             isClickStartLiveBtn = true;
             startTime = System.currentTimeMillis();
-            AppLog.i("TAG", "创建直播的地理位置:" + LiveActivity.liveLocation);
             if(getImageTokenTag==-1){
-                liveContentLoader.alterLive(roomName, null, LiveActivity.liveLocation);
+                liveContentLoader.alterLive(roomName, null, CommonUtil.LOCATION_RESULT);
             }else if(getImageTokenTag == 1){
                 liveContentLoader.getImgToken();
             }
-
-
-
-
         }
     }
 
@@ -966,15 +841,12 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                         @Override
                         public void complete(String key, ResponseInfo info, JSONObject res) {
                             boolean ok = info.isOK();
-                            AppLog.i("TAG", "上产日志回调1" + key + ",\r\n " + info + ",\r\n " + res);
-                            AppLog.i("TAG", "上产日志回调：" + (ok == true ? "成功" : "失败") + "     文件名:" + Environment.getExternalStorageDirectory() + "/" + LogFileUtils.fileAgoraPath + logTime);
+                            //删除本地日志
                             deleteFile(Environment.getExternalStorageDirectory() + "/" + LogFileUtils.fileAgoraPath + logTime);
 
                         }
                     }, null);
-
                 }
-
             }
         }
 
@@ -1045,9 +917,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject response) {
                         if (info.statusCode == 200) {
-                            liveContentLoader.alterLive(roomName, filename, LiveActivity.liveLocation);
+                            liveContentLoader.alterLive(roomName, filename, CommonUtil.LOCATION_RESULT);
                         } else {
-                            liveContentLoader.alterLive(roomName, null, LiveActivity.liveLocation);
+                            liveContentLoader.alterLive(roomName, null,CommonUtil.LOCATION_RESULT);
                         }
                     }
                 }, null);
@@ -1155,6 +1027,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         if (isClickStartLiveBtn) {
             isStartLive = false;
             drawerLayout.closeDrawer(Gravity.RIGHT);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             if (inputPanel != null) {
                 inputPanel.collapse(true);// 收起软键盘
             }
@@ -1214,17 +1087,14 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
     @Override
     public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
-        AppLog.i("TAG", "开始直播陈公公。。。。。");
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                AppLog.i("TAG", "开始公。。。。。");
                 isStartLive = true;
                 if (liveRoomName != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(liveRoomName.getWindowToken(), 0);
                 }
-                AppLog.i("TAG", "开始直播陈公公。。。。。");
                 isEnterRoom = true;
                 if (createLiveLayout != null) {
                     createLiveLayout.setVisibility(View.GONE);
@@ -1581,17 +1451,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onResume() {
         super.onResume();
         viewById.addOnLayoutChangeListener(this);
-        if (createLiveLayout != null && createLiveLayout.getVisibility() == View.VISIBLE && inputStartLive != null) {
-            createLiveLocationTv.setText(LiveActivity.liveLocation);
-            AppLog.i("TAG", "返回地理位置：" + LiveActivity.liveLocation);
-            inputStartLive.setTextColor(getResources().getColor(R.color.live_start_tv));
-        } else {
-            if (inputPanel != null) {
-                inputPanel.hideInputMethod();
-                inputPanel.collapse(false);
-            }
-        }
-
         //    rtcEngine().enableLastmileTest();//启动网络质量检测
         if (isStartLive) {
             //主播回来了
@@ -1634,7 +1493,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void onDestroy() {
         AppLog.i("TAG", "直播端走了onDestroy");
 
-        destroyLocation();
+
         if (DemoCache.getLoginChatRoomStatus()) {
             NIMClient.getService(ChatRoomService.class).exitChatRoom(roomId);
         }

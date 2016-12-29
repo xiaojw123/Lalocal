@@ -811,7 +811,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     break;
                 case MessageType.closeLive:
                     AppLog.i("TAG", "收到关闭直播间消息");
-                    closeLiveNotifi();
+                    isOnLineUsersCountChange=false;
+                    if(handler!=null){
+                        handler.removeCallbacks(onLInesRunnable);
+                    }
+                    closeLiveNotifi(message);
                     break;
 
                 case MessageType.leaveLive:
@@ -875,7 +879,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     protected abstract void superManagerKickOutUser();
 
-    protected abstract void closeLiveNotifi();
+    protected abstract void closeLiveNotifi(IMMessage message);
 
     LinkedList<RoomNotifyExt> roomNotifyExtList = new LinkedList<>();
 
@@ -1033,7 +1037,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             onLInesRunnable = new OnLinesRunnable();
         }
         handler.postDelayed(onLInesRunnable, 2000);
-
     }
 
     public void endHandler() {
@@ -1151,6 +1154,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onDismiss() {
                 drawerLayout.openDrawer(Gravity.RIGHT);
                 firstClick = true;
+                LiveConstant.USER_INFO_FIRST_CLICK=true;
             }
         });
 
@@ -1488,8 +1492,6 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }
         }
     };
-
-
     @Override
     protected void onStop() {
         super.onStop();

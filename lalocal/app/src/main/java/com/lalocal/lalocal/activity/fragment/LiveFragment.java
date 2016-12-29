@@ -58,7 +58,20 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * A simple {@link Fragment} subclass.
+ * 重现情况分类：
+ * 1. 点击home键，返回桌面后重进应用（后台运行，非销毁）：
+ * 定位刷新
+ * onResume调用刷新
+ * 2. 点击分类栏item：
+ * 分类栏置顶刷新
+ * onItemClick方法调用刷新，列表滑动到分类栏置顶的位置
+ * 3. 切换Fragment：
+ * 定位刷新
+ * onHideChanged调用刷新
+ * 4：跳转界面再回来：
+ * 不刷新
+ * 5：点击直播按钮再回来：
+ * 定位刷新
  */
 public class LiveFragment extends BaseFragment {
     @BindView(R.id.xrv_live)
@@ -111,8 +124,11 @@ public class LiveFragment extends BaseFragment {
     // 当前分页页码
     private int mCurPageNum = 1;
 
-    // 判断是不是已经调用了onResume方法
-    private boolean isResume = false;
+    // 判断是不是需要重现时刷新
+    private boolean isNeedRefresh = true;
+
+    // 如果是点击分类栏刷新
+    private boolean isCateRefresh = false;
 
     // -标记
     private static final int INIT = 0x01;
@@ -169,6 +185,15 @@ public class LiveFragment extends BaseFragment {
         } else {
             // 初始化
             init();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        AppLog.i("sfr", "onResult requestCode " + requestCode);
+        if (requestCode == 123) {
+            isNeedRefresh = false;
         }
     }
 
@@ -401,32 +426,34 @@ public class LiveFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
+        AppLog.i("sfr", "onHiddenChanged");
         if (hidden && isFirst) {
             // 隐藏推荐页
             mRecommendPage.hide();
             mRecommendPage.setFocusable(false);
-        } else if (!hidden && !isResume) {
+        } else if (!hidden) {
+            AppLog.i("sfr", "onHiddenChanged isNeedRefresh");
             // 如果仅仅是fragment的tab切换，则刷新页面，不更改列表定位
             refreshWithSolidPosition();
             mBtnTakeLive.show();
         }
 
-        if (isResume) {
-            isResume = false;
-        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        AppLog.i("sfr", "onResume");
         if (isFirstEnter) {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
-        } else {
+        } else if (isNeedRefresh) {
+            AppLog.i("sfr", "onResume isNeedRefresh");
 //            isSyncAttention = true;
             refreshWithSolidPosition();
         }
         mBtnTakeLive.show();
+        isNeedRefresh = true;
     }
 
 
@@ -435,8 +462,6 @@ public class LiveFragment extends BaseFragment {
      * 刷新页面，不更改列表定位
      */
     private void refreshWithSolidPosition() {
-        // 已回调过onResume()方法
-        isResume = true;
         // 默认为热门直播的id，自定义的，因为热门直播分类的tab是本地的，访问接口的categoryId=""，
         // 所以定义一个标记，实际访问的时候用空字符串
         mCategoryId = Constants.CATEGORY_HOT_LIVE;
@@ -795,6 +820,13 @@ public class LiveFragment extends BaseFragment {
                             mPlaybackList);
                     // 配置顶部目录适配器
                     setCategoryAdapter();
+
+                    if (isCateRefresh) {
+                        LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
+                        AppLog.i("sfr", "scroll to mCategory " + mCategoryIndex);
+                        layoutManager.scrollToPositionWithOffset(mCategoryIndex + 1, 0);
+                        isCateRefresh = false;
+                    }
                     break;
             }
         }
@@ -855,15 +887,14 @@ public class LiveFragment extends BaseFragment {
                 AppLog.i("slt", "positoin is " + position);
                 // 加载分页重置为1
                 mCurPageNum = 1;
+                // 点击分类刷新
+                isCateRefresh = true;
                 // 获取数据
                 getChannelIndexTotal(mCurPageNum, mCategoryId);
                 // 设置选中的分类栏
                 if (mAdapter != null) {
                     mAdapter.setSelected(mSelCategory);
                 }
-
-                LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
-                layoutManager.scrollToPosition(0);
             }
         }
     }

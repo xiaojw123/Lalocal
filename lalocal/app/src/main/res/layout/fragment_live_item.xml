@@ -21,13 +21,6 @@
             android:layout_height="wrap_content"
             android:focusable="false"
             android:layout_marginTop="@dimen/dimen_size_15_dp">
-            <ImageView
-                android:id="@+id/icon"
-                android:layout_width="@dimen/dimen_size_12_dp"
-                android:layout_height="@dimen/dimen_size_12_dp"
-                android:layout_marginLeft="@dimen/dimen_size_25_dp"
-                android:layout_marginTop="@dimen/dimen_size_4_dp"
-                android:src="@drawable/homelist_living_ic"/>
 
             <TextView
                 android:id="@+id/tv_type"
@@ -42,11 +35,22 @@
                 android:layout_marginRight="@dimen/dimen_size_15_dp"
                 android:background="@drawable/bg_tag_living"/>
 
+            <ImageView
+                android:id="@+id/img_live_type"
+                android:layout_width="@dimen/dimen_size_12_dp"
+                android:layout_height="@dimen/dimen_size_12_dp"
+                android:layout_marginLeft="25dp"
+                android:src="@drawable/homelist_living_ic"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="25dp" />
+
             <TextView
                 android:id="@+id/tv_title"
                 android:layout_toLeftOf="@id/tv_type"
                 android:layout_marginRight="@dimen/dimen_size_15_dp"
-                android:layout_toRightOf="@id/icon"
+                android:layout_toRightOf="@id/img_live_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="加载中..."
@@ -55,6 +59,7 @@
                 android:maxLines="2"
                 android:ellipsize="end"
                 android:textColor="@color/color_191000"/>
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -95,7 +100,7 @@
                     android:gravity="right"
                     android:layout_height="wrap_content"
                     android:text="加载中..."
-                    android:maxLength="7"
+                    android:maxEms="7"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:layout_gravity="center_vertical"

@@ -317,7 +317,7 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
                     shareActivity.setOnSuccessShare(new SharePopupWindow.OnSuccessShareListener() {
                         @Override
                         public void shareSuccess(SHARE_MEDIA share_media) {
-                            playBackBottomTableTranmitCount.setText(String.valueOf(shareNum)+1);
+                            playBackBottomTableTranmitCount.setText(String.valueOf(shareNum+1));
                         }
                     });
                     shareActivity.show();
