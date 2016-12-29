@@ -325,6 +325,15 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         showFragment(FRAGMENT_FIND);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (mFragLive != null) {
+            mFragLive.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     /**
      * 跳转到某一个Fragment
      *

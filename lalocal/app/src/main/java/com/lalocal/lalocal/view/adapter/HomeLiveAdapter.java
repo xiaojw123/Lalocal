@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.view.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -197,9 +198,12 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 holder = mCategoryHolder;
                 break;
             case LIVING_ITEM:
+                view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_item, parent, false);
+                holder = new LiveViewHolder(view, true);
+                break;
             case PLAYBACK_ITEM:
                 view = LayoutInflater.from(mContext).inflate(R.layout.fragment_live_item, parent, false);
-                holder = new LiveViewHolder(view);
+                holder = new LiveViewHolder(view, false);
                 break;
         }
         return holder;
@@ -345,9 +349,16 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         TextView tvType;
         // Item点击范围
         LinearLayout layoutClick;
+        // 播放类型图标
+        ImageView imgType;
 
-        public LiveViewHolder(View itemView) {
+        // 判断是直播还是回放
+        boolean isLiving;
+
+        public LiveViewHolder(View itemView, boolean isLiving) {
             super(itemView);
+
+            this.isLiving = isLiving;
 
             itemView.setFocusable(false);
 
@@ -360,6 +371,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             tvLastMsg = (TextView) itemView.findViewById(R.id.tv_last_msg);
             tvType = (TextView) itemView.findViewById(R.id.tv_type);
             layoutClick = (LinearLayout) itemView.findViewById(R.id.layout_click);
+            imgType = (ImageView) itemView.findViewById(R.id.img_live_type);
 
         }
 
@@ -371,6 +383,12 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
         public void initData(final LiveRowsBean bean) {
             if(bean==null){
                 return;
+            }
+
+            if (isLiving) {
+                imgType.setImageResource(R.drawable.homelist_living_ic);
+            } else {
+                imgType.setImageResource(R.drawable.homelist_replay_ic);
             }
 
             layoutContainer.setFocusable(false);
@@ -461,31 +479,37 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     // 我的关注对回放还是直播进行判断
                     if (targetType == Constants.TARGET_TYPE_CHANNEL) {
+                        AppLog.i("sfr", "1");
                         Intent intent1 = new Intent(mContext, AudienceActivity.class);
                         intent1.putExtra("id", String.valueOf(id));
-                        mContext.startActivity(intent1);
+                        ((Activity)mContext).startActivityForResult(intent1, 123);
                     } else if (targetType == Constants.PLAY_BACK_TYPE_URL) {
+                        AppLog.i("sfr", "2");
                         Intent intent = new Intent(mContext, PlayBackActivity.class);
                         intent.putExtra("id", String.valueOf(id));
-                        mContext.startActivity(intent);
+                        ((Activity)mContext).startActivityForResult(intent, 123);
                     } else if (targetType == 0) {
+                        AppLog.i("sfr", "3");
 
                         if (bean.getEndAt() != null && bean.getStartAt() != null) {
+                            AppLog.i("sfr", "4");
                             Intent intent = new Intent(mContext, PlayBackActivity.class);
                             intent.putExtra("id", String.valueOf(bean.getId()));
-                            mContext.startActivity(intent);
+                            ((Activity)mContext).startActivityForResult(intent, 123);
                         } else {
+                            AppLog.i("sfr", "5");
                             int roomId = bean.getRoomId();
                             String createRoom = SPCUtils.getString(mContext, CREATE_ROOMID);
                             String s = String.valueOf(roomId);
                             if (createRoom != null && createRoom.equals(s)) {
+                                AppLog.i("sfr", "6");
                                 CommonUtil.REMIND_BACK = 1;
                                 prepareLive();
                                 return;
                             }
                             Intent intent = new Intent(mContext, AudienceActivity.class);
                             intent.putExtra("id", String.valueOf(bean.getId()));
-                            mContext.startActivity(intent);
+                            ((Activity)mContext).startActivityForResult(intent, 123);
                         }
                     }
                 }
