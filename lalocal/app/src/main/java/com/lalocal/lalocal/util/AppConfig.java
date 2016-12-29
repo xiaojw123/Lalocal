@@ -374,6 +374,10 @@ public class AppConfig {
         return baseUrl + "users/block/";
     }
 
+    //关闭直播间
+    public static final String getCloseRoom(){
+        return baseUrl+"channels/close";
+    }
     //发送消息
     public static final String sendMessage() {
         return baseUrl + "system/msgs/validate";

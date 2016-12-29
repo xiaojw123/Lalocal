@@ -136,6 +136,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     private TextView masterName;
     private boolean isLocation = false;
     private String liveTitle;
+    private CustomNewUserInforDialog userInfoDialog;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -763,15 +764,15 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
     @Override
     protected void showUserInfoDialog(final String userIds, final String channelIds, boolean isMaster) {
 
-        CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(this, container, userIds, channelIds, LiveConstant.ROLE, isMaster, creatorAccount, roomId);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        userInfoDialog = new CustomNewUserInforDialog(this, container, userIds, channelIds, LiveConstant.ROLE, isMaster, creatorAccount, roomId);
+        userInfoDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialog) {
                 LiveConstant.USER_INFO_FIRST_CLICK = true;
             }
         });
-        dialog.setDialogStatusListener(this);
-        dialog.show();
+        userInfoDialog.setDialogStatusListener(this);
+        userInfoDialog.show();
 
     }
 
@@ -807,7 +808,12 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
 
     //超级管理员关闭直播间
     @Override
-    protected void closeLiveNotifi() {
+    protected void closeLiveNotifi(IMMessage message) {
+        if(userInfoDialog!=null){
+            userInfoDialog.dismiss();
+        }
+
+
     }
 
     @Override

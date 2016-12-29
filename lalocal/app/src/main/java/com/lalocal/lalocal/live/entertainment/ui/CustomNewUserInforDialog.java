@@ -41,7 +41,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * Created by android on 2016/12/13.
  */
@@ -84,8 +83,10 @@ public class CustomNewUserInforDialog extends BaseDialog {
     TextView masterInfoLocation;
     @BindView(R.id.master_info_signature_layout)
     LinearLayout masterInfoSignatureLayout;
+    @BindView(R.id.user_info_content_layout)
+    LinearLayout userInfoContentLayout;
     @BindView(R.id.user_info_root_layout)
-    LinearLayout userInfoRootLayout;
+ LinearLayout userInfoRootLayout;
 
     private String userId;
     private Context mContext;
@@ -125,10 +126,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
     }
 
     private int managerResult;
-
     class MyCallBack extends ICallBack {
-
-
         @Override
         public void onCheckManager(LiveManagerBean liveManagerBean) {
             super.onCheckManager(liveManagerBean);
@@ -141,7 +139,6 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 }
             }
         }
-
         @Override
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
@@ -201,7 +198,6 @@ public class CustomNewUserInforDialog extends BaseDialog {
             }
         }
 
-
         @Override
         public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
             super.onLiveCancelAttention(liveCancelAttention);
@@ -255,9 +251,18 @@ public class CustomNewUserInforDialog extends BaseDialog {
     }
 
 
-    @OnClick({R.id.custom_dialog_report, R.id.custom_dialog_close_iv,R.id.user_info_root_layout,R.id.custom_dialog_close_iv_1, R.id.userinfo_head_iv, R.id.userinfo_bottom_left, R.id.userinfo_bottom_right})
+    @OnClick({R.id.custom_dialog_report,R.id.custom_dialog_close_iv,R.id.user_info_content_layout,R.id.user_info_root_layout,R.id.custom_dialog_close_iv_1, R.id.userinfo_head_iv, R.id.userinfo_bottom_left, R.id.userinfo_bottom_right})
     public void clickBtn(View view) {
         switch (view.getId()) {
+            case R.id.user_info_content_layout:
+                break;
+            case R.id.userinfo_bottom_center:
+                if(userId != null && userId.equals(String.valueOf(UserHelper.getUserId(mContext)))){
+                    intent = new Intent(mContext, LiveHomePageActivity.class);
+                    intent.putExtra("userId", String.valueOf(userId));
+                    mContext.startActivity(intent);
+                }
+                break;
             case R.id.user_info_root_layout:
                 dismiss();
                 break;
@@ -319,7 +324,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 }
                 break;
 
-        }
+    }
     }
 
 
@@ -370,7 +375,6 @@ public class CustomNewUserInforDialog extends BaseDialog {
 
     public void setDialogStatusListener(MessageUpdateListener statusListener) {
         this.statusListener = statusListener;
-
     }
 
     MessageUpdateListener statusListener;

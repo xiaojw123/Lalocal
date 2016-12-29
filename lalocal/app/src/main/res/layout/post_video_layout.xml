@@ -84,7 +84,6 @@
 
         <TextView
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:text="@string/title"
             android:textSize="@dimen/live_text_16sp"
@@ -99,9 +98,10 @@
             android:maxLength="20"
             android:ellipsize="end"
             android:singleLine="true"
-            android:paddingLeft="@dimen/live_padding_20dp"
+            android:layout_marginLeft="@dimen/live_padding_20dp"
             android:textColor="@color/color_190f00"
             android:layout_gravity="right|center_vertical"
+            android:gravity="right|center_vertical"
             android:background="@null"
             android:hint="20字内,亲输入..."
             android:textColorHint="@color/color_70190f00"
