@@ -108,8 +108,6 @@ public class MyApplication extends Application {
         DemoCache.setContext(this);
         AppLog.print("init Live Cache");
         NIMClient.init(this, getLoginInfo(), getOptions());
-        //关闭通知栏提醒
-        NIMClient.toggleNotification(false);
         AppLog.print("init NIMClient");
         if (inMainProcess()) {
             // TODO: 2016/12/15 im
@@ -284,6 +282,7 @@ public class MyApplication extends Application {
 
         // 配置保存图片，文件，log等数据的目录
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim/";
+        AppLog.i("pxt", sdkPath);
         options.sdkStorageRootPath = sdkPath;
         // 配置数据库加密秘钥
         options.databaseEncryptKey = "NETEASE";

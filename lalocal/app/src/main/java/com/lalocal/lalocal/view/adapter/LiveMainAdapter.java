@@ -136,7 +136,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
                     hightHolder.titleTv.setText(liveRowsBean.getTitle());
                     hightHolder.onlineNumTv.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
                     hightHolder.timeTv.setText(liveRowsBean.getStartAt());
-                    hightHolder.locTv.getCompoundDrawables()[0].setAlpha(20);
+                    hightHolder.locTv.getCompoundDrawables()[0].setAlpha(60);
                     hightHolder.onlineNumTv.getCompoundDrawables()[0].setAlpha(20);
                     hightHolder.timeTv.getCompoundDrawables()[0].setAlpha(20);
                     DrawableUtils.displayImg(mContext, hightHolder.photoImg, liveRowsBean.getPhoto());

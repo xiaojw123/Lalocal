@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -43,6 +44,7 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.pili.pldroid.player.PLMediaPlayer;
@@ -66,7 +68,7 @@ import static com.lalocal.lalocal.R.id.playback_fragment_container;
 /**
  * Created by android on 2016/12/21.
  */
-public class PlayBackNewActivity extends BaseActivity {
+public class PlayBackNewActivity extends BaseActivity implements View.OnTouchListener {
     public static final int RESQUEST_COD = 101;
     private static final int MESSAGE_ID_RECONNECTING = 0x01;
     @BindView(R.id.VideoView)
@@ -95,6 +97,8 @@ public class PlayBackNewActivity extends BaseActivity {
     RelativeLayout playbackLoadingPage;
     @BindView(R.id.play_layout)
     FrameLayout playLayout;
+    @BindView(R.id.playback_fragment_container)
+    FrameLayout frameCotainer;
     private SpecialShareVOBean shareVO;
     private int direction;
     int status;
@@ -148,6 +152,7 @@ public class PlayBackNewActivity extends BaseActivity {
         mVideoView.setOnCompletionListener(mOnCompletionListener);
         mVideoView.setOnErrorListener(mOnErrorListener);
         mVideoView.setOnPreparedListener(mOnPreparedListener);
+        mVideoView.setOnTouchListener(this);
 
         playbackQuit.setClickable(true);
     }
@@ -355,31 +360,39 @@ public class PlayBackNewActivity extends BaseActivity {
         @Override
         public void inputPrivate() {
             //TODO 私信主播
-            mMediaController.setHideContro();
-            FragmentManager fm = getFragmentManager();
-            ft = fm.beginTransaction();
-            if (chatFragment == null) {
-                chatFragment = new ChatFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(KeyParams.ACCID, accid);
-                bundle.putString(KeyParams.NICKNAME, nickName);
-                bundle.putInt(KeyParams.PAGE_TYPE, PageType.PAGE_PLAY_BACK);
-                chatFragment.setArguments(bundle);
-                ft.add(R.id.playback_fragment_container, chatFragment);
-
-                chatFragment.setOnCloseFragmentClickListener(new ChatFragment.CloseFragmentClickListener() {
-                    @Override
-                    public void closeClick() {
-                        mMediaController.showContro();
-                    }
-                });
-            } else {
-                ft.show(chatFragment);
-            }
-            ft.commit();
+            attatchChatFragment();
         }
     };
+
+    public void attatchChatFragment() {
+        //TODO 私信主播
+        frameCotainer.requestFocus();
+        mMediaController.setHideContro();
+        FragmentManager fm = getFragmentManager();
+        ft = fm.beginTransaction();
+        if (chatFragment == null) {
+            chatFragment = new ChatFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(KeyParams.ACCID, CommonUtil.getAccId(userId));
+            bundle.putString(KeyParams.NICKNAME, nickName);
+            bundle.putInt(KeyParams.PAGE_TYPE, PageType.PAGE_PLAY_BACK);
+            chatFragment.setArguments(bundle);
+            ft.add(R.id.playback_fragment_container, chatFragment);
+
+            chatFragment.setOnCloseFragmentClickListener(new ChatFragment.CloseFragmentClickListener() {
+                @Override
+                public void closeClick() {
+                    mMediaController.showContro();
+                }
+            });
+        } else {
+            ft.show(chatFragment);
+        }
+        ft.commit();
+    }
+
     private ChatFragment chatFragment;
+
 
 
     private PLMediaPlayer.OnPreparedListener mOnPreparedListener = new PLMediaPlayer.OnPreparedListener() {
@@ -691,6 +704,20 @@ public class PlayBackNewActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         mVideoView.stopPlayback();
+    }
+
+
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (chatFragment!=null&&!chatFragment.isHidden()){
+            mMediaController.showContro();
+            FragmentManager fm=getFragmentManager();
+            FragmentTransaction ft=fm.beginTransaction();
+            ft.hide(chatFragment);
+            ft.commit();
+        }
+        return false;
     }
 
 

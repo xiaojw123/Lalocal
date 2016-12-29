@@ -149,7 +149,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         chatTv.setTitle(nickName);
         limit = 10;
-        isRoot=true;
+        isRoot = true;
         loadDataFromRemote(limit);
     }
 
@@ -164,7 +164,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mMsgEdit = (EditText) contentView.findViewById(R.id.chat_edit);
         mMsgSendTv = (TextView) contentView.findViewById(R.id.chat_send_tv);
         mXRecyclerView = (XRecyclerView) contentView.findViewById(R.id.chat_xrlv);
-        mXRecyclerView.setRefreshing(true);
         mXRecyclerView.setLoadingMoreEnabled(false);
         mXRecyclerView.setLoadingListener(this);
         layoutManager = new LinearLayoutManager(getActivity());
@@ -172,7 +171,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mXRecyclerView.setOnTouchListener(this);
         msgAdapter = new MessageListAdapter(mMessageList);
         mXRecyclerView.setAdapter(msgAdapter);
-        mXRecyclerView.setRefreshing(true);
         cancelBtn.setOnClickListener(this);
         myselfBtn.setOnClickListener(this);
         mMsgSendTv.setOnClickListener(this);
@@ -194,6 +192,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 myselfBtn.setVisibility(View.VISIBLE);
             }
         }
+        loadDataFromRemote(limit);
     }
 
 
@@ -209,7 +208,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     if (fm == null) {
                         fm = getFragmentManager();
                     }
-                    if(closeFragmentClickListener!=null){
+                    if (closeFragmentClickListener != null) {
                         closeFragmentClickListener.closeClick();
                     }
                     FragmentTransaction ft = fm.beginTransaction();
@@ -222,11 +221,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 break;
             case R.id.chat_myself_btn:
                 Intent intent = new Intent(getActivity(), LiveHomePageActivity.class);
-                String userid = "";
-                if (!TextUtils.isEmpty(accId)) {
-                    userid = accId.substring(accId.indexOf("_") + 1);
-                }
-                intent.putExtra("userId", userid);
+
+                intent.putExtra("userId", CommonUtil.getUserId(accId));
                 getActivity().startActivity(intent);
                 break;
             case R.id.chat_more_send_img:
@@ -253,13 +249,16 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
 
     }
+
     CloseFragmentClickListener closeFragmentClickListener;
+
     public void setOnCloseFragmentClickListener(CloseFragmentClickListener closeFragmentClickListener) {
-               this.closeFragmentClickListener=closeFragmentClickListener;
-             }
+        this.closeFragmentClickListener = closeFragmentClickListener;
+    }
+
     public interface CloseFragmentClickListener {
         void closeClick();
-             }
+    }
 
 
     private void sendImg() {
@@ -297,7 +296,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             moreOpLayout.setVisibility(View.GONE);
         }
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.putExtra("crop", "true");
+//        intent.putExtra("crop", "true");
         intent.putExtra("scale", "true");
         intent.putExtra("scaleUpIfNeeded", true);
         intent.setType("image/*");
@@ -463,6 +462,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onPause() {
         super.onPause();
+        resetOpView();
         reigisterNimService(false);
     }
 
@@ -482,8 +482,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             isRoot=false;
             layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
         }
-//        mXRecyclerView.scrollToPosition(msgAdapter.getItemCount()-1);
-//        AppLog.print("measure___"+mXRecyclerView.getMeasuredHeight());
     }
 
     private IMMessage anchor() {
@@ -510,7 +508,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 public void onEvent(List<IMMessage> messages) {
                     // 处理新收到的消息，为了上传处理方便，SDK 保证参数 messages 全部来自同一个聊天对象。
                     AppLog.print("incomingMessageObserver___len:" + messages.size());
-                    isRoot=true;
+                    isRoot = true;
                     updateMessages(messages);
                 }
 
@@ -561,6 +559,15 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
     }
 
+    public void resetOpView() {
+        if (moreOpLayout.getVisibility() == View.VISIBLE) {
+            moreOpLayout.setVisibility(View.GONE);
+        }
+        if (isSoftKeyShow) {
+            KeyboardUtil.hidenSoftKey(mMsgEdit);
+        }
+    }
+
 
     @Override
     public void onBackClick() {
@@ -589,6 +596,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (!hidden) {
             reigisterNimService(true);
         } else {
+            resetOpView();
             reigisterNimService(false);
         }
     }
@@ -596,8 +604,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onRefresh() {
         isRefresh = true;
-        loadDataFromRemote(limit);
         limit += 10;
+        loadDataFromRemote(limit);
     }
 
     @Override
@@ -607,5 +615,5 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     List<IMMessage> lastParams;
     int limit = 10;
-    boolean isRefresh,isRoot=true;
+    boolean isRefresh, isRoot = true;
 }

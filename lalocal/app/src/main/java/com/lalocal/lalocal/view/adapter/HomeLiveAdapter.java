@@ -440,12 +440,12 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 }
             } else if (targetType == Constants.PLAY_BACK_TYPE_URL) {
                 tvType.setBackgroundResource(R.drawable.bg_tag_playback);
-                tvType.setText("精彩回放");
+                tvType.setText("回放");
             } else if (targetType == 0) {
 
                 if (bean.getEndAt() != null && bean.getStartAt() != null) {
                     tvType.setBackgroundResource(R.drawable.bg_tag_playback);
-                    tvType.setText("精彩回放");
+                    tvType.setText("回放");
                 } else if (bean.isChallengeStatus()) {
                     tvType.setBackgroundResource(R.drawable.bg_tag_challenge);
                     tvType.setText("任务挑战中");
