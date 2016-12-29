@@ -33,7 +33,7 @@
         android:layout_alignLeft="@+id/item_hightlists_nickname"
         android:layout_below="@+id/item_hightlists_nickname"
         android:layout_marginTop="@dimen/dimen_size_2_dp"
-        android:drawableLeft="@drawable/peopleliving_location_darkic"
+        android:drawableLeft="@drawable/peopleliving_location_darkic_02"
         android:drawablePadding="@dimen/dimen_size_4_dp"
         android:textColor="@color/color_b3"
         android:textSize="@dimen/text_size_12_sp" />
