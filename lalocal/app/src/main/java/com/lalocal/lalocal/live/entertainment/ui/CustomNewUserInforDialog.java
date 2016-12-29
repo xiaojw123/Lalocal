@@ -18,6 +18,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
@@ -287,6 +288,8 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 dismiss();
                 if (mContext instanceof LivePlayerBaseActivity) {
                     ((LivePlayerBaseActivity) mContext).gotoPersonalMessage(true, accId, nickName);
+                }else if (mContext instanceof PlayBackNewActivity){
+                    ((PlayBackNewActivity)mContext).attatchChatFragment();
                 }
                 break;
             case R.id.userinfo_bottom_right://关注

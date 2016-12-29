@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.im;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -29,6 +30,7 @@ import java.util.List;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<IMMessage> mMessageList;
+    LinearLayoutManager layoutManager;
 
     public MessageListAdapter(List<IMMessage> messageList) {
         mMessageList = messageList;
@@ -37,6 +39,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     public void updateItems(List<IMMessage> messageList) {
         mMessageList = messageList;
         notifyDataSetChanged();
+    }
+
+    public void setLayoutManager(LinearLayoutManager layoutManager) {
+        this.layoutManager = layoutManager;
     }
 
 
@@ -51,7 +57,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AppLog.print("onBindViewHolder___position___"+position);
+        AppLog.print("onBindViewHolder___position___" + position);
         if (mMessageList == null || mMessageList.size() < 1) {
             return;
         }
@@ -123,6 +129,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         } else {
             msgHolder.timeTv.setVisibility(View.GONE);
         }
+        if (position == getItemCount()-1) {
+            AppLog.print("last size___");
+            if (layoutManager != null) {
+                AppLog.print("scoll___to pos_");
+                layoutManager.scrollToPositionWithOffset(getItemCount() - 1, 0);
+            }
+        }
 
 
     }
@@ -130,7 +143,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private void loadImg(IMMessage imMessage, ImageView img) {
         FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
         if (fileAttachment != null) {
-            Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).into(img);
+            Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).error(R.drawable.androidloading).into(img);
             String thumbPath = fileAttachment.getThumbPath();
             if (TextUtils.isEmpty(thumbPath)) {
                 NIMClient.getService(MsgService.class).downloadAttachment(imMessage, true);
@@ -159,7 +172,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        AppLog.print("getItemCount__"+mMessageList.size());
+        AppLog.print("getItemCount__" + mMessageList.size());
         return mMessageList != null && mMessageList.size() > 0 ? mMessageList.size() : 0;
     }
 

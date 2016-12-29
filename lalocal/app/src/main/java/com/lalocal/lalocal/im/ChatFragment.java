@@ -164,15 +164,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mMsgEdit = (EditText) contentView.findViewById(R.id.chat_edit);
         mMsgSendTv = (TextView) contentView.findViewById(R.id.chat_send_tv);
         mXRecyclerView = (XRecyclerView) contentView.findViewById(R.id.chat_xrlv);
-        mXRecyclerView.setRefreshing(true);
         mXRecyclerView.setLoadingMoreEnabled(false);
         mXRecyclerView.setLoadingListener(this);
         layoutManager = new LinearLayoutManager(getActivity());
         mXRecyclerView.setLayoutManager(layoutManager);
         mXRecyclerView.setOnTouchListener(this);
         msgAdapter = new MessageListAdapter(mMessageList);
+        msgAdapter.setLayoutManager(layoutManager);
         mXRecyclerView.setAdapter(msgAdapter);
-        mXRecyclerView.setRefreshing(true);
         cancelBtn.setOnClickListener(this);
         myselfBtn.setOnClickListener(this);
         mMsgSendTv.setOnClickListener(this);
@@ -194,6 +193,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 myselfBtn.setVisibility(View.VISIBLE);
             }
         }
+        loadDataFromRemote(limit);
     }
 
 
@@ -297,7 +297,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             moreOpLayout.setVisibility(View.GONE);
         }
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.putExtra("crop", "true");
+//        intent.putExtra("crop", "true");
         intent.putExtra("scale", "true");
         intent.putExtra("scaleUpIfNeeded", true);
         intent.setType("image/*");
@@ -478,10 +478,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mMessageList.addAll(param);
         msgAdapter.updateItems(mMessageList);
         AppLog.print("scrollToPosition__");
-        if (isRoot) {
-            isRoot=false;
-            layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
-        }
+//        if (isRoot) {
+//            isRoot=false;
+//            layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
+//        }
 //        mXRecyclerView.scrollToPosition(msgAdapter.getItemCount()-1);
 //        AppLog.print("measure___"+mXRecyclerView.getMeasuredHeight());
     }

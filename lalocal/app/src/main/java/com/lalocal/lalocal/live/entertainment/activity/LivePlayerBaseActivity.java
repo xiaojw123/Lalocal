@@ -254,11 +254,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             if (data != null) {
                 AppLog.i("TAG", "直播基类登录回调rere：" + resultCode);
                 ChatRoomMemberCache.getInstance().clearRoomCache(roomId);
-               try{
-                   NIMClient.getService(AuthService.class).logout();
-               }catch (Exception e){
-                   e.printStackTrace();
-               }
+                try {
+                    NIMClient.getService(AuthService.class).logout();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -304,6 +304,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
     }
+
     //监听云信账号登录状态
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
         @Override
@@ -336,7 +337,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     }, 2000);
 
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -607,7 +608,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.live_telecast_top_message:
-                    gotoPersonalMessage(false, accId, nickName);
+                    if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
+                        gotoPersonalMessage(false, accId, nickName);
+                    } else {
+                        showLoginViewDialog();
+                    }
                     break;
 
                 case R.id.live_master_info_layout:
@@ -769,9 +774,9 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     break;
                 case MessageType.like:
                     periscopeLayout.addHeart();
-                    AppLog.i("TAG","点赞内容监听:"+message.getContent());
+                    AppLog.i("TAG", "点赞内容监听:" + message.getContent());
                     //   marqueeView.start(((ChatRoomMessage) message).getChatRoomMessageExtension().getSenderNick() + "  给主播点了个赞");
-                    if (message.getContent().equals(getString(R.string.like_master))||message.getContent().equals("点赞")) {
+                    if (message.getContent().equals(getString(R.string.like_master)) || message.getContent().equals("点赞")) {
                         messageListPanel.onIncomingMessage(messages);
                     }
                     break;
@@ -932,13 +937,13 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             onConnected();
             DemoCache.setLoginChatRoomStatus(true);
         } else {
-          try {
-              NIMClient.getService(AuthService.class).logout();
-              DemoCache.setLoginChatRoomStatus(false);
-              onDisconnected();
-          }catch (Exception e){
-              e.printStackTrace();
-          }
+            try {
+                NIMClient.getService(AuthService.class).logout();
+                DemoCache.setLoginChatRoomStatus(false);
+                onDisconnected();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
 
         }
@@ -1220,7 +1225,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                             content = getString(R.string.share_weiclcle);
                             MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_SHARE_WECHAT2);
                         }
-                        if(UserHelper.isLogined(LivePlayerBaseActivity.this)){
+                        if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
                             LiveMessage liveMessage = new LiveMessage();
                             liveMessage.setStyle(MessageType.text);
                             liveMessage.setUserId(userId);
@@ -1606,7 +1611,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     public void updateUnReadMsg() {
         int unreadNum = NIMClient.getService(MsgService.class).getTotalUnreadCount();
-        AppLog.print("unReadNum____"+unreadNum);
+        AppLog.print("unReadNum____" + unreadNum);
         if (unreadNum > 0) {
             String fomartCount = unreadNum > 99 ? unreadNum + "+" : String.valueOf(unreadNum);
             unReadTv.setVisibility(View.VISIBLE);
@@ -1620,6 +1625,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, flag);
     }
+
     //  创建观察者对象
     Observer<List<RecentContact>> messageObserver =
             new Observer<List<RecentContact>>() {
@@ -1633,5 +1639,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     @Override
     public void onUnReadUpate() {
         updateUnReadMsg();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        onImHiden();
+        return super.dispatchTouchEvent(event);
+
     }
 }

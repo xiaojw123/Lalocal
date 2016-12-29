@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -353,32 +354,49 @@ public class PlayBackNewActivity extends BaseActivity {
         @Override
         public void inputPrivate() {
             //TODO 私信主播
-
-            mMediaController.setHideContro();
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            if (chatFragment == null) {
-                chatFragment = new ChatFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(KeyParams.ACCID, accid);
-                bundle.putString(KeyParams.NICKNAME, nickName);
-                bundle.putInt(KeyParams.PAGE_TYPE, PageType.PAGE_PLAY_BACK);
-                chatFragment.setArguments(bundle);
-                ft.add(R.id.playback_fragment_container, chatFragment);
-
-                chatFragment.setOnCloseFragmentClickListener(new ChatFragment.CloseFragmentClickListener() {
-                    @Override
-                    public void closeClick() {
-                        mMediaController.showContro();
-                    }
-                });
-            } else {
-                ft.show(chatFragment);
-            }
-            ft.commit();
+            attatchChatFragment();
         }
     };
+
+    public void attatchChatFragment() {
+        mMediaController.setHideContro();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        if (chatFragment == null) {
+            chatFragment = new ChatFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(KeyParams.ACCID, accid);
+            bundle.putString(KeyParams.NICKNAME, nickName);
+            bundle.putInt(KeyParams.PAGE_TYPE, PageType.PAGE_PLAY_BACK);
+            chatFragment.setArguments(bundle);
+            ft.add(R.id.playback_fragment_container, chatFragment);
+
+            chatFragment.setOnCloseFragmentClickListener(new ChatFragment.CloseFragmentClickListener() {
+                @Override
+                public void closeClick() {
+                    mMediaController.showContro();
+                }
+            });
+        } else {
+            ft.show(chatFragment);
+        }
+        ft.commit();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (chatFragment!=null&&!chatFragment.isHidden()){
+            mMediaController.showContro();
+            FragmentManager fm=getFragmentManager();
+            FragmentTransaction ft=fm.beginTransaction();
+            ft.hide(chatFragment);
+            ft.commit();
+        }
+        return super.dispatchTouchEvent(event);
+    }
+
     private ChatFragment chatFragment;
+
 
 
     private PLMediaPlayer.OnPreparedListener mOnPreparedListener = new PLMediaPlayer.OnPreparedListener() {
