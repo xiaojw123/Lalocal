@@ -80,7 +80,6 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
         } else {
             return REVIEW_LIST;
         }
-
     }
 
     @Override

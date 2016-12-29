@@ -44,6 +44,8 @@ public class CommonUtil {
 
     public static String LONGITUDE = "";
     public static String LATITUDE = "";
+    public static Boolean LOCATION_Y=false;
+    public static String LOCATION_RESULT="";
 
     //根据userid获取accid
     public static String getAccId(int userId) {

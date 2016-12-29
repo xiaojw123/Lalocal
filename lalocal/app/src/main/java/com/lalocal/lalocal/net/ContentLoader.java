@@ -3885,8 +3885,8 @@ public class ContentLoader {
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        headers.put("LATITUDE", "38.65777");
-        headers.put("LONGITUDE", "104.08296");
+        headers.put("LATITUDE",CommonUtil.LATITUDE);
+        headers.put("LONGITUDE", CommonUtil.LONGITUDE);
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
 //        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +

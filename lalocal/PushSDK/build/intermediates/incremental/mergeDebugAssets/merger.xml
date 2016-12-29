@@ -1,10 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<<<<<<< HEAD
-<<<<<<< HEAD
-<merger version="3"><dataSet config="main"><source path="D:\Git_lalocal\lalocal\PushSDK\assets"/><source path="D:\Git_lalocal\lalocal\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\Git_lalocal\lalocal\PushSDK\build-types\debug\assets"/></dataSet></merger>
-=======
 <merger version="3"><dataSet config="main"><source path="D:\lalocal\lalocal\PushSDK\assets"/><source path="D:\lalocal\lalocal\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="D:\lalocal\lalocal\PushSDK\build-types\debug\assets"/></dataSet></merger>
->>>>>>> bcd2c9f0999edf1d094d56a0815da4dd92779729
-=======
-<merger version="3"><dataSet config="main"><source path="E:\workspace\AndroidStudio\lalocal_Android\lalocal\PushSDK\assets"/><source path="E:\workspace\AndroidStudio\lalocal_Android\lalocal\PushSDK\build\generated\assets\shaders\debug"/></dataSet><dataSet config="debug"><source path="E:\workspace\AndroidStudio\lalocal_Android\lalocal\PushSDK\build-types\debug\assets"/></dataSet></merger>
->>>>>>> f812acfbb0f5b5f9ec8f396ed148b28a4dbbdac1

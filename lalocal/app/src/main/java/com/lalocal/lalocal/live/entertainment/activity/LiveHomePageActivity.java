@@ -231,6 +231,7 @@ public class LiveHomePageActivity extends BaseActivity {
                     if ("关注".equals(text)) {
                         contentLoader.getAddAttention(userId);
                     } else {
+                        AppLog.i("TAG","显示取消。。。。。");
                         showAttentionPopuwindow(userId);
                     }
                 } else {
@@ -362,30 +363,18 @@ public class LiveHomePageActivity extends BaseActivity {
 
 
             if (result.getRole() == 1) {
-            /*    userpageVerified.setText("专栏作者");
-                userpageVerified.setTextColor(Color.WHITE);
-                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));*/
                 isAuthor = true;
                 userpageAuthorTag.setVisibility(View.VISIBLE);
-            //    userpageVerified.setVisibility(View.GONE);
                 // 显示文章
                 layoutArticlePart.setVisibility(View.VISIBLE);
             } else if (result.getRole() == -1) {
-           /*     userpageVerified.setText("管理员");
-                userpageVerified.setTextColor(Color.WHITE);
-                userpageVerified.setBackgroundColor(Color.parseColor("#ffaa2a"));*/
 
                 isAuthor = false;
                 userpageAuthorTag.setVisibility(View.GONE);
-            //    userpageVerified.setVisibility(View.VISIBLE);
                 // 隐藏文章
                 layoutArticlePart.setVisibility(View.GONE);
             } else {
-            /*    userpageVerified.setText("未验证");
-                userpageVerified.setTextColor(Color.BLACK);
-                userpageVerified.setBackgroundColor(Color.parseColor("#999999"));*/
                 userpageAuthorTag.setVisibility(View.GONE);
-              //  userpageVerified.setVisibility(View.VISIBLE);
                 isAuthor = false;
                 // 隐藏文章
                 layoutArticlePart.setVisibility(View.GONE);
@@ -406,23 +395,19 @@ public class LiveHomePageActivity extends BaseActivity {
                     masterAttention.setEnabled(true);
                     masterIm.setEnabled(false);
                     masterAttention.setText("关注");
-//                    masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
 
                 } else if (status == 1) {
-                    AppLog.print("status:1");
-                    masterAttention.setEnabled(false);
+                    masterAttention.setEnabled(true);
                     masterIm.setEnabled(true);
+                    masterIm.setText("私信");
                     masterAttention.setText("已关注");
-//                    masterAttention.setTextColor(Color.BLACK);
                 } else if (status == 2) {
-                    AppLog.print("status:2");
-                    masterAttention.setEnabled(false);
+                    masterAttention.setEnabled(true);
                     masterIm.setEnabled(true);
+                    masterIm.setText("私信");
                     masterAttention.setText("已相互关注");
-//                    masterAttention.setTextColor(Color.BLACK);
                 }
             } else {
-                // Toast.makeText(LiveHomePageActivity.this,"status为空",Toast.LENGTH_SHORT).show();
             }
 
         }
@@ -435,19 +420,19 @@ public class LiveHomePageActivity extends BaseActivity {
                 if (status == 1) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已关注");
-                    masterAttention.setEnabled(false);
+                    masterAttention.setEnabled(true);
                     masterIm.setEnabled(true);
+                    masterIm.setText("私信");
                     fansNum = fansNum + 1;
                     userpageFansNum.setText(String.valueOf(fansNum));
-//                    masterAttention.setTextColor(Color.BLACK);
                 } else if (status == 2) {
                     Toast.makeText(LiveHomePageActivity.this, "关注成功", Toast.LENGTH_SHORT).show();
                     masterAttention.setText("已相互关注");
-                    masterAttention.setEnabled(false);
+                    masterAttention.setEnabled(true);
                     masterIm.setEnabled(true);
+                    masterIm.setText("私信");
                     fansNum = fansNum + 1;
                     userpageFansNum.setText(String.valueOf(fansNum));
-//                    masterAttention.setTextColor(Color.BLACK);
                 }
             }
         }
@@ -461,7 +446,7 @@ public class LiveHomePageActivity extends BaseActivity {
                 masterAttention.setText("关注");
                 masterAttention.setEnabled(true);
                 masterIm.setEnabled(false);
-//                masterAttention.setTextColor(Color.parseColor("#ffaa2a"));
+                masterIm.setText("私信(需关注)");
                 fansNum = fansNum - 1;
                 userpageFansNum.setText(String.valueOf(fansNum));
             }

@@ -39,6 +39,7 @@ import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.LiveHistoryItem;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.adapter.LocationHistoryAdapter;
 import com.lalocal.lalocal.view.decoration.LinearItemDecoration;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
@@ -199,13 +200,13 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 String errorInfo = loc.getErrorInfo();
                 if("success".equals(errorInfo)){
                     //解析定位结果
-                    LiveActivity.locationY=true;
+                    CommonUtil.LOCATION_Y=true;
                     latitude = loc.getLatitude();
                     longitude = loc.getLongitude();
-                    LiveActivity.latitude=String.valueOf(latitude);
-                    LiveActivity.latitude=String.valueOf(longitude);
+                    CommonUtil.LATITUDE=String.valueOf(latitude);
+                    CommonUtil.LONGITUDE=String.valueOf(longitude);
                     String result = loc.getCountry() + "·" + loc.getProvince() + "·" + loc.getCity();
-                    LiveActivity.liveLocation=result;
+                    CommonUtil.LOCATION_RESULT=result;
                     locationInfo=result;
                     liveLocationTv.setText("当前地位: " + result);
                     AppLog.i("TAG", "获取详细地理位置信息" + loc.getAddress() + "    " + loc.getAoiName());
@@ -213,7 +214,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     locationPoi(loc.getAoiName(), loc.getCity());
                 }else {
                     liveLocationTv.setText("定位失败!");
-                    LiveActivity.liveLocation="Lalocal神秘之地";
+                  //  CommonUtil.LOCATION_Y=false;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -304,16 +305,15 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
             public void onItemClickListener(View view, int position) {
                 Intent intent = new Intent();
                 String text = (String) view.getTag();
-                LiveActivity.liveLocation = text;
+                CommonUtil.LOCATION_RESULT = text;
                 locationInfo=text;
                 intent.putExtra(KeyParams.POST_GET_LOCATION,text);
-                LiveActivity.locationY=true;
+                CommonUtil.LOCATION_Y=true;
                 try{
                     List<LiveHistoryItem> all = DataSupport.findAll(LiveHistoryItem.class);
                     if(all!=null&&all.size()>0){
                         for(LiveHistoryItem historyItem: all){
                             if(historyItem.getName().equals(text.trim())){
-
                                 setResult(KeyParams.LOCATION_RESULTCODE,intent);
                                 finish();
                                 return;
@@ -325,7 +325,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 }
 
                 LiveHistoryItem item = new LiveHistoryItem();
-                item.setName(LiveActivity.liveLocation);
+                item.setName(CommonUtil.LOCATION_RESULT);
                 item.save();
                 setResult(KeyParams.LOCATION_RESULTCODE,intent);
                 finish();
@@ -354,8 +354,8 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 intent=new Intent();
                 intent.putExtra(KeyParams.POST_GET_LOCATION,trim);
                 if(trim.length()>0){
-                    LiveActivity.locationY=true;
-                    LiveActivity.liveLocation =trim;
+                    CommonUtil.LOCATION_Y=true;
+                    CommonUtil.LOCATION_RESULT =trim;
                     try{
                         List<LiveHistoryItem> all = DataSupport.findAll(LiveHistoryItem.class);
                         if(all!=null&&all.size()>0){
@@ -368,7 +368,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                             }
                         }
                         LiveHistoryItem item = new LiveHistoryItem();
-                        item.setName(LiveActivity.liveLocation);
+                        item.setName(CommonUtil.LOCATION_RESULT);
                         item.save();
                     }catch (Exception e){
                         e.printStackTrace();
@@ -376,7 +376,7 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                     setResult(KeyParams.LOCATION_RESULTCODE,intent);
                     finish();
                 }else{
-                    LiveActivity.locationY=false;
+                    CommonUtil.LOCATION_Y=false;
                     Toast.makeText(this,"请输入地址!",Toast.LENGTH_SHORT).show();
                 }
                 break;
