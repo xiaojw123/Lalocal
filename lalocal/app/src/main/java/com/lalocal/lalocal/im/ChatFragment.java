@@ -346,7 +346,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             @Override
             public void run() {
-                // // TODO Auto-generated method stub
                 try {
                     String GalPicPath = getSavePicPath();
                     Bitmap bitmap = PictureUtil.compressSizeImage(path);
@@ -365,14 +364,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
 
-    private String getSavePicPath() {
-        final String dir = FileSaveUtil.SD_CARD_PATH + "image_data/";
-        try {
-            FileSaveUtil.createSDDirectory(dir);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    private String getSavePicPath() throws IOException {
+        String dir = FileSaveUtil.SD_CARD_PATH + "image_data/";
+        FileSaveUtil.createSDDirectory(dir);
         String fileName = String.valueOf(System.currentTimeMillis() + ".png");
         return dir + fileName;
     }
@@ -479,7 +473,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         msgAdapter.updateItems(mMessageList);
         AppLog.print("scrollToPosition__");
         if (isRoot) {
-            isRoot=false;
+            isRoot = false;
             layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
         }
     }
@@ -560,7 +554,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public void resetOpView() {
-        if (moreOpLayout.getVisibility() == View.VISIBLE) {
+        if (moreOpLayout!=null&&moreOpLayout.getVisibility() == View.VISIBLE) {
             moreOpLayout.setVisibility(View.GONE);
         }
         if (isSoftKeyShow) {

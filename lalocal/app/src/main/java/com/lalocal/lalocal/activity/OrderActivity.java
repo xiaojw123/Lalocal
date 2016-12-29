@@ -35,6 +35,8 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
+import static com.lalocal.lalocal.R.id.orderdetail_contact_email_tv;
+
 public class OrderActivity extends BaseActivity implements View.OnClickListener, CustomTitleView.onBackBtnClickListener {
     private LinearLayout travel_people_container;
     private LinearLayout pay_money_container;
@@ -61,6 +63,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     /*补充信息模块 问题1 问题2。。动态添加*/
     //容器
     private LinearLayout additional_info_llt;
+    //接送机
+    private LinearLayout pickup_info_llt;
 
     //接送时间
 //    private TextView shuttle_time_tv;
@@ -87,9 +91,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     CustomTitleView order_title_ctv;
     /*    附加信息*/
     FrameLayout shuttle_up_container, remark_cotainer, language_cotainer;
+    FrameLayout fligtnum_fl, fromaddress_fl, toaddress_fl, usetime_fl, usedur_fl, usecount_fl, usetye_fl;
     //接送地点
     private TextView shuttle_setup_tv, remark_tv, language_tv;
     boolean isCancelOrder;
+    RelativeLayout travleInfoCotainer;
+    TextView wechatTv;
 
 
     @Override
@@ -115,6 +122,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         contentView = LayoutInflater.from(this).inflate(R.layout.orderdetail_more_operation, null);
         cancel_order_tv = (TextView) contentView.findViewById(R.id.morefunction_cancel_order);
         customer_service_tv = (TextView) contentView.findViewById(R.id.morefunction_customer_sevice);
+        wechatTv = (TextView) findViewById(R.id.orderdetail_contact_wechat_tv);
+        travleInfoCotainer = (RelativeLayout) findViewById(R.id.travel_info_container);
         shuttle_up_container = (FrameLayout) findViewById(R.id.orderdetail_shuttle_setup_container);
         remark_cotainer = (FrameLayout) findViewById(R.id.orderdetail_remark_container);
         language_cotainer = (FrameLayout) findViewById(R.id.orderdetail_language_container);
@@ -128,9 +137,19 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         mOrderPayContainer = (LinearLayout) findViewById(R.id.order_pay_container);
         toalinfo_container = (LinearLayout) findViewById(R.id.order_toalinfo_container);
         additional_info_llt = (LinearLayout) findViewById(R.id.orderdetail_additional_info_container);
+        pickup_info_llt = (LinearLayout) findViewById(R.id.orderdetail_pickup_info_container);
+        fligtnum_fl = (FrameLayout) findViewById(R.id.orderdetail_fightnum_container);
+        fromaddress_fl = (FrameLayout) findViewById(R.id.orderdetail_fromaddress_container);
+        toaddress_fl = (FrameLayout) findViewById(R.id.orderdetail_toaddress_container);
+        usetime_fl = (FrameLayout) findViewById(R.id.orderdetail_usetime_container);
+        usedur_fl = (FrameLayout) findViewById(R.id.orderdetail_useduration_container);
+        usetye_fl = (FrameLayout) findViewById(R.id.orderdetail_usetype_container);
+        usecount_fl = (FrameLayout) findViewById(R.id.orderdetail_usecount_container);
+
+
         contact_name_tv = (TextView) findViewById(R.id.orderdetail_contact_name_tv);
         contact_phone_tv = (TextView) findViewById(R.id.orderdetail_contact_phone_tv);
-        contact_email_tv = (TextView) findViewById(R.id.orderdetail_contact_email_tv);
+        contact_email_tv = (TextView) findViewById(orderdetail_contact_email_tv);
         mTravelPersonContainer = (FrameLayout) findViewById(R.id.order_person_container);
         more_function_img = (ImageView) findViewById(R.id.order_more_img);
         evalute_btn = (Button) findViewById(R.id.order_immediately_evaluate_btn);
@@ -228,7 +247,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 break;
         }
     }
-
 
 
     public void showPopWindow() {
@@ -408,13 +426,68 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         if (productList != null && productList.size() > 0) {
             OrderDetail.ProduItemListBean item = productList.get(0);
             if (item != null) {
-                packages_tv.setText(item.getName());
+                String name = item.getName();
+                if (!TextUtils.isEmpty(name)) {
+                    packages_tv.setText(name);
+                }
             }
 
         }
 
         showAdddtionInfo();
+        shoWPickupInfo();
+    }
 
+    private void shoWPickupInfo() {
+        OrderDetail.OrderPickUpVO orderPickUpVO = mOrderDetail.getOrderPickUpVO();
+        if (orderPickUpVO != null) {
+            travleInfoCotainer.setVisibility(View.GONE);
+            pickup_info_llt.setVisibility(View.VISIBLE);
+            String fightNum = orderPickUpVO.getFightNum();
+            String fromAddress = orderPickUpVO.getFromCityAddress();
+            String toAddress = orderPickUpVO.getToCityAddress();
+            String usetime = orderPickUpVO.getUseTime();
+            String useDur = orderPickUpVO.getUseDuration();
+            String usecount = orderPickUpVO.getCarCount();
+            String useType = mOrderDetail.getName();
+            if (!TextUtils.isEmpty(fightNum)) {
+                fromaddress_fl.setVisibility(View.VISIBLE);
+                setPickChildText(fromaddress_fl, fightNum);
+            }
+            if (!TextUtils.isEmpty(fromAddress)) {
+                fromaddress_fl.setVisibility(View.VISIBLE);
+                setPickChildText(fromaddress_fl, fromAddress);
+            }
+            if (!TextUtils.isEmpty(toAddress)) {
+                toaddress_fl.setVisibility(View.VISIBLE);
+                setPickChildText(toaddress_fl, toAddress);
+            }
+            if (!TextUtils.isEmpty(usetime)) {
+                usetime_fl.setVisibility(View.VISIBLE);
+                setPickChildText(usetime_fl, usetime);
+            }
+
+            if (!TextUtils.isEmpty(useDur)) {
+                usedur_fl.setVisibility(View.VISIBLE);
+                setPickChildText(usedur_fl, useDur + "天");
+            }
+            if (!TextUtils.isEmpty(usecount)) {
+                usecount_fl.setVisibility(View.VISIBLE);
+                setPickChildText(usecount_fl, usecount + "辆");
+            }
+            if (!TextUtils.isEmpty(useType)) {
+                usetye_fl.setVisibility(View.VISIBLE);
+                setPickChildText(usetye_fl, useType);
+            }
+
+        }
+
+
+    }
+
+    public void setPickChildText(FrameLayout container, String text) {
+        TextView childTv = (TextView) container.getChildAt(1);
+        childTv.setText(text);
     }
 
     private void showAdddtionInfo() {
@@ -476,9 +549,22 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void updateModuleContacts() {
-        contact_name_tv.setText(mOrderDetail.getUserName());
-        contact_phone_tv.setText(mOrderDetail.getPhone());
-        contact_email_tv.setText(mOrderDetail.getEmail());
+        String contactName = mOrderDetail.getUserName();
+        String phone = mOrderDetail.getPhone();
+        String email = mOrderDetail.getEmail();
+        String wechat = mOrderDetail.getWechat();
+        setContactsView(contact_name_tv, contactName);
+        setContactsView(contact_phone_tv, phone);
+        setContactsView(contact_email_tv, email);
+        setContactsView(wechatTv, wechat);
+    }
+
+    public void setContactsView(TextView contactTv, String text) {
+        if (!TextUtils.isEmpty(text)) {
+            contactTv.setText(text);
+        } else {
+            ((ViewGroup) contactTv.getParent()).setVisibility(View.GONE);
+        }
     }
 
     private void setCoupon(double couponValue) {
@@ -599,8 +685,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_15_sp));
                         textView.setSingleLine();
                         textView.setEllipsize(TextUtils.TruncateAt.END);
-                        String sName="";
-                        String sValue="";
+                        String sName = "";
+                        String sValue = "";
                         for (OrderDetail.PeopleItemListBean.ContactInfoListBean.ItemListBean item : itemList) {
                             String code = item.getCode();
                             int type = item.getType();
@@ -619,14 +705,14 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                                     container.addView(leadImg);
                                 }
                             } else {
-                                if (type==9) {
-                                    sName=item.getValue();
-                                } else if (type==5) {
-                                    sValue=item.getValue();
+                                if (type == 9) {
+                                    sName = item.getValue();
+                                } else if (type == 5) {
+                                    sValue = item.getValue();
                                 }
                             }
                         }
-                        textView.setText(sName+"  "+sValue);
+                        textView.setText(sName + "  " + sValue);
                         if (container != null) {
                             textView.setTextColor(getResources().getColor(R.color.color_ffaa2a));
                             travel_people_container.addView(container, 2);

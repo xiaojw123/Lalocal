@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -23,6 +24,7 @@ public class BookActivity extends BaseActivity {
     public static final String PAGE_BACK_PRODUCT_DETAIL = "backProdutionDetail";
     public static final String PAGE_TO_PAY = "orderIdCallBack";
     public static final String PAGET_TO_COUPON = "couponCallBack";
+    public static final String PAGET_TO_COUPON_PAY_DONE = "couponsJumpToPayDone";
     public static final int RESULT_COUPON_SELECTED = 0x12;
     WebView mPreOrderWv;
     View loadPage;
@@ -41,7 +43,6 @@ public class BookActivity extends BaseActivity {
         mPreOrderWv.setWebViewClient(new PreWebClient());
         mPreOrderWv.addJavascriptInterface(new JsInterface(this), "webkit");
         WebSettings ws = mPreOrderWv.getSettings();
-        ws.setCacheMode(WebSettings.LOAD_NO_CACHE);
         ws.setJavaScriptEnabled(true);
         ws.setJavaScriptCanOpenWindowsAutomatically(true);
         ws.setUseWideViewPort(true);
@@ -49,7 +50,11 @@ public class BookActivity extends BaseActivity {
         ws.setAllowFileAccess(true); // 允许访问文件
         ws.setLoadWithOverviewMode(true);
         ws.setDisplayZoomControls(false);
-        mPreOrderWv.loadUrl(AppConfig.getH5Url(this,url));
+        ws.setBlockNetworkImage(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        mPreOrderWv.loadUrl(AppConfig.getH5Url(this, url));
 //        url = "http://www.jianshu.com/p/8bc9a4af771f";
     }
 
@@ -58,7 +63,7 @@ public class BookActivity extends BaseActivity {
         public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
             AppLog.print("alert__" + message);
             if (!TextUtils.isEmpty(message)) {
-                CustomDialog dialog=new CustomDialog(BookActivity.this);
+                CustomDialog dialog = new CustomDialog(BookActivity.this);
                 dialog.setTitle("提示");
                 dialog.setMessage(message);
                 dialog.setNeturalBtn("确定", new CustomDialog.CustomDialogListener() {
@@ -78,7 +83,7 @@ public class BookActivity extends BaseActivity {
         public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
             AppLog.print("onJsConfirm____");
             if (!TextUtils.isEmpty(message)) {
-                CustomDialog dialog=new CustomDialog(BookActivity.this);
+                CustomDialog dialog = new CustomDialog(BookActivity.this);
                 dialog.setTitle("提示");
                 dialog.setMessage(message);
                 dialog.setSurceBtn("确定", new CustomDialog.CustomDialogListener() {
@@ -140,17 +145,15 @@ public class BookActivity extends BaseActivity {
                 } else {
                     view.loadUrl(url);
                 }
-
-
             }
-            return true;
+            return super.shouldOverrideUrlLoading(view,url);
         }
 
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        AppLog.print("keyDown__keycode___"+keyCode);
+        AppLog.print("keyDown__keycode___" + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK && mPreOrderWv.canGoBack()) {
             AppLog.print("keyBack___webview goback");
             mPreOrderWv.goBack();
@@ -163,14 +166,14 @@ public class BookActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_COUPON_SELECTED) {
-            String params="";
-            if (data!=null){
-                params=data.getStringExtra("selectedCoupons");
-            }else{
-                params="[]";
+            String params = "";
+            if (data != null) {
+                params = data.getStringExtra("selectedCoupons");
+            } else {
+                params = "[]";
             }
             String js = String.format("javascript:backOrderWeb(%1$s)", params);
-            AppLog.print("book___js_____"+js);
+            AppLog.print("book___js_____" + js);
             mPreOrderWv.loadUrl(js);
         } else if (resultCode == PayActivity.RESULT_BACK_PRODUCT) {
             finish();

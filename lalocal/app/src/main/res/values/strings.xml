@@ -207,6 +207,7 @@
     <string name="view_order">查看订单</string>
     <string name="contacts">联系人</string>
     <string name="supplementary_information">补充信息</string>
+    <string name="pickup_service">接机服务</string>
     <string name="shuttle_location">接送地点</string>
     <string name="shuttle_time">接送时间</string>
     <string name="language_of_guide">导游语言</string>

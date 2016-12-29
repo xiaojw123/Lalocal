@@ -48,6 +48,7 @@ public class PraiseCommentActivity extends BaseActivity implements XRecyclerView
 
     }
 
+
     @Override
     protected void onStart() {
         AppLog.print("onStart_____");

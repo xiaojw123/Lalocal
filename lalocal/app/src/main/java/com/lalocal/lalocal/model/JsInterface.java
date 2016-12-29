@@ -8,6 +8,7 @@ import android.webkit.JavascriptInterface;
 import com.lalocal.lalocal.activity.BookActivity;
 import com.lalocal.lalocal.activity.MyCouponActivity;
 import com.lalocal.lalocal.activity.PayActivity;
+import com.lalocal.lalocal.activity.PayCompleteActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.util.AppLog;
 
@@ -26,19 +27,33 @@ public class JsInterface {
         AppLog.print("postMessage@param  callback:" + callback + "\nmessage:" + message);
         switch (callback){
             case BookActivity.PAGE_TO_PAY:
-                Intent intent=new Intent(mContext,PayActivity.class);
-                intent.putExtra(PayActivity.ORDER_ID,Integer.parseInt(message));
-                intent.putExtra(KeyParams.ACTION_TYPE,KeyParams.ACTION_BOOK);
-//                ((Activity)mContext).startActivityForResult(intent,100);
-                mContext.startActivity(intent);
-                ((Activity)mContext).finish();
+                gotoPay(message);
                 break;
             case BookActivity.PAGET_TO_COUPON:
                 //TODO:优惠券影响预定流程
                 gotoMyCoupon(message);
                 break;
+            case BookActivity.PAGET_TO_COUPON_PAY_DONE:
+                gotoPayComplete(message);
+                break;
         }
 
+    }
+
+    private void gotoPay(String message) {
+        Intent intent=new Intent(mContext,PayActivity.class);
+        intent.putExtra(PayActivity.ORDER_ID,Integer.parseInt(message));
+        intent.putExtra(KeyParams.ACTION_TYPE,KeyParams.ACTION_BOOK);
+//                ((Activity)mContext).startActivityForResult(intent,100);
+        mContext.startActivity(intent);
+        ((Activity)mContext).finish();
+    }
+
+    private void gotoPayComplete(String orderId) {
+        Intent intent=new Intent(mContext, PayCompleteActivity.class);
+        intent.putExtra(KeyParams.ORDER_ID,Integer.parseInt(orderId));
+        mContext.startActivity(intent);
+        ((Activity)mContext).finish();
     }
 
 
@@ -64,5 +79,6 @@ public class JsInterface {
         intent.putExtra(MyCouponActivity.PRODUCTION_ID,productionId);
         ((Activity)mContext).startActivityForResult(intent,KeyParams.REQUEST_CODE);
     }
+
 
 }

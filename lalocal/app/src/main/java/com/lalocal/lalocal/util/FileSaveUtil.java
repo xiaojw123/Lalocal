@@ -327,7 +327,7 @@ public class FileSaveUtil {
         else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
-        return null;
+        return "";
     }
 
     @SuppressLint("NewApi")

@@ -61,7 +61,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     @BindView(R.id.home_tab_find_selected)
     View mTabFindSelected;
     @BindView(R.id.home_unread_tv)
-    TextView unReadTv;
+    public TextView unReadTv;
 
     public static final String VERSION_RESULT = "version_result";
     ViewGroup lastSelectedTab;

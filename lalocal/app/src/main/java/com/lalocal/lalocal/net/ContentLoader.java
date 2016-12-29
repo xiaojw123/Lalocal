@@ -20,7 +20,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobHelper;
@@ -50,7 +49,6 @@ import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
 import com.lalocal.lalocal.model.CmbPay;
 import com.lalocal.lalocal.model.CommentOperateResp;
-import com.lalocal.lalocal.model.CommentRowBean;
 import com.lalocal.lalocal.model.CommentsResp;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ConsumeRecord;
@@ -187,6 +185,7 @@ public class ContentLoader {
             response = new ContentResponse(GET_MESSAGE_COUNT);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMessageCount(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
     }
 
@@ -3883,12 +3882,6 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
-        if (MyApplication.isDebug) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                AppLog.print("loginHeadParams:key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
-            }
-        }
-
         return map;
 
     }
