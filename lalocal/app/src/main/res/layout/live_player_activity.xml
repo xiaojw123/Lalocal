@@ -159,7 +159,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="17dp"
                         android:layout_toRightOf="@+id/live_master_info_layout"
-                        android:background="@drawable/live_emcee_info_shape"
+                        android:visibility="gone"
                         >
                         <ImageView
                             android:id="@+id/network_hint_iv"
@@ -179,6 +179,7 @@
                             android:drawableLeft="@drawable/livecrown_16"
                             android:drawableRight="@drawable/livecrown_arrow"
                             android:text="@string/live_ranking_list"
+                            android:visibility="gone"
                             />
                     </RelativeLayout>
                     <ImageView
@@ -223,7 +224,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_toLeftOf="@+id/live_telecast_top_setting"
-                        android:paddingRight="@dimen/dimen_size_30_dp"
+                        android:paddingRight="@dimen/dimen_size_15_dp"
                         android:src="@drawable/live_message"
                         />
 

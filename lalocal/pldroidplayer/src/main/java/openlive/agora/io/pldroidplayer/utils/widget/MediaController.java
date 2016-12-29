@@ -347,7 +347,7 @@ public class MediaController extends FrameLayout implements IMediaController,Vie
                     .toString();
         }
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         show(sDefaultTimeout);

@@ -183,6 +183,16 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                             mContext.startActivity(intent);
                         }
                     });
+                    videoInfoHolder.palyBackByHeadIv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // 去个人页面
+                            Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+                            intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
+                            mContext.startActivity(intent);
+                        }
+                    });
+
                 }
                 break;
             case REVIEW_TITLE:
@@ -192,7 +202,6 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                     @Override
                     public void onClick(View v) {
                         // 去编辑评论页面
-
                         if(UserHelper.isLogined(mContext)){
                             Intent intent = new Intent(mContext, RePlyActivity.class);
                             Bundle bundle = new Bundle();
@@ -214,7 +223,11 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
                 break;
             case REVIEW_LIST:
                 if(reviewRows.size()==0){
-                    ReplyNull replyNull=(ReplyNull)holder;
+                    try {
+                        ReplyNull replyNull=(ReplyNull)holder;
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 }else{
                     ReviewHolder reviewHolder = (ReviewHolder) holder;
                     final PlayBackReviewRowsBean playBackReviewRowsBean = reviewRows.get(getPosition(position));

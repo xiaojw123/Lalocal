@@ -89,10 +89,6 @@ public class CustomOtherFunctionDialog extends BaseDialog {
             contentLoader.getLiveManagerList(channelId);//查看管理员列表
         }
 
-        if (role==1){//主播
-
-
-        }
     }
 
     private int managerResult;
@@ -199,9 +195,11 @@ public class CustomOtherFunctionDialog extends BaseDialog {
                         isMuted = true;
                         sendMessage("禁言",MessageType.ban);
                     }
+                dismiss();
                 break;
             case R.id.live_other_function_report:
                 toReportActivity();
+                dismiss();
                 break;
             case R.id.live_other_function_bottom:
                 if (role == 1) {//主播
@@ -268,6 +266,7 @@ public class CustomOtherFunctionDialog extends BaseDialog {
                     }
 
                 }
+                dismiss();
                 break;
         }
 
@@ -329,7 +328,10 @@ public class CustomOtherFunctionDialog extends BaseDialog {
 
         if (role == 1) {//主播端
             contentLoader.checkUserIdentity(channelId, userId);//查看用户是否为管理员
-
+            liveOtherFunctionCommon.setVisibility(View.VISIBLE);
+            liveOtherFunctionBottomLayout.setVisibility(View.VISIBLE);
+            liveOtherFunctionBottom.setText("设置管理员");
+            liveOtherFunctionCommon.setTextColor(mContext.getResources().getColor(R.color.color_fe3824));
         } else if (role == 2) {//超级管理员
             checkMute(result.getAccId());
             liveOtherFunctionBottomLayout.setVisibility(View.VISIBLE);

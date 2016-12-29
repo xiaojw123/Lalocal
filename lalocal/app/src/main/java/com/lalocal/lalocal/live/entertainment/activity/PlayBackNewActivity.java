@@ -355,7 +355,6 @@ public class PlayBackNewActivity extends BaseActivity {
         @Override
         public void inputPrivate() {
             //TODO 私信主播
-
             mMediaController.setHideContro();
             FragmentManager fm = getFragmentManager();
             ft = fm.beginTransaction();
