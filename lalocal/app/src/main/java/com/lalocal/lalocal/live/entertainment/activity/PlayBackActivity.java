@@ -127,17 +127,11 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == KeyParams.REPLY_REQUESTCODE && resultCode == KeyParams.REPLY_RESULTCODE) {
-            if(allRows!=null){
-                allRows.clear();
-            }
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
 
         if(requestCode==KeyParams.POST_REQUESTCODE&&resultCode==KeyParams.POST_RESULTCODE){
-            if(allRows!=null){
-                allRows.clear();
-            }
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
@@ -368,17 +362,19 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
     }
 
 
-
+    boolean isRefresh=false;
     public class XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
         @Override
         public void onRefresh() {
             allRows.clear();
+            isRefresh=true;
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
 
         @Override
         public void onLoadMore() {
+            isRefresh=false;
             AppLog.i("TAG", "粉红色咖啡壶咖啡哈咖啡很多坑：" + pageNumber + "      totalPages:" + totalPages);
             if (totalPages != 0 && pageNumber == totalPages) {
                 xRecyclerView.setNoMore(true);
@@ -403,6 +399,7 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
                 if (TextUtils.equals(message, "success")) {
                     Toast.makeText(PlayBackActivity.this, "评论删除成功", Toast.LENGTH_SHORT).show();
                     // 请求评论
+                    isRefresh=true;
                     contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
                     return;
                 }
@@ -497,6 +494,9 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
                 List<PlayBackReviewRowsBean> rows = reviewResultBean.getRows();
                 totalRows = reviewResultBean.getTotalRows();
                 playBackBottomTableReplyCount.setText(String.valueOf(totalRows));
+                if(isRefresh){
+                    allRows.clear();
+                }
                 if (rows == null) {
                     reviewRefresh = true;
                     if (detailsRefresh) {
