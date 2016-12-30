@@ -449,7 +449,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
             NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.P2P);
         }
-
     }
 
 

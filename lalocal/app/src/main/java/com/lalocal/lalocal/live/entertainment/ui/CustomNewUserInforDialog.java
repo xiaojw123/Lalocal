@@ -233,6 +233,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                     userinfoBottomLeft.setEnabled(true);
                     if (isMaster) {
                         sendMessage(getContext().getString(R.string.attention_live_e), MessageType.text);
+                        LiveConstant.isAttention=true;
                     }
                 } else if (userStatus == 2) {
                     ++fansNum;
@@ -243,6 +244,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
                     userinfoBottomLeft.setEnabled(true);
                     if (isMaster) {
                         sendMessage(getContext().getString(R.string.attention_live_e), MessageType.text);
+                        LiveConstant.isAttention=true;
                     }
                 }
             }

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/live_padding_10dp"
-    android:paddingRight="3dp"
     android:paddingTop="3dp"
     android:paddingBottom="3dp"
    >

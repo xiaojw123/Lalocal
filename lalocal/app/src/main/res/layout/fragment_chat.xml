@@ -8,8 +8,6 @@
     android:background="@color/color_faf8f3"
     android:orientation="vertical"
     tools:context="com.lalocal.lalocal.im.ChatActivity">
-
-
     <FrameLayout
         android:id="@+id/chat_title_container"
         android:layout_width="match_parent"

@@ -62,19 +62,20 @@ public class QiniuUtils {
      * @param token 从服务端获取的token
      * @return 图片是否上传成功
      */
-    public static boolean uploadSimpleFile(String filePath, String fileName, String token) {
-        final boolean[] isSuccess = {false};
+    public static void uploadSimpleFile(String filePath, String fileName, String token, final OnUploadListener listener) {
         UploadManager uploadManager = new UploadManager();
         uploadManager.put(filePath, fileName, token,
                 new UpCompletionHandler() {
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject response) {
                         if (info.statusCode == 200) {
-                            isSuccess[0] = true;
+                            listener.onUploadSuccess(info);
+                        } else {
+                            listener.onUploadFail(info);
                         }
+                        listener.afterUpload(info);
                     }
                 }, null);
-        return isSuccess[0];
     }
 
     public static boolean uploadSimpleFile(byte[] bytesImg, final String fileName, final String token) {
@@ -92,6 +93,12 @@ public class QiniuUtils {
                     }
                 }, null);
         return isSuccess[0];
+    }
+
+    public interface OnUploadListener {
+        void onUploadSuccess(ResponseInfo info);
+        void onUploadFail(ResponseInfo info);
+        void afterUpload(ResponseInfo info);
     }
 
 }

@@ -37,6 +37,9 @@ import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -112,6 +115,8 @@ public class ReportActivity extends BaseActivity {
 
     // 标记当前传第几张图片
     private int mCurUpload = 0;
+    // 标记当前选中要上传的图片
+    private int mCurSelectPic = 0;
 
     // 选中按钮的选中标签
     private int mSelected = 0;
@@ -182,10 +187,10 @@ public class ReportActivity extends BaseActivity {
      * 初始化ContentLoader
      */
     private void initContentLoader() {
-        try{
+        try {
             mContentLoader = new ContentLoader(this);
             mContentLoader.setCallBack(new MyCallBack());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -491,46 +496,103 @@ public class ReportActivity extends BaseActivity {
                 }
 
                 // 获取文件名
-                String fileName = result.getFilename();
+                final String fileName = result.getFilename();
                 // 获取
                 String token = result.getToken();
                 // 获取文件信息对象
-                PhotoInfo photoInfo = mUploadPhotoList.get(mCurUpload);
+                PhotoInfo photoInfo = mUploadPhotoList.get(mCurSelectPic);
+                // 上传下标
+                mCurSelectPic++;
                 // 获取文件路径
                 String filePath = photoInfo.getPhotoPath();
                 AppLog.i("qn", "filePaht is " + filePath);
+
                 // 上传七牛云图片
-                boolean isSuccess = QiniuUtils.uploadSimpleFile(filePath, fileName, token);
-                AppLog.i("qn", "isSuccess " + isSuccess);
-                if (isSuccess) {
-                    // 将文件名称添加到名称数组中
-                    mUploadSuccess.add(fileName);
-                }
-                // 当前上传的图片标记
-                mCurUpload++;
-                // 如果图片上传完毕
-                if (mCurUpload == mUploadPhotoList.size()) {
-                    // 标签重置
-                    mCurUpload = 0;
-                    // 上传成功的图片数量
-                    int picSize = mUploadSuccess.size();
-                    // 将上传成功的图片列表传入数组
-                    mPhotos = new String[picSize];
-                    // 列表转数组
-                    for (int i = 0; i < picSize; i++) {
-                        mPhotos[i] = mUploadSuccess.get(i);
+//                uploadSimpleFile(filePath, fileName, token);
+                QiniuUtils.uploadSimpleFile(filePath, fileName, token, new QiniuUtils.OnUploadListener() {
+                    @Override
+                    public void onUploadSuccess(ResponseInfo info) {
+                        // 将文件名称添加到名称数组中
+                        mUploadSuccess.add(fileName);
                     }
-                    // 清空上传成功的列表
-                    mUploadSuccess.clear();
-                    // 将举报信息上传服务器
-                    mContentLoader.getChannelReport(mReportFrom, mContent, mPhotos, mUserId, mMasterName, mChannelId);
-                }
+
+                    @Override
+                    public void onUploadFail(ResponseInfo info) {
+
+                    }
+
+                    @Override
+                    public void afterUpload(ResponseInfo info) {
+                        // 当前上传的图片标记
+                        mCurUpload++;
+                        // 如果图片上传完毕
+                        if (mCurUpload == mUploadPhotoList.size()) {
+                            // 标签重置
+                            mCurUpload = 0;
+                            mCurSelectPic = 0;
+                            // 上传成功的图片数量
+                            int picSize = mUploadSuccess.size();
+                            // 将上传成功的图片列表传入数组
+                            mPhotos = new String[picSize];
+                            // 列表转数组
+                            for (int i = 0; i < picSize; i++) {
+                                mPhotos[i] = mUploadSuccess.get(i);
+                            }
+                            // 清空上传成功的列表
+                            mUploadSuccess.clear();
+                            // 将举报信息上传服务器
+                            mContentLoader.getChannelReport(mReportFrom, mContent, mPhotos, mUserId, mMasterName, mChannelId);
+                        }
+                    }
+                });
             } else {
                 loading.setVisibility(View.GONE);
                 Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
                 resetReport();
             }
 
+        }
+
+        /**
+         * 上传简单文件
+         *
+         * @param filePath 文件路径
+         * @param fileName 指定上传到七牛云上后图片的文件名，后台获取token的时候有fileName
+         * @param token    从服务端获取的token
+         * @return 图片是否上传成功
+         */
+        public void uploadSimpleFile(String filePath, final String fileName, String token) {
+            UploadManager uploadManager = new UploadManager();
+            uploadManager.put(filePath, fileName, token,
+                    new UpCompletionHandler() {
+                        @Override
+                        public void complete(String key, ResponseInfo info, JSONObject response) {
+                            if (info.statusCode == 200) {
+                                // 将文件名称添加到名称数组中
+                                mUploadSuccess.add(fileName);
+                            }
+                            // 当前上传的图片标记
+                            mCurUpload++;
+                            // 如果图片上传完毕
+                            if (mCurUpload == mUploadPhotoList.size()) {
+                                // 标签重置
+                                mCurUpload = 0;
+                                mCurSelectPic = 0;
+                                // 上传成功的图片数量
+                                int picSize = mUploadSuccess.size();
+                                // 将上传成功的图片列表传入数组
+                                mPhotos = new String[picSize];
+                                // 列表转数组
+                                for (int i = 0; i < picSize; i++) {
+                                    mPhotos[i] = mUploadSuccess.get(i);
+                                }
+                                // 清空上传成功的列表
+                                mUploadSuccess.clear();
+                                // 将举报信息上传服务器
+                                mContentLoader.getChannelReport(mReportFrom, mContent, mPhotos, mUserId, mMasterName, mChannelId);
+                            }
+                        }
+                    }, null);
         }
 
         @Override
@@ -544,13 +606,14 @@ public class ReportActivity extends BaseActivity {
          */
         private void resetReport() {
             mCurUpload = 0;
+            mCurSelectPic = 0;
             loading.setVisibility(View.GONE);
         }
 
         @Override
         public void onGetChannelReport(String json) {
             super.onGetChannelReport(json);
-            AppLog.i("TAG","举报成功："+json);
+            AppLog.i("TAG", "举报成功：" + json);
             try {
                 // json解析
                 JSONObject response = new JSONObject(json);
