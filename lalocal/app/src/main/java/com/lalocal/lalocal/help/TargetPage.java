@@ -14,6 +14,7 @@ import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.me.TargetWebActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
@@ -45,17 +46,22 @@ public class TargetPage {
     }
 
     //优惠券
-    public static void gotoCoupon(Context context,boolean isMessage) {
-        Intent couponIntent = new Intent(context, MyCouponActivity.class);
-        couponIntent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
-        if (isMessage) {
-            couponIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    public static void gotoCoupon(Context context, boolean isMessage) {
+        Intent intent = new Intent();
+        if (UserHelper.isLogined(context)) {
+            intent.setClass(context, MyCouponActivity.class);
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_BACK_NORMAIL);
+            intent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
+            context.startActivity(intent);
+        } else {
+            intent.setClass(context, LLoginActivity.class);
+            intent.putExtra(KeyParams.PAGE_TYPE, PageType.PAGE_BACK_NORMAIL);
+            context.startActivity(intent);
         }
-        context.startActivity(couponIntent);
     }
 
     //回放
-    public static void gotoPlayBack(Context context, String id,boolean isMessage) {
+    public static void gotoPlayBack(Context context, String id, boolean isMessage) {
         Intent intent = new Intent(context, PlayBackActivity.class);
         intent.putExtra("id", id);
         if (isMessage) {
@@ -76,7 +82,7 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoUser(Context context, String targetId,boolean isMessage) {
+    public static void gotoUser(Context context, String targetId, boolean isMessage) {
         Intent intent = new Intent(context, LiveHomePageActivity.class);
         intent.putExtra("userId", targetId);
         if (isMessage) {
@@ -85,7 +91,7 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoProductDetail(Context context, String targetId, String targetType,boolean isMessage) {
+    public static void gotoProductDetail(Context context, String targetId, String targetType, boolean isMessage) {
         Intent intent = new Intent(context, ProductDetailsActivity.class);
         SpecialToH5Bean bean = new SpecialToH5Bean();
         bean.setTargetId(Integer.parseInt(targetId));
@@ -97,7 +103,7 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoSpecialDetail(Context context, String targetId,boolean isMessage) {
+    public static void gotoSpecialDetail(Context context, String targetId, boolean isMessage) {
         Intent intent = new Intent(context, SpecialDetailsActivity.class);
         intent.putExtra("rowId", targetId);
         if (isMessage) {
@@ -107,7 +113,7 @@ public class TargetPage {
     }
 
 
-    public static void gotoArticleDetail(Context context, String targetId,boolean isMessage) {
+    public static void gotoArticleDetail(Context context, String targetId, boolean isMessage) {
         Intent intent = new Intent(context, ArticleActivity.class);
         intent.putExtra("targetID", targetId);
         if (isMessage) {
@@ -116,7 +122,7 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static void gotoRouteDetail(Context context, String targetId,boolean isMessage) {
+    public static void gotoRouteDetail(Context context, String targetId, boolean isMessage) {
         Intent intent = new Intent(context, RouteDetailActivity.class);
         intent.putExtra(RouteDetailActivity.DETAILS_ID, Integer.parseInt(targetId));
         if (isMessage) {
@@ -125,45 +131,49 @@ public class TargetPage {
         context.startActivity(intent);
     }
 
-    public static  void gotoArticleComment(Context context,String targetId){
+    public static void gotoArticleComment(Context context, String targetId) {
         Intent commentIntent = new Intent(context, ArticleCommentActivity.class);
-        commentIntent.putExtra(Constants.KEY_ARTICLE_ID,Integer.parseInt(targetId));
+        commentIntent.putExtra(Constants.KEY_ARTICLE_ID, Integer.parseInt(targetId));
         context.startActivity(commentIntent);
 
     }
 
-    public static void gotoTargetPage(Context context,String targetType,String targetId,String targetUrl,String targetName){
-        if (TextUtils.isEmpty(targetType)){
+    public static void gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName,boolean isMessage) {
+        if (TextUtils.isEmpty(targetType)) {
             return;
         }
         switch (targetType) {
             case TargetType.URL://链接
-                TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
+                gotoWebDetail(context, targetUrl, targetName, isMessage);
                 break;
+            case TargetType.AUTHOR:
             case TargetType.USER://用户
-                TargetPage.gotoUser(context, targetId, true);
+                gotoUser(context, targetId, isMessage);
                 break;
             case TargetType.ARTICLE://文章
             case TargetType.INFORMATION://资讯
-                TargetPage.gotoArticleDetail(context, targetId, true);
+                gotoArticleDetail(context, targetId, isMessage);
                 break;
             case TargetType.PRODUCT://产品
-                TargetPage.gotoProductDetail(context, targetId, targetType, true);
+                gotoProductDetail(context, targetId, targetType, isMessage);
                 break;
             case TargetType.ROUTE://线路
-                TargetPage.gotoRouteDetail(context,targetId, true);
+                gotoRouteDetail(context, targetId, isMessage);
                 break;
             case TargetType.SPECIAL://专题
-                TargetPage.gotoSpecialDetail(context, targetId, true);
+               gotoSpecialDetail(context, targetId, isMessage);
                 break;
             case TargetType.LIVE_VIDEO://直播视频
-                TargetPage.gotoLive(context, targetId, true);
+                gotoLive(context, targetId, isMessage);
                 break;
             case TargetType.LIVE_PALY_BACK://回放
-                TargetPage.gotoPlayBack(context, targetId, true);
+                gotoPlayBack(context, targetId, isMessage);
                 break;
             case TargetType.COMMENT://评论
-                TargetPage.gotoArticleComment(context,targetId);
+                gotoArticleComment(context, targetId);
+                break;
+            case TargetType.COUPON:
+                gotoCoupon(context,isMessage);
                 break;
 
         }

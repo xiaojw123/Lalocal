@@ -52,7 +52,6 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
-import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -150,6 +149,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         chatTv.setTitle(nickName);
         limit = 10;
         isRoot = true;
+        mMessageList.clear();
+        msgAdapter = new MessageListAdapter(mMessageList);
+        mXRecyclerView.setAdapter(msgAdapter);
         loadDataFromRemote(limit);
     }
 
@@ -255,6 +257,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void setOnCloseFragmentClickListener(CloseFragmentClickListener closeFragmentClickListener) {
         this.closeFragmentClickListener = closeFragmentClickListener;
     }
+
 
     public interface CloseFragmentClickListener {
         void closeClick();
@@ -371,33 +374,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return dir + fileName;
     }
 
-    public void sendImg(String sessionId, File file) {
-        AppLog.print("sendImg____sessionId___");
-        // 创建图片消息
-        IMMessage message = MessageBuilder.createImageMessage(
-                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                SessionTypeEnum.P2P, // 聊天类型，单聊或群组
-                file, // 图片文件对象
-                null // 文件显示名字，如果第三方 APP 不关注，可以为 null
-        );
-        NIMClient.getService(MsgService.class).sendMessage(message, false);
-
-    }
-
-    private void sendText(String sessionId, String text) {
-        AppLog.print("sendText ssid___" + sessionId);
-        if (isSoftKeyShow) {
-            KeyboardUtil.hidenSoftKey(mMsgEdit);
-        }
-        // 创建文本消息
-        IMMessage message = MessageBuilder.createTextMessage(
-                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
-                SessionTypeEnum.P2P, // 聊天类型，单聊或群组
-                text);
-// 发送消息。如果需要关心发送结果，可设置回调函数。发送完成时，会收到回调。如果失败，会有具体的错误码。
-        NIMClient.getService(MsgService.class).sendMessage(message, false);
-    }
-
 
     @Override
     public void onGlobalLayout() {
@@ -485,15 +461,20 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     private Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage imMessage) {
-            AppLog.print("msg statut onEvent__");
-            MsgStatusEnum status = imMessage.getStatus();
-            if (status == MsgStatusEnum.success) {
-                AppLog.print("msg statut enum___success__len msg___len__" + mMessageList.size());
-                if (!mMessageList.contains(imMessage)) {
-                    mMessageList.add(imMessage);
-                    msgAdapter.updateItems(mMessageList);
-                }
-            }
+            AppLog.print("msg statut onEvent__imMessageStatus__" + imMessage.getStatus());
+            updateChatMessage(imMessage);
+//            MsgStatusEnum status = imMessage.getStatus();
+//            if (status == MsgStatusEnum.success) {
+////                updateChatMessage(imMessage);
+//                AppLog.print("message send sucess__imstatus_");
+//            } else if (status == MsgStatusEnum.fail) {
+//                AppLog.print("message send failed ");
+////                if (mMessageList.contains(imMessage)) {
+////                    AppLog.print("im message in the msg list__");
+////                    int position=mMessageList.indexOf(imMessage);
+////                    msgAdapter.notifyItemChanged(position);
+////                }
+//            }
         }
     };
     private Observer<List<IMMessage>> incomingMessageObserver =
@@ -554,7 +535,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public void resetOpView() {
-        if (moreOpLayout!=null&&moreOpLayout.getVisibility() == View.VISIBLE) {
+        if (moreOpLayout != null && moreOpLayout.getVisibility() == View.VISIBLE) {
             moreOpLayout.setVisibility(View.GONE);
         }
         if (isSoftKeyShow) {
@@ -606,6 +587,61 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onLoadMore() {
 
     }
+
+    public void sendImg(String sessionId, File file) {
+        AppLog.print("sendImg____ssid:" + sessionId + ", file:" + file);
+        // 创建图片消息
+        if (isSoftKeyShow) {
+            KeyboardUtil.hidenSoftKey(mMsgEdit);
+        }
+        IMMessage message = MessageBuilder.createImageMessage(
+                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                SessionTypeEnum.P2P, // 聊天类型，单聊或群组
+                file, // 图片文件对象
+                null // 文件显示名字，如果第三方 APP 不关注，可以为 null
+        );
+//        updateChatMessage(message);
+        NIMClient.getService(MsgService.class).sendMessage(message, false);
+
+    }
+
+    private void sendText(String sessionId, String text) {
+        AppLog.print("sendText ssid:" + sessionId + ", text:" + text);
+        if (isSoftKeyShow) {
+            KeyboardUtil.hidenSoftKey(mMsgEdit);
+        }
+        // 创建文本消息
+        IMMessage message = MessageBuilder.createTextMessage(
+                sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
+                SessionTypeEnum.P2P, // 聊天类型，单聊或群组
+                text);
+//        updateChatMessage(message);
+        NIMClient.getService(MsgService.class).sendMessage(message, false);
+    }
+
+
+    private void updateChatMessage(IMMessage message) {
+        AppLog.print("ready update message list...");
+        if (!mMessageList.contains(message)) {
+            AppLog.print("message list container current message..." + message);
+            mMessageList.add(message);
+            msgAdapter.setItems(mMessageList);
+            int lastPos = msgAdapter.getItemCount() - 1;
+            AppLog.print("lastPos___" + lastPos);
+            if (lastPos <= 0) {
+                AppLog.print("notify all__");
+                msgAdapter.notifyDataSetChanged();
+            } else {
+                AppLog.print("notify lastPos__");
+                msgAdapter.notifyItemChanged(lastPos);
+            }
+            layoutManager.scrollToPositionWithOffset(lastPos, 0);
+        } else {
+            AppLog.print("updateChatMessage___updateitems__");
+            msgAdapter.updateItems(mMessageList);
+        }
+    }
+
 
     List<IMMessage> lastParams;
     int limit = 10;

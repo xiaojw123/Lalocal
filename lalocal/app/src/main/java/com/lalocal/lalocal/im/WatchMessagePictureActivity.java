@@ -13,7 +13,6 @@ import com.lalocal.lalocal.im.view.ImageGestureListener;
 import com.lalocal.lalocal.im.view.MultiTouchZoomableImageView;
 import com.lalocal.lalocal.live.im.util.media.BitmapDecoder;
 import com.lalocal.lalocal.live.im.util.media.ImageUtil;
-import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -41,11 +40,17 @@ public class WatchMessagePictureActivity extends BaseActivity {
         IMMessage message = (IMMessage) getIntent().getSerializableExtra(IM_MESSAGE);
         FileAttachment fileAttachment = (FileAttachment) message.getAttachment();
         if (fileAttachment != null) {
-            String thumbPath = fileAttachment.getThumbPath();
-            AppLog.print("setThumbnail path_____" + thumbPath);
-            if (!TextUtils.isEmpty(thumbPath)) {
-                Bitmap bitmap = BitmapDecoder.decodeSampledForDisplay(thumbPath);
-                bitmap = ImageUtil.rotateBitmapInNeeded(thumbPath, bitmap);
+            String imgPath = fileAttachment.getPath();
+            if (TextUtils.isEmpty(imgPath)) {
+                imgPath = fileAttachment.getThumbPath();
+            }
+            if (TextUtils.isEmpty(imgPath)) {
+                img.setImageBitmap(ImageUtil.getBitmapFromDrawableRes(R.drawable.androidloading));
+                return;
+            }
+            if (!TextUtils.isEmpty(imgPath)) {
+                Bitmap bitmap = BitmapDecoder.decodeSampledForDisplay(imgPath);
+                bitmap = ImageUtil.rotateBitmapInNeeded(imgPath, bitmap);
                 if (bitmap != null) {
                     img.setImageBitmap(bitmap);
                     return;

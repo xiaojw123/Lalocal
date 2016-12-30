@@ -61,7 +61,7 @@ public class LiveSearchAdapter extends BaseRecyclerAdapter {
                 }
                 DrawableUtils.displayImg(mContext, itemHolder.photoImg, item.getPhoto());
                 String title = item.getTitle();
-                String onlinUserNumb = String.valueOf(item.getOnlineUser());
+                String onlinUserNumb = String.valueOf(item.getOnlineNumber());
                 if (!TextUtils.isEmpty(title)) {
                     itemHolder.titleTv.setText(title);
                 }

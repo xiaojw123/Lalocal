@@ -19,11 +19,11 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_widget);
-        pb=(ProgressButton) findViewById(R.id.progressView);
-        pb2= (ProgressButton) findViewById(R.id.progressView2);
-        pb.setOnClickListener(this);
-        pb2.setOnClickListener(this);
+        setContentView(R.layout.fragment_chat);
+//        pb=(ProgressButton) findViewById(R.id.progressView);
+//        pb2= (ProgressButton) findViewById(R.id.progressView2);
+//        pb.setOnClickListener(this);
+//        pb2.setOnClickListener(this);
 //        TimerTask timerTask = new TimerTask() {
 //            @Override
 //            public void run() {
