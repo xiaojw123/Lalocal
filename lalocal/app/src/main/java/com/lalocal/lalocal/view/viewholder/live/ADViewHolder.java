@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
@@ -113,7 +115,6 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
 //            }
             // 点击跳转
             RecommendAdResultBean recommendAdResultBean = mAdList.get(position);
-            String url = recommendAdResultBean.url;
             int targetType = recommendAdResultBean.targetType;
             int targetId = recommendAdResultBean.targetId;
 
@@ -125,10 +126,15 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_URL: // 链接
-                    AppLog.i("addd", "链接");
-                    intent = new Intent(mContext, CarouselFigureActivity.class);
-                    intent.putExtra("carousefigure", recommendAdResultBean);
-                    mContext.startActivity(intent);
+                    String url = recommendAdResultBean.url;
+                    if (TextUtils.isEmpty(url)) {
+                        Toast.makeText(mContext, "加载链接失败", Toast.LENGTH_SHORT).show();
+                    } else {
+                        AppLog.i("addd", "链接");
+                        intent = new Intent(mContext, CarouselFigureActivity.class);
+                        intent.putExtra("carousefigure", recommendAdResultBean);
+                        mContext.startActivity(intent);
+                    }
                     break;
                 case Constants.TARGET_TYPE_ARTICLE: // 文章
                     AppLog.i("addd", "文章");
