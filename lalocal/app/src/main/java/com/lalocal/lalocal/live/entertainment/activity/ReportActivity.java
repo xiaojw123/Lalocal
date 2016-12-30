@@ -512,9 +512,14 @@ public class ReportActivity extends BaseActivity {
                 if (mCurUpload == mUploadPhotoList.size()) {
                     // 标签重置
                     mCurUpload = 0;
+                    // 上传成功的图片数量
+                    int picSize = mUploadSuccess.size();
                     // 将上传成功的图片列表传入数组
-                    mPhotos = new String[mUploadSuccess.size()];
-                    mPhotos = (String[]) mUploadSuccess.toArray();
+                    mPhotos = new String[picSize];
+                    // 列表转数组
+                    for (int i = 0; i < picSize; i++) {
+                        mPhotos[i] = mUploadSuccess.get(i);
+                    }
                     // 清空上传成功的列表
                     mUploadSuccess.clear();
                     // 将举报信息上传服务器
