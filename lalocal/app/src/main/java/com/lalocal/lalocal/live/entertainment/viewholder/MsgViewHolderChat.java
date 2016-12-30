@@ -249,13 +249,34 @@ public class MsgViewHolderChat extends TViewHolder{
             int length = substring.length();
             Bitmap bitmap = DrawableUtils.loadingBitMap(context,messageToGiftBean.getGiftImage());
         if(bitmap==null){
-            String code = messageToGiftBean.getCode();
-            if(code.equals("001")){
-                drawable = context.getResources().getDrawable(R.drawable.rose1);
-            }else if(code.equals("002")){
-                drawable = context.getResources().getDrawable(R.drawable.boot1);
-            }else if(code.equals("003")){
-                drawable = context.getResources().getDrawable(R.drawable.plane1);
+            switch (messageToGiftBean.getCode()){
+                case LiveConstant.ROSE:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_rose_48);
+                    break;
+                case LiveConstant.GLASSES:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_glasses_48);
+                    break;
+                case LiveConstant.PLAN:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_plane_48);
+                    break;
+                case LiveConstant.FACE:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_face_48);
+                    break;
+                case LiveConstant.TRAVELLINGCASE:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_travellingcase_48);
+                    break;
+                case LiveConstant.STAR:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_start_48);
+                    break;
+                case LiveConstant.FRUIT:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_fruit_48);
+                    break;
+                case LiveConstant.WATER:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_water_48);
+                    break;
+                case LiveConstant.UMBRELLA:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_umbrella_48);
+                    break;
             }
             int i = DensityUtil.dip2px(context, 25);
             drawable.setBounds(0,0,i, i);
