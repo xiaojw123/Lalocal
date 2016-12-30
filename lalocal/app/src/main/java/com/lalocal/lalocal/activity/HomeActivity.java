@@ -117,13 +117,13 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         }
     }
 
-    @OnClick({R.id.home_tab_live, R.id.home_tab_find, R.id.home_tab_me, R.id.home_tab_search})
+    @OnClick({R.id.layout_tab_live, R.id.layout_tab_find, R.id.home_tab_me, R.id.home_tab_search})
     void clickButton(View view) {
         switch (view.getId()) {
-            case R.id.home_tab_live:
+            case R.id.layout_tab_live:
                 showFragment(FRAGMENT_LIVE);
                 break;
-            case R.id.home_tab_find:
+            case R.id.layout_tab_find:
                 showFragment(FRAGMENT_FIND);
                 break;
             case R.id.home_tab_me:
