@@ -77,7 +77,8 @@ public class TAdapter<T> extends BaseAdapter implements IViewReclaimer {
 		holder.setPosition(position);
 
 		if (needRefresh) {
-            try {
+		//	holder.refresh(getItem(position));
+			try {
                 holder.refresh(getItem(position));
             } catch (RuntimeException e) {
                 AppLog.i("TAG", "Tadapter refresh viewholder error. " + e.getMessage());

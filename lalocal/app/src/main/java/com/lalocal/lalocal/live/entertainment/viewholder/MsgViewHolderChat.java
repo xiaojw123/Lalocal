@@ -4,11 +4,14 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,6 +38,8 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import java.util.Iterator;
 import java.util.Map;
 
+import static com.lalocal.lalocal.R.drawable.*;
+
 /**
  * Created by hzxuwen on 2016/3/24.
  */
@@ -52,6 +57,8 @@ public class MsgViewHolderChat extends TViewHolder{
     private Container container;
     private String disableSendMsgUserId;
     private String adminSendMsgUserId;
+    private VerticalImageSpan span;
+    private Drawable drawable;
 
 
     @Override
@@ -79,7 +86,7 @@ public class MsgViewHolderChat extends TViewHolder{
         nameText.setCompoundDrawables(null,null,null,null);
         message = (ChatRoomMessage) item;
         fromAccount = message.getFromAccount();
-        messageItem.setBackgroundResource(R.drawable.live_master_im_item_bg);
+        messageItem.setBackgroundResource(live_master_im_item_bg);
         messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
         Map<String, Object> remoteExtension = message.getRemoteExtension();
         if (remoteExtension != null) {
@@ -146,15 +153,17 @@ public class MsgViewHolderChat extends TViewHolder{
                     container = new Container(((LivePlayerBaseActivity)context), LiveConstant.ROOM_ID, SessionTypeEnum.ChatRoom, ((LivePlayerBaseActivity)context));
                 }
                 if(disableSendMsgUserId!=null&&!disableSendMsgUserId.equals("null")){
+                    AppLog.i("TAG","disableSendMsgUserId："+disableSendMsgUserId);
                     userId1=disableSendMsgUserId;
                 }else if(adminSendMsgUserId!=null&&!adminSendMsgUserId.equals("null")){
                     userId1=adminSendMsgUserId;
                 }else{
                     userId1=userId;
                 }
+                AppLog.i("TAG","获取用户id:"+userId1+"    :"+UserHelper.getUserId(context)+"channelId:"+channelId);
                 if(UserHelper.isLogined(context)&&userId1!=null&&channelId!=null){
                     if(LiveConstant.isUnDestory){
-                        CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, channelId, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
+                        CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, LivePlayerBaseActivity.CHANNELID_ID, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                         dialog.show();
                     }
                 }else {
@@ -195,29 +204,29 @@ public class MsgViewHolderChat extends TViewHolder{
                 itemContent=message.getContent();
                 break;
             case "2"://点赞
-                itemContent=context.getString(R.string.like_master);
-              break;
+                itemContent="给主播点了赞";
+                break;
             case "6"://禁言
                 itemContent=context.getString(R.string.ban)+disableSendMsgNickName;
-                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
+                messageItem.setBackgroundResource(live_im_master_bg);
                 break;
             case "7":
                 itemContent=context.getString(R.string.relieve)+disableSendMsgNickName+context.getString(R.string.de_ban);
-                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
+                messageItem.setBackgroundResource(live_im_master_bg);
                 break;
             case "8":
                 itemContent= context.getString(R.string.jiang)+adminSendMsgNickName+context.getString(R.string.setting_manage);
-                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
+                messageItem.setBackgroundResource(live_im_master_bg);
                 break;
             case "9":
                 itemContent=context.getString(R.string.cancel_le)+adminSendMsgNickName+context.getString(R.string.de_manager);
-                messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
+                messageItem.setBackgroundResource(live_im_master_bg);
                 break;
             case "10":
-              final   GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
+                final   GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
                 itemContent=context.getString(R.string.send_gift_)+giftCount+context.getString(R.string.ge)+giftName;
                 textColor="#ffffff";
-                messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
+                messageItem.setBackgroundResource(live_im_gift_item_bg);
                 messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
                 setNameTextView(creatorAccount,itemContent,textColor,styles,messageToGiftBean);
                 return;
@@ -231,34 +240,54 @@ public class MsgViewHolderChat extends TViewHolder{
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void textviewImageContent(final String text, final String textColor, final GiftBean messageToGiftBean, final TextView tv){
-            try {
-                AppLog.i("TAG","礼物消息内容:"+text);
-                String[] textContent = text.split(",.,");
-                String nameText = textContent[0]+" ";
-                String contentText = " "+textContent[1];
-                String substring = nameText.substring(0, nameText.length() - 1);
-                String str=substring+contentText+"!";
-                int length = substring.length();
-                Bitmap bitmap = DrawableUtils.loadingBitMap(messageToGiftBean.getGiftImage());
-                int i = DensityUtil.dip2px(context, 60);
-                Bitmap small = DensityUtil.small(bitmap,i,i);
-                VerticalImageSpan span = new VerticalImageSpan(small);
-                final SpannableStringBuilder style=new SpannableStringBuilder(str);
-                style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                if(style==null||style.length()==0){
-                   tv.setText(textviewSetContent(text,textColor));
-                }else {
-                    tv.setText(style);
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-                AppLog.i("TAG","礼物消息显示失败。。。。");
+            AppLog.i("TAG","礼物消息内容:"+text);
+            String[] textContent = text.split(",.,");
+            String nameText = textContent[0]+" ";
+            String contentText = " "+textContent[1];
+            String substring = nameText.substring(0, nameText.length() - 1);
+            String str=substring+contentText+"!";
+            int length = substring.length();
+            Bitmap bitmap = DrawableUtils.loadingBitMap(context,messageToGiftBean.getGiftImage());
+        if(bitmap==null){
+            String code = messageToGiftBean.getCode();
+            if(code.equals("001")){
+                drawable = context.getResources().getDrawable(R.drawable.rose1);
+            }else if(code.equals("002")){
+                drawable = context.getResources().getDrawable(R.drawable.boot1);
+            }else if(code.equals("003")){
+                drawable = context.getResources().getDrawable(R.drawable.plane1);
             }
-
-
+            int i = DensityUtil.dip2px(context, 25);
+            drawable.setBounds(0,0,i, i);
+            span=new VerticalImageSpan(drawable);
+        }else {
+            int i = DensityUtil.dip2px(context, 60);
+            Bitmap small = DensityUtil.small(bitmap,i,i);
+            span = new VerticalImageSpan(small);
+        }
+            final SpannableStringBuilder style=new SpannableStringBuilder(str);
+            style.setSpan(new ForegroundColorSpan(context.getResources().getColor(R.color.live_im_item_name_color)), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(new ForegroundColorSpan(Color.parseColor(textColor)), length+1, str.length()-1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            style.setSpan(span,str.length()-1,str.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if(style==null||style.length()==0){
+                tv.setText(textviewSetContent(text,textColor));
+            }else {
+                tv.setText(style);
+            }
     }
+    private Bitmap getBitmap(String imagUrl){
+        ImageView imageView = new ImageView(context);
+        DrawableUtils.displayImg(context,imageView,imagUrl);
+      Bitmap  bitmap= ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+        if(bitmap==null){
+            getBitmap(imagUrl);
+            AppLog.i("TAG","获取bitmap失败");
+        }else {
+            return bitmap;
+        }
+        return null;
+    }
+
     private SpannableStringBuilder textviewSetContent(String text, String textColor) {
         String[] textContent = text.split(",.,");
         String nameText = textContent[0] + " ";
@@ -278,7 +307,7 @@ public class MsgViewHolderChat extends TViewHolder{
             if(message.getRemoteExtension() != null) {
                 if(styles.equals("101")||styles.equals("100")){
                     contentItem=context.getString(R.string.master_aplit)+itemContent;
-                    messageItem.setBackgroundResource(R.drawable.live_im_gift_item_bg);
+                    messageItem.setBackgroundResource(live_im_gift_item_bg);
                 }else {
                     String fromAccount = message.getFromAccount();
                     String account = DemoCache.getAccount();
@@ -286,7 +315,7 @@ public class MsgViewHolderChat extends TViewHolder{
                         contentItem=context.getString(R.string.me_split)+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){
                         contentItem=context.getString(R.string.master_aplit)+itemContent;
-                        messageItem.setBackgroundResource(R.drawable.live_im_master_bg);
+                        messageItem.setBackgroundResource(live_im_master_bg);
                         textColor="#99190f00";
                     } else{
                         contentItem=message.getChatRoomMessageExtension().getSenderNick()+" :  ,.,  "+itemContent;

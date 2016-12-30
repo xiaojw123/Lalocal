@@ -343,7 +343,7 @@
     <string name="share_live">分享了直播</string>
     <string name="tickout_live_room">你已被管理员踢出直播间!</string>
     <string name="attention_live_e">关注了主播!</string>
-    <string name="like_master">给主播点了个赞</string>
+    <string name="like_master">点赞</string>
     <string name="live_master_1">给主播点了个赞1</string>
     <string name="play_back_no_share">此视频暂不可分享!!</string>
     <string name="play_back_compelet">视频播放完成!</string>

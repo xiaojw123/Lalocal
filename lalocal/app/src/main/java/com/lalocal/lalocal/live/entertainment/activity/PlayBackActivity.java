@@ -109,6 +109,8 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
     private int shareNum;
     private int commentNum;
     private int replyId;
+    private int totalRows;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -457,7 +459,7 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
                     userId = liveRowsBean.getUser().getId();
                     shareVO = liveRowsBean.getShareVO();
                     replyId = liveRowsBean.getId();
-                    playBackBottomTableReplyCount.setText(String.valueOf(commentNum));
+
                     playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
                     praiseFlag = liveRowsBean.isPraiseFlag();
                     praiseId = liveRowsBean.getPraiseId();
@@ -493,6 +495,8 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
             super.onPlayBackReviewDetails(reviewResultBean);
             if (reviewResultBean != null) {
                 List<PlayBackReviewRowsBean> rows = reviewResultBean.getRows();
+                totalRows = reviewResultBean.getTotalRows();
+                playBackBottomTableReplyCount.setText(String.valueOf(totalRows));
                 if (rows == null) {
                     reviewRefresh = true;
                     if (detailsRefresh) {

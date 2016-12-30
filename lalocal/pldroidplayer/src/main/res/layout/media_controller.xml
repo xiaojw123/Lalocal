@@ -29,7 +29,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/media_controller_progress"
-                android:text="/100"
+                android:text="/00:00"
                 android:textColor="@android:color/white"
                 android:paddingRight="20dp"
                 android:textSize="11.0sp"
@@ -41,8 +41,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@android:color/white"
                android:layout_toLeftOf="@+id/time"
-                android:text="12"
-
+                android:text="00:00"
                 android:textSize="11.0sp"
                 />
 
@@ -70,6 +69,7 @@
                     android:layout_gravity="center_vertical"
                     android:gravity="center_vertical"
                     android:background="@null"
+                    android:visibility="gone"
                     android:src="@drawable/video_before_btn"/>
 
 
@@ -92,6 +92,7 @@
                     android:layout_marginLeft="20dp"
                     android:layout_toRightOf="@+id/ic_media_pause"
                     android:background="@null"
+                    android:visibility="gone"
                     android:src="@drawable/video_next_btn"/>
 
             </RelativeLayout>
@@ -109,7 +110,7 @@
                 android:gravity="center"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="与主播对话..."/>
+                android:text="与主播对话"/>
 
 
             <ImageView

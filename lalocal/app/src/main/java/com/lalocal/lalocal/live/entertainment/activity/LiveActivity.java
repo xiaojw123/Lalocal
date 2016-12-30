@@ -168,9 +168,6 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     private TextView chooseUp;
     private TextView chooseDown;
 
-
-
-
     @Override
     protected int getActivityLayout() {
         return R.layout.live_player_activity;
@@ -200,7 +197,13 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
             AppLog.i("TAG","獲取返回地理位置:"+CommonUtil.LOCATION_RESULT+"    "+(CommonUtil.LOCATION_Y==true?"有":"无"));
             if(createLiveLocationTv!=null){
                 createLiveLocationTv.setText(CommonUtil.LOCATION_RESULT);
+                if (roomNameLength > 0 && CommonUtil.LOCATION_Y == true) {
+                    inputStartLive.setTextColor(getResources().getColor(R.color.live_start_tv));
+                } else {
+                    inputStartLive.setTextColor(getResources().getColor(R.color.live_start_nomal_tv));
+                }
             }
+
         }
 
         if (requestCode == PHOTO_REQUEST_GALLERY) {
@@ -437,6 +440,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         chooseDown = (TextView) createLiveLayout.findViewById(R.id.live_definition_choose_down);
         liveTextTitleCount = (TextView) createLiveLayout.findViewById(R.id.live_text_title_count);
         View layoutBg = createLiveLayout.findViewById(R.id.create_layout_bg);
+        createLiveLocationTv.setText(CommonUtil.LOCATION_RESULT);
         createLiveLocationTv.setOnClickListener(buttonClickListener);
         liveCreateRoomCloseIv.setOnClickListener(buttonClickListener);
         inputStartLive.setOnClickListener(buttonClickListener);

@@ -126,6 +126,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler, MessageUpdateListener {
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
+    public static  String CHANNELID_ID="";
     // 聊天室信息
     protected String roomId;
     protected String url; // 推流/拉流地址
@@ -281,6 +282,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         liveNumber = liveRowsBean.getNumber();
         shareVO = liveRowsBean.getShareVO();
         channelId = String.valueOf(liveRowsBean.getId());
+        CHANNELID_ID=channelId;
         playType = String.valueOf(liveRowsBean.getType());
         avatar = liveRowsBean.getUser().getAvatar();
         String title = liveRowsBean.getTitle();
