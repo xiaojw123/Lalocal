@@ -11,7 +11,6 @@
         android:layout_gravity="bottom"
         android:visibility="gone"
         >
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -200,7 +199,15 @@
                         android:layout_toLeftOf="@+id/live_telecast_quit"
                         android:paddingRight="@dimen/live_padding_20dp"
                         android:src="@drawable/anotherfunction_unsel"/>
-
+                    <ImageView
+                        android:id="@+id/live_telecast_top_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_toLeftOf="@+id/live_telecast_top_setting"
+                        android:paddingRight="@dimen/dimen_size_15_dp"
+                        android:src="@drawable/live_message"
+                        />
                     <com.lalocal.lalocal.view.ShapeTextView
                         android:id="@+id/audience_immessage_count"
                         android:layout_width="wrap_content"
@@ -218,15 +225,7 @@
                         android:visibility="invisible"
                         />
 
-                    <ImageView
-                        android:id="@+id/live_telecast_top_message"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_toLeftOf="@+id/live_telecast_top_setting"
-                        android:paddingRight="@dimen/dimen_size_15_dp"
-                        android:src="@drawable/live_message"
-                        />
+
 
                 </RelativeLayout>
                 <android.support.v7.widget.RecyclerView
@@ -319,7 +318,7 @@
                     style="@style/list_view"
                     android:layout_width="match_parent"
                     android:layout_marginRight="@dimen/live_height_100dp"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_above="@id/live_nofitifation_layout"
                     android:cacheColorHint="@android:color/transparent"
                     android:divider="@null"

@@ -126,6 +126,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler, MessageUpdateListener {
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
+    public static  String CHANNELID_ID="";
     // 聊天室信息
     protected String roomId;
     protected String url; // 推流/拉流地址
@@ -281,6 +282,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         liveNumber = liveRowsBean.getNumber();
         shareVO = liveRowsBean.getShareVO();
         channelId = String.valueOf(liveRowsBean.getId());
+        CHANNELID_ID=channelId;
         playType = String.valueOf(liveRowsBean.getType());
         avatar = liveRowsBean.getUser().getAvatar();
         String title = liveRowsBean.getTitle();
@@ -1232,7 +1234,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
                             LiveMessage liveMessage = new LiveMessage();
                             liveMessage.setStyle(MessageType.text);
-                            liveMessage.setUserId(userId);
+                            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(LivePlayerBaseActivity.this)));
                             liveMessage.setCreatorAccount(creatorAccount);
                             liveMessage.setChannelId(channelId);
                             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, shareRemid + content, roomId, AuthPreferences.getUserAccount(), liveMessage);
@@ -1552,6 +1554,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     public void gotoPersonalMessage(boolean chatVisible, String accId, String nickName) {
+        AppLog.i("TAG","获取用户accId:"+accId);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Bundle chatBundle = new Bundle();

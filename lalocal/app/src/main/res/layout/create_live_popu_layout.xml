@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:visibility="gone"
     >
-
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -30,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/live_height_50dp"
         android:layout_alignParentBottom="true"
+        android:layout_marginTop="@dimen/live_padding_15dp"
         android:layout_gravity="center"
         android:background="@color/live_input_live_bg"
         android:gravity="center"
@@ -53,7 +53,7 @@
                 android:id="@+id/create_live_head_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/home_me_personheadnormal"
+                android:src="@drawable/livestart_headnone"
                 android:layout_centerVertical="true"
                 android:scaleType="centerCrop" />
             <TextView

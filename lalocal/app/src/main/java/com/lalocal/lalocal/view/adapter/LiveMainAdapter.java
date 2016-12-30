@@ -2,8 +2,12 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -232,6 +236,10 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         public LiveViewHodler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            // 将左侧图标变成白色
+            Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.peopleliving_location_darkic_02);
+            DrawableUtils.tintDrawable(drawable, ColorStateList.valueOf(Color.WHITE));
+            itemLiveAdress.setCompoundDrawables(drawable, null, null, null);
         }
     }
 

@@ -145,22 +145,33 @@ public class RePlyActivity extends BaseActivity {
     public void clickBtn(View v) {
         switch (v.getId()) {
             case R.id.reply_send:
+                AppLog.i("kdl", "1");
                 if (length > 0) {
+                    AppLog.i("kdl", "2");
                     if(isFirstClick){
+                        AppLog.i("kdl", "3");
                         isFirstClick=false;
+                        AppLog.i("kdl", "4");
                         if (mReplyType == KeyParams.REPLY_TYPE_NEW) {
+                            AppLog.i("kdl", "NEW content is " + mContent + "; targetId is " + mTargetId + "; targetType is " + mTargetType);
                             // 请求发送评论
                             contentService.sendComments(mContent, mTargetId, mTargetType);
+                            AppLog.i("kdl", "6");
                         } else if (mReplyType == KeyParams.REPLY_TYPE_REPLY) {
+                            AppLog.i("kdl", "REPLY content is " + mContent + "; paretnId is " + mParentId);
                             // 请求发送回复评论
                             contentService.replyComments(mContent, mParentId);
+                            AppLog.i("kdl", "7");
                         } else {
+                            AppLog.i("kdl", "8");
                             isFirstClick=true;
+                            AppLog.i("kdl", "9");
                             Toast.makeText(this, "获取文章信息失败，请稍后再试~", Toast.LENGTH_SHORT).show();
                         }
                     }
 
                 } else {
+                    AppLog.i("kdl", "10");
                     Toast.makeText(this, "请输入有效内容~", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -183,13 +194,21 @@ public class RePlyActivity extends BaseActivity {
         public void onSendComment(CommentOperateResp commentOperateResp) {
             super.onSendComment(commentOperateResp);
             if (commentOperateResp.getReturnCode() == 0) {
+                AppLog.i("kdl", "11");
                 String message = commentOperateResp.getMessage();
+                AppLog.i("kdl", "messagte is " + message);
                 if (TextUtils.equals(message, "success")) {
+                    AppLog.i("kdl", "122");
                     Toast.makeText(RePlyActivity.this, "评论发表成功", Toast.LENGTH_SHORT).show();
+                    AppLog.i("kdl", "13");
                     Intent intent=new Intent();
+                    AppLog.i("kdl", "14");
                     intent.putExtra(KeyParams.REPLY_CONTENT,"success");
+                    AppLog.i("kdl", "15");
                     setResult(KeyParams.REPLY_RESULTCODE,intent);
+                    AppLog.i("kdl", "16");
                     RePlyActivity.this.finish();
+                    AppLog.i("kdl", "17");
                     return;
                 }
             }

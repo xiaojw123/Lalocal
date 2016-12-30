@@ -212,8 +212,7 @@
                     <TextView
                         style="@style/OrderCardItemTextStyle"
                         android:text="微信"
-                        />
-
+                         />
                 </FrameLayout>
             </LinearLayout>
 

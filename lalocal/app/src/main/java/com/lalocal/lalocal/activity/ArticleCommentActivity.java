@@ -109,7 +109,6 @@ public class ArticleCommentActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==ArticleCommentActivity.REPLY_REQUESTCODE&&resultCode==KeyParams.REPLY_RESULTCODE){
             if(mCommentList!=null){
-                mCommentList.clear();
                 mContentLoader.getArticleComments(mArticleId,1);
             }
         }
@@ -129,9 +128,7 @@ public class ArticleCommentActivity extends BaseActivity {
         xrvArticleComments.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                if(mCommentList!=null){
-                    mCommentList.clear();
-                }
+
                 isRefresh=true;
                 mContentLoader.getArticleComments(mArticleId,1);
             }
@@ -166,6 +163,7 @@ public class ArticleCommentActivity extends BaseActivity {
                 totalPages = resultBean.getTotalPages();
                 if(isRefresh){
                     xrvArticleComments.refreshComplete();
+                    mCommentList.clear();
                 }else{
                     if(pageNumber==totalPages){
                         xrvArticleComments.setNoMore(true);
@@ -325,7 +323,6 @@ public class ArticleCommentActivity extends BaseActivity {
                 }).show();
     }
 
-
     public void showHintDialog(final int targetId){
         final CustomChatDialog customChatDialog = new CustomChatDialog(ArticleCommentActivity.this);
         customChatDialog.setTitle(getString(R.string.live_hint));
@@ -353,14 +350,18 @@ public class ArticleCommentActivity extends BaseActivity {
                 ArticleCommentActivity.this.finish();
                 break;
             case R.id.img_write_comment:
-                Intent replyIntent = new Intent(ArticleCommentActivity.this, RePlyActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
-                bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
-                bundle.putInt(KeyParams.TARGET_ID, mArticleId);
-                bundle.putInt(KeyParams.TARGET_TYPE, Constants.TARGET_TYPE_ARTICLE);
-                replyIntent.putExtras(bundle);
-                startActivityForResult(replyIntent,ArticleCommentActivity.REPLY_REQUESTCODE);
+                if (UserHelper.isLogined(this)) {
+                    Intent replyIntent = new Intent(ArticleCommentActivity.this, RePlyActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
+                    bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
+                    bundle.putInt(KeyParams.TARGET_ID, mArticleId);
+                    bundle.putInt(KeyParams.TARGET_TYPE, Constants.TARGET_TYPE_ARTICLE);
+                    replyIntent.putExtras(bundle);
+                    startActivityForResult(replyIntent, ArticleCommentActivity.REPLY_REQUESTCODE);
+                } else {
+                    showLoginDialog();
+                }
                 break;
         }
     }
