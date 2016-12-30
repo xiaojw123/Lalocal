@@ -1234,6 +1234,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
         if (isAudienceOver && liveEnd) {
             isAudienceOver = false;
+            if(userInfoDialog!=null){
+                userInfoDialog.dismiss();
+            }
             palyerLayout.removeAllViews();
             drawerLayout.closeDrawer(Gravity.RIGHT);
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

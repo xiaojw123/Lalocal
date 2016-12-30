@@ -1234,7 +1234,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
                             LiveMessage liveMessage = new LiveMessage();
                             liveMessage.setStyle(MessageType.text);
-                            liveMessage.setUserId(userId);
+                            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(LivePlayerBaseActivity.this)));
                             liveMessage.setCreatorAccount(creatorAccount);
                             liveMessage.setChannelId(channelId);
                             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, shareRemid + content, roomId, AuthPreferences.getUserAccount(), liveMessage);

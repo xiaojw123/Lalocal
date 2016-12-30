@@ -26,7 +26,6 @@ import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.adapter.ArticleCommentListAdapter;
 
 import java.util.ArrayList;
@@ -110,7 +109,6 @@ public class ArticleCommentActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode==ArticleCommentActivity.REPLY_REQUESTCODE&&resultCode==KeyParams.REPLY_RESULTCODE){
             if(mCommentList!=null){
-//                mCommentList.clear();
                 mContentLoader.getArticleComments(mArticleId,1);
             }
         }
@@ -130,9 +128,7 @@ public class ArticleCommentActivity extends BaseActivity {
         xrvArticleComments.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-                if(mCommentList!=null){
-                    mCommentList.clear();
-                }
+
                 isRefresh=true;
                 mContentLoader.getArticleComments(mArticleId,1);
             }

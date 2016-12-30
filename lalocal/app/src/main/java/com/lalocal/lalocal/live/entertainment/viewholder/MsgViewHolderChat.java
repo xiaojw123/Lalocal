@@ -4,14 +4,12 @@ import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -38,7 +36,9 @@ import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import java.util.Iterator;
 import java.util.Map;
 
-import static com.lalocal.lalocal.R.drawable.*;
+import static com.lalocal.lalocal.R.drawable.live_im_gift_item_bg;
+import static com.lalocal.lalocal.R.drawable.live_im_master_bg;
+import static com.lalocal.lalocal.R.drawable.live_master_im_item_bg;
 
 /**
  * Created by hzxuwen on 2016/3/24.
@@ -160,8 +160,8 @@ public class MsgViewHolderChat extends TViewHolder{
                 }else{
                     userId1=userId;
                 }
-                AppLog.i("TAG","获取用户id:"+userId1+"    :"+UserHelper.getUserId(context)+"channelId:"+channelId);
-                if(UserHelper.isLogined(context)&&userId1!=null&&channelId!=null){
+                AppLog.i("TAG","获取用户id:"+userId1+"    :"+UserHelper.getUserId(context)+"channelId:"+channelId+"     :"+LivePlayerBaseActivity.CHANNELID_ID);
+                if(UserHelper.isLogined(context)&&userId1!=null){
                     if(LiveConstant.isUnDestory){
                         CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, LivePlayerBaseActivity.CHANNELID_ID, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
                         dialog.show();
@@ -259,9 +259,6 @@ public class MsgViewHolderChat extends TViewHolder{
                 case LiveConstant.PLAN:
                     drawable=context.getResources().getDrawable(R.drawable.gift_plane_48);
                     break;
-                case LiveConstant.FACE:
-                    drawable=context.getResources().getDrawable(R.drawable.gift_face_48);
-                    break;
                 case LiveConstant.TRAVELLINGCASE:
                     drawable=context.getResources().getDrawable(R.drawable.gift_travellingcase_48);
                     break;
@@ -296,18 +293,6 @@ public class MsgViewHolderChat extends TViewHolder{
             }else {
                 tv.setText(style);
             }
-    }
-    private Bitmap getBitmap(String imagUrl){
-        ImageView imageView = new ImageView(context);
-        DrawableUtils.displayImg(context,imageView,imagUrl);
-      Bitmap  bitmap= ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-        if(bitmap==null){
-            getBitmap(imagUrl);
-            AppLog.i("TAG","获取bitmap失败");
-        }else {
-            return bitmap;
-        }
-        return null;
     }
 
     private SpannableStringBuilder textviewSetContent(String text, String textColor) {

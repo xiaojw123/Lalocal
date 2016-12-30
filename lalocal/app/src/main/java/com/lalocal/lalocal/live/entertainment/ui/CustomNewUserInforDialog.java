@@ -88,7 +88,6 @@ public class CustomNewUserInforDialog extends BaseDialog {
     LinearLayout userInfoContentLayout;
     @BindView(R.id.user_info_root_layout)
  LinearLayout userInfoRootLayout;
-
     private String userId;
     private Context mContext;
     boolean isMuted;//是否禁言
@@ -354,10 +353,10 @@ public class CustomNewUserInforDialog extends BaseDialog {
             liveMessage.setStyle(type);
             liveMessage.setAdminSendMsgImUserId(accId);
             liveMessage.setAdminSendMsgNickName(nickName);
-            liveMessage.setAdminSendMsgUserId(userId);
+          //  liveMessage.setAdminSendMsgUserId(userId);
             liveMessage.setDisableSendMsgNickName(nickName);
-            liveMessage.setDisableSendMsgUserId(userId);
-            liveMessage.setUserId(userId);
+         //   liveMessage.setDisableSendMsgUserId(userId);
+            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(mContext)));
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
             AppLog.i("TAG", "用户信息dialog:" + new Gson().toJson(result).toString());
