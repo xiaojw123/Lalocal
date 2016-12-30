@@ -496,7 +496,7 @@ public class ReportActivity extends BaseActivity {
                 }
 
                 // 获取文件名
-                String fileName = result.getFilename();
+                final String fileName = result.getFilename();
                 // 获取
                 String token = result.getToken();
                 // 获取文件信息对象
@@ -508,7 +508,43 @@ public class ReportActivity extends BaseActivity {
                 AppLog.i("qn", "filePaht is " + filePath);
 
                 // 上传七牛云图片
-                uploadSimpleFile(filePath, fileName, token);
+//                uploadSimpleFile(filePath, fileName, token);
+                QiniuUtils.uploadSimpleFile(filePath, fileName, token, new QiniuUtils.OnUploadListener() {
+                    @Override
+                    public void onUploadSuccess(ResponseInfo info) {
+                        // 将文件名称添加到名称数组中
+                        mUploadSuccess.add(fileName);
+                    }
+
+                    @Override
+                    public void onUploadFail(ResponseInfo info) {
+
+                    }
+
+                    @Override
+                    public void afterUpload(ResponseInfo info) {
+                        // 当前上传的图片标记
+                        mCurUpload++;
+                        // 如果图片上传完毕
+                        if (mCurUpload == mUploadPhotoList.size()) {
+                            // 标签重置
+                            mCurUpload = 0;
+                            mCurSelectPic = 0;
+                            // 上传成功的图片数量
+                            int picSize = mUploadSuccess.size();
+                            // 将上传成功的图片列表传入数组
+                            mPhotos = new String[picSize];
+                            // 列表转数组
+                            for (int i = 0; i < picSize; i++) {
+                                mPhotos[i] = mUploadSuccess.get(i);
+                            }
+                            // 清空上传成功的列表
+                            mUploadSuccess.clear();
+                            // 将举报信息上传服务器
+                            mContentLoader.getChannelReport(mReportFrom, mContent, mPhotos, mUserId, mMasterName, mChannelId);
+                        }
+                    }
+                });
             } else {
                 loading.setVisibility(View.GONE);
                 Toast.makeText(ReportActivity.this, "访问数据接口失败，请检查网络", Toast.LENGTH_SHORT).show();
