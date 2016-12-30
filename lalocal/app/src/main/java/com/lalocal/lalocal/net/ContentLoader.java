@@ -1680,7 +1680,7 @@ public class ContentLoader {
      * @param targetType
      */
     public void sendComments(String content, int targetId, int targetType) {
-        AppLog.i("ReplyA", "content is " + content + "; targetId is " + targetId + "; targetType is " + targetType);
+        AppLog.i("kdl", "content is " + content + "; targetId is " + targetId + "; targetType is " + targetType);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SEND_COMMENTS);
         }
@@ -1689,7 +1689,7 @@ public class ContentLoader {
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
                 UserHelper.getToken(context)));
 
-        AppLog.i("ReplyA", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
+        AppLog.i("kdl", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -1709,7 +1709,7 @@ public class ContentLoader {
      * @param parentId
      */
     public void replyComments(String content, int parentId) {
-        AppLog.i("ReplyA", "content is " + content + "; parentId is " + parentId);
+        AppLog.i("kdl", "content is " + content + "; parentId is " + parentId);
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REPLY_COMMENTS);
         }
@@ -1718,7 +1718,7 @@ public class ContentLoader {
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
                 UserHelper.getToken(context)));
 
-        AppLog.i("ReplyA", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
+        AppLog.i("kdl", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
 
         JSONObject jsonObject = new JSONObject();
         try {
@@ -3533,7 +3533,7 @@ public class ContentLoader {
          */
         private void responseSendingComments(String json) {
 
-            AppLog.i("ReplyA", "res json is " + json);
+            AppLog.i("kdl", "res json is " + json);
             CommentOperateResp commentOperateResp = new Gson().fromJson(json, CommentOperateResp.class);
             callBack.onSendComment(commentOperateResp);
         }
