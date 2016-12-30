@@ -278,7 +278,7 @@ public class MsgViewHolderChat extends TViewHolder{
                     drawable=context.getResources().getDrawable(R.drawable.gift_umbrella_48);
                     break;
             }
-            
+
             int i = DensityUtil.dip2px(context, 25);
             drawable.setBounds(0,0,i, i);
             span=new VerticalImageSpan(drawable);
