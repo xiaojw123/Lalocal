@@ -1068,6 +1068,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         liveMessage.setGiftModel(giftBean);
         liveMessage.setChannelId(channelId);
         liveMessage.setStyle(MessageType.gift);
+        liveMessage.setUserId(String.valueOf(UserHelper.getUserId(AudienceActivity.this)));
         IMMessage giftMessage = SendMessageUtil.sendMessage(container.account, messageContent, roomId, AuthPreferences.getUserAccount(), liveMessage);
         if (giftDataResultBean == null || code == null || giftDataResultBean.getName() == null || sendTotal == 0) {
             return;
@@ -1163,9 +1164,10 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
             IMMessage imMessage = null;
             LiveMessage liveMessage = new LiveMessage();
             liveMessage.setStyle(MessageType.like);
-            liveMessage.setUserId(userId);
+            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(AudienceActivity.this)));
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
+            liveMessage.setDisableSendMsgUserId(String.valueOf(UserHelper.getUserId(AudienceActivity.this)));
             if (isSendLike) {
                 isSendLike = false;
                 imMessage = SendMessageUtil.sendMessage(container.account, getString(R.string.like_master), roomId, AuthPreferences.getUserAccount(), liveMessage);

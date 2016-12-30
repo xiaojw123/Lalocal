@@ -140,6 +140,7 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
         contentLoader.setCallBack(myCallBack);
         //1659
         intentId = getIntent().getStringExtra("id");
+        AppLog.i("TAG","获取历史回放id:"+intentId);
         contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
         contentLoader.getPlayBackMsg(intentId);
         framentCotainer = (FrameLayout) findViewById(playback_fragment_container);
@@ -242,10 +243,6 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
         userId = user.getId();
         nickName = user.getNickName();
         startAtLong = stringToDate(startAt, "yyyy-MM-dd HH:mm:ss");
-        long endAtLong = stringToDate(endAt, "yyyy-MM-dd HH:mm:ss");
-        // 回放视频开始和结束的时间:1481876214000      end:1481877415000
-        //                  消息记录:1481876276240
-        AppLog.i("TAG", "回放视频开始和结束的时间:" + startAtLong + "      end:" + endAtLong);
         playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
         initListview();
         initData(liveRowsBean);
@@ -305,7 +302,6 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
                             }
                         });
                         customDialog.show();
-
                         DialogUtil.addDialog(customDialog);
                     }
 
@@ -393,8 +389,6 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
 
     private ChatFragment chatFragment;
 
-
-
     private PLMediaPlayer.OnPreparedListener mOnPreparedListener = new PLMediaPlayer.OnPreparedListener() {
 
         @Override
@@ -405,6 +399,8 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                         if (videoList != null && videoList.size() == 1) {
                             mMediaController.setPlayerCountStatus(false);
+                        }else {
+                            mMediaController.setPlayerCountStatus(true);
                         }
                         playbackLoadingPage.setVisibility(View.GONE);
                         mMediaController.setCollect(praiseFlag);
@@ -434,10 +430,10 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
                 showToastTips("视频播放完毕，正加载下一段视频...");
                 ++position;
                 positionChangeListener(position);
+                startAtLong=stringToDate(videoList.get(position).getStartTime(), "yyyy-MM-dd HH:mm:ss");
                 mVideoView.setVideoPath(videoList.get(position).getUrl());
                 mVideoView.start();
             }
-
         }
     };
 
@@ -511,7 +507,6 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
 
     };
 
-
     private void getMsgInfo(long msgAt) {
         if (thisSendAt != 0) {
             if (msgAt > thisSendAt) {
@@ -551,7 +546,6 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
         } else {
             showToastTips("正在加载上一段视频....");
         }
-
         positionChangeListener(position);
         mVideoView.setVideoPath(videoList.get(position).getUrl());
         mVideoView.start();
@@ -575,6 +569,7 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
             showToastTips("正在加载下一段视频....");
         }
         positionChangeListener(position);
+        startAtLong=stringToDate(videoList.get(position).getStartTime(), "yyyy-MM-dd HH:mm:ss");
         mVideoView.setVideoPath(videoList.get(position).getUrl());
         mVideoView.start();
 
@@ -679,7 +674,6 @@ public class PlayBackNewActivity extends BaseActivity implements View.OnTouchLis
     @Override
     protected void onPause() {
         super.onPause();
-
         mVideoView.pause();
         mIsActivityPaused = true;
     }

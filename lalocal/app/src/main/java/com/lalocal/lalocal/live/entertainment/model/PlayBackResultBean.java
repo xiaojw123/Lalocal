@@ -232,8 +232,8 @@ public class PlayBackResultBean {
             private int id;
             private int size;
             private double duration;
-            private Object startTime;
-            private Object endTime;
+            private String startTime;
+            private String endTime;
             private String url;
 
             public int getId() {
@@ -260,19 +260,19 @@ public class PlayBackResultBean {
                 this.duration = duration;
             }
 
-            public Object getStartTime() {
+            public String getStartTime() {
                 return startTime;
             }
 
-            public void setStartTime(Object startTime) {
+            public void setStartTime(String startTime) {
                 this.startTime = startTime;
             }
 
-            public Object getEndTime() {
+            public String getEndTime() {
                 return endTime;
             }
 
-            public void setEndTime(Object endTime) {
+            public void setEndTime(String endTime) {
                 this.endTime = endTime;
             }
 

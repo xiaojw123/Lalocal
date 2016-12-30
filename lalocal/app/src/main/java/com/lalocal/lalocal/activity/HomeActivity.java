@@ -227,13 +227,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         return mOption;
     }
 
-
-
-
-
-
-
-
     /**
      * 检查更新
      */
