@@ -158,24 +158,27 @@ public class MsgViewHolderChat extends TViewHolder{
                         dialog.show();
                     }
                 }else {
-                    final CustomChatDialog customDialog = new CustomChatDialog(context);
-                    customDialog.setContent(context.getString(R.string.live_login_hint));
-                    customDialog.setCancelable(false);
-                    customDialog.setCancelBtn(context.getString(R.string.live_canncel), null);
-                    customDialog.setSurceBtn(context.getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
-                        @Override
-                        public void onDialogClickListener() {
-                            DemoCache.setLoginStatus(false);
-                            LLoginActivity.startForResult(context, 701);
-                        }
-                    });
-                    customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialog) {
-                            LiveConstant.USER_INFO_FIRST_CLICK = true;
-                        }
-                    });
-                    customDialog.show();
+                    if(!UserHelper.isLogined(context)){
+                        final CustomChatDialog customDialog = new CustomChatDialog(context);
+                        customDialog.setContent(context.getString(R.string.live_login_hint));
+                        customDialog.setCancelable(false);
+                        customDialog.setCancelBtn(context.getString(R.string.live_canncel), null);
+                        customDialog.setSurceBtn(context.getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                DemoCache.setLoginStatus(false);
+                                LLoginActivity.startForResult(context, 701);
+                            }
+                        });
+                        customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialog) {
+                                LiveConstant.USER_INFO_FIRST_CLICK = true;
+                            }
+                        });
+                        customDialog.show();
+                    }
+
                 }
 
             }

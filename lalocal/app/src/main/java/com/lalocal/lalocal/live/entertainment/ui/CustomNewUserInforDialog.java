@@ -239,9 +239,9 @@ public class CustomNewUserInforDialog extends BaseDialog {
                     ++fansNum;
                     userinfoBottomRight.setText(mContext.getString(R.string.live_attention_mutual));
                     liveFans.setText(String.valueOf(fansNum));
-                    userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
-                    userinfoBottomLeft.setAlpha(0.5f);
-                    userinfoBottomLeft.setEnabled(false);
+                    userinfoBottomLeft.setText(mContext.getString(R.string.private_letter));
+                    userinfoBottomLeft.setAlpha(1.0f);
+                    userinfoBottomLeft.setEnabled(true);
                     if (isMaster) {
                         sendMessage(getContext().getString(R.string.attention_live_e), MessageType.text);
                     }
@@ -338,6 +338,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
             customDialogAudienceCloseLayout.setVisibility(View.VISIBLE);
             userinfoBottomLeft.setVisibility(View.GONE);
             userinfoBottomRight.setVisibility(View.GONE);
+            userinfoBottomCenter.setVisibility(View.VISIBLE);
             userinfoBottomCenter.setText(getContext().getString(R.string.live_master_home));
             userinfoBottomCenter.setTextColor(Color.WHITE);
             userinfoBottomCenter.setBackgroundColor(mContext.getResources().getColor(R.color.color_ffaa2a));

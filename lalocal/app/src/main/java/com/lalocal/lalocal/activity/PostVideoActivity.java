@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,9 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
     TextView postTextCount;
     @BindView(R.id.post_alter_ok_tv)
     TextView postAlterOkTv;
+
+    @BindView(R.id.root_layout)
+    LinearLayout rootLayout;
     private String intentLocation;
     private String intentTitle;
     private String intentPhoto;
@@ -122,7 +126,6 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
             }
         }
 
-
         if(requestCode==KeyParams.LOCATION_REQUESTCODE&&resultCode==KeyParams.LOCATION_RESULTCODE){
             dataLoaction = data.getStringExtra(KeyParams.POST_GET_LOCATION);
             if(dataLoaction !=null){
@@ -143,8 +146,8 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
         initView();
         contentService = new ContentLoader(this);
         contentService.setCallBack(new MyCallBack());
-
     }
+
 
     private void parseIntent() {
         // 获取Intent
@@ -274,7 +277,6 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
@@ -285,7 +287,7 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
         @Override
         public void afterTextChanged(Editable s) {
             int length = s.toString().length();
-            postTextCount.setText(length+"/50");
+            postTextCount.setText(length+"/150");
         }
     };
     private void searchPhotoBum() {

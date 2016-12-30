@@ -8,31 +8,32 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.me.NotificationActivity;
 import com.lalocal.lalocal.me.PraiseCommentActivity;
+import com.lalocal.lalocal.net.callback.ICallBack;
 
 /**
  * Created by xiaojw on 2016/12/14.
  */
 
 public class NimPersonalMessageActivity extends BaseActivity implements View.OnClickListener {
-    public static final String COMMENT_COUNT = "comment_count";
+    TextView countTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nim_personal_msg);
+        setLoaderCallBack(new NimPerMsgCallBack());
         FrameLayout notifyLayout = (FrameLayout) findViewById(R.id.my_immessage_notification);
         FrameLayout praiseLayout = (FrameLayout) findViewById(R.id.my_immessage_praise_and_comment);
-        TextView countTv = (TextView) findViewById(R.id.my_immessage_praise_and_comment_num);
-        int unReadCount = getIntent().getIntExtra(COMMENT_COUNT, 0);
-        if (unReadCount > 0) {
-            countTv.setVisibility(View.VISIBLE);
-            String fomartCount = unReadCount > 99 ? unReadCount + "+" : String.valueOf(unReadCount);
-            countTv.setText(fomartCount);
-        }
+        countTv = (TextView) findViewById(R.id.my_immessage_praise_and_comment_num);
         notifyLayout.setOnClickListener(this);
         praiseLayout.setOnClickListener(this);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mContentloader.getMessageCount();
+    }
 
     @Override
     public void onClick(View v) {
@@ -43,6 +44,20 @@ public class NimPersonalMessageActivity extends BaseActivity implements View.OnC
             case R.id.my_immessage_praise_and_comment:
                 PraiseCommentActivity.start(this);
                 break;
+        }
+    }
+
+    class NimPerMsgCallBack extends ICallBack {
+
+        @Override
+        public void onGetMessageCount(int unReadCount) {
+            if (unReadCount > 0) {
+                countTv.setVisibility(View.VISIBLE);
+                String fomartCount = unReadCount > 99 ? unReadCount + "+" : String.valueOf(unReadCount);
+                countTv.setText(fomartCount);
+            }else{
+                countTv.setVisibility(View.GONE);
+            }
         }
     }
 }

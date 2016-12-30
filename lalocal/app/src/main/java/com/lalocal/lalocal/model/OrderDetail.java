@@ -70,6 +70,217 @@ public class OrderDetail implements Parcelable {
     private String languageName;
     private String remark;
     private Object supplierId;
+    private String wechat;
+
+    public String getWechat() {
+        return wechat;
+    }
+
+    public void setWechat(String wechat) {
+        this.wechat = wechat;
+    }
+
+    public OrderPickUpVO getOrderPickUpVO() {
+        return orderPickUpVO;
+    }
+
+    public void setOrderPickUpVO(OrderPickUpVO orderPickUpVO) {
+        this.orderPickUpVO = orderPickUpVO;
+    }
+
+
+    private OrderPickUpVO orderPickUpVO;
+   public static class OrderPickUpVO implements Parcelable {
+
+
+        /**
+         * productType : 2
+         * routeType : 1
+         * useTime : 2016-12-15 14:26:00
+         * useDuration : 1
+         * staffNum : 1
+         * luggageNum : 1
+         * carCount : 1
+         * fromCityName : 巴黎
+         * fromCityAddress : 巴黎奥利机场
+         * toCityName : 巴黎
+         * toCityAddress : 戴高乐机场
+         * driverInfo : null
+         * fightNum : s123
+         */
+
+        private int productType;
+        private int routeType;
+        private String useTime;
+        private String useDuration;
+        private int staffNum;
+        private int luggageNum;
+        private String carCount;
+        private String fromCityName;
+        private String fromCityAddress;
+        private String toCityName;
+        private String toCityAddress;
+        private String driverInfo;
+        private String fightNum;
+
+        public int getProductType() {
+            return productType;
+        }
+
+        public void setProductType(int productType) {
+            this.productType = productType;
+        }
+
+        public int getRouteType() {
+            return routeType;
+        }
+
+        public void setRouteType(int routeType) {
+            this.routeType = routeType;
+        }
+
+        public String getUseTime() {
+            return useTime;
+        }
+
+        public void setUseTime(String useTime) {
+            this.useTime = useTime;
+        }
+
+        public String getUseDuration() {
+            return useDuration;
+        }
+
+        public void setUseDuration(String useDuration) {
+            this.useDuration = useDuration;
+        }
+
+        public int getStaffNum() {
+            return staffNum;
+        }
+
+        public void setStaffNum(int staffNum) {
+            this.staffNum = staffNum;
+        }
+
+        public int getLuggageNum() {
+            return luggageNum;
+        }
+
+        public void setLuggageNum(int luggageNum) {
+            this.luggageNum = luggageNum;
+        }
+
+        public String getCarCount() {
+            return carCount;
+        }
+
+        public void setCarCount(String carCount) {
+            this.carCount = carCount;
+        }
+
+        public String getFromCityName() {
+            return fromCityName;
+        }
+
+        public void setFromCityName(String fromCityName) {
+            this.fromCityName = fromCityName;
+        }
+
+        public String getFromCityAddress() {
+            return fromCityAddress;
+        }
+
+        public void setFromCityAddress(String fromCityAddress) {
+            this.fromCityAddress = fromCityAddress;
+        }
+
+        public String getToCityName() {
+            return toCityName;
+        }
+
+        public void setToCityName(String toCityName) {
+            this.toCityName = toCityName;
+        }
+
+        public String getToCityAddress() {
+            return toCityAddress;
+        }
+
+        public void setToCityAddress(String toCityAddress) {
+            this.toCityAddress = toCityAddress;
+        }
+
+        public Object getDriverInfo() {
+            return driverInfo;
+        }
+
+        public void setDriverInfo(String driverInfo) {
+            this.driverInfo = driverInfo;
+        }
+
+        public String getFightNum() {
+            return fightNum;
+        }
+
+        public void setFightNum(String fightNum) {
+            this.fightNum = fightNum;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.productType);
+            dest.writeInt(this.routeType);
+            dest.writeString(this.useTime);
+            dest.writeString(this.useDuration);
+            dest.writeInt(this.staffNum);
+            dest.writeInt(this.luggageNum);
+            dest.writeString(this.carCount);
+            dest.writeString(this.fromCityName);
+            dest.writeString(this.fromCityAddress);
+            dest.writeString(this.toCityName);
+            dest.writeString(this.toCityAddress);
+            dest.writeString(this.driverInfo);
+            dest.writeString(this.fightNum);
+        }
+
+        public OrderPickUpVO() {
+        }
+
+        protected OrderPickUpVO(Parcel in) {
+            this.productType = in.readInt();
+            this.routeType = in.readInt();
+            this.useTime = in.readString();
+            this.useDuration = in.readString();
+            this.staffNum = in.readInt();
+            this.luggageNum = in.readInt();
+            this.carCount = in.readString();
+            this.fromCityName = in.readString();
+            this.fromCityAddress = in.readString();
+            this.toCityName = in.readString();
+            this.toCityAddress = in.readString();
+            this.driverInfo = in.readParcelable(Object.class.getClassLoader());
+            this.fightNum = in.readString();
+        }
+
+        public static final Creator<OrderPickUpVO> CREATOR = new Creator<OrderPickUpVO>() {
+            @Override
+            public OrderPickUpVO createFromParcel(Parcel source) {
+                return new OrderPickUpVO(source);
+            }
+
+            @Override
+            public OrderPickUpVO[] newArray(int size) {
+                return new OrderPickUpVO[size];
+            }
+        };
+    }
+
     /**
      * contactInfoList : [{"itemList":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"HHH","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"GGGG","type":5,"nessary":true}]},{"itemList":[{"description":"如张三填写为'zhang'","code":"0","name":"姓(拼音)","value":"ZHANG","type":9,"nessary":true},{"description":"如张三填写为'san'","code":"1","name":"名(拼音)","value":"SAN","type":5,"nessary":true},{"description":"","code":"-1","name":"isLeader","value":"1","type":8,"nessary":true},{"description":"","code":"2","name":"email","value":"yyy@qq.com","type":0,"nessary":true},{"description":"","code":"12","name":"phone","value":"+86-1875888597","type":3,"nessary":true}]}]
      * name : 成人

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
 import com.lalocal.lalocal.activity.EmptActivity;
+import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.MyArticleActivity;
 import com.lalocal.lalocal.activity.MyFavoriteActivity;
 import com.lalocal.lalocal.activity.MyLiveActivity;
@@ -104,8 +105,6 @@ MeFragment extends BaseFragment {
     RecyclerView itemRlv;
     @BindView(R.id.fragment_me_rsv)
     ReboundScrollView reboundScrollView;
-    //    @BindView(R.id.home_me_headportrait_arcimg)
-//    ArcImageView headArcImg;
     MeItemAdapter itemAdapter;
     int commUnReadCount;
 
@@ -179,7 +178,7 @@ MeFragment extends BaseFragment {
         if (!hidden) {
             registerMsgServicesObser(true);
             initLogin();
-        }else{
+        } else {
             registerMsgServicesObser(false);
         }
     }
@@ -311,10 +310,7 @@ MeFragment extends BaseFragment {
                     case MeItemAdapter.ITEM_MY_MESSAGE://我的消息
                         MobHelper.sendEevent(getActivity(), MobEvent.MY_NOTICE);
                         if (UserHelper.isLogined(getActivity())) {
-//                            gotoMyItemPage(PersonalMessageActivity.class);
-                            Intent intent = new Intent(getActivity(), NimPersonalMessageActivity.class);
-                            intent.putExtra(NimPersonalMessageActivity.COMMENT_COUNT,commUnReadCount);
-                            startActivity(intent);
+                            gotoMyItemPage(NimPersonalMessageActivity.class);
                         } else {
                             gotoLoginPage();
                         }
@@ -429,15 +425,13 @@ MeFragment extends BaseFragment {
 
         @Override
         public void onGetMessageCount(int msgCount) {
-            commUnReadCount =msgCount;
-            AppLog.print("onGetMessageCount____");
-            updateMessageCount(true,msgCount);
+            commUnReadCount = msgCount;
+            updateMessageCount(true, msgCount);
         }
 
         //只刷新验证状态————
         @Override
         public void onGetUserProfile(LoginUser user) {
-            AppLog.print("onGetUserProfiles____获取用户信息————");
             updateFragmentView(true, user);
         }
 
@@ -446,7 +440,15 @@ MeFragment extends BaseFragment {
     private void updateMessageCount(boolean isLogin, int msgCount) {
         if (isLogin) {
             msgCount += NIMClient.getService(MsgService.class).getTotalUnreadCount();
-            AppLog.print("msgCount____"+msgCount);
+            if (msgCount > 0) {
+                if (isAdded()) {
+                    if (((HomeActivity) getActivity()).unReadTv.getVisibility() != View.VISIBLE) {
+                        ((HomeActivity) getActivity()).unReadTv.setVisibility(View.VISIBLE);
+                    } else {
+                        ((HomeActivity) getActivity()).unReadTv.setVisibility(View.INVISIBLE);
+                    }
+                }
+            }
         }
         if (itemAdapter != null) {
             List<MeItem> items = itemAdapter.getItems();
@@ -502,7 +504,7 @@ MeFragment extends BaseFragment {
                 @Override
                 public void onEvent(List<RecentContact> messages) {
                     AppLog.print("messageObserver____onEvent___");
-                    updateMessageCount(UserHelper.isLogined(getActivity()),0);
+                    updateMessageCount(UserHelper.isLogined(getActivity()), 0);
                 }
             };
 

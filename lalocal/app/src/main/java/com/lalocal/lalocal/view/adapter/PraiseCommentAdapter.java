@@ -93,7 +93,7 @@ public class PraiseCommentAdapter extends BaseRecyclerAdapter {
                         params.bottomMargin = (int) res.getDimension(R.dimen.dimen_size_15_dp);
                         praComHolder.itemPraiseLayout.setBackgroundColor(res.getColor(R.color.color_fa));
                         praComHolder.itemLayout.setBackgroundColor(res.getColor(R.color.white));
-                        praComHolder.itemCommentImg.setVisibility(View.GONE);
+                        praComHolder.itemCommentImg.setVisibility(View.VISIBLE);
                         praComHolder.itemCommentContent.setVisibility(View.VISIBLE);
                         praComHolder.itemReplyContent.setVisibility(View.VISIBLE);
                         break;
@@ -181,7 +181,7 @@ public class PraiseCommentAdapter extends BaseRecyclerAdapter {
             Bundle bundle = new Bundle();
             bundle.putString(KeyParams.REPLY_TITLE, "回复 " + bean.getNickName());
             bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_REPLY);
-            bundle.putInt(KeyParams.REPLY_PARENT_ID, rowsBean.getId());
+            bundle.putInt(KeyParams.REPLY_PARENT_ID, rowsBean.getOpId());
             intent.putExtras(bundle);
             mContext.startActivity(intent);
         }
@@ -189,10 +189,12 @@ public class PraiseCommentAdapter extends BaseRecyclerAdapter {
 
     private void appendText(PraiseComment.TargetUserVO targetUserVO, String content, StringBuffer sb) {
         if (targetUserVO == null) {
+            sb.append("：");
             sb.append(content);
         } else {
             sb.append("  回复 ");
             sb.append(targetUserVO.getNickName());
+            sb.append("：");
             sb.append(content);
         }
     }

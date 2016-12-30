@@ -114,6 +114,7 @@
                         android:drawableLeft="@drawable/peopleliving_location_darkic_02"
                         android:drawablePadding="@dimen/live_padding_3dp"
                         android:alpha="0.6"
+                        android:textColor="@android:color/black"
                         android:visibility="gone"
                         />
 
@@ -181,6 +182,7 @@
                     android:gravity="center"
                     android:textColor="@color/color_ffaa2a"
                     android:textSize="@dimen/text_size_14_sp"
+                    android:text="私信(需关注)"
                     />
                 <TextView
                     android:id="@+id/userinfo_bottom_center"
@@ -190,7 +192,7 @@
                     android:textColor="@color/color_ffaa2a"
                     android:textSize="@dimen/text_size_14_sp"
                     android:gravity="center"
-
+                    android:visibility="gone"
                     />
 
                 <TextView
@@ -201,6 +203,7 @@
                     android:textColor="@color/color_ffaa2a"
                     android:textSize="@dimen/text_size_14_sp"
                     android:gravity="center"
+                    android:text="关注"
                     />
 
             </LinearLayout>

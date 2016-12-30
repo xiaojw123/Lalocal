@@ -32,8 +32,7 @@
         </LinearLayout>
 
         <include layout="@layout/live_loading_page"></include>
-
-
+        <include layout="@layout/audience_live_over_page"></include>
     </RelativeLayout>
 
     <!--    android:layout_gravity="right"
@@ -292,7 +291,6 @@
                 android:layout_above="@id/gift_animation_view" />
         </RelativeLayout>
 
-        <include layout="@layout/audience_live_over_page"></include>
 
         <include layout="@layout/gift_plan_layout"></include>
 
@@ -303,6 +301,4 @@
             android:layout_alignParentBottom="true"
             />
     </RelativeLayout>
-
-
 </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>

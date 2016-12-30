@@ -20,7 +20,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.lalocal.lalocal.MyApplication;
 import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobHelper;
@@ -186,6 +185,7 @@ public class ContentLoader {
             response = new ContentResponse(GET_MESSAGE_COUNT);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMessageCount(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
     }
 
@@ -3885,8 +3885,8 @@ public class ContentLoader {
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        headers.put("LATITUDE", "38.65777");
-        headers.put("LONGITUDE", "104.08296");
+        headers.put("LATITUDE",CommonUtil.LATITUDE);
+        headers.put("LONGITUDE", CommonUtil.LONGITUDE);
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
 //        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
@@ -3922,12 +3922,6 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
-        if (MyApplication.isDebug) {
-            for (Map.Entry<String, String> entry : map.entrySet()) {
-                AppLog.print("loginHeadParams:key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
-            }
-        }
-
         return map;
 
     }
