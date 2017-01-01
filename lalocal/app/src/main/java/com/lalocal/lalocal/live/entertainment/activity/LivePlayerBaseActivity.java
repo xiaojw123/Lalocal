@@ -1554,7 +1554,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     public void gotoPersonalMessage(boolean chatVisible, String accId, String nickName) {
-        AppLog.i("TAG","获取用户accId:"+accId);
+
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Bundle chatBundle = new Bundle();

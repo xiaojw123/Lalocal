@@ -3,7 +3,6 @@ package com.lalocal.lalocal.activity.fragment;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -194,9 +193,9 @@ public class LiveFragment extends BaseFragment {
         AppLog.i("sfr", "onResult requestCode " + requestCode);
         if (requestCode == 123) {
             isNeedRefresh = false;
+            getChannelIndexTotal(mCurPageNum,mCategoryId);
         }
     }
-
     /**
      * 初始化
      */
