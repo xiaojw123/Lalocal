@@ -4,6 +4,18 @@
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_delete_photo.png"
     },
     {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_arrow_left.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_arrow_left.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\choosepic_sel.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\choosepic_sel.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_arrow_drop_down.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_arrow_drop_down.png"
+    },
+    {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_gf_crop.png",
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_gf_crop.png"
     },
@@ -24,8 +36,8 @@
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_gf_done.png"
     },
     {
-        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_gf_back.png",
-        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_gf_back.png"
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_keyboard_arrow_left_black_48dp.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_keyboard_arrow_left_black_48dp.png"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_gf_clear.png",
@@ -42,6 +54,10 @@
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\ic_gf_crop_tile.png",
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\ic_gf_crop_tile.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\choosepic_unsel.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xhdpi\\choosepic_unsel.png"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi-v4\\androidloading.9.png",

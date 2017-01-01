@@ -8,6 +8,14 @@
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_gf_camera.png"
     },
     {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_arrow_drop_down.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_arrow_drop_down.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_arrow_left.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_arrow_left.png"
+    },
+    {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_gf_crop.png",
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_gf_crop.png"
     },
@@ -24,7 +32,7 @@
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_gf_rotate.png"
     },
     {
-        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_gf_back.png",
-        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_gf_back.png"
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_keyboard_arrow_left_black_48dp.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-hdpi\\ic_keyboard_arrow_left_black_48dp.png"
     }
 ]

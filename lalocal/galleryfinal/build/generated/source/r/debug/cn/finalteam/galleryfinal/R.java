@@ -65,19 +65,23 @@ containing a value of this type.
     public static final class drawable {
         public static int androidloading=0x7f020000;
         public static int bg_gf_crop_texture=0x7f020001;
-        public static int gf_ic_preview=0x7f020002;
-        public static int ic_delete_photo=0x7f020003;
-        public static int ic_folder_check=0x7f020004;
-        public static int ic_gf_back=0x7f020005;
-        public static int ic_gf_camera=0x7f020006;
-        public static int ic_gf_clear=0x7f020007;
-        public static int ic_gf_crop=0x7f020008;
-        public static int ic_gf_crop_tile=0x7f020009;
-        public static int ic_gf_default_photo=0x7f02000a;
-        public static int ic_gf_done=0x7f02000b;
-        public static int ic_gf_preview=0x7f02000c;
-        public static int ic_gf_rotate=0x7f02000d;
-        public static int ic_gf_triangle_arrow=0x7f02000e;
+        public static int choosepic_sel=0x7f020002;
+        public static int choosepic_unsel=0x7f020003;
+        public static int gf_ic_preview=0x7f020004;
+        public static int ic_arrow_drop_down=0x7f020005;
+        public static int ic_arrow_left=0x7f020006;
+        public static int ic_delete_photo=0x7f020007;
+        public static int ic_folder_check=0x7f020008;
+        public static int ic_gf_camera=0x7f020009;
+        public static int ic_gf_clear=0x7f02000a;
+        public static int ic_gf_crop=0x7f02000b;
+        public static int ic_gf_crop_tile=0x7f02000c;
+        public static int ic_gf_default_photo=0x7f02000d;
+        public static int ic_gf_done=0x7f02000e;
+        public static int ic_gf_preview=0x7f02000f;
+        public static int ic_gf_rotate=0x7f020010;
+        public static int ic_gf_triangle_arrow=0x7f020011;
+        public static int ic_keyboard_arrow_left_black_48dp=0x7f020012;
     }
     public static final class id {
         public static int fab_crop=0x7f07000b;

@@ -4,12 +4,24 @@
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\gf_ic_preview.png"
     },
     {
-        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_gf_back.png",
-        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\ic_gf_back.png"
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_keyboard_arrow_left_black_48dp.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\ic_keyboard_arrow_left_black_48dp.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_arrow_left.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\ic_arrow_left.png"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_gf_crop.png",
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\ic_gf_crop.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\choosepic_unsel.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\choosepic_unsel.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_arrow_drop_down.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\ic_arrow_drop_down.png"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_gf_camera.png",
@@ -22,6 +34,10 @@
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_gf_clear.png",
         "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\ic_gf_clear.png"
+    },
+    {
+        "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\choosepic_sel.png",
+        "source": "D:\\Git_lalocal\\lalocal\\galleryfinal\\src\\main\\res\\drawable-xxhdpi\\choosepic_sel.png"
     },
     {
         "merged": "D:\\Git_lalocal\\lalocal\\galleryfinal\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi-v4\\ic_folder_check.png",

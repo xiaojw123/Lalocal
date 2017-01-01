@@ -8,15 +8,15 @@ package pl.droidsonroids.gif;
 
 public final class R {
 	public static final class attr {
-		public static int freezesAnimation = 0x7f0100d7;
-		public static int gifSource = 0x7f0100d5;
-		public static int isOpaque = 0x7f0100d6;
+		public static int freezesAnimation = 0x7f0100d8;
+		public static int gifSource = 0x7f0100d6;
+		public static int isOpaque = 0x7f0100d7;
 	}
 	public static final class styleable {
-		public static int[] GifTextureView = { 0x7f0100d5, 0x7f0100d6 };
+		public static int[] GifTextureView = { 0x7f0100d6, 0x7f0100d7 };
 		public static int GifTextureView_gifSource = 0;
 		public static int GifTextureView_isOpaque = 1;
-		public static int[] GifView = { 0x7f0100d7 };
+		public static int[] GifView = { 0x7f0100d8 };
 		public static int GifView_freezesAnimation = 0;
 	}
 }
