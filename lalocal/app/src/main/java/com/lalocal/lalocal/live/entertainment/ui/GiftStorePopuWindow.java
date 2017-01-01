@@ -14,11 +14,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.LoginActivity;
 import com.lalocal.lalocal.activity.RechargeActivity;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResultBean;
+import com.lalocal.lalocal.me.LLoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +49,9 @@ public class GiftStorePopuWindow extends PopupWindow {
         IndicatorView mIndicatorView = (IndicatorView) giftView.findViewById(R.id.idv_banner);
         TextView giftSend = (TextView) giftView.findViewById(R.id.audience_gift_send);
         List<GridView> list = new ArrayList<>();
+        if(giftSresult==null){
+            return;
+        }
         int giftCountSize = giftSresult.size();
         int viewPageCount=(giftCountSize%6)==0?(giftCountSize/6):(giftCountSize/6)+1;
         for(int i=0;i<viewPageCount;i++){
@@ -161,8 +164,7 @@ public class GiftStorePopuWindow extends PopupWindow {
     }
 
     private void login() {
-        Intent intent=new Intent(mContext, LoginActivity.class);
-        mContext.startActivity(intent);
+        LLoginActivity.start(mContext);
     }
 
     private void charge() {

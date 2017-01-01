@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:id="@+id/reply_title_layout"
+    android:background="@color/white"
+    android:gravity="center"
+    android:visibility="gone">
+    <TextView
+        android:id="@+id/review_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/live_padding_15dp"
+        android:textSize="@dimen/text_size_15_sp"
+        android:text="@string/review"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/reply_write_iv"
+        android:layout_alignEnd="@+id/reply_write_iv" />
+
+    <ImageView
+        android:id="@+id/reply_write_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:src="@drawable/write_reply"
+        android:layout_alignParentRight="true"
+        android:paddingRight="@dimen/live_padding_15dp"/>
+
+</RelativeLayout>

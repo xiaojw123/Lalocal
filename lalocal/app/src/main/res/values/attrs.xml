@@ -21,6 +21,7 @@
         <attr name="maxLen" format="integer"/>
         <attr name="dights" format="string"/>
         <attr name="isPsw" format="boolean"/>
+        <attr name="clearVisible" format="boolean"/>
     </declare-styleable>
     <declare-styleable name="CustomTitleView">
         <attr name="title_name" format="string"/>
@@ -59,6 +60,9 @@
         <attr name="is_password" format="boolean"/>
         <attr name="my_maxLen" format="integer"/>
         <attr name="hint" format="string"/>
+        <attr name="clearEanble" format="boolean"/>
+        <attr name="my_background" format="reference"/>
+        <attr name="my_width" format="dimension"/>
     </declare-styleable>
     <declare-styleable name="LCustomLayout">
         <attr name="l_title" format="string"/>
@@ -90,4 +94,23 @@
         <attr name="lineSpacingMultiplier"/>
         <attr name="maxLines"/>
     </declare-styleable>
+
+    <!--阴影属性-->
+    <declare-styleable name="MyShadow">
+        <attr name="shadow_width" format="dimension|reference" />
+        <attr name="shadow_alpha" format="float|reference" />
+        <attr name="shadow_color" format="color|reference" />
+    </declare-styleable>
+
+    <attr name="progressButtonStyle" format="reference" />
+
+    <declare-styleable name="ProgressButton">
+        <attr name="pb_background" format="reference" />
+        <attr name="pb_BackgroundColor" format="color" />
+        <attr name="pb_TextSize" format="dimension" />
+        <attr name="pb_TextColor" format="color" />
+        <attr name="pb_text" format="string" />
+        <attr name="isOrangeBg" format="boolean"/>
+    </declare-styleable>
+
 </resources>

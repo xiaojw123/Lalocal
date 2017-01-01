@@ -16,6 +16,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
+import com.lalocal.lalocal.live.entertainment.ui.MyAnimationDrawable;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
@@ -41,7 +42,6 @@ public class GiftPlaneAnimation {
     private String avatar;
 
 
-
     public GiftPlaneAnimation(ImageView anchorHeadImg,ImageView userHeadImg,ImageView giftPlaneUp, RelativeLayout giftPlanceBg, Context mContext,String avatar) {
         mAnchorHeadImg=anchorHeadImg;
         mUserHeadImg=userHeadImg;
@@ -49,6 +49,7 @@ public class GiftPlaneAnimation {
         this.mContext = mContext;
         this.giftPlaneBg = giftPlanceBg;
         this.avatar=avatar;
+
         gfitPlaneIndex = giftPlanceBg.getChildAt(0);
         giftPlaneText = (TextView) giftPlanceBg.getChildAt(1);
         AppLog.i("TAG","飞机动画1:avatar"+avatar);
@@ -78,16 +79,16 @@ public class GiftPlaneAnimation {
         mAnchorHeadImg.setVisibility(View.VISIBLE);
         mUserHeadImg.setVisibility(View.VISIBLE);
         AppLog.i("TAG","飞机动画2："+giftBean.getHeadImage());
+
         DrawableUtils.displayImg(mContext,mUserHeadImg,giftBean.getHeadImage());
         target.setVisibility(View.VISIBLE);
-        target.setBackgroundResource(R.drawable.plane_rocket);
+
         giftPlaneBg.setVisibility(View.VISIBLE);
         String s = giftBean.getUserName() + "  与主播同乘飞机旅行";
         TextView sendName= (TextView) giftPlanceBg.findViewById(R.id.audience_gift_send_plane);
         sendName.setText(s);
         giftPlaneBg.startAnimation(getTranslateAnim());
-        rocketAnimation = (AnimationDrawable) target.getBackground();
-        rocketAnimation.start();
+        MyAnimationDrawable.animateRawManuallyFromXML(R.drawable.plane_rocket,target,null,null);
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -133,7 +134,7 @@ public class GiftPlaneAnimation {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1 || msg.what == 2) {
-                rocketAnimation.stop();
+
                 isStartAnim=true;
                 if (msg.what == 1) {
                     giftPlaneUp.setVisibility(View.GONE);

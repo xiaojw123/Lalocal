@@ -4,13 +4,12 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
-import android.text.Spannable;
-import android.text.SpannableStringBuilder;
 import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -18,6 +17,8 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.im.session.BarrageViewBean;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DrawableUtils;
 
 import java.lang.ref.SoftReference;
 import java.util.ArrayList;
@@ -28,16 +29,17 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * 弹幕容器
  */
-public class BarrageView extends RelativeLayout {
+public class BarrageView extends RelativeLayout{
 
     private static final String TAG = "BarrageView";
-
     private static final int DEFAULT_RANDOM_COLOR_NUM = 10;
-
     private static final boolean OUTPUT_LOG = true;
+    private  int padding;
 
     private Random random;
 
@@ -46,7 +48,7 @@ public class BarrageView extends RelativeLayout {
 
     // 轨道管理
     private Set<Integer> linesUnavailable = new HashSet<>();
-    private Queue<SoftReference<TextView>> textViewCache = new LinkedList<>();
+    private Queue<SoftReference<LinearLayout>> textViewCache = new LinkedList<>();
     private int lineCount;
     private int lineHeight;
 
@@ -67,7 +69,7 @@ public class BarrageView extends RelativeLayout {
         int totalLineHeight = getBottom() - getTop() - getPaddingTop() - getPaddingBottom();
         this.lineHeight = ScreenUtil.sp2px(config.getMaxTextSizeSp());
         this.lineCount = totalLineHeight / lineHeight;
-
+        this.padding= DensityUtil.dip2px(getContext(), 3);
         // random colors
         if (config.getColors() == null || config.getColors().isEmpty()) {
             List<Integer> colors = new ArrayList<>(DEFAULT_RANDOM_COLOR_NUM);
@@ -86,16 +88,7 @@ public class BarrageView extends RelativeLayout {
         checkAndRunTextBarrage();
     }
 
-    private SpannableStringBuilder textviewSetContent(String text) {
-        String[] textContent = text.split(":");
-        String nameText = textContent[0];
-        String contentText = textContent[1];
-        int length = nameText.length();
-        SpannableStringBuilder style=new SpannableStringBuilder(text);
-        style.setSpan(new ForegroundColorSpan(Color.parseColor("#97d3e9")), 0, length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        style.setSpan(new ForegroundColorSpan(Color.WHITE), length+1, text.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        return  style;
-    }
+
 
     private void checkAndRunTextBarrage() {
         if (textCache.isEmpty()) {
@@ -108,80 +101,135 @@ public class BarrageView extends RelativeLayout {
             return; // pend
         }
 
-        // find cached text view
-        TextView textView = null;
-        SoftReference<TextView> softReference;
+        LinearLayout linearLayout=null;
+        SoftReference<LinearLayout> softReference;
         while (true) {
             softReference = textViewCache.poll();
-            if (softReference == null || (textView = softReference.get()) != null) {
+            if (softReference == null || (linearLayout = softReference.get()) != null) {
                 break; // queue is empty or find available cached object
             }
         }
-
         // create text view
         poll = textCache.poll();
-        if (textView == null) {
-            textView = buildTextView(poll, availableLine);
+        if(poll==null){
+            return;
+        }
+        if (linearLayout == null) {
+            linearLayout = buildTextView(poll, availableLine);
 
         } else {
-            textView = reuseTextView(textView, poll, availableLine);
+            linearLayout = reuseTextView(linearLayout, poll, availableLine);
         }
-
         // run
-        buildTranslationAnimator(textView, availableLine,poll).start();
+        buildTranslationAnimator(linearLayout, availableLine,poll).start();
     }
 
-    private TextView buildTextView(final BarrageViewBean text, int line) {
-        if (TextUtils.isEmpty(text.getContent())) {
+    private LinearLayout buildTextView(final BarrageViewBean barrageBean, int line) {
+        if (TextUtils.isEmpty(barrageBean.getContent())) {
             return null;
         }
-        SpannableStringBuilder spannableStringBuilder = textviewSetContent(text.getContent());
-        // text content
-        TextView textView = new TextView(getContext());
-        textView.setText(spannableStringBuilder);
-        textView.setSingleLine();
+        LinearLayout linearLayoutParent=new LinearLayout(getContext());
+        linearLayoutParent.setOrientation(LinearLayout.HORIZONTAL);
+        TextView textNull=new TextView(getContext());
+        textNull.setText("     ");
 
-        // text size
-      /*  int textSizeSp = config.getMinTextSizeSp() + random.nextInt(config.getMaxTextSizeSp() - config.getMinTextSizeSp() + 1);
-        textView.setTextSize(textSizeSp);*/
+        LinearLayout linearLayout=new LinearLayout(getContext());
+        linearLayout.setPadding(padding,padding,padding,padding);
+        linearLayout.setBackgroundResource(R.drawable.barrage_view_bg);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setGravity(Gravity.CENTER);
 
-        // text color
-        int textColor;
-       /* if (config.getColors() != null && !config.getColors().isEmpty()) {
-            textColor = config.getColors().get(random.nextInt(config.getColors().size()));
-        } else {
-            textColor = Color.rgb(random.nextInt(256), random.nextInt(256), random.nextInt(256));
-        }*/
-     //   textView.setTextColor(Color.parseColor("#97d3e9"));
-        textView.setBackgroundResource(R.drawable.barrage_view_textview_bg);
-        textView.setPadding(5,5,5,5);
 
-        // layout param
+        linearLayoutParent.addView(linearLayout);
+        linearLayoutParent.addView(textNull);
+        CircleImageView imageView=new CircleImageView(getContext());
+        if(barrageBean.getAvator()!=null){
+            DrawableUtils.displayImg(getContext(),imageView,barrageBean.getAvator());
+        }else {
+            imageView.setImageResource(R.drawable.androidloading);
+        }
+
+        linearLayout.addView(imageView);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+        layoutParams.height= DensityUtil.dip2px(getContext(),22);
+        layoutParams.width=DensityUtil.dip2px(getContext(),22);
+        layoutParams.gravity= Gravity.CENTER;
+        imageView.setLayoutParams(layoutParams);
+        TextView textName = new TextView(getContext());
+        textName.setText(barrageBean.getSenderName());
+        textName.setSingleLine();
+        textName.setMaxEms(7);
+        textName.setTextColor(Color.parseColor("#ffaa2a"));
+        textName.setPadding(padding,0,padding,0);
+        textName.setEllipsize(TextUtils.TruncateAt.END);
+        linearLayout.addView(textName);
+
+        TextView textContent = new TextView(getContext());
+        textContent.setText(barrageBean.getContent());
+        textContent.setSingleLine();
+        textContent.setMaxEms(30);
+        textContent.setTextColor(Color.WHITE);
+        textContent.setPadding(padding,0,padding,0);
+        textContent.setEllipsize(TextUtils.TruncateAt.END);
+        linearLayout.addView(textContent);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         params.topMargin = line * lineHeight;
-        textView.setLayoutParams(params);
+        linearLayoutParent.setLayoutParams(params);
 
-        // add view to container
-        addView(textView);
+        addView(linearLayoutParent);
 
-
-
-        return textView;
+        return linearLayoutParent;
     }
 
-    private TextView reuseTextView(TextView textView,final BarrageViewBean text, int line) {
-        textView.setText(textviewSetContent(text.getContent()));
-        LayoutParams params = (LayoutParams) textView.getLayoutParams();
-        params.topMargin = line * lineHeight;
-        textView.setLayoutParams(params);
-        // re add view to container
-        addView(textView);
+    private LinearLayout reuseTextView(LinearLayout  linearLayoutParent,final BarrageViewBean barrageBean, int line) {
+        linearLayoutParent.removeAllViews();
+        CircleImageView imageView=new CircleImageView(getContext());
+        if(barrageBean.getAvator()!=null){
+            DrawableUtils.displayImg(getContext(),imageView,barrageBean.getAvator());
+        }else{
+            imageView.setImageResource(R.drawable.androidloading);
+        }
+        LinearLayout linearLayout=new LinearLayout(getContext());
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        TextView textNull=new TextView(getContext());
+        textNull.setText("     ");
+        linearLayoutParent.addView(linearLayout);
+        linearLayoutParent.addView(textNull);
+        linearLayout.setGravity(Gravity.CENTER);
+        linearLayout.setPadding(padding,padding,padding,padding);
+        linearLayout.setBackgroundResource(R.drawable.barrage_view_bg);
+        linearLayout.addView(imageView);
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+        layoutParams.height=DensityUtil.dip2px(getContext(),22);
+        layoutParams.width=DensityUtil.dip2px(getContext(),22);
+        layoutParams.gravity=Gravity.CENTER;
+        imageView.setLayoutParams(layoutParams);
 
+        TextView textName = new TextView(getContext());
+        textName.setText(barrageBean.getSenderName());
+        textName.setSingleLine();
+        textName.setMaxEms(7);
+        textName.setTextColor(Color.parseColor("#ffaa2a"));
+        textName.setPadding(padding,0,padding,0);
+        textName.setEllipsize(TextUtils.TruncateAt.END);
+        linearLayout.addView(textName);
+
+        TextView textContent = new TextView(getContext());
+        textContent.setText(barrageBean.getContent());
+        textContent.setSingleLine();
+        textContent.setMaxEms(30);
+        textContent.setTextColor(Color.WHITE);
+        textContent.setPadding(padding,0,padding,0);
+        textContent.setEllipsize(TextUtils.TruncateAt.END);
+        linearLayout.addView(textContent);
+        LayoutParams params = (LayoutParams) linearLayoutParent.getLayoutParams();
+        params.topMargin = line * lineHeight;
+        linearLayoutParent.setLayoutParams(params);
+        addView(linearLayoutParent);
         // log
         log("reuse text barrage");
-
-        return textView;
+        return linearLayoutParent;
     }
 
     private int getAvailableLine() {
@@ -200,10 +248,11 @@ public class BarrageView extends RelativeLayout {
         return line;
     }
 
-    private ObjectAnimator buildTranslationAnimator(final TextView target, final int line,final BarrageViewBean text) {
-
-
-        final int textLength = (int) target.getPaint().measureText(target.getText().toString());
+    private  BarrageViewBean barrageBean;
+    private ObjectAnimator buildTranslationAnimator(final LinearLayout target, final int line,final BarrageViewBean barrageBean) {
+        target.measure(0,0);
+        this.barrageBean=barrageBean;
+        final int textLength =target.getMeasuredWidth();
         final int duration = config.getDuration() +( random.nextInt() % 500);
         final int freeLineDuration = (int) ((textLength + 50.0f) / (1.0f * getWidth() / duration));
         ObjectAnimator animator = ObjectAnimator.ofFloat(target, "translationX", getWidth(), -textLength).setDuration(duration);
@@ -211,7 +260,6 @@ public class BarrageView extends RelativeLayout {
             @Override
             public void onAnimationStart(Animator animation) {
                 AppLog.i("TAG","text barrage run, line=" + line + ", duration=" + duration + ", freeLineDuration=" + freeLineDuration);
-
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -223,6 +271,7 @@ public class BarrageView extends RelativeLayout {
             @Override
             public void onAnimationEnd(Animator animation) {
                 onTextBarrageDone(target, line);
+
             }
 
             @Override
@@ -238,12 +287,10 @@ public class BarrageView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if(onBarrageClickListener!=null){
-                    onBarrageClickListener.getUserId(text.getUserId());
+                    onBarrageClickListener.getUserId(barrageBean.getUserId());
                 }
             }
         });
-
-
         return animator;
     }
 
@@ -254,27 +301,14 @@ public class BarrageView extends RelativeLayout {
         checkAndRunTextBarrage();
     }
 
-    private void onTextBarrageDone(final TextView view, final int line) {
-        log("text barrage completed, line=" + line);
-
-        // should remove strong reference
+    private void onTextBarrageDone(final LinearLayout view, final int line) {
+        AppLog.i("TAG","弹幕动画结束，移除view");
         removeView(view);
-
-        // add to cache for reuse
         textViewCache.add(new SoftReference<>(view));
 
         checkAndRunTextBarrage();
     }
 
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        super.onWindowVisibilityChanged(visibility);
-        if (View.GONE == visibility) {
-
-        } else {
-
-        }
-    }
 
     private void log(String message) {
         if (OUTPUT_LOG) {
@@ -285,7 +319,7 @@ public class BarrageView extends RelativeLayout {
     private OnBarrageClickListener onBarrageClickListener;
 
     public interface OnBarrageClickListener {
-       void getUserId(String userId);
+        void getUserId(String userId);
     }
 
     public void setOnBarrageClickListener( OnBarrageClickListener onBarrageClickListener) {

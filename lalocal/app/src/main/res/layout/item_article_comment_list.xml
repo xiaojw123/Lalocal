@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_click"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/dimen_size_15_dp">
+
+    <com.makeramen.roundedimageview.RoundedImageView
+        android:id="@+id/img_user_avatar"
+        android:layout_width="@dimen/dimen_size_35_dp"
+        android:layout_height="@dimen/dimen_size_35_dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/androidloading"
+        app:riv_oval="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="加载中..."
+            android:textColor="@color/color_0065b2"
+            android:textSize="@dimen/text_size_15_sp" />
+
+        <TextView
+            android:id="@+id/tv_reply_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.3"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="00-00 00:00"
+            android:textColor="@color/color_191000"
+            android:textSize="@dimen/text_size_12_sp" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dimen_size_15_dp"
+            android:text="评论加载中"
+            android:textColor="@color/color_191000"
+            android:textSize="@dimen/text_size_14_sp" />
+
+        <TextView
+            android:id="@+id/tv_reply_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_f8"
+            android:layout_marginTop="@dimen/dimen_size_8_dp"
+            android:padding="@dimen/dimen_size_10_dp"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

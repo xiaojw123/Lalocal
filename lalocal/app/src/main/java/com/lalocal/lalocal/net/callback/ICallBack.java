@@ -1,6 +1,8 @@
 package com.lalocal.lalocal.net.callback;
 
 
+import android.widget.CompoundButton;
+
 import com.android.volley.VolleyError;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
@@ -9,15 +11,22 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
+import com.lalocal.lalocal.model.CmbPay;
+import com.lalocal.lalocal.model.CommentOperateResp;
+import com.lalocal.lalocal.model.CommentsResp;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
-import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
@@ -26,25 +35,31 @@ import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
+import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
+import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.PraiseComment;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
+import com.lalocal.lalocal.model.RecommendRowsBean;
+import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
+import com.lalocal.lalocal.model.SocialUser;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
@@ -52,6 +67,9 @@ import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.model.VersionInfo;
 import com.lalocal.lalocal.model.WalletContent;
 import com.lalocal.lalocal.model.WelcomeImg;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -71,7 +89,7 @@ public abstract class ICallBack {
     }
 
 
-    public void onChargeGold(String result){
+    public void onChargeGold(String result,String channel){
 
     }
 
@@ -118,7 +136,11 @@ public abstract class ICallBack {
 
 
     }
-    public void onGetMoreItems(int pageNumber,int totalPages,List<SearchItem> items){
+    public void onGetMoreItems(String key,int pageNumber,int totalPages,List<SearchItem> items){
+
+
+    }
+    public void onGetMoreItems(int type,String key,int pageNumber,int totalPages,List<SearchItem> items){
 
 
     }
@@ -181,7 +203,7 @@ public abstract class ICallBack {
 
     }
 
-    public void onCheckEmail(String email) {
+    public void onCheckEmail(String email,String userid) {
 
 
     }
@@ -200,7 +222,7 @@ public abstract class ICallBack {
     }
     public void onResponseFailed(int returnCode,String message){
     }
-    public void onResponseFailed(String message,int returnCode){
+    public void onResponseFailed(String message,int requestCode){
     }
     //推荐
     public void onRecommend(RecommendDataResp recommendDataResp){}
@@ -278,7 +300,7 @@ public abstract class ICallBack {
     //礼物排行榜
     public void onGiftRanks(LiveGiftRanksResp liveGiftRanksResp) {
     }
-    public void onGetExchargeResult(CouponItem couponItem){
+    public void onGetExchargeResult(){
     }
 
     //在线人数
@@ -326,7 +348,7 @@ public abstract class ICallBack {
     public void onLiveHomeArea(LiveHomeAreaResp liveHomeAreaResp) {
     }
     //历史回放详情
-    public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+    public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
     }
     public void onGetChannelRecord(ChannelRecord record){
 
@@ -356,4 +378,135 @@ public abstract class ICallBack {
 
     }
 
+    public void onSocialLogin(User user, String bodyParams, String uidParams){
+
+    }
+
+    public void onSocialRegisterSuccess(User user){
+
+
+    }
+    public  void onBindPhoneSuccess(String phone){}
+
+    public void onGetSocialUsers(SocialUser wexinUser,SocialUser qqUser,SocialUser weiboUser){
+
+
+
+    }
+
+    public void onBindSocialUser(CompoundButton switchBtn,SocialUser wexinUser, SocialUser qqUser, SocialUser weiboUser){}
+
+    public void onUnBindSocialUser(CompoundButton switchBtn){
+
+
+    }
+
+    public void onLiveRoomAvatar(LiveRoomAvatarSortResp.ResultBean result) {
+    }
+
+    public void onResponseLog(String json) {
+
+
+    }
+
+    /**
+     * 获取首页我的关注
+     * @param bean
+     */
+    public void onGetHomeAttention(LiveRowsBean bean) {
+
+    }
+
+    /**
+     * 获取每日推荐
+     * @param bean
+     */
+    public void onGetDailyRecommend(RecommendationsBean bean) {
+
+    }
+
+    /**
+     * 直播间举报
+     * @param json
+     */
+    public void onGetChannelReport(String json) {
+    }
+
+
+    public void onCancelManager(String json) {
+    }
+
+    public void onUserMuteResult(String json) {
+    }
+
+    public void onPerpetualMute(int json) {
+    }
+
+    public void onResponseGetTags(List<String> tags){}
+
+    public void onGetCmbPayParams(CmbPay cmbPay){
+    }
+    public void onGetOrderStatus(int status){}
+    public void onGetPayStatus(int status){
+
+    }
+    public void onGetPushLogs(String date, List<MessageItem> items){}
+    public void onGetGLiveSearch(List<LiveRowsBean> rowList,String name){
+
+    }
+    public void onGetGPlayBackSearch(int pageNum,int toalPages,List<LiveRowsBean> rowList){
+
+    }
+
+    public void onGetGUserSearch(String key,int pageNum, int toalPages, List<LiveFansOrAttentionRowsBean> beanList){
+
+    }
+
+    public void onGetGSpecialSearch(String key,int pageNum, int toalPages, List<RecommendRowsBean> beanList){
+
+    }
+    public void onGetMessageCount(int msgCount){
+
+    }
+
+    public void onSendMessage(int code) {
+    }
+
+    public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {}
+
+    public void onGetYitu8City(boolean hasCity){
+
+    };
+    public void onGetUsersSerice(JSONArray resutJarray){
+
+    }
+    public void onGetUser(JSONObject resultJobj){
+
+    }
+    public void onGetUser(JSONObject resultJobj,int type){
+
+    }
+    public void onGetPraiseComment(PraiseComment praiseComment){
+
+    }
+    public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
+    }
+
+    public void onPlayBackMsgDetails(PlayBackMsgResultBean msgResultBean) {
+
+    }
+
+    public void onGetArticleComments(CommentsResp.ResultBean resultBean) {}
+
+    public void onSendComment(CommentOperateResp commentOperateResp) {}
+
+    public void onDeleteComment(CommentOperateResp commentOperateResp) {}
+
+    public void onAlterHistoryPlayBack(int returnCode) {
+
+    }
+
+    public void onSuperManagerCloseLive(int code) {
+
+    }
 }

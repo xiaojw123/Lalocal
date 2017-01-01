@@ -50,7 +50,6 @@
             android:textColorHint="@color/live_text_color"
             android:maxLength="20"
             android:layerType="software"
-
             android:textSize="@dimen/text_size_16_sp"
             android:windowSoftInputMode="stateVisible"
             android:textColor="@color/live_start_tv"/>

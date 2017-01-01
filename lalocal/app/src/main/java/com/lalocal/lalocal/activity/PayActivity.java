@@ -12,14 +12,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.model.CmbPay;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -34,6 +35,8 @@ import butterknife.OnClick;
 
 public class PayActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
     public static final int RESULT_BACK_PRODUCT = 0x11;
+    public static  final int RESULT_CMB_PAY_FAILED=0x21;
+    public static  final int RESULT_CMB_PAY_SUCCESS=0x22;
     public static final String ORDER_ID = "order_id";
     /**
      * 微信支付渠道
@@ -47,6 +50,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
      * 信诚分期付渠道
      */
     private static final String CHANNEL_XINCHENG = "xc";
+    public static final String CHANNEL_CMB = "cmb";
 
     @BindView(R.id.pay_order_title)
     TextView payOrderTitle;
@@ -60,6 +64,8 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     FrameLayout payMannerWeixinFl;
     @BindView(R.id.pay_manner_instalments_fl)
     FrameLayout payMannerInstalmentsFl;
+    @BindView(R.id.pay_manner_cmb_fl)
+    FrameLayout payMannerCmbFl;
     @BindView(R.id.pay_available_instalments)
     TextView payAvailableInstalments;
     @BindView(R.id.pay_showdetail_triangle_container)
@@ -103,13 +109,14 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
 
 
     @OnClick({R.id.pay_showdetail_triangle_btn, R.id.pay_btn, R.id.pay_order_info_item,
-            R.id.pay_manner_alipay_fl, R.id.pay_manner_weixin_fl, R.id.pay_manner_instalments_fl, R.id.pay_showdetail_triangle_container})
+            R.id.pay_manner_alipay_fl, R.id.pay_manner_weixin_fl, R.id.pay_manner_instalments_fl, R.id.pay_showdetail_triangle_container, R.id.pay_manner_cmb_fl})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
             case R.id.pay_manner_alipay_fl:
             case R.id.pay_manner_weixin_fl:
             case R.id.pay_manner_instalments_fl:
+            case R.id.pay_manner_cmb_fl:
                 selectPayManner(id);
                 break;
             case R.id.pay_order_info_item:
@@ -120,7 +127,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 break;
             case R.id.pay_btn:
                 //TODO:支付流程
-                MobHelper.sendEevent(this,MobEvent.ORDER_LIST_PAY);
+                MobHelper.sendEevent(this, MobEvent.ORDER_LIST_PAY);
                 //微信
                 if (payMannerWeixinCb.isSelected()) {
                     mChannelStr = CHANNEL_WECHAT;
@@ -136,6 +143,14 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 if (payMannerInstalmentsCb.isSelected()) {
                     mChannelStr = CHANNEL_XINCHENG;
                     AppLog.print("信诚——————支付————");
+                    return;
+                }
+                if (payMannerCmbFl.isSelected()) {
+                    mChannelStr = CHANNEL_CMB;
+                    AppLog.print("招行支付-----");
+                    if (mOrderDetail != null) {
+                        mContentloader.getCmbPay(mOrderDetail.getId());
+                    }
                     return;
                 }
                 //TODO:test
@@ -157,8 +172,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
         Intent intent = new Intent(this, OrderActivity.class);
         intent.putExtra(KeyParams.ORDER_ID, mOrderid);
         intent.putExtra(KeyParams.PRE_VIEW_PARAMS, true);
-//        startActivityForResult(intent,100);
-        startActivity(intent);
+        startActivityForResult(intent,100);
     }
 
     private void showDetailView() {
@@ -182,6 +196,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 }
                 payMannerWeixinCb.setSelected(false);
                 payMannerInstalmentsCb.setSelected(false);
+                payMannerCmbFl.setSelected(false);
                 break;
             case R.id.pay_manner_weixin_fl:
                 if (!payMannerWeixinCb.isSelected()) {
@@ -189,6 +204,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 }
                 payMannerAlipayCb.setSelected(false);
                 payMannerInstalmentsCb.setSelected(false);
+                payMannerCmbFl.setSelected(false);
                 break;
             case R.id.pay_manner_instalments_fl:
                 if (!payMannerInstalmentsCb.isSelected()) {
@@ -196,6 +212,15 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 }
                 payMannerAlipayCb.setSelected(false);
                 payMannerWeixinCb.setSelected(false);
+                payMannerCmbFl.setSelected(false);
+                break;
+            case R.id.pay_manner_cmb_fl:
+                if (!payMannerCmbFl.isSelected()) {
+                    payMannerCmbFl.setSelected(true);
+                }
+                payMannerAlipayCb.setSelected(false);
+                payMannerWeixinCb.setSelected(false);
+                payMannerInstalmentsCb.setSelected(false);
                 break;
         }
     }
@@ -240,8 +265,12 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                 setResult(RESULT_BACK_PRODUCT);
                 finish();
             }
-
+        }else{
+            if (resultCode==RESULT_CMB_PAY_SUCCESS){
+                showCompletePay();
+            }
         }
+
     }
 
     public void showCompletePay() {
@@ -290,20 +319,33 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
 
     class PayCallBack extends ICallBack {
         @Override
+        public void onGetCmbPayParams(CmbPay cmbPay) {
+            String cmbPayCommandUrl = AppConfig.getCmbPayCommand(
+                    cmbPay.getBranchId(),
+                    cmbPay.getCoNo(),
+                    cmbPay.getBillNo(),
+                    cmbPay.getAmount(),
+                    cmbPay.getDate(),
+                    cmbPay.getExpireTimeSpan(),
+                    cmbPay.getMerchantUrl(),
+                    cmbPay.getMerchantPara(),
+                    cmbPay.getMerchantCode(),
+                    cmbPay.getMerchantRetUrl(),
+                    cmbPay.getMerchantRetPara());
+            AppLog.print("招行支付命令————"+cmbPayCommandUrl);
+            Intent intent=new Intent(PayActivity.this,CmbPayActivity.class);
+            intent.putExtra(CmbPayActivity.CMB_PAY_URL,cmbPayCommandUrl);
+            intent.putExtra(KeyParams.ORDER_ID,mOrderDetail.getId());
+            startActivityForResult(intent,KeyParams.REQUEST_CODE);
+        }
+
+        @Override
         public void onGetPayResult(String result) {
             AppLog.print("onGetPayResult result___" + result);
             Pingpp.createPayment(PayActivity.this, result);
 
         }
 
-        @Override
-        public void onError(VolleyError volleyError) {
-            int code = volleyError.networkResponse.statusCode;
-            if (code == 401) {
-                Intent intent = new Intent(PayActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        }
 
         @Override
         public void onGetOrderDetail(OrderDetail detail) {
@@ -327,7 +369,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                             });
                             break;
                         default:
-                            MobHelper.sendEevent(PayActivity.this,MobEvent.PRODUCT_PAY_CANCEL);
+                            MobHelper.sendEevent(PayActivity.this, MobEvent.PRODUCT_PAY_CANCEL);
                             CommonUtil.showPromptDialog(PayActivity.this, "支付失败", new CustomDialog.CustomDialogListener() {
                                 @Override
                                 public void onDialogClickListener() {

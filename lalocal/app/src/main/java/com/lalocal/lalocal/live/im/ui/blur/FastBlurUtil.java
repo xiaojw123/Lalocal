@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.live.im.ui.blur;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 public class FastBlurUtil {
 
@@ -15,15 +14,16 @@ public class FastBlurUtil {
         Bitmap blurBitmap = doBlur(scaledBitmap, blurRadius);
 
         long endTime = System.currentTimeMillis();
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("blur image cost：").append(endTime - startTime).append(" ms")
-                .append(",image width=").append(originBitmap.getWidth())
-                .append(",height=").append(originBitmap.getHeight())
-                .append(",scaleRatio=").append(scaleRatio)
-                .append(",blurRadius=").append(blurRadius);
-
-        Log.i(TAG, sb.toString());
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append("blur image cost：").append(endTime - startTime).append(" ms")
+                    .append(",image width=").append(originBitmap.getWidth())
+                    .append(",height=").append(originBitmap.getHeight())
+                    .append(",scaleRatio=").append(scaleRatio)
+                    .append(",blurRadius=").append(blurRadius);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         return blurBitmap;
     }

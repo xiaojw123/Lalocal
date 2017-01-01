@@ -86,5 +86,26 @@
                     android:text="0"/>
             </LinearLayout>
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_theme_tag"
+            android:layout_width="@dimen/dimen_size_40_dp"
+            android:layout_height="@dimen/dimen_size_100_dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/nextsharemeeting_tag"
+            android:layout_marginRight="@dimen/dimen_size_25_dp">
+
+                <TextView
+                    android:id="@+id/tv_theme_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:textSize="@dimen/text_size_12_sp"
+                    android:textColor="@color/white"
+                    android:ems="1"
+                    android:lineSpacingExtra="@dimen/dimen_size_2_dp"
+                    android:layout_marginTop="@dimen/dimen_size_2_dp"/>
+
+        </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

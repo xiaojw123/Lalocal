@@ -4,10 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.SparseArray;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -17,12 +15,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
@@ -36,7 +33,6 @@ import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -54,14 +50,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 /**
  * Created by lenovo on 2016/6/22.
  */
 
-public class ProductDetailsActivity extends AppCompatActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
+public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
         View.OnClickListener, CustomTitleView.onBackBtnClickListener {
 
-    private static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
 
@@ -226,11 +222,11 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 break;
             case R.id.product_customer_service:
                 MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
-                startOnlineService();
+                CommonUtil.startCustomService(this);
                 //去客服页面
                 break;
             case R.id.product_btn_like:
-                //TODO 收藏
+                // 收藏
                 MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIKE);
                 if (result != null) {
                     //取消收藏
@@ -243,7 +239,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 }
                 break;
             case R.id.product_btn_share:
-                //TODO 分享
+                // 分享
                 MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_SHARE);
                 if (result != null) {
                     SpecialShareVOBean shareVO = result.shareVO;
@@ -251,20 +247,16 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 }
                 break;
             case R.id.product_details_reserve:
-                //TODO 预定
+                // 预定
                 MobHelper.sendEevent(this,MobEvent.PRODUCT_BOOKING);
                 if (UserHelper.isLogined(this)) {
-                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
+                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this),v);
                 } else {
-                    Intent preIntent = new Intent();
-                    preIntent.setClass(this, LoginActivity.class);
-                    startActivityForResult(preIntent, 100);
+                    LLoginActivity.start(this);
                 }
-
-
                 break;
             case R.id.product_check_detail:
-                //TODO 查看详情
+                // 查看详情
                 if (result != null && result.url != null) {
                     String url = result.url;
                     Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);
@@ -274,8 +266,8 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
                 break;
             case R.id.product_service_ll:
-                startOnlineService();
-
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
+                CommonUtil.startCustomService(this);
                 break;
         }
     }
@@ -285,28 +277,12 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
         if (result != null) {
             String orderUrl = result.orderUrl;
             if (!TextUtils.isEmpty(orderUrl)) {
-                int userId = UserHelper.getUserId(this);
-                String token = UserHelper.getToken(this);
-                String device = CommonUtil.getDevice();
-                String devcieId = CommonUtil.getUUID(this);
-                String version = AppConfig.getVersionName(this);
                 Intent intent = new Intent();
                 intent.setClass(this, BookActivity.class);
-                intent.putExtra(BookActivity.BOOK_URL, String.format(BOOK_URL_FORMART, orderUrl, userId, token, version, device, devcieId));
+                intent.putExtra(BookActivity.BOOK_URL, orderUrl);
                 startActivity(intent);
             }
         }
-    }
-
-    public void startOnlineService() {
-        Intent intent = new Intent(this, ChatActivity.class);
-        if (result != null) {
-            intent.putExtra(Constant.ITEM_TITLE, result.title);
-            intent.putExtra(Constant.ITEM_DES, result.description);
-            intent.putExtra(Constant.ITEM_POST_URL, result.photo);
-            intent.putExtra(Constant.ITEM_PRICE, String.valueOf((int) result.price));
-        }
-        startActivity(intent);
     }
 
 
@@ -335,17 +311,31 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 if (user.getStatus() == 0) {
                     preOrderProduct();
                 } else {
-                    CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", new CustomDialog.CustomDialogListener() {
-                        @Override
-                        public void onDialogClickListener() {
-                            Intent intent = new Intent(ProductDetailsActivity.this, AccountEidt2Activity.class);
-                            intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
-                            intent.putExtra("emailtext", user.getEmail() + "(未验证)");
-                            intent.putExtra(KeyParams.USERID, user.getId());
-                            intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
-                            startActivity(intent);
-                        }
-                    });
+                    String email=user.getEmail();
+                    if (TextUtils.isEmpty(email)){
+                        CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未绑定,请前去绑定", new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                Intent intent = new Intent(ProductDetailsActivity.this, EmailBoundActivity.class);
+                                intent.putExtra(KeyParams.USERID, user.getId());
+                                intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
+                                startActivity(intent);
+                            }
+                        });
+
+                    }else {
+                        CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", new CustomDialog.CustomDialogListener() {
+                            @Override
+                            public void onDialogClickListener() {
+                                Intent intent = new Intent(ProductDetailsActivity.this, AccountEidt2Activity.class);
+                                intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
+                                intent.putExtra("emailtext", user.getEmail() + "(未验证)");
+                                intent.putExtra(KeyParams.USERID, user.getId());
+                                intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(ProductDetailsActivity.this));
+                                startActivity(intent);
+                            }
+                        });
+                    }
                 }
             }
 
@@ -369,7 +359,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                 productDetail(result);
                 List<PhotosVosBean> photoVOs = result.photoVOs;
                 List<RecommendAdResultBean> list = new ArrayList<>();
-                if (photoVOs.size() > 0) {
+                if (photoVOs!=null&&photoVOs.size() > 0) {
                     //显示轮播图
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoVOs.size(); i++) {
@@ -381,7 +371,7 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
                         list.add(recommendAdResultBean);
                     }
                     showphotos(list);
-                } else if (photoList.size() > 0) {
+                } else if (photoList!=null&&photoList.size() > 0) {
                     detailsPhoto1.setVisibility(View.GONE);
 
                     for (int i = 0; i < photoList.size(); i++) {
@@ -425,17 +415,17 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //轮播图
     private void showphotos(List<RecommendAdResultBean> list) {
-
-        View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.product_viewpager, null);
-
-        CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
-
-        if (list.size() > 0) {
-
-            ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
+        try {
+            View inflate = LayoutInflater.from(ProductDetailsActivity.this).inflate(R.layout.product_viewpager, null);
+            CycleViewPager cycleViewPager = (CycleViewPager) getFragmentManager().findFragmentById(R.id.lunbotu_content);
+            if (list.size() > 0) {
+                ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
+            }
+            phones.addView(inflate);
+        }catch (Exception e){
+            e.printStackTrace();
         }
 
-        phones.addView(inflate);
     }
 
     //产品详情介绍
@@ -628,21 +618,9 @@ public class ProductDetailsActivity extends AppCompatActivity implements MyScrol
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO,String.valueOf(specialToH5Bean.getTargetId()));
-        sharePopupWindow.showShareWindow();
-        sharePopupWindow.showAtLocation(ProductDetailsActivity.this.findViewById(R.id.product),
-                Gravity.BOTTOM, 0, 0);
-
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext,shareVO);
+        sharePopupWindow.show();
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LoginActivity.REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            contentService.login(email, psw);
-        }
-
-    }
 
 }

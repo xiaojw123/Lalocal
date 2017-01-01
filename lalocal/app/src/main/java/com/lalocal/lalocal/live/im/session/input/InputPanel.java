@@ -25,6 +25,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
+import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
@@ -80,9 +81,9 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     protected FrameLayout textAudioSwitchLayout; // 切换文本，语音按钮布局
 
 
-    protected View moreFuntionButtonInInputBar;// 更多消息选择按钮
+
     protected View sendMessageButtonInInputBar;// 发送消息按钮
-    protected View emojiButtonInInputBar;// 发送消息按钮
+
     protected View messageInputBar;
 
     // 表情
@@ -125,6 +126,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         init();
     }
 
+
     public InputPanel(Context mContext,Container container, View view, List<BaseAction> actions,String creatorAccount,int userId, String channelId) {
         this(mContext,container, view, actions, new InputConfig(),creatorAccount,userId, channelId);
     }
@@ -146,7 +148,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         initViews();
         initInputBarListener();
         initTextEdit();
-
         restoreText(false);
 
         for (int i = 0; i < actions.size(); ++i) {
@@ -167,14 +168,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         messageInputBar = view.findViewById(R.id.textMessageLayout);
         barrageView = (BarrageView) view.findViewById(R.id.barrageView_test);
         barrageAndChat = (ImageView) view.findViewById(R.id.im_barrage_and_chat_iv);
-        moreFuntionButtonInInputBar = view.findViewById(R.id.buttonMoreFuntionInText);
-        moreFuntionButtonInInputBar.setVisibility(inputConfig.isMoreFunctionShow ? View.VISIBLE : View.GONE);
-        emojiButtonInInputBar = view.findViewById(R.id.emoji_button);
-        emojiButtonInInputBar.setVisibility(inputConfig.isEmojiButtonShow ? View.VISIBLE : View.GONE);
+
         sendMessageButtonInInputBar = view.findViewById(R.id.buttonSendMessage);
         messageEditText = (EditText) view.findViewById(R.id.editTextMessage);
         // 表情
-
 
         // 显示录音按钮
         // 文本录音按钮切换布局
@@ -185,9 +182,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void initInputBarListener() {
 
 
-        emojiButtonInInputBar.setOnClickListener(clickListener);
         sendMessageButtonInInputBar.setOnClickListener(clickListener);
-        moreFuntionButtonInInputBar.setOnClickListener(clickListener);
+
         barrageAndChat.setOnClickListener(clickListener);
 
     }
@@ -293,8 +289,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     Toast.makeText(mContext,"正在连接聊天系统，请稍后",Toast.LENGTH_SHORT).show();
                 }
 
-            } else if (v == moreFuntionButtonInInputBar) {
-                toggleActionPanelLayout();
             } else if(v.getId()== R.id.im_barrage_and_chat_iv){
                 isSelector = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 barrageAndChat.setSelected(!isSelector);
@@ -344,7 +338,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
             Toast.makeText(container.activity, "不要输入空消息！", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (container.sessionType == SessionTypeEnum.ChatRoom) {
+        if (container.sessionType == SessionTypeEnum.ChatRoom&&creatorAccount!=null) {
                 textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
             ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
             Map<String, Object> ext = new HashMap<>();
@@ -357,13 +351,12 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         return;
                     }
 
-
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","1");
                         ext.put("creatorAccount",creatorAccount);
-                        ext.put("userId",userId);
-                        ext.put("disableSendMsgUserId",userId);
+                        ext.put("userId", UserHelper.getUserId(mContext));
+                        ext.put("disableSendMsgUserId",UserHelper.getUserId(mContext));
                         ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
@@ -375,8 +368,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","0");
                         ext.put("creatorAccount",creatorAccount);
-                        ext.put("userId",userId);
-                        ext.put("disableSendMsgUserId",userId);
+                        ext.put("userId", UserHelper.getUserId(mContext));
+                        ext.put("disableSendMsgUserId",UserHelper.getUserId(mContext));
                         ext.put("channelId", channelId);
                         textMessage.setRemoteExtension(ext);
                     }
@@ -450,6 +443,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
     }
 
+
     // 隐藏语音布局
     private void hideAudioLayout() {
 
@@ -491,7 +485,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
 
         InputMethodManager imm = (InputMethodManager) container.activity.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editTextMessage, 0);
-
         container.proxy.onInputPanelExpand();
     }
 
@@ -552,11 +545,10 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
     private void checkSendButtonEnable(EditText editText) {
         String textMessage = editText.getText().toString();
         if (!TextUtils.isEmpty(StringUtil.removeBlanks(textMessage)) && editText.hasFocus()) {
-            moreFuntionButtonInInputBar.setVisibility(View.GONE);
+
             sendMessageButtonInInputBar.setVisibility(View.VISIBLE);
         } else if (inputConfig.isMoreFunctionShow) {
             sendMessageButtonInInputBar.setVisibility(View.GONE);
-            moreFuntionButtonInInputBar.setVisibility(View.VISIBLE);
         }
     }
 
@@ -648,10 +640,6 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         if (!touched) {
             return;
         }
-
-
-
-
         updateTimerTip(false); // 初始化语音动画状态
         playAudioRecordAnim();
     }

@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,8 +30,6 @@ public class PhotoAdapter extends BaseAdapter {
 
     // 图片列表
     private List<PhotoInfo> mList;
-    // 布局填充器
-    private LayoutInflater mInflater;
     // 上下文
     private Context mContext;
     // 屏幕宽度
@@ -39,7 +38,6 @@ public class PhotoAdapter extends BaseAdapter {
     public PhotoAdapter(Activity activity, List<PhotoInfo> list) {
         this.mList = list;
         this.mContext = activity;
-        this.mInflater = LayoutInflater.from(activity);
         this.mScreenWidth = DeviceUtils.getScreenPix(activity).widthPixels;
     }
 
@@ -66,33 +64,23 @@ public class PhotoAdapter extends BaseAdapter {
                 .showImageForEmptyUri(R.drawable.androidloading)
                 .showImageOnLoading(R.drawable.androidloading)
                 .build();
-        // 图片控件声明
-        ImageView imgPhoto;
-        // 如果是第一次加载
-        if (convertView == null) {
-            // 初始化ImageView
-            imgPhoto = new ImageView(mContext);
-            // 设置图片尺寸
-            setImgSize(imgPhoto);
-            // 不调整图片宽高比例
-            imgPhoto.setAdjustViewBounds(false);
-            // 设置缩放
-            imgPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        } else {
-            // 得到图片控件
-            imgPhoto = (ImageView) convertView;
-        }
 
-        Log.i("haha", "size is " + mList.size());
+        // 初始化ImageView
+        ImageView imgPhoto = new ImageView(mContext);
+        // 设置图片尺寸
+        setImgSize(imgPhoto);
+        // 不调整图片宽高比例
+        imgPhoto.setAdjustViewBounds(false);
+        // 设置缩放
+        imgPhoto.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
         // 如果当前不是最后一张图片，则显示系统选中的图片
-        Log.d("haha", "position " + position);
         // 得到图片类
         PhotoInfo photoInfo = mList.get(position);
         // 获取图片路径
         String path = photoInfo.getPhotoPath();
-        Log.i("haha", "the path is " + path);
         // 如果为占位图片
-        if (TextUtils.equals(path, Constants.ADD_PIC)) {
+        if (TextUtils.equals(path, Constants.FLAG_ADD_PIC)) {
             // 加载添加按钮
             imgPhoto.setImageResource(R.drawable.add_pics_btn);
         } else {
@@ -118,7 +106,7 @@ public class PhotoAdapter extends BaseAdapter {
         // 设置图片高度=宽度
         int height = width;
         // 设置布局参数
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(width, height);
+        AbsListView.LayoutParams lp = new AbsListView.LayoutParams(width, height);
         // 设置布局参数
         img.setLayoutParams(lp);
     }

@@ -4,7 +4,7 @@
     <string name="write_email">填写邮箱</string>
     <string name="write_psw">填写密码</string>
     <string name="write_nickname">填写昵称</string>
-    <string name="input_email">输入邮箱</string>
+    <string name="input_email">请输入你的邮箱</string>
     <string name="input_psw">输入密码</string>
     <string name="input_verification_code">输入验证码</string>
     <string name="input_latest_psw">输入新密码</string>
@@ -23,6 +23,7 @@
     <string name="forget_psw">忘记密码</string>k
     <string name="other_login_way">其他方式登录</string>
     <string name="weixin">微信</string>
+    <string name="cmb">一网通银行卡支付</string>
     <string name="qq">QQ</string>
     <string name="weibo">微博</string>
     <string name="sure">确认</string>
@@ -50,7 +51,7 @@
     <string name="grade">去评分</string>
     <string name="use_clauses">使用条款</string>
     <string name="publisher">©2015杭州目的地科技有限公司</string>
-    <string name="reserved">Copyright（c）2015 HangZhou Destionation Technology Ltd. All rights reserved.</string>
+    <string name="reserved">Copyright（c）2015 HangZhou Destionation Technology Co., Ltd. All rights reserved.</string>
     <string name="edit_account">编辑资料</string>
     <string name="sex">性别</string>
     <string name="phone">电话</string>
@@ -80,7 +81,7 @@
     <string name="xlistview_header_last_time">上次更新时间：</string>
     <string name="xlistview_footer_hint_normal">查看更多</string>
     <string name="xlistview_footer_hint_ready">松开载入更多</string>
-    <string name="travel_notes">游记</string>
+    <string name="travel_notes">笔记</string>
     <string name="article">文章</string>
     <string name="goods">商品</string>‘
     <string name="route">路线</string>
@@ -109,11 +110,12 @@
     <string name="mobile">手机</string>
     <string name="unlogin_warn">你还没有登录，即使是我们的工程师也不能算出你有多少优惠券</string>
     <string name="search">搜索</string>
-    <string name="input_key_word">请输入关键字</string>
+    <string name="input_key_word">请输入关键词</string>
     <string name="hot">热门</string>
     <string name="strategy">攻略</string>
     <string name="packagetour">精品游</string>
     <string name="freewarker">自由行</string>
+    <string name="pickup">接送机</string>
     <string name="lacoalplay">当地玩乐</string>
     <string name="route_overview">行程概览</string>
     <string name="buy">购买</string>
@@ -205,6 +207,8 @@
     <string name="view_order">查看订单</string>
     <string name="contacts">联系人</string>
     <string name="supplementary_information">补充信息</string>
+    <string name="pickup_service">接机服务</string>
+    <string name="driver_info">司导信息</string>
     <string name="shuttle_location">接送地点</string>
     <string name="shuttle_time">接送时间</string>
     <string name="language_of_guide">导游语言</string>
@@ -232,6 +236,7 @@
     <string name="no_live">没有搜索到相关直播</string>
     <string name="start_live">开始直播</string>
 
+
     <!--直播-->
     <string name="live_login_hint">您还没有登录,请登录!</string>
     <string name="live_login_imm">马上登录</string>
@@ -243,6 +248,7 @@
     <string name="more">More</string>
     <string name="no_favorite">没有收藏</string>
     <string name="my_message">我的消息</string>
+    <string name="message">消息</string>
     <string name="invite_friends">邀请好友</string>
     <string name="person_description">个人介绍</string>
     <string name="select_sex">选择性别</string>
@@ -273,6 +279,7 @@
     <string name="live_manager_setting_success">设置管理员成功</string>
     <string name="live_hint">提示</string>
     <string name="live_net_type_cmcc">当前网络为移动网络，是否继续直播？</string>
+    <string name="account_kicout">您的账号在其他设备登录,请重新登录!</string>
     <string name="live_continue_look">继续观看</string>
     <string name="live_video_conncet_fail">视频连接失败!</string>
     <string name="live_quit_room">退出直播间</string>
@@ -307,8 +314,102 @@
     <string name="you_no_login_no_atten">你还没有登录，无法查看关注</string>
     <string name="default_description">宝宝，写几句话介绍自己吧</string>
     <string name="delete">删除</string>
+    <string name="live_input">与主播对话...</string>
+    <string name="live_ranking_list">榜单</string>
+    <string name="live_master_accept_challenge">主播接受了任务</string>
+    <string name="live_network">网络</string>
+    <string name="live_switchover_camera">反转相机</string>
+    <string name="live_beauty_on">美颜: 开</string>
+    <string name="live_beauty_off">美颜: 关</string>
+    <string name="live_share">分享直播</string>
+    <string name="live_send_message">发送文字</string>
+    <string name="audience_master_rest">主播休息啦！</string>
+    <string name="audience_over_attention">喜欢主播就关注一下咯!</string>
+    <string name="audience_over_share">与好友分享有趣的直播</string>
+    <string name="live_over_layout_count">观众人数</string>
+    <string name="live_over_layout_time">直播时长</string>
+    <string name="live_over_layout_gold">获得游票</string>
+    <string name="live_over_layout_content">表现超级棒 !</string>
+    <string name="live_over_reminder">少于5分钟的直播将不会被保存</string>
+    <string name="live_over_share_reminder">炫耀一下</string>
+    <string name="super_manager_close_liveroom">关闭直播间</string>
+    <string name="super_manager_close_liveroom_content">你要好好确认一下不然扣你工资了噢</string>
+    <string name="super_manager_cancel_liveroom">给个机会</string>
+    <string name="super_manager_close_liveroom_ok">我就关了咋地</string>
+    <string name="super_manager_ban_long">踢出直播间</string>
+    <string name="live_report">举报</string>
+    <string name="system_announ">系统公告： </string>
+    <string name="player_complete">播放完成!</string>
+    <string name="unlogin_chatroom_again_login">没有登录聊天室，请退出重进!</string>
+    <string name="share_live">分享了直播</string>
+    <string name="tickout_live_room">你已被管理员踢出直播间!</string>
+    <string name="attention_live_e">关注了主播!</string>
+    <string name="like_master">点赞</string>
+    <string name="live_master_1">给主播点了个赞1</string>
+    <string name="play_back_no_share">此视频暂不可分享!!</string>
+    <string name="play_back_compelet">视频播放完成!</string>
+    <string name="play_back_all_compelet">视频全部播放完毕!</string>
+    <string name="play_back_next">视频播放完毕，正加载下一段视频...</string>
+    <string name="play_back_first">已经是第一段视频了!</string>
+    <string name="play_back_no_up">没有上一段视频!</string>
+    <string name="play_back_play_first">播放第一段视频</string>
+    <string name="play_back_loading_up">正在加载上一段视频....</string>
+    <string name="play_back_loading_down">正在加载下一段视频....</string>
+    <string name="play_back_no_next">没有下一段视频</string>
+    <string name="lolacal_no_location">LALOCAL神秘之地</string>
+    <string name="no_location_permison">没有地理位置权限!</string>
+    <string name="live_room_close_to_manager">直播间被管理员关闭!</string>
+    <string name="live_room_title_no_null">直播间标题不能为空!</string>
+    <string name="not_get_location_please_input">没有获取位置信息，请手动输入!</string>
+    <string name="prepare_start_live">准备中...</string>
+    <string name="him_is_manager">对方为管理员!</string>
+    <string name="come_back">回来了!</string>
+    <string name="leave_master">离开了一会儿!</string>
+    <string name="liveing">正在直播： </string>
+    <string name="connectting_chatroom">正在连接聊天室...</string>
+    <string name="connect_chatroom_fuial">聊天室登录失败，正在重新连接...</string>
+    <string name="user_tourist">该用户为游客!</string>
+    <string name="you_ban">你已被管理员禁言!</string>
+    <string name="welcome_live">欢迎</string>
+    <string name="enter_room">进入直播间</string>
+    <string name="you">你</string>
+    <string name="share_rank">分享了榜单</string>
+    <string name="share_sina">到新浪微博</string>
+    <string name="share_weixin">到微信</string>
+    <string name="share_weiclcle">到朋友圈</string>
+    <string name="new_massage">新消息</string>
+    <string name="ban">禁言了</string>
+    <string name="relieve">解除了</string>
+    <string name="de_ban">的禁言</string>
+    <string name="jiang">将</string>
+    <string name="setting_manage">授权为管理员</string>
+    <string name="cancel_le">取消了</string>
+    <string name="de_manager">"的管理员权限</string>
+    <string name="send_gift_">给主播送了</string>
+    <string name="ge">个</string>
+    <string name="master_aplit">主播 : ,.,</string>
+    <string name="me_split">我 : ,.,</string>
+    <string name="sou_quan">授权</string>
+    <string name="wei_manager">为管理员</string>
+    <string name="manager_quanxian">管理员权限</string>
+    <string name="other_funcation">其他功能</string>
+    <string name="private_letter_no">私信(需关注)</string>
+    <string name="private_letter">私信</string>
+    <string name="play_back_jianjie">视频简介</string>
+    <string name="edit_up_content">编辑以上内容</string>
+    <string name="review">评  论</string>
+    <string name="change_live_cover">更换直播封面</string>
+    <string name="change_cover_reminder">与直播主题不相关的封面请慎重使用</string>
+    <string name="title">标题</string>
+    <string name="post_loaction">地理位置</string>
+    <string name="video_lightspot">视频亮点</string>
+    <string name="video_lightspot_hint">请填写视频中精彩部分的介绍</string>
+    <string name="post_alter_ok">确认更改</string>
+    <string name="edit_cover">编辑封面</string>
+
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>
+    <string name="live_read_write_external_storage">SD卡读写权限未开启,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_camera_jurisdiction">没有视频权限，无法开启直播</string>
     <string name="live_camera_start_failure">摄像头启动失败,请尝试在手机应用权限管理中打开权限!</string>
     <string name="live_frequency_start_failure">音频权限开启失败,请尝试在手机应用权限管理中打开权限!</string>
@@ -322,5 +423,47 @@
     <string name="exchange_rule">游票100起兑换, 且要是100的倍数</string>
     <string name="go_to_start_live_travel">快去开启属于自己的直播旅行</string>
     <string name="got_to_atten_travel_talent">快去关注旅行达人，看遍世界的美...</string>
+    <string name="click_register_show_you_argee">点击注册表示您已同意</string>
+    <string name="nick_or_password">昵称或密码不能为空</string>
+    <string name="we_have_send_email_to_you">我们已发送一封邮件到你的邮箱,有空的时候记得去激活</string>
+    <string name="we_will_send_ver_code_to_your_email">我们将会发送验证码到您的邮箱</string>
+    <string name="set_password_by_ver_code">通过验证码完成重设</string>
+    <string name="forget_password">忘记密码?</string>
+    <string name="ver_code">验证码</string>
+    <string name="password">密码</string>
+    <string name="nickname">昵称</string>
+    <string name="please_input_password">请输入密码</string>
+    <string name="umeng_socialize_comment" translatable="false">评论</string>
+    <string name="umeng_socialize_near_At" translatable="false">最近\@的好友</string>
+    <string name="umeng_socialize_friends" translatable="false">关注的好友</string>
+    <string name="umeng_socialize_text_comment_hint">说点什么吧&#8230;</string>
+    <string name="please_input_vercode_email">请输入验证码(在邮件里查看)</string>
+    <string name="sure_modify">确认修改</string>
+    <string name="account_security">账户安全</string>
+    <string name="recommend_login_way">推荐登录方式</string>
+    <string name="sure_bind">确认绑定</string>
+    <string name="bind_phone">绑定手机</string>
+    <string name="no_bind">未绑定</string>
+    <string name="information_feedback">信息反馈</string>
+    <string name="login_success">登录成功</string>
+    <string name="register_success">注册成功</string>
+    <string name="contact_customer">联系客服</string>
+    <string name="look_over_the_record_of_commun_with_cutomer">点击查看您与客服的沟通纪录</string>
+    <string name="user">用户</string>
+    <string name="travel_note">笔记</string>
+    <string name="g_search_result_empt">该标签下没有搜索结果，看看其他标签或换一个关键词试试</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="notification">通知</string>
+    <string name="comment_and_praise">赞与评论</string>
+    <string name="private_message">私信</string>
+    <string name="ignore_no_read">忽略未读</string>
+    <string name="attent_im">私信的（需关注）</string>
+    <string name="lalocal_helper">乐可小助手</string>
+    <string name="lalocal_helper_tip">欢迎加入乐可大家庭, 我是你永远的朋友（因为你删不掉我，有任何产品上的问题都可以问我，在下边选择你要问的类型↓ ↓ ↓</string>
 
+
+    <item name="tag_first" type="id" />
+    <item name="tag_second" type="id" />
+    <item name="tag_third" type="id" />
 </resources>

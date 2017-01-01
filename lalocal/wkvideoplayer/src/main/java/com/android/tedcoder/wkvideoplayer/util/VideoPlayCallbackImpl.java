@@ -14,9 +14,10 @@ public interface VideoPlayCallbackImpl {
 
     void onPlayStatus(boolean isPlay);
 
-    void onClickQuit();
+    void onClickCollect(ImageView iv);
     void onClickShare();
     void  onClickBefore(ImageView view);
     void onClickNext(ImageView view);
     void showLoadingPage(boolean isShow);
+    void getprogressDuration(long duration);
 }

@@ -1,30 +1,22 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.SharePopupWindow;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import static com.lalocal.lalocal.R.id.carous_figure_webview;
 
@@ -40,21 +32,33 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     private SpecialShareVOBean shareVO;
     private CustomTitleView carousFigureCtv;
     private int targetId;
+    String url;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.carous_figure_layout);
+        AppLog.print("CarouselFigureActivity___oncreate___");
         init();
         Intent intent = getIntent();
         recommendAdResultBean = intent.getParcelableExtra("carousefigure");
-        String url = recommendAdResultBean.url;
+        url = recommendAdResultBean.url;
         shareVO = recommendAdResultBean.shareVO;
         targetId = recommendAdResultBean.targetId;
-        carousFigure.getSettings().setJavaScriptEnabled(true);
-        carousFigure.loadUrl(url);
-        carousFigure.setWebViewClient(new CarouseLWebViewClient());
+        WebSettings ws = carousFigure.getSettings();
+        ws.setJavaScriptEnabled(true);
+        ws.setJavaScriptCanOpenWindowsAutomatically(true);
+        ws.setUseWideViewPort(true);
+        ws.setDomStorageEnabled(true);
+        ws.setAllowFileAccess(true); // 允许访问文件
+        ws.setLoadWithOverviewMode(true);
+        ws.setDisplayZoomControls(false);
+        ws.setBlockNetworkImage(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        carousFigure.setWebViewClient(new CommonWebClient(this));
         figureTv.setText(recommendAdResultBean.title);
     }
 
@@ -69,6 +73,13 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        carousFigure.loadUrl(url);
+    }
+
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.carous_figure_share:
@@ -79,15 +90,14 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO,String.valueOf(targetId));
-        shareActivity.showShareWindow();
-        shareActivity.showAtLocation(CarouselFigureActivity.this.findViewById(R.id.carous),
-                Gravity.BOTTOM, 0, 0);
+        SharePopupWindow shareActivity = new SharePopupWindow(CarouselFigureActivity.this, shareVO);
+        shareActivity.show();
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_BACK) && carousFigure.canGoBack()) {
+            AppLog.print("onKeyDown__back__goback____");
             carousFigure.goBack(); // goBack()表示返回WebView的上一页面
             return true;
         }
@@ -102,7 +112,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
 
     private void cloaseAudio() {
         String js = "var _audio = document.getElementsByTagName('audio')[0];\nif(_audio.played){\n_audio.pause();}";
-        carousFigure.loadUrl("javascript:" + js);
+        carousFigure.loadUrl("javascript:" + js);//video
     }
 
     @Override
@@ -112,68 +122,6 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         } else {
             finish();
         }
-    }
-
-    class CarouseLWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            AppLog.print("webviewclient url____" + url);
-//            webviewclient url____lalocal://app?{"targetType": "19","targetId": "","targetUrl": ""}
-            if (url.startsWith("lalocal:")) {
-                int startIndex = url.indexOf("?") + 1;
-                String jsonData = url.substring(startIndex, url.length());
-                try {
-                    JSONObject jsonObject = new JSONObject(jsonData);
-                    String targetType = jsonObject.optString("targetType");
-                    String targetId = jsonObject.optString("targetId");
-                    if (!TextUtils.isEmpty(targetType)) {
-                        if ("19".equals(targetType)) {
-                            if (UserHelper.isLogined(CarouselFigureActivity.this)) {
-                                Intent intent = new Intent(CarouselFigureActivity.this, MyCouponActivity.class);
-                                intent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
-                                startActivity(intent);
-                            } else {
-                                Intent intent = new Intent(CarouselFigureActivity.this, LoginActivity.class);
-                                startActivityForResult(intent,KeyParams.REQUEST_CODE);
-                            }
-                            return true;
-                        }else if("15".equals(targetType)){
-                            Intent intent = new Intent(CarouselFigureActivity.this, AudienceActivity.class);
-                            intent.putExtra("id",targetId);
-                            startActivity(intent);
-                            return true;
-                        }else if("20".equals(targetType)){
-                            Intent intent = new Intent(CarouselFigureActivity.this, PlayBackActivity.class);
-                            intent.putExtra("id",targetId);
-                            startActivity(intent);
-                            return  true;
-                        }
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-            return super.shouldOverrideUrlLoading(view, url);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == LoginActivity.REGISTER_OK) {
-            String email = data.getStringExtra(LoginActivity.EMAIL);
-            String psw = data.getStringExtra(LoginActivity.PSW);
-            setLoaderCallBack(new CarouseCallback());
-            mContentloader.login(email, psw);
-        }
-
-    }
-
-    class CarouseCallback extends ICallBack {
-
-
     }
 
 

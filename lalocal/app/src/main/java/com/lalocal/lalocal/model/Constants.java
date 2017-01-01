@@ -5,6 +5,9 @@ package com.lalocal.lalocal.model;
  */
 public class Constants {
 
+    //回放
+    public static final int PLAY_BACK_TYPE_URL =20;
+
     // url
     public static final int TARGET_TYPE_URL = -1;
     // 用户
@@ -42,11 +45,43 @@ public class Constants {
     // 我的粉丝页面
     public static final int TARGET_TYPE_FANS_PAGE = 16;
 
-    public static final String ADD_PIC = "empty for adding pic";
+    // -专题类型
+    // 0：综合
+    public static final int THEME_NORMAL = 0;
+    // 1：商品
+    public static final int THEME_PRODUCT = 1;
+    // 2：作者
+    public static final int THEME_AUTHOR = 2;
+    // 3：文章
+    public static final int THEME_ARTICLE = 3;
+
+
+    public static final String FLAG_ADD_PIC = "empty for adding pic";
     public static final int REQUEST_CODE_GALLERY = 0x01;
     public static final int PIC_MAX_QUANTITY = 5;
 
     public static final int SOLID_WIDTH = -1;
     public static final int SOLID_HEIGHT = -2;
 
+    // -每日推荐参数
+    // 每日推荐
+    public static final int OPEN_APP_TO_SCAN = 0;
+    // 主动拉取
+    public static final int PULL_TO_SCAN = 1;
+
+    // bundle传递的key
+    public static final String KEY_USER_ID = "user_id";
+    public static final String KEY_MASTER_NAME = "master_name";
+    public static final String KEY_CHANNEL_ID = "channel_id";
+    public static final String KEY_REPORT_FROM = "report_from";
+    public static final String KEY_ARTICLE_ID = "article_id";
+
+    // -举报类型
+    // 主播举报
+    public static final int REPORT_CHANNEL = 0;
+    // 用户举报
+    public static final int REPORT_USER = 1;
+
+    // 直播首页分类 热门直播
+    public static final int CATEGORY_HOT_LIVE = -999;
 }

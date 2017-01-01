@@ -11,12 +11,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.PasswordForget1Activity;
-import com.lalocal.lalocal.activity.PasswordForget2Activity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.me.LPEmailBound2Activity;
 import com.lalocal.lalocal.me.LPEmailBoundActivity;
+import com.lalocal.lalocal.me.LPasswordForget1Activity;
+import com.lalocal.lalocal.me.LPasswordForget2Activity;
 
 /**
  * Created by xiaojw on 2016/7/4.
@@ -25,9 +25,10 @@ import com.lalocal.lalocal.me.LPEmailBoundActivity;
  * title_name   type:string 设置标题名称
  */
 public class CustomTitleView extends FrameLayout implements View.OnClickListener {
-    onBackBtnClickListener listener;
+    onBackBtnClickListener listener, cListener;
     Context context;
     TextView title_tv;
+    ImageView backImg;
     boolean isFinishEanble = true;
 
     public CustomTitleView(Context context) {
@@ -44,17 +45,17 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomTitleView);
         String name = a.getString(R.styleable.CustomTitleView_title_name);
         boolean lineVisible = a.getBoolean(R.styleable.CustomTitleView_lineVisible, true);
-        boolean backVisible=a.getBoolean(R.styleable.CustomTitleView_backVisible,true);
+        boolean backVisible = a.getBoolean(R.styleable.CustomTitleView_backVisible, true);
         a.recycle();
         LayoutInflater.from(context).inflate(R.layout.custom_title_layout, this);
-        ImageView backImg = (ImageView) findViewById(R.id.titleview_back_img);
+        backImg = (ImageView) findViewById(R.id.titleview_back_img);
         title_tv = (TextView) findViewById(R.id.titleview_title_tv);
         View line = findViewById(R.id.titleview_line);
         backImg.setOnClickListener(this);
         if (!lineVisible) {
             line.setVisibility(GONE);
         }
-        if (!backVisible){
+        if (!backVisible) {
             backImg.setVisibility(GONE);
         }
         title_tv.setText(name);
@@ -69,26 +70,43 @@ public class CustomTitleView extends FrameLayout implements View.OnClickListener
 
     }
 
+    public void setOnCustomClickLister(onBackBtnClickListener listener) {
+        cListener = listener;
+    }
+
+    public void setBackVisible(boolean isVisble) {
+        if (isVisble) {
+            backImg.setVisibility(VISIBLE);
+        } else {
+            backImg.setVisibility(GONE);
+        }
+
+    }
+
     public void setTitle(String titleName) {
         title_tv.setText(titleName);
     }
 
     @Override
     public void onClick(View v) {
+        if (cListener != null) {
+            cListener.onBackClick();
+            return;
+        }
         try {
             if (listener != null) {
                 listener.onBackClick();
             }
             if (isFinishEanble) {
                 Activity a = (Activity) context;
-                if (a instanceof LPEmailBoundActivity){
+                if (a instanceof LPEmailBoundActivity) {
                     MobHelper.sendEevent(context, MobEvent.BINDING_BACK_01);
-                }else if (a instanceof LPEmailBound2Activity){
+                } else if (a instanceof LPEmailBound2Activity) {
                     MobHelper.sendEevent(context, MobEvent.BINDING_BACK_02);
-                }else if (a instanceof PasswordForget1Activity){
-                    MobHelper.sendEevent(context,MobEvent.LOGIN_FORGET_BACK_01);
-                }else  if (a instanceof PasswordForget2Activity){
-                    MobHelper.sendEevent(context,MobEvent.LOGIN_FORGET_BACK_02);
+                } else if (a instanceof LPasswordForget1Activity) {
+                    MobHelper.sendEevent(context, MobEvent.LOGIN_FORGET_BACK_01);
+                } else if (a instanceof LPasswordForget2Activity) {
+                    MobHelper.sendEevent(context, MobEvent.LOGIN_FORGET_BACK_02);
                 }
                 a.finish();
             }

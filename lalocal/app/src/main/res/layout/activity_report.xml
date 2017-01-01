@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#11d9d9d9"
     tools:context="com.lalocal.lalocal.live.entertainment.activity.ReportActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_close"
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_height="@dimen/report_close_bar_height">
+
+        <ImageButton
+            android:id="@+id/btn_close_report"
+            android:layout_width="@dimen/report_close_btn_dimen"
+            android:layout_height="@dimen/report_close_btn_dimen"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/report_close_btn_padding"
+            android:src="@drawable/btnbg_close" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_confirm_report"
@@ -19,26 +36,13 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/layout_close"
         android:layout_above="@id/btn_confirm_report">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/report_close_bar_height">
-
-                <ImageButton
-                    android:id="@+id/btn_close_report"
-                    android:layout_width="@dimen/report_close_btn_dimen"
-                    android:layout_height="@dimen/report_close_btn_dimen"
-                    android:layout_centerInParent="true"
-                    android:background="@android:color/transparent"
-                    android:padding="@dimen/report_close_btn_padding"
-                    android:src="@drawable/btnbg_close" />
-            </RelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,57 +52,62 @@
                 android:text="选择举报原因"
                 android:textColor="@color/color_8c" />
 
-            <RadioButton
-                android:id="@+id/rb_uncivilized"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_line_height"
-                android:layout_marginLeft="@dimen/report_item_margni_left"
-                android:drawablePadding="8dp"
-                android:text="不文明直播" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/white">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="@dimen/report_divider_margin_left"
-                android:background="@color/color_gray_d9d9d9" />
+                <RadioButton
+                    android:id="@+id/rb_uncivilized"
+                    android:layout_width="match_parent"
+                    android:textSize="16sp"
+                    android:layout_height="@dimen/report_item_line_height"
+                    android:layout_marginLeft="@dimen/report_item_margni_left"
+                    android:text="不文明直播" />
 
-            <RadioButton
-                android:id="@+id/rb_illegal"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_line_height"
-                android:layout_marginLeft="@dimen/report_item_margni_left"
-                android:drawablePadding="8dp"
-                android:text="触犯法律法规" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="@dimen/report_divider_margin_left"
+                    android:background="@color/color_gray_d9d9d9" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginLeft="@dimen/report_divider_margin_left"
-                android:background="@color/color_gray_d9d9d9" />
+                <RadioButton
+                    android:id="@+id/rb_illegal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/report_item_line_height"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="@dimen/report_item_margni_left"
+                    android:text="触犯法律法规" />
 
-            <RadioButton
-                android:id="@+id/rb_other"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/report_item_line_height"
-                android:layout_marginLeft="@dimen/report_item_margni_left"
-                android:drawablePadding="8dp"
-                android:text="其他原因" />
-            <!--android:button="@null"-->
-            <!--android:background="@null"-->
-            <!--android:drawableLeft="@drawable/only_checkbox_selector"-->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginLeft="@dimen/report_divider_margin_left"
+                    android:background="@color/color_gray_d9d9d9" />
 
-            <EditText
-                android:id="@+id/et_report"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/report_et_height"
-                android:background="@color/white"
-                android:gravity="top"
-                android:hint="请输入举报内容"
-                android:paddingBottom="@dimen/report_et_padding_bottom"
-                android:paddingLeft="@dimen/report_et_padding_left"
-                android:paddingRight="@dimen/report_et_padding_right"
-                android:paddingTop="@dimen/report_et_padding_top"
-                android:textColor="@color/color_66" />
+                <RadioButton
+                    android:id="@+id/rb_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/report_item_line_height"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="@dimen/report_item_margni_left"
+                    android:text="其他原因" />
+
+                <EditText
+                    android:id="@+id/et_report"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/report_et_height"
+                    android:background="@color/white"
+                    android:gravity="top"
+                    android:hint="请输入举报内容"
+                    android:textSize="16sp"
+                    android:paddingBottom="@dimen/report_et_padding_bottom"
+                    android:paddingLeft="@dimen/report_et_padding_left"
+                    android:paddingRight="@dimen/report_et_padding_right"
+                    android:paddingTop="@dimen/report_et_padding_top"
+                    android:textColor="@color/color_66" />
+            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -123,6 +132,7 @@
                 android:paddingRight="7.5dp"
                 android:paddingTop="10dp"
                 android:verticalSpacing="7.5dp"
+                android:background="@color/white"
                 android:horizontalSpacing="10dp">
 
             </com.lalocal.lalocal.view.MyGridView>
@@ -136,4 +146,13 @@
                 android:textSize="12sp" />
         </LinearLayout>
     </ScrollView>
+
+    <com.cunoraz.gifview.library.GifView
+        android:id="@+id/loading"
+        android:layout_width="200dp"
+        android:layout_height="110dp"
+        app:gif="@drawable/loading"
+        android:visibility="gone"
+        android:background="@drawable/loading_anim_bg"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

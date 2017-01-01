@@ -67,7 +67,7 @@ public class PhotoPreviewActivity extends PhotoBaseActivity implements ViewPager
 
     private void setTheme() {
         mIvBack.setImageResource(mThemeConfig.getIconBack());
-        if (mThemeConfig.getIconBack() == R.drawable.ic_gf_back) {
+        if (mThemeConfig.getIconBack() == R.drawable.ic_arrow_left) {
             mIvBack.setColorFilter(mThemeConfig.getTitleBarIconColor());
         }
 
@@ -84,7 +84,7 @@ public class PhotoPreviewActivity extends PhotoBaseActivity implements ViewPager
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mTvIndicator.setText((position + 1) + "/" + mPhotoList.size());
+        mTvIndicator.setText("(" + (position + 1) + "/" + mPhotoList.size() + ")");
     }
 
     @Override

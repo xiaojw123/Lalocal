@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -53,22 +52,23 @@ public class BlurBitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
 
     @Override
     protected Bitmap doInBackground(Void... params) {
-        // decode
-        Log.i(TAG, "decode origin bitmap");
+
         Bitmap originBitmap = (imageResId > 0 && loadedBitmap == null) ?
                 BitmapFactory.decodeResource(context.getResources(), imageResId) : loadedBitmap;
-        // blur
-        Log.i(TAG, "doing blur image...");
-        Bitmap blurBitmap = FastBlurUtil.blur(originBitmap, scaleRatio, blurRadius);
-        Log.i(TAG, "blur image done");
+        try {
+            Bitmap blurBitmap = FastBlurUtil.blur(originBitmap, scaleRatio, blurRadius);
 
-        // cache
-        if (memoryCache && blurBitmap != null && ImageLoader.getInstance() != null) {
-            Log.i(TAG, "cache blur image");
-            ImageLoader.getInstance().getMemoryCache().put(key, blurBitmap);
+            if (memoryCache && blurBitmap != null && ImageLoader.getInstance() != null) {
+
+                ImageLoader.getInstance().getMemoryCache().put(key, blurBitmap);
+            }
+            return blurBitmap;
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return originBitmap;
 
-        return blurBitmap;
     }
 
     @Override
@@ -80,14 +80,14 @@ public class BlurBitmapWorkerTask extends AsyncTask<Void, Void, Bitmap> {
                 imageView.setImageBitmap(bitmap);
             }
 
-            if(animation) {
+            if (animation) {
                 doAnimation();
             }
         }
     }
 
     private void doAnimation() {
-        if(blurImageViewRef != null && bgImageViewRef != null) {
+        if (blurImageViewRef != null && bgImageViewRef != null) {
             final ImageView bgImageView = bgImageViewRef.get();
             final ImageView blurImageView = blurImageViewRef.get();
             ObjectAnimator bgAnimator = ObjectAnimator.ofFloat(bgImageView, View.ALPHA, 1f, 0.0f).setDuration(ANIMATION_DURATION);

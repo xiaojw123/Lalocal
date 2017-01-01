@@ -1,31 +1,32 @@
 package com.lalocal.lalocal.util;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.content.Context;
-import android.support.v4.view.ViewPager;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.net.Uri;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.TextAppearanceSpan;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.daimajia.slider.library.SliderLayout;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.im.LalocalHelperActivity;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,6 +41,69 @@ public class CommonUtil {
 
     public static int RESULT_DIALOG = 0;
     public static int REMIND_BACK = 0;
+
+    public static String LONGITUDE = "";
+    public static String LATITUDE = "";
+    public static Boolean LOCATION_Y=false;
+    public static String LOCATION_RESULT="";
+
+    //根据userid获取accid
+    public static String getAccId(int userId) {
+        return "user_" + userId;
+    }
+
+    //根据accid获取userid
+    public static String getUserId(String accId) {
+        String userid = "";
+        if (!TextUtils.isEmpty(accId)) {
+            userid = accId.substring(accId.indexOf("_") + 1);
+        }
+        return userid;
+    }
+
+    public static String getFileUri(String path) {
+
+        return "file:///" + path;
+    }
+
+
+    @SuppressLint("NewApi")
+    public static boolean checkDeviceHasNavigationBar(Context activity) {
+
+        //通过判断设备是否有返回键、菜单键(不是虚拟键,是手机屏幕外的按键)来确定是否有navigation bar
+        boolean hasMenuKey = ViewConfiguration.get(activity)
+                .hasPermanentMenuKey();
+        boolean hasBackKey = KeyCharacterMap
+                .deviceHasKey(KeyEvent.KEYCODE_BACK);
+
+        if (!hasMenuKey && !hasBackKey) {
+            // 做任何你需要做的,这个设备有一个导航栏
+            return true;
+        }
+        return false;
+    }
+
+
+    public static int getNavigationBarHeight(Context context) {
+        int height = 0;
+        if (checkDeviceHasNavigationBar(context)) {
+            Resources resources = context.getResources();
+            int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
+            height = resources.getDimensionPixelSize(resourceId);
+        }
+        return height;
+    }
+
+
+    public static void startCustomService(Context context) {
+        LalocalHelperActivity.start(context);
+    }
+
+    public static void callPhone(Context context, String phone) {
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
 
     public static String getProcessName(Context cxt, int pid) {
         ActivityManager am = (ActivityManager) cxt.getSystemService(Context.ACTIVITY_SERVICE);
@@ -115,10 +179,14 @@ public class CommonUtil {
 
     //验证邮箱格式
     public static boolean checkEmail(String email) {
-        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-        Pattern regex = Pattern.compile(check);
-        Matcher matcher = regex.matcher(email);
-        return matcher.matches();
+//        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+//        Pattern regex = Pattern.compile(check);
+//        Matcher matcher = regex.matcher(email);
+//        return matcher.matches();
+        Pattern pattern = Pattern
+                .compile("^[A-Za-z0-9][\\w\\._]*[a-zA-Z0-9]+@[A-Za-z0-9-_]+\\.([A-Za-z]{2,4})");
+        Matcher mc = pattern.matcher(email);
+        return mc.matches();
     }
 
     //验证密码长度
@@ -164,7 +232,20 @@ public class CommonUtil {
     }
 
     public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener) {
+        CustomDialog dialog = new CustomDialog(context);
+        dialog.setCancelable(false);
+        dialog.setTitle(context.getResources().getString(R.string.prompt));
+        dialog.setNeturalBtn(context.getResources().getString(R.string.sure), listener);
+        dialog.setMessage(message);
+        dialog.show();
 
+
+    }
+
+    public static void showPromptDialog(Context context, String message, CustomDialog.CustomDialogListener listener, ProgressButton pb) {
+        if (pb != null) {
+            pb.stopLoadingAnimation();
+        }
         CustomDialog dialog = new CustomDialog(context);
         dialog.setCancelable(false);
         dialog.setTitle(context.getResources().getString(R.string.prompt));
@@ -179,211 +260,6 @@ public class CommonUtil {
         toast.show();
     }
 
-    public static final int AD_DOT = 0x01;
-    public static final int DARK_DOT = 0x02;
-    public static final int WHITE_DOT = 0x03;
-
-    /**
-     * 初始化小点
-     *
-     * @param context
-     * @param viewPager
-     * @param dotContainer
-     * @param size
-     * @param selected
-     * @return
-     */
-    public static List<Button> initDot(Context context, final ViewPager viewPager, LinearLayout dotContainer, int size, int selected, final int type) {
-        final List<Button> dotBtns = new ArrayList<>();
-        if (size > 0 && selected >= 0 && selected < size) {
-            // 移除所有视图
-            ((ViewGroup) dotContainer).removeAllViews();
-
-            int width = 0;
-            int height = 0;
-            int marginHorizontal = 0;
-            int marginVertical = 0;
-            int selectedResId = 0;
-            int normalResId = 0;
-
-            if (type == AD_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_rect_width);
-                height = (int) context.getResources().getDimension(R.dimen.dot_rect_height);
-
-                marginHorizontal = DensityUtil.dip2px(context, 2);
-                marginVertical = DensityUtil.dip2px(context, 10);
-
-                selectedResId = R.color.black;
-                normalResId = R.color.color_761a1a1a;
-            } else if (type == DARK_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_dark_dot_selected;
-                normalResId = R.drawable.icon_dark_dot_normal;
-            } else if (type == WHITE_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_white_dot_selected;
-                normalResId = R.drawable.icon_white_dot_normal;
-            }
-
-            for (int i = 0; i < size; i++) {
-                // 新建一个按钮
-                Button btn = new Button(context);
-                // 点的大小
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
-                // 设置点的边距
-                params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
-                // 设置按钮的大小属性
-                btn.setLayoutParams(params);
-                if (i == selected) {
-                    btn.setBackgroundResource(selectedResId);
-                } else {
-                    btn.setBackgroundResource(normalResId);
-                }
-                dotBtns.add(btn);
-                dotContainer.addView(btn);
-            }
-
-            for (int i = 0; i < dotBtns.size(); i++) {
-                final int finalI = i;
-                dotBtns.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        viewPager.setCurrentItem(finalI);
-                        selectDotBtn(dotBtns, finalI, type);
-                    }
-                });
-            }
-        }
-        return dotBtns;
-    }
-
-    /**
-     * 初始化小点
-     *
-     * @param context
-     * @param sliderLayout
-     * @param dotContainer
-     * @param size
-     * @param selected
-     * @return
-     */
-    public static List<Button> initDot(Context context, final SliderLayout sliderLayout, LinearLayout dotContainer, int size, int selected, final int type) {
-        final List<Button> dotBtns = new ArrayList<>();
-        if (size > 0 && selected >= 0 && selected < size) {
-            // 移除所有视图
-            ((ViewGroup) dotContainer).removeAllViews();
-
-            int width = 0;
-            int height = 0;
-            int marginHorizontal = 0;
-            int marginVertical = 0;
-            int selectedResId = 0;
-            int normalResId = 0;
-
-            if (type == AD_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_rect_width);
-                height = (int) context.getResources().getDimension(R.dimen.dot_rect_height);
-
-                marginHorizontal = DensityUtil.dip2px(context, 2);
-                marginVertical = DensityUtil.dip2px(context, 10);
-
-                selectedResId = R.color.black;
-                normalResId = R.color.color_761a1a1a;
-            } else if (type == DARK_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_white_dot_selected;
-                normalResId = R.drawable.icon_dark_dot_normal;
-            } else if (type == WHITE_DOT) {
-                width = (int) context.getResources().getDimension(R.dimen.dot_size);
-                ;
-                height = width;
-
-                marginHorizontal = DensityUtil.dip2px(context, 4);
-                marginVertical = DensityUtil.dip2px(context, 15);
-
-                selectedResId = R.drawable.icon_white_dot_selected;
-                normalResId = R.drawable.icon_white_dot_normal;
-            }
-
-            for (int i = 0; i < size; i++) {
-                // 新建一个按钮
-                Button btn = new Button(context);
-                // 点的大小
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
-                // 设置点的边距
-                params.setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical);
-                // 设置按钮的大小属性
-                btn.setLayoutParams(params);
-                if (i == selected) {
-                    btn.setBackgroundResource(selectedResId);
-                } else {
-                    btn.setBackgroundResource(normalResId);
-                }
-                dotBtns.add(btn);
-                dotContainer.addView(btn);
-            }
-
-            for (int i = 0; i < dotBtns.size(); i++) {
-                final int finalI = i;
-                dotBtns.get(i).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        sliderLayout.setCurrentPosition(finalI);
-                        selectDotBtn(dotBtns, finalI, type);
-                    }
-                });
-            }
-        }
-        return dotBtns;
-    }
-
-    /**
-     * 选择按钮
-     *
-     * @param finalI
-     */
-    public static void selectDotBtn(List<Button> dotBtns, int finalI, int type) {
-
-        int selectedResId = 0;
-        int normalResId = 0;
-
-        if (type == AD_DOT) {
-            selectedResId = R.color.black;
-            normalResId = R.color.color_761a1a1a;
-        } else if (type == DARK_DOT) {
-            selectedResId = R.drawable.icon_dark_dot_selected;
-            normalResId = R.drawable.icon_dark_dot_normal;
-        } else if (type == WHITE_DOT) {
-            selectedResId = R.drawable.icon_white_dot_selected;
-            normalResId = R.drawable.icon_white_dot_normal;
-        }
-
-        for (int i = 0; i < dotBtns.size(); i++) {
-            if (i == finalI) {
-                dotBtns.get(i).setBackgroundResource(selectedResId);
-            } else {
-                dotBtns.get(i).setBackgroundResource(normalResId);
-            }
-        }
-    }
 
     /**
      * 设置屏幕的背景透明度
@@ -398,6 +274,7 @@ public class CommonUtil {
 
     /**
      * 计算两个时间的时间差，以“00:00:00”格式输出
+     *
      * @param start
      * @param end
      * @return
@@ -442,4 +319,6 @@ public class CommonUtil {
         NumberFormat nf = NumberFormat.getNumberInstance();
         return nf.format(num);
     }
+
+
 }

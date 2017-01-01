@@ -42,7 +42,8 @@
     <color name="color_dcf3fa">#dcf3fa</color>
     <color name="color_eeee00">#90eaad3a</color>
     <color name="color_e29428">#e29428</color>
-
+    <color name="color_191000">#191000</color>
+    <color name="color_4d330c">#4d330c</color>
 
     <!-- common -->
 
@@ -72,13 +73,28 @@
     <!-- leave -->
     <!--========================-->
     <!--live-->
-    <color name="live_emcee_info_bg">#99000000</color>
+    <color name="live_emcee_info_bg">#b0ffffff</color>
+    <color name="live_barrageview_bg">#99000000</color>
+    <color name="live_notification">#b3191000</color>
     <color name="live_telecast_bottom_bg">#cc000000</color>
     <color name="live_text_color">#66ffffff</color>
     <color name="live_input_live_bg">#b2000000</color>
     <color name="live_start_tv">#ffaa2a</color>
+    <color name="live_start_nomal_tv">#99ffaa2a</color>
     <color name="live_barraview">#73000000</color>
     <color name="live_gift">#64000000</color>
+    <color name="live_im_bg_color">#dff6cf4e</color>
+    <color name="live_im_item_bg_color">#e4f6cf4e</color>
+    <color name="live_im_item_name_color">#a98b25</color>
+    <color name="live_beauty_on">#f5a623</color>
+    <color name="live_im_item_content">#ffffff</color>
+    <color name="color_0076ff">#0076ff</color>
+    <color name="color_8f8e94">#8f8e94</color>
+    <color name="color_4d4d4d">#4d4d4d</color>
+    <color name="color_fe3824">#fe3824</color>
+    <color name="color_190f00">#190f00</color>
+    <color name="color_70190f00">#70190f00</color>
+    <color name="color_0065b2">#0065b2</color>
     <!--umeng-->
     <color name="umeng_socialize_list_item_bgcolor">#FFFFFF</color>
     <color name="umeng_socialize_divider">#E6E6E6</color>
@@ -86,8 +102,6 @@
     <!-- theme -->
 
     <color name="color_activity_blue_bg">#389fff</color>
-
-
     <color name="color_blue_0888ff">#0888ff</color>
     <color name="color_gray_d9d9d9">#d9d9d9</color>
     <color name="color_b3b3b3">#b3b3b3</color>
@@ -129,4 +143,28 @@
     <color name="black_opacity_45">#72000000</color>
     <color name="black_99">#99000000</color>
     <color name="color_f0a028">#f0a028</color>
+    <color name="color_live_type_playback">#54A3FF</color>
+    <color name="color_live_type_living">#FFAA2A</color>
+    <color name="color_live_type_challenge">#FF6F6F</color>
+    <color name="color_tab_selected_bar">#F6A623</color>
+
+    <color name="color_theme_tag_author">#4ad3d9</color>
+    <color name="color_theme_tag_red">#fb6d6d</color>
+
+    <color name="umeng_socialize_text_title">#464f61</color>
+    <color name="black_color">#000000</color>
+    <color name="white_color">#ffffff</color>
+    <color name="color_faf7f2">#faf7f2</color>
+    <color name="color_30191000">#30191000</color>
+    <color name="color_10191000">#10191000</color>
+    <color name="color_50191000">#50191000</color>]
+    <color name="color_70191000">#70191000</color>
+    <color name="color_f6cf4e">#F6CF4E</color>
+    <color name="color_faf6f0">#FAF6F0</color>
+    <color name="color_f5a623">#f5a623</color>
+    <color name="color_20190f00">#20190F00</color>
+    <color name="color_60190f00">#60190F00</color>
+    <color name="color_ff3030">#FFFF3030</color>
+    <color name="color_faf8f3">#FFFAF8F3</color>
+    <color name="color_home_live_category_text">#190F00</color>
 </resources>

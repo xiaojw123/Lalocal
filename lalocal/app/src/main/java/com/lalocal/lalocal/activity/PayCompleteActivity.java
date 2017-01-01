@@ -11,8 +11,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
@@ -21,6 +19,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,8 +27,6 @@ import butterknife.OnClick;
 
 public class PayCompleteActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
 
-    @BindView(R.id.pay_complete_service)
-    TextView customerService;
     @BindView(R.id.pay_complete_fee_tv)
     TextView orderFeeTv;
     @BindView(R.id.pay_complete_good_name)
@@ -75,7 +72,7 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
 
 
     private void updateView() {
-        payCompleteCtv.setOnBackClickListener(this);
+        payCompleteCtv.setOnCustomClickLister(this);
         if (mOrderDetail != null) {
             String formartPricee = CommonUtil.formartOrderPrice(mOrderDetail.getFee());
             if (!TextUtils.isEmpty(formartPricee)) {
@@ -96,36 +93,33 @@ public class PayCompleteActivity extends BaseActivity implements CustomTitleView
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         backToOrderDetail();
+//        super.onBackPressed();
     }
 
     private void backToOrderDetail() {
         AppLog.print("backToOrderDetail_____order id__");
-        Intent intent = new Intent(this, OrderActivity.class);
-        intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
-        startActivityForResult(intent, 100);
+        if (mOrderDetail != null) {
+            MobHelper.sendEevent(this, MobEvent.ORDER_DETAIL);
+            Intent intent = new Intent(this, OrderActivity.class);
+            intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
+            startActivityForResult(intent, 100);
+        } else {
+            CommonUtil.showPromptDialog(this, "订单信息为空", new CustomDialog.CustomDialogListener() {
+                @Override
+                public void onDialogClickListener() {
+                    finish();
+                }
+            });
+        }
     }
 
-    @OnClick({R.id.pay_complete_service, R.id.pay_complete_vieworder_btn})
+    @OnClick({R.id.pay_complete_vieworder_btn})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.pay_complete_service:
-                if (mOrderDetail != null) {
-                    Intent csIntent = new Intent(this, ChatActivity.class);
-                    csIntent.putExtra(Constant.ITEM_TITLE, mOrderDetail.getName());
-                    csIntent.putExtra(Constant.ITEM_POST_URL, mOrderDetail.getPhoto());
-                    csIntent.putExtra(Constant.ITEM_PRICE, String.valueOf(mOrderDetail.getFee()));
-                    startActivity(csIntent);
-                }
-                break;
             case R.id.pay_complete_vieworder_btn:
-                MobHelper.sendEevent(this,MobEvent.ORDER_DETAIL);
-                if (mOrderDetail != null) {
-                    Intent intent = new Intent(this, OrderActivity.class);
-                    intent.putExtra(KeyParams.ORDER_ID, mOrderDetail.getId());
-                    startActivityForResult(intent, 100);
-                }
+                //// TODO: 2016/11/22
+                backToOrderDetail();
                 break;
         }
     }

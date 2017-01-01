@@ -62,10 +62,10 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         res = mContext.getResources();
-        View mybg = LayoutInflater.from(mContext).inflate(R.layout.list_item_delete, null);
+        View mybg = LayoutInflater.from(mContext).inflate(R.layout.item_delete, null);
         mybg.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         //获取item布局
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.list_item_my_live, null);
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.item_my_live, null);
         itemView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         //生成返回RecyclerView.ViewHolder
         return new ItemLiveHolder(mContext, mybg, itemView, RecyclerViewDragHolder.EDGE_RIGHT, (int) res.getDimension(R.dimen.item_my_live_layout_height)).getDragViewHolder();

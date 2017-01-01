@@ -8,14 +8,14 @@ import android.text.TextUtils;
 
 import com.bugtags.library.Bugtags;
 import com.crashlytics.android.Crashlytics;
-import com.easemob.chat.EMChat;
-import com.lalocal.lalocal.easemob.DemoHelper;
-import com.lalocal.lalocal.easemob.utils.HelpDeskPreferenceUtils;
+import com.lalocal.lalocal.help.TargetPage;
+import com.lalocal.lalocal.help.TargetType;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
 import com.lalocal.lalocal.live.base.util.sys.SystemUtil;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.WorkerThread;
+import com.lalocal.lalocal.live.entertainment.ui.ApngImageLoader;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.im.config.UserPreferences;
 import com.lalocal.lalocal.live.im.util.storage.StorageType;
@@ -31,6 +31,10 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.pingplusplus.android.PingppLog;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.message.IUmengRegisterCallback;
+import com.umeng.message.PushAgent;
+import com.umeng.message.UmengNotificationClickHandler;
+import com.umeng.message.entity.UMessage;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.PlatformConfig;
 import com.umeng.socialize.utils.Log;
@@ -40,8 +44,12 @@ import org.litepal.crud.DataSupport;
 import org.litepal.tablemanager.Connector;
 
 import java.util.List;
+import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
+
+;
+
 
 /**
  * Created by xiaojw on 2016/6/30.
@@ -49,7 +57,7 @@ import io.fabric.sdk.android.Fabric;
  * <p>
  * 1.为区分线上/线下版本，版本号定义如下
  * 线下版本：版本号=版本名称数字
- * 线下版本：版本号=版本名称数字+1
+ * 线上版本：版本号=版本名称数字+1
  * eg:版本名称：2.1.3
  * 线下版本号：213
  * 线上版本号：214
@@ -61,10 +69,16 @@ import io.fabric.sdk.android.Fabric;
  * 友盟统计开启
  * fabric开启
  * <p>
- * 3.第三方加固
+ * 3.baseUrl改为生产环境
+ * 解决app崩溃后退回开发环境问题
+ * <p>
+ * 4.云信key(线上)
+ * 5.
+ * 5-1 第三方加固
  * meta-data选项选择UMENG_CHANNEL
  * 根据不同市场设置对应value，生成
  * 相应渠道包
+ * 5-2 重新签名
  * 此约定从2.1.3版本开始生效
  */
 public class MyApplication extends Application {
@@ -74,28 +88,30 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppLog.print("Application create start");
         initLogManager();
         Config.IsToastTip = true;
-        AppLog.print("MyApplication onCreate___");
         AppCrashHandler.getInstance(this);
-        EMChat.getInstance().init(this);
-        EMChat.getInstance().setDebugMode(isDebug);//在做打包混淆时，要关闭debug模式，避免消耗不必要的资源
         if (isDebug) {
-            Bugtags.start("35af803b133278a8f97e4c5a692d1e71", this, Bugtags.BTGInvocationEventBubble);
-        }else{
+            Bugtags.start("19f79e144b295411ef4b402ae7157a5a", this, Bugtags.BTGInvocationEventBubble);
+        } else {
             startFabric();
             startUmeng();
         }
+        initUPsuh();
+        AppLog.print("initUPush");
+
         //数据库
         intCountryDB();
-        //代码中设置环信IM的Appkey
-        String appkey = HelpDeskPreferenceUtils.getInstance(this).getSettingCustomerAppkey();
-        EMChat.getInstance().setAppkey(appkey);
-        // init demo helper
-        DemoHelper.getInstance().init(this);
+        AppLog.print("initDB");
+        //初始化Apng
+        //    initApngImageLoader();
         DemoCache.setContext(this);
+        AppLog.print("init Live Cache");
         NIMClient.init(this, getLoginInfo(), getOptions());
+        AppLog.print("init NIMClient");
         if (inMainProcess()) {
+            // TODO: 2016/12/15 im
             // 注册自定义消息附件解析器
             NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
             // init tools
@@ -104,6 +120,141 @@ public class MyApplication extends Application {
             DemoCache.initImageLoaderKit();
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
+            //关闭通知栏提醒
+            try {
+                NIMClient.toggleNotification(false);
+            } catch (Exception e) {
+                AppLog.print("关闭通知异常");
+            }
+        }
+        AppLog.print("Application create end");
+    }
+
+    private void initApngImageLoader() {
+        ApngImageLoader apngImageLoader = ApngImageLoader.getInstance();
+        apngImageLoader.setEnableDebugLog(false);
+        apngImageLoader.setEnableVerboseLog(false);
+        apngImageLoader.init(this);
+
+    }
+
+
+    private void initUPsuh() {
+        try {
+            PushAgent mPushAgent = PushAgent.getInstance(this);
+//        UmengMessageHandler messageHandler = new UmengMessageHandler() {
+//            /**
+//             * 自定义消息的回调方法
+//             * */
+//            @Override
+//            public void dealWithCustomMessage(final Context context, final UMessage msg) {
+//                AppLog.print("dealWithCustomMessage____");
+//                super.dealWithCustomMessage(context, msg);
+//            }
+//
+//            @Override
+//            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
+//                super.dealWithNotificationMessage(context, uMessage);
+//            }
+//        };
+//        mPushAgent.setMessageHandler(messageHandler);
+            UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
+                //打开链接
+                @Override
+                public void openUrl(Context context, UMessage uMessage) {
+                    AppLog.print("UMessage____openUrl__text__" + uMessage.text);
+                    super.openUrl(context, uMessage);
+                }
+
+                //打开应用
+                @Override
+                public void launchApp(Context context, UMessage uMessage) {
+                    AppLog.print("UMessage____launchApp");
+                    if (uMessage != null) {
+                        Map<String, String> data = uMessage.extra;
+                        if (data == null || data.size() < 1) {
+                            return;
+                        }
+                        for (Map.Entry entry : data.entrySet()) {
+                            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
+                        }
+                        if (data != null && data.size() > 0) {
+                            String targetType = data.get("targetType");
+                            String targetId = data.get("targetId");
+                            String targetUrl = data.get("targetUrl");
+                            String targetName = data.get("targetName");
+                            AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
+                            if (targetType != null) {
+                                switch (targetType) {
+                                    case TargetType.URL://链接
+                                        TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
+                                        break;
+                                    case TargetType.USER://用户
+                                        TargetPage.gotoUser(context, targetId, true);
+                                        break;
+                                    case TargetType.ARTICLE://文章
+                                    case TargetType.INFORMATION://资讯
+                                        TargetPage.gotoArticleDetail(context, targetId, true);
+                                        break;
+                                    case TargetType.PRODUCT://产品
+                                        TargetPage.gotoProductDetail(context, targetId, targetType, true);
+                                        break;
+                                    case TargetType.ROUTE://线路
+                                        TargetPage.gotoRouteDetail(context, targetId, true);
+                                        break;
+                                    case TargetType.SPECIAL://专题
+                                        TargetPage.gotoSpecialDetail(context, targetId, true);
+                                        break;
+                                    case TargetType.LIVE_VIDEO://直播视频
+                                        TargetPage.gotoLive(context, targetId, true);
+                                        break;
+                                    case TargetType.LIVE_PALY_BACK://回放
+                                        TargetPage.gotoPlayBack(context, targetId, true);
+                                        break;
+
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                //打开指定页面
+                @Override
+                public void openActivity(Context context, UMessage uMessage) {
+                    AppLog.print("UMessage____openActivity");
+                    super.openActivity(context, uMessage);
+                }
+
+                //自定义行为
+                @Override
+                public void dealWithCustomAction(Context context, UMessage msg) {
+                    AppLog.print("UMessage____dealWithCustomAction");
+                    super.dealWithCustomAction(context, msg);
+                    //                for (Map.Entry<String, String> entry : msg.extra.entrySet()) {
+                    //                    String key = entry.getKey();
+                    //                    String value = entry.getValue();
+                    //                    AppLog.print("Application__dealWithCustomAction@ key:"+key+", value:"+value);
+                    //                }
+                }
+            };
+            mPushAgent.setNotificationClickHandler(notificationClickHandler);
+//注册推送服务，每次调用register方法都会回调该接口c
+            mPushAgent.register(new IUmengRegisterCallback() {
+
+                @Override
+                public void onSuccess(String deviceToken) {
+                    //注册成功会返回device token
+                    AppLog.print("uPush deviceToken____" + deviceToken);
+                }
+
+                @Override
+                public void onFailure(String s, String s1) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -138,14 +289,13 @@ public class MyApplication extends Application {
 
         // 配置保存图片，文件，log等数据的目录
         String sdkPath = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/nim/";
+        AppLog.i("pxt", sdkPath);
         options.sdkStorageRootPath = sdkPath;
-        android.util.Log.i("demo", FlavorDependent.getInstance().getFlavorName() + " demo nim sdk log path=" + sdkPath);
-
         // 配置数据库加密秘钥
         options.databaseEncryptKey = "NETEASE";
 
         // 配置是否需要预下载附件缩略图
-        options.preloadAttach = true;
+        options.preloadAttach = false;
 
         // 配置附件缩略图的尺寸大小，
         options.thumbnailSize = (int) (0.5 * ScreenUtil.screenWidth);
@@ -172,7 +322,6 @@ public class MyApplication extends Application {
     private LoginInfo getLoginInfo() {
         String imccId = AuthPreferences.getUserAccount();
         String imToken = AuthPreferences.getUserToken();
-
         AppLog.i("TAG", "MyApplication：account:" + imccId + "token:" + imToken);
         if (!TextUtils.isEmpty(imccId) && !TextUtils.isEmpty(imToken)) {
             DemoCache.setAccount(imccId.toLowerCase());
@@ -182,7 +331,6 @@ public class MyApplication extends Application {
         }
 
     }
-
 
     private void intCountryDB() {
         LitePalApplication.initialize(this);
@@ -203,6 +351,7 @@ public class MyApplication extends Application {
         //微信 appid appsecret
         PlatformConfig.setSinaWeibo("2849578775", "3b3bce66ae4671ae755fa11c2ba0ad5d");
         //新浪微博 appkey appsecret
+        PlatformConfig.setQQZone("1105529194", "XONwXa348plDFJGf");
 
 
     }
@@ -231,7 +380,6 @@ public class MyApplication extends Application {
         if (mWorkerThread == null) {
             mWorkerThread = new WorkerThread(getApplicationContext());
             mWorkerThread.start();
-
             mWorkerThread.waitForReady();
         }
     }
@@ -249,6 +397,4 @@ public class MyApplication extends Application {
         }
         mWorkerThread = null;
     }
-
-
 }

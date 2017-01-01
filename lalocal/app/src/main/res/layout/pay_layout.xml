@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_fa"
     tools:context="com.lalocal.lalocal.activity.PayActivity">
 
     <com.lalocal.lalocal.view.CustomTitleView
         android:id="@+id/pay_title_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:title_name="@string/pay" />
+        app:title_name="@string/pay"
+        android:background="@color/white"
+        />
 
     <FrameLayout
         android:id="@+id/pay_order_info_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/pay_order_info_item_height"
         android:layout_below="@+id/pay_title_view"
+        android:background="@color/white"
         android:focusable="true">
 
         <TextView
@@ -49,14 +53,6 @@
             android:layout_height="@dimen/dimen_size_1_dp"
             android:layout_gravity="bottom" />
     </FrameLayout>
-
-    <include
-        android:id="@+id/pay_manner_container"
-        layout="@layout/pay_manner_sel_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_order_info_item"
-        android:layout_marginTop="@dimen/dimen_size_20_dp" />
 
     <!--<TextView-->
     <!--android:id="@+id/paly_manner_text"-->
@@ -181,6 +177,7 @@
         android:visibility="invisible" />
 
     <RelativeLayout
+        android:background="@color/white"
         android:id="@+id/pay_bottom_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/pay_bottom_container_height"
@@ -242,6 +239,16 @@
             android:layout_alignParentBottom="true" />
 
     </RelativeLayout>
+
+    <include
+        android:id="@+id/pay_manner_container"
+        layout="@layout/pay_manner_sel_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/pay_order_info_item"
+        android:layout_toRightOf="@+id/pay_available_instalments"
+        android:layout_toEndOf="@+id/pay_available_instalments" />
 
 
 </RelativeLayout>

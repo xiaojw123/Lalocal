@@ -2,456 +2,546 @@ package com.lalocal.lalocal.live.entertainment.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.tedcoder.wkvideoplayer.util.VideoPlayCallbackImpl;
-import com.android.tedcoder.wkvideoplayer.view.PlayBackPlayer;
-import com.android.tedcoder.wkvideoplayer.view.TextureVideoPlayer;
-import com.cunoraz.gifview.library.GifView;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
-import com.lalocal.lalocal.activity.LoginActivity;
+import com.lalocal.lalocal.activity.RePlyActivity;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.base.util.ActivityManager;
-import com.lalocal.lalocal.live.base.util.DialogUtil;
+import com.lalocal.lalocal.live.entertainment.adapter.PlayBackReviewAdapter;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewRowsBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
-import com.lalocal.lalocal.live.entertainment.ui.CustomLiveUserInfoDialog;
-import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
-import com.lalocal.lalocal.model.LiveRowsBean;
-import com.lalocal.lalocal.model.LiveUserBean;
-import com.lalocal.lalocal.model.LiveUserInfoResultBean;
+import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
+import com.lalocal.lalocal.me.LLoginActivity;
+import com.lalocal.lalocal.model.CommentOperateResp;
+import com.lalocal.lalocal.model.Constants;
+import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
+import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.DensityUtil;
+import com.lalocal.lalocal.util.DialogUtils;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.QiniuUtils;
+import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
+import butterknife.OnClick;
 
 /**
  * Created by android on 2016/10/12.
  */
 public class PlayBackActivity extends BaseActivity {
-    public static final int RESQUEST_COD = 101;
 
-
-    @BindView(R.id.video_player)
-    TextureVideoPlayer videoPlayer;
-    @BindView(R.id.video_view_player)
-    PlayBackPlayer videoViewPlayer;
-    @BindView(R.id.playback_emcee_head)
-    CircleImageView playbackEmceeHead;
-    @BindView(R.id.playback_emcee_name)
-    TextView playbackEmceeName;
-    @BindView(R.id.playback_online_count)
-    TextView playbackOnlineCount;
-    @BindView(R.id.playback_master_info_layout)
-    LinearLayout playbackMasterInfoLayout;
-    @BindView(R.id.play_layout)
-    LinearLayout playLayout;
-    @BindView(R.id.play_loading_page_bg)
-    BlurImageView playLoadingPageBg;
-    @BindView(R.id.loading_live_imag)
-    GifView loadingLiveImag;
-    @BindView(R.id.xlistview_header_anim)
-    LinearLayout xlistviewHeaderAnim;
-    @BindView(R.id.playback_loading_page)
-    RelativeLayout playbackLoadingPage;
-    private SpecialShareVOBean shareVO;
-    private int direction;
-    private List<LiveRowsBean.VideoListBean> videoList;
+public static final  String PLAYER_OVER_FIRST="player_over_first";
+    @BindView(R.id.video_cover)
+    ImageView videoCover;
+    @BindView(R.id.back_btn)
+    ImageView backBtn;
+    @BindView(R.id.enter_playback_layout)
+    RelativeLayout enterPlaybackLayout;
+    @BindView(R.id.playback_info_layout)
+    XRecyclerView xRecyclerView;
+    @BindView(R.id.review_title)
+    TextView reviewTitle;
+    @BindView(R.id.tips_close_iv)
+    ImageView tipsCloseIv;
+    @BindView(R.id.reply_write_iv)
+    ImageView replyWriteIv;
+    @BindView(R.id.reply_title_layout)
+    RelativeLayout replyTitleLayout;
+    @BindView(R.id.play_back_bottom_table_reply_count)
+    TextView playBackBottomTableReplyCount;
+    @BindView(R.id.play_back_bottom_table_reply_layout)
+    LinearLayout playBackBottomTableReplyLayout;
+    @BindView(R.id.reply_tips_layout)
+    LinearLayout replyTipsLayout;
+    @BindView(R.id.page_base_loading)
+    LinearLayout pageBaseLoading;
+    @BindView(R.id.play_back_bottom_table_tranmit_count)
+    TextView playBackBottomTableTranmitCount;
+    @BindView(R.id.play_back_bottom_table_transmit_layout)
+    LinearLayout playBackBottomTableTransmitLayout;
+    @BindView(R.id.play_back_bottom_table_collect_img)
+    ImageView playBackBottomTableCollectImg;
+    @BindView(R.id.play_back_bottom_table_collect_count)
+    TextView playBackBottomTableCollectCount;
+    @BindView(R.id.play_back_bottom_table_collect_layout)
+    LinearLayout playBackBottomTableCollectLayout;
+    @BindView(R.id.play_back_bottom_table_like_img)
+    ImageView playBackBottomTableLikeImg;
+    @BindView(R.id.play_back_bottom_table_like_count)
+    TextView playBackBottomTableLikeCount;
+    @BindView(R.id.play_back_bottom_table_like_layout)
+    LinearLayout playBackBottomTableLikeLayout;
+    private PlayBackReviewAdapter playBackReviewAdapter;
+    private String intentId;
     private ContentLoader contentLoader;
-    private MyCallBack myCallBack;
-    private LiveUserInfoResultBean result;
-    private int position1;
-    private LiveUserBean user;
+    private int pageNumber;
+    private int userId;
+    private boolean praiseFlag;
+    private Object praiseId;
+    private SpecialShareVOBean shareVO;
+    private int praiseNum;
+    private int shareNum;
+    private int commentNum;
+    private int replyId;
+    private int totalRows;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.playback_activity);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);   //应用运行时，保持屏幕高亮，不锁屏
+        setContentView(R.layout.play_back_new_activity);
         ButterKnife.bind(this);
-        ActivityManager.removePlayBackCurrent();
-        ActivityManager.addPlayBackActivity(this);
         contentLoader = new ContentLoader(this);
-        myCallBack = new MyCallBack();
+        MyCallBack myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
-        String id = getIntent().getStringExtra("id");
-        contentLoader.getPlayBackLiveDetails(Integer.parseInt(id));
+        intentId = getIntent().getStringExtra("id");
+        AppLog.i("TAG", "获取回放视屏Id:" + intentId);
+        initXRecyclerView();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESQUEST_COD && (resultCode == 101 || resultCode == 105)) {
-            if (data != null) {
-                String email = data.getStringExtra(LoginActivity.EMAIL);
-                String psw = data.getStringExtra(LoginActivity.PSW);
-                contentLoader.login(email, psw);
-            }
-        }
-    }
-
-    private void parseIntent(LiveRowsBean liveRowsBean) {
-        videoList = liveRowsBean.getVideoList();
-        user = liveRowsBean.getUser();
-        shareVO = liveRowsBean.getShareVO();
-        direction = liveRowsBean.getDirection();
-        playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
-        initData(liveRowsBean);
-    }
-
-    private boolean isPlayStatus = true;//视频播放状态
-    private int position = 0;
-
-    private void initData(LiveRowsBean liveRowsBean) {
-        playLoadingPageBg.setBlurImageURL(user.getAvatar());
-        playLoadingPageBg.setScaleRatio(20);
-        playLoadingPageBg.setBlurRadius(1);
-        DrawableUtils.displayImg(this, playbackEmceeHead, user.getAvatar());
-        playbackOnlineCount.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
-        playbackMasterInfoLayout.setOnClickListener(clickListener);
-        AppLog.i("TAG", "视频回放:视频方向：" + direction + "    视频地址：" + videoList.get(0).getUrl());
-        // 视频回放:视频方向：1    视频地址：http://vid-11812.vod.chinanetcenter.broadcastapp.agoraio.cn/live-dev-388-11--20161027115838.mp4
-        if (direction == 0) {//横屏
-            positionChangeListener(0);
-            videoViewPlayer.setVisibility(View.GONE);
-            videoPlayer.setRotation(90f);
-            videoPlayer.setVideoPlayCallback(mVideoPlayCallback);
-            videoPlayer.setAutoHideController(true);
-            if (videoList != null && videoList.size() > 0) {
-                Uri uri = Uri.parse(videoList.get(position).getUrl());
-                videoPlayer.loadAndPlay(uri, 0);
-                //   Toast.makeText(this, "共：" + videoList.size() + "段视频", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            videoPlayer.setVisibility(View.GONE);
-            positionChangeListener(0);
-            videoViewPlayer.setVideoPlayCallback(mVideoPlayCallback);
-            videoViewPlayer.setAutoHideController(true);
-            if (videoList != null && videoList.size() > 0) {
-                Uri uri = Uri.parse(videoList.get(position).getUrl());
-                videoViewPlayer.loadAndPlay(uri, 0);
-            }
-        }
-    }
-
-
-    private void positionChangeListener(int position){
-        if (videoList.size() == 1) {
-            videoPlayer.setBefore(0.4f, false);
-            videoPlayer.setNext(0.4f, false);
-        } else {
-            if (videoList.size() == position + 1) {
-                videoPlayer.setBefore(1.0f, true);
-                videoPlayer.setNext(0.4f, false);
-            } else if (position == 0) {
-                videoPlayer.setNext(1.0f, true);
-                videoPlayer.setBefore(0.4f, false);
-            } else {
-                videoPlayer.setNext(1.0f, true);
-                videoPlayer.setBefore(1.0f, true);
-            }
-
+        if (requestCode == KeyParams.REPLY_REQUESTCODE && resultCode == KeyParams.REPLY_RESULTCODE) {
+            isRefresh=true;
+            contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
+            contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
 
+        if(requestCode==KeyParams.POST_REQUESTCODE&&resultCode==KeyParams.POST_RESULTCODE){
+            isRefresh=true;
+            contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
+            contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
+        }
+
+        if(requestCode==KeyParams.PLAYER_OVER_FIRST_REQUESTCODE&&resultCode==KeyParams.PLAYER_OVER_FIRST_RESULTCODE){
+            replyTipsLayout.setVisibility(View.VISIBLE);
+            //第一次返回。。。。
+        }
     }
+    boolean isAttentions;
+    private String[] mDialogItems = new String[] {"回复", "举报"};
 
-    private View.OnClickListener clickListener = new View.OnClickListener() {
+    private void initXRecyclerView() {
+        final CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
+        layoutManager.setOrientation(CustomLinearLayoutManager.VERTICAL);
+        xRecyclerView.setLayoutManager(layoutManager);
+        XRecyclerviewLoadingListener xRecyclerviewLoadingListener = new XRecyclerviewLoadingListener();
+        xRecyclerView.setLoadingListener(xRecyclerviewLoadingListener);
+        xRecyclerView.setPullRefreshEnabled(true);
+        xRecyclerView.setLoadingMoreEnabled(true);
+        xRecyclerView.setRefreshing(true);
+        playBackReviewAdapter = new PlayBackReviewAdapter(this);
+        xRecyclerView.setAdapter(playBackReviewAdapter);
+        xRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
 
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.playback_master_info_layout:
-                    if(UserHelper.isLogined(PlayBackActivity.this)){
-                        contentLoader.getLiveUserInfo(String.valueOf(user.getId()));
-                    }else{
-                        CustomChatDialog customDialog = new CustomChatDialog(PlayBackActivity.this);
-                        customDialog.setContent(getString(R.string.live_login_hint));
-                        customDialog.setCancelable(false);
-                        customDialog.setCancelable(false);
-                        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
-                        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
-                            @Override
-                            public void onDialogClickListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition > 1) {
+                    replyTitleLayout.setVisibility(View.VISIBLE);
+                } else {
+                    replyTitleLayout.setVisibility(View.GONE);
+                }
+            }
+        });
 
-                                Intent intent = new Intent(PlayBackActivity.this, LoginActivity.class);
-                                startActivityForResult(intent, RESQUEST_COD);
-
-                            }
-                        });
-                        customDialog.show();
-
-                        DialogUtil.addDialog(customDialog);
+        playBackReviewAdapter.setOnReviewItemClickListener(new PlayBackReviewAdapter.OnReviewItemClickListener() {
+            @Override
+            public void itemClick(int targetId,int userId,String userName) {
+                // 回复评论
+                if(!isOnStop){
+                    if(userId== UserHelper.getUserId(PlayBackActivity.this)){
+                        showDeleteDialog(targetId);
+                    }else {
+                        showReplyDialog(targetId,userId,userName);
                     }
-
-                    break;
-            }
-        }
-    };
-
-
-    private VideoPlayCallbackImpl mVideoPlayCallback = new VideoPlayCallbackImpl() {
-        @Override
-        public void onCloseVideo() {
-            videoPlayer.close();//关闭VideoView
-        }
-
-        @Override
-        public void onSwitchPageType() {
-        }
-
-        /**
-         * 播放完成回调
-         */
-        @Override
-        public void onPlayFinish() {
-            if (videoList == null || videoList.size() == 0) {
-                return;
+                }
             }
 
-            if (videoList.size() == 1) {
-                Toast.makeText(PlayBackActivity.this, "视频播放完成!", Toast.LENGTH_SHORT).show();
-                return;
-            } else if (videoList.size() == position + 1) {
-                Toast.makeText(PlayBackActivity.this, "视频全部播放完毕!", Toast.LENGTH_SHORT).show();
-                return;
-            } else {
-                Toast.makeText(PlayBackActivity.this, "视频播放完毕，正加载下一段视频...", Toast.LENGTH_SHORT).show();
-                videoPlayer.close();
-                ++position;
-                positionChangeListener(position);
-                Uri uri = Uri.parse(videoList.get(position).getUrl());
-                videoPlayer.loadAndPlay(uri, 0);
+            @Override
+            public void attentionBtnClick(boolean isAttention, TextView textView) {
+                    contentLoader.getAddAttention(String.valueOf(userId));
+                    textView.setText("已关注");
+                    textView.setBackgroundResource(R.drawable.play_back_info);
+                    textView.setCompoundDrawables(null,null,null,null);
             }
-        }
+        });
+    }
 
-        @Override
-        public void onPlayStatus(boolean isPlay) {
-            isPlayStatus = isPlay;
-            Log.i("TAG", " 播放状态:" + (isPlay == true ? "开始播放" : "没有播放"));
-
-        }
-
-        @Override
-        public void onClickQuit() {
-            videoPlayer.close();
-            finish();
-        }
-
-        @Override
-        public void onClickShare() {
-            if (shareVO != null) {
-                SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this, shareVO);
-                shareActivity.showShareWindow();
-//                shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
-//                        Gravity.CENTER, 0, 0);
-                shareActivity.showAtLocation(PlayBackActivity.this.findViewById(R.id.play_layout),
-                        Gravity.BOTTOM, 0, 0);
-            } else {
-                Toast.makeText(PlayBackActivity.this, "此视频暂不可分享!!", Toast.LENGTH_SHORT).show();
+    private void showReplyDialog(final int targetId, final int userId, final String userName) {
+        DialogUtils.createListDialog(PlayBackActivity.this,0,null,mDialogItems, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(which==0){
+                    //回复
+                    Intent intent = new Intent(PlayBackActivity.this, RePlyActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KeyParams.REPLY_TITLE, "回复 " + userName);
+                    bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_REPLY);
+                    bundle.putInt(KeyParams.REPLY_PARENT_ID, targetId);
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+                }else{
+                    //举报
+                    Toast.makeText(PlayBackActivity.this,"举报功能暂未开启!",Toast.LENGTH_SHORT).show();
+                }
             }
+        });
+    }
 
-        }
+    private void showDeleteDialog(final int targetId) {
+        new AlertDialog.Builder(this)
+                .setItems(new String[]{"删除","取消"}, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // TODO: 删除评论
+                        if(which==0){
+                            showHintDialog(targetId);
+                        }else {
 
-        @Override
-        public void onClickBefore(ImageView view) {
-            if (videoList == null || videoList.size() == 0) {
-                return;
+                        }
+
+                    }
+                }).show();
+
+    }
+
+
+  public void showHintDialog(final int targetId){
+      final CustomChatDialog customChatDialog = new CustomChatDialog(PlayBackActivity.this);
+      customChatDialog.setTitle(getString(R.string.live_hint));
+      customChatDialog.setContent("确定要删除当前评论吗?");
+      customChatDialog.setCancelable(false);
+      customChatDialog.setCancelBtn("取消", new CustomChatDialog.CustomDialogListener() {
+          @Override
+          public void onDialogClickListener() {
+          }
+      });
+      customChatDialog.setSurceBtn("确认", new CustomChatDialog.CustomDialogListener() {
+          @Override
+          public void onDialogClickListener() {
+              allRows.clear();
+              contentLoader.deleteComment(targetId);
+          }
+      });
+      customChatDialog.show();
+    }
+
+
+
+    @OnClick({R.id.back_btn, R.id.enter_playback_layout, R.id.reply_write_iv,R.id.play_back_bottom_table_collect_layout,
+            R.id.play_back_bottom_table_reply_layout,R.id.play_back_bottom_table_transmit_layout,R.id.play_back_bottom_table_like_layout,R.id.tips_close_iv})
+    public void clickBtn(View view) {
+
+        switch (view.getId()) {
+            case R.id.back_btn:
+                finish();
+                break;
+            case R.id.enter_playback_layout:
+                // TODO 视频回放
+                Intent intent = new Intent(PlayBackActivity.this, PlayBackNewActivity.class);
+                intent.putExtra("id",intentId);
+            if(!SPCUtils.getBoolean(PlayBackActivity.this,PLAYER_OVER_FIRST)){
+                SPCUtils.put(PlayBackActivity.this,PLAYER_OVER_FIRST,true);
+                startActivityForResult(intent,KeyParams.PLAYER_OVER_FIRST_REQUESTCODE);
+            }else{
+                startActivity(intent);
             }
-            if (position == 0) {
-                Toast.makeText(PlayBackActivity.this, "已经是第一段视频了!", Toast.LENGTH_SHORT).show();
-                return;
-            }
+                break;
+            case R.id.reply_write_iv:
+                if(UserHelper.isLogined(PlayBackActivity.this)){
+                    toRePlyActivity();
+                }else{
+                    if(LiveConstant.USER_INFO_FIRST_CLICK){
+                        LiveConstant.USER_INFO_FIRST_CLICK = false;
+                        showLoginViewDialog();
+                    }
+                }
 
-            if (videoList.size() == 1) {
-                Toast.makeText(PlayBackActivity.this, "没有上一段视频!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            --position;
-            if (videoList.size() == position || position < 0) {
-                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
-                position = 0;
-            } else {
-                Toast.makeText(PlayBackActivity.this, "正在加载上一段视频....", Toast.LENGTH_SHORT).show();
-            }
-            positionChangeListener(position);
-            videoPlayer.close();
-            Uri uri = Uri.parse(videoList.get(position).getUrl());
-            videoPlayer.loadAndPlay(uri, 0);
-        }
-
-        @Override
-        public void onClickNext(ImageView view) {
-            if (videoList == null || videoList.size() == 0) {
-                return;
-            }
-            if (videoList.size() == 1) {
-                Toast.makeText(PlayBackActivity.this, "没有下一段视频!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            ++position;
-
-            if (videoList.size() == position) {
-                Toast.makeText(PlayBackActivity.this, "播放第一段视频", Toast.LENGTH_SHORT).show();
-                position = 0;
-            } else {
-                Toast.makeText(PlayBackActivity.this, "正在加载下一段视频....", Toast.LENGTH_SHORT).show();
-            }
-            positionChangeListener(position);
-            videoPlayer.close();
-            Uri uri = Uri.parse(videoList.get(position).getUrl());
-            videoPlayer.loadAndPlay(uri, 0);
-        }
-
-        @Override
-        public void showLoadingPage(boolean isShow) {
-            playbackLoadingPage.setVisibility(View.GONE);
-        }
-
-
-    };
-
-
-    private void resetPageToPortrait() {
-        if (getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+                break;
+            case R.id.play_back_bottom_table_collect_layout:
+                if(praiseFlag&&praiseId != null){//取消
+                    contentLoader.cancelParises(praiseId, Integer.parseInt(intentId));//取消赞
+                }else{//点赞
+                    contentLoader.specialPraise(Integer.parseInt(intentId),20);
+                }
+                break;
+            case R.id.play_back_bottom_table_reply_layout:
+                if(SPCUtils.getBoolean(PlayBackActivity.this,PLAYER_OVER_FIRST)){
+                    replyTipsLayout.setVisibility(View.GONE);
+                }
+                if(UserHelper.isLogined(PlayBackActivity.this)){
+                    toRePlyActivity();
+                }else{
+                    if(LiveConstant.USER_INFO_FIRST_CLICK){
+                        LiveConstant.USER_INFO_FIRST_CLICK = false;
+                        showLoginViewDialog();
+                    }
+                }
+                break;
+            case R.id.play_back_bottom_table_transmit_layout:
+                if(shareVO!=null){
+                    SharePopupWindow shareActivity = new SharePopupWindow(PlayBackActivity.this,shareVO);
+                    shareActivity.setOnSuccessShare(new SharePopupWindow.OnSuccessShareListener() {
+                        @Override
+                        public void shareSuccess(SHARE_MEDIA share_media) {
+                            playBackBottomTableTranmitCount.setText(String.valueOf(shareNum+1));
+                        }
+                    });
+                    shareActivity.show();
+                }
+                break;
+            case R.id.play_back_bottom_table_like_layout:
+                break;
+            case R.id.tips_close_iv:
+                replyTipsLayout.setVisibility(View.GONE);
+                break;
         }
     }
 
-    private int status;
+    private void toRePlyActivity() {
+        if(replyId!=0){
+            Intent intent=new Intent(PlayBackActivity.this, RePlyActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(KeyParams.REPLY_TITLE, "发起评论");
+            bundle.putInt(KeyParams.REPLY_TYPE, KeyParams.REPLY_TYPE_NEW);
+            bundle.putInt(KeyParams.TARGET_ID, replyId);
+            bundle.putInt(KeyParams.TARGET_TYPE, Constants.PLAY_BACK_TYPE_URL);
+            intent.putExtras(bundle);
+            startActivityForResult(intent, KeyParams.REPLY_REQUESTCODE);
+        }
+
+    }
+
+    public void showLoginViewDialog() {
+        final CustomChatDialog customDialog = new CustomChatDialog(this);
+        customDialog.setContent(getString(R.string.live_login_hint));
+        customDialog.setCancelable(false);
+        customDialog.setCancelBtn(getString(R.string.live_canncel), null);
+        customDialog.setSurceBtn(getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
+            @Override
+            public void onDialogClickListener() {
+                LLoginActivity.startForResult(PlayBackActivity.this, 701);
+            }
+        });
+        customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                LiveConstant.USER_INFO_FIRST_CLICK = true;
+            }
+        });
+        customDialog.show();
+    }
+
+
+    boolean isRefresh=false;
+    public class XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
+        @Override
+        public void onRefresh() {
+            allRows.clear();
+            isRefresh=true;
+            contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
+            contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
+        }
+
+        @Override
+        public void onLoadMore() {
+            isRefresh=false;
+            AppLog.i("TAG", "粉红色咖啡壶咖啡哈咖啡很多坑：" + pageNumber + "      totalPages:" + totalPages);
+            if (totalPages != 0 && pageNumber == totalPages) {
+                xRecyclerView.setNoMore(true);
+            } else {
+                contentLoader.getPlayBackLiveReview(intentId, 20, 10, pageNumber + 1);
+            }
+        }
+    }
+
+    boolean detailsRefresh = false;//视频信息加载完毕
+    boolean reviewRefresh = false;//评论信息加载完毕
+    private int totalPages;
+    List<PlayBackReviewRowsBean> allRows = new ArrayList<>();
 
     public class MyCallBack extends ICallBack {
 
         @Override
-        public void onPlayBackDetails(LiveRowsBean liveRowsBean) {
+        public void onDeleteComment(CommentOperateResp commentOperateResp) {
+            super.onDeleteComment(commentOperateResp);
+            if (commentOperateResp.getReturnCode() == 0) {
+                String message = commentOperateResp.getMessage();
+                if (TextUtils.equals(message, "success")) {
+                    Toast.makeText(PlayBackActivity.this, "评论删除成功", Toast.LENGTH_SHORT).show();
+                    // 请求评论
+                    isRefresh=true;
+                    contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
+                    return;
+                }
+            }
+
+            Toast.makeText(PlayBackActivity.this, "评论删除失败，请稍后再试~", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        public void onLiveCancelAttention(LiveCancelAttention liveCancelAttention) {
+            super.onLiveCancelAttention(liveCancelAttention);
+            if(liveCancelAttention.getReturnCode()==0){
+
+            }
+        }
+
+        @Override
+        public void onInputPariseResult(PariseResult pariseResult) {//点赞结果
+            super.onInputPariseResult(pariseResult);
+            if (pariseResult.getReturnCode() == 0) {
+                praiseId = pariseResult.getResult();
+                praiseFlag = true;
+                praiseNum = praiseNum + 1;
+                playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
+                playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
+
+            }
+
+        }
+
+        @Override
+        public void onPariseResult(PariseResult pariseResult) {//取消赞返回结果
+            super.onPariseResult(pariseResult);
+            if (pariseResult.getReturnCode() == 0) {
+                praiseFlag = false;
+                praiseNum = praiseNum - 1;
+                playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
+                playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
+            }
+        }
+
+        @Override
+        public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
-            if(liveRowsBean!=null){
-                parseIntent(liveRowsBean);
+            try{
+                if (liveRowsBean != null) {
+                    String photo = liveRowsBean.getPhoto();
+                    praiseNum = liveRowsBean.getPraiseNum();
+                    shareNum = liveRowsBean.getShareNum();
+                    commentNum = liveRowsBean.getCommentNum();
+                    userId = liveRowsBean.getUser().getId();
+                    shareVO = liveRowsBean.getShareVO();
+                    replyId = liveRowsBean.getId();
+                    playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
+                    praiseFlag = liveRowsBean.isPraiseFlag();
+                    praiseId = liveRowsBean.getPraiseId();
+                    playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
+                    if(liveRowsBean.isPraiseFlag()){
+                        playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.color_ff6f6f));
+                        playBackBottomTableCollectImg.setImageResource(R.drawable.collect_like_red);
+                    }else{
+                        playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
+                        playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
+                    }
+                    if (photo != null) {
+                        AppLog.i("TAG","获取图片地址:"+photo);
+                        DrawableUtils.loadingImg(PlayBackActivity.this, videoCover, QiniuUtils.centerCrop(photo, DensityUtil.getWindowWidth(PlayBackActivity.this), DensityUtil.dip2px(PlayBackActivity.this, 258)));
+                    }
+                    detailsRefresh = true;
+                    if (reviewRefresh) {
+                        xRecyclerView.refreshComplete();
+                        if(pageBaseLoading.getVisibility()==View.VISIBLE){
+                            pageBaseLoading.setVisibility(View.GONE);
+                        }
+                    }
+                    playBackReviewAdapter.setRefreshVideoInfo(liveRowsBean);
+                    contentLoader.getLiveUserInfo(String.valueOf(userId));
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+        @Override
+        public void onPlayBackReviewDetails(PlayBackReviewResultBean reviewResultBean) {
+            super.onPlayBackReviewDetails(reviewResultBean);
+            if (reviewResultBean != null) {
+                List<PlayBackReviewRowsBean> rows = reviewResultBean.getRows();
+                totalRows = reviewResultBean.getTotalRows();
+                playBackBottomTableReplyCount.setText(String.valueOf(totalRows));
+                if(isRefresh){
+                    allRows.clear();
+                }
+                if (rows == null) {
+                    reviewRefresh = true;
+                    if (detailsRefresh) {
+                        xRecyclerView.refreshComplete();
+                    }
+                    return;
+                }
+                allRows.addAll(rows);
+                playBackReviewAdapter.setRefreshReviewList(allRows);
+                pageNumber = reviewResultBean.getPageNumber();
+                totalPages = reviewResultBean.getTotalPages();
+                reviewRefresh = true;
+                if (detailsRefresh) {
+                    xRecyclerView.refreshComplete();
+                    if(pageBaseLoading.getVisibility()==View.VISIBLE){
+                        pageBaseLoading.setVisibility(View.GONE);
+                    }
+                }
+
             }
         }
 
         @Override
         public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
             super.onLiveUserInfo(liveUserInfosDataResp);
-
             if (liveUserInfosDataResp.getReturnCode() == 0) {
-                result = liveUserInfosDataResp.getResult();
-                LiveConstant.IDENTITY = LiveConstant.IS_LIVEER;
-                Object statusa = result.getAttentionVO().getStatus();
-                if (statusa != null) {
-                    double parseDouble = Double.parseDouble(String.valueOf(statusa));
-                    status = (int) parseDouble;
-
+                Object status = liveUserInfosDataResp.getResult().getAttentionVO().getStatus();
+                if (status != null) {
+                    double parseDouble = Double.parseDouble(String.valueOf(status));
+                    int userStatus = (int) parseDouble;//关注状态
+                    playBackReviewAdapter.setRefreshAttention(userStatus == 0 ? false : true);
                 }
-                final CustomLiveUserInfoDialog dialog = new CustomLiveUserInfoDialog(PlayBackActivity.this, result, false, false);
-                dialog.setUserHomeBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                    @Override
-                    public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                        Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
-                        intent.putExtra("userId", String.valueOf(id));
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setSurceBtn(new CustomLiveUserInfoDialog.CustomLiveUserInfoDialogListener() {
-                    @Override
-                    public void onCustomLiveUserInfoDialogListener(String id, TextView textView, ImageView managerMark) {
-                        Intent intent = new Intent(PlayBackActivity.this, LiveHomePageActivity.class);
-                        intent.putExtra("userId", String.valueOf(id));
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-                dialog.setAttention(status == 0 ? getString(R.string.live_attention) : getString(R.string.live_attention_ok), new CustomLiveUserInfoDialog.CustomLiveFansOrAttentionListener() {
-                    int fansCounts = -2;
-
-                    @Override
-                    public void onCustomLiveFansOrAttentionListener(String id, TextView fansView, TextView attentionView, int fansCount, int attentionCount, TextView attentionStatus) {
-
-                        if (fansCounts == -2) {
-                            fansCounts = fansCount;
-                        }
-                        if (status == 0) {
-                            attentionStatus.setText(getString(R.string.live_attention_ok));
-                            attentionStatus.setAlpha(0.4f);
-                            ++fansCounts;
-                            fansView.setText(String.valueOf(fansCounts));
-                            contentLoader.getAddAttention(id);
-                            status = 1;
-                        } else {
-                            attentionStatus.setText(getString(R.string.live_attention));
-                            attentionStatus.setAlpha(1);
-                            --fansCounts;
-                            fansView.setText(String.valueOf(fansCounts));
-                            contentLoader.getCancelAttention(id);
-                            status = 0;
-                        }
-                    }
-                });
-                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        LiveConstant.USER_INFO_FIRST_CLICK = true;
-                    }
-                });
-                dialog.show();
             }
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // 恢复播放
-        if (videoPlayer != null && videoList != null && videoList.size() > 0) {
-            Log.i("TAF", "播放器activityhhehh ");
-            Uri uri = Uri.parse(videoList.get(position).getUrl());
-            videoPlayer.loadAndPlay(uri, position1);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // 暂停播放
-        if (videoPlayer != null) {
-            Log.i("TAF", "播放器activityhhehh  onPause ");
-            position1 = videoPlayer.pause();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        // 释放资源
-        if (videoPlayer != null) {
-            videoPlayer.close();
-        }
-        super.onDestroy();
-    }
-
+    boolean isOnStop=false;
     @Override
     protected void onStop() {
         super.onStop();
-        DialogUtil.clear();
+        isOnStop=true;
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        isOnStop=false;
     }
 }

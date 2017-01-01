@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -20,12 +20,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
-import com.lalocal.lalocal.activity.RegisterActivity;
-import com.lalocal.lalocal.help.ErrorMessage;
+import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveGiftRanksResp;
@@ -33,16 +33,26 @@ import com.lalocal.lalocal.live.entertainment.model.LiveHomeAreaResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerBean;
 import com.lalocal.lalocal.live.entertainment.model.LiveManagerListResp;
+import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
+import com.lalocal.lalocal.me.LRegister1Activity;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
 import com.lalocal.lalocal.model.ArticlesResp;
+import com.lalocal.lalocal.model.ChannelIndexTotal;
+import com.lalocal.lalocal.model.ChannelIndexTotalResult;
 import com.lalocal.lalocal.model.ChannelRecord;
 import com.lalocal.lalocal.model.CloseLiveBean;
+import com.lalocal.lalocal.model.CmbPay;
+import com.lalocal.lalocal.model.CommentOperateResp;
+import com.lalocal.lalocal.model.CommentsResp;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.ConsumeRecord;
 import com.lalocal.lalocal.model.Coupon;
-import com.lalocal.lalocal.model.CouponItem;
 import com.lalocal.lalocal.model.CreateLiveRoomDataResp;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.HomepageUserArticlesResp;
@@ -51,6 +61,7 @@ import com.lalocal.lalocal.model.LiveAttentionStatusBean;
 import com.lalocal.lalocal.model.LiveCancelAttention;
 import com.lalocal.lalocal.model.LiveDetailsDataResp;
 import com.lalocal.lalocal.model.LiveFansOrAttentionResp;
+import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
 import com.lalocal.lalocal.model.LiveListDataResp;
 import com.lalocal.lalocal.model.LiveRecommendListDataResp;
 import com.lalocal.lalocal.model.LiveRowsBean;
@@ -58,19 +69,24 @@ import com.lalocal.lalocal.model.LiveRowsDataResp;
 import com.lalocal.lalocal.model.LiveSeachItem;
 import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.LoginUser;
+import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.model.OrderDetail;
 import com.lalocal.lalocal.model.OrderItem;
 import com.lalocal.lalocal.model.PariseResult;
+import com.lalocal.lalocal.model.PraiseComment;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductItem;
 import com.lalocal.lalocal.model.RechargeItem;
 import com.lalocal.lalocal.model.RecommendAdResp;
 import com.lalocal.lalocal.model.RecommendDataResp;
 import com.lalocal.lalocal.model.RecommendListDataResp;
+import com.lalocal.lalocal.model.RecommendRowsBean;
+import com.lalocal.lalocal.model.RecommendationsResp;
 import com.lalocal.lalocal.model.RouteDetail;
 import com.lalocal.lalocal.model.RouteItem;
 import com.lalocal.lalocal.model.SearchItem;
 import com.lalocal.lalocal.model.SiftModle;
+import com.lalocal.lalocal.model.SocialUser;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.model.SysConfigItem;
 import com.lalocal.lalocal.model.User;
@@ -84,14 +100,15 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.MD5Util;
+import com.lalocal.lalocal.util.SPCUtils;
+import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.adapter.AreaDetailAdapter;
 import com.lalocal.lalocal.view.adapter.MoreAdpater;
 import com.lalocal.lalocal.view.adapter.SearchResultAapter;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 import com.netease.nimlib.sdk.NIMClient;
-import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
-import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.umeng.socialize.bean.SHARE_MEDIA;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,12 +119,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.BIND_SOCIAL_ACCOUNT;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_G_SPECIAL_SEARCH;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_MESSAGE_COUNT;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_ORDER_STATUS;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_PAY_STATUS;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_PUSH_LOGS;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_SEARCH_RESULT;
+import static com.lalocal.lalocal.net.ContentLoader.RequestCode.GET_USERS_SERVICE;
+
 
 /**
- * Created by xiaojw on 2016/6/1.
+ * Created by xiaojw on 2016/6/1./
  */
 public class ContentLoader {
-    public static final String CONTENT_TYPE = "application/json";
+    public static final String CONTENT_TYPE = "application/json;charset=UTF-8";
     private ICallBack callBack;
     RequestQueue requestQueue;
     ContentResponse response;
@@ -123,13 +149,272 @@ public class ContentLoader {
     }
 
     public void setCallBack(ICallBack callBack) {
+
+
         this.callBack = callBack;
     }
 
+    public void getPraiseComment(int pageNum){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_PRAISE_COMMENT);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getPraiseCommentUrl(pageNum),response,response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
 
-    public void registerByPhone(String phone, String code, String email, String password) {
+    public void getUsersService(){
+        if (callBack!=null){
+            response=new ContentResponse(GET_USERS_SERVICE);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(),response,response);
+        requestQueue.add(request);
+    }
+    public  void getUsersService(int type,int index){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_USER_SERVICE);
+            response.setChildIndex(index);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(type),response,response);
+        requestQueue.add(request);
+    }
+
+
+    public void getMessageCount() {
+        if (callBack != null) {
+            response = new ContentResponse(GET_MESSAGE_COUNT);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMessageCount(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getGloablSearchUser(String name, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_G_USER_SEARCH);
+            response.setSearchKey(name);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getGUserSearchUrl(10, pageNum, name), response, response);
+        requestQueue.add(request);
+    }
+
+    public void getGlobalSearchLive(String name) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_G_LIVE_SEARCH);
+            response.setSearchKey(name);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getGLiveSearchUrl(name, 1, 100), response, response);
+        requestQueue.add(request);
+
+    }
+
+    public void getGlobalSearchPlayBack(String name, int pageNum) {
+
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_G_PLAY_BACK_SEARCH);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getGPlayBackSearchUrl(name, pageNum, 10), response, response);
+        requestQueue.add(request);
+    }
+
+    public void getGlobalSearchSpecial(String name, int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(GET_G_SPECIAL_SEARCH);
+            response.setSearchKey(name);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getGSepicalSearchUrl(name, pageNum, 10), response, response);
+        requestQueue.add(request);
+    }
+
+
+    public void getPushLogs(String dateTime) {
+        if (callBack != null) {
+            response = new ContentResponse(GET_PUSH_LOGS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getPushLogsUrl(dateTime), response, response);
+        AppLog.print("pushLog_url___" + AppConfig.getPushLogsUrl(dateTime));
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+
+    public void getPayStatus(String payNo) {
+        if (callBack != null) {
+            response = new ContentResponse(GET_PAY_STATUS);
+        }
+        AppLog.print("getPayStatus————————" + AppConfig.getPayStatus(payNo));
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getPayStatus(payNo), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+
+    public void getOrderStatus(int orderId) {
+        if (callBack != null) {
+            response = new ContentResponse(GET_ORDER_STATUS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getOrderStatusUrl(orderId), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+
+    public void getCmbPay(int orderId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_CMB_PAY);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getCmbPayUrl(orderId), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getPushTags() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_PUSH_TAGS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getPushTagUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+
+    public void bindPhone(String phone, String code, ProgressButton pb) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.BIDN_PHONE);
+            response.setProgressButton(pb);
+            response.setPLoginInfo(phone, code);
+        }
+        JSONObject jobj = new JSONObject();
+        try {
+            jobj.put("phone", phone);
+            jobj.put("code", code);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getBindPhoneUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        request.setBodyParams(jobj.toString());
+        requestQueue.add(request);
+    }
+
+
+    //获取三方账户列表
+    public void getSocialUsers() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_SOCIAL_USES);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUsersSocialUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+    //绑定三方账户
+    public void bindSocialAccount(CompoundButton switchBtn, Map<String, String> map, SHARE_MEDIA share_media) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.BIND_SOCIAL_ACCOUNT);
+            response.setSwitchButton(switchBtn);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getUsersSocialUrl(), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        request.setBodyParams(getSocialBodyParams(map, share_media).toString());
+        requestQueue.add(request);
+    }
+
+    //解绑三方账号
+    public void unBindSocialAccount(CompoundButton switchBtn, int uid) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.UNBIND_SOCIAL_ACCOUNT);
+            response.setSwitchButton(switchBtn);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.DELETE, AppConfig.getUnBindSocialUrl(uid), response, response);
+        request.setHeaderParams(getLoginHeaderParams());
+        requestQueue.add(request);
+    }
+
+
+    public void loginBySocial(Map<String, String> map, SHARE_MEDIA share_media) {
+        String loginParams = getSocialLoginPrarams(map, share_media).toString();
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LOGIN_BY_SOCIAL);
+            response.setSocialParams(getSocialBodyParams(map, share_media).toString(), loginParams);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialLoginUrl(), response, response);
+//        Set<Map.Entry<String, String>> entrySet = map.entrySet();
+//        for (Map.Entry<String, String> entry : entrySet) {
+//            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
+//        }
+        AppLog.print("rquestUrl__" + AppConfig.getSocialLoginUrl() + ", id____" + getSocialLoginPrarams(map, share_media).toString());
+        request.setBodyParams(loginParams);
+        requestQueue.add(request);
+    }
+
+    public JSONObject getSocialBodyParams(Map<String, String> map, SHARE_MEDIA share_media) {
+        JSONObject jsonObject = getSocialLoginPrarams(map, share_media);
+        try {
+            boolean isM = true;
+            String gender = map.get("gender");
+            if (share_media == SHARE_MEDIA.WEIXIN) {
+                isM = "1".equals(gender);
+            } else if (share_media == SHARE_MEDIA.QQ) {
+                isM = "男".equals(gender);
+            } else if (share_media == SHARE_MEDIA.SINA) {
+                isM = "m".equals(gender);
+            }
+            jsonObject.put("nickName", map.get("screen_name"));
+            jsonObject.put("avatar", map.get("profile_image_url"));
+            jsonObject.put("sex", isM);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public JSONObject getSocialLoginPrarams(Map<String, String> map, SHARE_MEDIA share_media) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            if (share_media == SHARE_MEDIA.SINA) {
+
+                //uid
+                jsonObject.put("weiboUid", map.get("uid"));
+            } else if (share_media == SHARE_MEDIA.QQ) {
+                jsonObject.put("qqUid", map.get("uid"));
+            } else if (share_media == SHARE_MEDIA.WEIXIN) {
+                jsonObject.put("unionId", map.get("unionid"));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    public void socialBind(String socialParams, ProgressButton pb) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SOCIAL_BIND);
+            response.setProgressButton(pb);
+        }
+        AppLog.print("三方绑定邮箱bodyPrams___" + socialParams);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialBindurl(), response, response);
+        request.setBodyParams(socialParams);
+        requestQueue.add(request);
+    }
+
+
+    public void registerBySocial(String socialParams, ProgressButton pb) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.REGISTER_BY_SOCIAL);
+            response.setProgressButton(pb);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialReigsterUrl(), response, response);
+        AppLog.print("三方注册___socialParams_" + socialParams);
+        request.setBodyParams(socialParams);
+        requestQueue.add(request);
+    }
+
+
+    public void registerByPhone(String phone, String code, String email, String password, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER_PHONE);
+            response.setProgressButton(pb);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneRegisterUrl(), response, response);
         JSONObject reqParams = new JSONObject();
@@ -140,9 +425,27 @@ public class ContentLoader {
                 reqParams.put(RequestParams.EMAIL, email);
             }
             if (!TextUtils.isEmpty(password)) {
-                reqParams.put(RequestParams.PASSWORD, password);
+                reqParams.put(RequestParams.PASSWORD, MD5Util.getMD5String(password));
             }
             request.setBodyParams(reqParams.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        requestQueue.add(request);
+    }
+
+    public void loginByPhone(String phone, String code, ProgressButton pb) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LOGIN_PHEON);
+            response.setProgressButton(pb);
+            response.setPLoginInfo(phone, code);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPhoneLoginUrl(), response, response);
+        JSONObject reqBody = new JSONObject();
+        try {
+            reqBody.put(RequestParams.PHONE, phone);
+            reqBody.put(RequestParams.CODE, code);
+            request.setBodyParams(reqBody.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -167,9 +470,10 @@ public class ContentLoader {
     }
 
 
-    public void getSMSCode(View resView, String phoneNum, String type) {
+    public void getSMSCode(View resView, String phoneNum, String type, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SMS_VER_CODE);
+            response.setProgressButton(pb);
             response.setResponseView(resView);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSMSVerCode(), response, response);
@@ -206,9 +510,10 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
-    public void exchargeCopon(String code) {
+    public void exchargeCopon(String code, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.EXCHARGE_COUPON);
+            response.setProgressButton(pb);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.exchargeCouponUrl(), response, response);
         request.setHeaderParams(getLoginHeaderParams());
@@ -232,6 +537,27 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    //直播头像列表
+    public void getLiveAvatar(String roomId, int number, boolean isMaster) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.LIVE_AVATAR);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getLiveRoomAvatar(roomId, number, isMaster), response, response);
+        AppLog.i("TAG", "获取直播间头像地址：" + AppConfig.getLiveRoomAvatar(roomId, number, isMaster));
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
+    //用户离开直播间
+    public void getUserLeaveRoom(String channels) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.USER_LEAVE_ROOM);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUserLeaveRoom(channels), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+
     //兑换乐钻
     public void exchargeGold(long socre) {
         if (callBack != null) {
@@ -252,15 +578,21 @@ public class ContentLoader {
     }
 
     //充值乐钻
-    public void chargeGold(String bodyJson) {
+    public void chargeGold(String bodyJson, String channel) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHARGE_GOLD);
+            response.setChargeChannel(channel);
         }
-        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.chargeGoldUrl(), response, response);
+        String chargeUrl = AppConfig.chargeGoldUrl();
+        if (PayActivity.CHANNEL_CMB.equals(channel)) {
+            chargeUrl = AppConfig.chargeCmbGoldUrl();
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, chargeUrl, response, response);
         request.setHeaderParams(getLoginHeaderParams());
         request.setBodyParams(bodyJson);
         requestQueue.add(request);
     }
+
 
     public void getRechargeProducts() {
         if (callBack != null) {
@@ -335,7 +667,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_WELCOME_IMGS);
         }
-        AppLog.print("startPage url_____" + AppConfig.getWelcommeImgs());
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getWelcommeImgs(), response, response);
         requestQueue.add(request);
     }
@@ -357,7 +688,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ROUTE_DETAILS);
         }
-        AppLog.print("request url____" + AppConfig.getRouteDetailsUrl(id));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getRouteDetailsUrl(id), response, response);
         request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
@@ -398,6 +728,7 @@ public class ContentLoader {
     public void getMoreProductResult(String name, int pageNumber, int pageSize) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_MORE_PRODUCT);
+            response.setSearchKey(name);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMoreProductUrl(name, pageNumber, pageSize), response, response);
         request.setHeaderParams(getHeaderParams());
@@ -407,6 +738,7 @@ public class ContentLoader {
     public void getMoreRouteResult(String name, int pageNumber, int pageSize) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_MORE_ROUTE);
+            response.setSearchKey(name);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getMoreRouteUrl(name, pageNumber, pageSize), response, response);
         request.setHeaderParams(getHeaderParams());
@@ -414,16 +746,15 @@ public class ContentLoader {
     }
 
     public void getSearchResult(String name) {
-        name = name.replaceAll(" ", "");
+        name = name.replaceAll("", "");
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_SEARCH_RESULT);
             response.setSearchKey(name);
         }
-        AppLog.print("AppConfig.getSearchResultUrl(name)___" + AppConfig.getSearchResultUrl(name));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getSearchResultUrl(name), response, response);
-        request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
     }
+
 
     public void getSearhHot() {
         if (callBack != null) {
@@ -444,6 +775,14 @@ public class ContentLoader {
         AppLog.print("areadProudcts_____url=" + AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId));
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getAreaProducts(pageSize, pageNub, areaId, type, collectionId), response, response);
         request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+
+    public void getYiTu8Citys(int id){
+        if (callBack!=null){
+            response=new ContentResponse(RequestCode.GET_YITU8_CITY);
+        }
+        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getYiTu8City(id),response,response);
         requestQueue.add(request);
     }
 
@@ -521,6 +860,15 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    public void getMyAvailableCoupon(int userid, String token, String proudctionId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_MY_COUPON);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getAvaileCouponItemUrl(proudctionId), response, response);
+        request.setHeaderParams(getHeaderParams(userid, token));
+        requestQueue.add(request);
+    }
+
     public void getMyFavorite(int userid, String token, int pageNumber, int pageSize) {
         //pageNumber=1&pageSize=10
         if (callBack != null) {
@@ -551,6 +899,18 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    public void getUserProfile(int userid, String token, View resView) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_PROFILE);
+            resView.setEnabled(false);
+            response.setResponseView(resView);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUserProfileUrl(), response, response);
+        request.setHeaderParams(getHeaderParams(userid, token));
+        requestQueue.add(request);
+    }
+
+
     //修改的用户资料
     public void modifyUserProfile(String nickanme, int sex, String areaCode, String phone, String description, int userid, String token) {
         if (callBack != null) {
@@ -563,9 +923,10 @@ public class ContentLoader {
     }
 
 
-    public void resetPasword(String email, String vercode, String newpsw) {
+    public void resetPasword(String email, String vercode, String newpsw, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.RESET_PASSWORD);
+            response.setProgressButton(pb);
             response.setPassWord(newpsw);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getPasswordResetUrl(), response, response);
@@ -574,9 +935,11 @@ public class ContentLoader {
 
     }
 
-    public void boundEmail(String email, int userid, String token) {
+    public void boundEmail(String email, int userid, String token, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.BOUDN_EMAIL);
+            response.setProgressButton(pb);
+            response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getEmailBoundUrl(), response, response);
         request.setHeaderParams(getHeaderParams(userid, token));
@@ -595,36 +958,39 @@ public class ContentLoader {
     }
 
     //发送验证码
-    public void sendVerificationCode(String email, TextView textView) {
+    public void sendVerificationCode(String email, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.SEND_VERIFICATION_CODE);
-            response.setResponseView(textView);
+            response.setProgressButton(pb);
             response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getVerCodeSendUrl(), response, response);
         request.setBodyParams(getVerParams(email));
         requestQueue.add(request);
-
     }
 
     //判断邮箱是否被注册过
-    public void checkEmail(String email) {
+    public void checkEmail(String email, String uidprams, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CHECK_EMAIL);
+            response.setProgressButton(pb);
             response.setEmail(email);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCheckMailUrl(), response, response);
-        request.setBodyParams(getCheckParams(email));
+        AppLog.print("checkPrams___" + getCheckParams(email, uidprams));
+        request.setBodyParams(getCheckParams(email, uidprams));
         requestQueue.add(request);
     }
 
 
     //登录
-    public void login(final String email, final String password) {
+    public void login(final String email, final String password, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LOGIN);
+            response.setProgressButton(pb);
             response.setUserInfo(email, password);
         }
+        AppLog.print("login____loginURL___" + AppConfig.getLoginUrl() + "__email_:" + email + ", password:" + password);
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getLoginUrl(), response, response);
         request.setBodyParams(getLoginParams(email, password));
 
@@ -633,10 +999,10 @@ public class ContentLoader {
     }
 
     //注册
-    public void register(final String email, final String password, final String nickname, Button regitsterBtn) {
+    public void register(final String email, final String password, final String nickname, ProgressButton regitsterBtn) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER);
-            response.setResponseView(regitsterBtn);
+            response.setProgressButton(regitsterBtn);
             response.setUserInfo(email, password);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getRegisterUrl(), response, response);
@@ -739,28 +1105,16 @@ public class ContentLoader {
     }
 
     //修改直播
-    public void alterLive(String title, String userId, String photo, String announcement, String longitude, String latitude) {
+    public void alterLive(String title, String photo, String address) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_LIVE_ROOM);
         }
-
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getAlterLive(), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
+        request.setBodyParams(getAlterLiveRoom(title, photo, address));
         requestQueue.add(request);
     }
 
-    //上传直播封面
-    public void alterLiveCover(String title, String userId, String photo, String announcement, String longitude, String latitude) {
-        if (callBack != null) {
-            response = new ContentResponse(RequestCode.ALTER_LIVE_COVER);
-        }
-
-        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterLive() + userId, response, response);
-        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterLiveRoom(title, photo, announcement, longitude, latitude));
-        requestQueue.add(request);
-    }
 
     //上传在线人数
     public void getUserOnLine(String onLineUsers, int onlinecount) {
@@ -837,6 +1191,46 @@ public class ContentLoader {
         request.setBodyParams(getUserIdentityStatus(userId, channelId));
         requestQueue.add(request);
     }
+
+
+    //禁言
+    public void getUserMute(String channelId, String roomid, String operator, String target, int type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.USER_MUTE);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getMute(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getUserMuteParams(channelId, roomid, operator, target, type));
+        requestQueue.add(request);
+
+    }
+
+    //永久禁言
+    public void getPerpetualMute(String accid) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PERPETUAL_MUTE);
+        }
+        AppLog.i("TAG", "回访客户开发和地方：" + accid);
+
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getPerpetualMute(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getMuteParams(accid));
+        requestQueue.add(request);
+    }
+
+    //超级管理员关闭直播间
+
+    public  void getCloseLiveRoom(String channelId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.CLOSE_LIVE_ROOM);
+        }
+
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getCloseRoom(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getCloseRoomParams(channelId));
+        requestQueue.add(request);
+    }
+
 
     //删除管理员
     public void cancelManagerAccredit(String userId) {
@@ -955,6 +1349,29 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+    //上传日志
+    public void getUploadLogs(String log) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.APP_LOG);
+        }
+        String logContent = "手机型号：" + android.os.Build.MODEL + "   /版本号：" + android.os.Build.VERSION.RELEASE + "  /日志信息：" + log;
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.uploadLogs(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getLogBodyParams(logContent));
+        requestQueue.add(request);
+    }
+
+    //发消息
+    public void sendMessage(String content, int targetType) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.VALIDATE_MSGS);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.sendMessage(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getMsgBodyParams(content, targetType));
+        requestQueue.add(request);
+    }
+
     //挑战详情
     public void getChallengeDetails(String challengeId) {
         if (callBack != null) {
@@ -1008,6 +1425,7 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
+
     //历史直播
     public void getPlayBackLiveList(String areaId, int pageNumber, String attentionFlag) {
         if (callBack != null) {
@@ -1028,8 +1446,38 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+    public void getPlayBackMsg(String historyId){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PLAY_BACK_MSG);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackMsg(historyId), response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
+    }
+    //历史直播评论
+    public  void getPlayBackLiveReview(String targetId,int targetType,int pageSize,int pageNumber){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.PLAY_BACK_DETAILES);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackReview(targetId,targetType,pageSize,pageNumber),response, response);
+        request.setHeaderParams(getHeaderParams());
+        requestQueue.add(request);
 
-    //历史直播详情
+    }
+
+    //修改历史回放
+    public void getAlterPlayBack(int historyId,String title,String photo,String description,String address){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.ALTER_PLAY_BACK);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.PUT,AppConfig.getAlterPlayBack(historyId),response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getAlterPlayBack(title,photo, description,address));
+        requestQueue.add(request);
+    }
+
+
+    //删除历史直播详情
     public void deleteLiveHistory(int id) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.LIVE_HISTORY_DELETE);
@@ -1070,7 +1518,6 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
-
     //产品详情
     public void productDetails(String targetId) {
         if (callBack != null) {
@@ -1089,9 +1536,9 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.VERSION_CODE);
         }
         ContentRequest contentRequest = new ContentRequest(AppConfig.VERSION_UPDATE + versionCode, response, response);
-        contentRequest.setHeaderParams(getHeaderParams(-1, null));
         requestQueue.add(contentRequest);
     }
+
 
     public void articleDetails(String targetId) {
         if (callBack != null) {
@@ -1123,6 +1570,182 @@ public class ContentLoader {
         requestQueue.add(contentRequest);
     }
 
+    /**
+     * 获取首页我的关注
+     */
+    public void getHomeAttention() {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_HOME_ATTENTION);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getHomeAttention(), response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 获取每日推荐
+     */
+    public void getDailyRecommendations(int type) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_DAILY_RECOMMENDATIONS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getDailyRecommendations(type),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+
+    }
+
+    /**
+     * 直播间举报
+     *
+     * @param content    举报原因
+     * @param photos     举报图片，从服务器获取的filename组成的数组
+     * @param userId     被举报用户的id
+     * @param masterName 被举报用户的昵称
+     * @param channelId  当前直播间id
+     */
+    public void getChannelReport(int reportType, String content, String[] photos,
+                                 String userId, String masterName, String channelId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_CHANNEL_REPORT);
+        }
+
+        // 主播端举报
+        String url = AppConfig.getChannelReport();
+        // 如果是用户端举报
+        if (reportType == Constants.REPORT_USER) {
+            url = AppConfig.getReport();
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, url, response, response);
+        JSONObject jsonObject = new JSONObject();
+
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("qn", "content - " + content + "; photos size is " + photos.length + "; userId is " + userId + "; masterName is " + masterName + "; channelId is " + channelId);
+        try {
+            jsonObject.put("content", content);
+            JSONArray jsonArray = new JSONArray();
+            for (String photo : photos) {
+                jsonArray.put(photo);
+            }
+            jsonObject.put("photo", jsonArray);
+            jsonObject.put("userId", userId);
+            jsonObject.put("masterName", masterName);
+            jsonObject.put("channelId", channelId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 2.2版本
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @param dateTime
+     */
+    public void getChannelIndexTotal(int pageNum, int pageSize, String categoryId, String dateTime) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_CHANNEL_INDEX_TOTAL);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getChannelIndexTotal(String.valueOf(pageNum), String.valueOf(pageSize), categoryId, dateTime),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 获取文章评论列表
+     * @param articleId
+     */
+    public void getArticleComments(int articleId,int pageNum)  {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_ARTICLE_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(articleId,pageNum), response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 发表评论
+     * @param content 评论内容
+     * @param targetId
+     * @param targetType
+     */
+    public void sendComments(String content, int targetId, int targetType) {
+        AppLog.i("kdl", "content is " + content + "; targetId is " + targetId + "; targetType is " + targetType);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SEND_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getSendingCommentsUrl(),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("kdl", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("content", content);
+            jsonObject.put("targetId", targetId);
+            jsonObject.put("targetType", targetType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 发表评论
+     * @param content 评论内容
+     * @param parentId
+     */
+    public void replyComments(String content, int parentId) {
+        AppLog.i("kdl", "content is " + content + "; parentId is " + parentId);
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.REPLY_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.POST, AppConfig.getSendingCommentsUrl(),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+
+        AppLog.i("kdl", "key is " + UserHelper.getUserId(context) + "; value is " + UserHelper.getToken(context));
+
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("content", content);
+            jsonObject.put("parentId", parentId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        contentRequest.setBodyParams(jsonObject.toString());
+        requestQueue.add(contentRequest);
+    }
+
+    /**
+     * 删除评论
+     * @param commentId
+     */
+    public void deleteComment(int commentId) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.DELETE_COMMENTS);
+        }
+        ContentRequest contentRequest = new ContentRequest(Request.Method.DELETE, AppConfig.getDeletingCommentUrl(commentId),
+                response, response);
+        contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context),
+                UserHelper.getToken(context)));
+        requestQueue.add(contentRequest);
+    }
+
     class ContentRequest extends StringRequest {
         private String body;
         private Map<String, String> headerParams;
@@ -1135,13 +1758,14 @@ public class ContentLoader {
 
         @Override
         public Request<?> setRetryPolicy(RetryPolicy retryPolicy) {
-            return super.setRetryPolicy(new DefaultRetryPolicy(10000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
+            return super.setRetryPolicy(new DefaultRetryPolicy(50000,//默认超时时间，应设置一个稍微大点儿的，例如本处的500000
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,//默认最大尝试次数
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         }
 
         public ContentRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);
+            AppLog.print("requestUrl____" + url);
         }
 
         public void setHeaderParams(Map<String, String> headerParams) {
@@ -1202,10 +1826,35 @@ public class ContentLoader {
         private int collectionId;
         private String phone, code;
         private String attentionFlag;
+        private String socialParams;
+        private String uidPramas;
+        private CompoundButton switchBtn;
+        private ProgressButton mProgressButton;
+        private String chargeChannel;
+        private  int childIndex;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
+
+        public void setChildIndex(int index){
+            childIndex=index;
+        }
+
+        public void setChargeChannel(String channel) {
+            chargeChannel = channel;
+        }
+
+        public void setSwitchButton(CompoundButton switchBtn) {
+            this.switchBtn = switchBtn;
+        }
+
+        //三方账号用户信息
+        public void setSocialParams(String json, String pramas) {
+            socialParams = json;
+            uidPramas = pramas;
+        }
+
 
         public void setAttentionFlag(String attentionFlag) {
             this.attentionFlag = attentionFlag;
@@ -1254,6 +1903,15 @@ public class ContentLoader {
             this.responseView = responseView;
         }
 
+        public void setProgressButton(ProgressButton pb) {
+            if (pb != null) {
+                pb.startLoadingAnimation();
+                pb.setEnabled(false);
+                mProgressButton = pb;
+            }
+        }
+
+
         public void setRecommend(int pageSize, int pageNumber) {
             this.pageSize = pageSize;
             this.pageNumber = pageNumber;
@@ -1262,32 +1920,40 @@ public class ContentLoader {
 
         @Override
         public void onErrorResponse(VolleyError volleyError) {
-            AppLog.print("volley error——————" + volleyError);
-            if (responseView != null) {
-                responseView.setEnabled(true);
-            }
-            if (volleyError != null) {
-
-                String errorMsg = volleyError.toString();
-                if (volleyError.networkResponse != null) {
-                    int code = volleyError.networkResponse.statusCode;
-                    if (code == 401) {
-                        UserHelper.updateSignOutInfo(context);
-                        Toast.makeText(context,"你的账号已在其他设备登录,请重新登录",Toast.LENGTH_SHORT).show();
+            resetResponseView();
+            if (resultCode == RequestCode.VERSION_CODE) {
+                return;
+            } else {
+                if (resultCode == RequestCode.GET_PUSH_TAGS) {
+                    getSystemConfigs();
+                    return;
+                }
+                if (volleyError != null) {
+                    NetworkResponse netRespone = volleyError.networkResponse;
+                    if (netRespone != null && netRespone.statusCode == 401) {
+                        return;
                     }
                 }
-                if (!ErrorMessage.AUTHOR_FIALED.equals(errorMsg) && !ErrorMessage.CLIENT_ERROR.equals(errorMsg)) {
-                    Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
-                }
             }
+            Toast.makeText(context, "网络错误", Toast.LENGTH_SHORT).show();
             callBack.onError(volleyError);
         }
 
-        @Override
-        public void onResponse(String json) {
+        private void resetResponseView() {
+            if (mProgressButton != null) {
+                mProgressButton.setEnabled(true);
+                mProgressButton.stopLoadingAnimation();
+            }
             if (responseView != null) {
                 responseView.setEnabled(true);
             }
+        }
+
+
+        @Override
+        public void onResponse(String json) {
+            AppLog.print("response JSON____" + json);
+            resetResponseView();
             JSONObject jsonObj;
             try {
                 if (TextUtils.isEmpty(json)) {
@@ -1297,6 +1963,10 @@ public class ContentLoader {
                 int code = jsonObj.optInt(ResultParams.RESULT_CODE);
                 String message = jsonObj.optString(ResultParams.MESSAGE);
                 if (code != 0) {
+                    if (resultCode == RequestCode.GET_PUSH_TAGS) {
+                        getSystemConfigs();
+                        return;
+                    }
                     if (resultCode == RequestCode.LOGIN && "该邮箱未注册".equals(message)) {
                         CustomDialog dialog = new CustomDialog(context);
                         dialog.setMessage(message);
@@ -1304,15 +1974,112 @@ public class ContentLoader {
                         dialog.setCancelBtn("取消", null);
                         dialog.setSurceBtn("去注册", this);
                         dialog.show();
-                    } else if(resultCode!=RequestCode.LIVE_ON_LINE_COUNT&&resultCode!=RequestCode.GET_ONLINE_COUNT) {
+
+                    } else if (resultCode != RequestCode.GET_ORDER_STATUS && resultCode != RequestCode.GET_PAY_STATUS && resultCode != RequestCode.LIVE_ON_LINE_COUNT && resultCode != RequestCode.GET_ONLINE_COUNT && resultCode != RequestCode.LIVE_AVATAR) {
                         CommonUtil.showPromptDialog(context, message, null);
                     }
-                    callBack.onResponseFailed(code,message);
-                    callBack.onResponseFailed(message,RequestCode.LIVE_ON_LINE_COUNT);
+                    callBack.onResponseFailed(code, message);
+                    callBack.onResponseFailed(message, RequestCode.LIVE_AVATAR);
                     return;
+
 
                 }
                 switch (resultCode) {
+                    case RequestCode.GET_PRAISE_COMMENT:
+                        responseGetPraiseComment(jsonObj);
+                        break;
+
+                    case RequestCode.GET_USERS_SERVICE:
+                       JSONArray resutJarray=jsonObj.optJSONArray(ResultParams.REULST);
+                        callBack.onGetUsersSerice(resutJarray);
+                       break;
+                    case RequestCode.GET_USER_SERVICE:
+                        JSONObject sercieResultJobj=jsonObj.optJSONObject(ResultParams.REULST);
+                        callBack.onGetUser(sercieResultJobj);
+                        callBack.onGetUser(sercieResultJobj,childIndex);
+                        break;
+
+                    case RequestCode.GET_YITU8_CITY:
+                        JSONArray jsonArray=jsonObj.optJSONArray(ResultParams.REULST);
+                        callBack.onGetYitu8City(jsonArray.length()>0);
+                        break;
+
+                    case RequestCode.GET_MESSAGE_COUNT:
+                        String res = jsonObj.optString(ResultParams.REULST);
+                        int count=0;
+                        if (!TextUtils.isEmpty(res)){
+                            count=Integer.parseInt(res);
+                        }
+                        callBack.onGetMessageCount(count);
+                        break;
+
+                    case RequestCode.GET_G_SPECIAL_SEARCH:
+                        responseGetGSpecialSearch(jsonObj);
+                        break;
+
+                    case RequestCode.GET_G_USER_SEARCH:
+                        responseGetGUserSearch(jsonObj);
+
+
+                        break;
+                    case RequestCode.GET_G_LIVE_SEARCH:
+                        responseGetGLiveSearch(jsonObj, true);
+                        break;
+                    case RequestCode.GET_G_PLAY_BACK_SEARCH:
+                        responseGetGLiveSearch(jsonObj, false);
+                        break;
+
+                    case RequestCode.GET_PUSH_LOGS:
+                        responeGetPushLogs(jsonObj);
+                        break;
+
+                    case RequestCode.GET_PAY_STATUS:
+                        AppLog.print("getPayStatus____" + json);
+                        int payStatus = jsonObj.optInt(ResultParams.REULST);
+                        callBack.onGetPayStatus(payStatus);
+                        break;
+                    case GET_ORDER_STATUS:
+                        AppLog.print("getOrderStatus_____" + json);
+                        int status = jsonObj.optInt(ResultParams.REULST);
+                        callBack.onGetOrderStatus(status);
+                        break;
+
+
+                    case RequestCode.GET_CMB_PAY:
+                        AppLog.print("getCMBPay______" + json);
+                        responseGetCmbPay(jsonObj);
+                        break;
+                    case RequestCode.BIDN_PHONE:
+                        AppLog.print("bind_phone_result___" + json);
+                        callBack.onBindPhoneSuccess(phone);
+                        break;
+                    case RequestCode.GET_SOCIAL_USES:
+                        AppLog.print("get__");
+                        responGetSocialUsers(jsonObj);
+                        break;
+                    case BIND_SOCIAL_ACCOUNT:
+                        AppLog.print("bind__social__acount__" + json);
+                        responBindSocialUser(jsonObj);
+                        break;
+                    case RequestCode.UNBIND_SOCIAL_ACCOUNT:
+                        AppLog.print("unbind__social__acount__" + json);
+                        jsonObj.optString(ResultParams.REULST);
+                        callBack.onUnBindSocialUser(switchBtn);
+                        break;
+
+                    case RequestCode.SOCIAL_BIND:
+                        AppLog.print("三方绑定----result---" + json);
+                        responseSocialBind(jsonObj);
+                        break;
+
+                    case RequestCode.LOGIN_BY_SOCIAL:
+                        AppLog.print("三方登录结果————result__" + json);
+                        responseLoginBySocial(jsonObj);
+                        break;
+                    case RequestCode.REGISTER_BY_SOCIAL:
+                        AppLog.print("“三方注册————”" + json);
+                        responseRegisterBySocial(jsonObj);
+                        break;
                     case RequestCode.LIVE_HISTORY_DELETE:
                         responseDeleteLiveHisotry(jsonObj);
                         break;
@@ -1332,7 +2099,7 @@ public class ContentLoader {
                         responseGetUserLive(jsonObj);
                         break;
                     case RequestCode.EXCHARGE_COUPON:
-                        responseExchargeCoupon(jsonObj);
+                        callBack.onGetExchargeResult();
                         break;
                     case RequestCode.SEARCH_LIVE:
                         AppLog.print("result search JSON___" + json);
@@ -1373,6 +2140,7 @@ public class ContentLoader {
                         responseGetWelcomeImgs(jsonObj);
                         break;
                     case RequestCode.GET_SYSTM_CONFIG:
+                        AppLog.i("TAG", "获取系统配置信息：" + json);
                         responseGetSystemConfig(jsonObj);
                         break;
                     case RequestCode.GET_PAY_RESULT:
@@ -1409,7 +2177,7 @@ public class ContentLoader {
                         responsMoreItems(jsonObj, MoreAdpater.MODUEL_TYPE_ARTICLE);
                         break;
 
-                    case RequestCode.GET_SEARCH_RESULT:
+                    case GET_SEARCH_RESULT:
                         AppLog.print("get_search_result__" + json);
                         responseGetSearchResult(jsonObj);
                         break;
@@ -1440,10 +2208,11 @@ public class ContentLoader {
                         responseRegister(jsonObj);
                         break;
                     case RequestCode.LOGIN:
+                        AppLog.print("邮箱登录___json___" + json);
                         responseLogin(jsonObj);
                         break;
                     case RequestCode.CHECK_EMAIL:
-                        responseCheckMail();
+                        responseCheckMail(jsonObj);
                         break;
                     case RequestCode.SEND_VERIFICATION_CODE:
                         responseSendVerCode();
@@ -1598,11 +2367,218 @@ public class ContentLoader {
                     case RequestCode.GET_USER_ARTICLE:
                         responseUserArticle(json);
                         break;
+                    case RequestCode.APP_LOG:
+                        responseAppLog(json);
+                        break;
+                    case RequestCode.USER_MUTE:
+                        responseUserMute(json);
+                        break;
+                    case RequestCode.PERPETUAL_MUTE:
+                        responsePerpetualMute(jsonObj);
+                        break;
+                    case RequestCode.CLOSE_LIVE_ROOM:
+                        responseSuperManagerCloseRoom(jsonObj);
+                        break;
+                    case RequestCode.LIVE_AVATAR:
+                        responseLiveAvatar(json);
+                        break;
+                    case RequestCode.USER_LEAVE_ROOM:
+                        responseUserLeaveRoom(json);
+                        break;
+
+                    case RequestCode.GET_PUSH_TAGS:
+                        AppLog.print("get push tags____" + json);
+                        responseGetPushTags(jsonObj);
+                        break;
+                    case RequestCode.GET_HOME_ATTENTION:
+                        responseHomeAttention(json);
+                        break;
+                    case RequestCode.GET_DAILY_RECOMMENDATIONS:
+                        responseDailyRecommendations(json);
+                        break;
+                    case RequestCode.GET_CHANNEL_REPORT:
+                        responseChannelReport(json);
+                        break;
+                    case RequestCode.VALIDATE_MSGS:
+                        responseMsg(jsonObj);
+                        break;
+                    case RequestCode.GET_CHANNEL_INDEX_TOTAL:
+                        responseChannelIndexTotal(json);
+                        break;
+                    case RequestCode.GET_ARTICLE_COMMENTS:
+                        responseArticleComments(json);
+                        break;
+                    case RequestCode.PLAY_BACK_DETAILES:
+                        responsePlayBack(jsonObj);
+                        break;
+                    case RequestCode.PLAY_BACK_MSG:
+                        responsePlayBackMsg(json);
+                        break;
+                    case RequestCode.SEND_COMMENTS:
+                        responseSendingComments(json);
+                        break;
+                    case RequestCode.REPLY_COMMENTS:
+                        responseSendingComments(json);
+                        break;
+                    case RequestCode.DELETE_COMMENTS:
+                        responseDeleteComments(json);
+                        break;
+                    case RequestCode.ALTER_PLAY_BACK:
+                        responseAlterHistoryPlayBack(jsonObj);
+                        break;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+        }
+
+        private void responseGetPraiseComment(JSONObject jsonObj) {
+            String resultJson=jsonObj.optString(ResultParams.REULST);
+            Gson gson=new Gson();
+            PraiseComment pc=gson.fromJson(resultJson,PraiseComment.class);
+            callBack.onGetPraiseComment(pc);
+        }
+
+        private void responseGetGSpecialSearch(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            int pageNum = resultJobj.optInt(ResultParams.PAGE_NUMBER);
+            int totalPages = resultJobj.optInt(ResultParams.TOTAL_PAGES);
+            JSONArray rowsJarray = resultJobj.optJSONArray(ResultParams.ROWS);
+            Gson gson = new Gson();
+            List<RecommendRowsBean> beenList = new ArrayList<>();
+            for (int i = 0; i < rowsJarray.length(); i++) {
+                String rowJson = rowsJarray.optString(i);
+                RecommendRowsBean bean = gson.fromJson(rowJson, RecommendRowsBean.class);
+                beenList.add(bean);
+            }
+            callBack.onGetGSpecialSearch(key, pageNum, totalPages, beenList);
+        }
+
+
+        private void responseGetGUserSearch(JSONObject jsonObj) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            int pageNum = resultJobj.optInt(ResultParams.PAGE_NUMBER);
+            int totalPages = resultJobj.optInt(ResultParams.TOTAL_PAGES);
+            JSONArray rowsJarray = resultJobj.optJSONArray(ResultParams.ROWS);
+            Gson gson = new Gson();
+            List<LiveFansOrAttentionRowsBean> beenList = new ArrayList<>();
+            for (int i = 0; i < rowsJarray.length(); i++) {
+                String rowJson = rowsJarray.optString(i);
+                LiveFansOrAttentionRowsBean bean = gson.fromJson(rowJson, LiveFansOrAttentionRowsBean.class);
+                beenList.add(bean);
+            }
+            callBack.onGetGUserSearch(key, pageNum, totalPages, beenList);
+        }
+
+        private void responseGetGLiveSearch(JSONObject jsonObj, boolean isLive) {
+            JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
+            int pageNum = resultJobj.optInt(ResultParams.PAGE_NUMBER);
+            int totalPages = resultJobj.optInt(ResultParams.TOTAL_PAGES);
+            JSONArray rowsJarray = resultJobj.optJSONArray(ResultParams.ROWS);
+            Gson gson = new Gson();
+            List<LiveRowsBean> rowsBeens = new ArrayList<>();
+            for (int i = 0; i < rowsJarray.length(); i++) {
+                String rowJson = rowsJarray.optString(i);
+                LiveRowsBean bean = gson.fromJson(rowJson, LiveRowsBean.class);
+                rowsBeens.add(bean);
+            }
+            if (isLive) {
+                callBack.onGetGLiveSearch(rowsBeens, key);
+            } else {
+                callBack.onGetGPlayBackSearch(pageNum, totalPages, rowsBeens);
+            }
+        }
+
+        private void responeGetPushLogs(JSONObject jsonObj) {
+            JSONArray resutJarray = jsonObj.optJSONArray(ResultParams.REULST);
+            String date = jsonObj.optString("date");
+            List<MessageItem> items = new ArrayList<>();
+            Gson gson = new Gson();
+            for (int i = 0; i < resutJarray.length(); i++) {
+                String itemJson = resutJarray.optString(i);
+                MessageItem item = gson.fromJson(itemJson, MessageItem.class);
+                items.add(item);
+            }
+            callBack.onGetPushLogs(date, items);
+
+        }
+
+
+        private void responseGetCmbPay(JSONObject jsonObj) {
+            String resJson = jsonObj.optString(ResultParams.REULST);
+            Gson gson = new Gson();
+            CmbPay cmbPay = gson.fromJson(resJson, CmbPay.class);
+            callBack.onGetCmbPayParams(cmbPay);
+        }
+
+        private void responseGetPushTags(JSONObject jsonObj) {
+            JSONArray resultJarray = jsonObj.optJSONArray(ResultParams.REULST);
+            List<String> tags = new ArrayList<>();
+            for (int i = 0; i < resultJarray.length(); i++) {
+                String tag = resultJarray.optString(i);
+                tags.add(tag);
+            }
+            callBack.onResponseGetTags(tags);
+
+        }
+
+
+        private void responBindSocialUser(JSONObject jsonObj) {
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            try {
+                Gson gson = new Gson();
+                JSONObject resultJobj = new JSONObject(resultJson);
+                String wechatJson = resultJobj.optString("wechat");
+                String qqJson = resultJobj.optString("qq");
+                String weiboJson = resultJobj.optString("weibo");
+                SocialUser wechatUser = gson.fromJson(wechatJson, SocialUser.class);
+                SocialUser qqUser = gson.fromJson(qqJson, SocialUser.class);
+                SocialUser weiboUser = gson.fromJson(weiboJson, SocialUser.class);
+                callBack.onBindSocialUser(switchBtn, wechatUser, qqUser, weiboUser);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        private void responGetSocialUsers(JSONObject jsonObj) {
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            try {
+                Gson gson = new Gson();
+                JSONObject resultJobj = new JSONObject(resultJson);
+                String wechatJson = resultJobj.optString("wechat");
+                String qqJson = resultJobj.optString("qq");
+                String weiboJson = resultJobj.optString("weibo");
+                SocialUser wechatUser = gson.fromJson(wechatJson, SocialUser.class);
+                SocialUser qqUser = gson.fromJson(qqJson, SocialUser.class);
+                SocialUser weiboUser = gson.fromJson(weiboJson, SocialUser.class);
+                callBack.onGetSocialUsers(wechatUser, qqUser, weiboUser);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        private void responseSocialBind(JSONObject jsonObj) {
+            responseRegisterBySocial(jsonObj);
+        }
+
+        private void responseRegisterBySocial(JSONObject jsonObj) {
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            Gson gson = new Gson();
+            User user = gson.fromJson(resultJson, User.class);
+            saveUserInfo(user, KeyParams.CHANNEL_LOGIN_SOCIAL);
+            callBack.onSocialRegisterSuccess(user);
+        }
+
+        private void responseLoginBySocial(JSONObject jsonObj) {
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            Gson gson = new Gson();
+            User item = gson.fromJson(resultJson, User.class);
+            saveUserInfo(item, KeyParams.CHANNEL_LOGIN_SOCIAL);
+            callBack.onSocialLogin(item, socialParams, uidPramas);
         }
 
         private void responseDeleteLiveHisotry(JSONObject jsonObj) {
@@ -1613,7 +2589,7 @@ public class ContentLoader {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
             User item = gson.fromJson(json, User.class);
-            saveUserInfo(item);
+            saveUserInfo(item, KeyParams.CHANNEL_LOGIN_PHONE);
             callBack.onLoginByPhone(item, phone, code);
         }
 
@@ -1621,7 +2597,7 @@ public class ContentLoader {
             Gson gson = new Gson();
             String json = jsonObj.optString(ResultParams.REULST);
             User item = gson.fromJson(json, User.class);
-            saveUserInfo(item);
+            saveUserInfo(item, KeyParams.CHANNEL_LOGIN_PHONE);
             callBack.onRegisterByPhone(item);
         }
 
@@ -1643,12 +2619,6 @@ public class ContentLoader {
             callBack.onGetUserLive(item);
         }
 
-        private void responseExchargeCoupon(JSONObject jsonObj) {
-            Gson gson = new Gson();
-            String json = jsonObj.optString(ResultParams.REULST);
-            CouponItem item = gson.fromJson(json, CouponItem.class);
-            callBack.onGetExchargeResult(item);
-        }
 
         private void responseSearchLive(JSONObject jsonObj) {
             Gson gson = new Gson();
@@ -1663,12 +2633,12 @@ public class ContentLoader {
 
         private void responseChargeGold(JSONObject jsonObj) {
             String result = jsonObj.optString(ResultParams.REULST);
-            callBack.onChargeGold(result);
+            callBack.onChargeGold(result, chargeChannel);
         }
 
         // 首页推荐文章列表
         private void responseArticleList(String json) {
-            AppLog.i("aaa", "response article lsit " + json);
+            AppLog.i("rsp", "response article lsit " + json);
             ArticlesResp articlesResp = new Gson().fromJson(json, ArticlesResp.class);
             if (articlesResp.getReturnCode() == 0) {
                 callBack.onArticleListResult(articlesResp);
@@ -1710,8 +2680,10 @@ public class ContentLoader {
             for (int i = 0; i < resultJarray.length(); i++) {
                 JSONObject itemJobj = resultJarray.optJSONObject(i);
                 SysConfigItem item = gson.fromJson(itemJobj.toString(), SysConfigItem.class);
+
                 items.add(item);
             }
+
             callBack.onGetSysConfigs(items);
         }
 
@@ -1740,6 +2712,13 @@ public class ContentLoader {
 
         }
 
+
+        //发消息
+        private void responseMsg(JSONObject jsonObj) {
+            int code = jsonObj.optInt(ResultParams.RESULT_CODE);
+            AppLog.i("TAG", "发消息反馈：");
+            callBack.onSendMessage(code);
+        }
 
         private void responseGetAreaDetailItems(JSONObject jsonObj, int moduleType) {
             JSONObject resJobj = jsonObj.optJSONObject(ResultParams.REULST);
@@ -1772,10 +2751,9 @@ public class ContentLoader {
 
         private void responsMoreItems(JSONObject jsonObj, int type) {
             JSONObject resultJobj = jsonObj.optJSONObject(ResultParams.REULST);
-            int pageNumber = resultJobj.optInt("pageNumber");
-            int totalPages = resultJobj.optInt("totalPages");
-            int totalRows = resultJobj.optInt("totalRows");
-            JSONArray rowsJarray = resultJobj.optJSONArray("rows");
+            int pageNumber = resultJobj.optInt(ResultParams.PAGE_NUMBER);
+            int totalPages = resultJobj.optInt(ResultParams.TOTAL_PAGES);
+            JSONArray rowsJarray = resultJobj.optJSONArray(ResultParams.ROWS);
             List<SearchItem> items = new ArrayList<>();
             Gson gson = new Gson();
             for (int i = 0; i < rowsJarray.length(); i++) {
@@ -1797,7 +2775,8 @@ public class ContentLoader {
                     items.add(item);
                 }
             }
-            callBack.onGetMoreItems(pageNumber, totalPages, items);
+            callBack.onGetMoreItems(key, pageNumber, totalPages, items);
+            callBack.onGetMoreItems(type, key, pageNumber, totalPages, items);
 
         }
 
@@ -1880,6 +2859,9 @@ public class ContentLoader {
             for (int i = 0; i < itemsArray.length(); i++) {
                 String key = itemsArray.optString(i);
                 items.add(key);
+                if (i == 4) {
+                    break;
+                }
             }
             callBack.onGetSearchHot(items);
         }
@@ -1924,7 +2906,7 @@ public class ContentLoader {
 
         // 首页推荐列表，包括：直播、专题、商品
         private void responseIndexRecommendList(String json) {
-            AppLog.i("hehe", "recommendList is " + json);
+            AppLog.i("rsp", "recommendList is " + json);
             RecommendListDataResp recommendListDataResp = new Gson().fromJson(json, RecommendListDataResp.class);
             if (recommendListDataResp != null) {
                 callBack.onRecommendList(recommendListDataResp);
@@ -2007,6 +2989,7 @@ public class ContentLoader {
         }
 
         private void responseBoundEmail() {
+            UserHelper.updateEmail(context, email);
             callBack.onSendActivateEmmailComplete();
 
         }
@@ -2034,9 +3017,18 @@ public class ContentLoader {
             callBack.onSendVerCode(email);
         }
 
-        private void responseCheckMail() {
+        private void responseCheckMail(JSONObject jsonObject) {
+            String resutJson = jsonObject.optString(ResultParams.REULST);
+            String userId = null;
+            if (resutJson != null) {
+                try {
+                    JSONObject resJobj = new JSONObject(resutJson);
+                    userId = resJobj.optString("userId");
+                } catch (JSONException e) {
+                }
 
-            callBack.onCheckEmail(email);
+            }
+            callBack.onCheckEmail(email, userId);
         }
 
         private void responseLogin(JSONObject jsonObject) {
@@ -2047,53 +3039,40 @@ public class ContentLoader {
                 user = gson.fromJson(resutJson.toString(), User.class);
             }
             AppLog.i("TAG", "responseLogin" + jsonObject.toString());
-            saveUserInfo(user);
+            saveUserInfo(user, KeyParams.CHANNEL_LOGIN_EMAIL);
             callBack.onLoginSucess(user);
         }
 
-        private void saveUserInfo(User user) {
+
+        private void saveUserInfo(User user, int loginChannel) {
             if (user != null) {
                 MobHelper.singIn(user.getId());
                 Bundle bundle = new Bundle();
                 bundle.putBoolean(KeyParams.IS_LOGIN, true);
-                bundle.putString(KeyParams.EMAIL, email);
-                bundle.putString(KeyParams.PASSWORD, psw);
+                bundle.putInt(KeyParams.LOGIN_CHANNEL, loginChannel);
+                bundle.putString(KeyParams.EMAIL, user.getEmail());
+                bundle.putInt(KeyParams.STATUS, user.getStatus());
                 bundle.putInt(KeyParams.USERID, user.getId());
                 bundle.putString(KeyParams.TOKEN, user.getToken());
                 bundle.putString(KeyParams.AVATAR, user.getAvatar());
                 bundle.putString(KeyParams.IM_CCID, user.getImUserInfo().getAccId());
                 bundle.putString(KeyParams.IM_TOKEN, user.getImUserInfo().getToken());
                 bundle.putString(KeyParams.NICKNAME, user.getNickName());
+                bundle.putInt(KeyParams.SORTVALUE, user.getSortValue());
                 UserHelper.saveLoginInfo(context, bundle);
                 DemoCache.clear();
                 AuthPreferences.clearUserInfo();
+               try {
+                   NIMClient.getService(AuthService.class).logout();
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+                DemoCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
-                loginIMServer(user.getImUserInfo().getAccId(), user.getImUserInfo().getToken());
             }
         }
 
-        private void loginIMServer(final String imccId, String imToken) {
-            NIMClient.getService(AuthService.class).login(new LoginInfo(imccId, imToken)).setCallback(new RequestCallback() {
-
-                @Override
-                public void onSuccess(Object o) {
-                    DemoCache.setAccount(imccId);
-                    DemoCache.getRegUserInfo();
-                    DemoCache.setLoginStatus(true);
-                }
-
-                @Override
-                public void onFailed(int i) {
-                    DemoCache.setLoginStatus(false);
-                }
-
-                @Override
-                public void onException(Throwable throwable) {
-                    DemoCache.setLoginStatus(false);
-                }
-            });
-        }
 
         private void responseRegister(JSONObject jsonObject) {
             JSONObject jsonObj = jsonObject.optJSONObject(ResultParams.REULST);
@@ -2109,12 +3088,14 @@ public class ContentLoader {
 
         //点赞
         private void responseParises(String json) {
+            AppLog.i("TAG", "获取收藏结果：" + json);
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onInputPariseResult(pariseResult);
         }
 
         //取消赞
         private void responseCancelParises(String json) {
+            AppLog.i("TAG", "取消收藏：" + json);
             PariseResult pariseResult = new Gson().fromJson(json, PariseResult.class);
             callBack.onPariseResult(pariseResult);
         }
@@ -2139,9 +3120,9 @@ public class ContentLoader {
 
         //推荐广告
         public void responseRecommendAd(String json) {
+            AppLog.i("rsp", "ad: " + json);
             RecommendAdResp recommendAdResp = new Gson().fromJson(json, RecommendAdResp.class);
             callBack.onRecommendAd(recommendAdResp);
-
         }
 
         //直播列表
@@ -2162,21 +3143,24 @@ public class ContentLoader {
 
         //直播详情
         private void responseLiveDetails(String json) {
+            AppLog.i("TAG", "直播详情：" + json);
             LiveDetailsDataResp liveDetailsDataResp = new Gson().fromJson(json, LiveDetailsDataResp.class);
             callBack.onLiveDetails(liveDetailsDataResp);
         }
 
         //创建直播间
         private void responseCreateLiveRoom(String json) {
-            AppLog.i("TAG","打印创建直播间返回日志："+json);
+            AppLog.i("TAG", "打印创建直播间返回日志：" + json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             int id = createLiveRoomDataResp.getResult().getId();
             callBack.onCreateLiveRoom(createLiveRoomDataResp);
+
+
         }
 
         //修改直播间
         private void responseAlterLiveRoom(String json) {
-
+            AppLog.i("TAG","修改直播间："+json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             callBack.onAlterLiveRoom(createLiveRoomDataResp);
         }
@@ -2243,10 +3227,12 @@ public class ContentLoader {
         //取消管理员
         private void responseCancelManager(String json) {
             AppLog.i("TAG", "responseCancelManager:" + json);
+            callBack.onCancelManager(json);
         }
 
         //上传图片token
         private void responseImgToken(String json) {
+            AppLog.i("rpt", "igm token is " + json);
             ImgTokenBean imgTokenBean = new Gson().fromJson(json, ImgTokenBean.class);
             callBack.onImgToken(imgTokenBean);
         }
@@ -2307,33 +3293,93 @@ public class ContentLoader {
 
         //直播首页列表
         private void responListHomeList(String json) {
+            AppLog.i("dailyRec", "living list is " + json);
             LiveHomeListResp liveHomeListResp = new Gson().fromJson(json, LiveHomeListResp.class);
             if (liveHomeListResp != null) {
                 callBack.onLiveHomeList(liveHomeListResp, attentionFlag);
             }
         }
 
+        //上传日志
+        private void responseAppLog(String json) {
+            callBack.onResponseLog(json);
+        }
+
         //历史直播
         private void responPlayBackLive(String json) {
-            AppLog.i("TAG", "历史直播:" + json);
+            AppLog.i("lve", "历史直播:" + json);
             callBack.onPlayBackList(json, attentionFlag);
         }
 
         //历史直播详情
         private void responPlayBackDetails(JSONObject jsonObj) {
+            AppLog.i("TAG", "历史直播详情:" + jsonObj.toString());
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
-            LiveRowsBean liveRowsBean = new Gson().fromJson(resultJson.toString(), LiveRowsBean.class);
+            PlayBackResultBean liveRowsBean = new Gson().fromJson(resultJson.toString(), PlayBackResultBean.class);
             callBack.onPlayBackDetails(liveRowsBean);
         }
 
+        //历史直播回放评论
+        private void responsePlayBack(JSONObject jsonObj) {
+            AppLog.i("TAG","历史回放评论:"+jsonObj.toString());
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
+            callBack.onPlayBackReviewDetails(reviewResultBean);
+        }
+        //历史回放消息
+        private void responsePlayBackMsg(String json) {
+            AppLog.i("TAG","回放历史消息:"+json);
+            PlayBackMsgResultBean msgResultBean = new Gson().fromJson(json, PlayBackMsgResultBean.class);
+            callBack.onPlayBackMsgDetails(msgResultBean);
+        }
+        //修改历史回放
+        private void responseAlterHistoryPlayBack(JSONObject jsonObj) {
+            try {
+                int anInt = jsonObj.getInt(ResultParams.RESULT_CODE);
+                callBack.onAlterHistoryPlayBack(anInt);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
+        //临时禁言
+        private void responseUserMute(String json) {
+            AppLog.i("TAG", "临时禁言回调：" + json);
+            callBack.onUserMuteResult(json);
+        }
+
+        //永久禁言
+        private void responsePerpetualMute(JSONObject jsonObj) {
+            AppLog.i("TAG", "永久禁言回调：" + jsonObj.toString());
+
+            try {
+                int code = jsonObj.optInt(ResultParams.REULST);
+                callBack.onPerpetualMute(code);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        //超管关闭直播间
+        private void responseSuperManagerCloseRoom(JSONObject jsonObj) {
+            AppLog.i("TAG", "超管关闭只播回调：" + jsonObj.toString());
+
+            try {
+                int code = jsonObj.optInt(ResultParams.REULST);
+                callBack.onSuperManagerCloseLive(code);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         //取消关注
         private void responseCancelAttention(String json) {
             LiveCancelAttention liveCancelAttention = new Gson().fromJson(json, LiveCancelAttention.class);
             callBack.onLiveCancelAttention(liveCancelAttention);
-
         }
-
 
         //获取粉丝或关注列表
         private void responseFansOrAttention(String json, boolean isSearch) {
@@ -2341,12 +3387,6 @@ public class ContentLoader {
             LiveFansOrAttentionResp liveFansOrAttentionResp = new Gson().fromJson(json, LiveFansOrAttentionResp.class);
             callBack.onLiveFansOrAttention(liveFansOrAttentionResp, isSearch);
         }
-        /*//搜索关注粉丝
-        private void responseSearchUser(String json) {
-            AppLog.i("TAG","responseSearchUser:"+json);
-            LiveFansOrAttentionResp liveFansOrAttentionResp = new Gson().fromJson(json, LiveFansOrAttentionResp.class);
-            callBack.onSearchAttentionOrFans(liveFansOrAttentionResp);
-        }*/
 
         //specialdetail
         public void responseSpecialDetail(String json) {
@@ -2356,6 +3396,18 @@ public class ContentLoader {
                 callBack.onRecommendSpecial(spectialDetailsResp);
             }
 
+        }
+
+        private void responseUserLeaveRoom(String json) {
+            AppLog.i("TAG", "用户离开直播间" + json);
+        }
+
+        private void responseLiveAvatar(String json) {
+            AppLog.i("TAG", "获取直播间用户头像和排序" + json);
+            LiveRoomAvatarSortResp liveRoomAvatarSortResp = new Gson().fromJson(json, LiveRoomAvatarSortResp.class);
+            if (liveRoomAvatarSortResp.getReturnCode() == 0) {
+                callBack.onLiveRoomAvatar(liveRoomAvatarSortResp.getResult());
+            }
         }
 
         private void responseArticle(String json) {
@@ -2389,14 +3441,120 @@ public class ContentLoader {
             }
         }
 
+        // 相应首页我的关注
+        private void responseHomeAttention(String json) {
+            AppLog.i("my_attention", "json -- " + json);
+            LiveRowsDataResp liveRowsDataResp = new Gson().fromJson(json, LiveRowsDataResp.class);
+            if (liveRowsDataResp.getReturnCode() == 0) {
+                LiveRowsBean bean = liveRowsDataResp.getResult();
+                callBack.onGetHomeAttention(bean);
+            }
+        }
+
+        /**
+         * 每日推荐
+         *
+         * @param json
+         */
+        private void responseDailyRecommendations(String json) {
+            AppLog.i("dailyy", "json is " + json);
+            RecommendationsResp recommendationsResp = new Gson().fromJson(json, RecommendationsResp.class);
+            if (recommendationsResp.getReturnCode() == 0) {
+                callBack.onGetDailyRecommend(recommendationsResp.getResult());
+            }
+        }
+
+        /**
+         * 响应直播间举报
+         *
+         * @param json
+         */
+        private void responseChannelReport(String json) {
+            AppLog.i("rpt", "report response is " + json);
+            callBack.onGetChannelReport(json);
+        }
+
+        private void responseChannelIndexTotal(String json) {
+            AppLog.i("rfs", "json is " + json);
+            ChannelIndexTotal channelIndexTotal = new Gson().fromJson(json, ChannelIndexTotal.class);
+            AppLog.i("rfs", "接口  1");
+            ChannelIndexTotalResult result = channelIndexTotal.getResult();
+            AppLog.i("rfs", "接口  2");
+            long dateTime = channelIndexTotal.getDate();
+            AppLog.i("rfs", "接口 3 ");
+            if (channelIndexTotal.getReturnCode() == 0) {
+                AppLog.i("rfs", "接口  4");
+
+                // -存时间戳
+                // 获取用户id，-1表示获取失败，即：未登录状态，可以的userId用-1表示
+                int userId = UserHelper.getUserId(context);
+                AppLog.i("rfs", "接口 5 ");
+                // key的基
+                String baseKey = "live_index_timestamp_get_";
+                AppLog.i("rfs", "接口 6 ");
+                if (userId != -1) {
+                    AppLog.i("rfs", "接口 7 ");
+                    SPCUtils.put(context, (baseKey + String.valueOf(userId)), String.valueOf(dateTime));
+                    AppLog.i("rfs", "接口 8 ");
+                }
+//                 存上未登录时的时间戳
+//                SPCUtils.put(context, (baseKey + "_0"), String.valueOf(dateTime));
+
+                AppLog.i("rfs", "接口 9 ");
+                callBack.onGetChannelIndexTotal(result, dateTime);
+                AppLog.i("rfs", "接口 10 ");
+            }
+            AppLog.i("rfs", "接口 11 ");
+        }
+
+        /**
+         * 相应文章评论列表
+         * @param json
+         */
+        private void responseArticleComments(String json) {
+            AppLog.i("articleComments", "response json is " + json);
+            CommentsResp commentsResp = new Gson().fromJson(json, CommentsResp.class);
+            if (commentsResp.getReturnCode() == 0) {
+                CommentsResp.ResultBean resultBean = commentsResp.getResult();
+                callBack.onGetArticleComments(resultBean);
+
+               /* if (resultBean == null)
+                    return;
+                List<CommentRowBean> commentList = resultBean.getRows();
+                if (commentList != null) {
+                    callBack.onGetArticleComments(commentList);
+                }*/
+            }
+        }
+
+        /**
+         * 响应评论发表
+         * @param json
+         */
+        private void responseSendingComments(String json) {
+
+            AppLog.i("kdl", "res json is " + json);
+            CommentOperateResp commentOperateResp = new Gson().fromJson(json, CommentOperateResp.class);
+            callBack.onSendComment(commentOperateResp);
+        }
+
+        /**
+         * 响应删除评论
+         * @param json
+         */
+        private void responseDeleteComments(String json) {
+            CommentOperateResp commentOperateResp = new Gson().fromJson(json, CommentOperateResp.class);
+            callBack.onDeleteComment(commentOperateResp);
+        }
 
         @Override
         public void onDialogClickListener() {
-            Intent intent = new Intent(context, RegisterActivity.class);
+            Intent intent = new Intent(context, LRegister1Activity.class);
             intent.putExtra(KeyParams.EMAIL, email);
-            ((Activity) context).startActivityForResult(intent, 100);
+            ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
+
 
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
@@ -2460,6 +3618,23 @@ public class ContentLoader {
 
     }
 
+    public String getCheckParams(String email, String uidPrams) {
+        JSONObject jsonObj = null;
+        try {
+            if (!TextUtils.isEmpty(uidPrams)) {
+                jsonObj = new JSONObject(uidPrams);
+            } else {
+                jsonObj = new JSONObject();
+            }
+            jsonObj.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObj == null ? "" : jsonObj.toString();
+
+
+    }
+
     public String getLoginParams(String email, String password) {
         JSONObject jsonObject = new JSONObject();
         try {
@@ -2484,6 +3659,32 @@ public class ContentLoader {
 
     }
 
+    //永久禁言
+    private String getMuteParams(String id) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+
+    }
+    //关闭直播间
+    private String getCloseRoomParams(String id) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("id", id);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+
+    }
+
+
     //点赞
     public String getParisesParams(int id, int type) {
         JSONObject jsonObject = new JSONObject();
@@ -2502,7 +3703,7 @@ public class ContentLoader {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("style", 0);
-
+            jsonObject.put("direction", LiveConstant.DEFAULT_DIRECTION);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -2521,19 +3722,63 @@ public class ContentLoader {
         return jsonObject.toString();
     }
 
-    //查看用户是否为管理员
-    public String getUserIdentityStatus(String userID, String channelId) {
-        AppLog.i("TAG", "getUserIdentityStatus" + "userID:" + userID + "channelId:" + channelId);
+    //修改历史回放
+    private String getAlterPlayBack(String title,String photo,String description,String address){
         JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId", Integer.parseInt(userID));
-            jsonObject.put("channelId", Integer.parseInt(channelId));
+            jsonObject.put("title", title);
+            jsonObject.put("photo", photo);
+            jsonObject.put("description", description);
+            jsonObject.put("address", address);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject.toString();
     }
+
+    //查看用户是否为管理员
+    public String getUserIdentityStatus(String userID, String channelId) {
+        AppLog.i("TAG", "getUserIdentityStatus" + "userID:" + userID + "channelId:" + channelId);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userId", Integer.parseInt(userID.trim()));
+            jsonObject.put("channelId", Integer.parseInt(channelId.trim()));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    //临时禁言
+    public String getUserMuteParams(String channelId, String roomid, String operator, String target, int type) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("channelId", channelId);
+            jsonObject.put("roomId", roomid);
+            jsonObject.put("operator", operator);
+            jsonObject.put("target", target);
+            jsonObject.put("type", type);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    private String getPerpetualMuteParams(String accid) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("accid", accid);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+
+    }
+
 
     //直播送礼物
     public String getSendGiftsParams(String channelId, String toId, String toNickName, int giftId, String amount) {
@@ -2582,6 +3827,29 @@ public class ContentLoader {
         return jsonObject.toString();
     }
 
+    //日志信息
+    private String getLogBodyParams(String log) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("log", log);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
+    //发消息
+    private String getMsgBodyParams(String content, int targetType) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg", content);
+            jsonObject.put("targetType", targetType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
+    }
+
 
     //上传在线人数
     public String getUserOnLines(String onLinesUser) {
@@ -2597,16 +3865,13 @@ public class ContentLoader {
 
 
     //修改直播
-    private String getAlterLiveRoom(String title, String photo, String announcement, String longitude, String latitude) {
-
+    private String getAlterLiveRoom(String title, String photo, String address) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
             jsonObject.put("photo", photo);
-            jsonObject.put("announcement", announcement);
-            jsonObject.put("longitude", longitude);
-            jsonObject.put("latitude", latitude);
-
+            jsonObject.put("direction", 1);
+            jsonObject.put("address", address);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -2620,13 +3885,15 @@ public class ContentLoader {
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        headers.put("LATITUDE", "38.65777");
-        headers.put("LONGITUDE", "104.08296");
+        headers.put("LATITUDE",CommonUtil.LATITUDE);
+        headers.put("LONGITUDE", CommonUtil.LONGITUDE);
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
 //        AppLog.i("TAG", "getHeaderParams:" + "APP_VERSION=" + AppConfig.getVersionName(context) + "&" + "DEVICE=" + "android" + "&DEVICE_ID=" + CommonUtil.getUUID(context) +
 //                "&LATITUDE=38.65777&LONGITUDE=104.08296" + "&DEVICE_WIDTH=" + DensityUtil.getWindowWidth((Activity) context) + "" + "&DEVICE_HEIGHT="
 //                + DensityUtil.getWindowHeight((Activity) context) + "");
+
+        AppLog.i("TAG", "LATITUDE:" + CommonUtil.LATITUDE + "   LONGITUDE；" + CommonUtil.LONGITUDE);
         return headers;
     }
 
@@ -2639,6 +3906,7 @@ public class ContentLoader {
         if (!TextUtils.isEmpty(token)) {
             map.put("TOKEN", token);
         }
+        AppLog.i("dailyRec", "device id " + map.get("DEVICE_ID"));
         AppLog.print("__USER_ID=" + String.valueOf(userid) + "\n__TOKEN=" + token);
         return map;
 
@@ -2646,8 +3914,14 @@ public class ContentLoader {
 
     public Map<String, String> getLoginHeaderParams() {
         Map<String, String> map = getHeaderParams();
-        map.put("USER_ID", String.valueOf(UserHelper.getUserId(context)));
-        map.put("TOKEN", UserHelper.getToken(context));
+        String userid = String.valueOf(UserHelper.getUserId(context));
+        String token = UserHelper.getToken(context);
+        if (!TextUtils.isEmpty(userid)) {
+            map.put("USER_ID", userid);
+        }
+        if (!TextUtils.isEmpty(token)) {
+            map.put("TOKEN", token);
+        }
         return map;
 
     }
@@ -2715,6 +3989,28 @@ public class ContentLoader {
         int LOGIN_PHEON = 152;
         int REGISTER_PHONE = 153;
         int LIVE_HISTORY_DELETE = 154;
+        int LOGIN_BY_SOCIAL = 155;
+        int REGISTER_BY_SOCIAL = 156;
+        int SOCIAL_BIND = 157;
+        int GET_SOCIAL_USES = 158;
+        int BIND_SOCIAL_ACCOUNT = 159;
+        int UNBIND_SOCIAL_ACCOUNT = 160;
+        int BIDN_PHONE = 161;
+        int GET_PUSH_TAGS = 162;
+        int GET_CMB_PAY = 163;
+        int GET_ORDER_STATUS = 164;
+        int GET_PAY_STATUS = 165;
+        int GET_PUSH_LOGS = 166;
+        int GET_G_LIVE_SEARCH = 167;
+        int GET_G_PLAY_BACK_SEARCH = 168;
+        int GET_G_SPECIAL_SEARCH = 169;
+        int GET_G_USER_SEARCH = 170;
+        int GET_MESSAGE_COUNT = 171;
+        int GET_YITU8_CITY=172;
+        int GET_USERS_SERVICE=173;
+        int GET_USER_SERVICE=174;
+        int GET_PRAISE_COMMENT=175;
+
 
         int RECOMMEND = 200;
         int RECOMMEND_AD = 201;
@@ -2722,7 +4018,6 @@ public class ContentLoader {
         int PRODUCT_DETAILS = 203;
         int CANCEL_PARISES = 204;
         int PARISES = 205;
-
         int ARTICLE_DETAILS = 206;
         int VERSION_CODE = 207;
         int LIVE_LIST = 208;
@@ -2757,12 +4052,29 @@ public class ContentLoader {
         int LIVE_HOME_LIST = 237;
         int LIVE_PALY_BACK = 238;
         int LIVE_PALY_BACK_DETAILS = 239;
-
+        int APP_LOG = 240;
+        int USER_MUTE = 241;
+        int PERPETUAL_MUTE = 242;
+        int LIVE_AVATAR = 243;
+        int USER_LEAVE_ROOM = 244;
+        int VALIDATE_MSGS = 245;
+        int PLAY_BACK_DETAILES=246;
+        int PLAY_BACK_MSG=247;
+        int ALTER_PLAY_BACK=248;
+        int CLOSE_LIVE_ROOM=249;
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;
         int GET_USER_CUR_LIVE = 302;
         int GET_USER_ARTICLE = 303;
+        int GET_HOME_ATTENTION = 304;
+        int GET_DAILY_RECOMMENDATIONS = 305;
+        int GET_CHANNEL_REPORT = 306;
+        int GET_CHANNEL_INDEX_TOTAL = 307;
+        int GET_ARTICLE_COMMENTS = 308;
+        int SEND_COMMENTS = 309;
+        int REPLY_COMMENTS = 310;
+        int DELETE_COMMENTS = 311;
     }
 
 }

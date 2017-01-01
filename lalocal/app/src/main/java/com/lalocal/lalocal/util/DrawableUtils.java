@@ -1,10 +1,15 @@
 package com.lalocal.lalocal.util;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.text.TextUtils;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.lalocal.lalocal.MyApplication;
@@ -18,6 +23,7 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import java.io.File;
 import java.util.concurrent.Executors;
@@ -53,9 +59,45 @@ public class DrawableUtils {
         displayImg(context, img, url, radius, drawable, null);
     }
 
+  //  public static void displayAvatar
+
+    public static  Bitmap loadingBitMap(Context context,String url){
+        if (loader == null) {
+            loader = ImageLoader.getInstance();
+        }
+        if (!loader.isInited()) {
+            loader.init(getConfiguration(context));
+        }
+         return loader.loadImageSync(url);
+    }
+
+    public static void loadingImg(Context context , final ImageView img, String url){
+        if (TextUtils.isEmpty(url)) {
+            AppLog.i("TAG","图片URl为空");
+            return;
+        }
+        img.setImageResource(DRAWABLE_NULL);
+        if (loader == null) {
+            loader = ImageLoader.getInstance();
+        }
+        if (!loader.isInited()) {
+            loader.init(getConfiguration(context));
+        }
+        loader.loadImage(url,new SimpleImageLoadingListener(){
+                    @Override
+                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                        super.onLoadingComplete(imageUri, view, loadedImage);
+                        img.setImageBitmap(loadedImage);
+                    }
+                }
+        );
+
+    }
+
 
     public static void displayImg(Context context, ImageView img, String url, int radius, int drawable, ImageLoadingListener listener) {
         if (TextUtils.isEmpty(url)) {
+            img.setImageResource(DRAWABLE_NULL);
             return;
         }
         if (loader == null) {
@@ -64,6 +106,7 @@ public class DrawableUtils {
         if (!loader.isInited()) {
             loader.init(getConfiguration(context));
         }
+
         File imgFile = loader.getDiskCache().get(url);
 
         if (imgFile == null || !imgFile.exists()) {
@@ -72,7 +115,6 @@ public class DrawableUtils {
         } else {
             String fileUri = "file://" + imgFile.getAbsolutePath();
             loader.displayImage(fileUri, img, listener);
-
         }
     }
 
@@ -102,8 +144,8 @@ public class DrawableUtils {
         builder.diskCacheFileCount(100);
         builder.tasksProcessingOrder(QueueProcessingType.FIFO);
         builder.taskExecutor(Executors.newCachedThreadPool());
-        if(MyApplication.isDebug){
-        builder.writeDebugLogs();
+        if (MyApplication.isDebug) {
+            builder.writeDebugLogs();
         }
         return builder.build();
     }
@@ -114,7 +156,7 @@ public class DrawableUtils {
 
         if (resID != -1) {
             builder.showImageForEmptyUri(resID);
-            builder.showImageOnLoading(resID);
+           builder.showImageOnLoading(resID);
             builder.showImageOnFail(resID);
         }
         if (radius > 0) {
@@ -138,8 +180,22 @@ public class DrawableUtils {
         return null;
     }
 
+    /**
+     * 本地drawable文件中的drawable资源转uri
+     *
+     * @param resId
+     * @return
+     */
+    public static Uri drawableRes2Uri(Context context, int resId) {
+        if (context == null) {
+            return null;
+        }
 
-    ;
-
-
+        Resources r = context.getResources();
+        String uri = ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
+                + r.getResourcePackageName(resId) + "/"
+                + r.getResourceTypeName(resId) + "/"
+                + r.getResourceEntryName(resId);
+        return Uri.parse(uri);
+    }
 }

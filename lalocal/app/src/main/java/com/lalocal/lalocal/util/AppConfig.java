@@ -4,27 +4,58 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
+import com.lalocal.lalocal.help.UserHelper;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by lenovo on 2016/6/22.
  */
 public class AppConfig {
+
+/*    1.获取我的推送标签
+
+            get
+
+    http://dev.lalocal.cn/api/users/pushTags
+
+    应用启动的时候调用（登陆状态），将返回的结果注册到友盟平台（tag）
+
+    相应：
+    数组String
+    */
+
+    /*2. 上报日志接口
+    *method:post
+    * params:log
+    * ur:http://dev.lalocal.cn/api/system/logs/app
+    * */
+    public static String UTF8 = "UTF-8";
+
     //用户协议-h5
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
-
-
-//        private static String baseUrl = "http://api.lalocal.cn/api/";
-    // private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
+//       private static String baseUrl = "http://api.lalocal.cn/api/";
     private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
+    public static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+    //获取h5 url地址
+    public static String getH5Url(Context context,String baseH5Url) {
+        int userId = UserHelper.getUserId(context);
+        String token = UserHelper.getToken(context);
+        String device = CommonUtil.getDevice();
+        String devcieId = CommonUtil.getUUID(context);
+        String version = AppConfig.getVersionName(context);
+        return String.format(AppConfig.BOOK_URL_FORMART, baseH5Url, userId, token, version, device, devcieId);
+    }
 
     public static String getWelcommeImgs() {
         return baseUrl + "system/welcomeImgs";
     }
 
     public static String getSystemConfigUrl() {
-
         return baseUrl + "system/configs";
     }
 
@@ -35,7 +66,7 @@ public class AppConfig {
 
     // 首页推荐接口 包含：直播列表、专题列表、商品列表
     public static String getIndexRecommendListUrl() {
-        return baseUrl + "/index";
+        return baseUrl + "index";
     }
 
     public static void setUserRuleUrl(String userRuleUrl) {
@@ -76,6 +107,11 @@ public class AppConfig {
         return baseUrl + "coupons?";
     }
 
+    public static String getAvaileCouponItemUrl(String productionId) {
+
+        return baseUrl + "coupons/available?productionId=" + productionId;
+    }
+
     //我的订单接口 GET_MY_ORDER_ITEMS
     public static String getOrderItemsUrl() {
 
@@ -104,6 +140,17 @@ public class AppConfig {
 
         return baseUrl + "users/bindEmail";
     }
+
+    //用户端离开直播间
+    public static final String getUserLeaveRoom(String channels) {
+        return baseUrl + "channels/" + channels + "/leave";
+    }
+
+    //获取直播间头像  http://dev.lalocal.cn/api/channels/14/stats?number=7&isMaster=false
+    public static final String getLiveRoomAvatar(String roomId, int number, boolean isMaster) {
+        return baseUrl + "channels/" + roomId + "/stats?number=" + number + "&isMaster=" + isMaster;
+    }
+
 
     //推荐接口RECOMMEND_URL
     public static String getRecommendUrl() {
@@ -250,51 +297,90 @@ public class AppConfig {
     }
 
     //分享统计
-    public static final String getShareStatistics(){
-        return  baseUrl+"system/share";
+    public static final String getShareStatistics() {
+        return baseUrl + "system/share";
     }
 
     //上传在线人数 http://dev.lalocal.cn:8080/api/system/numbs?number=1&channelId=11
-    public static final String getOnLineUserCount(int number,String channelId ){
-        return  baseUrl+"system/numbs?number="+number+"&channelId="+channelId;
+    public static final String getOnLineUserCount(int number, String channelId) {
+        return baseUrl + "system/numbs?number=" + number + "&channelId=" + channelId;
     }
 
     //发起挑战 http://dev.lalocal.cn:8080/api/challenges
-    public static final String getChallageInitiate(){
-        return  baseUrl+"challenges";
+    public static final String getChallageInitiate() {
+        return baseUrl + "challenges";
     }
 
     //挑战列表 http://dev.lalocal.cn:8080/api/challenges?channelId=1&status=0 getChallengeList
-    public static final String getChallengeList(){
-        return  baseUrl+"challenges?channelId=";
+    public static final String getChallengeList() {
+        return baseUrl + "challenges?channelId=";
     }
+
     //主播操作挑战 http://dev.lalocal.cn:8080/api/challenges/6/status
-    public static final String getLiveChallengeStatus(int challengeId){
-        return  baseUrl+"challenges/"+challengeId+"/status";
+    public static final String getLiveChallengeStatus(int challengeId) {
+        return baseUrl + "challenges/" + challengeId + "/status";
     }
+
     //挑战详情
-    public static final String getChallengeDetails(){
-        return baseUrl+"challenges";
+    public static final String getChallengeDetails() {
+        return baseUrl + "challenges";
     }
 
     //直播地区列表
-    public  static  final String getLiveArea(){
-        return baseUrl+"system/areas?channelFlag=true";
+    public static final String getLiveArea() {
+        return baseUrl + "system/areas?channelFlag=true";
     }
+
     //直播首页 http://dev.lalocal.cn:8080/api/channels/index?area=2&attentionFlag=
-    public  static  final  String getLiveHotList(String areaId,String attentionFlag){
-        return  baseUrl+"channels/index?area="+areaId+"&attentionFlag="+attentionFlag;
+    public static final String getLiveHotList(String areaId, String attentionFlag) {
+        return baseUrl + "channels/index?area=" + areaId + "&attentionFlag=" + attentionFlag;
     }
+
     //历史直播http://dev.lalocal.cn:8080/api/channels/historys?area=2&pageNumber=2
-    public static final String getPlayBackLive(String areaId,int pageNumber,String attentionFlag){
-      //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
-   return baseUrl+"channels/historys?area="+areaId+"&pageNumber="+pageNumber+"&attentionFlag="+attentionFlag;
-
+    public static final String getPlayBackLive(String areaId, int pageNumber, String attentionFlag) {
+        //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
+        return baseUrl + "channels/historys?area=" + areaId + "&pageNumber=" + pageNumber + "&attentionFlag=" + attentionFlag;
     }
-    //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
-    public  static final String getPlayBackLiveDetails(int id){
 
-        return baseUrl+"channels/historys/"+id;
+    //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
+    public static final String getPlayBackLiveDetails(int id) {
+        return baseUrl + "channels/historys/" + id;
+    }
+
+    //修改历史回放 http://dev.lalocal.cn/api/channels/historys/1
+    public static final String getAlterPlayBack(int historyId){
+        return baseUrl+"channels/historys/"+historyId;
+    }
+    //回放消息展示
+    public static final String getPlayBackMsg(String historyId){
+        return  baseUrl+"channels/historys/"+historyId+"/msgs";
+    }
+    //历史直播评论  comments?targetId=5317&targetType=20&pageSize=10&pageNumber=1
+    public  static final String getPlayBackReview(String targetId,int targetType,int pageSize,int pageNumber){
+        return  baseUrl+"comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
+    }
+    //上报日志 http://dev.lalocal.cn/api/system/logs/app
+    public static final String uploadLogs() {
+        return baseUrl + "system/logs/app";
+    }
+
+    //禁言
+    public static final String getMute() {
+        return baseUrl + "channels/mute";
+    }
+
+    //永久禁言
+    public static final String getPerpetualMute() {
+        return baseUrl + "users/block/";
+    }
+
+    //关闭直播间
+    public static final String getCloseRoom(){
+        return baseUrl+"channels/close";
+    }
+    //发送消息
+    public static final String sendMessage() {
+        return baseUrl + "system/msgs/validate";
     }
 
     public static String getBaseUrl() {
@@ -370,29 +456,58 @@ public class AppConfig {
 
     //获取搜索标签
     public static String getSearchTagUrl(String name) {
-        return baseUrl + "tags?name=" + name;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags?name=" + encodeName;
     }
 
     //获取搜索
     public static String getSearchResultUrl(String name) {
-        return baseUrl + "tags/search?name=" + name;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search?name=" + encodeName;
     }
 
     //获取更多文章
     public static String getMoreArticleUrl(String name, int pageNumber, int pageSize) {
-        return baseUrl + "tags/search/articles?name=" + name + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search/articles?name=" + encodeName + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
     }
 
     //获取更多产品
     public static String getMoreProductUrl(String name, int pageNumber, int pageSize) {
-        return baseUrl + "tags/search/productions?name=" + name +
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search/productions?name=" + encodeName +
                 "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
     }
     //获取更多路线
 
     public static String getMoreRouteUrl(String name, int pageNumber, int pageSize) {
-
-        return baseUrl + "tags/search/routes?name=" + name + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "tags/search/routes?name=" + encodeName + "&pageNumber=" + pageNumber + "&pageSize=" + pageSize;
     }
 
     //⽬的地地区下⾯的路线列表
@@ -419,6 +534,11 @@ public class AppConfig {
         }
         return url;
     }
+
+    public static String getYiTu8City(int id) {
+        return baseUrl + "yitu8/+" + id + "/city";
+    }
+
 
     public static String getRouteDetailsUrl(int id) {
         return baseUrl + "routes/" + id;
@@ -465,6 +585,18 @@ public class AppConfig {
         return baseUrl + "iaplogs/charges";
     }
 
+    //招商充值接口
+    public static String chargeCmbGoldUrl() {
+
+        return baseUrl + "iaplogs/charges/cmb";
+    }
+
+    public static String getPayStatus(String payNo) {
+        return String.format(baseUrl + "iaplogs/%1$s/status", payNo);
+
+    }
+
+
     public static String exchargeGoldUrl() {
 
         return baseUrl + "users/score/exchange";
@@ -472,39 +604,48 @@ public class AppConfig {
 
     //直播搜索
     public static String searchLiveUrl(int pageSize, int pageNum, String nickName) {
-        return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + nickName;
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(nickName, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return baseUrl + "channels?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + encodeName;
     }
 
     //兑换优惠券
     public static String exchargeCouponUrl() {
-        return baseUrl + "codes";
+        return baseUrl + "codes/check";
+//
     }
 
     //用户历史直播
-    public static  String getUserLiveUrl(int userid,int pageNum){
-        String url = baseUrl+"channels/users/"+userid+"/historys?pageNum="+pageNum+"&pageSize=10";
-        AppLog.i("ussr", "the getUserLIveUrl is -- " + url);
+    public static String getUserLiveUrl(int userid, int pageNum) {
+        String url = baseUrl + "channels/users/" + userid + "/historys?pageNumber=" + pageNum + "&pageSize=10";
+        AppLog.i("hs", "url is " + url);
         return url;
-
     }
 
     //用户明细
-    public static  String getChannelRecords(int id){
+    public static String getChannelRecords(int id) {
 
-        return  baseUrl+"channels/records/"+id;
+        return baseUrl + "channels/records/" + id;
     }
+
     //发送短信验证码
-    public static  String getSMSVerCode(){
+    public static String getSMSVerCode() {
 
-        return baseUrl+"users/phone/code";
+        return baseUrl + "users/phone/code";
     }
+
     //手机登录
-    public static  String getPhoneLoginUrl(){
-   return  baseUrl+"users/phone/login";
+    public static String getPhoneLoginUrl() {
+        return baseUrl + "users/phone/login";
     }
+
     //手机注册
-    public static  String getPhoneRegisterUrl(){
-        return baseUrl+"users/phone/user";
+    public static String getPhoneRegisterUrl() {
+        return baseUrl + "users/phone/user";
     }
 
 
@@ -522,4 +663,207 @@ public class AppConfig {
         return url;
     }
 
+    //三方登录url
+    public static String getSocialLoginUrl() {
+        return baseUrl + "users/social/login";
+    }
+
+    //三方注册
+    public static String getSocialReigsterUrl() {
+        return baseUrl + "users/social/register";
+    }
+
+    //三方绑定
+    public static String getSocialBindurl() {
+        return baseUrl + "users/social/bind";
+    }
+
+    //三方账号列表
+    public static String getUsersSocialUrl() {
+        return baseUrl + "users/social";
+    }
+
+    //解除绑定
+    public static String getUnBindSocialUrl(int uid) {
+        return baseUrl + "users/social/" + uid;
+    }
+
+    //绑定手机号
+    public static String getBindPhoneUrl() {
+//        http://dev.lalocal.cn:8080/api/users/phone/bind
+        return baseUrl + "users/phone/bind";
+    }
+
+    public static String getPushTagUrl() {
+        return baseUrl + "users/pushTags";
+    }
+
+    public static String getCmbPayUrl(int orderId) {
+        return baseUrl + "pay/cmb/pay/" + orderId;
+    }
+
+    /* 招行支付命令
+    * 生产环境：https://netpay.cmbchina.com/netpayment/BaseHttp.dll?PrePayEUserP
+    * 测试环境：http://61.144.248.29:801/netpayment/BaseHttp.dll?PrePayEUserP
+    *
+    * */
+    public static String getCmbPayCommand(String branchId, String cono, String billNo, String amount, String date,
+                                          int expireTimeSpan, String merchantUrl, String merchantPara, String merchantCode,
+                                          String merchantRetUrl, String merchantRetPara) {
+//        return String.format("http://61.144.248.29:801/netpayment/BaseHttp.dll?PrePayEUserP?" +
+//                        "BranchID=%1$s&CoNo=%2$s&BillNo=%3$s&Amount=%4$s&Date=%5$s&ExpireTimeSpan=%6$s&MerchantUrl=%7$s" +
+//                        "&MerchantPara=%8$s&MerchantCode=%9$s&MerchantRetUrl=%10$s&MerchantRetPara=%11$s"
+//                , branchId, cono, billNo, amount, date,
+//                expireTimeSpan, merchantUrl, merchantPara, merchantCode,
+//                merchantRetUrl, merchantRetPara);
+        return String.format("https://netpay.cmbchina.com/netpayment/BaseHttp.dll?PrePayEUserP?" +
+                        "BranchID=%1$s&CoNo=%2$s&BillNo=%3$s&Amount=%4$s&Date=%5$s&ExpireTimeSpan=%6$s&MerchantUrl=%7$s" +
+                        "&MerchantPara=%8$s&MerchantCode=%9$s&MerchantRetUrl=%10$s&MerchantRetPara=%11$s"
+                , branchId, cono, billNo, amount, date,
+                expireTimeSpan, merchantUrl, merchantPara, merchantCode,
+                merchantRetUrl, merchantRetPara);
+
+    }
+
+    public static String getOrderStatusUrl(int orderId) {
+        return String.format(baseUrl + "orders/%1$s/status", orderId);
+    }
+
+    public static String getPushLogsUrl(String dateTime) {
+        if (dateTime == null) {
+            dateTime = "";
+        }
+        return baseUrl + "pushLogs?dateTime=" + dateTime;
+    }
+
+    public static String getGLiveSearchUrl(String name, int pageNum, int pageSize) {
+        return baseUrl + "tags/search/channels?name=" + encodeString(name) +
+                "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
+    }
+
+
+    //回放接口
+    public static String getGPlayBackSearchUrl(String name, int pageNum, int pageSize) {
+        return baseUrl + "tags/search/channel/historys?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
+    }
+
+
+    public static String getGSepicalSearchUrl(String name, int pageNum, int pageSize) {
+        return baseUrl + "tags/search/themes?name=" + encodeString(name) + "&pageNumber=" + pageNum + "&pageSize=" + pageSize;
+    }
+
+    public static String getGUserSearchUrl(int pageSize, int pageNum, String nickName) {
+        return baseUrl + "users?pageSize=" + pageSize + "&pageNumber=" + pageNum + "&nickName=" + encodeString(nickName);
+    }
+
+    public static String encodeString(String name) {
+        String encodeName = "";
+        try {
+            encodeName = URLEncoder.encode(name, UTF8);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return encodeName;
+
+    }
+
+    public static String getMessageCount() {
+        return baseUrl + "dynamics/amount";
+    }
+
+    /**
+     * 首页我的关注接口
+     *
+     * @return
+     */
+    public static String getHomeAttention() {
+        return baseUrl + "channels/index/attention";
+    }
+
+    /**
+     * 获取每日推荐
+     *
+     * @return
+     */
+    public static String getDailyRecommendations(int type) {
+        AppLog.i("dailyy", baseUrl + "dailyRecommendations?type=" + type);
+        return baseUrl + "dailyRecommendations?type=" + type;
+    }
+
+    /**
+     * 直播间举报，主播端
+     * @return
+     */
+    public static String getChannelReport() {
+        AppLog.i("qn", "channel report url is " + baseUrl + "channels/report");
+        return baseUrl + "channels/report";
+    }
+
+    /**
+     * 举报：用户端
+     * @return
+     */
+    public static String getReport() {
+        AppLog.i("qn", "report url is " + baseUrl + "reports");
+        return baseUrl + "reports";
+    }
+
+    /**
+     * 2.2版本直播首页接口
+     *
+     * @param pageNum
+     * @param pageSize
+     * @param categoryId
+     * @param dateTime
+     * @return
+     */
+    public static String getChannelIndexTotal(String pageNum, String pageSize, String categoryId, String dateTime) {
+        String url = baseUrl + "channels/index/total?pageNumber=" + pageNum + "&pageSize=" +
+                pageSize + "&categoryId=" + categoryId + "&dateTime=" + dateTime;
+        AppLog.i("fghd", "getChannelIndexTotlal url is " + url);
+        return url;
+    }
+
+    /**
+     * 获取文章评论
+     * @param articleId 文章编号
+     * @return
+     * "comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
+     */
+    public static String getArticleComments(int articleId,int pageNum) {
+        String url = baseUrl + "comments?targetId="+ articleId+"&targetType=1&pageSize=10&pageNumber="+pageNum;
+     //   String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
+        AppLog.i("articleComments", "the url is " + url);
+        return url;
+    }
+
+    /**
+     * 获取发表评论的url
+     * @return
+     */
+    public static String getSendingCommentsUrl() {
+        return baseUrl + "comments";
+    }
+
+    /**
+     * 获取删除评论的url
+     * @param commentId
+     * @return
+     */
+    public static String getDeletingCommentUrl(int commentId) {
+        String url = baseUrl + "comments/" + commentId;
+        AppLog.i("deleteComments", "url is " + url);
+        return url;
+    }
+
+    public static String getUsersServiceUrl(){
+        return baseUrl+"users/service";
+    }
+
+    public static String getUsersServiceUrl(int type){
+        return  baseUrl+"users/"+type+"/service ";
+    }
+    public static String getPraiseCommentUrl(int pageNum){
+        return  baseUrl+"dynamics?pageSize=10&pageNumber="+pageNum;
+    }
 }

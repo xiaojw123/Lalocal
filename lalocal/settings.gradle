@@ -1,1 +1,1 @@
-include ':app', ':shinebuttonlib', ':wkvideoplayer', ':easeui', ':pingpp', ':gifviewlibrary', ':xrecyclerview', ':galleryfinal', ':selectordialog', ':sliderlayoutlibrary'
+include ':app', ':shinebuttonlib', ':wkvideoplayer', ':pingpp', ':gifviewlibrary', ':xrecyclerview', ':galleryfinal', ':selectordialog', ':PushSDK', ':sliderlayoutlibrary', ':pldroidplayer'

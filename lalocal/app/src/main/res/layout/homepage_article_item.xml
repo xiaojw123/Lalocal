@@ -4,57 +4,64 @@
     xmlns:vtv="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="@dimen/dimen_size_10_dp"
-    android:paddingTop="@dimen/dimen_size_10_dp"
-    android:orientation="vertical">
+    android:layout_marginLeft="@dimen/dimen_size_15_dp"
+    android:layout_marginRight="@dimen/dimen_size_15_dp">
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/card_view"
-        android:clickable="true"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        app:cardCornerRadius="@dimen/dimen_size_3_dp">
-        <RelativeLayout
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dimen_size_10_dp"
+        android:paddingTop="@dimen/dimen_size_10_dp"
+        android:orientation="vertical">
+        <android.support.v7.widget.CardView
+            android:id="@+id/card_view"
+            android:clickable="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <ImageView
-                android:id="@+id/img_article"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/androidloading"/>
-            
+            android:layout_height="200dp"
+            app:cardCornerRadius="@dimen/dimen_size_3_dp">
             <RelativeLayout
-                android:id="@+id/article_title_container"
-                android:layout_width="120dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:background="@color/black_opacity_45"
-                android:paddingLeft="23dp"
-                android:paddingRight="23dp"
-                >
-                <com.lalocal.lalocal.view.VerticalTextView
-                    android:id="@+id/vtv_article_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="118dp"
-                    android:layout_centerInParent="true"/>
-                
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
                 <ImageView
-                    android:id="@+id/icon_article_title_up"
-                    android:layout_width="@dimen/dimen_size_16_dp"
-                    android:layout_height="@dimen/dimen_size_8_dp"
-                    android:src="@drawable/articletitletop_ic"
-                    android:layout_above="@id/vtv_article_title"
-                    android:layout_marginBottom="21dp"/>
+                    android:id="@+id/img_article"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/androidloading"/>
 
-                <ImageView
-                    android:id="@+id/icon_article_title_bottom"
-                    android:layout_width="@dimen/dimen_size_16_dp"
-                    android:layout_height="@dimen/dimen_size_8_dp"
-                    android:src="@drawable/articletitlebottom_ic"
-                    android:layout_below="@id/vtv_article_title"
-                    android:layout_marginTop="21dp"/>
+                <RelativeLayout
+                    android:id="@+id/article_title_container"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/black_opacity_45"
+                    android:paddingLeft="23dp"
+                    android:paddingRight="23dp"
+                    >
+                    <com.lalocal.lalocal.view.VerticalTextView
+                        android:id="@+id/vtv_article_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="118dp"
+                        android:layout_centerInParent="true"/>
+
+                    <ImageView
+                        android:id="@+id/icon_article_title_up"
+                        android:layout_width="@dimen/dimen_size_16_dp"
+                        android:layout_height="@dimen/dimen_size_8_dp"
+                        android:src="@drawable/articletitletop_ic"
+                        android:layout_above="@id/vtv_article_title"
+                        android:layout_marginBottom="21dp"/>
+
+                    <ImageView
+                        android:id="@+id/icon_article_title_bottom"
+                        android:layout_width="@dimen/dimen_size_16_dp"
+                        android:layout_height="@dimen/dimen_size_8_dp"
+                        android:src="@drawable/articletitlebottom_ic"
+                        android:layout_below="@id/vtv_article_title"
+                        android:layout_marginTop="21dp"/>
+                </RelativeLayout>
             </RelativeLayout>
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+        </android.support.v7.widget.CardView>
+    </LinearLayout>
+
 </LinearLayout>

@@ -18,9 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.help.ErrorMessage;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.live.permission.annotation.OnMPermissionDenied;
@@ -49,11 +47,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
     ImageView personalheader_civ;
     RelativeLayout nickname_rlt;
     TextView nickaname_tv;
-    RelativeLayout email_rlt;
-    RelativeLayout phone_rlt;
-    TextView phone_tv;
-    TextView areacode_tv;
-    TextView email_tv;
     TextView sex_tv;
     ContentLoader contentService;
     LoginUser user;
@@ -101,16 +94,9 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         personalheader_civ = (ImageView) findViewById(R.id.account_edit_personalheader);
         nickname_rlt = (RelativeLayout) findViewById(R.id.account_edit_nickname);
         nickaname_tv = (TextView) findViewById(R.id.account_edit_nickname_text);
-        phone_rlt = (RelativeLayout) findViewById(R.id.account_edit_phone);
-        areacode_tv = (TextView) findViewById(R.id.account_edit_areacode_text);
-        phone_tv = (TextView) findViewById(R.id.acount_edit_phone_text);
-        email_rlt = (RelativeLayout) findViewById(R.id.account_edit_email);
-        email_tv = (TextView) findViewById(R.id.acount_edit_email_text);
         editsex_rlt.setOnClickListener(this);
         personalheader_civ.setOnClickListener(this);
         nickname_rlt.setOnClickListener(this);
-        phone_rlt.setOnClickListener(this);
-        email_rlt.setOnClickListener(this);
         description_rlt.setOnClickListener(this);
         customTitleView.setOnBackClickListener(this);
 
@@ -124,7 +110,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 Intent desIntent = new Intent(this, PersonalIntroActivity.class);
                 String des = description_tv.getText().toString();
                 if (getResources().getString(R.string.default_description).equals(des)) {
-                    des="";
+                    des = "";
                 }
                 desIntent.putExtra(KeyParams.DESCRIPTON, des);
                 startActivityForResult(desIntent, MODIFY_USER_PROFILE);
@@ -151,22 +137,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 startEditIntent(AccountEidt2Activity.ACTION_NICKNAME_MODIFY);
                 break;
 
-            case R.id.account_edit_phone:
-                startEditIntent(AccountEidt2Activity.ACTION_PHONE_MODIFY);
-                break;
-            case R.id.account_edit_email:
-                if (user != null && user.getStatus() == 0) {
-                    Intent intent = new Intent(this, EmailBoundActivity.class);
-                    intent.putExtra(KeyParams.EMAIL, user.getEmail());
-                    intent.putExtra(KeyParams.USERID, user.getId());
-                    intent.putExtra(KeyParams.TOKEN, getToken());
-                    startActivityForResult(intent, MODIFY_USER_PROFILE);
-                } else {
-                    startEditIntent(AccountEidt2Activity.ACTION_EMAIL_MODIFY);
-
-                }
-                break;
-
 
         }
 
@@ -179,13 +149,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         switch (action) {
             case AccountEidt2Activity.ACTION_NICKNAME_MODIFY:
                 intent.putExtra("nickname", nickaname_tv.getText().toString());
-                break;
-            case AccountEidt2Activity.ACTION_EMAIL_MODIFY:
-                intent.putExtra("emailtext", email_tv.getText().toString());
-                break;
-            case AccountEidt2Activity.ACTION_PHONE_MODIFY:
-                intent.putExtra(KeyParams.AREA_Code, areacode_tv.getText().toString());
-                intent.putExtra(KeyParams.PHONE, phone_tv.getText().toString());
                 break;
         }
         if (user != null) {
@@ -264,19 +227,7 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
                 }
             }
         } else if (requestCode == MODIFY_USER_PROFILE) {
-            if (resultCode == EmailBoundActivity.RESULIT_CODE_BOUND_EMAIL) {
-                isEmailUpdate = true;
-                contentService.getUserProfile(getUserId(), getToken());
-            } else if (resultCode == AccountEidt2Activity.RESULT_CODE_PHONE) {
-                String phone = data.getStringExtra(KeyParams.PHONE);
-                String areaCode = data.getStringExtra(KeyParams.AREA_Code);
-                if (phone != null) {
-                    if (areaCode != null) {
-                        areacode_tv.setText(areaCode);
-                    }
-                    phone_tv.setText(phone);
-                }
-            } else if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
+            if (resultCode == AccountEidt2Activity.RESULT_CODE_NICKNAME) {
                 String nickname = data.getStringExtra(KeyParams.NICKNAME);
                 backIntent.putExtra(KeyParams.NICKNAME, nickname);
                 nickaname_tv.setText(nickname);
@@ -360,13 +311,6 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             updateUserProfileView(user);
         }
 
-        @Override
-        public void onError(VolleyError volleyError) {
-            if (ErrorMessage.AUTHOR_FIALED.equals(volleyError.toString())) {
-                Intent intent = new Intent(AccountEidt1Activity.this, LoginActivity.class);
-                startActivityForResult(intent, LOGIN_RQEUST_CODE);
-            }
-        }
     }
 
 
@@ -380,20 +324,10 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
             } else {
                 sex_tv.setText(getResources().getString(R.string.woman));
             }
-            if (!TextUtils.isEmpty(user.getPhone())) {
-                AppLog.print("updateUser___areacode___" + user.getAreaCode());
-                areacode_tv.setText(user.getAreaCode());
-                phone_tv.setText(user.getPhone());
-            }
         } else {
             isEmailUpdate = false;
         }
         int status = user.getStatus();
-        if (status == -1) {
-            email_tv.setText(user.getEmail() + "(未验证)");
-        } else {
-            email_tv.setText(user.getEmail());
-        }
         String descripton = user.getDescription();
         if (!TextUtils.isEmpty(descripton)) {
             description_tv.setText(descripton);

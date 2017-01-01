@@ -12,7 +12,7 @@ import android.widget.FrameLayout;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.DestinationAreaActivity;
-import com.lalocal.lalocal.activity.SearchActivity;
+import com.lalocal.lalocal.activity.GlobalSearchActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.AreaItem;
@@ -53,7 +53,10 @@ public class DestinationFragment extends BaseFragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         MobHelper.sendEevent(getActivity(), MobEvent.DESTINATION_SEARCH);
-        Intent intent = new Intent(getActivity(), SearchActivity.class);
+//        Intent intent = new Intent(getActivity(), SearchActivity.class);
+//        startActivity(intent);
+        //TODO:220 search
+        Intent intent = new Intent(getActivity(), GlobalSearchActivity.class);
         startActivity(intent);
     }
 
@@ -61,13 +64,17 @@ public class DestinationFragment extends BaseFragment implements View.OnClickLis
 
         @Override
         public void onGetDestinationAreas(List<AreaItem> items) {
-            DesAreaAdapter adapter = new DesAreaAdapter(getActivity(), items);
-            adapter.setOnItemClickListener(this);
-            LinearLayoutManager lm=new LinearLayoutManager(getActivity());
-            lm.setOrientation(LinearLayoutManager.VERTICAL);
-            mRecyclerView.addItemDecoration(new SpaceItemDecoration((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
-            mRecyclerView.setLayoutManager(lm);
-            mRecyclerView.setAdapter(adapter);
+            try {
+                DesAreaAdapter adapter = new DesAreaAdapter(getActivity(), items);
+                adapter.setOnItemClickListener(this);
+                LinearLayoutManager lm=new LinearLayoutManager(getActivity());
+                lm.setOrientation(LinearLayoutManager.VERTICAL);
+                mRecyclerView.addItemDecoration(new SpaceItemDecoration((int)getResources().getDimension(R.dimen.dimen_size_10_dp)));
+                mRecyclerView.setLayoutManager(lm);
+                mRecyclerView.setAdapter(adapter);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         @Override

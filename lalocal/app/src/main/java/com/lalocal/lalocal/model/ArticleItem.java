@@ -24,8 +24,6 @@ public class ArticleItem extends SearchItem{
 
     private int targetType;
     private String description;
-    private int readNum;
-    private int praiseNum;
     private long publishedAt;
     private String publishDate;
     private int authorId;
@@ -63,21 +61,6 @@ public class ArticleItem extends SearchItem{
     }
 
 
-    public int getReadNum() {
-        return readNum;
-    }
-
-    public void setReadNum(int readNum) {
-        this.readNum = readNum;
-    }
-
-    public int getPraiseNum() {
-        return praiseNum;
-    }
-
-    public void setPraiseNum(int praiseNum) {
-        this.praiseNum = praiseNum;
-    }
 
     public long getPublishedAt() {
         return publishedAt;

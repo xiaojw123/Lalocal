@@ -15,9 +15,6 @@ public class MsgViewHolderFactory {
 
     private static Class<? extends MsgViewHolderBase> tipMsgViewHolder;
 
-    static {
-        // built in
-    }
 
     public static void register(Class<? extends MsgAttachment> attach, Class<? extends MsgViewHolderBase> viewHolder) {
         viewHolders.put(attach, viewHolder);

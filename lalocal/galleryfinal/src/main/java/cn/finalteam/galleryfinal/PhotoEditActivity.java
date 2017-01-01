@@ -281,10 +281,10 @@ public class PhotoEditActivity extends CropImageActivity implements AdapterView.
     }
 
     private void setTheme() {
-        mIvBack.setImageResource(GalleryFinal.getGalleryTheme().getIconBack());
-        if (GalleryFinal.getGalleryTheme().getIconBack() == R.drawable.ic_gf_back) {
-            mIvBack.setColorFilter(GalleryFinal.getGalleryTheme().getTitleBarIconColor());
-        }
+//        mIvBack.setImageResource(GalleryFinal.getGalleryTheme().getIconBack());
+//        if (GalleryFinal.getGalleryTheme().getIconBack() == R.drawable.ic_arrow_left) {
+//            mIvBack.setColorFilter(GalleryFinal.getGalleryTheme().getTitleBarIconColor());
+//        }
 
         mIvTakePhoto.setImageResource(GalleryFinal.getGalleryTheme().getIconCamera());
         if (GalleryFinal.getGalleryTheme().getIconCamera() == R.drawable.ic_gf_camera) {
@@ -315,7 +315,7 @@ public class PhotoEditActivity extends CropImageActivity implements AdapterView.
         mTitlebar.setBackgroundColor(GalleryFinal.getGalleryTheme().getTitleBarBgColor());
         mTvTitle.setTextColor(GalleryFinal.getGalleryTheme().getTitleBarTextColor());
         mFabCrop.setColorPressed(GalleryFinal.getGalleryTheme().getFabPressedColor());
-        mFabCrop.setColorNormal(GalleryFinal.getGalleryTheme().getFabNornalColor());
+        mFabCrop.setColorNormal(GalleryFinal.getGalleryTheme().getFabNormalColor());
     }
 
     private void findViews() {

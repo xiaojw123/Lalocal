@@ -32,6 +32,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/orderdetail_title_ctv"
         android:layout_above="@+id/order_immediately_evaluate_btn"
+        android:overScrollMode="never"
         android:scrollbars="none">
 
         <LinearLayout
@@ -53,7 +54,7 @@
                     android:id="@+id/order_detail_img"
                     android:layout_width="@dimen/order_detail_img_width"
                     android:layout_height="@dimen/order_detail_img_width"
-                    android:scaleType="fitXY" />
+                    android:scaleType="centerCrop" />
 
                 <!--android:layout_width="@dimen/order_detail_title_wdith"-->
                 <TextView
@@ -75,7 +76,9 @@
 
             <View style="@style/CommonD9LineTheme" />
 
-            <RelativeLayout style="@style/OrderCarditemContainerStyle">
+            <RelativeLayout
+                android:id="@+id/travel_info_container"
+                style="@style/OrderCarditemContainerStyle">
                 <!--android:layout_height="@dimen/order_travel_information_container_height"-->
                 <TextView
                     android:id="@+id/travel_information"
@@ -180,16 +183,36 @@
                     >
 
                     <TextView
-                        style="@style/OrderCardItemTextStyle"
-                        android:text="@string/email"
-                        />
-
-                    <TextView
                         android:id="@+id/orderdetail_contact_email_tv"
                         style="@style/OrderCardItemTextStyle"
                         android:layout_gravity="end"
                         android:layout_marginStart="@dimen/dimen_size_36_dp" />
 
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="@string/email"
+                        android:id="@+id/textView3"
+                        />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/orderdetail_contact_wechat_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="微信"
+                         />
                 </FrameLayout>
             </LinearLayout>
 
@@ -303,6 +326,218 @@
                         <!--android:layout_marginStart="@dimen/dimen_size_36_dp" />-->
                 <!--</FrameLayout>-->
                 <!--问题1 2. 3.。。-->
+            </LinearLayout>
+
+
+            <!--接送机-->
+
+            <LinearLayout
+                android:id="@+id/orderdetail_pickup_info_container"
+                style="@style/OrderCarditemContainerStyle"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    style="@style/OrderCardItemIitleStyle"
+                    android:text="@string/pickup_service" />
+
+                <View style="@style/CommonD9LineTheme" />
+
+                <FrameLayout
+                    android:id="@+id/orderdetail_fightnum_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="航班号" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_fightnum_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/orderdetail_fromaddress_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="出发地点" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_fromaddress_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+                </FrameLayout>
+                <FrameLayout
+                    android:id="@+id/orderdetail_toaddress_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="到达地点" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_toaddress_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:id="@+id/orderdetail_usetime_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="用车时间" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_usetime_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/orderdetail_useduration_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="用车时长" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_useduration_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+                </FrameLayout>
+
+
+                <FrameLayout
+                    android:id="@+id/orderdetail_usetype_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="用车类型" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_usetype_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/orderdetail_usecount_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_36_dp"
+                    android:paddingEnd="@dimen/dimen_size_15_dp"
+                    android:paddingStart="@dimen/dimen_size_15_dp"
+                    android:visibility="gone"
+                    >
+
+                    <TextView
+                        style="@style/OrderCardItemTextStyle"
+                        android:text="用车数量" />
+
+                    <TextView
+                        android:id="@+id/orderdetail_usecount_tv"
+                        style="@style/OrderCardItemTextStyle"
+                        android:layout_gravity="end"
+                        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+                </FrameLayout>
+                <!--<FrameLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dimen_size_36_dp"-->
+                <!--android:paddingEnd="@dimen/dimen_size_15_dp"-->
+                <!--android:paddingStart="@dimen/dimen_size_15_dp">-->
+
+                <!--<TextView-->
+                <!--style="@style/OrderCardItemTextStyle"-->
+                <!--android:text="@string/shuttle_time" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/orderdetail_shuttle_time_tv"-->
+                <!--style="@style/OrderCardItemTextStyle"-->
+                <!--android:layout_gravity="end"-->
+                <!--android:layout_marginStart="@dimen/dimen_size_36_dp" />-->
+
+                <!--</FrameLayout>-->
+
+                <!--<FrameLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/dimen_size_36_dp"-->
+                <!--android:paddingEnd="@dimen/dimen_size_15_dp"-->
+                <!--android:paddingStart="@dimen/dimen_size_15_dp">-->
+
+                <!--<TextView-->
+                <!--style="@style/OrderCardItemTextStyle"-->
+                <!--android:text="@string/language_of_guide" />-->
+
+                <!--<TextView-->
+                <!--android:id="@+id/orderdetail_guide_language_tv"-->
+                <!--style="@style/OrderCardItemTextStyle"-->
+                <!--android:layout_gravity="end"-->
+                <!--android:layout_marginStart="@dimen/dimen_size_36_dp" />-->
+                <!--</FrameLayout>-->
+                <!--问题1 2. 3.。。-->
+            </LinearLayout>
+
+
+
+            <!--司导信息-->
+
+            <LinearLayout
+                android:id="@+id/orderdetail_driver_info_container"
+                style="@style/OrderCarditemContainerStyle"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    style="@style/OrderCardItemIitleStyle"
+                    android:text="@string/driver_info" />
+                <View style="@style/CommonD9LineTheme" />
             </LinearLayout>
 
 

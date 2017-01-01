@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_alignParentBottom="true"
+    >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/live_bg_gradient_bottom"
+        android:layout_alignParentBottom="true"></View>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:clickable="true"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/click_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            >
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/media_controller_progress"
+                android:text="/00:00"
+                android:textColor="@android:color/white"
+                android:paddingRight="20dp"
+                android:textSize="11.0sp"
+                />
+
+            <TextView android:id="@+id/time_current"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+               android:layout_toLeftOf="@+id/time"
+                android:text="00:00"
+                android:textSize="11.0sp"
+                />
+
+
+            <SeekBar
+                android:id="@+id/media_controller_progress"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:progressDrawable="@drawable/biz_video_progressbar"
+                android:thumb="@drawable/now_progress"
+                android:layout_below="@+id/time"
+                android:thumbOffset="1.5dip"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/media_controller_progress"
+                android:layout_centerHorizontal="true">
+
+
+                <ImageView
+                    android:id="@+id/prev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:background="@null"
+                    android:visibility="gone"
+                    android:src="@drawable/video_before_btn"/>
+
+
+                <ImageView
+                    android:id="@+id/ic_media_pause"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/prev"
+                    android:src="@drawable/livingreplay_unplay"/>
+
+
+                <ImageView
+                    android:id="@+id/next"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/ic_media_pause"
+                    android:background="@null"
+                    android:visibility="gone"
+                    android:src="@drawable/video_next_btn"/>
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:id="@+id/input_text"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/input_layout_bg"
+                android:layout_below="@+id/media_controller_progress"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"
+                android:layout_marginLeft="10dp"
+                android:gravity="center"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:text="与主播对话"/>
+
+
+            <ImageView
+                android:id="@+id/live_telecast_collect"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentRight="true"
+                android:scaleType="centerCrop"
+                android:layout_below="@+id/media_controller_progress"
+                android:layout_marginRight="20dp"
+                android:background="@null"
+                android:src="@drawable/collect_light_unsel" />
+
+            <TextView
+                android:id="@+id/think_collect"
+                android:layout_width="wrap_content"
+                android:layout_height="22dp"
+                android:layout_toLeftOf="@+id/live_telecast_collect"
+                android:layout_below="@+id/media_controller_progress"
+                android:gravity="center"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="5dp"
+                android:padding="3dp"
+                android:textColor="@android:color/white"
+                android:background="@drawable/think_bg"
+                android:textSize="10sp"
+                android:visibility="gone"
+                android:text="感谢收藏"/>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view_menu_placeholder"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+</RelativeLayout>

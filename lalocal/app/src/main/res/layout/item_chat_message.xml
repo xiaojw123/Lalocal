@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dimen_size_5_dp"
+    android:layout_marginTop="@dimen/dimen_size_5_dp"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dimen_size_15_dp"
+    android:paddingRight="@dimen/dimen_size_15_dp">
+
+    <TextView
+        android:id="@+id/item_message_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_15_dp"
+        android:textColor="@color/color_50191000"
+        android:textSize="@dimen/text_size_13_sp"
+        android:visibility="gone" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/item_message_send_cotainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/item_message_sendagain_btn"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|right"
+                android:layout_marginRight="@dimen/dimen_size_10_dp"
+                android:background="@drawable/sendagain_ic"
+                android:visibility="gone" />
+
+            <com.lalocal.lalocal.view.ShapeTextView
+                android:id="@+id/item_message_send_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/item_message_text_max_width"
+                android:paddingBottom="@dimen/dimen_size_11_dp"
+                android:paddingLeft="@dimen/dimen_size_12_dp"
+                android:paddingRight="@dimen/dimen_size_10_dp"
+                android:paddingTop="@dimen/dimen_size_11_dp"
+                android:text="ddddd"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_16_sp"
+                android:visibility="gone"
+                app:corner_radius="@dimen/dimen_size_6_dp"
+                app:solid_color="#FF4990E2" />
+
+
+            <ImageView
+                android:id="@+id/item_message_send_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/androidloading"
+                android:visibility="gone"
+                />
+
+        </LinearLayout>
+
+
+        <FrameLayout
+            android:id="@+id/item_message_accept_cotainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.lalocal.lalocal.view.ShapeTextView
+                android:id="@+id/item_message_accept_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxWidth="@dimen/item_message_text_max_width"
+                android:paddingBottom="@dimen/dimen_size_11_dp"
+                android:paddingLeft="@dimen/dimen_size_12_dp"
+                android:paddingRight="@dimen/dimen_size_10_dp"
+                android:paddingTop="@dimen/dimen_size_11_dp"
+                android:textColor="@color/color_190f00"
+                android:textSize="@dimen/text_size_16_sp"
+                android:visibility="gone"
+                app:corner_radius="@dimen/dimen_size_6_dp"
+                app:solid_color="@color/white" />
+
+            <ImageView
+                android:id="@+id/item_message_accept_img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scaleType="centerCrop"
+                android:src="@drawable/androidloading"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

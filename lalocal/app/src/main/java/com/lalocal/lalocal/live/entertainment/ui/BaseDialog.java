@@ -13,7 +13,7 @@ import butterknife.ButterKnife;
  * Created by android on 2016/10/14.
  */
 public abstract class BaseDialog extends Dialog {
-    private  Context context;
+
     public BaseDialog(Context context) {
         super(context, R.style.live_dialog);
     }
@@ -23,7 +23,6 @@ public abstract class BaseDialog extends Dialog {
     protected BaseDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +39,11 @@ public abstract class BaseDialog extends Dialog {
 
     public void closeCurrent() {
         DialogUtil.getInstance().removeCurrent();
+    }
+
+    @Override
+    public void setOnShowListener(OnShowListener listener) {
+        super.setOnShowListener(listener);
     }
 
     @Override

@@ -24,7 +24,7 @@
             android:id="@+id/article_back_btn"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginLeft="25dp"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="15dp"
             android:alpha="0.7"
             android:background="@drawable/back_bg"

@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,8 @@ public class XRecyclerView extends RecyclerView {
     private AppBarStateChangeListener.State appbarState = AppBarStateChangeListener.State.EXPANDED;
     private Adapter mAdapter;
 
+    private RecyclerView recyclerView;
+
     public XRecyclerView(Context context) {
         this(context, null);
     }
@@ -56,6 +59,7 @@ public class XRecyclerView extends RecyclerView {
     }
 
     private void init() {
+        setOverScrollMode(OVER_SCROLL_NEVER);
         if (pullRefreshEnabled) {
             mRefreshHeader = new ArrowRefreshHeader(getContext());
             mRefreshHeader.setProgressStyle(mRefreshProgressStyle);
@@ -80,6 +84,17 @@ public class XRecyclerView extends RecyclerView {
     public void setHeaderVisible() {
         if (mHeaderViews.size() > 1) {
             mHeaderViews.remove(mHeaderViews.size() - 1);
+        }
+    }
+
+    /**
+     * 设置默认刷新头部文本
+     * @param charSequence
+     */
+    public void setDefaultHeaderText(CharSequence charSequence) {
+        if (mRefreshHeader != null) {
+            mRefreshHeader.setTipText(charSequence);
+            mRefreshHeader.setTipVisibility(View.VISIBLE);
         }
     }
 
@@ -187,6 +202,7 @@ public class XRecyclerView extends RecyclerView {
 
     @Override
     public void setAdapter(Adapter adapter) {
+        setNoMore(false);
         mAdapter = adapter;
         mWrapAdapter = new WrapAdapter(adapter);
         super.setAdapter(mWrapAdapter);
@@ -236,6 +252,7 @@ public class XRecyclerView extends RecyclerView {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 mLastY = ev.getRawY();
+                Log.d("TAF","xRecyclerview 监听：MotionEvent.ACTION_DOWN："+mLastY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 final float deltaY = ev.getRawY() - mLastY;
@@ -277,6 +294,13 @@ public class XRecyclerView extends RecyclerView {
         } else {
             return false;
         }
+    }
+
+    public int getHeaderVisibleHeight() {
+        if (mRefreshHeader == null) {
+            return 0;
+        }
+        return mRefreshHeader.getVisibleHeight();
     }
 
     private class DataObserver extends RecyclerView.AdapterDataObserver {

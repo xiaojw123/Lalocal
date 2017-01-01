@@ -44,13 +44,9 @@ public class TextureVideoPlayer extends RelativeLayout {
     private ImageView touchStatusImg;
     private TextView touchStatusTime;
 
-
-
     public void setAutoHideController(boolean autoHideController) {
         mAutoHideController = autoHideController;
     }
-
-
     private void showOrHideController() {
         if (mMediaController.getVisibility() == View.VISIBLE) {
             Animation animation = AnimationUtils.loadAnimation(mContext,
@@ -86,7 +82,6 @@ public class TextureVideoPlayer extends RelativeLayout {
 
         @Override
         public void onAnimationEnd(Animation animation) {
-
         }
 
         @Override
@@ -106,6 +101,7 @@ public class TextureVideoPlayer extends RelativeLayout {
         int[] time = getMinuteAndSecond(duration);
         formatTotalTime = String.format("%02d:%02d", time[0], time[1]);
         mMediaController.setPlayProgressTxt(playTime, allTime);
+        mVideoPlayCallback.getprogressDuration(playTime);
     }
     private void updatePlayProgress() {
         int allTime = mVideoView.getDuration();
@@ -172,19 +168,18 @@ public class TextureVideoPlayer extends RelativeLayout {
 
             switch (event.getAction()){
                 case MotionEvent.ACTION_DOWN:
-
                     showOrHideController();
-                    if (!mVideoView.isPlaying()){
+                /*    if (!mVideoView.isPlaying()){
                         return false;
                     }
                     float downX =  event.getRawX();
                     touchLastX = downX;
                     position = mVideoView.getCurrentPosition();
                     touchPosition=position;
-                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);
+                    Log.i("TAg", "ACTION_DOWN: "+touchPosition+"position:"+position);*/
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    Log.i("TAg", "ACTION_MOVE: "+touchPosition);
+                 /*   Log.i("TAg", "ACTION_MOVE: "+touchPosition);
                     float currentX =  event.getRawX();
                     float currentY = event.getRawY();
                     float deltaX = currentX - touchLastX;
@@ -217,10 +212,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                             touchStatusTime.setText(String.format("%02d:%02d/%s", time[0], time[1],formatTotalTime));
                             mVideoView.seekTo(position);
                         }
-                    }
+                    }*/
                     break;
                 case MotionEvent.ACTION_UP:
-                    if (!mVideoView.isPlaying()){
+                   /* if (!mVideoView.isPlaying()){
                         return false;
                     }
                     Log.i("TAg", "ACTION_UP: "+touchPosition);
@@ -229,10 +224,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                         mVideoView.seekTo(touchPosition);
                         touchPosition = -1;
                         Log.i("TAg", "ACTION_UP: "+touchPosition+"哈哈哈哈哈哈哈哈");
-                  /*  if (videoControllerShow){
+                  *//*  if (videoControllerShow){
                         return true;
+                    }*//*
                     }*/
-                    }
                     break;
              /*   case MotionEvent.ACTION_CANCEL:
                     if (!mVideoView.isPlaying()){
@@ -267,6 +262,9 @@ public class TextureVideoPlayer extends RelativeLayout {
     public  void setBefore(float alpha,boolean clickAble){
         mMediaController.setBefore(alpha,clickAble);
     }
+    public  void setCollect(boolean isCollect){
+        mMediaController.setCollect(isCollect);
+    }
     public  void setNext(float alpha,boolean clickAble){
         mMediaController.setNext(alpha,clickAble);
     }
@@ -289,6 +287,7 @@ public class TextureVideoPlayer extends RelativeLayout {
             mVideoView.pause();
         return getSeek();
         }else {
+            Log.i("TAF","播放器player pause22222");
             return 0;
         }
 
@@ -341,14 +340,10 @@ public class TextureVideoPlayer extends RelativeLayout {
             }
         }
 
-        @Override
-        public void onClickShare() {
-            mVideoPlayCallback.onClickShare();
-        }
 
         @Override
-        public void onClickQuit() {
-            mVideoPlayCallback.onClickQuit();
+        public void onClickCollect(ImageView iv) {
+            mVideoPlayCallback.onClickCollect(iv);
         }
 
         @Override
@@ -371,7 +366,10 @@ public class TextureVideoPlayer extends RelativeLayout {
                 public boolean onInfo(MediaPlayer mp, int what, int extra) {
                     if (what == MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START) {
                            //  mProgressBarView.setVisibility(View.GONE);
-                        mVideoPlayCallback.showLoadingPage(false);
+                        if(mVideoPlayCallback!=null){
+                            mVideoPlayCallback.showLoadingPage(false);
+                        }
+
                         return true;
                     }
                     return false;
@@ -390,14 +388,7 @@ public class TextureVideoPlayer extends RelativeLayout {
         mVideoView.setVisibility(VISIBLE);
         startPlayVideo(seekTime);
     }
-  /*  private void showProgressView(Boolean isTransparentBg) {
-        mProgressBarView.setVisibility(VISIBLE);
-        if (!isTransparentBg) {
-            mProgressBarView.setBackgroundResource(android.R.color.black);
-        } else {
-            mProgressBarView.setBackgroundResource(android.R.color.transparent);
-        }
-    }*/
+
     public  void setRotation(float rotation){
         mVideoView.setRotation(rotation);
     }
@@ -411,7 +402,7 @@ public class TextureVideoPlayer extends RelativeLayout {
             mVideoView.seekTo(seekTime);
         }
         mMediaController.setPlayState(PlayBackMediaController.PlayState.PLAY);
-      //  handler.postDelayed(runnable, 500);
+
     }
     private MediaPlayer.OnCompletionListener mOnCompletionListener = new MediaPlayer.OnCompletionListener() {
         @Override

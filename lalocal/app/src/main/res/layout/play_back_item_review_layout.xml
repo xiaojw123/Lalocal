@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:id="@+id/review_item_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/live_padding_15dp"
+    android:paddingBottom="@dimen/live_padding_15dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/paly_back_review_head_iv"
+        android:layout_width="@dimen/live_height_35dp"
+        android:layout_height="@dimen/live_height_35dp"
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="@dimen/live_padding_15dp"
+        android:src="@drawable/androidloading"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_35dp"
+            >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/live_padding_10dp"
+               >
+                <TextView
+                    android:id="@+id/review_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_0065b2"
+                    android:textSize="@dimen/live_text_15sp"
+                    android:maxEms="15"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                   />
+                <TextView
+                    android:id="@+id/review_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_12_sp"
+                    android:layout_below="@+id/review_name"
+                    android:textColor="@color/color_70190f00"
+                    android:text="12-01"/>
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/review_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/color_70190f00"
+                android:drawablePadding="@dimen/live_padding_5dp"
+                android:gravity="center"
+                android:layout_marginRight="@dimen/live_padding_15dp"
+                android:visibility="gone"
+                android:drawableRight="@drawable/bottom_unlike"/>
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/review_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_14_sp"
+            android:layout_marginRight="@dimen/live_padding_15dp"
+            android:paddingTop="@dimen/live_padding_15dp"
+            android:paddingBottom="@dimen/live_padding_8dp"
+            android:paddingLeft="@dimen/live_padding_10dp"
+
+            />
+
+        <TextView
+            android:id="@+id/review_reply_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_12_sp"
+            android:padding="@dimen/live_padding_10dp"
+            android:layout_marginRight="@dimen/live_padding_15dp"
+            android:background="@drawable/play_back_review_bg"
+            android:layout_marginLeft="@dimen/live_padding_10dp"
+            android:layout_marginBottom="@dimen/live_padding_8dp"
+            android:textColor="@color/color_70190f00"
+           android:text="阿凡达发酵肯定会就发挥科技"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"
+            android:background="@color/color_b3"
+            android:layout_marginLeft="@dimen/live_padding_10dp"></View>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

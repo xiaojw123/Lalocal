@@ -19,23 +19,17 @@
             android:layout_height="0dp"
             android:orientation="vertical"
             android:layout_gravity="center"
+
             >
-          <!--  <ImageView
-                android:id="@+id/custom_dialog_close_iv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingBottom="@dimen/author_padding_25dp"
-                android:paddingTop="20dp"
-                android:visibility="invisible"
-                android:src="@drawable/btnbg_close" />-->
+
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/master_info_head_iv"
                 android:layout_width="@dimen/live_height_50dp"
                 android:layout_height="@dimen/live_height_50dp"
+                android:layout_marginTop="@dimen/live_padding_20dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dimen_size_10_dp"
+
                 android:background="@color/white"
                 android:src="@drawable/androidloading" />
             <TextView
@@ -50,14 +44,6 @@
                 android:textColor="@color/live_info_1a1a1a"
                 android:textSize="@dimen/live_text_16sp" />
 
-         <!--   <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:paddingTop="@dimen/live_padding_5dp"
-                android:src="@drawable/playertag"
-                android:visibility="gone" />-->
-
             <TextView
                 android:id="@+id/master_info_signature"
                 android:layout_width="wrap_content"
@@ -69,7 +55,6 @@
                 android:maxLines="3"
                 android:paddingLeft="@dimen/author_padding_25dp"
                 android:paddingRight="@dimen/author_padding_25dp"
-
                 android:text="神秘人拒绝透露自己的个人简介！"
                 android:textColor="@color/color_b3b3b3"
                 android:textSize="@dimen/live_text_13sp" />
@@ -120,7 +105,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/live_height_45dp"
             android:clickable="true"
-
             android:gravity="center">
           <!--  <TextView
                 android:id="@+id/live_master_home_over"

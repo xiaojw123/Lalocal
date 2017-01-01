@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/my_immessage_item_height"
+    android:paddingLeft="@dimen/dimen_size_15_dp">
+
+    <View
+        style="@style/CommonDeLineTheme"
+        android:layout_alignLeft="@+id/contact_layout1" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/my_immessage_avatar"
+        android:layout_width="@dimen/dimen_size_60_dp"
+        android:layout_height="@dimen/dimen_size_60_dp"
+        android:layout_centerVertical="true"
+        android:padding="@dimen/dimen_size_5_dp" />
+
+    <com.lalocal.lalocal.view.ShapeTextView
+        android:id="@+id/my_immessage_count"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dimen_size_20_dp"
+        android:layout_alignRight="@+id/my_immessage_avatar"
+        android:layout_alignTop="@+id/my_immessage_avatar"
+        android:layout_marginRight="@dimen/dimen_size_3_dp"
+        android:layout_marginTop="@dimen/dimen_size_3_dp"
+        android:gravity="center"
+        android:minWidth="@dimen/dimen_size_20_dp"
+        android:text="0"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_12_sp"
+        android:visibility="invisible"
+        app:corner_radius="@dimen/dimen_size_10_dp"
+        app:solid_color="@color/color_ff3030" />
+
+    <RelativeLayout
+        android:id="@+id/contact_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_size_5_dp"
+        android:layout_toRightOf="@+id/my_immessage_avatar"
+        android:paddingRight="@dimen/dimen_size_15_dp">
+
+        <TextView
+            android:id="@+id/item_recent_contact_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxEms="11"
+            android:maxLines="1"
+            android:textColor="@color/color_190f00"
+            android:textSize="@dimen/text_size_16_sp" />
+
+        <TextView
+            android:id="@+id/item_recent_contact_lastmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/item_recent_contact_nickname"
+            android:layout_marginTop="@dimen/dimen_size_8_dp"
+            android:textColor="@color/color_60190f00"
+            android:textSize="@dimen/text_size_14_sp" />
+
+        <TextView
+            android:id="@+id/item_recent_contact_lasttime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/color_60190f00"
+            android:textSize="@dimen/text_size_12_sp" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

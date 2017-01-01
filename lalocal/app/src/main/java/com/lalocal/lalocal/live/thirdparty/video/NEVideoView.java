@@ -114,27 +114,22 @@ public class NEVideoView extends SurfaceView implements NEVideoController.MediaP
     private boolean mMute = false;
     private boolean isBackground;
     private boolean manualPause = false;
-
     private boolean isFirstPrepared = true; // 是否第一次准备好
-    
     public NEVideoView(Context context) {
         super(context);
         NEVideoView.mContext = context;
         initVideoView();
     }
-
     public NEVideoView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
         NEVideoView.mContext = context;
         initVideoView();
     }
-
     public NEVideoView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         NEVideoView.mContext = context;
         initVideoView();
     }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int width = getDefaultSize(mVideoWidth, widthMeasureSpec);

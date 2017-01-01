@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".test.TestActivity">
 
     <Button
@@ -11,7 +12,60 @@
         android:text="H5支付"
         android:layout_gravity="center"
         android:onClick="payment"
+        android:visibility="gone"
         />
 
+
+    <!--<com.lalocal.lalocal.view.ProgressButton-->
+        <!--android:id="@+id/progressView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:clickable="true"-->
+        <!--android:src="@drawable/progress_view"-->
+        <!--android:padding="@dimen/text_size_16_sp"-->
+        <!--android:layout_gravity="center"-->
+        <!--app:pb_background="@drawable/orange_corner_btn_bg"-->
+        <!--app:pb_text="@string/set_pssword"-->
+        <!--app:pb_fontColor="@color/white"-->
+        <!--app:pb_fontSize="@dimen/text_size_18_sp"-->
+        <!--/>-->
+
+    <!--<com.lalocal.lalocal.view.ProgressButton-->
+        <!--android:id="@+id/progressView"-->
+        <!--style="@style/PbStyle"-->
+        <!--app:pb_text="@string/set_pssword"-->
+        <!--app:pb_background="@drawable/orange_corner_btn_bg"-->
+        <!--app:pb_fontColor="@color/white"-->
+        <!--app:pb_fontSize="@dimen/text_size_18_sp"-->
+        <!--/>-->
+
+    <com.lalocal.lalocal.view.ProgressButton
+        android:id="@+id/progressView"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
+        android:layout_gravity="center"
+        app:isOrangeBg="true"
+        app:pb_text="杭州"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:layout_marginRight="@dimen/dimen_size_10_dp"
+        />
+
+
+    <com.lalocal.lalocal.view.ProgressButton
+        android:id="@+id/progressView2"
+        android:layout_marginLeft="@dimen/dimen_size_10_dp"
+        android:layout_marginRight="@dimen/dimen_size_10_dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50_dp"
+        app:isOrangeBg="false"
+        app:pb_text="锦州"
+        android:layout_marginTop="@dimen/dimen_size_20_dp"
+        />
+
+
+    <!--<Button-->
+        <!--android:id="@+id/forgetpsw_next_btn"-->
+        <!--style="@style/LoginNextStyle"-->
+        <!--android:text="@string/next" />-->
 
 </FrameLayout>

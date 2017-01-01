@@ -2,12 +2,14 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
@@ -16,6 +18,7 @@ import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,6 +61,7 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                 Resources res = context.getResources();
                 String authorText = "";
                 String priceText = "";
+                boolean isLive = false;
                 itemHolder.author.setText(authorText);
                 itemHolder.price.setText(priceText);
                 switch (targetType) {
@@ -67,7 +71,7 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                         Author author = item.getAuthor();
                         if (author != null) {
                             authorText = author.getAuthorName();
-                            itemHolder.author.setText(CommonUtil.getSpannelStyle(context,"—— "+authorText,R.style.AuthorNameStyle,0,3));
+                            itemHolder.author.setText(CommonUtil.getSpannelStyle(context, "—— " + authorText, R.style.AuthorNameStyle, 0, 3));
                         }
                         break;
                     case 2://商品
@@ -81,7 +85,23 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     case 10:
                         itemHolder.type.setText(res.getString(R.string.special));
                         break;
+                    case 20:
+                        isLive = true;
+                        itemHolder.type.setText(res.getString(R.string.liveplay));
+                        break;
                 }
+                if (isLive) {
+                    itemHolder.liveCotainer.setVisibility(View.VISIBLE);
+                    Drawable[] liveLocDrawables=itemHolder.liveLoc.getCompoundDrawables();
+                    liveLocDrawables[0].setAlpha(50);
+                    Drawable[] liveTimeDrawables=itemHolder.liveTimeStart.getCompoundDrawables();
+                    liveTimeDrawables[0].setAlpha(50);
+                    itemHolder.liveLoc.setText(item.getAddress());
+                    itemHolder.liveTimeStart.setText(item.getStartAt());
+                } else {
+                    itemHolder.liveCotainer.setVisibility(View.GONE);
+                }
+
                 if (!TextUtils.isEmpty(authorText)) {
                     itemHolder.author.setVisibility(View.VISIBLE);
                 } else {
@@ -93,9 +113,9 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     itemHolder.price.setVisibility(View.GONE);
                 }
                 itemHolder.title.setText(item.getTargetName());
-                String readNum = item.getReadNum();
-                String praiseNum = item.getPraiseNum();
-                String commentNum = item.getCommentNum();
+                String praiseNum = formartNum(item.getPraiseNum());
+                String commentNum = formartNum(item.getCommentNum());
+                String readNum = formartNum(item.getReadNum());
                 if (!TextUtils.isEmpty(readNum)) {
                     if (itemHolder.readnNum.getVisibility() != View.VISIBLE) {
                         itemHolder.readnNum.setVisibility(View.VISIBLE);
@@ -116,6 +136,8 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
                     if (itemHolder.commentNum.getVisibility() != View.VISIBLE) {
                         itemHolder.commentNum.setVisibility(View.VISIBLE);
                     }
+                    Drawable[] drawables = itemHolder.commentNum.getCompoundDrawables();
+                    drawables[0].setAlpha(50);
                     itemHolder.commentNum.setText(commentNum);
                 } else {
                     itemHolder.commentNum.setVisibility(View.GONE);
@@ -129,6 +151,18 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
 
         }
 
+    }
+
+    public String formartNum(double num) {
+        if (num >= 1000) {
+            double x = num / 1000;
+            BigDecimal b = new BigDecimal(x);
+            double f = b.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+            return String.valueOf(f + "k");
+        } else if (num <= 0) {
+            return "";
+        }
+        return String.valueOf((int) num);
     }
 
     @Override
@@ -155,6 +189,12 @@ public class MyFavoriteRecyclerAdpater extends BaseRecyclerAdapter {
         TextView praiseNum;
         @BindView(R.id.my_favorite_item_commentnum_tv)
         TextView commentNum;
+        @BindView(R.id.my_favorite_live_cotainer)
+        LinearLayout liveCotainer;
+        @BindView(R.id.my_favorite_live_loc)
+        TextView liveLoc;
+        @BindView(R.id.my_favorite_live_time)
+        TextView liveTimeStart;
 
         public FavoriteHolder(View itemView) {
             super(itemView);

@@ -2,8 +2,12 @@ package com.lalocal.lalocal.view.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -83,7 +87,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
         if (viewType == VIEW_TYPE_HIGHT || viewType == VIEW_TYPE_HIGHT_TITILE) {
-            View hightView = inflater.inflate(R.layout.list_item_highlights, parent, false);
+            View hightView = inflater.inflate(R.layout.item_highlights, parent, false);
             hightView.setOnClickListener(this);
             if (viewType == VIEW_TYPE_HIGHT_TITILE) {
                 LinearLayout titleCotaner = new LinearLayout(mContext);
@@ -136,7 +140,7 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
                     hightHolder.titleTv.setText(liveRowsBean.getTitle());
                     hightHolder.onlineNumTv.setText(String.valueOf(liveRowsBean.getOnlineNumber()));
                     hightHolder.timeTv.setText(liveRowsBean.getStartAt());
-                    hightHolder.locTv.getCompoundDrawables()[0].setAlpha(20);
+                    hightHolder.locTv.getCompoundDrawables()[0].setAlpha(60);
                     hightHolder.onlineNumTv.getCompoundDrawables()[0].setAlpha(20);
                     hightHolder.timeTv.getCompoundDrawables()[0].setAlpha(20);
                     DrawableUtils.displayImg(mContext, hightHolder.photoImg, liveRowsBean.getPhoto());
@@ -232,6 +236,10 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         public LiveViewHodler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            // 将左侧图标变成白色
+            Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.peopleliving_location_darkic_02);
+            DrawableUtils.tintDrawable(drawable, ColorStateList.valueOf(Color.WHITE));
+            itemLiveAdress.setCompoundDrawables(drawable, null, null, null);
         }
     }
 

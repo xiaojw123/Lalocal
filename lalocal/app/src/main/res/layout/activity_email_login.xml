@@ -8,7 +8,10 @@
         android:layout_height="match_parent"
         app:l_title="@string/welcome_to_back"
         app:l_des="@string/give_you_one_diferent_world"
+        app:l_titleVisible="true"
+        android:id="@+id/login_wel_layout"
         />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -22,7 +25,10 @@
             android:id="@+id/login_emial_custom_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/login_emial_custom_edit_top"
+            app:my_title="@string/email"
+            app:clearEanble="true"
+            app:my_maxLen="50"
+            android:layout_marginTop="@dimen/login_phone_edit_top"
             app:hint="@string/input_email" />
 
         <com.lalocal.lalocal.view.MyEditText
@@ -30,28 +36,34 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dimen_size_half_dp"
-            app:maxLen="20"
-            app:isPsw="true"
+            app:my_maxLen="20"
+            app:my_title="@string/password"
+            app:is_password="true"
             app:hint="@string/input_psw" />
-
+        <FrameLayout
+            android:layout_width="@dimen/login_phone_edit_width"
+            android:layout_height="wrap_content"
+            >
         <TextView
             android:id="@+id/login_forget_psw_tv"
-            android:layout_width="@dimen/login_phone_edit_width"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:text="忘记密码?"
-            android:textColor="@color/white"
+            android:layout_gravity="right"
+            android:textColor="@color/color_fa"
             android:layout_marginTop="@dimen/dimen_size_6_dp"
-            android:textSize="@dimen/text_size_14_sp" />
-        <Button
+            android:textSize="@dimen/text_size_12_sp" />
+        </FrameLayout>
+        <!--<Button-->
+            <!--android:id="@+id/login_btn"-->
+            <!--android:text="@string/enter"-->
+            <!--style="@style/LoginNextStyle"-->
+            <!--/>-->
+        <com.lalocal.lalocal.view.ProgressButton
+            style="@style/PbNextStyle"
             android:id="@+id/login_btn"
-            android:layout_width="@dimen/login_phone_edit_width"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_size_10_dp"
-            android:background="@color/black_99"
-            android:text="@string/enter"
-            android:textColor="@color/color_f0a028"
-            android:textSize="@dimen/text_size_18_sp" />
+            app:isOrangeBg="false"
+            app:pb_text="@string/enter"
+        />
         <com.lalocal.lalocal.view.ShapeTextView
             android:id="@+id/login_register_tv"
             android:layout_width="wrap_content"
@@ -127,8 +139,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
 
 
 </merge>

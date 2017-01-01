@@ -25,20 +25,19 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.im.ui.blur.BlurImageView;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleDetailsResultBean;
+import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.SpecialAuthorBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.lalocal.lalocal.util.WebViewClientUrlSkipUtils;
 import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
@@ -123,7 +122,11 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
             case R.id.article_btn_comment:
                 //评论
-                Toast.makeText(mContext, "评论功能尚未开启，敬请期待...", Toast.LENGTH_SHORT).show();
+
+
+                Intent commentIntent = new Intent(ArticleActivity.this, ArticleCommentActivity.class);
+                commentIntent.putExtra(Constants.KEY_ARTICLE_ID, Integer.parseInt(targetID));
+                ArticleActivity.this.startActivity(commentIntent);
                 break;
             case R.id.article_btn_share:
                 //分享
@@ -165,11 +168,8 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void showShare(SpecialShareVOBean shareVO) {
-
-        SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO, targetID);
-        shareActivity.showShareWindow();
-        shareActivity.showAtLocation(ArticleActivity.this.findViewById(R.id.article_relayout),
-                Gravity.BOTTOM, 0, 0);
+        SharePopupWindow shareActivity = new SharePopupWindow(mContext,shareVO);
+        shareActivity.show();
     }
 
     //判断二维码是否下载过
@@ -299,40 +299,27 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
 
             AppLog.i("TAG", "shouldOverrideUrlLoading" + url);
             if (url.matches(".*codeImageClick.*")) {
-                //TODO 作者二维码
+                // 作者二维码
                 if (authorVO != null) {
                     showPopupWindow(authorVO);
                 }
             }
-            if (url.matches(".*app.*")) {
-
-                String[] split = url.split("\\?");
-                String json = split[1];
-                SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-                if (specialToH5Bean.getTargetType() == 2) {
-                    // 去商品详情
-                    Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
-                    intent2.putExtra("productdetails", specialToH5Bean);
-                    startActivity(intent2);
-
-                } else if (specialToH5Bean.getTargetType() == 12) {
-                    // 去用户详情页
-                    int targetId = specialToH5Bean.getTargetId();
-                    Intent intent = new Intent(ArticleActivity.this, LiveHomePageActivity.class);
-                    intent.putExtra("userId", String.valueOf(targetId));
-                    startActivity(intent);
-                }
+            if(url.matches(".*imageClick.*")){
+                String[] split = url.split("imageClick:");
+                String s = split[1];
+                String[] split1 = s.split(",");
+                AppLog.i("TAG","文章评论图片点击:"+split1[1]);
             }
-
+            if (url.matches(".*app.*")) {
+               return WebViewClientUrlSkipUtils.getUrlPrasent(url,ArticleActivity.this);
+            }
             return true;
         }
 
         @Override
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view, url);
-            /*    if (!articleWebview.getSettings().getLoadsImagesAutomatically()) {
-                    articleWebview.getSettings().setLoadsImagesAutomatically(true);
-                }*/
+
         }
     }
 
@@ -438,5 +425,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         setResult(MyFavoriteActivity.UPDATE_MY_DATA);
         super.onBackPressed();
     }
+
 }
 

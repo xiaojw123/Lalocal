@@ -2,6 +2,7 @@ package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdate;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
@@ -33,8 +35,6 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.LatLngBounds;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.easemob.Constant;
-import com.lalocal.lalocal.easemob.ui.ChatActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.model.PariseResult;
@@ -51,6 +51,7 @@ import com.lalocal.lalocal.view.adapter.DayRouteItemAdpater;
 import com.lalocal.lalocal.view.listener.OnItemClickListener;
 import com.sackcentury.shinebuttonlib.ShineButton;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +60,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoadedListener, View.OnClickListener, CustomTitleView.onBackBtnClickListener {
+    private static final String MINIMAP="com.autonavi.minimap";
     public static final String DETAILS_ID = "detail_id";
     private static final String FORMART_BETWEEN = "Day  %1$s - %2$s";
     RouteDetail mRouteDetail;
@@ -82,8 +84,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     Button dayItemDetailBuyBtn;
     private boolean praiseFlag;
     private Object praiseId;
-    @BindView(R.id.route_detail_service)
-    TextView routeDetailService;
     @BindView(R.id.route_detail_mapview)
     MapView mapView;
     AMap aMap;
@@ -94,7 +94,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     HorizontalScrollView routeDetailHsv;
     @BindView(R.id.route_detail_btn_share)
     ImageView routeDetailBtnShare;
-//    @BindView(R.id.route_detail_collect_sbtn)
+    @BindView(R.id.route_detail_collect_sbtn)
     ShineButton likeBtn;
     @BindView(R.id.route_detail_buy)
     FrameLayout routeDetailBuy;
@@ -115,7 +115,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         setContentView(R.layout.route_detail_layout);
         showLoadingAnimation();
         ButterKnife.bind(this);
-        likeBtn=(ShineButton)findViewById(R.id.route_detail_collect_sbtn);
         routeDetailTitle.setOnBackClickListener(this);
         this.savedInstanceState = savedInstanceState;
         dayItemLeft = (int) getResources().getDimension(R.dimen.dimen_size_36_dp);
@@ -139,21 +138,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             views.add(recyclerView);
         }
         routeDetailViewpagerRoute.setCallBack(pagerCallBack);
-        RoutePagerAdpater pagerAdpater=  new RoutePagerAdpater(views);
+        RoutePagerAdpater pagerAdpater = new RoutePagerAdpater(views);
         routeDetailViewpagerRoute.setAdapter(pagerAdpater);
-    }
-
-    @OnClick(R.id.route_detail_service)
-    public void chatToLalocalService() {
-        // 进入主页面
-        MobHelper.sendEevent(this, MobEvent.DESTINATION_ROUTE_SERVICE);
-        int messageToIndex = Constant.MESSAGE_TO_DEFAULT;
-        Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra(
-                Constant.MESSAGE_TO_INTENT_EXTRA, messageToIndex);
-        intent.putExtra(Constant.ITEM_POST_URL, mRouteDetail.getPhoto());
-        intent.putExtra(Constant.ITEM_TITLE, mRouteDetail.getTitle());
-        startActivity(intent);
     }
 
     @OnClick(R.id.day_item_detail_title_container)
@@ -161,19 +147,33 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         dayItemDetailContainer.setVisibility(View.INVISIBLE);
     }
 
+    //判断是否安装目标应用
+    private boolean isInstallByread(String packageName) {
+        return new File("/data/data/" + packageName)
+                .exists();
+    }
+
     @OnClick(R.id.day_item_detail_loc)
     public void planFromMap() {
-//        Intent intent = new Intent("android.intent.action.VIEW",
-//                Uri.parse("androidamap://viewMap?sourceApplication=乐可旅行&poiname=杭州未来科技城&lat=36.2&lon=116.1&dev=0"));
-//        intent.setPackage("com.autonavi.minimap");
-//        startActivity(intent);
-
+        Object tagObj = dayItemDetailLoc.getTag();
+        if (tagObj != null) {
+            if (isInstallByread(MINIMAP)) {
+                RouteDetail.RouteDatesBean.RouteItemsBean routeItemsBean = (RouteDetail.RouteDatesBean.RouteItemsBean) tagObj;
+                Intent intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("androidamap://navi?sourceApplication=" + getResources().getString(R.string.app_name) + "&poiname=" + routeItemsBean.getTitle() + "&lat=" + routeItemsBean.getLatitude() + "&lon=" + routeItemsBean.getLongitude() + "&dev=1&style=2"));
+                intent.setPackage(MINIMAP);
+                intent.addCategory(Intent.CATEGORY_DEFAULT);
+                startActivity(intent);
+            }
+        } else {
+            Toast.makeText(this, "目标地址不存在", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
     @OnClick({R.id.day_item_detail_buy_btn, R.id.route_detail_buy})
     public void openProductDetail(View view) {
-        MobHelper.sendEevent(this,MobEvent.DESTINATION_ROUTE_BUY);
+        MobHelper.sendEevent(this, MobEvent.DESTINATION_ROUTE_BUY);
         Object tag = view.getTag();
         if (tag != null) {
 
@@ -217,6 +217,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                 }
                 dayItemDetailLocTv.setText(String.valueOf(position + 1));
                 dayItemDetailName.setText(routeItem.getTitle());
+                dayItemDetailLoc.setTag(routeItem);
                 dayItemDetailSubtitle.setText(routeItem.getSubTitle());
                 SparseArray<String> items = new SparseArray<>();
                 String ticket = routeItem.getTicket();
@@ -359,16 +360,13 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         shareVO.setDesc(routeShareVO.getDesc());
         shareVO.setTitle(routeShareVO.getTitle());
         shareVO.setUrl(routeShareVO.getUrl());
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(this, shareVO);
-        sharePopupWindow.showShareWindow();
-        sharePopupWindow.showAtLocation(getWindow().getDecorView(),
-                Gravity.BOTTOM, 0, 0);
-
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(this,shareVO);
+        sharePopupWindow.show();
     }
 
     @OnClick(R.id.route_detail_collect_sbtn)
     public void collect() {
-        MobHelper.sendEevent(this,MobEvent.DESTINATION_ROUTE_LIKE);
+        MobHelper.sendEevent(this, MobEvent.DESTINATION_ROUTE_LIKE);
         if (mRouteDetail != null) {
             //取消收藏
             int id = mRouteDetail.getId();
@@ -388,7 +386,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         setSelectItem(routeDetailRoutedateLlt, id);
         routeDetailViewpagerRoute.setCurrentItem(id - 1);
     }
-
 
     public void setSelectItem(ViewGroup viewGroup, int selectedId) {
         AppLog.print("setSelectItem___start_");
@@ -414,6 +411,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                             RouteDetail.RouteDatesBean date = dates.get(i);
                             if (date != null) {
                                 updateMap(date.getRouteItems());
+                                moveCamera();
                             }
                         }
 
@@ -423,8 +421,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                 }
             }
         }
-        AppLog.print("setSelectItem___end_");
-
     }
 
     @Override
@@ -510,7 +506,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             }
             if (dates == null || dates.size() < 1 || !dates.contains(dateId)) {
                 //无组合订单
-                routeDetailRoutedateLlt.addView(getDateItem(i + 1, false,routeDate));
+                routeDetailRoutedateLlt.addView(getDateItem(i + 1, false, routeDate));
                 continue;
             }
             for (Integer id : dates) {
@@ -523,7 +519,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
                         routeDetailBuyBetween.setText(String.format(FORMART_BETWEEN, i + 1, i + dates.size()));
                     }
                     if (comboContainer != null) {
-                        comboContainer.addView(getDateItem(i + 1,true, routeDate));
+                        comboContainer.addView(getDateItem(i + 1, true, routeDate));
                         continue out1;
                     }
                 }
@@ -540,7 +536,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     }
 
 
-    public TextView getDateItem(int dateNum,boolean isFlag, RouteDetail.RouteDatesBean routeDate) {
+    public TextView getDateItem(int dateNum, boolean isFlag, RouteDetail.RouteDatesBean routeDate) {
         TextView view = new TextView(this);
         ColorStateList stateList = getResources().getColorStateList(R.color.date_item_textcolor);
         view.setTextColor(stateList);
@@ -553,7 +549,7 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         view.setTag(R.id.routeDateItem, routeDate);
         view.setId(dateNum);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        if (dateNum == 1&&isFlag) {
+        if (dateNum == 1 && isFlag) {
             params.leftMargin = 0;
             updateMap(routeDate.getRouteItems());
         } else {
@@ -566,7 +562,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
 
     private void updateMap(List<RouteDetail.RouteDatesBean.RouteItemsBean> routeItems) {
         if (aMap == null) {
-
             mapView.onCreate(savedInstanceState);
             aMap = mapView.getMap();
             aMap.setOnMapLoadedListener(this);// 设置amap加载成功事件监听器
@@ -593,7 +588,8 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             textView.setText(String.valueOf(pos + 1));
             textView.setBackground(getResources().getDrawable(res));
             options.icon(BitmapDescriptorFactory.fromView(textView));
-            LatLng latLng = new LatLng(item.getLongitude(), item.getLatitude());
+            LatLng latLng = new LatLng(item.getLongitude(),item.getLatitude());
+          //  LatLng latLng = new LatLng(item.getLatitude(), item.getLongitude());
             lats.add(latLng);
             options.position(latLng);
             aMap.addMarker(options);
@@ -606,6 +602,11 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
     @Override
     public void onMapLoaded() {
         // 设置所有maker显示在当前可视区域地图中
+        moveCamera();
+
+    }
+
+    private void moveCamera() {
         LatLngBounds.Builder bulder = new LatLngBounds.Builder();
         for (LatLng latLng : lats) {
             bulder.include(latLng);
@@ -614,7 +615,6 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
         if (aMap != null) {
             aMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 10));
         }
-
     }
 
 
@@ -697,6 +697,5 @@ public class RouteDetailActivity extends BaseActivity implements AMap.OnMapLoade
             return view;
         }
     }
-
 
 }

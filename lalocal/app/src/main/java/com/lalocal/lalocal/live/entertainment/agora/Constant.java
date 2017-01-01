@@ -21,13 +21,12 @@ public class Constant {
     }
 
     public static boolean PRP_ENABLED = true;
-    public static float PRP_DEFAULT_LIGHTNESS = 1.1f;
-    public static int PRP_DEFAULT_SMOOTHNESS = 12;
-    public static final float PRP_MAX_LIGHTNESS = 1.5f;
-    public static final int PRP_MAX_SMOOTHNESS = 15;
-    public static final float PRP_USER_LIGHTNESS=1.2f;
+    public static float PRP_DEFAULT_LIGHTNESS = 0.65f;
+    public static float PRP_DEFAULT_SMOOTHNESS = 1.0f;
+    public static final float PRP_MAX_LIGHTNESS = 1.0f;
+    public static final float PRP_MAX_SMOOTHNESS = 1.0f;
 
-    public static boolean CAMERABACK=false;
+    public static boolean CAMERABACK=false;//摄像头切换
 
 
 }

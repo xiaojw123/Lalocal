@@ -12,7 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -21,18 +21,24 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.tedcoder.wkvideoplayer.view.MediaController;
 import com.android.tedcoder.wkvideoplayer.view.SuperVideoPlayer;
-import com.google.gson.Gson;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.help.TargetPage;
+import com.lalocal.lalocal.help.TargetType;
+import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.ArticleDetailsBean;
 import com.lalocal.lalocal.model.BigPictureBean;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.SpecialBannerBean;
 import com.lalocal.lalocal.model.SpecialGroupsBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.model.SpectialDetailsResp;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -47,6 +53,9 @@ import com.lalocal.lalocal.view.SharePopupWindow;
 import com.sackcentury.shinebuttonlib.ShineButton;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 
@@ -77,7 +86,7 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private LinearLayout imgLayout;
     private RelativeLayout videoLayoout;
     private String description;
-  //  private SharePopupWindow shareActivity;
+    //  private SharePopupWindow shareActivity;
     private LinearLayout main;
     private RelativeLayout banerContent;
     private LinearLayout loadingPage;
@@ -89,29 +98,32 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     private int praiseId;
     private String h5Url;
     private View mPlayBtnView;
-    private RelativeLayout relativeLayout;
-    private View line;
+
+
     private boolean isPause;
     private SecretTextView textContent;
     private SecretTextView textName;
     private int bannerType = 5;
     public static final int RESULT_PLAY = 0;
     private String videoUrl;//视频播放地址
-    private CustomTitleView backTitleView;
+    private ImageView backTitleView;
+    private TextView readTv;
+    private TextView collectTv;
+    private LinearLayout bottomLayout;
+    private int readNum;
+    private int praiseNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.special_details_layout);
         initView();
         initData();
     }
-
     private void initView() {
-        backTitleView = (CustomTitleView) findViewById(R.id.special_details_ctv);
-        detailsLike = (ShineButton) findViewById(R.id.special_details_like_iv);
-        detailsShare = (ImageView) findViewById(R.id.special_details_share_iv);
+        backTitleView = (ImageView) findViewById(R.id.special_details_ctv);
+        detailsLike = (ShineButton) findViewById(R.id.article_btn_like);
+        detailsShare = (ImageView) findViewById(R.id.article_btn_share);
         loadingPage = (LinearLayout) findViewById(R.id.loading_page);
         mainUi = (LinearLayout) findViewById(R.id.special_main_ui);
         mScrollview = (MyScrollView) findViewById(R.id.special_scrollview);
@@ -122,22 +134,23 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         main = (LinearLayout) findViewById(R.id.mian);
         videoView = (SuperVideoPlayer) findViewById(R.id.video_player_item_1);
         banerContent = (RelativeLayout) findViewById(R.id.special_title_content);
-        line = findViewById(R.id.special_line);
-        relativeLayout = (RelativeLayout) findViewById(R.id.reLayout);
+        bottomLayout = (LinearLayout) findViewById(R.id.article_bottom_layout);
+        readTv = (TextView) findViewById(R.id.article_read_tv);
+        collectTv = (TextView) findViewById(R.id.article_collect_tv);
         mPlayBtnView = findViewById(R.id.play_btn);
-        backTitleView.setOnBackClickListener(this);
+        findViewById(R.id.article_btn_comment).setVisibility(View.GONE);
+        backTitleView.setOnClickListener(this);
         mPlayBtnView.setOnClickListener(this);
         detailsLike.setOnClickListener(this);
         detailsShare.setOnClickListener(this);
         mScrollview.setScrollViewListener(this);
         videoView.setVideoPlayCallback(mVideoPlayCallback);
-
-
     }
 
     private void initData() {
         final Intent intent = getIntent();
         String rowId = intent.getStringExtra("rowId");
+        AppLog.i("TAG","专题详情:"+rowId);
         String url = AppConfig.getSepcailDetailUrl() + rowId;
         if (rowId != null) {
             contentService1 = new ContentLoader(this);
@@ -149,20 +162,17 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.special_details_like_iv:
+            case R.id.article_btn_like:
                 if (praiseFlag) {
                     contentService1.cancelParises(praiseId1, targetId);//取消赞
                 } else {
                     contentService1.specialPraise(targetId, 10);//点赞
                 }
                 break;
-            case R.id.special_details_share_iv:
+            case R.id.article_btn_share:
                 if (shareVO != null) {
-
-                    SharePopupWindow shareActivity = new SharePopupWindow(mContext, shareVO);
-                    shareActivity.showShareWindow();
-                    shareActivity.showAtLocation(SpecialDetailsActivity.this.findViewById(R.id.mian),
-                            Gravity.BOTTOM, 0, 0);
+                    SharePopupWindow shareActivity = new SharePopupWindow(mContext,shareVO);
+                    shareActivity.show();
                 }
                 break;
             case R.id.play_btn:
@@ -170,6 +180,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
                 break;
             case R.id.fullscreen_back_btn:
                 hideFullScreen();
+                break;
+            case R.id.special_details_ctv:
+                finish();
                 break;
 
         }
@@ -206,18 +219,22 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
 
 
     public class MyCallBack extends ICallBack {
+
+
         @Override
         public void onRecommendSpecial(SpectialDetailsResp spectialDetailsResp) {
             super.onRecommendSpecial(spectialDetailsResp);
-
             if (spectialDetailsResp.returnCode == 0) {
-
                 h5Url = spectialDetailsResp.result.url;
                 shareVO = spectialDetailsResp.result.shareVO;
                 praiseId1 = spectialDetailsResp.result.praiseId;
                 praiseFlag = spectialDetailsResp.result.praiseFlag;
                 description = spectialDetailsResp.result.description;
                 targetId = spectialDetailsResp.result.id;
+                readNum = spectialDetailsResp.result.readNum;
+                praiseNum = spectialDetailsResp.result.praiseNum;
+                readTv.setText("阅读 "+readNum);
+                collectTv.setText("· 收藏 "+praiseNum);
                 List<SpecialGroupsBean> groups = spectialDetailsResp.result.groups;
                 for (int i = 0; i < groups.size(); i++) {
                     targetType1 = groups.get(i).targetType;
@@ -276,7 +293,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             detailsLike.setChecked(true);
             praiseId1 = pariseResult.getResult();
             praiseFlag = true;
-
+            praiseNum=praiseNum+1;
+            collectTv.setText("· 收藏 "+praiseNum);
 
         }
 
@@ -286,6 +304,8 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             super.onPariseResult(pariseResult);
             detailsLike.setChecked(false);
             praiseFlag = false;
+            praiseNum=praiseNum-1;
+            collectTv.setText("· 收藏 "+praiseNum);
         }
     }
 
@@ -393,16 +413,14 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
             isPlayStatus = isPlay;
         }
 
-
     };
 
     //隐藏全屏
     private void hideFullScreen() {
         isFullScreen = true;
         specialWebView.setVisibility(View.VISIBLE);
-        relativeLayout.setVisibility(View.VISIBLE);
+        bottomLayout.setVisibility(View.VISIBLE);
         main.setBackgroundColor(Color.WHITE);
-        line.setVisibility(View.VISIBLE);
         heightLayout.setVisibility(View.GONE);
         heightLayout.removeAllViews();
         videoView.setPageType(MediaController.PageType.SHRINK);
@@ -414,9 +432,9 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         videoView.setPageType(MediaController.PageType.EXPAND);
         isFullScreen=false;
         specialWebView.setVisibility(View.GONE);
-        relativeLayout.setVisibility(View.GONE);
+        bottomLayout.setVisibility(View.GONE);
         main.setBackgroundColor(Color.BLACK);
-        line.setVisibility(View.GONE);
+
         heightLayout = (LinearLayout) findViewById(R.id.height_layout);
         View inflate = View.inflate(mContext, R.layout.fullsreen_back_layout, null);
         ImageView playerBack = (ImageView) inflate.findViewById(R.id.fullscreen_back_btn);
@@ -485,53 +503,70 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
     public class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
-           AppLog.i("TAG","SpecialDetails:"+url);
-            String[] split = url.split("\\?");
-            String json = split[1];
-      /*    //生产环境开启
-           // targetType=1&targetId=230;
-            String[] split2=json.split("&");
-            String split3 = split2[0];
-            String[] split4 = split3.split("Type=");
-            String targetTy = split4[1];
-            String[] split1 = json.split("Id=");
-            String targetID = split1[1];
-            int targetIDD=Integer.parseInt(targetID);
-            int targetTY = Integer.parseInt(targetTy);
-*/
-            SpecialToH5Bean specialToH5Bean = new Gson().fromJson(json, SpecialToH5Bean.class);
-            AppLog.i("TAG", specialToH5Bean.toString());
-         /*   SpecialToH5Bean specialToH5Bean=new SpecialToH5Bean();
-            specialToH5Bean.setTargetId(targetIDD);
-            specialToH5Bean.setTargetType(targetTY);*/
-            if (specialToH5Bean != null) {
-                switch (specialToH5Bean.getTargetType()) {
-                    case 1:
-                        //文章，调h5接口
-                        Intent intent1 = new Intent(mContext, ArticleActivity.class);
-                        intent1.putExtra("targetID", specialToH5Bean.getTargetId() + "");
-                        startActivity(intent1);
-                        break;
-                    case 2:
-                        //产品,去产品详情页
-                        Intent intent2 = new Intent(mContext, ProductDetailsActivity.class);
-                        intent2.putExtra("productdetails", specialToH5Bean);
-                        startActivity(intent2);
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5:
-                        break;
-                    case 13:
-                        Intent intent13 = new Intent(mContext, ArticleActivity.class);
-                        intent13.putExtra("targetID", specialToH5Bean.getTargetId() + "");
-                        startActivity(intent13);
-                        break;
+            if (url.startsWith("lalocal:")) {
+                int startIndex = url.indexOf("?") + 1;
+                String jsonData = url.substring(startIndex, url.length());
+                try {
+                    JSONObject jsonObject = new JSONObject(jsonData);
+                    String targetType = jsonObject.optString("targetType");
+                    String targetId = jsonObject.optString("targetId");
+                    String targetUrl = jsonObject.optString("targetUrl");
+                    if (!TextUtils.isEmpty(targetType)) {
+                        //优惠券跳转
+                        if (TargetType.COUPON.equals(targetType)) {
+                            if (UserHelper.isLogined(mContext)) {
+                                Intent intent = new Intent(mContext, MyCouponActivity.class);
+                                intent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
+                                mContext.startActivity(intent);
+                            } else {
+                                LLoginActivity.start(mContext);
+                            }
+                            return true;
+                        }
+                        //直播视频跳转
+                        if (TargetType.LIVE_VIDEO.equals(targetType)) {
+                            Intent intent = new Intent(mContext, AudienceActivity.class);
+                            intent.putExtra("id", targetId);
+                            mContext.startActivity(intent);
+                            return true;
+                        }
+                        //直播回放跳转
+                        if (TargetType.LIVE_PALY_BACK.equals(targetType)) {
+                            Intent intent = new Intent(mContext, PlayBackActivity.class);
+                            intent.putExtra("id", targetId);
+                            mContext.startActivity(intent);
+                            return true;
+                        }
+                        if (TargetType.URL.equals(targetType)) {
+                            TargetPage.gotoWebDetail(mContext, targetUrl, null, false);
+                            return true;
+                        }
+
+                        if (TargetType.USER.equals(targetType) || TargetType.AUTHOR.equals(targetType)) {
+                            TargetPage.gotoUser(mContext, targetId, false);
+                            return true;
+                        }
+                        if (TargetType.ARTICLE.equals(targetType) || TargetType.INFORMATION.equals(targetType)) {
+                            TargetPage.gotoArticleDetail(mContext, targetId, false);
+                            return true;
+                        }
+                        if (TargetType.PRODUCT.equals(targetType)) {
+                            TargetPage.gotoProductDetail(mContext, targetId, targetType, false);
+                            return true;
+                        }
+                        if (TargetType.ROUTE.equals(targetType)) {
+                            TargetPage.gotoRouteDetail(mContext, targetId, false);
+                            return true;
+                        }
+                        if (TargetType.SPECIAL.equals(targetType)) {
+                            TargetPage.gotoSpecialDetail(mContext, targetId, false);
+                            return true;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
-
             return true;
         }
 
@@ -602,4 +637,5 @@ public class SpecialDetailsActivity extends BaseActivity implements View.OnClick
         setResult(MyFavoriteActivity.UPDATE_MY_DATA);
         super.onBackPressed();
     }
+
 }

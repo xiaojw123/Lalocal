@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -32,7 +31,6 @@ import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.SecretTextView;
 import com.lalocal.lalocal.view.SharePopupWindow;
-import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
@@ -126,12 +124,10 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		SpecialShareVOBean shareVO=new SpecialShareVOBean();
 		shareVO.setBitmap(bitmap3);
 
-		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this, shareVO);
-		shareActivity.showShareWindow();
-		shareActivity.setCallBackListener(this);
-		shareActivity.showAtLocation(BigPictureActivity.this.findViewById(R.id.big_picture_main),
-				Gravity.BOTTOM, 0, 0);
+		SharePopupWindow shareActivity = new SharePopupWindow(BigPictureActivity.this,shareVO);
 
+		shareActivity.setCallBackListener(this);
+		shareActivity.show();
 	}
 
 	public static Bitmap drawTextToBitmap(Context gContext, Bitmap bitmap, String gText) {
@@ -230,12 +226,6 @@ public class BigPictureActivity extends BaseActivity implements View.OnClickList
 		AppLog.i("TAG","onError"+share_media.toString());
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		UMShareAPI.get(this).onActivityResult(requestCode, resultCode, data);
-
-	}
 
 	/*@Override
 	public boolean handleMessage(Message msg) {

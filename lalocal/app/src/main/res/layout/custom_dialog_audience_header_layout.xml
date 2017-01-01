@@ -3,7 +3,8 @@
     android:id="@+id/custom_dialog_live_header_layout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/live_height_50dp"
-    android:visibility="gone">
+    android:visibility="gone"
+   >
     <ImageView
         android:id="@+id/custom_dialog_close_iv"
         android:layout_width="wrap_content"
@@ -11,7 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:paddingRight="@dimen/live_padding_15dp"
-        android:src="@drawable/btnbg_close" />
+        android:src="@drawable/cancel_dark" />
     <TextView
         android:id="@+id/custom_dialog_report"
         android:layout_width="wrap_content"
@@ -21,5 +22,5 @@
         android:paddingLeft="@dimen/live_padding_15dp"
         android:textColor="@color/color_ffaa2a"
         android:textSize="@dimen/text_size_14_sp"
-        android:text="举报"/>
+        android:text="@string/other_funcation"/>
 </RelativeLayout>

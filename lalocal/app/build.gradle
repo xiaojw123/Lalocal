@@ -64,36 +64,52 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
+    //support库 version=${libs.support}
     compile "com.android.support:appcompat-v7:${libs.support}"
-    compile 'com.google.code.gson:gson:2.4'
     compile "com.android.support:recyclerview-v7:${libs.support}"
+    compile "com.android.support:cardview-v7:${libs.support}"
+    compile "com.android.support:percent:${libs.support}"
+    compile "com.android.support:support-v4:${libs.support}"
+    //moduel
+    compile project(':PushSDK')
+    compile project(':wkvideoplayer')
+    compile project(':shinebuttonlib')
+    compile project(':pingpp')
+    compile project(path: ':gifviewlibrary')
+    compile project(':xrecyclerview')
+    compile project(':selectordialog')
+    //libs
+    compile files('libs/SocialSDK_umengqq.jar')
+    compile files('libs/umeng_social_api.jar')
+    compile files('libs/SocialSDK_umengsina.jar')
+    compile files('libs/SocialSDK_umengwx.jar')
+    compile files('libs/SocialSDK_Sina.jar')
+    compile files('libs/SocialSDK_WeiXin_1.jar')
+    compile files('libs/cmbkeyboard.jar')
+    //other
+    compile 'com.netease.nimlib:basesdk:3.2.0'
+    compile 'com.netease.nimlib:chatroom:3.2.0'
+    compile 'com.google.code.gson:gson:2.4'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.belerweb:pinyin4j:2.5.1'
-    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
+    compile 'com.google.android.gms:play-services-appindexing:8.4.0'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.7@aar') {
         transitive = true;
     }
     compile 'org.litepal.android:core:1.3.2'
-    compile project(':wkvideoplayer')
-    compile project(':shinebuttonlib')
-    compile project(':easeui')
-    compile project(':pingpp')
     compile 'com.umeng.analytics:analytics:latest.integration'
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile "com.android.support:cardview-v7:${libs.support}"
     compile files('libs/AMap_2DMap_V2.9.0_20160525.jar')
-    compile files('libs/easemobchat_2.3.0.jar')
-    compile "com.android.support:support-v4:${libs.support}"
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.qiniu:qiniu-android-sdk:7.2.+'
-    compile project(path: ':gifviewlibrary')
-    compile project(':xrecyclerview')
-    compile project(':selectordialog')
     compile 'com.mcxiaoke.volley:library:1.0.19'
-    compile 'com.android.support:percent:22.2.0'
     compile 'com.makeramen:roundedimageview:2.2.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.github.sahasbhop:formatted-log:0.0.5'
+    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    compile files('libs/nim-basesdk-3.2.0.jar')
+    compile project(':pldroidplayer')
 }
 
 
@@ -109,8 +125,8 @@ android {
 apply plugin: 'com.bugtags.library.plugin'
 bugtags {
     //自动上传符号表功能配置，如果需要根据 build varint 配置，请参考插件详细使用说明
-    appKey "35af803b133278a8f97e4c5a692d1e71"  //这里是你的 appKey
-    appSecret "597327c81f891d5314b67d0129f703b0"    //这里是你的 appSecret，管理员在设置页可以查看
+    appKey "19f79e144b295411ef4b402ae7157a5a"  //这里是你的 appKey
+    appSecret "a5cea72d0e3963ddce8f0530ace2d207"    //这里是你的 appSecret，管理员在设置页可以查看
 //    appSecret "APP_SECRET"    //这里是你的 appSecret，管理员在设置页可以查看
     mappingUploadEnabled true
 
@@ -122,15 +138,9 @@ dependencies {
     compile 'in.srain.cube:ultra-ptr:1.0.11' // 下拉刷新控件
     compile 'in.srain.cube:cube-sdk:1.0.44@aar' // 上拉加载控件
     compile 'com.chanven.lib:cptr:1.1.0'
-//    compile('in.srain.cube:ultra-ptr:1.0.9.1-SNAPSHOT@aar') {
-//        exclude group: 'in.srain.cube', module: 'clog'
-//    }
-//    compile('in.srain.cube:cube-sdk:1.0.44.33-SNAPSHOT@aar') {
-//        exclude group: 'in.srain.cube', module: 'clog'
-//    }
-    compile 'com.daimajia.slider:library:1.1.5@aar' // 广告轮播
     compile 'com.squareup.picasso:picasso:2.5.2' // 图片加载框架
     compile 'com.nineoldandroids:library:2.4.0' // 开源动画框架
+    compile 'com.melnykov:floatingactionbutton:1.3.0' // 扩展的浮动按钮
 }
 
 repositories {
@@ -141,6 +151,10 @@ repositories {
 dependencies {
     compile(name: 'videoprp', ext: 'aar')
     compile project(path: ':galleryfinal')
+}
+dependencies {
+    compile "com.android.support:support-v4:${libs.support}"
+    compile project(path: ':sliderlayoutlibrary')
 }
 
 

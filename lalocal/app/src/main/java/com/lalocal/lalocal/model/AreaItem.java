@@ -8,6 +8,14 @@ import java.util.List;
 public class AreaItem {
 
 
+    public String getYitu8Url() {
+        return yitu8Url;
+    }
+
+    public void setYitu8Url(String yitu8Url) {
+        this.yitu8Url = yitu8Url;
+    }
+
     /**
      * photo : http://7xpid3.com1.z0.glb.clouddn.com/201604150930291471703259569
      * name : 日韩
@@ -16,6 +24,7 @@ public class AreaItem {
      * sonList : []
      */
 
+    private String yitu8Url;
     private String photo;
     private String name;
     private int status;

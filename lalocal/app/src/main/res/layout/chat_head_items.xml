@@ -3,15 +3,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="3dp">
+    android:paddingLeft="@dimen/live_padding_10dp"
+    android:paddingTop="3dp"
+    android:paddingBottom="3dp"
+   >
 
     <TextView
         android:id="@+id/chat_info_head"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#97d3e9"
-        android:paddingLeft="5dp"
+        android:background="@drawable/live_im_item_bg"
+        android:padding="@dimen/live_padding_5dp"
+        android:lineSpacingExtra="3dp"
         android:textSize="14sp"
+        android:textStyle="bold"
         android:text="公告"/>
 
 </LinearLayout>

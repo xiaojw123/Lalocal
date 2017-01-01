@@ -17,6 +17,42 @@ public class WelcomeImg {
     private String photo;
     private int second;
     private List<String> futureList;
+    private String targetUrl;
+    private String targetType;
+    private String targetId;
+    private String targetName;
+
+    public String getTargetName() {
+        return targetName;
+    }
+
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
+    }
+
+    public String getTargetUrl() {
+        return targetUrl;
+    }
+
+    public void setTargetUrl(String targetUrl) {
+        this.targetUrl = targetUrl;
+    }
+
+    public String getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(String targetType) {
+        this.targetType = targetType;
+    }
+
+    public String getTargetId() {
+        return targetId;
+    }
+
+    public void setTargetId(String targetId) {
+        this.targetId = targetId;
+    }
 
     public String getPhoto() {
         return photo;

@@ -21,13 +21,38 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
     <style name="live_dialog" parent="test_dialog">
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
+    </style>
+
+    <style name="setting_dialog" parent="test_dialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:background">@null</item>
         <item name="android:windowFrame">@null</item>
         <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/dialog_animation</item>
+    </style>
+
+    <style name="share_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:background">@null</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/AnimBottom</item>
+    </style>
+    <style name="dialog_animation">
+        <item name="android:windowEnterAnimation">@anim/live_dialog_in_anim</item>
+        <item name="android:windowExitAnimation">@anim/live_dialog_out_anim</item>
     </style>
     <style name="custom_dialog" parent="test_dialog">
         <item name="android:windowBackground">@color/thin_dark</item>
@@ -55,7 +80,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/register_edit_height</item>
         <item name="android:background">@drawable/register_edit_bg</item>
-        <item name="android:textColorHint">@color/color_ee</item>
+        <item name="android:textColorHint">@color/color_b3</item>
         <item name="android:textColor">@color/color_66</item>
         <item name="android:textSize">@dimen/text_size_18_sp</item>
         <item name="android:textCursorDrawable">@drawable/custom_edit_cursor</item>
@@ -127,6 +152,7 @@
 
     <style name="AboutUsItemArrowTheme" parent="AcountEditItemArrowRight">
         <item name="android:layout_marginRight">@dimen/dimen_size_11_dp</item>
+        <item name="android:layout_centerVertical">true</item>
     </style>
 
     <style name="AboutUsItemTheme">
@@ -557,4 +583,117 @@
         <item name="android:windowEnterAnimation">@anim/guide_in</item>
         <item name="android:windowExitAnimation">@anim/guide_out</item>
     </style>
+
+    <style name="LoginNextStyle">
+        <item name="android:layout_width">@dimen/login_phone_edit_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dimen_size_10_dp</item>
+        <item name="android:background">@color/black_99</item>
+        <item name="android:textColor">@color/color_f0a028</item>
+        <item name="android:textSize">@dimen/text_size_18_sp</item>
+    </style>
+    <style name="AccoutSecurityNameStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_12_sp</item>
+        <item name="android:textColor">@color/color_b3</item>
+
+    </style>
+    <!--<style name="ProgressButton" />-->
+
+    <!--&lt;!&ndash; Base theme for the Progress button. &ndash;&gt;-->
+    <!--<style name="ProgressButton.attrs">-->
+        <!--<item name="pb_background">@drawable/orange_corner_btn_bg</item>-->
+        <!--<item name="android:clickable">false</item>-->
+        <!--<item name="android:focusable">false</item>-->
+        <!--<item name="pb_fontSize">@dimen/text_size_18_sp</item>-->
+        <!--<item name="pb_fontColor">@color/black_color</item>-->
+    <!--</style>-->
+
+
+    <!--<declare-styleable name="ProgressButton">-->
+        <!--<attr name="android:clickable" />-->
+        <!--<attr name="android:focusable" />-->
+        <!--<attr name="pb_background" format="reference" />-->
+        <!--<attr name="pb_fontSize" format="integer" />-->
+        <!--<attr name="pb_fontColor" format="color" />-->
+        <!--<attr name="pb_text" format="string" />-->
+    <!--</declare-styleable>-->
+
+    <!--<style name="PbStyle">-->
+        <!--&lt;!&ndash;<com.lalocal.lalocal.view.ProgressButton&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/progressView"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width=""&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="50dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:clickable="true"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:src=""&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding=""&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_gravity="center"&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;=""&ndash;&gt;-->
+            <!--&lt;!&ndash;/>&ndash;&gt;-->
+        <!--<item name="android:layout_width">match_parent</item>-->
+        <!--<item name="android:layout_height">@dimen/dimen_size_50_dp</item>-->
+        <!--<item name="android:clickable">true</item>-->
+        <!--<item name="android:src">@drawable/progress_view</item>-->
+        <!--<item name="android:padding">@dimen/text_size_16_sp</item>-->
+
+
+
+
+
+    <!--</style>-->
+
+    <style name="PbStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/dimen_size_50_dp</item>
+    </style>
+    <style name="PbNextStyle">
+        <item name="android:layout_width">@dimen/login_phone_edit_width</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/dimen_size_10_dp</item>
+    </style>
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/tab1"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="@string/liveplay"-->
+        <!--android:textSize="@dimen/text_size_15_sp"-->
+        <!--android:clickable="true"-->
+        <!--android:textColor="@color/search_tab_textcolor"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--/>-->
+
+    <style name="GSearchTabTextStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/search_tab_textcolor</item>
+        <item name="android:textSize">@dimen/text_size_15_sp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_centerVertical">true</item>
+    </style>
+
+    <!--<View-->
+        <!--android:layout_width="12dp"-->
+        <!--android:layout_height="@dimen/live_padding_2dp"-->
+        <!--android:clickable="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_below="@+id/tab1"-->
+        <!--android:layout_marginTop="@dimen/dimen_size_3_dp"-->
+        <!--android:background="@color/color_f5a623"-->
+        <!--/>-->
+
+    <style name="GSearchTabIndexStyle">
+        <item name="android:layout_width">12dp</item>
+        <item name="android:layout_height">@dimen/live_padding_2dp</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:layout_marginTop">@dimen/dimen_size_3_dp</item>
+        <item name="android:background">@drawable/search_tab_index_bg</item>
+    </style>
+
 </resources>

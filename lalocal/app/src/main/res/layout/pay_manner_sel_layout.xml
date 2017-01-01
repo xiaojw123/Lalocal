@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/paly_manner_text"
@@ -12,7 +11,7 @@
         android:text="@string/pay_manner"
         android:textColor="@color/color_1a"
         android:textSize="@dimen/text_size_12_sp" />
-        <!--android:layout_marginTop="@dimen/dimen_size_20_dp"-->
+    <!--android:layout_marginTop="@dimen/dimen_size_20_dp"-->
 
     <FrameLayout
         android:id="@+id/pay_manner_alipay_fl"
@@ -22,16 +21,18 @@
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
         android:layout_marginRight="@dimen/dimen_size_15_dp"
         android:layout_marginTop="@dimen/dimen_size_9_dp"
-        android:background="@drawable/alipaybg_img"
+        android:background="@color/white"
         android:paddingEnd="@dimen/dimen_size_15_dp"
         android:paddingStart="@dimen/dimen_size_15_dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:drawableLeft="@drawable/shape"
+            android:drawablePadding="@dimen/dimen_size_10_dp"
             android:gravity="center"
             android:text="@string/alipay"
-            android:textColor="@color/white"
+            android:textColor="@color/color_1a"
             android:textSize="@dimen/text_size_15_sp" />
 
         <ImageView
@@ -51,16 +52,18 @@
         android:layout_marginLeft="@dimen/dimen_size_15_dp"
         android:layout_marginRight="@dimen/dimen_size_15_dp"
         android:layout_marginTop="@dimen/dimen_size_5_dp"
-        android:background="@drawable/wechatpay_img"
+        android:background="@color/white"
         android:paddingEnd="@dimen/dimen_size_15_dp"
         android:paddingStart="@dimen/dimen_size_15_dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:drawableLeft="@drawable/wechatpay_ic"
+            android:drawablePadding="@dimen/dimen_size_10_dp"
             android:gravity="center"
             android:text="@string/weixin"
-            android:textColor="@color/white"
+            android:textColor="@color/color_1a"
             android:textSize="@dimen/text_size_15_sp" />
 
         <ImageView
@@ -69,6 +72,62 @@
             android:layout_height="@dimen/pay_check_rb_width"
             android:layout_gravity="right|center_vertical"
             android:background="@drawable/pay_manner_checkbox_bg" />
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:id="@+id/pay_manner_cmb_fl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/pay_manner_alipay_fl_height"
+        android:layout_below="@+id/pay_manner_weixin_fl"
+        android:layout_marginLeft="@dimen/dimen_size_15_dp"
+        android:layout_marginRight="@dimen/dimen_size_15_dp"
+        android:layout_marginTop="@dimen/dimen_size_5_dp"
+        android:background="@color/white"
+        android:paddingEnd="@dimen/dimen_size_15_dp"
+        android:paddingStart="@dimen/dimen_size_15_dp">
+
+        <!--android:drawableLeft="@drawable/cmbkb_logo"-->
+        <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/cmb"-->
+        <!--android:drawableLeft="@drawable/cmbc_ic"-->
+        <!--android:drawablePadding="@dimen/dimen_size_10_dp"-->
+        <!--android:textColor="@color/color_1a"-->
+        <!--android:textSize="@dimen/text_size_15_sp" />-->
+
+
+        <ImageView
+            android:id="@+id/pay_manner_cmb_cb"
+            android:layout_width="@dimen/pay_check_rb_width"
+            android:layout_height="@dimen/pay_check_rb_width"
+            android:layout_gravity="right|center_vertical"
+            android:background="@drawable/pay_manner_checkbox_bg" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/cmbc_ic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingLeft="@dimen/dimen_size_10_dp"
+                android:text="@string/cmb"
+                android:textColor="@color/color_1a"
+                android:textSize="@dimen/text_size_15_sp" />
+
+        </LinearLayout>
 
     </FrameLayout>
 

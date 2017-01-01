@@ -12,7 +12,8 @@ import com.lalocal.lalocal.live.im.ui.listview.MessageListView;
  * Created by hzxuwen on 2016/3/31.
  */
 public class MessageListViewEx extends MessageListView {
-    private int maxHeight = ScreenUtil.dip2px(110);
+
+    private int maxHeight = ScreenUtil.dip2px(150);
 
     public MessageListViewEx(Context context) {
         super(context);

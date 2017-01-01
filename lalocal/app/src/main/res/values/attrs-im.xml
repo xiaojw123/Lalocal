@@ -80,4 +80,11 @@
         <attr name="selectColor"/>
         <attr name="indicatorRadius"/>
     </declare-styleable>
+
+    <declare-styleable name="MarqueeViewStyle">
+        <attr name="mvInterval" format="integer|reference" />
+        <attr name="mvAnimDuration" format="integer|reference" />
+        <attr name="mvTextSize" format="dimension|reference" />
+        <attr name="mvTextColor" format="color|reference" />
+    </declare-styleable>
 </resources>

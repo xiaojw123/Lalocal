@@ -5,14 +5,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.AccountEidt1Activity;
@@ -25,8 +26,9 @@ import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.KeyboardUtil;
+import com.lalocal.lalocal.view.ClearEditText;
 import com.lalocal.lalocal.view.CustomTitleView;
-import com.lalocal.lalocal.view.xlistview.XListView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,26 +44,26 @@ import butterknife.OnClick;
 /**
  * Created by android on 2016/8/7.
  */
-public class LiveAttentionOrFansActivity extends BaseActivity implements XListView.IXListViewListener, CustomTitleView.onBackBtnClickListener {
+public class LiveAttentionOrFansActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener,View.OnTouchListener {
+
+    @BindView(R.id.attention_tilte)
+    LinearLayout attentionTitle;
+    @BindView(R.id.attention_search_cet)
+    ClearEditText attentionSearchCet;
+    @BindView(R.id.attention_cancel_tv)
+    TextView attentionCancelTv;
+    @BindView(R.id.attention_search_layout)
+    RelativeLayout attentionSearchLayout;
+    @BindView(R.id.attention_title_back)
+    ImageView attentionTitleBack;
     @BindView(R.id.user_attention_title)
-    CustomTitleView userAttentionTitle;
-    @BindView(R.id.live_attention_search_et)
-    EditText liveAttentionSearchEt;
-    @BindView(R.id.seach_clear_btn)
-    ImageView searchClearBtn;
-    @BindView(R.id.live_attention_search_cancel)
-    TextView liveAttentionSearchCancel;
-    @BindView(R.id.search_text_hint)
-    TextView searchTextHint;
-    @BindView(R.id.live_attention_listview)
-    XRecyclerView liveAttentionListview;
-    @BindView(R.id.live_search_layout_to)
-    LinearLayout liveSearchLayout;
-    @BindView(R.id.live_search_layout_font)
-    LinearLayout liveSearchLayoutFont;
+    TextView userAttentionTitle;
+    @BindView(R.id.attention_search)
+    ImageView attentionSearch;
     @BindView(R.id.search_result_null)
     TextView searchResultNull;
-
+    @BindView(R.id.live_attention_listview)
+    XRecyclerView liveAttentionListview;
     private String liveType;
 
     private String typeId;
@@ -82,31 +84,26 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         userId = getIntent().getStringExtra("userId");
         typeId = "type=" + liveType + "&userId=" + userId;
         if ("0".equals(liveType)) {
-            userAttentionTitle.setTitle("关注(0)");
+            userAttentionTitle.setText("关注(0)");
         } else {
-            userAttentionTitle.setTitle("粉丝(0)");
+            userAttentionTitle.setText("粉丝(0)");
         }
-        userAttentionTitle.setOnBackClickListener(this);
-        initXlistView();
         contentLoader = new ContentLoader(this);
         contentLoader.setCallBack(new MyCallBack());
-       contentLoader.getAttentionOrFansList(typeId);
-
+        attentionSearchCet.addTextChangedListener(watcher);
+        initXlistView();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        AppLog.i("TAG","getAttentionOrFansList："+"走了onStart");
-       // contentLoader.getAttentionOrFansList(typeId);
+        AppLog.i("TAG", "getAttentionOrFansList：" + "走了onStart");
 
     }
 
@@ -125,35 +122,33 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
 
         @Override
         public void afterTextChanged(Editable s) {
-            String searchName = liveAttentionSearchEt.getText().toString().trim();
-            if (searchName.length() > 0) {
-                searchTextHint.setVisibility(View.GONE);
-                searchClearBtn.setVisibility(View.VISIBLE);
-                if(allRows==null||allRows.size()==0){
-                    searchResultNull.setVisibility(View.VISIBLE);
-                    liveAttentionListview.setVisibility(View.GONE);
-                    searchResultNull.setText("暂无搜索结果!");
-                }else {
-                    searchResultNull.setVisibility(View.GONE);
-                    liveAttentionListview.setVisibility(View.VISIBLE);
-                }
-
-            } else {
-                searchTextHint.setVisibility(View.VISIBLE);
-                searchClearBtn.setVisibility(View.GONE);
-                searchResultNull.setVisibility(View.GONE);
-            }
-
-            allRows.clear();
+            String searchName = attentionSearchCet.getText().toString().trim();
+            showSearchRows.clear();
             for (LiveFansOrAttentionRowsBean liveFansOrAttentionRowsBean : allSearchRows) {
                 String nickName = liveFansOrAttentionRowsBean.getNickName();
                 if (searchName.length() > 0 && nickName.contains(searchName)) {
-                    allRows.add(liveFansOrAttentionRowsBean);
+                    showSearchRows.add(liveFansOrAttentionRowsBean);
                 }
             }
-            Collections.sort(allRows, comp);
-            if(attentionOrFansRecyAdapter!=null){
-                attentionOrFansRecyAdapter.refresh(allRows);
+            Collections.sort(showSearchRows, comp);
+            if (attentionOrFansRecyAdapter != null) {
+                attentionOrFansRecyAdapter.refresh(showSearchRows);
+            }
+            if (searchName.length() > 0) {
+                if (showSearchRows == null || showSearchRows.size() == 0) {
+                    searchResultNull.setVisibility(View.VISIBLE);
+                    liveAttentionListview.setVisibility(View.GONE);
+                    AppLog.i("TAG","搜索1");
+                    searchResultNull.setText("暂无搜索结果!");
+                } else {
+                    searchResultNull.setVisibility(View.GONE);
+                    liveAttentionListview.setVisibility(View.VISIBLE);
+                    AppLog.i("TAG","搜索2");
+                }
+
+            } else {
+                searchResultNull.setVisibility(View.GONE);
+                AppLog.i("TAG","搜索3");
             }
         }
     };
@@ -162,74 +157,69 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
         CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
         layoutManager.setOrientation(CustomLinearLayoutManager.VERTICAL);
         liveAttentionListview.setLayoutManager(layoutManager);
+        XRecyclerviewLoadingListener xRecyclerviewLoadingListener = new XRecyclerviewLoadingListener();
+        liveAttentionListview.setLoadingListener(xRecyclerviewLoadingListener);
         liveAttentionListview.setPullRefreshEnabled(true);
         liveAttentionListview.setLoadingMoreEnabled(true);
         liveAttentionListview.setRefreshing(true);
-        XRecyclerviewLoadingListener xRecyclerviewLoadingListener = new XRecyclerviewLoadingListener();
-        liveAttentionListview.setLoadingListener(xRecyclerviewLoadingListener);
+        attentionOrFansRecyAdapter = new AttentionOrFansRecyAdapter(LiveAttentionOrFansActivity.this, null);
+        liveAttentionListview.setAdapter(attentionOrFansRecyAdapter);
+        liveAttentionListview.setOnTouchListener(this);
+        listItemAdapter();
     }
 
-    int searchPages=1;
-    @OnClick({R.id.live_attention_search_et, R.id.live_attention_search_cancel, R.id.live_search_layout_font, R.id.seach_clear_btn})
+    int searchPages = 1;
+
+    @OnClick({R.id.attention_search_cet,R.id.attention_title_back,R.id.attention_search,R.id.attention_cancel_tv})
     public void clickButton(View view) {
         switch (view.getId()) {
-            case R.id.live_search_layout_font:
-                liveSearchLayoutFont.setVisibility(View.GONE);
-                liveSearchLayout.setVisibility(View.VISIBLE);
-            case R.id.live_attention_search_et:
-                liveAttentionSearchEt.requestFocus();
-                liveAttentionSearchEt.setFocusable(true);
-                liveAttentionSearchEt.setFocusableInTouchMode(true);
-                liveAttentionSearchEt.setCompoundDrawables(null, null, null, null);
+
+            case R.id.attention_title_back:
+                finish();
+                break;
+            case R.id.attention_cancel_tv:
+                showSearchRows.clear();
+                allSearchRows.clear();
+                searchPages = 1;
+                isSearchFansOrAttention = false;
+                attentionSearchCet.setText("");
+                attentionTitle.setVisibility(View.VISIBLE);
+                attentionSearchLayout.setVisibility(View.GONE);
+                if(liveAttentionListview.getVisibility()==View.GONE){
+                    liveAttentionListview.setVisibility(View.VISIBLE);
+                }
+                liveAttentionListview.setPullRefreshEnabled(true);
+                liveAttentionListview.setLoadingMoreEnabled(true);
+                attentionOrFansRecyAdapter.refresh(allRows);
+                InputMethodManager inputManager =
+                        (InputMethodManager) attentionSearchCet.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.hideSoftInputFromWindow(attentionSearchCet.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                break;
+            case R.id.attention_search:
+                attentionTitle.setVisibility(View.GONE);
+                attentionSearchLayout.setVisibility(View.VISIBLE);
+                attentionSearchCet.requestFocus();
+                attentionSearchCet.setFocusable(true);
+                liveAttentionListview.setPullRefreshEnabled(false);
+                liveAttentionListview.setLoadingMoreEnabled(false);
+            case R.id.attention_search_cet:
                 if (timer == null) {
                     timer = new Timer();
                 }
                 timer.schedule(new TimerTask() {
                                    public void run() {
                                        InputMethodManager inputManager =
-                                               (InputMethodManager) liveAttentionSearchEt.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                       inputManager.showSoftInput(liveAttentionSearchEt, 0);
+                                               (InputMethodManager) attentionSearchCet.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                       inputManager.showSoftInput(attentionSearchCet, 0);
                                    }
                                },
                         500);
-
-                liveAttentionSearchCancel.setVisibility(View.VISIBLE);
-                userAttentionTitle.setVisibility(View.GONE);
-                if(attentionOrFansRecyAdapter!=null){
-                    attentionOrFansRecyAdapter.refresh(null);
-                }
                 isSearchFansOrAttention = true;
-                allSearchRows.clear();
-                allRows.clear();
-                if(totalPages>0){
+                if (totalPages > 0) {
                     String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + searchPages;
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
 
-                liveAttentionSearchEt.addTextChangedListener(watcher);
-                break;
-            case R.id.live_attention_search_cancel:
-                searchPages=1;
-                liveSearchLayoutFont.setVisibility(View.VISIBLE);
-                liveSearchLayout.setVisibility(View.GONE);
-                isSearchFansOrAttention = false;
-                allRows.clear();
-                allSearchRows.clear();
-                liveAttentionSearchEt.setText("");
-                liveAttentionSearchCancel.setVisibility(View.GONE);
-                userAttentionTitle.setVisibility(View.VISIBLE);
-
-                contentLoader.getAttentionOrFansList(typeId);
-                InputMethodManager inputManager =
-                        (InputMethodManager) liveAttentionSearchEt.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(liveAttentionSearchEt.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                break;
-            case R.id.seach_clear_btn:
-                liveAttentionSearchEt.setText("");
-                if(attentionOrFansRecyAdapter!=null){
-                    attentionOrFansRecyAdapter.refresh(null);
-                }
-                searchClearBtn.setVisibility(View.GONE);
                 break;
         }
     }
@@ -238,7 +228,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     List<LiveFansOrAttentionRowsBean> allRows = new ArrayList<LiveFansOrAttentionRowsBean>();
     boolean isSearchFansOrAttention = false;
     List<LiveFansOrAttentionRowsBean> allSearchRows = new ArrayList<LiveFansOrAttentionRowsBean>();
-
+    List<LiveFansOrAttentionRowsBean> showSearchRows = new ArrayList<LiveFansOrAttentionRowsBean>();
     @Override
     public void onBackClick() {
         setResult(AccountEidt1Activity.UPDATE_ME_DATA);
@@ -248,31 +238,43 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
     public void onBackPressed() {
         setResult(AccountEidt1Activity.UPDATE_ME_DATA);
         super.onBackPressed();
-
+    }
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            KeyboardUtil.hidenSoftKey(attentionSearchCet);
+        }
+        return false;
     }
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onError(VolleyError volleyError) {
+            super.onError(volleyError);
+
+            isRefreshStatus = false;
+            liveAttentionListview.refreshComplete();
+            liveAttentionListview.loadMoreComplete();
+        }
+
         @Override
         public void onLiveFansOrAttention(LiveFansOrAttentionResp liveFansOrAttentionResp, boolean isSecarch) {
             super.onLiveFansOrAttention(liveFansOrAttentionResp, isSecarch);
             if (isSearchFansOrAttention) {
-
                 LiveFansOrAttentionResultBean result = liveFansOrAttentionResp.getResult();
                 searchRows = result.getRows();
                 allSearchRows.addAll(allSearchRows.size(), searchRows);
                 Collections.sort(allSearchRows, comp);
                 ++searchPages;
-                if(searchPages<=totalPages){
+                if (searchPages <= totalPages) {
                     String typeIdTotal = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + searchPages;
                     contentLoader.getAttentionOrFansList(typeIdTotal);
                 }
-
                 return;
             }
             if (liveFansOrAttentionResp.getReturnCode() == 0) {
-                if(searchRows!=null){
-                    searchRows.clear();
-                }
+                isSearchFansOrAttention =false;
                 LiveFansOrAttentionResultBean result = liveFansOrAttentionResp.getResult();
                 int totalRows = result.getTotalRows();
                 if (totalRows == 0) {
@@ -284,43 +286,30 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                     } else {
                         searchResultNull.setText("暂时没有粉丝哦!");
                     }
-                 //   liveAttentionSearchEt.setEnabled(false);
-
                 } else {
-                  //  liveAttentionSearchEt.setEnabled(true);
                     searchResultNull.setVisibility(View.GONE);
                     liveAttentionListview.setVisibility(View.VISIBLE);
                     totalPages = result.getTotalPages();
                     if ("0".equals(liveType)) {
-                        userAttentionTitle.setTitle("关注(" + totalRows + ")");
+                        userAttentionTitle.setText("关注(" + totalRows + ")");
                     } else {
-                        userAttentionTitle.setTitle("粉丝(" + totalRows + ")");
+                        userAttentionTitle.setText("粉丝(" + totalRows + ")");
                     }
                     List<LiveFansOrAttentionRowsBean> rows = result.getRows();
-                    Collections.sort(rows, comp);
-                    if (isFirstLoadData) {
-                        isFirstLoadData = false;
-
-                        attentionOrFansRecyAdapter = new AttentionOrFansRecyAdapter(LiveAttentionOrFansActivity.this,rows);
-
-                        liveAttentionListview.setAdapter(attentionOrFansRecyAdapter);
-                        listItemAdapter();
-                        allRows.addAll(rows);
-                        Collections.sort(allRows, comp);
-                    } else {
-                        if (isRefreshStatus == 1) {
-                            allRows.clear();
-                            pages = 2;
-                            liveAttentionListview.refreshComplete();
-                        }else if(isRefreshStatus==2){
-                            liveAttentionListview.loadMoreComplete();
-                        }
-                        allRows.addAll(allRows.size(), rows);
-                        Collections.sort(allRows, comp);
-                        attentionOrFansRecyAdapter.refresh(allRows);
+                    if (isRefreshStatus) {
+                        allRows.clear();
+                        pages = 2;
+                        liveAttentionListview.refreshComplete();
+                    } else{
+                        liveAttentionListview.loadMoreComplete();
                     }
+                    allRows.addAll(allRows.size(), rows);
+                    if ("0".equals(liveType)) {
+                    } else {
+                        Collections.sort(allRows, comp);
+                    }
+                    attentionOrFansRecyAdapter.refresh(allRows);
                 }
-
             }
         }
     }
@@ -330,8 +319,7 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
             @Override
             public void onItemClick(int id) {
                 Intent intent = new Intent(LiveAttentionOrFansActivity.this, LiveHomePageActivity.class);
-                intent.putExtra("userId",String.valueOf(id));
-              //  intent.putExtra("back","2");
+                intent.putExtra("userId", String.valueOf(id));
                 startActivity(intent);
                 finish();
             }
@@ -349,23 +337,22 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
                 return -1;
             }
 
-            return lhs.getAttentionVO().getStatus()-rhs.getAttentionVO().getStatus();
+            return lhs.getAttentionVO().getStatus() - rhs.getAttentionVO().getStatus();
         }
     };
 
-
-
-    public  class  XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
+    public class XRecyclerviewLoadingListener implements XRecyclerView.LoadingListener {
 
         @Override
         public void onRefresh() {
-            isRefreshStatus = 1;
+            AppLog.i("TAG","刷新页面。。。。。");
+            isRefreshStatus=true;
             contentLoader.getAttentionOrFansList(typeId);
         }
 
         @Override
         public void onLoadMore() {
-            isRefreshStatus = 2;
+            isRefreshStatus=false;
             if (pages <= totalPages) {
                 typeIdMore = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + pages;
                 contentLoader.getAttentionOrFansList(typeIdMore);
@@ -379,31 +366,9 @@ public class LiveAttentionOrFansActivity extends BaseActivity implements XListVi
 
 
 
-
-
-    boolean isFirstLoadData = true;
-    int isRefreshStatus = 0;
-
-    @Override
-    public void onRefresh() {
-        isRefreshStatus = 1;
-        contentLoader.getAttentionOrFansList(typeId);
-    }
-
+    boolean isRefreshStatus=true;
     int pages = 2;
     String typeIdMore;
 
-    @Override
-    public void onLoadMore() {
-        isRefreshStatus = 2;
-        if (pages <= totalPages) {
-            typeIdMore = "type=" + liveType + "&userId=" + userId + "&pageSize=10&pageNumber=" + pages;
-            contentLoader.getAttentionOrFansList(typeIdMore);
-            pages = pages + 1;
-        } else {
-            Toast.makeText(LiveAttentionOrFansActivity.this, "没有更多数据", Toast.LENGTH_SHORT).show();
-       //     liveAttentionListview.stopLoadMore();
-        }
 
-    }
 }

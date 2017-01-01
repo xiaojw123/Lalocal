@@ -4,59 +4,20 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     >
-
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
         <LinearLayout
             android:id="@+id/special_main_ui"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             >
-            <RelativeLayout
-                android:id="@+id/reLayout"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/app_actionbar_height">
-                <com.lalocal.lalocal.view.CustomTitleView
-                    android:id="@+id/special_details_ctv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-                <ImageView
-                    android:layout_width="@dimen/recommend_title_img_wdith"
-                    android:layout_height="@dimen/recommend_title_img_height"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/lalocallogo"
-                    />
-                <ImageView
-                    android:id="@+id/special_details_share_iv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/special_details_margin"
-                    android:src="@drawable/index_article_btn_share"/>
 
-
-                <com.sackcentury.shinebuttonlib.ShineButton
-                    android:layout_width="@dimen/special_details_img_like"
-                    android:layout_height="@dimen/special_details_img_like"
-                    android:layout_toLeftOf="@+id/special_details_share_iv"
-                    android:layout_marginRight="@dimen/special_details_margin"
-                    android:layout_centerInParent="true"
-                    android:id="@+id/special_details_like_iv"
-                    app:btn_color="@android:color/darker_gray"
-                    app:btn_fill_color="#ff6f6f"
-                    app:siShape="@raw/heart"/>
-            </RelativeLayout>
-            <View
-                android:id="@+id/special_line"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/ml_gray"></View>
             <LinearLayout
                 android:id="@+id/height_layout"
                 android:layout_width="match_parent"
@@ -102,10 +63,22 @@
                         android:layout_height="0dp"
                         android:layout_weight="1"
                         ></WebView>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/live_height_44dp"></View>
                 </LinearLayout>
             </com.lalocal.lalocal.view.MyScrollView>
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/special_details_ctv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/live_padding_15dp"
+            android:layout_marginTop="@dimen/live_padding_10dp"
+            android:src="@drawable/backdarkbg_circle"/>
+        <include layout="@layout/article_bottom_layout"></include>
 
         <include layout="@layout/page_loading"></include>
     </RelativeLayout>

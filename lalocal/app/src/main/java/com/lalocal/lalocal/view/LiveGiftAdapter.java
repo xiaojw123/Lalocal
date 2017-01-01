@@ -32,7 +32,7 @@ public class LiveGiftAdapter extends BaseRecyclerAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         mContext=parent.getContext();
-        View view= LayoutInflater.from(mContext).inflate(R.layout.list_item_gift,parent,false);
+        View view= LayoutInflater.from(mContext).inflate(R.layout.item_gift,parent,false);
         return new LiveGiftHolder(view);
     }
 

@@ -218,4 +218,33 @@ public class LiveMessage {
     public void setChannelId(String channelId) {
         this.channelId = channelId;
     }
+
+    @Override
+    public String toString() {
+        return "LiveMessage{" +
+                "liveId='" + liveId + '\'' +
+                ", betGold='" + betGold + '\'' +
+                ", userRole='" + userRole + '\'' +
+                ", msg='" + msg + '\'' +
+                ", isAt='" + isAt + '\'' +
+                ", style=" + style +
+                ", scenesType='" + scenesType + '\'' +
+                ", disableSendMsgUserId='" + disableSendMsgUserId + '\'' +
+                ", disableSendMsgNickName='" + disableSendMsgNickName + '\'' +
+                ", adminSendMsgUserId='" + adminSendMsgUserId + '\'' +
+                ", adminSendMsgNickName='" + adminSendMsgNickName + '\'' +
+                ", adminSendMsgImUserId='" + adminSendMsgImUserId + '\'' +
+                ", alarmLevel='" + alarmLevel + '\'' +
+                ", userId='" + userId + '\'' +
+                ", noticeUsers='" + noticeUsers + '\'' +
+                ", questionUserName='" + questionUserName + '\'' +
+                ", giftModel=" + giftModel +
+                ", targetType='" + targetType + '\'' +
+                ", challengeModel=" + challengeModel +
+                ", channelId='" + channelId + '\'' +
+                ", type='" + type + '\'' +
+                ", onlineNum='" + onlineNum + '\'' +
+                ", creatorAccount='" + creatorAccount + '\'' +
+                '}';
+    }
 }

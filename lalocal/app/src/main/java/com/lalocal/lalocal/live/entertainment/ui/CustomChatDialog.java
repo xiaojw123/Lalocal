@@ -24,7 +24,7 @@ public class CustomChatDialog extends BaseDialog implements View.OnClickListener
     String title, determine, cancel,okText,content;
 
     public CustomChatDialog(Context context) {
-        super(context);
+        super(context,R.style.setting_dialog);
     }
 
     @Override
@@ -93,10 +93,10 @@ public class CustomChatDialog extends BaseDialog implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.remind_over_live:
-                dismiss();
                 if (sureBtnLisener != null) {
                     sureBtnLisener.onDialogClickListener();
                 }
+                dismiss();
                 break;
             case R.id.remind_contiun_live:
                 if (cancelBtnListener != null) {
