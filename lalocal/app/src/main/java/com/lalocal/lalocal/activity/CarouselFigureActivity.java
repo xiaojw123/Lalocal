@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -59,7 +58,6 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        AppLog.print("URL___" + url + ",  AppConfig.getH5Url___" + AppConfig.getH5Url(this, url));
         carousFigure.setWebViewClient(new CommonWebClient(this));
         figureTv.setText(recommendAdResultBean.title);
     }

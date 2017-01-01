@@ -100,8 +100,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         // 显示直播fragment
         showFragment(FRAGMENT_LIVE);
         updateUnReadMsg();
-        //关闭通知栏提醒
-        NIMClient.toggleNotification(false);
         // 检查更新
         checkUpdate();
         //初始化定位

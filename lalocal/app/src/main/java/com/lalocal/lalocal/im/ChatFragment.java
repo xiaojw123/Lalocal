@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -52,6 +51,7 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.msg.MessageBuilder;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -382,8 +382,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         rootView.getWindowVisibleDisplayFrame(r);
         int screenHeight = rootView.getRootView().getHeight();
         int height = screenHeight - r.bottom;
-        Log.i("xjw", "onGlobalLayout screenHeight___" + screenHeight + ", bottom___" + r.bottom + ", top__" + r.top);
-        //1920  1812  1011
         if (height == lastHeight) {
             return;
         }
@@ -444,12 +442,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void updateMessages(List<IMMessage> param) {
         AppLog.print("updateMessages___");
-        mMessageList.addAll(param);
-        msgAdapter.updateItems(mMessageList);
-        AppLog.print("scrollToPosition__");
-        if (isRoot) {
-            isRoot = false;
-            layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
+        if (!mMessageList.containsAll(param)) {
+            mMessageList.addAll(param);
+            msgAdapter.updateItems(mMessageList);
+            AppLog.print("scrollToPosition__");
+            if (isRoot) {
+                isRoot = false;
+                layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
+            }
         }
     }
 
@@ -482,8 +482,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 public void onEvent(List<IMMessage> messages) {
                     // 处理新收到的消息，为了上传处理方便，SDK 保证参数 messages 全部来自同一个聊天对象。
                     AppLog.print("incomingMessageObserver___len:" + messages.size());
-                    isRoot = true;
-                    updateMessages(messages);
+                    for (IMMessage imMessage : messages) {
+                        if (TextUtils.equals(accId, imMessage.getSessionId())) {
+                            isRoot = true;
+                            updateChatMessage(imMessage);
+                        } else {
+                            imMessage.setStatus(MsgStatusEnum.unread);
+                        }
+                    }
                 }
 
             };
@@ -557,6 +563,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             }
             FragmentTransaction ft = fm.beginTransaction();
             ft.hide(this);
+            ft.show(lastFragment);
             ft.commit();
         } else {
             getActivity().finish();

@@ -82,8 +82,9 @@ import io.fabric.sdk.android.Fabric;
  * 此约定从2.1.3版本开始生效
  */
 public class MyApplication extends Application {
-    public static final boolean isDebug =true;
+    public static final boolean isDebug = true;
     private WorkerThread mWorkerThread;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -104,7 +105,7 @@ public class MyApplication extends Application {
         intCountryDB();
         AppLog.print("initDB");
         //初始化Apng
-    //    initApngImageLoader();
+        //    initApngImageLoader();
         DemoCache.setContext(this);
         AppLog.print("init Live Cache");
         NIMClient.init(this, getLoginInfo(), getOptions());
@@ -119,6 +120,12 @@ public class MyApplication extends Application {
             DemoCache.initImageLoaderKit();
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
+            //关闭通知栏提醒
+            try {
+                NIMClient.toggleNotification(false);
+            } catch (Exception e) {
+                AppLog.print("关闭通知异常");
+            }
         }
         AppLog.print("Application create end");
     }
@@ -165,11 +172,11 @@ public class MyApplication extends Application {
                     AppLog.print("UMessage____launchApp");
                     if (uMessage != null) {
                         Map<String, String> data = uMessage.extra;
-                        if (data==null||data.size()<1){
+                        if (data == null || data.size() < 1) {
                             return;
                         }
-                        for (Map.Entry entry:data.entrySet()){
-                            AppLog.print("key:"+entry.getKey()+", value:"+entry.getValue()+"\n");
+                        for (Map.Entry entry : data.entrySet()) {
+                            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
                         }
                         if (data != null && data.size() > 0) {
                             String targetType = data.get("targetType");
@@ -193,7 +200,7 @@ public class MyApplication extends Application {
                                         TargetPage.gotoProductDetail(context, targetId, targetType, true);
                                         break;
                                     case TargetType.ROUTE://线路
-                                        TargetPage.gotoRouteDetail(context,targetId, true);
+                                        TargetPage.gotoRouteDetail(context, targetId, true);
                                         break;
                                     case TargetType.SPECIAL://专题
                                         TargetPage.gotoSpecialDetail(context, targetId, true);
@@ -224,11 +231,11 @@ public class MyApplication extends Application {
                 public void dealWithCustomAction(Context context, UMessage msg) {
                     AppLog.print("UMessage____dealWithCustomAction");
                     super.dealWithCustomAction(context, msg);
-    //                for (Map.Entry<String, String> entry : msg.extra.entrySet()) {
-    //                    String key = entry.getKey();
-    //                    String value = entry.getValue();
-    //                    AppLog.print("Application__dealWithCustomAction@ key:"+key+", value:"+value);
-    //                }
+                    //                for (Map.Entry<String, String> entry : msg.extra.entrySet()) {
+                    //                    String key = entry.getKey();
+                    //                    String value = entry.getValue();
+                    //                    AppLog.print("Application__dealWithCustomAction@ key:"+key+", value:"+value);
+                    //                }
                 }
             };
             mPushAgent.setNotificationClickHandler(notificationClickHandler);
