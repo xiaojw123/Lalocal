@@ -191,7 +191,8 @@
                     <TextView
                         style="@style/OrderCardItemTextStyle"
                         android:text="@string/email"
-                        android:id="@+id/textView3" />
+                        android:id="@+id/textView3"
+                        />
 
                 </FrameLayout>
 
@@ -211,8 +212,7 @@
                     <TextView
                         style="@style/OrderCardItemTextStyle"
                         android:text="微信"
-                        android:id="@+id/textView3" />
-
+                         />
                 </FrameLayout>
             </LinearLayout>
 
@@ -521,6 +521,23 @@
                 <!--android:layout_marginStart="@dimen/dimen_size_36_dp" />-->
                 <!--</FrameLayout>-->
                 <!--问题1 2. 3.。。-->
+            </LinearLayout>
+
+
+
+            <!--司导信息-->
+
+            <LinearLayout
+                android:id="@+id/orderdetail_driver_info_container"
+                style="@style/OrderCarditemContainerStyle"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+
+                <TextView
+                    style="@style/OrderCardItemIitleStyle"
+                    android:text="@string/driver_info" />
+                <View style="@style/CommonD9LineTheme" />
             </LinearLayout>
 
 

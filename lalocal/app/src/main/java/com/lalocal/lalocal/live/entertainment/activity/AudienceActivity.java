@@ -890,10 +890,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
     }
 
-
     private void showAttentionDialog() {
         try {
-            if (overAttentionStatus == 0 && LiveConstant.isUnDestory && audienceOver.getVisibility() != View.VISIBLE) {
+            if (LiveConstant.isAttention&&overAttentionStatus == 0 && LiveConstant.isUnDestory && audienceOver.getVisibility() != View.VISIBLE) {
                 LiveAttentionPopuwindow popuwindow = new LiveAttentionPopuwindow(AudienceActivity.this, liveRowsBean);
                 popuwindow.setOnUserAttentionListener(new LiveAttentionPopuwindow.OnUserAttentionListener() {
                     @Override
@@ -901,7 +900,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         if (container != null && container.account != null && creatorAccount != null) {
                             LiveMessage liveMessage = new LiveMessage();
                             liveMessage.setStyle(MessageType.text);
-                            liveMessage.setUserId(userId);
+                            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(AudienceActivity.this)));
                             liveMessage.setCreatorAccount(creatorAccount);
                             liveMessage.setChannelId(channelId);
                             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, getString(R.string.attention_live_e), roomId, AuthPreferences.getUserAccount(), liveMessage);
@@ -978,6 +977,7 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
                         periscopeLayout.addHeart();
                         sendLike();
                     }
+                    onImHiden();
                     break;
                 case R.id.master_info_head_iv:
                     Intent intent3 = new Intent(AudienceActivity.this, LiveHomePageActivity.class);
@@ -1234,6 +1234,9 @@ AudienceActivity extends LivePlayerBaseActivity implements VideoPlayer.VideoPlay
         }
         if (isAudienceOver && liveEnd) {
             isAudienceOver = false;
+            if(userInfoDialog!=null){
+                userInfoDialog.dismiss();
+            }
             palyerLayout.removeAllViews();
             drawerLayout.closeDrawer(Gravity.RIGHT);
             drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);

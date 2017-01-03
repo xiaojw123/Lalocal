@@ -126,7 +126,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public abstract class LivePlayerBaseActivity extends TActivity implements ModuleProxy, AGEventHandler, MessageUpdateListener {
     public static final int LIVE_BASE_RESQUEST_CODE = 701;
-    public static  String CHANNELID_ID="";
+    public static String CHANNELID_ID = "";
     // 聊天室信息
     protected String roomId;
     protected String url; // 推流/拉流地址
@@ -282,7 +282,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         liveNumber = liveRowsBean.getNumber();
         shareVO = liveRowsBean.getShareVO();
         channelId = String.valueOf(liveRowsBean.getId());
-        CHANNELID_ID=channelId;
+        CHANNELID_ID = channelId;
         playType = String.valueOf(liveRowsBean.getType());
         avatar = liveRowsBean.getUser().getAvatar();
         String title = liveRowsBean.getTitle();
@@ -624,7 +624,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                                 if (LivePlayerBaseActivity.this instanceof AudienceActivity) {
                                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_ANCHOR);
                                     showUserInfoDialog(userId, channelId, true);
-                                }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                } else if (LivePlayerBaseActivity.this instanceof LiveActivity) {
                                     contentLoader.liveGiftRanks(channelId);
                                 }
                             } else {
@@ -813,8 +813,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                     break;
                 case MessageType.closeLive:
                     AppLog.i("TAG", "收到关闭直播间消息");
-                    isOnLineUsersCountChange=false;
-                    if(handler!=null){
+                    isOnLineUsersCountChange = false;
+                    if (handler != null) {
                         handler.removeCallbacks(onLInesRunnable);
                     }
                     closeLiveNotifi(message);
@@ -1156,7 +1156,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             public void onDismiss() {
                 drawerLayout.openDrawer(Gravity.RIGHT);
                 firstClick = true;
-                LiveConstant.USER_INFO_FIRST_CLICK=true;
+                LiveConstant.USER_INFO_FIRST_CLICK = true;
             }
         });
 
@@ -1234,7 +1234,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
                         if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
                             LiveMessage liveMessage = new LiveMessage();
                             liveMessage.setStyle(MessageType.text);
-                            liveMessage.setUserId(userId);
+                            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(LivePlayerBaseActivity.this)));
                             liveMessage.setCreatorAccount(creatorAccount);
                             liveMessage.setChannelId(channelId);
                             IMMessage imMessage = SendMessageUtil.sendMessage(container.account, shareRemid + content, roomId, AuthPreferences.getUserAccount(), liveMessage);
@@ -1494,6 +1494,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             }
         }
     };
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -1554,17 +1555,19 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     public void gotoPersonalMessage(boolean chatVisible, String accId, String nickName) {
+        AppLog.i("TAG", "获取用户accId:" + accId);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Bundle chatBundle = new Bundle();
         chatBundle.putString(KeyParams.ACCID, accId);
         chatBundle.putString(KeyParams.NICKNAME, nickName);
         if (chatFragment != null) {
-            ft.show(personalMsgFragment);
             if (!chatVisible) {
+                ft.show(personalMsgFragment);
                 ft.hide(chatFragment);
             } else {
                 chatFragment.updateView(chatBundle);
+                ft.hide(personalMsgFragment);
                 ft.show(chatFragment);
             }
         } else {
@@ -1583,6 +1586,8 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             ft.add(R.id.audience_fragment_container, chatFragment);
             if (!chatVisible) {
                 ft.hide(chatFragment);
+            } else {
+                ft.hide(personalMsgFragment);
             }
         }
         ft.commit();

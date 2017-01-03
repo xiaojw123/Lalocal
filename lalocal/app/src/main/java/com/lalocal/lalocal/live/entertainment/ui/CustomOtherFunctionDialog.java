@@ -378,10 +378,10 @@ public class CustomOtherFunctionDialog extends BaseDialog {
             liveMessage.setStyle(type);
             liveMessage.setAdminSendMsgImUserId(result.getAccId());
             liveMessage.setAdminSendMsgNickName(result.getNickName());
-            liveMessage.setAdminSendMsgUserId(userId);
+        //    liveMessage.setAdminSendMsgUserId(userId);
             liveMessage.setDisableSendMsgNickName(result.getNickName());
-            liveMessage.setDisableSendMsgUserId(userId);
-            liveMessage.setUserId(userId);
+        //    liveMessage.setDisableSendMsgUserId(userId);
+            liveMessage.setUserId(String.valueOf(UserHelper.getUserId(mContext)));
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);
             AppLog.i("TAG","用户信息dialog:"+new Gson().toJson(result).toString());

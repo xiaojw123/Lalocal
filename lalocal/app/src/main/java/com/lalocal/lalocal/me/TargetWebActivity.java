@@ -2,6 +2,7 @@ package com.lalocal.lalocal.me;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -12,7 +13,6 @@ import android.webkit.WebView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.KeyParams;
-import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.CustomTitleView;
 
@@ -38,8 +38,17 @@ public class TargetWebActivity extends BaseActivity {
         }
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
-        ws.setUseWideViewPort(false);
-        webView.loadUrl(AppConfig.getH5Url(this,getTargeUrl()));
+        ws.setJavaScriptCanOpenWindowsAutomatically(true);
+        ws.setUseWideViewPort(true);
+        ws.setDomStorageEnabled(true);
+        ws.setAllowFileAccess(true); // 允许访问文件
+        ws.setLoadWithOverviewMode(true);
+        ws.setDisplayZoomControls(false);
+        ws.setBlockNetworkImage(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        webView.loadUrl(getTargeUrl());
         webView.setWebViewClient(new TargetWebviewClient(this));
     }
 

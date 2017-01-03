@@ -133,7 +133,7 @@ public class PraiseCommentAdapter extends BaseRecyclerAdapter {
                     praComHolder.itemLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            TargetPage.gotoTargetPage(mContext, targetType, targetId, null, null);
+                            TargetPage.gotoTargetPage(mContext, targetType, targetId, null, null,false);
                         }
                     });
                 }

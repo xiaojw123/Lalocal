@@ -35,6 +35,8 @@ import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -96,18 +98,56 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         AppLog.print("requestCallbackWrapper onResult recents___len___" + recents.size());
         final List<RecentContactInfo> infoList = new ArrayList<>();
         List<String> ssidlist = new ArrayList<>();
+//        Out:
+//        for (RecentContact contact : recents) {
+//            String ssid = contact.getContactId();
+//            for (RecentContactInfo curInfo : mItems) {
+//                if (ssid.equals(curInfo.getAccount())) {
+//                    curInfo.setContent(contact.getContent());
+//                    curInfo.setTime(contact.getTime());
+//                    curInfo.setUnReadCount(contact.getUnreadCount());
+//                    continue Out;//结束整个循环体
+//                }
+//            }
+//            RecentContactInfo info = new RecentContactInfo();
+//            info.setAccount(ssid);
+//            info.setContent(contact.getContent());
+//            info.setTime(contact.getTime());
+//            info.setUnReadCount(contact.getUnreadCount());
+//            infoList.add(info);
+//            ssidlist.add(ssid);
+//        }
+        int len = recents.size();
         Out:
-        for (RecentContact contact : recents) {
+        for (int i = 0; i < len; i++) {
+            RecentContact contact = recents.get(i);
             String ssid = contact.getContactId();
             for (RecentContactInfo curInfo : mItems) {
                 if (ssid.equals(curInfo.getAccount())) {
                     curInfo.setContent(contact.getContent());
                     curInfo.setTime(contact.getTime());
                     curInfo.setUnReadCount(contact.getUnreadCount());
-                    continue Out;//结束整个循环体
+                    continue Out;//继续下一次外层循环
                 }
             }
             RecentContactInfo info = new RecentContactInfo();
+//            long currentTime = contact.getTime();
+//            int nextIndex = i + 1;
+//            if (nextIndex < len) {
+//                RecentContact nextContct = recents.get(nextIndex);
+//                if (nextContct != null) {
+//                    long nextTime = nextContct.getTime();
+//                    if (currentTime < nextTime) {
+//                        info.setAccount(nextContct.getContactId());
+//                        info.setContent(nextContct.getContent());
+//                        info.setTime(nextTime);
+//                        info.setUnReadCount(nextContct.getUnreadCount());
+//                        infoList.add(nextIndex, info);
+//                        ssidlist.add(nextIndex, ssid);
+//                        continue;
+//                    }
+//                }
+//            }
             info.setAccount(ssid);
             info.setContent(contact.getContent());
             info.setTime(contact.getTime());
@@ -115,6 +155,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
             infoList.add(info);
             ssidlist.add(ssid);
         }
+
         List<NimUserInfo> users = NIMClient.getService(UserService.class).getUserInfoList(ssidlist);
         int cacheSize = users != null && users.size() > 0 ? users.size() : 0;
         if (ssidlist.size() == cacheSize) {
@@ -170,6 +211,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         if (infoList.size() > 0) {
             mItems.addAll(infoList);
         }
+        Collections.sort(mItems, desContactsComparator);
         contactAdapter.updateItems(mItems);
     }
 
@@ -185,6 +227,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 chatFragment.updateView(bundle);
+                ft.hide(this);
                 ft.show(chatFragment);
                 ft.commit();
                 return;
@@ -261,9 +304,17 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         AppLog.print("onHiddenChanged————————hiden___" + hidden);
         if (!hidden) {
             registerNimService(true);
-        }else{
+        } else {
             registerNimService(false);
         }
 
     }
+
+    private Comparator<RecentContactInfo> desContactsComparator = new Comparator<RecentContactInfo>() {
+
+        @Override
+        public int compare(RecentContactInfo o1, RecentContactInfo o2) {
+            return (int) (o2.getTime() - o1.getTime());
+        }
+    };
 }

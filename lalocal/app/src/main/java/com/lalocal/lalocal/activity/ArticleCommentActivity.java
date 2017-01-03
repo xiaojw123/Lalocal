@@ -26,7 +26,6 @@ import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.adapter.ArticleCommentListAdapter;
 
 import java.util.ArrayList;
@@ -129,6 +128,7 @@ public class ArticleCommentActivity extends BaseActivity {
         xrvArticleComments.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
+
                 isRefresh=true;
                 mContentLoader.getArticleComments(mArticleId,1);
             }

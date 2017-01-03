@@ -280,7 +280,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         liveContentLoader = new ContentLoader(this);
         liveCallBack = new LiveCallBack();
         liveContentLoader.setCallBack(liveCallBack);
-        viewById = findViewById(R.id.live_layout);
+
 
         //七牛云api
         uploadManager = new UploadManager();
@@ -343,6 +343,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
     protected void findViews() {
         super.findViews();
         backBtn = findView(R.id.BackBtn);
+        viewById = findViewById(R.id.live_layout);
         modelLayout = (RelativeLayout) findViewById(R.id.live_view_top_layout);
         startLiveBegin = (LinearLayout) findViewById(R.id.start_live_begin);
         keyboardLayout = (LinearLayout) findViewById(R.id.messageActivityBottomLayout);
@@ -366,7 +367,7 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
         closeLiveIv.setOnClickListener(buttonClickListener);
         aucienceCount = (TextView) findViewById(R.id.live_over_audience_count);
         overTime = (TextView) findViewById(R.id.live_over_time_tv);
-
+        viewById.setOnClickListener(buttonClickListener);
 
         //挑战
         challengeNewTask = (ImageView) findViewById(R.id.challenge_new_task);
@@ -393,11 +394,10 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
 
             @Override
             public void onDrawerStateChanged(int newState) {
-
             }
         });
-
     }
+
 
     @Override
     protected void showStatusUnUsual() {
@@ -708,6 +708,9 @@ public class LiveActivity extends LivePlayerBaseActivity implements LivePlayer.A
                     chooseLayout.setVisibility(View.GONE);
                     liveRoomName.setVisibility(View.VISIBLE);
                     LiveConstant.LIVE_DEFINITION=2;
+                    break;
+                case R.id.live_layout:
+                    onImHiden();
                     break;
             }
         }

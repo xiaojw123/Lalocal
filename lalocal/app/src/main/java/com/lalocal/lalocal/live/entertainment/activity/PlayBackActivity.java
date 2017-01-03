@@ -127,11 +127,13 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == KeyParams.REPLY_REQUESTCODE && resultCode == KeyParams.REPLY_RESULTCODE) {
+            isRefresh=true;
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
 
         if(requestCode==KeyParams.POST_REQUESTCODE&&resultCode==KeyParams.POST_RESULTCODE){
+            isRefresh=true;
             contentLoader.getPlayBackLiveDetails(Integer.parseInt(intentId));
             contentLoader.getPlayBackLiveReview(intentId, 20, 10, 1);
         }
@@ -440,7 +442,6 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
                 playBackBottomTableCollectCount.setText(String.valueOf(praiseNum));
                 playBackBottomTableCollectCount.setTextColor(getResources().getColor(R.color.thin_dark));
                 playBackBottomTableCollectImg.setImageResource(R.drawable.collect_unlike);
-
             }
         }
 
@@ -456,7 +457,6 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
                     userId = liveRowsBean.getUser().getId();
                     shareVO = liveRowsBean.getShareVO();
                     replyId = liveRowsBean.getId();
-
                     playBackBottomTableTranmitCount.setText(String.valueOf(shareNum));
                     praiseFlag = liveRowsBean.isPraiseFlag();
                     praiseId = liveRowsBean.getPraiseId();
@@ -539,7 +539,6 @@ public static final  String PLAYER_OVER_FIRST="player_over_first";
         super.onStop();
         isOnStop=true;
     }
-
     @Override
     protected void onStart() {
         super.onStart();

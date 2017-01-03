@@ -26,6 +26,7 @@ public class LiveConstant {
     public static  String creatorAccid="";//创建直播的云信id；
     public  static  String liveTitle="";
     public static  String liveLocation="";
+    public static boolean isAttention=false;
     public  static List<LiveManagerListBean> result=new ArrayList<>();
 
     public  static boolean enterRoom=false;

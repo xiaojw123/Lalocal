@@ -318,7 +318,7 @@
                     style="@style/list_view"
                     android:layout_width="match_parent"
                     android:layout_marginRight="@dimen/live_height_100dp"
-                    android:layout_height="200dp"
+                    android:layout_height="150dp"
                     android:layout_above="@id/live_nofitifation_layout"
                     android:cacheColorHint="@android:color/transparent"
                     android:divider="@null"

@@ -159,6 +159,10 @@ public class CategoryViewHolder extends RecyclerView.ViewHolder {
      * 点击可视最左侧，列表向左滑动一个item的距离；反之向右滑动一个item的距离
      */
     private void suitRecyclerView(RecyclerView rv1, RecyclerView rv2, int selected, int size) {
+        if (rv1 == null || rv2 == null) {
+            return;
+        }
+
         LinearLayoutManager layoutManager1 = (LinearLayoutManager) rv1.getLayoutManager();
         LinearLayoutManager layoutManager2 = (LinearLayoutManager) rv2.getLayoutManager();
 

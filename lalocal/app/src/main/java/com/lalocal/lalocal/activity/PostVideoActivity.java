@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.view.CustomTitleView;
+import com.lalocal.lalocal.view.ReboundScrollView;
 import com.lalocal.lalocal.view.dialog.PhotoSelectDialog;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.UpCompletionHandler;
@@ -76,6 +78,8 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
     TextView postTextCount;
     @BindView(R.id.post_alter_ok_tv)
     TextView postAlterOkTv;
+    @BindView(R.id.scroll_view)
+    ReboundScrollView scrollView;
 
     @BindView(R.id.root_layout)
     LinearLayout rootLayout;
@@ -180,7 +184,7 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
 
     }
 
-    @OnClick({R.id.post_back,R.id.post_laoction,R.id.post_cover_iv, R.id.post_alter_ok_tv})
+    @OnClick({R.id.post_back,R.id.post_laoction,R.id.post_cover_iv, R.id.post_alter_ok_tv,R.id.post_video_light_spot})
     public void clickBtn(View view) {
         switch (view.getId()){
             case R.id.post_back:
@@ -206,6 +210,9 @@ public class PostVideoActivity extends BaseActivity implements  PhotoSelectDialo
                     contentService.getAlterPlayBack(historyId,postTitle.getText().toString(),null,postVideoLightSpot.getText().toString(),dataLoaction==null?intentLocation:dataLoaction);
                 }
 
+                break;
+            case R.id.post_video_light_spot:
+                scrollView.fullScroll(ScrollView.FOCUS_DOWN);
                 break;
         }
     }

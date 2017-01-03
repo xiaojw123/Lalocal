@@ -1,13 +1,14 @@
 package com.lalocal.lalocal.im;
 
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -18,6 +19,7 @@ import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.FileAttachment;
 import com.netease.nimlib.sdk.msg.constant.MsgDirectionEnum;
+import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
 
@@ -30,7 +32,6 @@ import java.util.List;
 public class MessageListAdapter extends RecyclerView.Adapter {
     private Context mContext;
     private List<IMMessage> mMessageList;
-    LinearLayoutManager layoutManager;
 
     public MessageListAdapter(List<IMMessage> messageList) {
         mMessageList = messageList;
@@ -40,7 +41,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         mMessageList = messageList;
         notifyDataSetChanged();
     }
-
+    public void setItems(List<IMMessage> messageList){
+        mMessageList = messageList;
+    }
 
 
     @Override
@@ -54,7 +57,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AppLog.print("onBindViewHolder___position___" + position);
+        AppLog.print("onBindViewHolder__items_");
         if (mMessageList == null || mMessageList.size() < 1) {
             return;
         }
@@ -66,12 +69,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         if (position > 0) {
             anchor = mMessageList.get(position - 1);
         }
+        AppLog.print("onBindViewHolder___position___" + position + ", content__" + imMessage.getContent());
         MsgDirectionEnum directEnum = imMessage.getDirect();
         ChatMsgHolder msgHolder = (ChatMsgHolder) holder;
         MsgTypeEnum msgType = imMessage.getMsgType();
         if (directEnum == MsgDirectionEnum.Out) {
-            msgHolder.acceptTv.setVisibility(View.GONE);
-            msgHolder.acceptImg.setVisibility(View.GONE);
+            msgHolder.sendCotainer.setVisibility(View.VISIBLE);
+            msgHolder.acceptCotainer.setVisibility(View.GONE);
             if (msgType == MsgTypeEnum.text) {
                 msgHolder.sendTv.setVisibility(View.VISIBLE);
                 msgHolder.sendImg.setVisibility(View.GONE);
@@ -87,9 +91,17 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     }
                 });
             }
+//            if (imMessage.getStatus() == MsgStatusEnum.fail) {
+//                AppLog.print("msg content___" + imMessage.getContent() + "__failed___");
+//                msgHolder.sendAgainBtn.setTag(imMessage);
+//                msgHolder.sendAgainBtn.setOnClickListener(sendAgainListener);
+//                msgHolder.sendAgainBtn.setVisibility(View.VISIBLE);
+//            } else {
+//                msgHolder.sendAgainBtn.setVisibility(View.GONE);
+//            }
         } else if (directEnum == MsgDirectionEnum.In) {
-            msgHolder.sendTv.setVisibility(View.GONE);
-            msgHolder.sendImg.setVisibility(View.GONE);
+            msgHolder.sendCotainer.setVisibility(View.GONE);
+            msgHolder.acceptCotainer.setVisibility(View.VISIBLE);
             if (msgType == MsgTypeEnum.text) {
                 msgHolder.acceptTv.setVisibility(View.VISIBLE);
                 msgHolder.acceptImg.setVisibility(View.GONE);
@@ -97,17 +109,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             } else if (msgType == MsgTypeEnum.image) {
                 msgHolder.acceptImg.setVisibility(View.VISIBLE);
                 msgHolder.acceptTv.setVisibility(View.GONE);
-//                FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
-//                AppLog.print("fileAttachMent__" + fileAttachment);
-//                if (fileAttachment != null) {
-//                    AppLog.print("url____" + fileAttachment.getUrl());
-//                    Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).into(msgHolder.acceptImg);
-//                    String thumbPath = fileAttachment.getThumbPath();
-//                    if (TextUtils.isEmpty(thumbPath)) {
-//                        AppLog.print("");
-//                        NIMClient.getService(MsgService.class).downloadAttachment(imMessage, true);
-//                    }
-//                }
                 loadImg(imMessage, msgHolder.acceptImg);
                 msgHolder.acceptImg.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -133,7 +134,14 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private void loadImg(IMMessage imMessage, ImageView img) {
         FileAttachment fileAttachment = (FileAttachment) imMessage.getAttachment();
         if (fileAttachment != null) {
-            Glide.with(mContext).load(fileAttachment.getUrl()).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).error(R.drawable.androidloading).into(img);
+            String imgUrl = fileAttachment.getPath();
+            if (TextUtils.isEmpty(imgUrl)) {
+                imgUrl = fileAttachment.getThumbPath();
+            }
+            if (TextUtils.isEmpty(imgUrl)) {
+                imgUrl = fileAttachment.getUrl();
+            }
+            Glide.with(mContext).load(imgUrl).transform(new CustomShapeTransformation(mContext, R.drawable.androidloading)).error(R.drawable.androidloading).into(img);
             String thumbPath = fileAttachment.getThumbPath();
             if (TextUtils.isEmpty(thumbPath)) {
                 NIMClient.getService(MsgService.class).downloadAttachment(imMessage, true);
@@ -162,7 +170,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemCount() {
-        AppLog.print("getItemCount__" + mMessageList.size());
         return mMessageList != null && mMessageList.size() > 0 ? mMessageList.size() : 0;
     }
 
@@ -172,15 +179,57 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         TextView timeTv;
         ImageView acceptImg;
         TextView acceptTv;
+//        Button sendAgainBtn;
+        LinearLayout sendCotainer;
+        FrameLayout acceptCotainer;
 
         private ChatMsgHolder(View itemView) {
             super(itemView);
+            sendCotainer = (LinearLayout) itemView.findViewById(R.id.item_message_send_cotainer);
+            acceptCotainer = (FrameLayout) itemView.findViewById(R.id.item_message_accept_cotainer);
             sendImg = (ImageView) itemView.findViewById(R.id.item_message_send_img);
             acceptImg = (ImageView) itemView.findViewById(R.id.item_message_accept_img);
             sendTv = (TextView) itemView.findViewById(R.id.item_message_send_tv);
             acceptTv = (TextView) itemView.findViewById(R.id.item_message_accept_tv);
             timeTv = (TextView) itemView.findViewById(R.id.item_message_time_tv);
+//            sendAgainBtn = (Button) itemView.findViewById(R.id.item_message_sendagain_btn);
         }
     }
+
+    private View.OnClickListener sendAgainListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Object tag = v.getTag();
+            if (tag != null) {
+                IMMessage imMessage = (IMMessage) tag;
+                resendMessage(imMessage);
+            }
+        }
+
+    };
+
+    private void resendMessage(IMMessage imMessage) {
+        if (imMessage.getStatus() == MsgStatusEnum.fail) {
+            int index = getItemIndex(imMessage.getUuid());
+            if (index >= 0 && index < mMessageList.size()) {
+                IMMessage item = mMessageList.get(index);
+                item.setStatus(MsgStatusEnum.sending);
+                AppLog.print("msgServie__content___" + item.getContent());
+                NIMClient.getService(MsgService.class).sendMessage(item, true);
+            }
+        }
+    }
+
+    private int getItemIndex(String uuid) {
+        for (int i = 0; i < mMessageList.size(); i++) {
+            IMMessage message = mMessageList.get(i);
+            if (TextUtils.equals(uuid, message.getUuid())) {
+                return i;
+            }
+        }
+        return -1;
+
+    }
+
 
 }
