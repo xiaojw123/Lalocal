@@ -236,10 +236,6 @@ public class LiveMainAdapter extends RecyclerView.Adapter implements View.OnClic
         public LiveViewHodler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            // 将左侧图标变成白色
-            Drawable drawable = ContextCompat.getDrawable(mContext,R.drawable.peopleliving_location_darkic_02);
-            DrawableUtils.tintDrawable(drawable, ColorStateList.valueOf(Color.WHITE));
-            itemLiveAdress.setCompoundDrawables(drawable, null, null, null);
         }
     }
 

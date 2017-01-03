@@ -26,18 +26,6 @@
         android:textColor="@color/color_7babbd"
         android:textSize="@dimen/text_size_12_sp" />
 
-    <TextView
-        android:id="@+id/item_hightlists_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/item_hightlists_nickname"
-        android:layout_below="@+id/item_hightlists_nickname"
-        android:layout_marginTop="@dimen/dimen_size_2_dp"
-        android:drawableLeft="@drawable/peopleliving_location_darkic_02"
-        android:drawablePadding="@dimen/dimen_size_4_dp"
-        android:textColor="@color/color_b3"
-        android:textSize="@dimen/text_size_12_sp" />
-
     <RelativeLayout
         android:id="@+id/item_hightlists_liveroom"
         android:layout_width="match_parent"
@@ -97,6 +85,18 @@
             android:layout_alignTop="@+id/item_hightlists_onlinenum"
             android:textSize="@dimen/text_size_12_sp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/item_hightlists_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/peopleliving_location_darkic_02"
+        android:drawablePadding="@dimen/dimen_size_4_dp"
+        android:textColor="@color/color_b3"
+        android:textSize="@dimen/text_size_12_sp"
+        android:layout_below="@+id/item_hightlists_nickname"
+        android:layout_alignLeft="@+id/item_hightlists_nickname"
+        android:layout_alignStart="@+id/item_hightlists_nickname" />
 
 
 </RelativeLayout>
