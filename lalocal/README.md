@@ -69,7 +69,7 @@ llalocal://path?{"targetType":"10","targetId":"35","targetUrl":"https://dev.lalo
 打开app
 
 llalocal://callback?
-APP内部HTML链接解析
+ **APP内部HTML链接解析** 
 
 
 1. 指定跳转页
