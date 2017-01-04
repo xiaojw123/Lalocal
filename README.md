@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 ### Lalocal_android
 
 
@@ -57,29 +57,39 @@ myweb:lalocalcreditpaysuccessful
 7.Qiniu：七牛上传图片加速SDK
 
 
- **代码约定规则(同IOS)** 
+ ### 代码约定规则(同IOS)
 
-URL Schemes: LLalocal
+##### URL Schemes: LLalocal
 
-APP外部HTML打开APP
+##### APP外部HTML打开APP 
+1. 跳转指定页 
 
-跳转指定页
+	llalocal://path?{"targetType":"10","targetId":"35","targetUrl":"https://dev.lalocal.cn/wechat/app_theme?id=35"}	
+	 
+2. 打开app
+ 
+	llalocal://callback?
 
-llalocal://path?{"targetType":"10","targetId":"35","targetUrl":"https://dev.lalocal.cn/wechat/app_theme?id=35"}
-打开app
+##### APP内部HTML链接解析 
+1. 指定跳转页
 
-llalocal://callback?
-APP内部HTML链接解析
+	lalocal://app?{"targetType": "10","targetId": "35","targetUrl": "https://dev.lalocal.cn/wechat/app_theme?id=35"}
+	
+	用户未登录: lalocal://app?{"errorCode": "401"}
 
-指定跳转页
+2. 文章中二维码点击(作者微信公众号)
 
-lalocal://app?{"targetType": "10","targetId": "35","targetUrl": "https://dev.lalocal.cn/wechat/app_theme?id=35"}
-用户未登录: lalocal://app?
-文章中二维码点击
+	lalocal://codeimageclick?{"name": "10","wechatNo": "35","imageUrl": "http://7xpid3.com1.z0.glb.clouddn.com/2016052111453710470326042255","description":""}
+	
+3. 信程支付成功回调 
 
-lalocal://codeimageclick?{"name": "10","wechatNo": "35","imageUrl": "http://7xpid3.com1.z0.glb.clouddn.com/2016052111453710470326042255"}
-信程支付成功回调
+	myweb:lalocalcreditpaysuccessful
+	
+4. 所有h5页面url上加：USER_ID，TOKEN，APP_VERSION，DEVICE，DEVICE_ID  
+   
+5. 商品价格日历点击事件
 
-myweb:lalocalcreditpaysuccessful
+	lalocal://productpricecalendarclick?{"url": "http://7xpid3.com1.z0.glb.clouddn.com/2016052111453710470326042255"}
 
->>>>>>> 2e3d25b2f3d1215b2562b2912bc8b88ee9c6f196
+
+
