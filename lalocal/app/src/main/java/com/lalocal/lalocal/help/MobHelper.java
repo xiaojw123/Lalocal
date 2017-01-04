@@ -62,11 +62,13 @@ public class MobHelper {
         mActivity = activity;
         mLoader = loader;
         mUmShareAPI = UMShareAPI.get(activity);
+        //三方授权登录
         mUmShareAPI.doOauthVerify(activity, share_media, authListener);
 
     }
 
     private UMAuthListener authListener = new UMAuthListener() {
+        //授权成功
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             Toast.makeText(mActivity, "授权成功", Toast.LENGTH_SHORT).show();
@@ -89,6 +91,7 @@ public class MobHelper {
 
 
     private UMAuthListener infoGetListener = new UMAuthListener() {
+        //三方授权信息获取成功
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             AppLog.print("获取三方信息成功——————");

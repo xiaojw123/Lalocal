@@ -72,13 +72,13 @@ public class ChargePayActivity extends BaseActivity {
     @OnClick({R.id.pay_manner_alipay_fl, R.id.pay_manner_weixin_fl, R.id.pay_manner_cmb_fl, R.id.charge_pay_btn})
     public void onClick(View view) {
         int id = view.getId();
-        switch (id) {
+        switch (id) {//支付方式 支付宝/微信/一网通可选
             case R.id.pay_manner_alipay_fl:
             case R.id.pay_manner_weixin_fl:
             case R.id.pay_manner_cmb_fl:
                 selectPayManner(id);
                 break;
-            case R.id.charge_pay_btn:
+            case R.id.charge_pay_btn://支付
                 chargePay();
                 break;
         }
@@ -86,6 +86,7 @@ public class ChargePayActivity extends BaseActivity {
 
     private void chargePay() {
         String channel = "";
+        //选择支付渠道channel
         if (payMannerWeixinCb.isSelected()) {
             channel = PayActivity.CHANNEL_WECHAT;
             AppLog.print("微信——————支付————");
@@ -106,6 +107,7 @@ public class ChargePayActivity extends BaseActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        //后台生成充值所需的待支付产品信息
         mContentloader.chargeGold(jobj.toString(), channel);
 
     }
@@ -145,17 +147,19 @@ public class ChargePayActivity extends BaseActivity {
         public void onChargeGold(String result, String channel) {
             if (PayActivity.CHANNEL_CMB.equals(channel)) {
                 AppLog.print("channel cmb_____" + result);
+                //一网通充值
                 cmbCharge(result);
             } else {
+                //支付宝/微信充值
                 Pingpp.createPayment(ChargePayActivity.this, result);
 
             }
         }
-
         private void cmbCharge(String result) {
             Gson gson = new Gson();
             CmbPay cmbPay = gson.fromJson(result, CmbPay.class);
             String retPara = cmbPay.getMerchantRetPara();
+            //招行支付命令(H5 url)
             String cmbPayCommandUrl = AppConfig.getCmbPayCommand(
                     cmbPay.getBranchId(),
                     cmbPay.getCoNo(),
@@ -168,7 +172,6 @@ public class ChargePayActivity extends BaseActivity {
                     cmbPay.getMerchantCode(),
                     cmbPay.getMerchantRetUrl(),
                     retPara);
-            AppLog.print("招行支付命令————" + cmbPayCommandUrl);
             Intent intent = new Intent(ChargePayActivity.this, CmbPayActivity.class);
             intent.putExtra(CmbPayActivity.CMB_PAY_URL, cmbPayCommandUrl);
             if (!TextUtils.isEmpty(retPara)) {

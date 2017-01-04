@@ -116,7 +116,7 @@
 
 
             <fragment
-                android:id="@+id/nim_personal_msg_fragment"
+                android:id="@+id/personal_msg_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:name="com.lalocal.lalocal.activity.fragment.PersonalMessageFragment"

@@ -27,7 +27,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
+/*
+* 通知
+* */
 public class NotificationActivity extends BaseActivity {
 
     @BindView(R.id.my_message_customer)
@@ -49,6 +51,7 @@ public class NotificationActivity extends BaseActivity {
         myMessageRlv.setLayoutManager(new LinearLayoutManager(NotificationActivity.this));
         myMessageRlv.setHasFixedSize(true);
         try {
+            //从数据库中获取消息列表
             mItems = DataSupport.findAll(MessageItem.class);
         } catch (Exception e) {
             AppLog.print("get data exec");
@@ -57,6 +60,7 @@ public class NotificationActivity extends BaseActivity {
             mItems = new ArrayList<>();
         }
         setLoaderCallBack(new MessageCallBack());
+        //通过时间戳获取推送消息列表，第一次请求，时间戳为空
         mContentloader.getPushLogs(UserHelper.getDateTime(this));
 
     }
@@ -77,13 +81,15 @@ public class NotificationActivity extends BaseActivity {
         @Override
         public void onGetPushLogs(String date, List<MessageItem> items) {
             mItems.addAll(items);
+            //将消息列表保存到数据库
             DataSupport.saveAll(mItems);
+            //更新时间戳date
             UserHelper.updateDateTime(NotificationActivity.this, date);
             MyMessageAdapter messageAdapter = new MyMessageAdapter(mItems);
             messageAdapter.setOnItemClickListener(this);
             myMessageRlv.setAdapter(messageAdapter);
         }
-
+        //消息列表item跳转
         @Override
         public void onItemClickListener(View view, int position) {
             Object obj = view.getTag();

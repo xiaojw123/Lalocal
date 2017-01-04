@@ -26,14 +26,7 @@ public class NimChatActivity extends BaseActivity {
         FragmentTransaction ft = fm.beginTransaction();
         ft.add(R.id.activity_nim_chat, fragment);
         ft.commit();
-//        ChatFragment fragment = (ChatFragment) fm.findFragmentById(R.id.nim_chat_fragment);
-//        Bundle bundle = new Bundle();
-//        Intent intent = getIntent();
-//        bundle.putString(KeyParams.ACCID, intent.getStringExtra(KeyParams.ACCID));
-//        bundle.putString(KeyParams.NICKNAME, intent.getStringExtra(KeyParams.NICKNAME));
-//        fragment.setArguments(bundle);
     }
-    //用户主页
     public static void start(Context context, String accId, String nicKName) {
         Intent intent = new Intent(context, NimChatActivity.class);
         Bundle bundle = new Bundle();
@@ -43,7 +36,6 @@ public class NimChatActivity extends BaseActivity {
         context.startActivity(intent);
     }
 
-    //非用户主页
     public static void start(Context context, Bundle bundle) {
         Intent intent = new Intent(context, NimChatActivity.class);
         intent.putExtras(bundle);

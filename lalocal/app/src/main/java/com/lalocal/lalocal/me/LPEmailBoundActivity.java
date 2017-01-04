@@ -56,16 +56,13 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (v == skp_tv) {
+        if (v == skp_tv) {//跳过邮箱绑定
             MobHelper.sendEevent(this, MobEvent.BINDING_JUMP);
             String phone = getIntent().getStringExtra(KeyParams.PHONE);
             String code = getIntent().getStringExtra(KeyParams.CODE);
-            AppLog.print("register phone=" + phone + ", code=" + code);
             if (getPageType() == PageType.Page_BIND_EMAIL_SOCIAL) {
-                AppLog.print("pageType_socila__bindEmail___");
                 mContentloader.registerBySocial(mSocialUserPramas,null);
             } else {
-                AppLog.print("pageType phono_bindEmail___");
                 mContentloader.registerByPhone(phone, code, null, null,null);
             }
 
@@ -76,18 +73,20 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
                 CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_no_right), null);
                 return;
             }
+            //检查邮箱是否注册过
             mContentloader.checkEmail(email, uidPrams,next_btn);
 
         }
     }
 
     class LPEmailBoundCallback extends ICallBack {
+        //三方注册成功
         @Override
         public void onSocialRegisterSuccess(User user) {
             AppLog.print("onSocialRegisterSuccess__user_name_" + user.getNickName() + ", id=" + user.getId());
             UserHelper.setLoginSuccessResult(LPEmailBoundActivity.this, user);
         }
-
+       //手机号注册成功
         @Override
         public void onRegisterByPhone(User user) {
             UserHelper.setLoginSuccessResult(LPEmailBoundActivity.this, user);
@@ -98,6 +97,7 @@ public class LPEmailBoundActivity extends BaseActivity implements View.OnClickLi
             Intent intent = getIntent();
             intent.setClass(LPEmailBoundActivity.this, LPEmailBound2Activity.class);
             intent.putExtra(KeyParams.EMAIL, email);
+            //存在userid，则邮箱被注册; 反之，未注册
             intent.putExtra(LPEmailBound2Activity.IS_REGISTERED, !TextUtils.isEmpty(userid));
             startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }

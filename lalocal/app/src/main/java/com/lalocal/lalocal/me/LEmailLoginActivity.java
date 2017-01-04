@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.lalocal.lalocal.R.id.login_qq_btn;
-
+/*邮箱登录页*/
 public class LEmailLoginActivity extends BaseActivity implements LCustomLayout.OnBacKClickListener {
     @BindView(R.id.login_emial_custom_edit)
     MyEditText email_edit;
@@ -71,8 +71,6 @@ public class LEmailLoginActivity extends BaseActivity implements LCustomLayout.O
 
     private void initView() {
         forgetpsw_tv.setText(Html.fromHtml("<u>" + forgetPassword + "</u>"));
-//        email_edit.setSelectedButton(login_btn);
-//        psw_edit.setSelectedButton(login_btn);
     }
 
 
@@ -94,7 +92,7 @@ public class LEmailLoginActivity extends BaseActivity implements LCustomLayout.O
             return;
         }
         if (!CommonUtil.checkPassword(psw)) {
-            CommonUtil.showPromptDialog(this, getResources().getString(R.string.email_or_psw_no_right), null);
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_limit_num), null);
             return;
         }
         mContentloader.login(email, psw,login_btn);
@@ -112,16 +110,16 @@ public class LEmailLoginActivity extends BaseActivity implements LCustomLayout.O
             case R.id.login_weibo_btn:
                 MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.SINA);
                 break;
-            case R.id.login_register_tv:
+            case R.id.login_register_tv://邮箱注册
                 Intent registerIntent = new Intent(LEmailLoginActivity.this, LRegister1Activity.class);
                 startActivityForResult(registerIntent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.login_btn:
+            case R.id.login_btn://邮箱登录
                 String email = email_edit.getText();
                 String psw = psw_edit.getText();
                 login(email, psw);
                 break;
-            case R.id.login_forget_psw_tv:
+            case R.id.login_forget_psw_tv://忘记密码
                 Intent forgetPswIntent = new Intent(LEmailLoginActivity.this, LPasswordForget1Activity.class);
                 startActivity(forgetPswIntent);
                 break;

@@ -108,11 +108,16 @@ public class DestinationAreaActivity extends BaseActivity {
         loader.setCallBack(new AreaCallBack());
         areaId = getIntent().getIntExtra(AREA_ID, -1);
         isHotLoading = true;
+        //分类标签-热门
         loader.getHotProducts(areaId);
         loader.getHotRoutes(areaId);
+        //分类标签-攻略
         loader.getDesAreaRoutes(10, 1, areaId, 2);
+        //分类标签-跟团游
         loader.getAreaProducts(10, 1, areaId, 0, -1);
+        //分类标签-自由行
         loader.getAreaProducts(10, 1, areaId, 1, -1);
+        //分类标签-易途8
         loader.getYiTu8Citys(areaId);
     }
 
@@ -166,7 +171,7 @@ public class DestinationAreaActivity extends BaseActivity {
         int pageNumber;
         int toalPages;
         boolean isLoadMore;
-
+        //该地区下是否有易途8接送机服务
         @Override
         public void onGetYitu8City(boolean hasCity) {
             if (hasCity) {
@@ -176,7 +181,7 @@ public class DestinationAreaActivity extends BaseActivity {
             }
 
         }
-
+        //热门商品、路线
         @Override
         public void onGetHotItems(List<SearchItem> items, int type) {
             if (!desAreanavMenuHot.isSelected()) {
@@ -263,7 +268,7 @@ public class DestinationAreaActivity extends BaseActivity {
             }
             toalItems.addAll(items);
             switch (type) {
-                case 0:
+                case 0://跟团游
                     if (toalItems.size() > 0) {
                         if (desAreanavMenuPackagetour.getVisibility() != View.VISIBLE) {
                             desAreanavMenuPackagetour.setVisibility(View.VISIBLE);
@@ -286,7 +291,7 @@ public class DestinationAreaActivity extends BaseActivity {
                         }
                     }
                     break;
-                case 1:
+                case 1://自由行
                     if (toalItems.size() > 0) {
                         if (desAreanavMenuFreewarker.getVisibility() != View.VISIBLE) {
                             desAreanavMenuFreewarker.setVisibility(View.VISIBLE);
@@ -310,7 +315,7 @@ public class DestinationAreaActivity extends BaseActivity {
                         }
                     }
                     break;
-                case 2:
+                case 2://分类标签-攻略
                     if (toalItems.size() > 0) {
                         if (desAreanavMenuStrategy.getVisibility() != View.VISIBLE) {
                             desAreanavMenuStrategy.setVisibility(View.VISIBLE);
@@ -334,7 +339,7 @@ public class DestinationAreaActivity extends BaseActivity {
                         }
                     }
                     break;
-                case -1:
+                case -1://本地玩乐
                     if (desAreanavMenuLacoalplay.isSelected()) {
                         if (toalItems.size() > 0) {
                             hidenEmptView();
@@ -577,6 +582,7 @@ public class DestinationAreaActivity extends BaseActivity {
             if (item != null) {
                 showLoadingView();
                 desAreanavMenuLacoalplay.setText(item.getName());
+                //本地玩乐
                 loader.getAreaProducts(10, 1, areaId, -1, item.getId());
             }
 

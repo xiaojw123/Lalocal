@@ -71,7 +71,6 @@ public class BaseActivity extends AppCompatActivity {
         @Override
         public void onEvent(StatusCode statusCode) {
             try {
-                AppLog.i("TAG", "BaseActivity 監聽用戶登錄狀態：" + statusCode);
                 if (statusCode == StatusCode.UNLOGIN) {
                     String userAccount = AuthPreferences.getUserAccount();
                     String userToken = AuthPreferences.getUserToken();

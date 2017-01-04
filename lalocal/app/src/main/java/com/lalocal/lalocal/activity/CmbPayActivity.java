@@ -14,14 +14,15 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomTitleView;
 
 import cmb.pb.util.CMBKeyboardFunc;
 
 import static com.lalocal.lalocal.help.KeyParams.PAY_NO;
 
-
+/*
+*
+* 招商支付H5*/
 public class CmbPayActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
     public static final String CMB_PAY_URL = "cmb_pay_url";
     WebView webView;
@@ -72,8 +73,7 @@ public class CmbPayActivity extends BaseActivity implements CustomTitleView.onBa
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
 //            myweb:lalocalcmbpaysuccessful
-            AppLog.print("CMB PAY loadUrl__"+url);
-            if ("myweb:lalocalcmbpaysuccessful".equals(url)) {
+            if ("myweb:lalocalcmbpaysuccessful".equals(url)) {//支付成功
                 Toast.makeText(CmbPayActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
                 setResult(PayActivity.RESULT_CMB_PAY_SUCCESS);
                 finish();

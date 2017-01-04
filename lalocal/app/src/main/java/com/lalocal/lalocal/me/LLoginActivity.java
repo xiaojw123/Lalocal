@@ -39,9 +39,8 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static com.lalocal.lalocal.R.id.login_wechat_btn;
-
+/*
+* 登录主页*/
 public class LLoginActivity extends BaseActivity implements View.OnFocusChangeListener, TextWatcher {
     @BindView(R.id.login_areacode_tv)
     TextView areaCodeTv;
@@ -55,7 +54,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     Button loginEmailBtn;
     @BindView(R.id.login_qq_btn)
     Button loginQqBtn;
-    @BindView(login_wechat_btn)
+    @BindView(R.id.login_wechat_btn)
     Button loginWechatBtn;
     @BindView(R.id.login_weibo_btn)
     Button loginWeiboBtn;
@@ -108,14 +107,14 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
     @OnClick({R.id.login_close_btn, R.id.login_next_btn, R.id.login_get_password, R.id.login_email_btn, R.id.login_wechat_btn, R.id.login_weibo_btn, R.id.login_qq_btn})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.login_close_btn:
+            case R.id.login_close_btn://返回上一级
                 if (isImLogin && pageType == PageType.PAGE_SETTING || pageType == PageType.PAGE_BACK_NORMAIL) {
                     finish();
                 } else {
                     HomeActivity.start(this, isImLogin);
                 }
                 break;
-            case R.id.login_next_btn:
+            case R.id.login_next_btn://手机登录
                 MobHelper.sendEevent(this, MobEvent.LOGIN_PHONE_NEXT);
                 String phone = getPhone();
                 String code = getCode();
@@ -125,7 +124,7 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 }
                 mContentloader.loginByPhone(getPhone(), getCode(), nextBtn);
                 break;
-            case R.id.login_get_password:
+            case R.id.login_get_password://获取短信验证码
                 MobHelper.sendEevent(this, MobEvent.LOGIN_PHONE_VERIFICATOIN);
                 String phoneNum = getPhone();
                 if (TextUtils.isEmpty(phoneNum)) {
@@ -134,21 +133,18 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
                 }
                 mContentloader.getSMSCode(view, getPhone(), null, pswGetBtn);
                 break;
-            case R.id.login_email_btn:
+            case R.id.login_email_btn://邮箱登录
                 MobHelper.sendEevent(this, MobEvent.LOGIN_EMAIL);
                 Intent intent = new Intent(this, LEmailLoginActivity.class);
                 startActivityForResult(intent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.login_qq_btn:
-                AppLog.print("qq__click__");
+            case R.id.login_qq_btn://qq授权登录
                 MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.QQ);
                 break;
-            case R.id.login_wechat_btn:
-                AppLog.print("wechat__click__");
+            case R.id.login_wechat_btn://微信授权登录
                 MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.WEIXIN);
                 break;
-            case R.id.login_weibo_btn:
-                AppLog.print("weibo__click__");
+            case R.id.login_weibo_btn://微博授权登录
                 MobHelper.getInstance().socialLogin(this, mContentloader, SHARE_MEDIA.SINA);
                 break;
 
@@ -202,22 +198,23 @@ public class LLoginActivity extends BaseActivity implements View.OnFocusChangeLi
             }
 
         }
-
+        //成功获取验短信证码
         @Override
         public void onGetSmsCodeSuccess() {
-            AppLog.print("onGetSmsCodeSuccess____");
+            //禁止获取验证码码
             pswGetBtn.setEnabled(false);
+            //开启一个60s定时器，60s后可再次获取验证码
             mHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIMER, 1000);
         }
 
         @Override
         public void onLoginByPhone(User user, String phone, String code) {
-            if (user == null) {
+            if (user == null) {//首次登录，绑定邮箱可选
                 Intent intent = new Intent(LLoginActivity.this, LPEmailBoundActivity.class);
                 intent.putExtra(KeyParams.PHONE, phone);
                 intent.putExtra(KeyParams.CODE, code);
                 startActivityForResult(intent, KeyParams.REQUEST_CODE);
-            } else {
+            } else {//登录成功，更新个人页
                 UserHelper.setLoginSuccessResult(LLoginActivity.this, user);
             }
         }

@@ -79,31 +79,33 @@ public class AccountSecurityActivity extends BaseActivity {
         ButterKnife.bind(this);
         setLoginBackResult(true);
         setLoaderCallBack(new AccoutSecurityCallBack());
+        //获取用户信息：手机、邮箱状态（绑定/未绑定)等
         mContentloader.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this));
+        //获取三方账户列表
         mContentloader.getSocialUsers();
     }
 
     @OnClick({R.id.account_security_phone_layout, R.id.account_security_email_layout, R.id.account_security_modifypsw, R.id.accout_security_weixin_cb, R.id.accout_security_qq_cb, R.id.accout_security_weibo_cb})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.account_security_phone_layout:
+            case R.id.account_security_phone_layout://绑定手机号
                 if (phoneUnBindTv.getVisibility() == View.VISIBLE) {
                     Intent phoneIntent = new Intent(this, PhoneBindActivity.class);
                     startActivityForResult(phoneIntent, KeyParams.REQUEST_CODE);
                 }
                 break;
-            case R.id.account_security_email_layout:
+            case R.id.account_security_email_layout://邮箱绑定/验证/更改
                 if (mUser != null) {
                     String email = mUser.getEmail();
                     int userId = mUser.getId();
-                    if (!TextUtils.isEmpty(email)) {
-                        if (mUser != null && mUser.getStatus() == 0) {
+                    if (!TextUtils.isEmpty(email)) {//已绑定
+                        if (mUser != null && mUser.getStatus() == 0) {//已验证，可更换邮箱
                             Intent intent = new Intent(this, EmailBoundActivity.class);
                             intent.putExtra(KeyParams.EMAIL, email);
                             intent.putExtra(KeyParams.USERID, userId);
                             intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(this));
                             startActivityForResult(intent, KeyParams.REQUEST_CODE);
-                        } else {
+                        } else {//验证邮箱
                             Intent intent = new Intent(this, AccountEidt2Activity.class);
                             intent.putExtra(AccountEidt2Activity.ACTION_TYPE, AccountEidt2Activity.ACTION_EMAIL_MODIFY);
                             intent.putExtra("emailtext", email);
@@ -111,7 +113,7 @@ public class AccountSecurityActivity extends BaseActivity {
                             intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(this));
                             startActivityForResult(intent, KeyParams.REQUEST_CODE);
                         }
-                    } else {
+                    } else {//绑定邮箱
                         Intent intent = new Intent(this, EmailBoundActivity.class);
                         intent.putExtra(KeyParams.USERID, userId);
                         intent.putExtra(KeyParams.TOKEN, UserHelper.getToken(this));
@@ -121,32 +123,32 @@ public class AccountSecurityActivity extends BaseActivity {
 
 
                 break;
-            case R.id.account_security_modifypsw:
+            case R.id.account_security_modifypsw://修改密码
                 if (mUser != null) {
                     Intent pswIntent = new Intent(this, LPasswordModifyActivity.class);
                     pswIntent.putExtra(KeyParams.EMAIL, mUser.getEmail());
                     startActivityForResult(pswIntent, KeyParams.REQUEST_CODE);
                 }
                 break;
+
             case R.id.accout_security_weixin_cb:
             case R.id.accout_security_qq_cb:
-            case R.id.accout_security_weibo_cb:
+            case R.id.accout_security_weibo_cb://三方绑定 or 解绑
                 switchSocial((CompoundButton) view);
                 break;
         }
     }
 
     private void switchSocial(final CompoundButton button) {
-        AppLog.print("switchSocial isChecked___" + button.isChecked());
         /*
         * switch  status 1: close 2:open
         *     1 tag==null bind   tag!=null
         * */
-        final Object tag = button.getTag();
-        if (button.isChecked() && tag == null) {
+        final Object tag = button.getTag();//tag 三方用户对象@SocialUser 属性：头像,昵称，id等
+        if (button.isChecked() && tag == null) {//绑定邮箱
             button.setChecked(false);
             mUmShareAPI = UMShareAPI.get(this);
-            SHARE_MEDIA share_media = null;
+            SHARE_MEDIA share_media = null;//三方类型
             if (button == accoutSecurityWeixinCb) {
                 share_media = SHARE_MEDIA.WEIXIN;
             } else if (button == accoutSecurityQqCb) {
@@ -159,6 +161,7 @@ public class AccountSecurityActivity extends BaseActivity {
                     return;
                 }
             }
+            //授权登录
             mUmShareAPI.doOauthVerify(this, share_media, authListener);
         } else if (!button.isChecked() && tag != null) {
             button.setChecked(true);
@@ -175,6 +178,7 @@ public class AccountSecurityActivity extends BaseActivity {
                 @Override
                 public void onDialogClickListener() {
                     SocialUser user = (SocialUser) tag;
+                    //发起三方解绑请求
                     mContentloader.unBindSocialAccount(button, user.getId());
                 }
             });
@@ -186,6 +190,7 @@ public class AccountSecurityActivity extends BaseActivity {
         @Override
         public void onComplete(SHARE_MEDIA share_media, int i, Map<String, String> map) {
             if (mUmShareAPI != null) {
+                //获取三方用户信息
                 mUmShareAPI.getPlatformInfo(AccountSecurityActivity.this, share_media, infoGetListener);
             }
         }
@@ -217,6 +222,7 @@ public class AccountSecurityActivity extends BaseActivity {
                 } else if (share_media == SHARE_MEDIA.QQ) {
                     button = accoutSecurityQqCb;
                 }
+                //发起绑定三方请求
                 mContentloader.bindSocialAccount(button, map, share_media);
 
             }
@@ -236,7 +242,7 @@ public class AccountSecurityActivity extends BaseActivity {
 
 
     class AccoutSecurityCallBack extends ICallBack {
-
+        //更新用户信息
         @Override
         public void onGetUserProfile(LoginUser user) {
             if (user != null) {
@@ -244,32 +250,32 @@ public class AccountSecurityActivity extends BaseActivity {
                 String phone = user.getPhone();
                 String email = user.getEmail();
                 int status = user.getStatus();
-                if (!TextUtils.isEmpty(phone)) {
+                if (!TextUtils.isEmpty(phone)) {//已绑定手机号
                     phoneTv.setText(phone);
                     phoneTv.setVisibility(View.VISIBLE);
                     phoneUnBindTv.setVisibility(View.GONE);
-                } else {
+                } else {//未绑定手机号
                     phoneTv.setVisibility(View.GONE);
                     phoneUnBindTv.setVisibility(View.VISIBLE);
                 }
                 if (!TextUtils.isEmpty(email)) {
                     emailTv.setVisibility(View.VISIBLE);
                     emailTv.setText(email);
-                    if (status == 0) {
+                    if (status == 0) {//邮箱已验证
                         emailStatusTv.setVisibility(View.GONE);
-                    } else {
+                    } else {//邮箱未验证
                         emailStatusTv.setText(noVerifedText);
                         emailStatusTv.setVisibility(View.VISIBLE);
                     }
                     accountSecurityModifypsw.setVisibility(View.VISIBLE);
-                } else {
+                } else {//邮箱未绑定
                     emailStatusTv.setText(noBindText);
                     emailStatusTv.setVisibility(View.VISIBLE);
                     accountSecurityModifypsw.setVisibility(View.GONE);
                 }
             }
         }
-
+        //三方绑定回调
         @Override
         public void onBindSocialUser(CompoundButton button, SocialUser wexinUser, SocialUser qqUser, SocialUser weiboUser) {
             AppLog.print("onBindSocialUser");
@@ -284,7 +290,7 @@ public class AccountSecurityActivity extends BaseActivity {
                 updatSwitch(weiboNameTv, button, weiboUser);
             }
         }
-
+        //三方解绑回调
         @Override
         public void onUnBindSocialUser(CompoundButton switchBtn) {
             Toast.makeText(AccountSecurityActivity.this, "解除绑定成功", Toast.LENGTH_SHORT).show();
@@ -304,7 +310,7 @@ public class AccountSecurityActivity extends BaseActivity {
                 Toast.makeText(AccountSecurityActivity.this, "绑定失败", Toast.LENGTH_SHORT).show();
             }
         }
-
+        //三方账户列表wechat qq  weibo
         @Override
         public void onGetSocialUsers(SocialUser wexinUser, SocialUser qqUser, SocialUser weiboUser) {
             if (wexinUser != null) {

@@ -125,8 +125,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
             case R.id.pay_showdetail_triangle_container:
                 showDetailView();
                 break;
-            case R.id.pay_btn:
-                //TODO:支付流程
+            case R.id.pay_btn://支付：Wechat/Alipay/CMB
                 MobHelper.sendEevent(this, MobEvent.ORDER_LIST_PAY);
                 //微信
                 if (payMannerWeixinCb.isSelected()) {
@@ -149,11 +148,11 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                     mChannelStr = CHANNEL_CMB;
                     AppLog.print("招行支付-----");
                     if (mOrderDetail != null) {
+                        //请求一网通支付信息
                         mContentloader.getCmbPay(mOrderDetail.getId());
                     }
                     return;
                 }
-                //TODO:test
 //                showCompletePay();
                 //TODO: payorder  reset
                 if (mOrderDetail != null) {
@@ -161,6 +160,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
                     Gson gson = new Gson();
                     String json = gson.toJson(request);
                     AppLog.print("requestJson___" + json);
+                    //请求获取支付信息
                     mContentloader.payOrder(json);
                 }
                 break;
@@ -318,6 +318,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
     }
 
     class PayCallBack extends ICallBack {
+        //响应一网通支付信息
         @Override
         public void onGetCmbPayParams(CmbPay cmbPay) {
             String cmbPayCommandUrl = AppConfig.getCmbPayCommand(
@@ -338,7 +339,7 @@ public class PayActivity extends BaseActivity implements CustomTitleView.onBackB
             intent.putExtra(KeyParams.ORDER_ID,mOrderDetail.getId());
             startActivityForResult(intent,KeyParams.REQUEST_CODE);
         }
-
+        //响应支付信息
         @Override
         public void onGetPayResult(String result) {
             AppLog.print("onGetPayResult result___" + result);

@@ -28,7 +28,7 @@
     <string name="weibo">微博</string>
     <string name="sure">确认</string>
     <string name="email_no_right">邮箱输入格式有误</string>
-    <string name="psw_no_right">密码必须6-20位</string>
+    <string name="psw_limit_num">密码必须6-20位</string>
     <string name="nickname_no_right">昵称不正确</string>
     <string name="nickname_input_error">昵称输入有误</string>
     <string name="message_not_empty">信息不能为空</string>

@@ -41,6 +41,7 @@ import java.util.List;
 
 /**
  * Created by xiaojw on 2016/12/24.
+ * 私信-最近联系人
  */
 
 public class PersonalMessageFragment extends BaseFragment implements OnItemClickListener, View.OnClickListener {
@@ -95,29 +96,10 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     };
 
     private void updateRecentContacts(List<RecentContact> recents) {
-        AppLog.print("requestCallbackWrapper onResult recents___len___" + recents.size());
         final List<RecentContactInfo> infoList = new ArrayList<>();
         List<String> ssidlist = new ArrayList<>();
-//        Out:
-//        for (RecentContact contact : recents) {
-//            String ssid = contact.getContactId();
-//            for (RecentContactInfo curInfo : mItems) {
-//                if (ssid.equals(curInfo.getAccount())) {
-//                    curInfo.setContent(contact.getContent());
-//                    curInfo.setTime(contact.getTime());
-//                    curInfo.setUnReadCount(contact.getUnreadCount());
-//                    continue Out;//结束整个循环体
-//                }
-//            }
-//            RecentContactInfo info = new RecentContactInfo();
-//            info.setAccount(ssid);
-//            info.setContent(contact.getContent());
-//            info.setTime(contact.getTime());
-//            info.setUnReadCount(contact.getUnreadCount());
-//            infoList.add(info);
-//            ssidlist.add(ssid);
-//        }
         int len = recents.size();
+        //给item设置ssid、content 、time 、unReadCount
         Out:
         for (int i = 0; i < len; i++) {
             RecentContact contact = recents.get(i);
@@ -131,23 +113,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
                 }
             }
             RecentContactInfo info = new RecentContactInfo();
-//            long currentTime = contact.getTime();
-//            int nextIndex = i + 1;
-//            if (nextIndex < len) {
-//                RecentContact nextContct = recents.get(nextIndex);
-//                if (nextContct != null) {
-//                    long nextTime = nextContct.getTime();
-//                    if (currentTime < nextTime) {
-//                        info.setAccount(nextContct.getContactId());
-//                        info.setContent(nextContct.getContent());
-//                        info.setTime(nextTime);
-//                        info.setUnReadCount(nextContct.getUnreadCount());
-//                        infoList.add(nextIndex, info);
-//                        ssidlist.add(nextIndex, ssid);
-//                        continue;
-//                    }
-//                }
-//            }
             info.setAccount(ssid);
             info.setContent(contact.getContent());
             info.setTime(contact.getTime());
@@ -156,16 +121,14 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
             ssidlist.add(ssid);
         }
 
+        //从缓存中获取
         List<NimUserInfo> users = NIMClient.getService(UserService.class).getUserInfoList(ssidlist);
         int cacheSize = users != null && users.size() > 0 ? users.size() : 0;
         if (ssidlist.size() == cacheSize) {
-            AppLog.print("从缓存获取recent contacts");
-            //走缓存渠道
             resSetInfoList(infoList, users);
 
         } else {
-            //走服务器渠道
-            AppLog.print("从服务器获取recent contacts");
+            //从服务器获取
             NIMClient.getService(UserService.class).fetchUserInfo(ssidlist)
                     .setCallback(new RequestCallback<List<NimUserInfo>>() {
 
@@ -192,6 +155,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
 
     private void resSetInfoList(List<RecentContactInfo> infoList, List<NimUserInfo> users) {
         if (users != null) {
+            //给item设置avatar、name
             Out:
             for (NimUserInfo user : users) {
                 String account = user.getAccount();
@@ -211,10 +175,11 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         if (infoList.size() > 0) {
             mItems.addAll(infoList);
         }
+        //根据时间对联系人列表排序，最近的时间靠前
         Collections.sort(mItems, desContactsComparator);
         contactAdapter.updateItems(mItems);
     }
-
+    //进入私信聊天界面
     @Override
     public void onItemClickListener(View view, int position) {
         Object tag = view.getTag();
@@ -239,7 +204,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     @Override
     public void onResume() {
         super.onResume();
-        AppLog.print("personalMessage__onResume___");
         registerNimService(true);
     }
 
@@ -255,6 +219,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         if (flag) {
             // 进入最近联系人列表界面，建议放在onResume中
             NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.P2P);
+            //查询最近联系人列表
             queryContacts();
         } else {
             // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
@@ -301,7 +266,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        AppLog.print("onHiddenChanged————————hiden___" + hidden);
         if (!hidden) {
             registerNimService(true);
         } else {

@@ -87,7 +87,7 @@ public class ExchangeActivity extends BaseActivity implements TextWatcher, Custo
     @OnClick({exchage_btn, R.id.excharge_score_unit})
     public void onClick(View view) {
         switch (view.getId()) {
-            case exchage_btn:
+            case exchage_btn://兑换乐钻
                 String socreText = exchageScoreEdit.getText().toString();
                 if (!TextUtils.isEmpty(socreText)) {
                     long socre = Long.parseLong(socreText);

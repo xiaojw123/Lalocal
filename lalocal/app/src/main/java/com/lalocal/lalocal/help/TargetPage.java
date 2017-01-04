@@ -138,9 +138,11 @@ public class TargetPage {
 
     }
 
-    public static void gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName,boolean isMessage) {
+    public static int gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName, boolean isMessage) {
+        int resultCode = SUCESS;
         if (TextUtils.isEmpty(targetType)) {
-            return;
+            resultCode = FAILED;
+            return resultCode;
         }
         switch (targetType) {
             case TargetType.URL://链接
@@ -161,7 +163,7 @@ public class TargetPage {
                 gotoRouteDetail(context, targetId, isMessage);
                 break;
             case TargetType.SPECIAL://专题
-               gotoSpecialDetail(context, targetId, isMessage);
+                gotoSpecialDetail(context, targetId, isMessage);
                 break;
             case TargetType.LIVE_VIDEO://直播视频
                 gotoLive(context, targetId, isMessage);
@@ -173,13 +175,18 @@ public class TargetPage {
                 gotoArticleComment(context, targetId);
                 break;
             case TargetType.COUPON:
-                gotoCoupon(context,isMessage);
+                gotoCoupon(context, isMessage);
+                break;
+            default:
+                resultCode = FAILED;
                 break;
 
         }
-
-
+        return resultCode;
     }
+
+    public static final int FAILED = 0x12;
+    public static final int SUCESS = 0x11;
 
 
 }

@@ -21,13 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.lalocal.lalocal.R.id.my_diamond_llt;
+
 
 public class MyWalletActivity extends BaseActivity{
 
     @BindView(R.id.my_diamond_num)
     TextView myDiamondNum;
-    @BindView(my_diamond_llt)
+    @BindView(R.id.my_diamond_llt)
     LinearLayout myDiamondLlt;
     @BindView(R.id.my_travelticket_num)
     TextView myTravelticketNum;
@@ -63,29 +63,29 @@ public class MyWalletActivity extends BaseActivity{
 
     }
 
-    @OnClick({my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt,R.id.my_wallet_instructions})
+    @OnClick({R.id.my_diamond_llt, R.id.my_travelticket_llt, R.id.my_coupon_llt,R.id.my_wallet_instructions})
     public void onClick(View view) {
         switch (view.getId()) {
-            case my_diamond_llt:
+            case R.id.my_diamond_llt://乐钻
                 MobHelper.sendEevent(this, MobEvent.MY_WALLET_DIAMOND);
                 Intent diamondIntent = new Intent(this, MyDiamondActivity.class);
                 diamondIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(diamondIntent, KeyParams.REQUEST_CODE);
                 break;
 
-            case R.id.my_travelticket_llt:
+            case R.id.my_travelticket_llt://游票
                 MobHelper.sendEevent(this,MobEvent.MY_WALLET_TICKET);
                 Intent scoreIntent = new Intent(this, MyTravelTicketActivity.class);
                 scoreIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(scoreIntent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.my_coupon_llt:
+            case R.id.my_coupon_llt://优惠券
                 Intent couponIntent = new Intent(this, MyCouponActivity.class);
                 couponIntent.putExtra(KeyParams.PAGE_TYPE, KeyParams.PAGE_TYPE_WALLET);
                 couponIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(couponIntent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.my_wallet_instructions:
+            case R.id.my_wallet_instructions://乐钻使用说明
                 CurrencyInstructionActivity.start(this,mWalletContent);
                 break;
         }

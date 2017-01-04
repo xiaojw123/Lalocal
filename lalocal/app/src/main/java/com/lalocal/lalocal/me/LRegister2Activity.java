@@ -53,7 +53,7 @@ public class LRegister2Activity extends BaseActivity {
                     return;
                 }
                 if (!CommonUtil.checkPassword(password)) {
-                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
+                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_limit_num), null);
                     return;
                 }
                 if (!CommonUtil.checkNickname(nickname)) {

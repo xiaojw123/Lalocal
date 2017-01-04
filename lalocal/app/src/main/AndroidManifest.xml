@@ -372,7 +372,7 @@
         <activity android:name=".me.PraiseCommentActivity" />
         <activity android:name=".im.NimChatActivity" />
         <activity android:name=".activity.ArticleCommentActivity" />
-        <activity android:name=".activity.NimPersonalMessageActivity" />
+        <activity android:name=".activity.PersonalMessageActivity" />
         <activity android:name=".activity.PostVideoActivity"
             android:windowSoftInputMode="stateHidden" >
 

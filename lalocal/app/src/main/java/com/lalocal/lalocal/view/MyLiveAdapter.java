@@ -90,11 +90,6 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
                 itemHolder.locationTv.setText(adddres);
                 itemHolder.onlineNumTv.setText(onlienNum);
                 itemHolder.liveLenTv.setText(startAt);
-//                String liveLen = "00:00:00";
-//                if (!TextUtils.isEmpty(startAt) && !TextUtils.isEmpty(endAt)) {
-//                    liveLen = getLiveLen(startAt, endAt);
-//                    itemHolder.liveLenTv.setText(liveLen);
-//                }
                 if (!TextUtils.isEmpty(toalScore)) {
                     itemHolder.scoreNumTv.setText(toalScore);
 
@@ -147,14 +142,12 @@ public class MyLiveAdapter extends BaseRecyclerAdapter {
     public int getItemViewType(int position) {
         return position;
     }
-
+    //删除直播item
     public void remove(int position) {
         LiveRowsBean item = mItems.get(position);
-        AppLog.print("liveAdapter remove___position___" + position + ",id__" + item.getId());
         mContentLoader.deleteLiveHistory(item.getId());
         mItems.remove(position);
         notifyDataSetChanged();
-//        notifyItemRangeChanged(position, getItemCount());
     }
 
 

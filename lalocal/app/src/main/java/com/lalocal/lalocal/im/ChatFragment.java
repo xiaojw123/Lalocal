@@ -67,7 +67,7 @@ import java.util.List;
  */
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener, CustomTitleView.onBackBtnClickListener, XRecyclerView.LoadingListener {
-    private static final int IMAGE_SIZE = 100 * 1024;// 300kb
+    private static final int IMAGE_SIZE = 100 * 1024;
     private static final int LOAD_MESSAGE_COUNT = 10;
     private static final int PEMISSION_CODE_SDCARD = 0x11;
     private static final int PHOTO_REQUEST_GALLERY = 2;
@@ -97,6 +97,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
         initParams();
         initView(view);
+        //注册
         registerStatusObserve(true);
         return view;
     }
@@ -111,20 +112,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     @Override
     public void onDestroyView() {
-        AppLog.print("chatFragemtn destroyview____");
         registerStatusObserve(false);
         super.onDestroyView();
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        AppLog.print("chatFragemtn onDestroy____");
-    }
 
     private void registerStatusObserve(boolean flag) {
         NIMClient.getService(MsgServiceObserve.class).observeMsgStatus(
-                statusObserver, flag);
+                messageObserver, flag);
     }
 
 
@@ -457,23 +452,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         return ChatRoomMessageBuilder.createEmptyChatRoomMessage(accId, 0);
     }
 
-    private Observer<IMMessage> statusObserver = new Observer<IMMessage>() {
+    private Observer<IMMessage> messageObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage imMessage) {
-            AppLog.print("msg statut onEvent__imMessageStatus__" + imMessage.getStatus());
             updateChatMessage(imMessage);
-//            MsgStatusEnum status = imMessage.getStatus();
-//            if (status == MsgStatusEnum.success) {
-////                updateChatMessage(imMessage);
-//                AppLog.print("message send sucess__imstatus_");
-//            } else if (status == MsgStatusEnum.fail) {
-//                AppLog.print("message send failed ");
-////                if (mMessageList.contains(imMessage)) {
-////                    AppLog.print("im message in the msg list__");
-////                    int position=mMessageList.indexOf(imMessage);
-////                    msgAdapter.notifyItemChanged(position);
-////                }
-//            }
         }
     };
     private Observer<List<IMMessage>> incomingMessageObserver =
@@ -627,23 +609,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
 
     private void updateChatMessage(IMMessage message) {
-        AppLog.print("ready update message list...");
         if (!mMessageList.contains(message)) {
-            AppLog.print("message list container current message..." + message);
             mMessageList.add(message);
             msgAdapter.setItems(mMessageList);
             int lastPos = msgAdapter.getItemCount() - 1;
-            AppLog.print("lastPos___" + lastPos);
             if (lastPos <= 0) {
-                AppLog.print("notify all__");
                 msgAdapter.notifyDataSetChanged();
             } else {
-                AppLog.print("notify lastPos__");
                 msgAdapter.notifyItemChanged(lastPos);
             }
             layoutManager.scrollToPositionWithOffset(lastPos, 0);
         } else {
-            AppLog.print("updateChatMessage___updateitems__");
             msgAdapter.updateItems(mMessageList);
         }
     }

@@ -58,7 +58,7 @@ public class LPasswordForget2Activity extends BaseActivity implements View.OnCli
                 return;
             }
             if (!CommonUtil.checkPassword(psw)) {
-                CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
+                CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_limit_num), null);
                 return;
             }
             mContentloader.resetPasword(getEmail(), veritiedcode, psw,sureBtn);

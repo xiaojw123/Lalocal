@@ -179,10 +179,6 @@ public class CommonUtil {
 
     //验证邮箱格式
     public static boolean checkEmail(String email) {
-//        String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-//        Pattern regex = Pattern.compile(check);
-//        Matcher matcher = regex.matcher(email);
-//        return matcher.matches();
         Pattern pattern = Pattern
                 .compile("^[A-Za-z0-9][\\w\\._]*[a-zA-Z0-9]+@[A-Za-z0-9-_]+\\.([A-Za-z]{2,4})");
         Matcher mc = pattern.matcher(email);

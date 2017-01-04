@@ -25,7 +25,7 @@ public class CommonWebClient extends WebViewClient {
 
     @Override
     public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        AppLog.print("onPageStarted____url___"+url);
+        AppLog.print("onPageStarted____url___" + url);
         super.onPageStarted(view, url, favicon);
     }
 
@@ -34,8 +34,10 @@ public class CommonWebClient extends WebViewClient {
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
         AppLog.print("shouldOverrideUrlLoading  url____" + url);
 //            webviewclient url____lalocal://app?{"targetType": "19","targetId": "","targetUrl": ""}
+        boolean is=false;
         if (url.startsWith("lalocal:")) {
             int startIndex = url.indexOf("?") + 1;
+            int code = 0;
             try {
                 String jsonData = url.substring(startIndex, url.length());
                 JSONObject jsonObject = new JSONObject(jsonData);
@@ -43,12 +45,11 @@ public class CommonWebClient extends WebViewClient {
                 String targetId = jsonObject.optString("targetId");
                 String targetUrl = jsonObject.optString("targetUrl");
                 String targetName = jsonObject.optString("targetName");
-                TargetPage.gotoTargetPage(mContext,targetType,targetId,targetUrl,targetName,false);
+                code = TargetPage.gotoTargetPage(mContext, targetType, targetId, targetUrl, targetName, false);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return true;
-        }else{
+        } else {
             view.loadUrl(url);
         }
         return super.shouldOverrideUrlLoading(view, url);

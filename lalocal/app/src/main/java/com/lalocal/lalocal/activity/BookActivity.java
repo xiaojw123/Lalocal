@@ -18,7 +18,8 @@ import com.lalocal.lalocal.model.JsInterface;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
-
+/*h5下单，接送机
+* */
 public class BookActivity extends BaseActivity {
     public static final String BOOK_URL = "pre_order_url";
     public static final String PAGE_BACK_PRODUCT_DETAIL = "backProdutionDetail";

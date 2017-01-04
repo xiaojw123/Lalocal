@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.CustomTitleView;
@@ -75,7 +76,7 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onStart() {
         super.onStart();
-        carousFigure.loadUrl(url);
+        carousFigure.loadUrl(AppConfig.getH5Url(this,url));
     }
 
 

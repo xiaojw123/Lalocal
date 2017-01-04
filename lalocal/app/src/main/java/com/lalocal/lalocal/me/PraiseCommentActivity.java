@@ -11,7 +11,6 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.model.PraiseComment;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.adapter.PraiseCommentAdapter;
 import com.lalocal.lalocal.view.decoration.LinearItemDecoration;
 
@@ -51,7 +50,6 @@ public class PraiseCommentActivity extends BaseActivity implements XRecyclerView
 
     @Override
     protected void onStart() {
-        AppLog.print("onStart_____");
         super.onStart();
         mXRecyclerView.setRefreshing(true);
     }
@@ -59,7 +57,6 @@ public class PraiseCommentActivity extends BaseActivity implements XRecyclerView
 
     @Override
     public void onRefresh() {
-        AppLog.print("onRefresh____getPraiseComment___");
         isRefresh = true;
         mContentloader.getPraiseComment(1);
     }

@@ -331,7 +331,7 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
-
+    //三方登录
     public void loginBySocial(Map<String, String> map, SHARE_MEDIA share_media) {
         String loginParams = getSocialLoginPrarams(map, share_media).toString();
         if (callBack != null) {
@@ -339,10 +339,6 @@ public class ContentLoader {
             response.setSocialParams(getSocialBodyParams(map, share_media).toString(), loginParams);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialLoginUrl(), response, response);
-//        Set<Map.Entry<String, String>> entrySet = map.entrySet();
-//        for (Map.Entry<String, String> entry : entrySet) {
-//            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
-//        }
         AppLog.print("rquestUrl__" + AppConfig.getSocialLoginUrl() + ", id____" + getSocialLoginPrarams(map, share_media).toString());
         request.setBodyParams(loginParams);
         requestQueue.add(request);
@@ -392,25 +388,23 @@ public class ContentLoader {
             response = new ContentResponse(RequestCode.SOCIAL_BIND);
             response.setProgressButton(pb);
         }
-        AppLog.print("三方绑定邮箱bodyPrams___" + socialParams);
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialBindurl(), response, response);
         request.setBodyParams(socialParams);
         requestQueue.add(request);
     }
 
-
+    //三方注册账户
     public void registerBySocial(String socialParams, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER_BY_SOCIAL);
             response.setProgressButton(pb);
         }
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getSocialReigsterUrl(), response, response);
-        AppLog.print("三方注册___socialParams_" + socialParams);
         request.setBodyParams(socialParams);
         requestQueue.add(request);
     }
 
-
+    //手机号注册账户
     public void registerByPhone(String phone, String code, String email, String password, ProgressButton pb) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.REGISTER_PHONE);
@@ -890,6 +884,7 @@ public class ContentLoader {
     }
 
 
+    //获取用户资料
     public void getUserProfile(int userid, String token) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_PROFILE);
@@ -990,7 +985,6 @@ public class ContentLoader {
             response.setProgressButton(pb);
             response.setUserInfo(email, password);
         }
-        AppLog.print("login____loginURL___" + AppConfig.getLoginUrl() + "__email_:" + email + ", password:" + password);
         ContentRequest request = new ContentRequest(Request.Method.POST, AppConfig.getLoginUrl(), response, response);
         request.setBodyParams(getLoginParams(email, password));
 
@@ -2208,7 +2202,6 @@ public class ContentLoader {
                         responseRegister(jsonObj);
                         break;
                     case RequestCode.LOGIN:
-                        AppLog.print("邮箱登录___json___" + json);
                         responseLogin(jsonObj);
                         break;
                     case RequestCode.CHECK_EMAIL:
@@ -3038,7 +3031,6 @@ public class ContentLoader {
                 Gson gson = new Gson();
                 user = gson.fromJson(resutJson.toString(), User.class);
             }
-            AppLog.i("TAG", "responseLogin" + jsonObject.toString());
             saveUserInfo(user, KeyParams.CHANNEL_LOGIN_EMAIL);
             callBack.onLoginSucess(user);
         }

@@ -43,13 +43,13 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         mXRecyclerView.setPullRefreshEnabled(true);
         mXRecyclerView.setLoadingListener(this);
     }
-
+    //获取我的直播列表
     @Override
     public void onRefresh() {
         isRefresh = true;
         mContentloader.getUserLive(UserHelper.getUserId(this), 1);
     }
-
+    //加载更多items
     @Override
     public void onLoadMore() {
         if (pageNum < pageSize) {

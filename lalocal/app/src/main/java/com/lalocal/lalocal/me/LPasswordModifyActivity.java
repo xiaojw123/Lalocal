@@ -77,7 +77,7 @@ public class LPasswordModifyActivity extends BaseActivity implements CustomTitle
                     return;
                 }
                 if (!CommonUtil.checkPassword(psw)) {
-                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
+                    CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_limit_num), null);
                     return;
                 }
                 mContentloader.resetPasword(getEmail(), verCode, psw,lpswmodifySureBtn);

@@ -31,10 +31,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.lalocal.lalocal.R.id.my_diamond_recharge_tv;
 
 public class MyDiamondActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener {
-    @BindView(my_diamond_recharge_tv)
+    @BindView(R.id.my_diamond_recharge_tv)
     TextView myDiamondRechargeTv;
     @BindView(R.id.my_diamond_num_tv)
     TextView myDiamondNumTv;
@@ -81,20 +80,21 @@ public class MyDiamondActivity extends BaseActivity implements CustomTitleView.o
         } else {
             myDiamondNoRecharge.setVisibility(View.VISIBLE);
         }
+        //获取乐钻日志(消费记录/收入、支付情况)
         mContentloader.getGoldLogs(1);
     }
 
 
-    @OnClick({my_diamond_recharge_tv, R.id.consume_doubt_container})
+    @OnClick({R.id.my_diamond_recharge_tv, R.id.consume_doubt_container})
     public void onClick(View view) {
         switch (view.getId()) {
-            case my_diamond_recharge_tv:
+            case R.id.my_diamond_recharge_tv://充值
                 MobHelper.sendEevent(this, MobEvent.MY_WALLET_DIAMOND_RECHARGE);
                 Intent rechargeIntent = new Intent(this, RechargeActivity.class);
                 rechargeIntent.putExtra(KeyParams.WALLET_CONTENT, mWalletContent);
                 startActivityForResult(rechargeIntent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.consume_doubt_container:
+            case R.id.consume_doubt_container://消费疑问
                 CommonUtil.startCustomService(this);
                 break;
         }

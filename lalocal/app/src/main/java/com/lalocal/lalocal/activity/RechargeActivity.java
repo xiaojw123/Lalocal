@@ -84,12 +84,12 @@ public class RechargeActivity extends BaseActivity implements CustomTitleView.on
     @OnClick({R.id.rechage_ticket_exchage, R.id.recharge_doubt_container})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.rechage_ticket_exchage:
+            case R.id.rechage_ticket_exchage://兑换乐钻
                 Intent intent = new Intent(this, ExchangeActivity.class);
                 intent.putExtra(KeyParams.WALLET_CONTENT, mWalletCont);
                 startActivityForResult(intent, KeyParams.REQUEST_CODE);
                 break;
-            case R.id.recharge_doubt_container:
+            case R.id.recharge_doubt_container://充值问题联系客服
                 CommonUtil.startCustomService(this);
                 break;
 
@@ -113,7 +113,7 @@ public class RechargeActivity extends BaseActivity implements CustomTitleView.on
             adapter.setOnItemClickListener(this);
             rechargePackageRlv.setAdapter(adapter);
         }
-
+        //选择一种规格的乐钻产品进行充值
         @Override
         public void onItemClickListener(View view, int position) {
             Object tagObj = view.getTag();

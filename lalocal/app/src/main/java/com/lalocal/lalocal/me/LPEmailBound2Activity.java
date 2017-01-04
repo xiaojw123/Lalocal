@@ -14,7 +14,6 @@ import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.model.User;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.MD5Util;
 import com.lalocal.lalocal.view.CustomEditText;
@@ -45,10 +44,12 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
         pLalocalStart.setOnClickListener(this);
         isRegistered = getIntent().getBooleanExtra(IS_REGISTERED, false);
         if (isRegistered) {
+            //已注册-输入密码
             pEmailBoundEdit.setHint(getResources().getString(R.string.please_input_password));
             pEmailCtv.setTitle("绑定已有账号");
             reminderTv.setText("该邮箱已绑定，请输入对应密码进行绑定");
         } else {
+            //未注册-设置密码
             pEmailCtv.setTitle("绑定新账号");
             pEmailBoundEdit.setHint(getResources().getString(R.string.set_pssword));
             reminderTv.setText("该邮箱未被注册，请直接设置密码注册绑定");
@@ -57,6 +58,7 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
         setLoaderCallBack(new PemailBound2CallBack());
     }
 
+    //绑定邮箱
     @Override
     public void onClick(View v) {
         MobHelper.sendEevent(this, MobEvent.BINDING_START);
@@ -65,10 +67,9 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
         String email = getIntent().getStringExtra(KeyParams.EMAIL);
         String psw = pEmailBoundEdit.getText();
         if (!CommonUtil.checkPassword(psw)) {
-            CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_no_right), null);
+            CommonUtil.showPromptDialog(this, getResources().getString(R.string.psw_limit_num), null);
             return;
         }
-        AppLog.print("register phone=" + phone + ", code=" + code + ", email=" + email + ", psw=" + psw);
         if (getPageType() == PageType.Page_BIND_EMAIL_SOCIAL) {
             String bodyParams = getIntent().getStringExtra(KeyParams.SOCIAL_PARAMS);
             try {
@@ -76,14 +77,17 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
                 body.put("email", email);
                 body.put("password", MD5Util.getMD5String(psw));
                 if (isRegistered) {
+                    //三方已经注册直接绑定邮箱
                     mContentloader.socialBind(body.toString(),pLalocalStart);
                 } else {
+                    //三方未注册，请求注册同时绑定邮箱
                     mContentloader.registerBySocial(body.toString(),pLalocalStart);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
+            //手机注册同时绑定邮箱
             mContentloader.registerByPhone(phone, code, email, psw,pLalocalStart);
         }
     }
@@ -91,7 +95,7 @@ public class LPEmailBound2Activity extends BaseActivity implements View.OnClickL
 
     class PemailBound2CallBack extends ICallBack implements CustomDialog.CustomDialogListener {
         User user;
-
+        //手机注册成功
         @Override
         public void onRegisterByPhone(User user) {
             this.user = user;

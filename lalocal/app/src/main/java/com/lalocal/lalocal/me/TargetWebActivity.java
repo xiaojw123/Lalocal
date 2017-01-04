@@ -13,6 +13,7 @@ import android.webkit.WebView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.KeyParams;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.CustomTitleView;
 
@@ -99,7 +100,8 @@ public class TargetWebActivity extends BaseActivity {
 
 
     public String getTargeUrl() {
-        return getIntent().getStringExtra(KeyParams.TARGE_URL);
+        String url=getIntent().getStringExtra(KeyParams.TARGE_URL);
+        return AppConfig.getH5Url(this,url);
     }
 
     public String getTargetTitle() {
