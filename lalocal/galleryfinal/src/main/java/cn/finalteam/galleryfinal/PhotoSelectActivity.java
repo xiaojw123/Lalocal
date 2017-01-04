@@ -594,7 +594,9 @@ public class PhotoSelectActivity extends PhotoBaseActivity implements View.OnCli
     protected void onDestroy() {
         super.onDestroy();
         mPhotoTargetFolder = null;
-        mSelectPhotoList.clear();
+        if (mSelectPhotoList != null && mSelectPhotoList.size() > 0) {
+            mSelectPhotoList.clear();
+        }
         System.gc();
     }
 }
