@@ -27,6 +27,8 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/10/25.
+ *
+ * 发现页专题ViewPager适配器
  */
 public class HomeRecoThemeAdapter extends PagerAdapter {
     private Context mContext;
@@ -83,15 +85,7 @@ public class HomeRecoThemeAdapter extends PagerAdapter {
         String saveQuantity = CommonUtil.formatNumWithComma(bean.getPraiseNum());
 
 
-        // 使用Glide加载url图片, Glide与RoundedImage一起使用会导致圆角消失
-//        Glide.with(mContext)
-//                .load(photoUrl)
-//                .placeholder(R.drawable.androidloading)
-//                .centerCrop()
-//                .crossFade()
-//                // 只缓存原图，其他参数：DiskCacheStrategy.NONE不缓存到磁盘，DiskCacheStrategy.RESULT缓存处理后的图片，DiskCacheStrategy.ALL两者都缓存
-//                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-//                .into(holder.imgTheme);
+        // 此处不用glide加载url图片, Glide与RoundedImage一起使用会导致圆角消失
         DrawableUtils.displayImg(mContext, holder.imgTheme, photoUrl, R.drawable.androidloading);
 
         // 设置名字

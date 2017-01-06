@@ -27,6 +27,8 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/9/21.
+ *
+ * 专题列表适配器
  */
 public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -39,7 +41,12 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.mThemeList = themeList;
 
     }
-    public  void setResh(List<RecommendRowsBean> themeList){
+
+    /**
+     * 设置刷新
+     * @param themeList
+     */
+    public  void setRefresh(List<RecommendRowsBean> themeList){
         this.mThemeList=themeList;
         notifyDataSetChanged();
     }
@@ -68,6 +75,10 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         String readNum = formatNum(bean.getReadNum());
         String praiseNum = formatNum(bean.getPraiseNum());
         final String rowId = String.valueOf(bean.getId());
+
+        /**
+         * 对专题列表的标签进行设置
+         */
         if (type == Constants.THEME_AUTHOR) {
             holder.layoutThemeTag.setVisibility(View.VISIBLE);
             tag = "作者专栏";
@@ -118,6 +129,9 @@ public class ThemeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return mThemeList == null ? 0 : mThemeList.size();
     }
 
+    /**
+     * 专题视图容器
+     */
     private class ThemeViewHolder extends RecyclerView.ViewHolder {
         LinearLayout layoutContainer;
         RelativeLayout layoutThemeTag;

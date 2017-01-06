@@ -2,7 +2,6 @@ package com.lalocal.lalocal.activity.fragment;
 
 
 import android.annotation.TargetApi;
-import android.app.Fragment;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +23,6 @@ import com.lalocal.lalocal.model.RecommendListBean;
 import com.lalocal.lalocal.model.RecommendListDataResp;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.CustomXRecyclerView;
 import com.lalocal.lalocal.view.adapter.HomeRecommendAdapter;
 
@@ -35,38 +33,87 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * A simple {@link Fragment} subclass.
+ * create by Wangjie
+ * <p>
+ * 【发现页】
+ * 包括：广告位、分类栏、商品列表、专题列表、文章列表
+ * <p>
+ * *广告位* {@link com.lalocal.lalocal.view.viewholder.find.ADCategoryViewHolder}
+ * 使用AndroidImageSlider框架，实现无限轮播图的效果，Github网址：https://github.com/daimajia/AndroidImageSlider
+ * <p>
+ * *分类栏* {@link com.lalocal.lalocal.view.viewholder.find.ChannelViewHolder}
+ * 点击“旅行专题”，跳转专题列表页面 {@link com.lalocal.lalocal.activity.ThemeActivity}
+ * 点击“旅游笔记”，跳转文章列表 {@link com.lalocal.lalocal.view.viewholder.find.ArticleViewHolder}
+ * 点击“旅游商城”，跳转目的地页面 {@link com.lalocal.lalocal.activity.DestinationActivity}
+ * <p>
+ * *商品列表* {@link com.lalocal.lalocal.view.viewholder.find.ProductViewHolder}
+ * 包含4个商品预览和More {@link com.lalocal.lalocal.activity.DestinationActivity}
+ * 使用GridView实现，对GridView重新计算高度
+ * <p>
+ * *专题列表* {@link com.lalocal.lalocal.view.viewholder.find.ThemeViewHolder}
+ * 最多显示10页专题Item，向右滑动至底部，出现查看更多 {@link com.lalocal.lalocal.activity.ThemeActivity}
+ * 使用ViewPager+View来实现
+ * <p>
+ * *文章列表* {@link com.lalocal.lalocal.view.viewholder.find.ArticleViewHolder}
+ * 文章列表的每一个Item都是XRecyclerView的Item
+ * <p>
+ * -------------------------------------------------------------------------------------------------
+ * 布局搭建策略：
+ * 本页面使用XRecyclerView多布局填充实现，各布局作为XRecyclerView的子项填充进列表
+ *
+ * @see com.lalocal.lalocal.view.adapter.HomeRecommendAdapter#getItemViewType(int)
+ * <p>
+ * -------------------------------------------------------------------------------------------------
+ * 卡顿优化策略：
+ * Glide+XRecyclerView实现
+ * 注意：
+ * 1. Glide适合刷新频率比较低，图片数量比较多的情况使用
+ * 2. Glide不适合于项目中的RoundedImageView共用
+ * @see com.makeramen.roundedimageview.RoundedImageView
+ * <p>
+ * -------------------------------------------------------------------------------------------------
+ * 网络数据请求策略：
+ * 网络数据请求采用异步加载策略，本页面相关接口有三个，每获取一个接口数据，则刷新一次页面
+ * @see com.lalocal.lalocal.net.ContentLoader#recommendAd()
+ * @see com.lalocal.lalocal.net.ContentLoader#indexRecommentList()
+ * @see com.lalocal.lalocal.net.ContentLoader#articleList(int, int)
  */
 public class FindFragment extends BaseFragment {
 
     @BindView(R.id.xrv_recommend)
     CustomXRecyclerView mXrvRecommend;
 
+    // 多布局列表适配器
     private HomeRecommendAdapter mRecommendAdapter;
 
+    // 广告列表
     private List<RecommendAdResultBean> mAdResultList = new ArrayList<>();
+    // 包含商品列表、专题列表的bean类
     private RecommendListBean mRecommendListBeen;
+    // 文章列表
     private List<ArticleDetailsResultBean> mArticleList = new ArrayList<>();
 
+    // 网络数据请求响应的类
     private ContentLoader mContentLoader;
 
+    // 文章列表每页加载的数量
     private int mArticlePageSize = 10;
+    // 文章列表当前加载的页码
     private int mArticlePageNum = 1;
 
-    // 刷新标记
+    // 刷新区域的标记
     private static final int INIT = 0x00;
     private static final int REFRESH_AD = 0x01;
-    private static final int REFRESH_PRODUCT_THEME = 0x02;
-    private static final int REFRESH_ARTICLE = 0x03;
-    private static final int REFRESH_ALL = 0x04;
+    private static final int REFRESH_ARTICLE = 0x02;
 
     // 是否在刷新
     private boolean isRefreshing = false;
     // 是否在加载
     private boolean isLoadingMore = false;
 
+    // 刷新完成的标记，因三个接口，所以为3，表示所有的数据都获取完毕
     private static final int REFRESH_COMPLETE = 3;
-
+    // 当前已经获取完毕的数据接口数量
     private int mCountRefresh = 0;
 
     public FindFragment() {
@@ -95,7 +142,7 @@ public class FindFragment extends BaseFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-
+        // 为防止发现页重现时，列表自动上下打滑
         mXrvRecommend.setFocusable(true);
     }
 
@@ -122,18 +169,6 @@ public class FindFragment extends BaseFragment {
         mXrvRecommend.setRefreshing(true);
         // 初始化适配器
         updateAdapter(INIT);
-        // 滚动事件监听，保证滑动到底部的时候才加载更多而不是最后一个item出现的时候就加载
-//        mXrvRecommend.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                if (mXrvRecommend.canScrollVertically(1) == true) {
-//                    mXrvRecommend.loadMoreComplete();
-//                } else if (mXrvRecommend.canScrollVertically(1) == false) {
-//                    mXrvRecommend.setLoadingMoreEnabled(true);
-//                }
-//            }
-//        });
     }
 
     /**
@@ -143,26 +178,29 @@ public class FindFragment extends BaseFragment {
 
         @Override
         public void onRefresh() {
+            // 之前出现列表控件不存在但列表刷新出现的空指针BUG，加上判断，防止异常发生
             if (mXrvRecommend != null) {
                 isRefreshing = true;
                 mXrvRecommend.setLoadingMoreEnabled(true);
 
+                // 获取三个不同接口的数据
                 mContentLoader.recommendAd();
                 mContentLoader.indexRecommentList();
                 mContentLoader.articleList(10, 0);
             } else {
+                // 这里有点思路有点问题，但是最好不要动代码，防止出现BUG
                 mXrvRecommend.refreshComplete();
             }
+            // 重置当前文章列表的页码，从1开始加载
             mArticlePageNum = 1;
         }
 
         @Override
         public void onLoadMore() {
-            if (mXrvRecommend.canScrollVertically(1) == false) {
-                isLoadingMore = true;
-                mArticlePageNum++;
-                mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
-            }
+            isLoadingMore = true;
+            mArticlePageNum++;
+            // 获取文章接口数据
+            mContentLoader.articleList(mArticlePageSize, mArticlePageNum);
         }
     }
 
@@ -170,15 +208,21 @@ public class FindFragment extends BaseFragment {
      * 初始化ContentLoader
      */
     private void initLoader() {
+        // 网络接口数据获取做准备
         mContentLoader = new ContentLoader(getActivity());
+        // 设置回调监听
         mContentLoader.setCallBack(new MyCallBack());
-//        mContentLoader.recommendAd();
-//        mContentLoader.indexRecommentList();
-//        mContentLoader.articleList(10, 0);
     }
 
+    /**
+     * 回调监听类
+     */
     public class MyCallBack extends ICallBack {
 
+        /**
+         * 获取不到数据时，停止刷新或加载
+         * @param volleyError
+         */
         @Override
         public void onError(VolleyError volleyError) {
             super.onError(volleyError);
@@ -195,6 +239,10 @@ public class FindFragment extends BaseFragment {
             }
         }
 
+        /**
+         * 获取广告位数据
+         * @param recommendAdResp
+         */
         @Override
         public void onRecommendAd(final RecommendAdResp recommendAdResp) {
             super.onRecommendAd(recommendAdResp);
@@ -218,7 +266,7 @@ public class FindFragment extends BaseFragment {
         }
 
         /**
-         * 首页推荐列表，包括：专题、商品、直播列表
+         * 首页推荐列表，包括：专题、商品、直播列表(直播列表取消)
          *
          * @param recommendListDataResp
          */
@@ -230,6 +278,9 @@ public class FindFragment extends BaseFragment {
                 if (recommendListDataResp.getReturnCode() == 0) {
                     // 获取首页推荐列表
                     mRecommendListBeen = recommendListDataResp.getResult();
+                    // 这里的INIT即表示初始化适配器，也可以表示刷新全局，
+                    // 因存在notifyDataSetChanged无效的情况（涉及list.clear()+list.addAll()崩溃的问题，
+                    // 所以不用这个策略而使用重新初始化适配器的策略）
                     updateAdapter(INIT);
                 }
             } catch (Exception e) {
@@ -259,6 +310,7 @@ public class FindFragment extends BaseFragment {
                         }
 
                         mXrvRecommend.loadMoreComplete();
+                        // 局部刷新：刷新文章列表
                         updateAdapter(REFRESH_ARTICLE);
                     } else if (isRefreshing) {
                         mArticleList.clear();
@@ -292,7 +344,7 @@ public class FindFragment extends BaseFragment {
     }
 
     /**
-     * 设置适配器
+     * 设置适配器，根据传入参数的不同实现不同范围的刷新
      */
     private void updateAdapter(int refreshType) {
         if (mRecommendAdapter == null) {
@@ -304,16 +356,9 @@ public class FindFragment extends BaseFragment {
             switch (refreshType) {
                 case REFRESH_AD:
                     mRecommendAdapter.refreshAD(mAdResultList);
-                    AppLog.i("TAH","刷新。。。。。。。。。轮播图");
-                    break;
-                case REFRESH_PRODUCT_THEME:
-                    mRecommendAdapter.refreshProductTheme(mRecommendListBeen);
                     break;
                 case REFRESH_ARTICLE:
                     mRecommendAdapter.refreshArticle(mArticleList);
-                    break;
-                case REFRESH_ALL:
-                    mRecommendAdapter.refreshAll(mAdResultList, mRecommendListBeen, mArticleList);
                     break;
                 case INIT:
                     mRecommendAdapter = null;

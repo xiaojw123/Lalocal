@@ -39,13 +39,13 @@ import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendationsBean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
 import com.lalocal.lalocal.view.RecommendLayout;
 import com.lalocal.lalocal.view.adapter.CategoryAdapter;
 import com.lalocal.lalocal.view.adapter.HomeLiveAdapter;
+import com.lalocal.lalocal.view.viewholder.live.CategoryViewHolder;
 import com.makeramen.roundedimageview.RoundedImageView;
 import com.melnykov.fab.FloatingActionButton;
 
@@ -57,7 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 重现情况分类：
+ * 重现情况分类及刷新策略：
  * 1. 点击home键，返回桌面后重进应用（后台运行，非销毁）：
  * 定位刷新
  * onResume调用刷新
@@ -68,9 +68,31 @@ import butterknife.OnClick;
  * 定位刷新
  * onHideChanged调用刷新
  * 4：跳转界面再回来：
- * 不刷新
+ * 全局定位刷新
  * 5：点击直播按钮再回来：
  * 定位刷新
+ *
+ * -------------------------------------------------------------------------------------------------
+ * 分类栏顶部悬停策略：
+ * 两个布局实现，一个布局A在列表里面，另一个布局B在列表外面
+ * A滑动到即将屏幕顶部的时候，B显示，否则B隐藏
+ *
+ * 对于本身分类栏就在顶部的情况：无广告位，无我的关注
+ * 这种情况下，发现刷新列表后，再向下滑动列表，数据显示滑动的距离达到约100dp的时候，列表才真正的动
+ * 所以再列表下拉100dp的时候隐藏B
+ *
+ * -------------------------------------------------------------------------------------------------
+ * 两个分类栏滑动同步策略：
+ * 在列表的分类栏的ViewHolder中实现两个分类栏滑动的同步，将外部的分类栏XRecyclerView传入列表中的分类栏ViewHolder中实现同步
+ *
+ * @see CategoryViewHolder#syncScroll(RecyclerView, RecyclerView)
+ *
+ * -------------------------------------------------------------------------------------------------
+ * 两个分类栏点击同步策略：
+ * 向分类栏XrecyclerView所在的Adapter中分别传入当前选中的是哪一项，
+ * 其中列表里的分类栏，通过一层层Adapter和ViewHolder往里面传入，直到传到CategoryAdapter里面的setSelected
+ *
+ * @see CategoryAdapter#setSelected(int)
  */
 public class LiveFragment extends BaseFragment {
     @BindView(R.id.xrv_live)
@@ -118,8 +140,6 @@ public class LiveFragment extends BaseFragment {
     private boolean isRefresh = false;
     // 判断是否加载更多
     private boolean isLoadingMore = false;
-    // 判断是否刷新我的关注
-//    private boolean isSyncAttention = false;
     // 当前分页页码
     private int mCurPageNum = 1;
 
@@ -167,7 +187,6 @@ public class LiveFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_live, container, false);
-
         return mRootView;
     }
 
@@ -178,6 +197,9 @@ public class LiveFragment extends BaseFragment {
         // 使用ButterKnife框架
         ButterKnife.bind(this, mRootView);
 
+        /*
+        对手机系统版本进行判断，若是6.0及以上，则动态获取权限
+         */
         if (Build.VERSION.SDK_INT >= 22) {
             // 请求用户权限
             reminderUserPermission(INIT);
@@ -186,10 +208,16 @@ public class LiveFragment extends BaseFragment {
             init();
         }
     }
+
+    /**
+     * 跳转其他界面再返回时，实现全局定位刷新，不改变列表位置和分类栏的选中情况
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        AppLog.i("sfr", "onResult requestCode " + requestCode);
         if (requestCode == 123) {
             isNeedRefresh = false;
             getChannelIndexTotal(mCurPageNum,mCategoryId);
@@ -265,6 +293,7 @@ public class LiveFragment extends BaseFragment {
      * 初始化列表
      */
     private void initXRecyclerView() {
+        // 初始化XRecyclerView
         mXrvLive.setLayoutManager(new LinearLayoutManager(getActivity()));
         mXrvLive.setHasFixedSize(true);
         mXrvLive.setPullRefreshEnabled(true);
@@ -275,9 +304,6 @@ public class LiveFragment extends BaseFragment {
         mXrvLive.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
-
-//                mXrvLive.setNoMore(false);
-
                 if (isRefresh == false) {
                     mSelCategory = 0;
                     mCategoryId = Constants.CATEGORY_HOT_LIVE;
@@ -289,7 +315,6 @@ public class LiveFragment extends BaseFragment {
 
             @Override
             public void onLoadMore() {
-
                 if (isLoadingMore == false) {
                     isLoadingMore = true;
                     // 页码+1
@@ -299,6 +324,10 @@ public class LiveFragment extends BaseFragment {
             }
         });
 
+        /**
+         * 对XRecyclerView的触摸事件进行监听，
+         * 通过对刷新头部的显示部分的高度进行判断，大于133dp的时候，视为用力刷新将每日推荐显示
+         */
         mXrvLive.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -329,8 +358,6 @@ public class LiveFragment extends BaseFragment {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
 
                 int position = layoutManager.findFirstVisibleItemPosition();
-                AppLog.i("psn", "position i s " + position);
-                AppLog.i("psn", "category index is " + mCategoryIndex);
                 if (mCategoryIndex > 0) {
                     if (position > mCategoryIndex) {
                         mRvTopCategory.setVisibility(View.VISIBLE);
@@ -339,7 +366,6 @@ public class LiveFragment extends BaseFragment {
                     }
                 } else {
                     int scrollY = getScrollYDistance(mXrvLive);
-                    AppLog.i("psn", "scroll y = " + scrollY);
                     if (scrollY <= DensityUtil.dip2px(getActivity(), 100)) {
                         mRvTopCategory.setVisibility(View.INVISIBLE);
                     } else {
@@ -357,6 +383,11 @@ public class LiveFragment extends BaseFragment {
 
     }
 
+    /**
+     * 获取XRecyclerView滑动超出屏幕的高度，单位：px
+     * @param xRecyclerView
+     * @return
+     */
     private int getScrollYDistance(XRecyclerView xRecyclerView) {
         LinearLayoutManager layoutManager = (LinearLayoutManager) xRecyclerView.getLayoutManager();
         int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
@@ -369,6 +400,10 @@ public class LiveFragment extends BaseFragment {
         }
     }
 
+    /**
+     * 6.0系统动态获取权限
+     * @param type
+     */
     @TargetApi(Build.VERSION_CODES.M)
     private void reminderUserPermission(int type) {
         switch (type) {
@@ -394,13 +429,23 @@ public class LiveFragment extends BaseFragment {
         }
     }
 
-
+    /**
+     * 权限请求的结果处理
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         doNext(requestCode, grantResults);
     }
 
+    /**
+     * 获取SD卡读取权限和相机录音等权限
+     * @param requestCode
+     * @param grantResults
+     */
     private void doNext(int requestCode, int[] grantResults) {
         switch (requestCode) {
             case LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE:
@@ -422,16 +467,18 @@ public class LiveFragment extends BaseFragment {
         }
     }
 
+    /**
+     * fragment切换的监听事件
+     * @param hidden
+     */
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        AppLog.i("sfr", "onHiddenChanged");
         if (hidden && isFirst) {
             // 隐藏推荐页
             mRecommendPage.hide();
             mRecommendPage.setFocusable(false);
         } else if (!hidden) {
-            AppLog.i("sfr", "onHiddenChanged isNeedRefresh");
             // 如果仅仅是fragment的tab切换，则刷新页面，不更改列表定位
             refreshWithSolidPosition();
             mBtnTakeLive.show();
@@ -439,16 +486,16 @@ public class LiveFragment extends BaseFragment {
 
     }
 
+    /**
+     * 页面重现的监听事件
+     */
     @Override
     public void onResume() {
         super.onResume();
-        AppLog.i("sfr", "onResume");
         if (isFirstEnter) {
             isFirstEnter = false;
             mXrvLive.setRefreshing(true);
         } else if (isNeedRefresh) {
-            AppLog.i("sfr", "onResume isNeedRefresh");
-//            isSyncAttention = true;
             refreshWithSolidPosition();
         }
         mBtnTakeLive.show();
@@ -476,12 +523,17 @@ public class LiveFragment extends BaseFragment {
         getChannelIndexTotal(mCurPageNum, mCategoryId);
     }
 
+    /**
+     * 点击直播按钮的监听事件，先请求权限
+     * @param v
+     */
     @OnClick({R.id.btn_takelive})
     void click(View v) {
         switch (v.getId()) {
             case R.id.btn_takelive:
                 MobHelper.sendEevent(getActivity(), MobEvent.LIVE_BUTTON);
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    // 准备直播
                     prepareLive();
                 } else {
                     // 提示用户开启直播权限
@@ -491,7 +543,7 @@ public class LiveFragment extends BaseFragment {
         }
     }
     /**
-     * 准备直播
+     * 准备直播，先判断是否处于登录状态
      */
     private void prepareLive() {
         boolean isLogin = UserHelper.isLogined(getActivity());
@@ -518,6 +570,10 @@ public class LiveFragment extends BaseFragment {
         });
         customDialog.show();
     }
+
+    /**
+     * 网络数据监听回调
+     */
     private class MyCallBack extends ICallBack {
         @Override
         public void onError(VolleyError volleyError) {
@@ -532,6 +588,10 @@ public class LiveFragment extends BaseFragment {
             }
         }
 
+        /**
+         * 每日推荐数据获取结果
+         * @param bean
+         */
         @Override
         public void onGetDailyRecommend(RecommendationsBean bean) {
             super.onGetDailyRecommend(bean);
@@ -560,6 +620,7 @@ public class LiveFragment extends BaseFragment {
             mRecommendPage.show();
             mRecommendPage.setFocusable(true);
 
+            // 解析数据
             final int type = bean.getType();
             final int targetId = bean.getTargetId();
             String title = bean.getTitle();
@@ -588,11 +649,7 @@ public class LiveFragment extends BaseFragment {
             }
             if (!TextUtils.isEmpty(avatar)) {
                 RoundedImageView imgAvatar = (RoundedImageView) mRecommendPage.getView(R.id.img_recommendations_avatar);
-                // Glide与RoundedImage一起使用会导致圆角消失
-//                Glide.with(getActivity())
-//                        .load(avatar)
-//                        .placeholder(R.drawable.androidloading)
-//                        .into(imgAvatar);
+                // 此处不能用Grlid，因为Glid与RoundedImageView
                 DrawableUtils.displayImg(getActivity(), imgAvatar, avatar, R.drawable.androidloading);
             }
             if (TextUtils.isEmpty(nickname)) {
@@ -600,6 +657,7 @@ public class LiveFragment extends BaseFragment {
             }
             mRecommendPage.setText(R.id.tv_recommendations_nickname, nickname);
 
+            // 直播类型标签设置
             if (type == LIVING) {
                 mRecommendPage.setText(R.id.tv_recommendations_type, "正在直播");
             } else if (type == PLAYBACK) {
@@ -627,74 +685,15 @@ public class LiveFragment extends BaseFragment {
             mRecommendPage.setPlayTypeId(type, targetId);
         }
 
+        /**
+         * 综合数据获取结果
+         * @param result
+         * @param dateTime
+         */
         @Override
         public void onGetChannelIndexTotal(ChannelIndexTotalResult result, long dateTime) {
             super.onGetChannelIndexTotal(result, dateTime);
 
-            AppLog.i("sls", "enter onGetChannelIndexTotal");
-//            if (isSyncAttention) {
-//                isSyncAttention = false;
-//                // 获取我的关注
-//                mAttention = result.getLastDynamicUser();
-//                // 刷新我的关注
-//                setAdapter(REFRESH_MY_ATTENTION);
-//            } else if (isSwitchCate) {
-//
-//                isSwitchCate = false;
-//                // -刷新的时候去掉之前加载
-//                isRefresh = false;
-//                isLoadingMore = false;
-//                mXrvLive.refreshComplete();
-//                mXrvLive.loadMoreComplete();
-//                // 加载页标记为第1页
-//                mCurPageNum = 1;
-//
-//                // 获取正在直播的列表
-//                mLivingList.clear();
-//                mLivingList.addAll(result.getChannelList());
-//
-//                // 获取回放列表
-//                ChannelIndexTotalResult.HistoryListBean historyListBean = result.getHistoryList();
-//                mPlaybackList.clear();
-//                if (historyListBean != null) {
-//                    mPlaybackList.addAll(historyListBean.getRows());
-//                }
-//                setAdapter(REFRESH_LIVE);
-//            } else if (isRefresh) {
-//                // -刷新的时候去掉之前加载
-//                isRefresh = false;
-//                isLoadingMore = false;
-//                mXrvLive.refreshComplete();
-//                mXrvLive.loadMoreComplete();
-//                // 加载页标记为第1页
-//                mCurPageNum = 1;
-//
-//                // 获取我的关注
-//                mAttention = result.getLastDynamicUser();
-//
-//                // 获取广告列表
-//                mAdList.clear();
-//                mAdList.addAll(result.getAdvertisingList());
-//
-//                // 获取分类列表，“热门分类”手动添加
-//                mCategoryList.clear();
-//                CategoryBean categoryBean = new CategoryBean();
-//                categoryBean.setId(Constants.CATEGORY_HOT_LIVE);
-//                mCategoryList.add(categoryBean);
-//                mCategoryList.addAll(result.getCategoryList());
-//
-//                // 获取正在直播的列表
-//                mLivingList.clear();
-//                mLivingList.addAll(result.getChannelList());
-//
-//                // 获取回放列表
-//                ChannelIndexTotalResult.HistoryListBean historyListBean = result.getHistoryList();
-//                mPlaybackList.clear();
-//                if (historyListBean != null) {
-//                    mPlaybackList.addAll(historyListBean.getRows());
-//                }
-//                setAdapter(REFRESH_ALL);
-//            } else
                 if (isLoadingMore) {
                 // 加载的时候去掉刷新
                 isLoadingMore = false;
@@ -715,16 +714,6 @@ public class LiveFragment extends BaseFragment {
                     setAdapter(REFRESH_PLAYBACK_LIST);
                 }
             } else {
-
-//                // 加载完毕
-//                isLoadingMore = false;
-//                // 刷新完毕
-//                isRefresh = false;
-//                // 刷新结束
-//                mXrvLive.refreshComplete();
-
-                AppLog.i("fsa", "else");
-                AppLog.i("dsp", "else ");
                 // -刷新的时候去掉之前加载
                 isRefresh = false;
                 isLoadingMore = false;
@@ -746,7 +735,6 @@ public class LiveFragment extends BaseFragment {
                 categoryBean.setId(Constants.CATEGORY_HOT_LIVE);
                 mCategoryList.add(categoryBean);
                 mCategoryList.addAll(result.getCategoryList());
-                AppLog.i("fsa", "ad size is " + mCategoryList.size());
 
                 // 获取正在直播的列表
                 mLivingList.clear();
@@ -758,7 +746,6 @@ public class LiveFragment extends BaseFragment {
                 if (historyListBean != null) {
                     mPlaybackList.addAll(historyListBean.getRows());
                 }
-                AppLog.i("sls", "onGetChannelIndexTotal aflter data got");
                 setAdapter(REFRESH_ALL);
             }
         }
@@ -781,8 +768,6 @@ public class LiveFragment extends BaseFragment {
                     mPlaybackList, listener, mRvTopCategory);
             // 刷新数据
             mXrvLive.setAdapter(mAdapter);
-            // 分类栏滚动到顶部再滚动回来
-//            initCategory();
         } else {
             switch (refreshType) {
                 case REFRESH_MY_ATTENTION:
@@ -803,13 +788,10 @@ public class LiveFragment extends BaseFragment {
                     setAdapter(INITIAL);
                     break;
                 case REFRESH_LIVE:
-                    AppLog.i("sls", "REFRESH_LIVE");
                     // 刷新直播和回放列表
                     mAdapter.refreshLive(mLivingList, mPlaybackList);
-                    AppLog.i("sls", "after refresh live");
                     break;
                 case REFRESH_ALL:
-                    AppLog.i("dsp", "REFRESH_ALL");
                     // 如果分类不为热门直播
                     if (mCategoryId != Constants.CATEGORY_HOT_LIVE) {
                         mLivingList.clear();
@@ -822,7 +804,6 @@ public class LiveFragment extends BaseFragment {
 
                     if (isCateRefresh) {
                         LinearLayoutManager layoutManager = (LinearLayoutManager) mXrvLive.getLayoutManager();
-                        AppLog.i("sfr", "scroll to mCategory " + mCategoryIndex);
                         layoutManager.scrollToPositionWithOffset(mCategoryIndex + 1, 0);
                         isCateRefresh = false;
                     }
@@ -837,7 +818,6 @@ public class LiveFragment extends BaseFragment {
     private void setCategoryAdapter() {
 
         if (mCateAdapter == null) {
-            AppLog.i("dsp", "mCateAdapter null");
             OnCategoryItemClickListener itemClickListener = new OnCategoryItemClickListener();
             // 初始化分类适配器
             mCateAdapter = new CategoryAdapter(getActivity(), mCategoryList, itemClickListener, mRvTopCategory, mSelCategory);
@@ -850,8 +830,6 @@ public class LiveFragment extends BaseFragment {
             // 设置适配器
             mRvTopCategory.setAdapter(mCateAdapter);
         } else {
-            AppLog.i("dsp", "mCateAdapter not null");
-            AppLog.i("sls", "else setSelected");
             mCateAdapter.setSelected(mSelCategory);
         }
     }
@@ -876,14 +854,12 @@ public class LiveFragment extends BaseFragment {
         public void onItemClick(View view, int position) {
             if (mCategoryList.size() > 0) { //  && position != mSelCategory
 
-                AppLog.i("dsp", "position is " + position);
                 // 获取选中的分类
                 CategoryBean categoryBean = mCategoryList.get(position);
                 // 获取分类id
                 mCategoryId = categoryBean.getId();
                 // 得到选中的分类的下标
                 mSelCategory = position;
-                AppLog.i("slt", "positoin is " + position);
                 // 加载分页重置为1
                 mCurPageNum = 1;
                 // 点击分类刷新

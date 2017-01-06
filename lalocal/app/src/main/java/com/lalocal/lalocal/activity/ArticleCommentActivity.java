@@ -35,6 +35,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * create by Wangjie
+ *
+ * 文章评论列表Activity
+ */
 public class ArticleCommentActivity extends BaseActivity {
 
     @BindView(R.id.img_write_comment)
@@ -104,9 +109,16 @@ public class ArticleCommentActivity extends BaseActivity {
         mContentLoader.setCallBack(new MyCallBack());
     }
 
+    /**
+     * 根据界面跳转返回判断是否进行数据请求
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode==ArticleCommentActivity.REPLY_REQUESTCODE&&resultCode==KeyParams.REPLY_RESULTCODE){
             if(mCommentList!=null){
                 mContentLoader.getArticleComments(mArticleId,1);
@@ -154,6 +166,9 @@ public class ArticleCommentActivity extends BaseActivity {
 
     }
 
+    /**
+     * 接口数据返回处理回调
+     */
     private class MyCallBack extends ICallBack {
         @Override
         public void onGetArticleComments(CommentsResp.ResultBean resultBean) {
@@ -350,6 +365,9 @@ public class ArticleCommentActivity extends BaseActivity {
                 ArticleCommentActivity.this.finish();
                 break;
             case R.id.img_write_comment:
+                /*
+                因为发起评论页面是直播评论和文章评论共用的，所以需要传入不同的值来判断是哪一个评论及是发起评论还是回复评论
+                 */
                 if (UserHelper.isLogined(this)) {
                     Intent replyIntent = new Intent(ArticleCommentActivity.this, RePlyActivity.class);
                     Bundle bundle = new Bundle();
