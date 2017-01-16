@@ -689,7 +689,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 if (themeAdapter == null) {
                     themeAdapter = new ThemeAdapter(GlobalSearchActivity.this, specialList);
                 } else {
-                    themeAdapter.setResh(specialList);
+                    themeAdapter.setRefresh(specialList);
                 }
                 if (gsearchTabSpecial.isSelected()) {
                     showDataResult();
@@ -702,7 +702,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 }
             }
         }
-
     }
 
     private OnItemClickListener itemClickListener = new OnItemClickListener() {

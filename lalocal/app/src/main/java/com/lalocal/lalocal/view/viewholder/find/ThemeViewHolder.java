@@ -4,28 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.activity.ThemeActivity;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.util.CommonUtil;
-import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DotUtils;
-import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.ScaleAlphaPageTransformer;
-import com.lalocal.lalocal.view.CustomXRecyclerView;
-import com.lalocal.lalocal.view.DisallowParentTouchViewPager;
-import com.lalocal.lalocal.view.MyPtrClassicFrameLayout;
 import com.lalocal.lalocal.view.adapter.HomeRecoThemeAdapter;
 
 import java.util.ArrayList;
@@ -33,29 +23,42 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/10/25.
+ *
+ * 发现页的专题列表试图容器类
+ *
  */
 public class ThemeViewHolder extends RecyclerView.ViewHolder {
 
+    // 上下文
     private Context mContext;
 
+    // 专题列表大小
     private int mSize = -1;
+    // 当前显示的列表项所在的下标
     private int mSelected = -1;
 
+    // 控件声明
     private TextView mTitleView;
     private TextView mSubtitleView;
     private FrameLayout mLayoutContainer;
     private RelativeLayout mLayoutMore;
-
     private ViewPager mVpTheme;
     private LinearLayout mVtvSeeMore;
     private LinearLayout mDotContainer;
 
+    // 专题列表下方的小圆点列表
     private List<Button> mDotBtns = new ArrayList<>();
 
+    /**
+     * 构造方法
+     * @param context
+     * @param itemView
+     */
     public ThemeViewHolder(Context context, View itemView) {
         super(itemView);
         this.mContext = context;
 
+        // 关联控件
         mLayoutContainer = (FrameLayout) itemView.findViewById(R.id.theme_container);
         mVtvSeeMore = (LinearLayout) itemView.findViewById(R.id.vertical_see_more);
         mTitleView = (TextView) itemView.findViewById(R.id.tv_title);
@@ -64,11 +67,9 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
         mVpTheme = (ViewPager) itemView.findViewById(R.id.vp_theme);
         mDotContainer = (LinearLayout) itemView.findViewById(R.id.dot_container);
 
-        // 传入父容器
-//        mVpTheme.setNestParent(mXRecyclerView);
-        // 设置一个屏幕最多显示视频的个数
+        // 设置一个屏幕最多显示专题的个数
         mVpTheme.setOffscreenPageLimit(4);
-        // 设置热播视频间距
+        // 设置专题列表子项间距
         mVpTheme.setPageMargin(mContext.getResources().getDimensionPixelSize(
                 R.dimen.home_recommend_viewpager_page_margin));
     }
@@ -88,10 +89,11 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
 
         List<RecommendRowsBean> recommendSpecialList = list;
 
+        // 设置专题区域中英文标题
         mTitleView.setText(title);
         mSubtitleView.setText(subtitle);
 
-        // 改变大小透明度的工具类
+        // 改变大小透明度的工具类，专题列表左右滑动时，当前子项的透明度会高一点
         ScaleAlphaPageTransformer mScaleAlphaPageTransformer = new ScaleAlphaPageTransformer();
         // 初始化适配器
         final HomeRecoThemeAdapter themeAdapter = new HomeRecoThemeAdapter(mContext, recommendSpecialList);
@@ -126,6 +128,10 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
 
             }
 
+            /**
+             * 滚动到最后一页显示文案“查看更多”
+             * @param position
+             */
             @Override
             public void onPageSelected(int position) {
                 DotUtils.selectDotBtn(mDotBtns, position, DotUtils.ROUND_LIGHT_DOT);
@@ -145,6 +151,7 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        // 标题栏的More
         mLayoutMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -153,6 +160,7 @@ public class ThemeViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        // ViewPager滑到最后一页显示“查看更多”
         mVtvSeeMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

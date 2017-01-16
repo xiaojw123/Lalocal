@@ -19,6 +19,9 @@ import com.lalocal.lalocal.util.QiniuUtils;
 
 /**
  * Created by wangjie on 2016/10/25.
+ *
+ * 发现页文章列表的子项视图容器
+ * 每一个子项都包含中英文标题区域，但是只有第一个子项显示中英文标题区域
  */
 public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -84,7 +87,7 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.O
         mTargetId = bean.getId();
         // 获取图片链接
         String photoUrl = bean.getPhoto();
-        // 获取控件宽高
+        // 获取控件宽高，为七牛云图片裁剪做准备
         LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mImgArticle.getLayoutParams();
         int width = lp.width;
         int height = lp.height;
@@ -103,7 +106,6 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.O
         SpecialAuthorBean author = bean.getAuthorVO();
         String authorName = author.authorName;
 
-
         // 使用Glide加载url图片
         Glide.with(mContext)
                 .load(photoUrl)
@@ -114,12 +116,14 @@ public class ArticleViewHolder extends RecyclerView.ViewHolder implements View.O
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .into(mImgArticle);
 
+        // 视图内容填充
         mTvArticleTitle.setText(articleTitle);
         mTvReadNum.setText(String.valueOf(readNum));
         mTvPraiseNum.setText(String.valueOf(praiseNum));
         mTvDescription.setText(description);
         mTvAuthorName.setText(authorName);
 
+        // 容器点击事件，相当于onItemClickListener效果
         mLayoutClick.setOnClickListener(this);
     }
 

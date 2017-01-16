@@ -12,7 +12,6 @@ import com.lalocal.lalocal.model.ProductDetailsResultBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.RecommendListBean;
 import com.lalocal.lalocal.model.RecommendRowsBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.view.viewholder.find.ADCategoryViewHolder;
 import com.lalocal.lalocal.view.viewholder.find.ArticleViewHolder;
 import com.lalocal.lalocal.view.viewholder.find.ChannelViewHolder;
@@ -23,13 +22,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 项目名称：lalocal
- * 模块名称：
- * 包名：com.lalocal.lalocal.view.adapter
- * 类功能：
- * 创建人：wangjie
- * 创建时间：2016 16/9/9 下午2:54
- * 联系邮箱: wjnovember@icloud.com
+ * create by wangjie at 2016 16/9/9 下午2:54
+ *
+ * 发现页的适配器类：
+ * 多布局列表填充，对布局的类别判断详见:
+ *
+ * @see #getItemViewType(int)
  */
 public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -108,40 +106,10 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      * @param adList
      */
     public void refreshAD(List<RecommendAdResultBean> adList) {
-        AppLog.i("his", "refreshAD");
         if (adList == null || adList.size() == 0) {
             this.mAdList = new ArrayList<>();
         } else {
             this.mAdList = adList;
-        }
-        this.notifyDataSetChanged();
-    }
-
-    /**
-     * 刷新商品、专题
-     *
-     * @param recommendListBean
-     */
-    public void refreshProductTheme(RecommendListBean recommendListBean) {
-        AppLog.i("his", "refreshProductTheme");
-        if (recommendListBean != null) {
-            AppLog.i("his", "bean not null");
-            // 获取商品列表
-            if (recommendListBean.getProduList() != null) {
-                this.mProduList = recommendListBean.getProduList();
-                AppLog.i("his", "product list size " + mProduList.size());
-            } else {
-                this.mProduList = new ArrayList<>();
-                AppLog.i("his", "product list null");
-            }
-            // 获取专题列表
-            if (recommendListBean.getThemeList() != null) {
-                this.mThemeList = recommendListBean.getThemeList();
-                AppLog.i("his", "theme list size " + mThemeList.size());
-            } else {
-                this.mThemeList = new ArrayList<>();
-                AppLog.i("his", "theme list null");
-            }
         }
         this.notifyDataSetChanged();
     }
@@ -152,7 +120,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      * @param articleList
      */
     public void refreshArticle(List<ArticleDetailsResultBean> articleList) {
-        AppLog.i("his", "refreshArticle");
         if (articleList == null || articleList.size() == 0) {
             mArticleList = new ArrayList<>();
         } else {
@@ -169,7 +136,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
      */
     public void refreshAll(List<RecommendAdResultBean> adList, RecommendListBean recommendListBean,
                            List<ArticleDetailsResultBean> articleList) {
-        AppLog.i("his", "refreshAll");
         // 刷新广告栏
         if (adList == null || adList.size() == 0) {
             this.mAdList = new ArrayList<>();
@@ -236,7 +202,6 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        AppLog.i("recc", "onBindViewHolder viewwtype " + getItemViewType(position));
         switch (getItemViewType(position)) {
             case ADVERTISEMENT_CATEGORY:
                 ((ADCategoryViewHolder) holder).initData(mAdList);
@@ -267,6 +232,9 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     /**
      * 获取第一篇文章对应列表的下标
+     *
+     * 为实现文章子项在XRecyclerView的位置与文章List的下表对应起来，
+     * 需要找到下标为0的文章在XRecyclerView中对应的位置
      * @return
      */
     public int getFirstArticlePositoin() {
@@ -274,10 +242,10 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         int size = getItemCount();
         // 文章列表第一个item所在的下标
         int firstIndex = size - mArticleList.size();
-        AppLog.i("jump", "size = " + size + "; article size is " + mArticleList.size() + "; index is " + firstIndex);
         // 返回下标
         return firstIndex;
     }
+
 
     @Override
     public int getItemCount() {
@@ -296,6 +264,11 @@ public class HomeRecommendAdapter extends RecyclerView.Adapter<RecyclerView.View
         return count;
     }
 
+    /**
+     * 根据position的不同判断哪个position对应哪个布局
+     * @param position
+     * @return
+     */
     @Override
     public int getItemViewType(int position) {
         if (position == 0) {

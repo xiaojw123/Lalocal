@@ -35,6 +35,8 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/12/14.
+ *
+ * 直播首页广告位视图容器
  */
 
 public class ADViewHolder extends RecyclerView.ViewHolder {
@@ -79,7 +81,6 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
             RecommendAdResultBean ad = mAdList.get(i);
             String photoUrl = ad.photo;
             photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
-            AppLog.i("photoU", "ad photo is " + photoUrl);
             defaultSliderView.image(photoUrl);
             defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
             defaultSliderView.setOnSliderClickListener(onSliderClickListener);
@@ -130,20 +131,17 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
                     if (TextUtils.isEmpty(url)) {
                         Toast.makeText(mContext, "加载链接失败", Toast.LENGTH_SHORT).show();
                     } else {
-                        AppLog.i("addd", "链接");
                         intent = new Intent(mContext, CarouselFigureActivity.class);
                         intent.putExtra("carousefigure", recommendAdResultBean);
                         mContext.startActivity(intent);
                     }
                     break;
                 case Constants.TARGET_TYPE_ARTICLE: // 文章
-                    AppLog.i("addd", "文章");
                     intent = new Intent(mContext, ArticleActivity.class);
                     intent.putExtra("targetID", String.valueOf(targetId));
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_PRODUCTION: // 产品
-                    AppLog.i("addd", "产品--" + targetId);
                     // 跳转到商品详情界面
                     SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
                     specialToH5Bean.setTargetId(targetId);
@@ -153,13 +151,11 @@ public class ADViewHolder extends RecyclerView.ViewHolder {
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_ROUTE: // 路线
-                    AppLog.i("addd", "路线");
                     intent = new Intent(mContext, RouteDetailActivity.class);
                     intent.putExtra("detail_id", targetId);
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_THEME: // 专题
-                    AppLog.i("addd", "专题");
                     intent = new Intent(mContext, SpecialDetailsActivity.class);
                     intent.putExtra("rowId", targetId + "");
                     mContext.startActivity(intent);
