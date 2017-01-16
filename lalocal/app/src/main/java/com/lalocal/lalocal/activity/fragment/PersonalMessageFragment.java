@@ -75,6 +75,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         personalMessageRlv.setNestedScrollingEnabled(false);
         contactAdapter = new RecentContactAdapter(mItems);
         contactAdapter.setOnItemClickListener(this);
+        titleLayout.setOnClickListener(this);
         personalMessageRlv.setAdapter(contactAdapter);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -98,25 +99,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         AppLog.print("requestCallbackWrapper onResult recents___len___" + recents.size());
         final List<RecentContactInfo> infoList = new ArrayList<>();
         List<String> ssidlist = new ArrayList<>();
-//        Out:
-//        for (RecentContact contact : recents) {
-//            String ssid = contact.getContactId();
-//            for (RecentContactInfo curInfo : mItems) {
-//                if (ssid.equals(curInfo.getAccount())) {
-//                    curInfo.setContent(contact.getContent());
-//                    curInfo.setTime(contact.getTime());
-//                    curInfo.setUnReadCount(contact.getUnreadCount());
-//                    continue Out;//结束整个循环体
-//                }
-//            }
-//            RecentContactInfo info = new RecentContactInfo();
-//            info.setAccount(ssid);
-//            info.setContent(contact.getContent());
-//            info.setTime(contact.getTime());
-//            info.setUnReadCount(contact.getUnreadCount());
-//            infoList.add(info);
-//            ssidlist.add(ssid);
-//        }
         int len = recents.size();
         Out:
         for (int i = 0; i < len; i++) {
@@ -131,23 +113,6 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
                 }
             }
             RecentContactInfo info = new RecentContactInfo();
-//            long currentTime = contact.getTime();
-//            int nextIndex = i + 1;
-//            if (nextIndex < len) {
-//                RecentContact nextContct = recents.get(nextIndex);
-//                if (nextContct != null) {
-//                    long nextTime = nextContct.getTime();
-//                    if (currentTime < nextTime) {
-//                        info.setAccount(nextContct.getContactId());
-//                        info.setContent(nextContct.getContent());
-//                        info.setTime(nextTime);
-//                        info.setUnReadCount(nextContct.getUnreadCount());
-//                        infoList.add(nextIndex, info);
-//                        ssidlist.add(nextIndex, ssid);
-//                        continue;
-//                    }
-//                }
-//            }
             info.setAccount(ssid);
             info.setContent(contact.getContent());
             info.setTime(contact.getTime());
@@ -285,6 +250,8 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.fragment_personal_msg_title:
+                break;
             case R.id.chat_cancel_btn:
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();

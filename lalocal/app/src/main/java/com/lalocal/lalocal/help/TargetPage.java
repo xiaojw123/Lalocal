@@ -138,10 +138,11 @@ public class TargetPage {
 
     }
 
-    public static void gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName,boolean isMessage) {
+    public static boolean gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName,boolean isMessage) {
         if (TextUtils.isEmpty(targetType)) {
-            return;
+            return false;
         }
+        boolean isHandled=true;
         switch (targetType) {
             case TargetType.URL://链接
                 gotoWebDetail(context, targetUrl, targetName, isMessage);
@@ -175,10 +176,11 @@ public class TargetPage {
             case TargetType.COUPON:
                 gotoCoupon(context,isMessage);
                 break;
-
+            default:
+                isHandled=false;
+                break;
         }
-
-
+        return isHandled;
     }
 
 

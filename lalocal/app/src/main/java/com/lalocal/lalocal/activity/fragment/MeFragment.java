@@ -51,7 +51,9 @@ import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.model.RecentContact;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindString;
 import butterknife.BindView;
@@ -433,6 +435,12 @@ MeFragment extends BaseFragment {
         @Override
         public void onGetUserProfile(LoginUser user) {
             updateFragmentView(true, user);
+            String sex = user.isSex() ? getResources().getString(R.string.man) : getResources().getString(R.string.woman);
+            Map<String, Object> params = new HashMap<>();
+            params.put(MobHelper.UMADParamas.USER_ID,user.getId());
+            params.put(MobHelper.UMADParamas.NAME, user.getNickName());
+            params.put(MobHelper.UMADParamas.SEX, sex);
+            MobHelper.registerSuperProperty(getActivity(),params);
         }
 
     }

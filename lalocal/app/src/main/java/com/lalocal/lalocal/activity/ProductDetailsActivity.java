@@ -5,14 +5,13 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.KeyParams;
@@ -23,16 +22,14 @@ import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LoginUser;
 import com.lalocal.lalocal.model.PariseResult;
 import com.lalocal.lalocal.model.PhotosVosBean;
-import com.lalocal.lalocal.model.ProductContentBean;
-import com.lalocal.lalocal.model.ProductDetailsBean;
 import com.lalocal.lalocal.model.ProductDetailsDataResp;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
-import com.lalocal.lalocal.model.ProductValueBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
+import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DensityUtil;
@@ -50,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 /**
  * Created by lenovo on 2016/6/22.
  */
@@ -62,17 +58,11 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
     private RelativeLayout reLayout;
 
     private ImageView detailsPhoto1;
-    private TextView titleTv;
-    private TextView productPrice;
-    private LinearLayout checkDetails;
     private ShineButton btnLike;
     private ImageView btnShare;
     private ShapeTextView productReserve;
     private ImageView customer;
-    private TextView productService;
-    private LinearLayout featureLayout;
-    private LinearLayout serviceLayout;
-    private LinearLayout purchaseNotes;
+    //    private LinearLayout serviceLayout;
     private int left;
     private int top;
     private RelativeLayout phones;
@@ -91,13 +81,14 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
     private View titleLine;
     private LinearLayout serviceLL;
     private int statusHeight;
-    private View loadingView;
+    WebView detailWv;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_details_layout);
+        showLoadingAnimation();
         initView();
         initData();
 
@@ -105,21 +96,14 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
     }
 
     private void initView() {
-        loadingView = findViewById(R.id.page_base_loading);
+        detailWv = (WebView) findViewById(R.id.product_details_wv);
         backTitleView = (CustomTitleView) findViewById(R.id.product_title_back_ctv);
         detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
-        titleTv = (TextView) findViewById(R.id.product_title_tv);
-        productPrice = (TextView) findViewById(R.id.product_price);
-        checkDetails = (LinearLayout) findViewById(R.id.product_check_detail);
         btnLike = (ShineButton) findViewById(R.id.product_btn_like);
         btnShare = (ImageView) findViewById(R.id.product_btn_share);
         productReserve = (ShapeTextView) findViewById(R.id.product_details_reserve);
         customer = (ImageView) findViewById(R.id.product_customer_service);
         phones = (RelativeLayout) findViewById(R.id.product_details_phones);
-        productService = (TextView) findViewById(R.id.product_service);
-        featureLayout = (LinearLayout) findViewById(R.id.product_content_value);
-        serviceLayout = (LinearLayout) findViewById(R.id.product_service_layout);
-        purchaseNotes = (LinearLayout) findViewById(R.id.product_purchase_notes);
         titleBack = (ImageView) findViewById(R.id.product_title_back_btn);
         titleRelayout = (RelativeLayout) findViewById(R.id.product_service_relayout);
         mScrollView = (MyScrollView) findViewById(R.id.product_scrollview);
@@ -127,11 +111,9 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         detailsPhoto1 = (ImageView) findViewById(R.id.product_details_photo);
         titleLine = findViewById(R.id.product_title_line);
         serviceLL = (LinearLayout) findViewById(R.id.product_service_ll);
-
-
+        CommonUtil.setWebView(detailWv,true);
         //点击监听
         backTitleView.setOnBackClickListener(this);
-        checkDetails.setOnClickListener(this);
         btnLike.setOnClickListener(this);
         btnShare.setOnClickListener(this);
         customer.setOnClickListener(this);
@@ -166,6 +148,14 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
         contentService.productDetails(specialToH5Bean.getTargetId() + "");
         left = DensityUtil.dip2px(ProductDetailsActivity.this, 15);
         top = DensityUtil.dip2px(ProductDetailsActivity.this, 3);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (result!=null){
+            detailWv.loadUrl(AppConfig.getH5Url(this,result.h5Url));
+        }
     }
 
     @Override
@@ -227,7 +217,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 break;
             case R.id.product_btn_like:
                 // 收藏
-                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_LIKE);
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_LIKE);
                 if (result != null) {
                     //取消收藏
                     int targetId = specialToH5Bean.getTargetId();
@@ -240,7 +230,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 break;
             case R.id.product_btn_share:
                 // 分享
-                MobHelper.sendEevent(this,MobEvent.DESTINATION_PRODUCT_SHARE);
+                MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SHARE);
                 if (result != null) {
                     SpecialShareVOBean shareVO = result.shareVO;
                     showShare(shareVO);
@@ -248,23 +238,14 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 break;
             case R.id.product_details_reserve:
                 // 预定
-                MobHelper.sendEevent(this,MobEvent.PRODUCT_BOOKING);
+                MobHelper.sendEevent(this, MobEvent.PRODUCT_BOOKING);
                 if (UserHelper.isLogined(this)) {
-                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this),v);
+                    contentService.getUserProfile(UserHelper.getUserId(this), UserHelper.getToken(this), v);
                 } else {
                     LLoginActivity.start(this);
                 }
                 break;
-            case R.id.product_check_detail:
-                // 查看详情
-                if (result != null && result.url != null) {
-                    String url = result.url;
-                    Intent intent = new Intent(ProductDetailsActivity.this, ProductCheckDetailActivity.class);
-                    intent.putExtra("checkdetail", url);
-                    startActivity(intent);
-                }
 
-                break;
             case R.id.product_service_ll:
                 MobHelper.sendEevent(this, MobEvent.DESTINATION_PRODUCT_SERVICE);
                 CommonUtil.startCustomService(this);
@@ -311,8 +292,8 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 if (user.getStatus() == 0) {
                     preOrderProduct();
                 } else {
-                    String email=user.getEmail();
-                    if (TextUtils.isEmpty(email)){
+                    String email = user.getEmail();
+                    if (TextUtils.isEmpty(email)) {
                         CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未绑定,请前去绑定", new CustomDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
@@ -323,7 +304,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                             }
                         });
 
-                    }else {
+                    } else {
                         CommonUtil.showPromptDialog(ProductDetailsActivity.this, "邮箱未验证，请前去验证!", new CustomDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
@@ -343,7 +324,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
         @Override
         public void onProductDetails(ProductDetailsDataResp detailsDataResp) {
-            loadingView.setVisibility(View.GONE);
+            hidenLoadingAnimation();
             if (detailsDataResp.returnCode == 0) {
                 result = detailsDataResp.result;
                 praiseId = result.praiseId;
@@ -359,7 +340,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 productDetail(result);
                 List<PhotosVosBean> photoVOs = result.photoVOs;
                 List<RecommendAdResultBean> list = new ArrayList<>();
-                if (photoVOs!=null&&photoVOs.size() > 0) {
+                if (photoVOs != null && photoVOs.size() > 0) {
                     //显示轮播图
                     detailsPhoto1.setVisibility(View.GONE);
                     for (int i = 0; i < photoVOs.size(); i++) {
@@ -371,11 +352,11 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                         list.add(recommendAdResultBean);
                     }
                     showphotos(list);
-                } else if (photoList!=null&&photoList.size() > 0) {
+                } else if (photoList != null && photoList.size() > 0) {
                     detailsPhoto1.setVisibility(View.GONE);
 
                     for (int i = 0; i < photoList.size(); i++) {
-                        if(i>7){
+                        if (i > 7) {
                             break;
                         }
                         RecommendAdResultBean recommendAdResultBean = new RecommendAdResultBean();
@@ -422,7 +403,7 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
                 ViewFactory.initialize(ProductDetailsActivity.this, inflate, cycleViewPager, list);
             }
             phones.addView(inflate);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -458,167 +439,16 @@ public class ProductDetailsActivity extends BaseActivity implements MyScrollView
 
 
         }
-
-        titleTv.setText(result.title);
-//        productPrice.setText("¥ " + result.price);
-        productPrice.setText(CommonUtil.formartOrderPrice(result.price));
-        List<SparseArray<String>> items = new ArrayList<>();
-        SparseArray<String> item1 = new SparseArray<>();
-        SparseArray<String> item2 = new SparseArray<>();
-        SparseArray<String> item3 = new SparseArray<>();
-        SparseArray<String> item4 = new SparseArray<>();
-        SparseArray<String> item5 = new SparseArray<>();
-        String departureTime = result.departureTime;
-        String departurePoint = result.departurePoint;
-        String departureRemark = result.departureRemark;
-        String duration = result.duration;
-        String returnDetails = result.returnDetails;
-        if (!TextUtils.isEmpty(departureTime)) {
-            item1.append(0, "出发时间");
-            item1.append(1, departureTime);
-            items.add(item1);
-        }
-        if (!TextUtils.isEmpty(departurePoint)) {
-            item2.append(0, "出发地点");
-            item2.append(1, departurePoint);
-            items.add(item2);
-        }
-        if (!TextUtils.isEmpty(departureRemark)) {
-            item3.append(0, "出发须知");
-            item3.append(1, departureRemark);
-            items.add(item3);
-        }
-        if (!TextUtils.isEmpty(duration)) {
-            item4.append(0, "持续时间");
-            item4.append(1, duration);
-            items.add(item4);
-        }
-        if (!TextUtils.isEmpty(returnDetails)) {
-            item5.append(0, "返回信息");
-            item5.append(1, returnDetails);
-            items.add(item5);
-        }
-        serviceAddtionIntroduce(items);
-        List<ProductDetailsBean> details = result.details;
-        for (int i = 0; i < details.size(); i++) {
-            if (i == 0) {
-                //亮点介绍
-                featureIntroduce(details.get(i).content.get(i).value);
-            } else if (i == 1) {
-                //服务介绍
-                serviceIntroduce(details.get(i).content);
-                productService.setText("· " + details.get(i).title + " ·");
-                productService.setTextColor(Color.BLACK);
-            } else if (i == 2) {
-                //  purchaseNotes(details.get(i).content);
-            }
-        }
+        detailWv.loadUrl(AppConfig.getH5Url(this,result.h5Url));
 
     }
 
-    //购买须知
-    private void purchaseNotes(List<ProductContentBean> content) {
-        for (int i = 0; i < content.size(); i++) {
-            for (int j = 0; j < content.get(i).value.size(); j++) {
-                TextView tv = new TextView(ProductDetailsActivity.this);
-                tv.setText(content.get(i).value.get(j).text);
-                purchaseNotes.addView(tv);
-            }
-        }
-    }
 
-    public void serviceAddtionIntroduce(List<SparseArray<String>> items) {
-        for (int i = 0; i < items.size(); i++) {
-            SparseArray<String> item = items.get(i);
-            TextView tv = new TextView(ProductDetailsActivity.this);
-            tv.setText("· " + item.get(0) + "");
-            tv.setTextColor(Color.parseColor("#ffaa2a"));
-            tv.setPadding(left, left, 0, left);
-            serviceLayout.addView(tv);
-            TextView tvContent = new TextView(ProductDetailsActivity.this);
-            tvContent.setText(item.get(1));
-            tvContent.setPadding(left, 0, 0, 0);
-            serviceLayout.addView(tvContent);
-            View nullView = new View(ProductDetailsActivity.this);
-            LinearLayout.LayoutParams nullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60);
-            serviceLayout.addView(nullView, nullParams);
-            if (i != items.size() - 1) {
-                View view = new View(ProductDetailsActivity.this);
-                view.setBackgroundColor(Color.parseColor("#aaaaaa"));
-                view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                view.setBackgroundResource(R.drawable.imag_line);
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(mContext, 2));
-
-                params.leftMargin = DensityUtil.dip2px(mContext, 15);
-                params.rightMargin = DensityUtil.dip2px(mContext, 15);
-                serviceLayout.addView(view, params);
-            }
-        }
-
-    }
-
-    //服务介绍
-    private void serviceIntroduce(List<ProductContentBean> content) {
-        for (int i = 0; i < content.size(); i++) {
-            TextView tv = new TextView(ProductDetailsActivity.this);
-            tv.setText("· " + content.get(i).menu + "");
-            tv.setTextColor(Color.parseColor("#ffaa2a"));
-            tv.setPadding(left, left, 0, left);
-            serviceLayout.addView(tv);
-            List<ProductValueBean> value = content.get(i).value;
-            List<ProductValueBean> value1 = content.get(i).value;
-            photoList = new ArrayList<>();
-
-            for (int k = 0; k < value1.size(); k++) {
-                String photo = value1.get(k).photo;
-                if (!photo.equals("")) {
-                    photoList.add(photo);
-                }
-
-            }
-            for (int j = 0; j < value.size(); j++) {
-                TextView tvContent = new TextView(ProductDetailsActivity.this);
-                tvContent.setText(value.get(j).text);
-                tvContent.setPadding(left, 0, 0, 0);
-                serviceLayout.addView(tvContent);
-            }
-            View nullView = new View(ProductDetailsActivity.this);
-
-            LinearLayout.LayoutParams nullParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 60);
-            serviceLayout.addView(nullView, nullParams);
-            if (i != content.size() - 1) {
-                View view = new View(ProductDetailsActivity.this);
-                view.setBackgroundColor(Color.parseColor("#aaaaaa"));
-                view.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
-                view.setBackgroundResource(R.drawable.imag_line);
-
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(mContext, 2));
-
-                params.leftMargin = DensityUtil.dip2px(mContext, 15);
-                params.rightMargin = DensityUtil.dip2px(mContext, 15);
-                serviceLayout.addView(view, params);
-            }
-
-
-        }
-    }
-
-    //亮点介绍
-    private void featureIntroduce(List<ProductValueBean> value) {
-        for (int i = 0; i < value.size(); i++) {
-            TextView tv = new TextView(ProductDetailsActivity.this);
-            tv.setText(value.get(i).text);
-            tv.setPadding(left, top, 0, 0);
-            featureLayout.addView(tv);
-        }
-
-    }
 
 
     //显示分享图标页面
     private void showShare(SpecialShareVOBean shareVO) {
-        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext,shareVO);
+        SharePopupWindow sharePopupWindow = new SharePopupWindow(mContext, shareVO);
         sharePopupWindow.show();
     }
 

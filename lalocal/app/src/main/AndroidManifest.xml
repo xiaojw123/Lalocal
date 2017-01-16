@@ -139,12 +139,12 @@
             android:name="UMENG_MESSAGE_SECRET"
             android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
         <!-- //lalocal-debug -->
-        <!-- <meta-data -->
-        <!-- android:name="UMENG_APPKEY" -->
-        <!-- android:value="5806d2df67e58ef11a000e36" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="UMENG_MESSAGE_SECRET" -->
-        <!-- android:value="9b462862fd10e9e8872745ec67df7718"/> -->
+         <!--<meta-data-->
+         <!--android:name="UMENG_APPKEY"-->
+         <!--android:value="5806d2df67e58ef11a000e36" />-->
+         <!--<meta-data-->
+         <!--android:name="UMENG_MESSAGE_SECRET"-->
+         <!--android:value="9b462862fd10e9e8872745ec67df7718"/>-->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -266,9 +266,9 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-         <!--<meta-data-->
-         <!--android:name="com.netease.nim.appKey"-->
-         <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
+        <!--<meta-data-->
+        <!--android:name="com.netease.nim.appKey"-->
+        <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
         <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"
@@ -373,8 +373,9 @@
         <activity android:name=".im.NimChatActivity" />
         <activity android:name=".activity.ArticleCommentActivity" />
         <activity android:name=".activity.NimPersonalMessageActivity" />
-        <activity android:name=".activity.PostVideoActivity"
-            android:windowSoftInputMode="stateHidden" >
+        <activity
+            android:name=".activity.PostVideoActivity"
+            android:windowSoftInputMode="stateHidden">
 
         </activity>
 

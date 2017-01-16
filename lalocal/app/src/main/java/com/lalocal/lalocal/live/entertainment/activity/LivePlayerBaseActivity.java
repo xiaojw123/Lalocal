@@ -1368,27 +1368,50 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     }
 
     private void drawerLayoutListener() {
-        drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+        drawerLayout.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
-                // TODO Auto-generated method stub
+                AppLog.print("1___onDrawerSlide");
                 super.onDrawerSlide(drawerView, slideOffset);
                 drawerLayout.bringChildToFront(drawerView);
-                drawerLayout.requestLayout();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
+//                drawerLayout.requestLayout();
+                onImHiden();
+                AppLog.print("1__");
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                palyerLayout.requestLayout();
-
+//                palyerLayout.requestLayout();
+                AppLog.print("2__");
             }
         });
+//        drawerLayout.setDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+//            @Override
+//            public void onDrawerSlide(View drawerView, float slideOffset) {
+//                // TODO Auto-generated method stub
+//                super.onDrawerSlide(drawerView, slideOffset);
+//                AppLog.print("onDrawerSlide__");
+//                drawerLayout.bringChildToFront(drawerView);
+//                drawerLayout.requestLayout();
+//            }
+//
+//            @Override
+//            public void onDrawerClosed(View drawerView) {
+//                super.onDrawerClosed(drawerView);
+//                AppLog.print("onDrawerClosed___");
+//                onImHiden();
+//            }
+//
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//                AppLog.print("onDrawerOpened___");
+//                palyerLayout.requestLayout();
+//
+//
+//            }
+//        });
     }
 
     private void checkSharePlatform() {
@@ -1556,12 +1579,14 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
 
     public void gotoPersonalMessage(boolean chatVisible, String accId, String nickName) {
         AppLog.i("TAG", "获取用户accId:" + accId);
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         Bundle chatBundle = new Bundle();
         chatBundle.putString(KeyParams.ACCID, accId);
         chatBundle.putString(KeyParams.NICKNAME, nickName);
         if (chatFragment != null) {
+            chatFragment.setChatVisible(chatVisible);
             if (!chatVisible) {
                 ft.show(personalMsgFragment);
                 ft.hide(chatFragment);
@@ -1579,6 +1604,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             personalMsgFragment.setArguments(perMsgBundle);
             chatFragment.setLastFragment(personalMsgFragment);
             chatFragment.setUnReadUpdateListener(this);
+            chatFragment.setChatVisible(chatVisible);
             chatBundle.putBoolean(KeyParams.HAST_CANCLE, true);
             chatFragment.setArguments(chatBundle);
             AppLog.print("fragment___" + chatFragment);
@@ -1601,6 +1627,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         if (chatFragment.isHidden() && personalMsgFragment.isHidden()) {
             return;
         }
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         if (chatFragment != null && !chatFragment.isHidden()) {
@@ -1633,6 +1660,11 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     public void registerMsgServicesObser(boolean flag) {
         NIMClient.getService(MsgServiceObserve.class)
                 .observeRecentContact(messageObserver, flag);
+        if (flag) {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_ALL, SessionTypeEnum.P2P);
+        } else {
+            NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.P2P);
+        }
     }
 
     //  创建观察者对象
@@ -1640,10 +1672,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
             new Observer<List<RecentContact>>() {
                 @Override
                 public void onEvent(List<RecentContact> messages) {
-                    AppLog.print("messageObserver____onEvent___");
+                    AppLog.print("livepalyer  messageObserver____onEvent___");
                     updateUnReadMsg();
                 }
             };
+
+
 
     @Override
     public void onUnReadUpate() {

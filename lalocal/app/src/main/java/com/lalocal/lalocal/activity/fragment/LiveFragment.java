@@ -186,13 +186,14 @@ public class LiveFragment extends BaseFragment {
             init();
         }
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         AppLog.i("sfr", "onResult requestCode " + requestCode);
         if (requestCode == 123) {
             isNeedRefresh = false;
-            getChannelIndexTotal(mCurPageNum,mCategoryId);
+            getChannelIndexTotal(mCurPageNum, mCategoryId);
         }
     }
 
@@ -258,7 +259,9 @@ public class LiveFragment extends BaseFragment {
             dateTime = SPCUtils.getString(getActivity(), (baseKey + String.valueOf(userId)));
         }
         // 获取直播首页数据
-        mContentLoader.getChannelIndexTotal(curPage, 10, catId, dateTime);
+        if (mContentLoader != null) {
+            mContentLoader.getChannelIndexTotal(curPage, 10, catId, dateTime);
+        }
     }
 
     /**
@@ -490,6 +493,7 @@ public class LiveFragment extends BaseFragment {
                 break;
         }
     }
+
     /**
      * 准备直播
      */
@@ -501,6 +505,7 @@ public class LiveFragment extends BaseFragment {
             showLoginDialog();
         }
     }
+
     /**
      * 显示登录提示对话框
      */
@@ -518,6 +523,7 @@ public class LiveFragment extends BaseFragment {
         });
         customDialog.show();
     }
+
     private class MyCallBack extends ICallBack {
         @Override
         public void onError(VolleyError volleyError) {
@@ -695,7 +701,7 @@ public class LiveFragment extends BaseFragment {
 //                }
 //                setAdapter(REFRESH_ALL);
 //            } else
-                if (isLoadingMore) {
+            if (isLoadingMore) {
                 // 加载的时候去掉刷新
                 isLoadingMore = false;
                 isRefresh = false;

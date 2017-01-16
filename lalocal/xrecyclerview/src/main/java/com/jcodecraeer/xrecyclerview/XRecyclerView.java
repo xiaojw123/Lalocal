@@ -413,6 +413,22 @@ public class XRecyclerView extends RecyclerView {
         }
 
         @Override
+        public void onBindViewHolder(ViewHolder holder, int position, List<Object> payloads) {
+            if (isHeader(position) || isRefreshHeader(position)) {
+                return;
+            }
+            int adjPosition = position - (getHeadersCount() + 1);
+            int adapterCount;
+            if (adapter != null) {
+                adapterCount = adapter.getItemCount();
+                if (adjPosition < adapterCount) {
+                    adapter.onBindViewHolder(holder, adjPosition,payloads);
+                    return;
+                }
+            }
+        }
+
+        @Override
         public int getItemCount() {
             if (loadingMoreEnabled) {
                 if (adapter != null) {

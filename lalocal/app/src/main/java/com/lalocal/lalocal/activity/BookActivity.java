@@ -1,7 +1,6 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -9,7 +8,6 @@ import android.view.View;
 import android.webkit.JsPromptResult;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -17,6 +15,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.model.JsInterface;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
 public class BookActivity extends BaseActivity {
@@ -36,30 +35,18 @@ public class BookActivity extends BaseActivity {
         setContentView(R.layout.book_layout);
         mPreOrderWv = (WebView) findViewById(R.id.pre_order_wv);
         loadPage = findViewById(R.id.page_base_loading);
+        CommonUtil.setWebView(mPreOrderWv,false);
         String url = getIntent().getStringExtra(BOOK_URL);
 
         AppLog.print("H5___URL__" + url);
         mPreOrderWv.setWebChromeClient(new PreWebChromeClient());
         mPreOrderWv.setWebViewClient(new PreWebClient());
         mPreOrderWv.addJavascriptInterface(new JsInterface(this), "webkit");
-        WebSettings ws = mPreOrderWv.getSettings();
-        ws.setJavaScriptEnabled(true);
-        ws.setJavaScriptCanOpenWindowsAutomatically(true);
-        ws.setUseWideViewPort(true);
-        ws.setDomStorageEnabled(true);
-        ws.setAllowFileAccess(true); // 允许访问文件
-        ws.setLoadWithOverviewMode(true);
-        ws.setDisplayZoomControls(false);
-        ws.setBlockNetworkImage(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
         mPreOrderWv.loadUrl(AppConfig.getH5Url(this, url));
-//        url = "http://www.jianshu.com/p/8bc9a4af771f";
     }
 
     class PreWebChromeClient extends WebChromeClient {
-        @Override
+              @Override
         public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
             AppLog.print("alert__" + message);
             if (!TextUtils.isEmpty(message)) {
