@@ -13,6 +13,16 @@ public class LiveUserInfoResultBean {
     private int fansNum;
     private int attentionNum;
 
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    private  int level;
+
     public String getAccId() {
         return accId;
     }

@@ -47,8 +47,10 @@
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/chat_xrlv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:layout_gravity="top"
+            />
 
 
     </FrameLayout>

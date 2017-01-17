@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.live.entertainment.helper;
 
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.LiveMessage;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
@@ -21,6 +22,7 @@ public class SendMessageUtil {
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("style", liveMessage.getStyle());
+            ext.put("level", LiveConstant.level);
             ext.put("disableSendMsgUserId",liveMessage.getDisableSendMsgUserId());
             ext.put("disableSendMsgNickName",liveMessage.getDisableSendMsgNickName());
             ext.put("adminSendMsgUserId",liveMessage.getAdminSendMsgUserId());

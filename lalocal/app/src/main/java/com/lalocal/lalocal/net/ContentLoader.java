@@ -171,10 +171,9 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
-    public void getUsersService(int type, int index) {
+    public void getUsersService(int type) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_USER_SERVICE);
-            response.setChildIndex(index);
         }
         ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUsersServiceUrl(type), response, response);
         requestQueue.add(request);
@@ -2000,7 +1999,6 @@ public class ContentLoader {
                     case RequestCode.GET_USER_SERVICE:
                         JSONObject sercieResultJobj = jsonObj.optJSONObject(ResultParams.REULST);
                         callBack.onGetUser(sercieResultJobj);
-                        callBack.onGetUser(sercieResultJobj, childIndex);
                         break;
 
                     case RequestCode.GET_YITU8_CITY:

@@ -208,8 +208,11 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
                 userinfoBottomLeft.setAlpha(0.5f);
                 userinfoBottomLeft.setEnabled(false);
-                --fansNum;
-                liveFans.setText(String.valueOf(fansNum));
+                if(fansNum>0){
+                    --fansNum;
+                    liveFans.setText(String.valueOf(fansNum));
+                }
+
             }
         }
 

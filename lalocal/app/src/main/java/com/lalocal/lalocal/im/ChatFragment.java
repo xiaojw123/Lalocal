@@ -177,6 +177,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mXRecyclerView.setLoadingListener(this);
         moreOpLayout.setOnViewHeplerListner(viewHelperListener);
         layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setStackFromEnd(true);
         mXRecyclerView.setLayoutManager(layoutManager);
         mXRecyclerView.setOnTouchListener(this);
         msgAdapter = new MessageListAdapter(mMessageList);
@@ -415,7 +416,14 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     moreOpLayout.setVisibility(View.VISIBLE);
                 }
             }
-            mXRecyclerView.smoothScrollBy(0, -height);
+//            mXRecyclerView.smoothScrollBy(0, -height);l
+            mXRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+//                    mXRecyclerView.scrollToPosition(getLastPosition());
+                    layoutManager.scrollToPositionWithOffset(getLastPosition(),0);
+                }
+            },LOAD_DELAY_TIME);
         }
         lastHeight = height;
     }
@@ -613,7 +621,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 public void run() {
                     layoutManager.scrollToPositionWithOffset(getLastPosition(), 0);
                 }
-            }, 1000);
+            }, 20);
         }
     }
 
@@ -635,7 +643,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                         mXRecyclerView.scrollToPosition(msgAdapter.getItemCount() - 1);
                     }
                 }
-            }, 0);
+            }, LOAD_DELAY_TIME);
         }
 
     };

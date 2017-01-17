@@ -35,6 +35,7 @@ import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DrawableUtils;
+import com.netease.nimlib.sdk.NIMClient;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.umeng.message.PushAgent;
@@ -69,6 +70,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_layout);
         AppLog.print("splash create");
+        NIMClient.toggleNotification(false);
         welImg = (ImageView) findViewById(R.id.wel_img);
         timeTv = (TextView) findViewById(R.id.wel_time_tv);
         welImg.setOnClickListener(this);

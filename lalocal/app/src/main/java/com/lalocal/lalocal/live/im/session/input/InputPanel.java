@@ -29,6 +29,7 @@ import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.DemoCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
+import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.ChatRoomMemberCache;
 import com.lalocal.lalocal.live.im.session.Container;
@@ -354,6 +355,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","1");
+                        ext.put("level", LiveConstant.level);
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId", UserHelper.getUserId(mContext));
                         ext.put("disableSendMsgUserId",UserHelper.getUserId(mContext));
@@ -367,6 +369,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
                     if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
                         ext.put("type", chatRoomMember.getMemberType().getValue());
                         ext.put("style","0");
+                        ext.put("level", LiveConstant.level);
                         ext.put("creatorAccount",creatorAccount);
                         ext.put("userId", UserHelper.getUserId(mContext));
                         ext.put("disableSendMsgUserId",UserHelper.getUserId(mContext));

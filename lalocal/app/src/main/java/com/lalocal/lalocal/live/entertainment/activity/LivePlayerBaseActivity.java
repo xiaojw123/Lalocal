@@ -75,6 +75,7 @@ import com.lalocal.lalocal.live.im.ui.periscope.PeriscopeLayout;
 import com.lalocal.lalocal.live.im.ui.widget.MarqueeView;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.LiveRowsBean;
+import com.lalocal.lalocal.model.LiveUserInfosDataResp;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.model.TouristInfoResp;
 import com.lalocal.lalocal.net.ContentLoader;
@@ -235,6 +236,7 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
         contentLoader = new ContentLoader(this);
         myCallBack = new MyCallBack();
         contentLoader.setCallBack(myCallBack);
+        contentLoader.getLiveUserInfo(String.valueOf(UserHelper.getUserId(this)));
         LiveConstant.USER_INFO_FIRST_CLICK = true;
         findViews();
         updateUnReadMsg();
@@ -479,6 +481,12 @@ public abstract class LivePlayerBaseActivity extends TActivity implements Module
     protected abstract void showStatusUnUsual();
 
     public class MyCallBack extends ICallBack {
+
+        @Override
+        public void onLiveUserInfo(LiveUserInfosDataResp liveUserInfosDataResp) {
+            super.onLiveUserInfo(liveUserInfosDataResp);
+            LiveConstant.level=liveUserInfosDataResp.getResult().getLevel();
+        }
 
         @Override
         public void onResponseFailed(String message, int requestCode) {
