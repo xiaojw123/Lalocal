@@ -87,6 +87,7 @@ public class LocationHistoryAdapter extends BaseRecyclerAdapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final SparseArray<String> sp = datas.get(position);
         final String value = sp.valueAt(0);
+
         if (holder instanceof RecyclerViewDragHolder.DragViewHolder) {
             LiveHistoryItem myHolder = (LiveHistoryItem) RecyclerViewDragHolder.getHolder(holder);
             myHolder.title.setOnClickListener(new View.OnClickListener() {
@@ -179,15 +180,11 @@ class HotItem extends RecyclerView.ViewHolder {
     class LiveHistoryItem extends RecyclerViewDragHolder {
         private TextView title;
         private FrameLayout deleteItem;
-        public LiveHistoryItem(Context context, View bgView, View topView) {
-            super(context, bgView, topView);
-        }
         public LiveHistoryItem(Context context, View bgView, View topView, int mTrackingEdges) {
             super(context, bgView, topView, mTrackingEdges);
         }
         @Override
         public void initView(View itemView) {
-
             title = (TextView) itemView.findViewById(R.id.item_history_key_tv);
             deleteItem = (FrameLayout) itemView.findViewById(R.id.delete);
         }

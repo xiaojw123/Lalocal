@@ -18,7 +18,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.CategoryBean;
@@ -485,7 +485,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                         ((Activity)mContext).startActivityForResult(intent1, 123);
                     } else if (targetType == Constants.PLAY_BACK_TYPE_URL) {
                         AppLog.i("sfr", "2");
-                        Intent intent = new Intent(mContext, PlayBackActivity.class);
+                        Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
                         intent.putExtra("id", String.valueOf(id));
                         ((Activity)mContext).startActivityForResult(intent, 123);
                     } else if (targetType == 0) {
@@ -493,7 +493,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
 
                         if (bean.getEndAt() != null && bean.getStartAt() != null) {
                             AppLog.i("sfr", "4");
-                            Intent intent = new Intent(mContext, PlayBackActivity.class);
+                            Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
                             intent.putExtra("id", String.valueOf(bean.getId()));
                             ((Activity)mContext).startActivityForResult(intent, 123);
                         } else {

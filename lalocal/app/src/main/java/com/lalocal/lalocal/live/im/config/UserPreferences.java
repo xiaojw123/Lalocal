@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 
 /**
@@ -113,6 +113,6 @@ public class UserPreferences {
     }
 
     static SharedPreferences getSharedPreferences() {
-        return DemoCache.getContext().getSharedPreferences("Demo." + DemoCache.getAccount(), Context.MODE_PRIVATE);
+        return LiveCache.getContext().getSharedPreferences("Demo." + LiveCache.getAccount(), Context.MODE_PRIVATE);
     }
 }

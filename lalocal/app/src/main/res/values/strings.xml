@@ -208,6 +208,7 @@
     <string name="contacts">联系人</string>
     <string name="supplementary_information">补充信息</string>
     <string name="pickup_service">接机服务</string>
+    <string name="driver_info">司导信息</string>
     <string name="shuttle_location">接送地点</string>
     <string name="shuttle_time">接送时间</string>
     <string name="language_of_guide">导游语言</string>
@@ -344,6 +345,7 @@
     <string name="tickout_live_room">你已被管理员踢出直播间!</string>
     <string name="attention_live_e">关注了主播!</string>
     <string name="like_master">点赞</string>
+    <string name="like_to_master">给主播点了赞</string>
     <string name="live_master_1">给主播点了个赞1</string>
     <string name="play_back_no_share">此视频暂不可分享!!</string>
     <string name="play_back_compelet">视频播放完成!</string>
@@ -405,7 +407,42 @@
     <string name="video_lightspot_hint">请填写视频中精彩部分的介绍</string>
     <string name="post_alter_ok">确认更改</string>
     <string name="edit_cover">编辑封面</string>
+    <string name="not_find_sd">未找到存储卡，无法存储照片</string>
+    <string name="video_profile_720p">网络: 高清</string>
+    <string name="video_profile_480p">网络: 流畅</string>
+    <string name="permission_reject">权限被拒绝，无法继续往下执行</string>
+    <string name="get_location_ing">正在获取位置信息...</string>
+    <string name="start_live_btn">发起直播</string>
+    <string name="live_room_name_hint">为直播间取个名字</string>
+    <string name="live_start_count_tv">直播即将开始...</string>
+    <string name="camera_add_short_video">添加短视频</string>
+    <string name="add_short_video_hint">可以添加本地视频，离线录制更方便</string>
+    <string name="add_short_video_title">添加短视频</string>
+    <string name="choose_local_video">选取本地视频</string>
+    <string name="choose_local_video_hint">视频最大限制500M</string>
+    <string name="add_video_cover">添加直播封面</string>
+    <string name="add_video_cover_hint">与直播主题不相关的封面请慎重使用</string>
+    <string name="short_video_post">发布</string>
+    <string name="photo_add_short_video">相册获取视频</string>
+    <string name="please_chooose_video">请选取视频</string>
+    <string name="ok_video">好的</string>
+    <string name="please_edit_title">请填写标题</string>
+    <string name="please_choose_location">请选择</string>
+    <string name="short_video_continue">视频续传</string>
+    <string name="short_video_continue_btn">继续上传</string>
 
+    //礼物
+    <string name="gift_rose">玫瑰</string>
+    <string name="gift_travellingcase">行李箱</string>
+    <string name="gift_plan">飞机</string>
+    <string name="gift_face">笑脸</string>
+    <string name="gift_glasses">太阳镜</string>
+    <string name="gift_umbrella">遮阳扇</string>
+    <string name="gift_star">星星</string>
+    <string name="gift_fruit">果盘</string>
+    <string name="gift_water">矿泉水</string>
+    <string name="gift_christmas_trees">圣诞树</string>
+    <string name="gift_mystery_gift">神秘礼物</string>
 
     <string name="live_default_signture">神秘人拒绝透露自己的个人简介!</string>
     <string name="live_read_write_external_storage">SD卡读写权限未开启,请尝试在手机应用权限管理中打开权限!</string>

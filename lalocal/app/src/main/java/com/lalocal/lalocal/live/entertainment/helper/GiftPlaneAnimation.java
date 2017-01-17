@@ -33,7 +33,7 @@ public class GiftPlaneAnimation {
     private View gfitPlaneIndex;
     private TextView giftPlaneText;
     private Context mContext;
-    private Queue<GiftBean> cache = new LinkedList<>();
+    private Queue<GiftBean> cache = new LinkedList<>();//队列数据结构管理类,先进先出
     private AnimationDrawable rocketAnimation;
     private Animation messageBgAnimation;
     private Animation messageSliderAnimtion;
@@ -63,7 +63,6 @@ public class GiftPlaneAnimation {
     }
 
     private void startAnimation(ImageView target,RelativeLayout giftPlanceBg) {
-
         if(isStartAnim){
             isStartAnim=false;
             GiftBean giftBean = cache.poll();
@@ -134,7 +133,6 @@ public class GiftPlaneAnimation {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             if (msg.what == 1 || msg.what == 2) {
-
                 isStartAnim=true;
                 if (msg.what == 1) {
                     giftPlaneUp.setVisibility(View.GONE);

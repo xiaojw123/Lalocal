@@ -2,11 +2,9 @@ package com.lalocal.lalocal.live.base.util.crash;
 
 import android.content.Context;
 import android.text.TextUtils;
-
 import com.lalocal.lalocal.live.base.util.string.MD5;
 import com.lalocal.lalocal.live.im.util.storage.StorageType;
 import com.lalocal.lalocal.live.im.util.storage.StorageUtil;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
@@ -20,10 +18,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 class CrashSaver {
-
 	public static final void save(Context context, Throwable ex,
 			boolean uncaught) {
-
 		if (!StorageUtil.isExternalStorageExist()) {// 如果没有sdcard，则不存储
 			return;
 		}
@@ -65,7 +61,7 @@ class CrashSaver {
 		BufferedWriter mBufferedWriter = null;
 		try {
 			File mFile = new File(StorageUtil.getWritePath(
-                    filename + ".crashlog", StorageType.TYPE_LOG));
+                    filename + ".crashlog",StorageType.TYPE_LOG));
 			File pFile = mFile.getParentFile();
 			if (!pFile.exists()) {// 如果文件夹不存在，则先创建文件夹
 				pFile.mkdirs();
@@ -96,14 +92,11 @@ class CrashSaver {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }
                 }
                 mFile.delete();
 			}
-
             mFile.createNewFile();
-			
 			mBufferedWriter = new BufferedWriter(new FileWriter(mFile, true));// 追加模式写文件
 			mBufferedWriter.append(CrashSnapshot.snapshot(context, uncaught, timestamp, stackTrace, count));
 			mBufferedWriter.flush();

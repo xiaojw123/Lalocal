@@ -3,7 +3,7 @@ package com.lalocal.lalocal.live.im.session.emoji;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -102,7 +102,7 @@ public class StickerCategory implements Serializable {
 
     public List<StickerItem> loadStickerData() {
         List<StickerItem> stickers = new ArrayList<>();
-        AssetManager assetManager = DemoCache.getContext().getResources().getAssets();
+        AssetManager assetManager = LiveCache.getContext().getResources().getAssets();
         try {
             String[] files = assetManager.list("sticker/" + name);
             for (String file : files) {

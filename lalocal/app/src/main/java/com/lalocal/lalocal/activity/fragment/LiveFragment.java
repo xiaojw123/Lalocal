@@ -27,7 +27,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.CategoryBean;
@@ -618,7 +618,7 @@ public class LiveFragment extends BaseFragment {
                         intent1.putExtra("id", String.valueOf(targetId));
                         getActivity().startActivity(intent1);
                     } else if (type == PLAYBACK) {
-                        Intent intent = new Intent(getActivity(), PlayBackActivity.class);
+                        Intent intent = new Intent(getActivity(), PlayBackDetailActivity.class);
                         intent.putExtra("id", String.valueOf(targetId));
                         getActivity().startActivity(intent);
                     }

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/orderdetail_fromaddress_container"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dimen_size_36_dp"
+    android:paddingEnd="@dimen/dimen_size_15_dp"
+    android:paddingStart="@dimen/dimen_size_15_dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/order_item_name"
+        style="@style/OrderCardItemTextStyle"
+        android:text="出发地点" />
+
+    <TextView
+        android:id="@+id/order_item_content"
+        style="@style/OrderCardItemTextStyle"
+        android:layout_gravity="end"
+        android:text="dddsd"
+        android:layout_marginStart="@dimen/dimen_size_36_dp" />
+
+</FrameLayout>

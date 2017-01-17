@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/live_padding_15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title"
+            android:textSize="@dimen/live_text_16sp"
+            android:textColor="@color/color_190f00"/>
+
+        <EditText
+            android:id="@+id/post_title"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/live_text_16sp"
+            android:maxLength="20"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_marginLeft="@dimen/live_padding_20dp"
+            android:textColor="@color/color_190f00"
+            android:layout_gravity="right|center_vertical"
+            android:gravity="right|center_vertical"
+            android:background="@null"
+            android:hint="20字内,请输入..."
+            android:textColorHint="@color/color_70190f00"
+            android:paddingRight="@dimen/live_padding_30dp"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="@dimen/live_padding_15dp"
+        android:background="@color/color_b3"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/live_height_50dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/live_padding_15dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="@string/post_loaction"
+            android:textSize="@dimen/live_text_16sp"
+            android:textColor="@color/color_190f00"/>
+
+        <TextView
+            android:id="@+id/post_laoction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/live_text_16sp"
+            android:maxLength="12"
+            android:ellipsize="end"
+            android:hint="@string/please_choose_location"
+            android:textColorHint="@color/color_70190f00"
+            android:textColor="@color/color_190f00"
+            android:layout_gravity="right|center_vertical"
+            android:drawableRight="@drawable/livecrown_arrow"
+            android:drawablePadding="@dimen/live_padding_3dp"
+            android:paddingRight="@dimen/live_padding_15dp"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginLeft="@dimen/live_padding_15dp"
+        android:background="@color/color_b3"></View>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/live_padding_15dp"
+        android:paddingRight="@dimen/live_padding_15dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/live_height_50dp"
+            android:text="@string/video_lightspot"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/live_text_16sp"
+            android:textColor="@color/color_190f00"/>
+
+        <EditText
+            android:id="@+id/post_video_light_spot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/live_height_100dp"
+            android:hint="@string/video_lightspot_hint"
+            android:textSize="@dimen/text_size_16_sp"
+            android:background="@null"
+            android:gravity="top"
+            android:maxLength="150"
+            android:textColorHint="@color/color_70190f00"/>
+
+        <TextView
+            android:id="@+id/post_text_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/150"
+            android:layout_gravity="right"
+            android:textSize="@dimen/text_size_12_sp"
+            android:textColor="@color/color_70190f00"/>
+    </LinearLayout>
+</merge>

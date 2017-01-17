@@ -5,7 +5,7 @@ import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 
 import java.lang.reflect.Field;
 
@@ -30,7 +30,7 @@ public class ScreenUtil {
 	public static int navbarheight;
 
     static {
-        init(DemoCache.getContext());
+        init(LiveCache.getContext());
     }
 	
 	public static int dip2px(float dipValue) {
@@ -69,7 +69,7 @@ public class ScreenUtil {
 
 	public static int getDisplayHeight() {
 		if(screenHeight == 0){
-			GetInfo(DemoCache.getContext());
+			GetInfo(LiveCache.getContext());
 		}
 		return screenHeight;
 	}

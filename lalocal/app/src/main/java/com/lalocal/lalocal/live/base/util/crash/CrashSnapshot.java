@@ -11,7 +11,7 @@ import android.os.StatFs;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.base.util.NetworkUtil;
 import com.lalocal.lalocal.live.base.util.sys.InstallUtil;
 import com.lalocal.lalocal.live.base.util.sys.SysInfoUtil;
@@ -53,7 +53,7 @@ public class CrashSnapshot {
 	}
 
 	private static boolean isGoogleSdk() {
-		String str = Secure.getString(DemoCache.getContext()
+		String str = Secure.getString(LiveCache.getContext()
 				.getContentResolver(), Secure.ANDROID_ID);
 		return ("sdk".equals(Build.PRODUCT))
 				|| ("google_sdk".equals(Build.PRODUCT)) || (str == null);
@@ -66,7 +66,7 @@ public class CrashSnapshot {
 	 */
 	private static String battery() {
 		IntentFilter filter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-		Intent intent = DemoCache.getContext().registerReceiver(null, filter);
+		Intent intent = LiveCache.getContext().registerReceiver(null, filter);
 		int level = intent.getIntExtra("level", -1);
 		int scale = intent.getIntExtra("scale", -1);
 		if(scale == -1) {
@@ -77,7 +77,7 @@ public class CrashSnapshot {
 	}
 
 	private static long getAvailMemory() {
-		ActivityManager am = (ActivityManager) DemoCache.getContext()
+		ActivityManager am = (ActivityManager) LiveCache.getContext()
 				.getSystemService(Context.ACTIVITY_SERVICE);
 		ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
 		am.getMemoryInfo(mi);

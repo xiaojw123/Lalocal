@@ -42,7 +42,6 @@ import java.util.Random;
 
 
 public class PeriscopeLayout extends RelativeLayout {
-
     private Interpolator line = new LinearInterpolator();//线性
     private Interpolator acc = new AccelerateInterpolator();//加速
     private Interpolator accdec = new AccelerateDecelerateInterpolator();//先加速后减速
@@ -95,13 +94,12 @@ public class PeriscopeLayout extends RelativeLayout {
         drawables[4] = redhurt;
         drawables[5] = greenhurt;
         //获取图的宽高 用于后面的计算
-        //注意 我这里3张图片的大小都是一样的,所以我只取了一个
         dHeight = redpraise.getIntrinsicHeight();
         dWidth = redpraise.getIntrinsicWidth();
 
         //底部 并且 水平居中
         lp = new LayoutParams(dWidth, dHeight);
-        lp.addRule(CENTER_HORIZONTAL, TRUE);//这里的TRUE 要注意 不是true
+        lp.addRule(CENTER_HORIZONTAL, TRUE);//这里的TRUE
         lp.addRule(ALIGN_PARENT_BOTTOM, TRUE);
 
 
@@ -132,9 +130,7 @@ public class PeriscopeLayout extends RelativeLayout {
         //随机选一个
         imageView.setImageDrawable(drawables[random.nextInt(6)]);
         imageView.setLayoutParams(lp);
-
         addView(imageView);
-
         Animator set = getAnimator(imageView);
         set.addListener(new AnimEndListener(imageView));
         set.start();
@@ -142,9 +138,7 @@ public class PeriscopeLayout extends RelativeLayout {
 
     private Animator getAnimator(View target) {
         AnimatorSet set = getEnterAnimator(target);
-
         ValueAnimator bezierValueAnimator = getBezierValueAnimator(target);
-
         AnimatorSet finalSet = new AnimatorSet();
         finalSet.playTogether(set, bezierValueAnimator);
         finalSet.setInterpolator(interpolators[random.nextInt(3)]);
@@ -168,8 +162,7 @@ public class PeriscopeLayout extends RelativeLayout {
 
         //初始化一个贝塞尔计算器- - 传入
         BezierEvaluator evaluator = new BezierEvaluator(getPointF(2), getPointF(1));
-
-        //这里最好画个图 理解一下 传入了起点 和 终点
+        // 传入了起点 和 终点
         ValueAnimator animator = ValueAnimator.ofObject(evaluator, new PointF((mWidth - dWidth) / 2, mHeight - dHeight),new PointF(random.nextInt((getWidth()<=0)?3:getWidth()), 0));
         animator.addUpdateListener(new BezierListenr(target));
         animator.setTarget(target);
@@ -181,10 +174,6 @@ public class PeriscopeLayout extends RelativeLayout {
      * 获取中间的两个 点
      *
      * @param scale
-     *
-
-     *
-     *
      *
      */
     private PointF getPointF(int scale) {

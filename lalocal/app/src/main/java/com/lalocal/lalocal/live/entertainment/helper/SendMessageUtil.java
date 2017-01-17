@@ -10,17 +10,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by android on 2016/9/20.
+ * Created by wcj on 2016/9/20.
  */
 public class SendMessageUtil {
     public  static IMMessage sendMessage(String account, String messageContent, String roomId, String userAccount, LiveMessage liveMessage){
-
         IMMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(account,messageContent);
         ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(roomId,userAccount);
         Map<String, Object> ext = new HashMap<>();
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("style", liveMessage.getStyle());
+            ext.put("level","等级");
             ext.put("disableSendMsgUserId",liveMessage.getDisableSendMsgUserId());
             ext.put("disableSendMsgNickName",liveMessage.getDisableSendMsgNickName());
             ext.put("adminSendMsgUserId",liveMessage.getAdminSendMsgUserId());
@@ -58,11 +58,8 @@ public class SendMessageUtil {
                 ext2.put("successAt",challengeModel.getSuccessAt());
                 ext.put("challengeModel",ext2);
             }
-
             message.setRemoteExtension(ext);
         }
-
-
         return message;
     }
 }

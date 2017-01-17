@@ -23,7 +23,7 @@ import com.lalocal.lalocal.view.decoration.LinearItemDecoration;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.lalocal.lalocal.view.MyLiveAdapter.FOMRAT_TIME;
+import static com.lalocal.lalocal.view.adapter.MyLiveAdapter.FOMRAT_TIME;
 
 /**
  * Created by xiaojw on 2016/10/11.

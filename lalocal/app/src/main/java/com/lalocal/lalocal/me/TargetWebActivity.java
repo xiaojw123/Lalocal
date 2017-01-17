@@ -2,6 +2,7 @@ package com.lalocal.lalocal.me;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -39,6 +40,10 @@ public class TargetWebActivity extends BaseActivity {
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
         ws.setUseWideViewPort(false);
+        ws.setBlockNetworkImage(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
         webView.loadUrl(AppConfig.getH5Url(this,getTargeUrl()));
         webView.setWebViewClient(new TargetWebviewClient(this));
     }

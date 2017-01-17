@@ -35,6 +35,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 
+import static com.lalocal.lalocal.R.dimen.order_travel_time_height;
 import static com.lalocal.lalocal.R.id.orderdetail_contact_email_tv;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener, CustomTitleView.onBackBtnClickListener {
@@ -84,6 +85,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     LinearLayout mOrderPayContainer;
     LinearLayout mPreViewContainer;
     LinearLayout mMoreContainer;
+    LinearLayout mDriverCotainer;
     RelativeLayout mTitleCotainer;
     View contentView;
     TextView cancel_order_tv, customer_service_tv;
@@ -112,7 +114,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void initParams() {
-        height = (int) getResources().getDimension(R.dimen.order_travel_time_height);
+        height = (int) getResources().getDimension(order_travel_time_height);
         left = (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
         isPreView = getIntent().getBooleanExtra(KeyParams.PRE_VIEW_PARAMS, false);
         mInflater = LayoutInflater.from(this);
@@ -122,6 +124,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         contentView = LayoutInflater.from(this).inflate(R.layout.orderdetail_more_operation, null);
         cancel_order_tv = (TextView) contentView.findViewById(R.id.morefunction_cancel_order);
         customer_service_tv = (TextView) contentView.findViewById(R.id.morefunction_customer_sevice);
+        mDriverCotainer = (LinearLayout) findViewById(R.id.orderdetail_driver_info_container);
         wechatTv = (TextView) findViewById(R.id.orderdetail_contact_wechat_tv);
         travleInfoCotainer = (RelativeLayout) findViewById(R.id.travel_info_container);
         shuttle_up_container = (FrameLayout) findViewById(R.id.orderdetail_shuttle_setup_container);
@@ -436,6 +439,57 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
         showAdddtionInfo();
         shoWPickupInfo();
+
+    }
+
+    private void showDriverInfo(OrderDetail.DriverInfo driverInfo) {
+        if (driverInfo == null) {
+            TextView tipText = new TextView(this);
+            tipText.setTextSize(TypedValue.COMPLEX_UNIT_PX,getResources().getDimension(R.dimen.text_size_15_sp));
+            tipText.setTextColor(getResources().getColor(R.color.color_b3));
+            tipText.setGravity(Gravity.CENTER_VERTICAL);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getResources().getDimension(R.dimen.order_travel_time_height));
+            params.leftMargin= (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
+            params.rightMargin= (int) getResources().getDimension(R.dimen.dimen_size_15_dp);
+            tipText.setLayoutParams(params);
+            tipText.setText("正在匹配司导信息，请稍后刷新查看哦");
+            mDriverCotainer.addView(tipText);
+        } else {
+            String driverName = driverInfo.getDriverName();
+            String phone = driverInfo.getDriverPhone();
+            String phone2 = driverInfo.getDriverPhone2();
+            String carname = driverInfo.getDriverCarName();//车型
+            String carno = driverInfo.getDriverCarNo();//车牌
+            String cardes = driverInfo.getDriverCarDesc();//车辆信息
+            if (!TextUtils.isEmpty(driverName)) {
+                mDriverCotainer.addView(getItemView("姓名", driverName));
+            }
+            if (!TextUtils.isEmpty(phone)) {
+                mDriverCotainer.addView(getItemView("手机", phone));
+            }
+            if (!TextUtils.isEmpty(phone2)) {
+                mDriverCotainer.addView(getItemView("手机2", phone2));
+            }
+            if (!TextUtils.isEmpty(carname)) {
+                mDriverCotainer.addView(getItemView("车型", carname));
+            }
+            if (!TextUtils.isEmpty(carno)) {
+                mDriverCotainer.addView(getItemView("车牌", carno));
+            }
+            if (!TextUtils.isEmpty(cardes)) {
+                mDriverCotainer.addView(getItemView("车辆信息", cardes));
+            }
+        }
+    }
+
+    public View getItemView(String name, String content) {
+        View view = View.inflate(this, R.layout.order_item_layout, null);
+        TextView itemName = (TextView) view.findViewById(R.id.order_item_name);
+        TextView itemContent = (TextView) view.findViewById(R.id.order_item_content);
+        itemName.setText(name);
+        itemContent.setText(content);
+        return view;
+
     }
 
     private void shoWPickupInfo() {
@@ -443,6 +497,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         if (orderPickUpVO != null) {
             travleInfoCotainer.setVisibility(View.GONE);
             pickup_info_llt.setVisibility(View.VISIBLE);
+            mDriverCotainer.setVisibility(View.VISIBLE);
             String fightNum = orderPickUpVO.getFightNum();
             String fromAddress = orderPickUpVO.getFromCityAddress();
             String toAddress = orderPickUpVO.getToCityAddress();
@@ -479,7 +534,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 usetye_fl.setVisibility(View.VISIBLE);
                 setPickChildText(usetye_fl, useType);
             }
-
+            showDriverInfo(orderPickUpVO.getDriverInfo());
         }
 
 
@@ -680,7 +735,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         FrameLayout container = null;
                         TextView textView = new TextView(this);
                         textView.setGravity(Gravity.CENTER_VERTICAL);
-                        ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getResources().getDimension(R.dimen.order_travel_time_height));
+                        ViewGroup.LayoutParams params1 = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, (int) getResources().getDimension(order_travel_time_height));
                         textView.setLayoutParams(params1);
                         textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimension(R.dimen.text_size_15_sp));
                         textView.setSingleLine();

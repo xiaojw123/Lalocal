@@ -146,7 +146,6 @@ public class FindFragment extends BaseFragment {
             if (mXrvRecommend != null) {
                 isRefreshing = true;
                 mXrvRecommend.setLoadingMoreEnabled(true);
-
                 mContentLoader.recommendAd();
                 mContentLoader.indexRecommentList();
                 mContentLoader.articleList(10, 0);

@@ -14,7 +14,7 @@ import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.model.LiveHomeListResp;
 import com.lalocal.lalocal.live.entertainment.model.LivePlayBackListResp;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -321,7 +321,7 @@ public class AttentionActivity extends BaseActivity {
         @Override
         public void goLiveRoom(LiveRowsBean liveRowsBean) {
             if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
-                Intent intent = new Intent(AttentionActivity.this, PlayBackActivity.class);
+                Intent intent = new Intent(AttentionActivity.this, PlayBackDetailActivity.class);
                 intent.putExtra("id", String.valueOf(liveRowsBean.getId()));
                 startActivity(intent);
             } else {

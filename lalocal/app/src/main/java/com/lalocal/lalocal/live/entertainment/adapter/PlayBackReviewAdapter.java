@@ -108,91 +108,94 @@ public class PlayBackReviewAdapter extends RecyclerView.Adapter {
         switch (getItemViewType(position)) {
             case VIDEO_INFO:
                 final VideoInfoHolder videoInfoHolder = (VideoInfoHolder) holder;
-                if (liveRowsBean.getRecommendTitle() != null) {
-                    videoInfoHolder.playBackTitle.setText(liveRowsBean.getRecommendTitle());
-                    videoInfoHolder.playBackOldTitle.setText("(原标题:" + liveRowsBean.getTitle() + ")");
-                } else {
-                    videoInfoHolder.playBackTitle.setText(liveRowsBean.getTitle());
-                }
-                videoInfoHolder.playBackAttentionMaster.setText(isAttention == true ? "已关注" : "关注");
-                if (isAttention) {
-                    videoInfoHolder.playBackAttentionMaster.setBackgroundResource(R.drawable.play_back_info);
-                    videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(null, null, null, null);
-                } else {
-                    videoInfoHolder.playBackAttentionMaster.setBackgroundResource(R.drawable.play_back_info_un_attention_bg);
-                    Drawable drawable = mContext.getResources().getDrawable(R.drawable.add);
-                    drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
-                    videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(drawable, null, null, null);
-                }
-                videoInfoHolder.playBackAttentionMaster.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if(UserHelper.isLogined(mContext)){
-                            if (onReviewItemClickListener != null && !isAttention) {
-                                isAttention = true;
-                                onReviewItemClickListener.attentionBtnClick(isAttention, videoInfoHolder.playBackAttentionMaster);
-                            }
-                        }else{
-                            if(LiveConstant.USER_INFO_FIRST_CLICK){
-                                LiveConstant.USER_INFO_FIRST_CLICK = false;
-                                showLoginViewDialog();
-                            }
-                        }
-
+                if(liveRowsBean!=null){
+                    if (liveRowsBean.getRecommendTitle() != null) {
+                        videoInfoHolder.playBackTitle.setText(liveRowsBean.getRecommendTitle());
+                        videoInfoHolder.playBackOldTitle.setText("(原标题:" + liveRowsBean.getTitle() + ")");
+                    } else {
+                        videoInfoHolder.playBackTitle.setText(liveRowsBean.getTitle());
                     }
-                });
-
-                videoInfoHolder.playBackLocation.setText(liveRowsBean.getAddress());
-                videoInfoHolder.playNum.setText(liveRowsBean.getReadNum() + "次播放");
-                if (liveRowsBean.getDescription() != null) {
-                    videoInfoHolder.playBackTitleContent.setText(liveRowsBean.getDescription());
-                }
-                if (liveRowsBean.getUser().getId() == UserHelper.getUserId(mContext)) {//我自己的视频回放
-                    videoInfoHolder.playBackAttentionLayout.setVisibility(View.GONE);
-                    videoInfoHolder.editLayout.setVisibility(View.VISIBLE);
-                    videoInfoHolder.playBackMyName.setText(liveRowsBean.getUser().getNickName());
-                    DrawableUtils.loadingImg(mContext, videoInfoHolder.palyBackMyHeadIv, liveRowsBean.getUser().getAvatar());
-                    videoInfoHolder.editContent.setOnClickListener(new View.OnClickListener() {
+                    videoInfoHolder.playBackAttentionMaster.setText(isAttention == true ? "已关注" : "关注");
+                    if (isAttention) {
+                        videoInfoHolder.playBackAttentionMaster.setBackgroundResource(R.drawable.play_back_info);
+                        videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(null, null, null, null);
+                    } else {
+                        videoInfoHolder.playBackAttentionMaster.setBackgroundResource(R.drawable.play_back_info_un_attention_bg);
+                        Drawable drawable = mContext.getResources().getDrawable(R.drawable.add);
+                        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+                        videoInfoHolder.playBackAttentionMaster.setCompoundDrawables(drawable, null, null, null);
+                    }
+                    videoInfoHolder.playBackAttentionMaster.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // 去编辑标题PostVideoActivity
-                            Intent intent = new Intent(mContext, PostVideoActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString(KeyParams.POST_LOCATION, liveRowsBean.getAddress());
-                            bundle.putString(KeyParams.POST_PHOTO, liveRowsBean.getPhoto());
-                            bundle.putString(KeyParams.POST_TITLE, liveRowsBean.getTitle());
-                            bundle.putInt(KeyParams.POST_HISTORY_ID, liveRowsBean.getId());
-                            bundle.putString(KeyParams.POST_VIDEO_INFO, liveRowsBean.getDescription());
-                            intent.putExtras(bundle);
-                            ((Activity) mContext).startActivityForResult(intent, KeyParams.POST_REQUESTCODE);
-                        }
-                    });
-                } else {//他人视频
-                    videoInfoHolder.playBackAttentionLayout.setVisibility(View.VISIBLE);
-                    videoInfoHolder.editLayout.setVisibility(View.GONE);
-                    videoInfoHolder.playBackIsMeLayout.setVisibility(View.GONE);
-                    DrawableUtils.loadingImg(mContext, videoInfoHolder.palyBackByHeadIv, liveRowsBean.getUser().getAvatar());
-                    videoInfoHolder.playBackByName.setText(liveRowsBean.getUser().getNickName());
-                    videoInfoHolder.playBackByName.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // 去个人页面
-                            Intent intent = new Intent(mContext, LiveHomePageActivity.class);
-                            intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
-                            mContext.startActivity(intent);
-                        }
-                    });
-                    videoInfoHolder.palyBackByHeadIv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // 去个人页面
-                            Intent intent = new Intent(mContext, LiveHomePageActivity.class);
-                            intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
-                            mContext.startActivity(intent);
+                            if(UserHelper.isLogined(mContext)){
+                                if (onReviewItemClickListener != null && !isAttention) {
+                                    isAttention = true;
+                                    onReviewItemClickListener.attentionBtnClick(isAttention, videoInfoHolder.playBackAttentionMaster);
+                                }
+                            }else{
+                                if(LiveConstant.USER_INFO_FIRST_CLICK){
+                                    LiveConstant.USER_INFO_FIRST_CLICK = false;
+                                    showLoginViewDialog();
+                                }
+                            }
+
                         }
                     });
 
+                    videoInfoHolder.playBackLocation.setText(liveRowsBean.getAddress());
+                    videoInfoHolder.playNum.setText(liveRowsBean.getReadNum() + "次播放");
+                    if (liveRowsBean.getDescription() != null) {
+                        videoInfoHolder.playBackTitleContent.setText(liveRowsBean.getDescription());
+                    }
+                    if (liveRowsBean.getUser().getId() == UserHelper.getUserId(mContext)) {//我自己的视频回放
+                        videoInfoHolder.playBackAttentionLayout.setVisibility(View.GONE);
+                        videoInfoHolder.editLayout.setVisibility(View.VISIBLE);
+                        videoInfoHolder.playBackMyName.setText(liveRowsBean.getUser().getNickName());
+                        DrawableUtils.loadingImg(mContext, videoInfoHolder.palyBackMyHeadIv, liveRowsBean.getUser().getAvatar());
+                        videoInfoHolder.editContent.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // 去编辑标题PostVideoActivity
+                                Intent intent = new Intent(mContext, PostVideoActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString(KeyParams.POST_LOCATION, liveRowsBean.getAddress());
+                                bundle.putString(KeyParams.POST_PHOTO, liveRowsBean.getPhoto());
+                                bundle.putString(KeyParams.POST_TITLE, liveRowsBean.getTitle());
+                                bundle.putInt(KeyParams.POST_HISTORY_ID, liveRowsBean.getId());
+                                bundle.putString(KeyParams.POST_VIDEO_INFO, liveRowsBean.getDescription());
+                                intent.putExtras(bundle);
+                                ((Activity) mContext).startActivityForResult(intent, KeyParams.POST_REQUESTCODE);
+                            }
+                        });
+                    } else {//他人视频
+                        videoInfoHolder.playBackAttentionLayout.setVisibility(View.VISIBLE);
+                        videoInfoHolder.editLayout.setVisibility(View.GONE);
+                        videoInfoHolder.playBackIsMeLayout.setVisibility(View.GONE);
+                        DrawableUtils.loadingImg(mContext, videoInfoHolder.palyBackByHeadIv, liveRowsBean.getUser().getAvatar());
+                        videoInfoHolder.playBackByName.setText(liveRowsBean.getUser().getNickName());
+                        videoInfoHolder.playBackByName.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // 去个人页面
+                                Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+                                intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
+                                mContext.startActivity(intent);
+                            }
+                        });
+                        videoInfoHolder.palyBackByHeadIv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // 去个人页面
+                                Intent intent = new Intent(mContext, LiveHomePageActivity.class);
+                                intent.putExtra("userId", String.valueOf(liveRowsBean.getUser().getId()));
+                                mContext.startActivity(intent);
+                            }
+                        });
+
+                    }
                 }
+
                 break;
             case REVIEW_TITLE:
                 ReviewTitle reviewTitle = (ReviewTitle) holder;

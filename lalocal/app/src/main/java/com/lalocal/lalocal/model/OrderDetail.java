@@ -90,6 +90,135 @@ public class OrderDetail implements Parcelable {
 
 
     private OrderPickUpVO orderPickUpVO;
+public   static  class DriverInfo implements Parcelable {
+
+
+       /**
+        * resultCode : 1000
+        * resultMessage : 操作成功
+        * driverName : 张三
+        * driverPhone : +86.132428349234
+        * driverPhone2 : +86.23423489234
+        * driverCarName : 奔驰S600
+        * driverCarDesc : 红色
+        * driverCarNo : 美A23423
+        */
+
+       private int resultCode;
+       private String resultMessage;
+       private String driverName;
+       private String driverPhone;
+       private String driverPhone2;
+       private String driverCarName;
+       private String driverCarDesc;
+       private String driverCarNo;
+
+       public int getResultCode() {
+           return resultCode;
+       }
+
+       public void setResultCode(int resultCode) {
+           this.resultCode = resultCode;
+       }
+
+       public String getResultMessage() {
+           return resultMessage;
+       }
+
+       public void setResultMessage(String resultMessage) {
+           this.resultMessage = resultMessage;
+       }
+
+       public String getDriverName() {
+           return driverName;
+       }
+
+       public void setDriverName(String driverName) {
+           this.driverName = driverName;
+       }
+
+       public String getDriverPhone() {
+           return driverPhone;
+       }
+
+       public void setDriverPhone(String driverPhone) {
+           this.driverPhone = driverPhone;
+       }
+
+       public String getDriverPhone2() {
+           return driverPhone2;
+       }
+
+       public void setDriverPhone2(String driverPhone2) {
+           this.driverPhone2 = driverPhone2;
+       }
+
+       public String getDriverCarName() {
+           return driverCarName;
+       }
+
+       public void setDriverCarName(String driverCarName) {
+           this.driverCarName = driverCarName;
+       }
+
+       public String getDriverCarDesc() {
+           return driverCarDesc;
+       }
+
+       public void setDriverCarDesc(String driverCarDesc) {
+           this.driverCarDesc = driverCarDesc;
+       }
+
+       public String getDriverCarNo() {
+           return driverCarNo;
+       }
+
+       public void setDriverCarNo(String driverCarNo) {
+           this.driverCarNo = driverCarNo;
+       }
+
+       @Override
+       public int describeContents() {
+           return 0;
+       }
+
+       @Override
+       public void writeToParcel(Parcel dest, int flags) {
+           dest.writeInt(this.resultCode);
+           dest.writeString(this.resultMessage);
+           dest.writeString(this.driverName);
+           dest.writeString(this.driverPhone);
+           dest.writeString(this.driverPhone2);
+           dest.writeString(this.driverCarName);
+           dest.writeString(this.driverCarDesc);
+           dest.writeString(this.driverCarNo);
+       }
+
+
+       protected DriverInfo(Parcel in) {
+           this.resultCode = in.readInt();
+           this.resultMessage = in.readString();
+           this.driverName = in.readString();
+           this.driverPhone = in.readString();
+           this.driverPhone2 = in.readString();
+           this.driverCarName = in.readString();
+           this.driverCarDesc = in.readString();
+           this.driverCarNo = in.readString();
+       }
+
+       public static final Creator<DriverInfo> CREATOR = new Creator<DriverInfo>() {
+           @Override
+           public DriverInfo createFromParcel(Parcel source) {
+               return new DriverInfo(source);
+           }
+
+           @Override
+           public DriverInfo[] newArray(int size) {
+               return new DriverInfo[size];
+           }
+       };
+   }
+
    public static class OrderPickUpVO implements Parcelable {
 
 
@@ -120,7 +249,7 @@ public class OrderDetail implements Parcelable {
         private String fromCityAddress;
         private String toCityName;
         private String toCityAddress;
-        private String driverInfo;
+        private DriverInfo driverInfo;
         private String fightNum;
 
         public int getProductType() {
@@ -211,11 +340,11 @@ public class OrderDetail implements Parcelable {
             this.toCityAddress = toCityAddress;
         }
 
-        public Object getDriverInfo() {
+        public DriverInfo getDriverInfo() {
             return driverInfo;
         }
 
-        public void setDriverInfo(String driverInfo) {
+        public void setDriverInfo(DriverInfo driverInfo) {
             this.driverInfo = driverInfo;
         }
 
@@ -245,7 +374,6 @@ public class OrderDetail implements Parcelable {
             dest.writeString(this.fromCityAddress);
             dest.writeString(this.toCityName);
             dest.writeString(this.toCityAddress);
-            dest.writeString(this.driverInfo);
             dest.writeString(this.fightNum);
         }
 

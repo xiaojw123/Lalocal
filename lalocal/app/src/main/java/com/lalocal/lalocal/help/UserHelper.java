@@ -7,7 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.lalocal.lalocal.activity.fragment.MeFragment;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.model.MessageItem;
 import com.lalocal.lalocal.model.User;
@@ -44,13 +44,13 @@ public class UserHelper {
         removeUserAlias(context);
         MobHelper.singOff();
         AuthPreferences.clearUserInfo();
-        DemoCache.clear();
+        LiveCache.clear();
         try {
             NIMClient.getService(AuthService.class).logout();
         }catch (Exception e){
             e.printStackTrace();
         }
-        DemoCache.setLoginStatus(false);
+        LiveCache.setLoginStatus(false);
         DataSupport.deleteAll(MessageItem.class);
         Bundle bundle = new Bundle();
         bundle.putBoolean(KeyParams.IS_LOGIN, false);

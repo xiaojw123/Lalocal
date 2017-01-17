@@ -3,7 +3,7 @@ package com.lalocal.lalocal.live.im.business;
 import android.app.Activity;
 import android.content.Context;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.inject.FlavorDependent;
 import com.netease.nimlib.sdk.NIMClient;
@@ -17,13 +17,13 @@ public class LogoutHelper {
     public static void logout(Context context, boolean isKickOut) {
         AuthPreferences.saveUserToken("");
         // 清理缓存&注销监听&清除状态
-        DemoCache.getImageLoaderKit().clear();
+        LiveCache.getImageLoaderKit().clear();
         // flavor do logout
         FlavorDependent.getInstance().onLogout();
-        DemoCache.clear();
+        LiveCache.clear();
 
         NIMClient.getService(AuthService.class).logout();
-        DemoCache.setLoginStatus(false);
+        LiveCache.setLoginStatus(false);
 
         // 启动登录
    //     LoginActivity.start(context, isKickOut);
