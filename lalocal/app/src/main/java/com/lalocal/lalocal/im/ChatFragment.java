@@ -591,6 +591,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 //        updateChatMessage(message);
         NIMClient.getService(MsgService.class).sendMessage(message, false);
 
+
+        
+
+
+
+
     }
 
     private void sendText(String sessionId, String text) {
