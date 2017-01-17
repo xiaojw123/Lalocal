@@ -106,7 +106,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.order_layout);
         ButterKnife.bind(this);
-        AppLog.print("OrderActivity___oncreateView___order__" + getOrderId());
         initParams();
         initView();
         setLoaderCallBack(new CallBack());

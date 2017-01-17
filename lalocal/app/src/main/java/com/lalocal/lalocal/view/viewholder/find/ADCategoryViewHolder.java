@@ -38,11 +38,17 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/10/25.
+ *
+ * 发现页广告、分类区域试图容器
+ *
+ *
  */
 public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
 
+    // 上下文
     private Context mContext;
 
+    // 控件声明
     private LinearLayout mLayoutTheme;
     private LinearLayout mLayoutArticle;
     private LinearLayout mLayoutShop;
@@ -85,11 +91,13 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         this.mLayoutShop.setFocusable(false);
         this.mRvRecommendList = recyclerView;
 
+        // 设置不可获取焦点，防止发现页重现时列表上下打滑的问题
         this.mLayoutTheme.setFocusable(false);
         this.mLayoutArticle.setFocusable(false);
         this.mLayoutShop.setFocusable(false);
 
         // 监听事件回调
+        // "旅行专题"点击监听事件
         this.mLayoutTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +106,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        // "旅游笔记"点击监听事件
         this.mLayoutArticle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +114,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                 ((LinearLayoutManager) mRvRecommendList.getLayoutManager()).scrollToPositionWithOffset(firstArticlePosition, 0);
             }
         });
-
+        // "旅游商店"点击监听事件
         this.mLayoutShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,7 +124,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
-        // 列表滚动监听事件
+        // 列表滚动监听事件，当列表向下滑动，广告位轮播图不可见时，轮播图不轮播；可见时继续轮播
         mRvRecommendList.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -126,13 +135,11 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 LinearLayoutManager layoutManager = (LinearLayoutManager) mRvRecommendList.getLayoutManager();
+                // 通过判断列表中第一个可见的Item是不是轮播图来判断是否进行轮播
                 int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
-                AppLog.i("TAH","录播图.....："+firstVisibleItemPosition);
                 if (firstVisibleItemPosition > 1) {
-                    AppLog.i("TAH", "1 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.stopAutoCycle();
                 } else {
-                    AppLog.i("TAH", "2 firstVisible - " + firstVisibleItemPosition);
                     mSliderAd.startAutoCycle();
                     mSliderAd.setFocusable(true);
                     mDotContainer.setFocusable(true);
@@ -164,52 +171,17 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         int size = mAdList.size();
         // 移除所有slider
         mSliderAd.removeAllSliders();
+        // 广告位的广告页填充
         for (int i = 0; i < size; i++) {
             DefaultSliderView defaultSliderView = new DefaultSliderView(mContext);
             RecommendAdResultBean ad = mAdList.get(i);
             String photoUrl = ad.photo;
             photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
-            AppLog.i("photoU", "ad photo is " + photoUrl);
             defaultSliderView.image(photoUrl);
             defaultSliderView.setScaleType(BaseSliderView.ScaleType.CenterCrop);
             defaultSliderView.setOnSliderClickListener(onSliderClickListener);
             mSliderAd.addSlider(defaultSliderView);
-
-         /*   // 添加小圆点
-            View point = new View(mContext);
-            int bottomMargin = DensityUtil.dip2px(mContext, 20);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    15, 15);
-            params.leftMargin = 20;
-            params.bottomMargin = bottomMargin;
-            point.setBackgroundResource(R.drawable.icon_round_white_dot_normal);
-            point.setLayoutParams(params);
-            // 为point设置标识,便于将来识别point
-            point.setTag(i);
-            mDotContainer.addView(point);*/
         }
-
-        // 初始化小圆点列表
-//        mDotBtns = DotUtils.initDot(mContext, mSliderAd, mDotContainer, size, mSliderAd.getCurrentPosition(), DotUtils.ROUND_WHITE_DOT);
-
-        // 轮播图页面改变
-     /*   mSliderAd.addOnPageChangeListener(new ViewPagerEx.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-                AppLog.i("TAH", "position - " + position + "; preposition -* " + mPrePosition);
-                if (mDotContainer.getChildAt(0) != null && mDotContainer.getChildAt(position) != null) {
-                    mDotContainer.getChildAt(position).setBackgroundResource(
-                            R.drawable.icon_round_white_dot_selected);
-                    if (mPrePosition != -1) {
-                        mDotContainer.getChildAt(mPrePosition).setBackgroundResource(
-                                R.drawable.icon_round_white_dot_normal);
-                    }
-                    mPrePosition = position;
-                }
-            }
-
-        });*/
     }
 
     private BaseSliderView.OnSliderClickListener onSliderClickListener = new BaseSliderView.OnSliderClickListener() {
@@ -217,6 +189,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
         public void onSliderClick(BaseSliderView slider) {
             int position = mSliderAd.getCurrentPosition();
             int size = mAdList.size();
+            // 友盟数据埋点
             switch (position) {
                 case 0:
                     MobHelper.sendEevent(mContext, MobEvent.LIVE_BANNER_01);
@@ -243,6 +216,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             int targetType = recommendAdResultBean.targetType;
             int targetId = recommendAdResultBean.targetId;
 
+            // 广告位不同跳转的分类
             Intent intent = null;
             switch (targetType) {
                 case Constants.PLAY_BACK_TYPE_URL: // 回放
@@ -251,19 +225,16 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_URL: // 链接
-                    AppLog.i("addd", "链接");
                     intent = new Intent(mContext, CarouselFigureActivity.class);
                     intent.putExtra("carousefigure", recommendAdResultBean);
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_ARTICLE: // 文章
-                    AppLog.i("addd", "文章");
                     intent = new Intent(mContext, ArticleActivity.class);
                     intent.putExtra("targetID", String.valueOf(targetId));
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_PRODUCTION: // 产品
-                    AppLog.i("addd", "产品--" + targetId);
                     // 跳转到商品详情界面
                     SpecialToH5Bean specialToH5Bean = new SpecialToH5Bean();
                     specialToH5Bean.setTargetId(targetId);
@@ -273,13 +244,11 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_ROUTE: // 路线
-                    AppLog.i("addd", "路线");
                     intent = new Intent(mContext, RouteDetailActivity.class);
                     intent.putExtra("detail_id", targetId);
                     mContext.startActivity(intent);
                     break;
                 case Constants.TARGET_TYPE_THEME: // 专题
-                    AppLog.i("addd", "专题");
                     intent = new Intent(mContext, SpecialDetailsActivity.class);
                     intent.putExtra("rowId", targetId + "");
                     mContext.startActivity(intent);

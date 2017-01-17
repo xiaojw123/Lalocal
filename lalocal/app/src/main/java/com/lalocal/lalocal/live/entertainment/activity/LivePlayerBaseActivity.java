@@ -594,18 +594,18 @@ public abstract class LivePlayerBaseActivity extends BaseActivity implements Mod
                     break;
 
                 case R.id.live_master_info_layout:
-                        if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
-                            if (userId != null && channelId != null) {
-                                if (LivePlayerBaseActivity.this instanceof AudienceActivity) {
-                                    MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_ANCHOR);
-                                    showUserInfoDialog(userId, channelId, true);
-                                }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
-                                    contentLoader.liveGiftRanks(channelId);
-                                }
+                    if (UserHelper.isLogined(LivePlayerBaseActivity.this)) {
+                        if (userId != null && channelId != null) {
+                            if (LivePlayerBaseActivity.this instanceof AudienceActivity) {
+                                MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_USER_ANCHOR);
+                                showUserInfoDialog(userId, channelId, true);
+                            }else if(LivePlayerBaseActivity.this instanceof LiveActivity){
+                                contentLoader.liveGiftRanks(channelId);
                             }
-                        } else {
-                            showLoginViewDialog();
                         }
+                    } else {
+                        showLoginViewDialog();
+                    }
 
                     break;
                 case R.id.live_telecast_top_setting:
@@ -1332,20 +1332,20 @@ public abstract class LivePlayerBaseActivity extends BaseActivity implements Mod
                     MobHelper.sendEevent(LivePlayerBaseActivity.this, MobEvent.LIVE_ANCHOR_USER);
                 }
 
-                    boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
-                    if (!isLogin) {
-                        showLoginViewDialog();
-                    } else {
-                        String userIdItem = String.valueOf(member.getId());
-                        inputPanel.hideInputMethod();
-                        if (!isMasterAccount) {
-                            if ("-1".equals(userIdItem) || userIdItem == null || userIdItem.length() == 0) {
-                                Toast.makeText(LivePlayerBaseActivity.this, getString(R.string.user_tourist), Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-                            showUserInfoDialog(userIdItem, channelId, false);
+                boolean isLogin = UserHelper.isLogined(LivePlayerBaseActivity.this);
+                if (!isLogin) {
+                    showLoginViewDialog();
+                } else {
+                    String userIdItem = String.valueOf(member.getId());
+                    inputPanel.hideInputMethod();
+                    if (!isMasterAccount) {
+                        if ("-1".equals(userIdItem) || userIdItem == null || userIdItem.length() == 0) {
+                            Toast.makeText(LivePlayerBaseActivity.this, getString(R.string.user_tourist), Toast.LENGTH_SHORT).show();
+                            return;
                         }
+                        showUserInfoDialog(userIdItem, channelId, false);
                     }
+                }
             }
         });
 

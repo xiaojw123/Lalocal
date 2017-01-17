@@ -28,6 +28,8 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/10/25.
+ *
+ * 此类已作废
  */
 public class ChannelViewHolder extends RecyclerView.ViewHolder {
 

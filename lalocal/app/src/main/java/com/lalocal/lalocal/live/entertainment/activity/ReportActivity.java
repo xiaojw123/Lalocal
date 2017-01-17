@@ -22,7 +22,6 @@ import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.adapter.PhotoAdapter;
-import com.lalocal.lalocal.live.entertainment.agora.Constant;
 import com.lalocal.lalocal.live.entertainment.img.GlideImageLoader;
 import com.lalocal.lalocal.live.entertainment.listener.GlidePauseOnScrollListener;
 import com.lalocal.lalocal.model.Constants;
@@ -30,7 +29,6 @@ import com.lalocal.lalocal.model.ImgTokenBean;
 import com.lalocal.lalocal.model.ImgTokenResult;
 import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.net.callback.ICallBack;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.QiniuUtils;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -57,23 +55,26 @@ import cn.finalteam.galleryfinal.PauseOnScrollListener;
 import cn.finalteam.galleryfinal.ThemeConfig;
 import cn.finalteam.galleryfinal.model.PhotoInfo;
 
+/**
+ * create by Wangjie
+ *
+ * 举报Activity
+ *
+ * 举报氛围用户举报和主播举报，其中主播举报可以多次，用户举报只能对同一名用户举报一次
+ *
+ */
 public class ReportActivity extends BaseActivity {
 
     @BindView(R.id.et_report)
     EditText mEtReport;
-
     @BindView(R.id.rb_uncivilized)
     RadioButton mRbUncivilized;
-
     @BindView(R.id.rb_illegal)
     RadioButton mRbIllegal;
-
     @BindView(R.id.rb_other)
     RadioButton mRbOther;
-
     @BindView(R.id.gv_report_pic)
     GridView mGvReportPic;
-
     @BindView(R.id.btn_confirm_report)
     Button mBtnConfirmReport;
     @BindView(R.id.btn_close_report)
@@ -83,6 +84,7 @@ public class ReportActivity extends BaseActivity {
     @BindView(R.id.loading)
     GifView loading;
 
+    // 图片适配器
     private PhotoAdapter mPhotoAdapter;
 
     // 主题配置
@@ -150,25 +152,20 @@ public class ReportActivity extends BaseActivity {
 
         // -获取bundle
         if (getData == null) {
-            AppLog.i("qn", "itnent null");
             return;
         }
         Bundle bundle = getData.getExtras();
 
         // -获取key的值
         if (bundle == null) {
-            AppLog.i("qn", "bundle null");
             return;
         }
         // 获取被举报的用户id
         mUserId = bundle.getString(Constants.KEY_USER_ID);
-        AppLog.i("qn", "userid is " + mUserId);
         // 获取被举报的用户昵称
         mMasterName = bundle.getString(Constants.KEY_MASTER_NAME);
-        AppLog.i("qn", "master name is " + mMasterName);
         // 获取当前所在的直播间id
         mChannelId = bundle.getString(Constants.KEY_CHANNEL_ID);
-        AppLog.i("qn", "channelId is " + mChannelId);
         // 获取举报来源
         mReportFrom = bundle.getInt(Constants.KEY_REPORT_FROM);
     }
@@ -249,7 +246,6 @@ public class ReportActivity extends BaseActivity {
      * 初始化选中的图片列表
      */
     private void initSelectedPhoto() {
-
         // 添加占位图片
         addEmptyPhoto(mPhotoList);
 
@@ -331,8 +327,6 @@ public class ReportActivity extends BaseActivity {
         funConBuilder.setEnableCrop(false);
         // 设置不可通过照相选择照片
         funConBuilder.setEnableCamera(false);
-        // 设置添加过滤集合，过滤掉之前选中的图片
-//        funConBuilder.setFilter(mPhotoList);
         // 不过滤图片，而是将之前选中的图片设置为选中状态
         funConBuilder.setSelected(mPhotoList);
         // 设置可预览
@@ -390,7 +384,6 @@ public class ReportActivity extends BaseActivity {
             // 将返回的图片赋给上传的图片列表
             mUploadPhotoList.clear();
             mUploadPhotoList.addAll(resultList);
-            AppLog.i("qn", "gallery select pic " + mUploadPhotoList.size());
             // 没有图片返回的时候，也可以进行操作：清空之前选中的图片
 
             // 添加占位图片
@@ -459,24 +452,6 @@ public class ReportActivity extends BaseActivity {
         }
     }
 
-//    @OnClick({R.id.rb_uncivilized, R.id.rb_illegal, R.id.rb_other})
-//    void clickRadioButton(RadioButton rb) {
-//        switch (rb.getId()) {
-//            case R.id.rb_uncivilized:
-//                // 隐藏输入框
-//                mEtReport.setVisibility(View.GONE);
-//                break;
-//            case R.id.rb_illegal:
-//                // 隐藏输入框
-//                mEtReport.setVisibility(View.GONE);
-//                break;
-//            case R.id.rb_other:
-//                // 显示输入框
-//                mEtReport.setVisibility(View.VISIBLE);
-//                break;
-//        }
-//    }
-
     /**
      * 回调事件类
      */
@@ -486,10 +461,8 @@ public class ReportActivity extends BaseActivity {
             super.onImgToken(imgTokenBean);
 
             if (imgTokenBean.getReturnCode() == 0) {
-                AppLog.i("qn", "return code is 0");
                 ImgTokenResult result = imgTokenBean.getResult();
                 if (result == null) {
-                    AppLog.i("qn", "result null");
                     Toast.makeText(ReportActivity.this, "获取Token失败", Toast.LENGTH_SHORT).show();
                     resetReport();
                     return;
@@ -505,10 +478,7 @@ public class ReportActivity extends BaseActivity {
                 mCurSelectPic++;
                 // 获取文件路径
                 String filePath = photoInfo.getPhotoPath();
-                AppLog.i("qn", "filePaht is " + filePath);
 
-                // 上传七牛云图片
-//                uploadSimpleFile(filePath, fileName, token);
                 QiniuUtils.uploadSimpleFile(filePath, fileName, token, new QiniuUtils.OnUploadListener() {
                     @Override
                     public void onUploadSuccess(ResponseInfo info) {
@@ -613,7 +583,6 @@ public class ReportActivity extends BaseActivity {
         @Override
         public void onGetChannelReport(String json) {
             super.onGetChannelReport(json);
-            AppLog.i("TAG", "举报成功：" + json);
             try {
                 // json解析
                 JSONObject response = new JSONObject(json);

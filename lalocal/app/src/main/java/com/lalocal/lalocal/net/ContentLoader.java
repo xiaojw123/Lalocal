@@ -156,28 +156,29 @@ public class ContentLoader {
         this.callBack = callBack;
     }
 
-    public void getPraiseComment(int pageNum){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.GET_PRAISE_COMMENT);
+    public void getPraiseComment(int pageNum) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_PRAISE_COMMENT);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getPraiseCommentUrl(pageNum),response,response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getPraiseCommentUrl(pageNum), response, response);
         request.setHeaderParams(getLoginHeaderParams());
         requestQueue.add(request);
     }
 
-    public void getUsersService(){
-        if (callBack!=null){
-            response=new ContentResponse(GET_USERS_SERVICE);
+    public void getUsersService() {
+        if (callBack != null) {
+            response = new ContentResponse(GET_USERS_SERVICE);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(),response,response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUsersServiceUrl(), response, response);
         requestQueue.add(request);
     }
-    public  void getUsersService(int type,int index){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.GET_USER_SERVICE);
+
+    public void getUsersService(int type, int index) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_USER_SERVICE);
             response.setChildIndex(index);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getUsersServiceUrl(type),response,response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getUsersServiceUrl(type), response, response);
         requestQueue.add(request);
     }
 
@@ -780,11 +781,11 @@ public class ContentLoader {
         requestQueue.add(request);
     }
 
-    public void getYiTu8Citys(int id){
-        if (callBack!=null){
-            response=new ContentResponse(RequestCode.GET_YITU8_CITY);
+    public void getYiTu8Citys(int id) {
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.GET_YITU8_CITY);
         }
-        ContentRequest request=new ContentRequest(Request.Method.GET,AppConfig.getYiTu8City(id),response,response);
+        ContentRequest request = new ContentRequest(Request.Method.GET, AppConfig.getYiTu8City(id), response, response);
         requestQueue.add(request);
     }
 
@@ -1222,7 +1223,7 @@ public class ContentLoader {
 
     //超级管理员关闭直播间
 
-    public  void getCloseLiveRoom(String channelId){
+    public void getCloseLiveRoom(String channelId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.CLOSE_LIVE_ROOM);
         }
@@ -1469,7 +1470,8 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
-    public void getPlayBackMsg(String historyId){
+
+    public void getPlayBackMsg(String historyId) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PLAY_BACK_MSG);
         }
@@ -1477,25 +1479,26 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
     }
+
     //历史直播评论
-    public  void getPlayBackLiveReview(String targetId,int targetType,int pageSize,int pageNumber){
+    public void getPlayBackLiveReview(String targetId, int targetType, int pageSize, int pageNumber) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PLAY_BACK_DETAILES);
         }
-        ContentRequest request = new ContentRequest(AppConfig.getPlayBackReview(targetId,targetType,pageSize,pageNumber),response, response);
+        ContentRequest request = new ContentRequest(AppConfig.getPlayBackReview(targetId, targetType, pageSize, pageNumber), response, response);
         request.setHeaderParams(getHeaderParams());
         requestQueue.add(request);
 
     }
 
     //修改历史回放
-    public void getAlterPlayBack(int historyId,String title,String photo,String description,String address){
+    public void getAlterPlayBack(int historyId, String title, String photo, String description, String address) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.ALTER_PLAY_BACK);
         }
-        ContentRequest request = new ContentRequest(Request.Method.PUT,AppConfig.getAlterPlayBack(historyId),response, response);
+        ContentRequest request = new ContentRequest(Request.Method.PUT, AppConfig.getAlterPlayBack(historyId), response, response);
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
-        request.setBodyParams(getAlterPlayBack(title,photo, description,address));
+        request.setBodyParams(getAlterPlayBack(title, photo, description, address));
         requestQueue.add(request);
     }
 
@@ -1546,7 +1549,6 @@ public class ContentLoader {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.PRODUCT_DETAILS);
         }
-        AppLog.print("获取产品详情———url———" + AppConfig.getProductDetailsUrl() + targetId);
         ContentRequest contentRequest = new ContentRequest(AppConfig.getProductDetailsUrl() + targetId, response, response);
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
@@ -1685,20 +1687,22 @@ public class ContentLoader {
 
     /**
      * 获取文章评论列表
+     *
      * @param articleId
      */
-    public void getArticleComments(int articleId,int pageNum)  {
+    public void getArticleComments(int articleId, int pageNum) {
         if (callBack != null) {
             response = new ContentResponse(RequestCode.GET_ARTICLE_COMMENTS);
         }
-        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(articleId,pageNum), response, response);
+        ContentRequest contentRequest = new ContentRequest(AppConfig.getArticleComments(articleId, pageNum), response, response);
         contentRequest.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(contentRequest);
     }
 
     /**
      * 发表评论
-     * @param content 评论内容
+     *
+     * @param content    评论内容
      * @param targetId
      * @param targetType
      */
@@ -1728,7 +1732,8 @@ public class ContentLoader {
 
     /**
      * 发表评论
-     * @param content 评论内容
+     *
+     * @param content  评论内容
      * @param parentId
      */
     public void replyComments(String content, int parentId) {
@@ -1756,6 +1761,7 @@ public class ContentLoader {
 
     /**
      * 删除评论
+     *
      * @param commentId
      */
     public void deleteComment(int commentId) {
@@ -1788,7 +1794,7 @@ public class ContentLoader {
 
         public ContentRequest(int method, String url, Response.Listener<String> listener, Response.ErrorListener errorListener) {
             super(method, url, listener, errorListener);
-            AppLog.print("requestUrl____" + url);
+            AppLog.print("requestUrl:\n" + url);
         }
 
         public void setHeaderParams(Map<String, String> headerParams) {
@@ -1854,14 +1860,14 @@ public class ContentLoader {
         private CompoundButton switchBtn;
         private ProgressButton mProgressButton;
         private String chargeChannel;
-        private  int childIndex;
+        private int childIndex;
 
         public ContentResponse(int resultCode) {
             this.resultCode = resultCode;
         }
 
-        public void setChildIndex(int index){
-            childIndex=index;
+        public void setChildIndex(int index) {
+            childIndex = index;
         }
 
         public void setChargeChannel(String channel) {
@@ -1944,9 +1950,7 @@ public class ContentLoader {
         @Override
         public void onErrorResponse(VolleyError volleyError) {
             resetResponseView();
-            if (resultCode == RequestCode.VERSION_CODE) {
-                return;
-            } else {
+            if (resultCode != RequestCode.VERSION_CODE) {
                 if (resultCode == RequestCode.GET_PUSH_TAGS) {
                     getSystemConfigs();
                     return;
@@ -1975,7 +1979,7 @@ public class ContentLoader {
 
         @Override
         public void onResponse(String json) {
-            AppLog.print("response JSON____" + json);
+            AppLog.print("response:\n" + json);
             resetResponseView();
             JSONObject jsonObj;
             try {
@@ -2013,25 +2017,25 @@ public class ContentLoader {
                         break;
 
                     case RequestCode.GET_USERS_SERVICE:
-                       JSONArray resutJarray=jsonObj.optJSONArray(ResultParams.REULST);
+                        JSONArray resutJarray = jsonObj.optJSONArray(ResultParams.REULST);
                         callBack.onGetUsersSerice(resutJarray);
-                       break;
+                        break;
                     case RequestCode.GET_USER_SERVICE:
-                        JSONObject sercieResultJobj=jsonObj.optJSONObject(ResultParams.REULST);
+                        JSONObject sercieResultJobj = jsonObj.optJSONObject(ResultParams.REULST);
                         callBack.onGetUser(sercieResultJobj);
-                        callBack.onGetUser(sercieResultJobj,childIndex);
+                        callBack.onGetUser(sercieResultJobj, childIndex);
                         break;
 
                     case RequestCode.GET_YITU8_CITY:
-                        JSONArray jsonArray=jsonObj.optJSONArray(ResultParams.REULST);
-                        callBack.onGetYitu8City(jsonArray.length()>0);
+                        JSONArray jsonArray = jsonObj.optJSONArray(ResultParams.REULST);
+                        callBack.onGetYitu8City(jsonArray.length() > 0);
                         break;
 
                     case RequestCode.GET_MESSAGE_COUNT:
                         String res = jsonObj.optString(ResultParams.REULST);
-                        int count=0;
-                        if (!TextUtils.isEmpty(res)){
-                            count=Integer.parseInt(res);
+                        int count = 0;
+                        if (!TextUtils.isEmpty(res)) {
+                            count = Integer.parseInt(res);
                         }
                         callBack.onGetMessageCount(count);
                         break;
@@ -2257,11 +2261,9 @@ public class ContentLoader {
                         responseGetMyCoupon(jsonObj);
                         break;
                     case RequestCode.RECOMMEND:
-                        AppLog.print("recommend____json__" + json);
                         responseRecommend(json);
                         break;
                     case RequestCode.RECOMMEND_AD:
-                        AppLog.print("recommedn___ad__" + json);
                         responseRecommendAd(json);
                         break;
                     case RequestCode.SPECIAL_DETAIL:
@@ -2463,9 +2465,9 @@ public class ContentLoader {
         }
 
         private void responseGetPraiseComment(JSONObject jsonObj) {
-            String resultJson=jsonObj.optString(ResultParams.REULST);
-            Gson gson=new Gson();
-            PraiseComment pc=gson.fromJson(resultJson,PraiseComment.class);
+            String resultJson = jsonObj.optString(ResultParams.REULST);
+            Gson gson = new Gson();
+            PraiseComment pc = gson.fromJson(resultJson, PraiseComment.class);
             callBack.onGetPraiseComment(pc);
         }
 
@@ -3188,7 +3190,7 @@ public class ContentLoader {
 
         //修改直播间
         private void responseAlterLiveRoom(String json) {
-            AppLog.i("TAG","修改直播间："+json);
+            AppLog.i("TAG", "修改直播间：" + json);
             CreateLiveRoomDataResp createLiveRoomDataResp = new Gson().fromJson(json, CreateLiveRoomDataResp.class);
             callBack.onAlterLiveRoom(createLiveRoomDataResp);
         }
@@ -3361,17 +3363,19 @@ public class ContentLoader {
 
         //历史直播回放评论
         private void responsePlayBack(JSONObject jsonObj) {
-            AppLog.i("TAG","历史回放评论:"+jsonObj.toString());
+            AppLog.i("TAG", "历史回放评论:" + jsonObj.toString());
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
             PlayBackReviewResultBean reviewResultBean = new Gson().fromJson(resultJson.toString(), PlayBackReviewResultBean.class);
             callBack.onPlayBackReviewDetails(reviewResultBean);
         }
+
         //历史回放消息
         private void responsePlayBackMsg(String json) {
-            AppLog.i("TAG","回放历史消息:"+json);
+            AppLog.i("TAG", "回放历史消息:" + json);
             PlayBackMsgResultBean msgResultBean = new Gson().fromJson(json, PlayBackMsgResultBean.class);
             callBack.onPlayBackMsgDetails(msgResultBean);
         }
+
         //修改历史回放
         private void responseAlterHistoryPlayBack(JSONObject jsonObj) {
             try {
@@ -3549,6 +3553,7 @@ public class ContentLoader {
 
         /**
          * 相应文章评论列表
+         *
          * @param json
          */
         private void responseArticleComments(String json) {
@@ -3569,6 +3574,7 @@ public class ContentLoader {
 
         /**
          * 响应评论发表
+         *
          * @param json
          */
         private void responseSendingComments(String json) {
@@ -3580,6 +3586,7 @@ public class ContentLoader {
 
         /**
          * 响应删除评论
+         *
          * @param json
          */
         private void responseDeleteComments(String json) {
@@ -3594,9 +3601,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
-
-
-
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
             phone, String description) {
@@ -3712,6 +3716,7 @@ public class ContentLoader {
         return jsonObject.toString();
 
     }
+
     //关闭直播间
     private String getCloseRoomParams(String id) {
         JSONObject jsonObject = new JSONObject();
@@ -3764,7 +3769,7 @@ public class ContentLoader {
     }
 
     //修改历史回放
-    private String getAlterPlayBack(String title,String photo,String description,String address){
+    private String getAlterPlayBack(String title, String photo, String description, String address) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("title", title);
@@ -3926,7 +3931,7 @@ public class ContentLoader {
         headers.put("APP_VERSION", AppConfig.getVersionName(context));
         headers.put("DEVICE", "android");
         headers.put("DEVICE_ID", CommonUtil.getUUID(context));
-        headers.put("LATITUDE",CommonUtil.LATITUDE);
+        headers.put("LATITUDE", CommonUtil.LATITUDE);
         headers.put("LONGITUDE", CommonUtil.LONGITUDE);
         headers.put("DEVICE_WIDTH", DensityUtil.getWindowWidth((Activity) context) + "");
         headers.put("DEVICE_HEIGHT", DensityUtil.getWindowHeight((Activity) context) + "");
@@ -4077,10 +4082,10 @@ public class ContentLoader {
         int GET_G_SPECIAL_SEARCH = 169;
         int GET_G_USER_SEARCH = 170;
         int GET_MESSAGE_COUNT = 171;
-        int GET_YITU8_CITY=172;
-        int GET_USERS_SERVICE=173;
-        int GET_USER_SERVICE=174;
-        int GET_PRAISE_COMMENT=175;
+        int GET_YITU8_CITY = 172;
+        int GET_USERS_SERVICE = 173;
+        int GET_USER_SERVICE = 174;
+        int GET_PRAISE_COMMENT = 175;
 
 
         int RECOMMEND = 200;
@@ -4129,12 +4134,14 @@ public class ContentLoader {
         int LIVE_AVATAR = 243;
         int USER_LEAVE_ROOM = 244;
         int VALIDATE_MSGS = 245;
+
         int PLAY_BACK_DETAILES=246;
         int PLAY_BACK_MSG=247;
         int ALTER_PLAY_BACK=248;
         int CLOSE_LIVE_ROOM=249;
         int SHORT_VIDEO_TOKEN=250;
         int POST_SHORT_VIDEO=251;
+
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

@@ -42,6 +42,7 @@ public class UserHelper {
 
     public static void updateSignOutInfo(Context context) {
         removeUserAlias(context);
+        MobHelper.unRegsiterUserProperty(context);
         MobHelper.singOff();
         AuthPreferences.clearUserInfo();
         LiveCache.clear();

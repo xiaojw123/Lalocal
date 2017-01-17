@@ -200,7 +200,9 @@ public class AccountEidt1Activity extends BaseActivity implements View.OnClickLi
         } else if (requestCode == PHOTO_REQUEST_CAREMA) {
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED)) {
-                crop(Uri.fromFile(tempFile));
+                if (tempFile != null) {
+                    crop(Uri.fromFile(tempFile));
+                }
             } else {
                 CommonUtil.showToast(this, "未找到存储卡，无法存储照片", Toast.LENGTH_SHORT);
             }

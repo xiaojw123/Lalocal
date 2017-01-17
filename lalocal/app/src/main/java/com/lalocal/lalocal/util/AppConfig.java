@@ -3,6 +3,7 @@ package com.lalocal.lalocal.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 
 import com.lalocal.lalocal.help.UserHelper;
 
@@ -37,18 +38,34 @@ public class AppConfig {
     public static String USER_PROTOCOL_URL = "http://h5.lalocal.cn/static/userRole.html";
     //预定商品-h5
     public static String preOrderUrl = "http://dev.lalocal.cn/wechat/order_select?id=%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
-    //   private static String baseUrl = "http://api.lalocal.cn/api/";
+    //       private static String baseUrl = "http://api.lalocal.cn/api/";
     private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
-    public static final String BOOK_URL_FORMART = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+    public static final String BOOK_URL_FORMART_1 = "%1$s?USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+    public static final String BOOK_URL_FORMART_2 = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+
     //获取h5 url地址
-    public static String getH5Url(Context context,String baseH5Url) {
-        int userId = UserHelper.getUserId(context);
-        String token = UserHelper.getToken(context);
-        String device = CommonUtil.getDevice();
-        String devcieId = CommonUtil.getUUID(context);
-        String version = AppConfig.getVersionName(context);
-        return String.format(AppConfig.BOOK_URL_FORMART, baseH5Url, userId, token, version, device, devcieId);
+    public static String getH5Url(Context context, String baseH5Url) {
+        if (!TextUtils.isEmpty(baseH5Url)) {
+            if (UserHelper.isLogined(context)) {
+                int userId = UserHelper.getUserId(context);
+                String token = UserHelper.getToken(context);
+                String device = CommonUtil.getDevice();
+                String devcieId = CommonUtil.getUUID(context);
+                String version = AppConfig.getVersionName(context);
+                if (baseH5Url.contains("?")) {
+                    int len = baseH5Url.length();
+                    int firstIndex = baseH5Url.indexOf("?");
+                    String keyParams = baseH5Url.substring(firstIndex, len);
+                    if (!keyParams.contains("USER_ID")) {
+                        return String.format(AppConfig.BOOK_URL_FORMART_2, baseH5Url, userId, token, version, device, devcieId);
+                    }
+                } else {
+                    return String.format(AppConfig.BOOK_URL_FORMART_1, baseH5Url, userId, token, version, device, devcieId);
+                }
+            }
+        }
+        return baseH5Url;
     }
 
     public static String getWelcommeImgs() {
@@ -193,7 +210,6 @@ public class AppConfig {
 
         return baseUrl + "articles/";
     }
-
 
 
     //直播列表
@@ -356,18 +372,20 @@ public class AppConfig {
     }
 
     //修改历史回放 http://dev.lalocal.cn/api/channels/historys/1
-    public static final String getAlterPlayBack(int historyId){
-        return baseUrl+"channels/historys/"+historyId;
+    public static final String getAlterPlayBack(int historyId) {
+        return baseUrl + "channels/historys/" + historyId;
     }
 
     //回放消息展示
-    public static final String getPlayBackMsg(String historyId){
-        return  baseUrl+"channels/historys/"+historyId+"/msgs";
+    public static final String getPlayBackMsg(String historyId) {
+        return baseUrl + "channels/historys/" + historyId + "/msgs";
     }
+
     //历史直播评论  comments?targetId=5317&targetType=20&pageSize=10&pageNumber=1
-    public  static final String getPlayBackReview(String targetId,int targetType,int pageSize,int pageNumber){
-        return  baseUrl+"comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
+    public static final String getPlayBackReview(String targetId, int targetType, int pageSize, int pageNumber) {
+        return baseUrl + "comments?targetId=" + targetId + "&targetType=" + targetType + "&pageSize=" + pageSize + "&pageNumber=" + pageNumber;
     }
+
     //上报日志 http://dev.lalocal.cn/api/system/logs/app
     public static final String uploadLogs() {
         return baseUrl + "system/logs/app";
@@ -384,9 +402,10 @@ public class AppConfig {
     }
 
     //关闭直播间
-    public static final String getCloseRoom(){
-        return baseUrl+"channels/close";
+    public static final String getCloseRoom() {
+        return baseUrl + "channels/close";
     }
+
     //发送消息
     public static final String sendMessage() {
         return baseUrl + "system/msgs/validate";
@@ -801,6 +820,7 @@ public class AppConfig {
 
     /**
      * 直播间举报，主播端
+     *
      * @return
      */
     public static String getChannelReport() {
@@ -810,6 +830,7 @@ public class AppConfig {
 
     /**
      * 举报：用户端
+     *
      * @return
      */
     public static String getReport() {
@@ -835,19 +856,20 @@ public class AppConfig {
 
     /**
      * 获取文章评论
+     *
      * @param articleId 文章编号
-     * @return
-     * "comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
+     * @return "comments?targetId="+targetId+"&targetType="+targetType+"&pageSize="+pageSize+"&pageNumber="+pageNumber;
      */
-    public static String getArticleComments(int articleId,int pageNum) {
-        String url = baseUrl + "comments?targetId="+ articleId+"&targetType=1&pageSize=10&pageNumber="+pageNum;
-     //   String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
+    public static String getArticleComments(int articleId, int pageNum) {
+        String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1&pageSize=10&pageNumber=" + pageNum;
+        //   String url = baseUrl + "comments?targetId=" + articleId + "&targetType=1";
         AppLog.i("articleComments", "the url is " + url);
         return url;
     }
 
     /**
      * 获取发表评论的url
+     *
      * @return
      */
     public static String getSendingCommentsUrl() {
@@ -856,6 +878,7 @@ public class AppConfig {
 
     /**
      * 获取删除评论的url
+     *
      * @param commentId
      * @return
      */
@@ -865,14 +888,15 @@ public class AppConfig {
         return url;
     }
 
-    public static String getUsersServiceUrl(){
-        return baseUrl+"users/service";
+    public static String getUsersServiceUrl() {
+        return baseUrl + "users/service";
     }
 
-    public static String getUsersServiceUrl(int type){
-        return  baseUrl+"users/"+type+"/service ";
+    public static String getUsersServiceUrl(int type) {
+        return baseUrl + "users/" + type + "/service ";
     }
-    public static String getPraiseCommentUrl(int pageNum){
-        return  baseUrl+"dynamics?pageSize=10&pageNumber="+pageNum;
+
+    public static String getPraiseCommentUrl(int pageNum) {
+        return baseUrl + "dynamics?pageSize=10&pageNumber=" + pageNum;
     }
 }

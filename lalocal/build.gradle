@@ -6,8 +6,8 @@ ext {
             compileVersion   : 24,
             minSdk           : 14,
             targetSdk        : 23,
-            version_code     : 221,
-            version_name     : "2.2.1"
+            version_code     : 222,
+            version_name     : "2.2.2"
     ]
     libraries = [
             support: "25.1.0",
@@ -21,7 +21,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'com.android.tools.build:gradle:2.2.3'
         classpath 'io.fabric.tools:gradle:1.+'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong

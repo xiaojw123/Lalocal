@@ -40,6 +40,8 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/11/8.
+ *
+ * 直播首页列表适配器
  */
 public class HomeLiveAdapter extends RecyclerView.Adapter {
 
@@ -73,7 +75,6 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     public HomeLiveAdapter(Context context, List<RecommendAdResultBean> adList, LiveUserBean attention,
                            List<CategoryBean> categoryList, int cateSelected, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList,
                            CategoryAdapter.MyOnItemClickListener categoryItemListener, RecyclerView rvTopCategory) {
-        AppLog.i("lsck", "listener is " + (categoryItemListener == null ? "null" : "not null"));
         this.mContext = context;
         this.mAttentionUser = attention;
         this.mRvTopCategory = rvTopCategory;
@@ -131,7 +132,6 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      * @param playbackList
      */
     public void refreshLive(List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
-        AppLog.i("sls", "refreshLive");
         this.mLivingList = livingList;
         this.mPlaybackList = playbackList;
         this.notifyDataSetChanged();
@@ -149,10 +149,6 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
     public void refreshAll(List<RecommendAdResultBean> adList, LiveUserBean attention, List<CategoryBean> categoryList,
                            int cateSelected, List<LiveRowsBean> livingList, List<LiveRowsBean> playbackList) {
 
-        AppLog.i("dsp", "refreshAll()");
-        AppLog.i("cnt", "ad " + adList.size() + "; attention " + (attention == null ? "null" : "not null")
-                + "; cate " + categoryList.size() + "; cateSel " + cateSelected + "; living " + livingList.size() + "; playBack " + playbackList.size());
-        AppLog.i("sct", "refreshAll " + cateSelected);
         this.mAdList = adList;
         this.mAttentionUser = attention;
         this.mCategoryList = categoryList;
@@ -186,11 +182,8 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 holder = new AttentionViewHolder(mContext, view);
                 break;
             case CATEGORY:
-                AppLog.i("dsp", "CATGEORY onCreate");
                 // 保存分类栏，防止其中的RecyclerView的滑动距离未保存
                 if (mCategoryHolder == null) {
-                    AppLog.i("dsp", "mCategoryHolder not null");
-                    AppLog.i("sls", "CATEGORY ONcREATE");
                     view = LayoutInflater.from(mContext).inflate(R.layout.live_categories, parent, false);
                     mCategoryHolder = new CategoryViewHolder(mContext, view, mRvTopCategory);
                     mCategoryHolder.setIsRecyclable(false);
@@ -219,61 +212,55 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 ((AttentionViewHolder) holder).initData(mAttentionUser);
                 break;
             case CATEGORY:
-                AppLog.i("sct", "CATEGORY " + mCateSelected);
-                AppLog.i("dsp", "CAETGORY onBind mCategoryListlsiz");
                 ((CategoryViewHolder) holder).initData(mCategoryList, mCateSelected, mCategoryItemListener);
                 break;
             case LIVING_ITEM:
                 int livingIndex = getIndex(position);
-                AppLog.i("ctg", "LIVING ITEM " + position + "/" + livingIndex);
                 ((LiveViewHolder) holder).initData(mLivingList.get(livingIndex));
                 break;
             case PLAYBACK_ITEM:
                 int playbackIndex = getIndex(position);
-                AppLog.i("ctg", "LIVING ITEM " + position + "/" + playbackIndex);
-                AppLog.i("cnt", "position " + position + "; index " + playbackIndex);
                 ((LiveViewHolder) holder).initData(mPlaybackList.get(playbackIndex));
                 break;
         }
     }
 
+    /**
+     * 获取子项的个数
+     * @return
+     */
     @Override
     public int getItemCount() {
         int preCount = getPreCount();
         int count = preCount + mLivingList.size() + mPlaybackList.size();
-        AppLog.i("cnt", "count " + count);
         return count;
     }
 
+    /**
+     * 获取position对应的直播、回放在直播、回放列表中所在的下标
+     * @param position
+     * @return
+     */
     public int getIndex(int position) {
         int index = position;
         int preCount = getPreCount();
-        AppLog.i("ctg", "postion " + position + "; preCount " + preCount);
 
         if (preCount <= index) {
-            AppLog.i("ctg", "1");
             index -= preCount;
-            AppLog.i("ctg", "2 - index " + index);
             if (index >= mLivingList.size()) {
-                AppLog.i("ctg", "3 - size " + mLivingList.size());
                 index -= mLivingList.size();
-                AppLog.i("ctg", "4 - index " + index);
                 // 以重复加载最后一项的缺陷弥补崩溃
                 if (index >= mPlaybackList.size()) {
-                    AppLog.i("ctg", "5 - size " + mPlaybackList.size());
                     return mPlaybackList.size() - 1;
                 }
-                AppLog.i("ctg", "6");
             }
             return index;
         }
-        AppLog.i("ctg", "7");
         return 0;
     }
 
     /**
      * 获取直播首页非直播、回放的item数量（即：广告、我的关注、分类栏）
-     *
      * @return
      */
     private int getPreCount() {
@@ -295,8 +282,6 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
      */
     @Override
     public int getItemViewType(int position) {
-
-        AppLog.i("pss", "pos is " + position);
         if (position < 0) {
             return -1;
         }
@@ -434,11 +419,7 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
             }
 
             if (!TextUtils.isEmpty(avatar)) {
-                // 使用Glide，RoudedImageView无法显示圆角
-//                Glide.with(mContext)
-//                        .load(avatar)
-//                        .placeholder(R.drawable.androidloading)
-//                        .into(imgAvatar);
+                // 使用Glide，RoudedImageView无法显示圆角，所以使用ImageLoader
                 DrawableUtils.displayImg(mContext, imgAvatar, avatar, R.drawable.androidloading);
             }
 
@@ -474,35 +455,34 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                 }
             }
 
+            /**
+             * 布局点击事件监听，相当于onItemClickListener
+             */
             layoutClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     // 我的关注对回放还是直播进行判断
                     if (targetType == Constants.TARGET_TYPE_CHANNEL) {
-                        AppLog.i("sfr", "1");
                         Intent intent1 = new Intent(mContext, AudienceActivity.class);
                         intent1.putExtra("id", String.valueOf(id));
                         ((Activity)mContext).startActivityForResult(intent1, 123);
                     } else if (targetType == Constants.PLAY_BACK_TYPE_URL) {
                         AppLog.i("sfr", "2");
                         Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
+
                         intent.putExtra("id", String.valueOf(id));
                         ((Activity)mContext).startActivityForResult(intent, 123);
                     } else if (targetType == 0) {
-                        AppLog.i("sfr", "3");
-
                         if (bean.getEndAt() != null && bean.getStartAt() != null) {
                             AppLog.i("sfr", "4");
                             Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
                             intent.putExtra("id", String.valueOf(bean.getId()));
                             ((Activity)mContext).startActivityForResult(intent, 123);
                         } else {
-                            AppLog.i("sfr", "5");
                             int roomId = bean.getRoomId();
                             String createRoom = SPCUtils.getString(mContext, CREATE_ROOMID);
                             String s = String.valueOf(roomId);
                             if (createRoom != null && createRoom.equals(s)) {
-                                AppLog.i("sfr", "6");
                                 CommonUtil.REMIND_BACK = 1;
                                 prepareLive();
                                 return;

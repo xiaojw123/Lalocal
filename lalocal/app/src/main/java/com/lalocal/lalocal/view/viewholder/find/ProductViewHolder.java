@@ -3,26 +3,19 @@ package com.lalocal.lalocal.view.viewholder.find;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
-import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.DestinationActivity;
-import com.lalocal.lalocal.activity.HomeActivity;
 import com.lalocal.lalocal.activity.ProductDetailsActivity;
 import com.lalocal.lalocal.model.ProductDetailsResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.QiniuUtils;
@@ -34,18 +27,24 @@ import java.util.List;
 
 /**
  * Created by wangjie on 2016/10/25.
+ *
+ * 发现页商品列表视图容器
+ *
+ *
  */
 public class ProductViewHolder extends RecyclerView.ViewHolder {
 
+    // 上下文
     private Context mContext;
 
+    // 控件声明
     private TextView mTitleView;
     private TextView mSubTitleView;
     private RelativeLayout mLayoutMore;
     private GridView mGvCommodities;
-//        private GridLayout mGvCommodities;
     private FrameLayout mLayoutContainer;
 
+    // 最多商品数量标记
     private static final int MAX_PRODUCT = 4;
 
     public ProductViewHolder(Context context, View itemView) {
@@ -57,11 +56,15 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         mSubTitleView = (TextView) itemView.findViewById(R.id.tv_subtitle);
         mLayoutMore = (RelativeLayout) itemView.findViewById(R.id.layout_more);
         mGvCommodities = (GridView) itemView.findViewById(R.id.gv_commodities);
-//        mGvCommodities = (GridLayout) itemView.findViewById(R.id.gv_commodities);
     }
 
+    /**
+     * 初始化数据
+     * @param list
+     * @param title
+     * @param subtitle
+     */
     public void initData(List<ProductDetailsResultBean> list, String title, String subtitle) {
-        AppLog.i("prd", "the product list is " + list.size());
         if (list == null || list.size() == 0) {
             mLayoutContainer.setVisibility(View.GONE);
             return;
@@ -74,48 +77,6 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
 
         // 设置适配器
         mGvCommodities.setFocusable(false);
-
-//        int size = Math.max(4, list.size());
-//        for (int i = 0; i < size; i++) {
-//            ViewHolder holder = null;
-//            LinearLayout container = (LinearLayout) LayoutInflater.from(mContext)
-//                    .inflate(R.layout.home_recommend_product_gridview_item, null);
-//            if (mGvCommodities.getTag() == null) {
-//                holder = new ViewHolder();
-//                holder.imgCommodity = (ImageView) container.findViewById(R.id.img_commodity);
-//                holder.tvCommodityPrice = (TextView) container.findViewById(R.id.tv_commodity_price);
-//                holder.tvCommodityTitle = (TextView) container.findViewById(R.id.tv_commodity_title);
-//
-//                mGvCommodities.setTag(holder);
-//            } else {
-//                holder = (ViewHolder) mGvCommodities.getTag();
-//            }
-//
-//            ProductDetailsResultBean bean = list.get(i);
-//            // 获取图片url
-//            String photoUrl = bean.photo;
-//            int width = holder.imgCommodity.getWidth();
-//            int height = holder.imgCommodity.getHeight();
-//            // 七牛云处理图片大小
-//            photoUrl = QiniuUtils.centerCrop(photoUrl, width, height);
-//            // 获取商品价格
-//            double price = bean.price;
-//            // 获取商品标题
-//            String productTitle = bean.title;
-//
-//            // 加载图片
-//            DrawableUtils.displayImg(mContext, holder.imgCommodity, photoUrl);
-//
-//            // 设置商品价格
-//            String priceShow = "￥ " + CommonUtil.formatNumWithComma(price) + "起";
-//            holder.tvCommodityPrice.setText(priceShow);
-//            // 设置商品标题
-//            holder.tvCommodityTitle.setText(productTitle);
-//
-//            AppLog.i("prd", "addView");
-//            mGvCommodities.addView(container);
-//        }
-
 
         mGvCommodities.setAdapter(new CommonAdapter<ProductDetailsResultBean>(mContext, commodityList, R.layout.home_recommend_product_gridview_item, MAX_PRODUCT) {
 
@@ -156,6 +117,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        // 商品列表项点击事件
         mGvCommodities.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -171,6 +133,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        // More点击事件
         mLayoutMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +145,7 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 视图容器
+     * 商品列表的子项视图容器
      */
     private class ViewHolder {
         ImageView imgCommodity;

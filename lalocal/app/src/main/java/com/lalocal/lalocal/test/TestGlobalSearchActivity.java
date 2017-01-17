@@ -615,7 +615,7 @@ public class TestGlobalSearchActivity extends BaseActivity implements XRecyclerV
                 RecommendRowsBean> beanList) {
             updateItems(gsearchTabSpecial, specialList, beanList, pageNum, toalPages, key);
             if (specialList.size() > 0) {
-                themeAdapter.setResh(specialList);
+                themeAdapter.setRefresh(specialList);
                 showDataResult(gsearchTabSpecial);
             } else {
                 showEmptResult(gsearchTabSpecial);
