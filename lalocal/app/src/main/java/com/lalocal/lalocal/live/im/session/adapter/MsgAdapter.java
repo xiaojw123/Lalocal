@@ -70,7 +70,6 @@ public class MsgAdapter extends TAdapter<IMMessage> {
     public boolean needShowTime(IMMessage message) {
         return timedItems.contains(message.getUuid());
     }
-
     /**
      * 列表加入新消息时，更新时间显示
      */
@@ -81,12 +80,10 @@ public class MsgAdapter extends TAdapter<IMMessage> {
                 anchor = message;
             }
         }
-
         if (update) {
             lastShowTimeItem = anchor;
         }
     }
-
     /**
      * 是否显示时间item
      */

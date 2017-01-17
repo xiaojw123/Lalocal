@@ -1,5 +1,6 @@
 package com.lalocal.lalocal.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -9,12 +10,17 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
+import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.UserHelper;
+import com.lalocal.lalocal.live.entertainment.activity.PostShortVideoActivity;
+import com.lalocal.lalocal.live.entertainment.model.PostShortVideoParameterBean;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.UserLiveItem;
 import com.lalocal.lalocal.net.callback.ICallBack;
 import com.lalocal.lalocal.view.CustomTitleView;
-import com.lalocal.lalocal.view.MyLiveAdapter;
+import com.lalocal.lalocal.view.adapter.MyLiveAdapter;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,30 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
     int pageNum, pageSize;
     boolean isRefresh, isLoadMore;
     CustomTitleView titleView;
+public static final int VIDEO_PREVIEW_REQUESTCODE=501;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode== VIDEO_PREVIEW_REQUESTCODE){
+            if(resultCode== KeyParams.UPLOAD_SHORT_VIEW_RESULTCODE){
+                if(adapter!=null){
+                    adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
+                }
+            }else if(resultCode==KeyParams.UPLOAD_SHORT_VIEW_SUCCESS_RESULTCODE_){
+                isRefresh = true;
+                mContentloader.getUserLive(UserHelper.getUserId(this), 1);
+                if(adapter!=null){
+                    adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
+                }
+            }
+        }
+        if(resultCode== KeyParams.UPLOAD_SHORT_VIEW_RESULTCODE){
+            if(adapter!=null){
+                adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +65,8 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         mXRecyclerView.setRefreshing(true);
     }
 
+
+
     private void initView() {
         titleView=(CustomTitleView) findViewById(R.id.my_live_ctv);
         hintTv= (TextView) findViewById(R.id.my_live_items_hint);
@@ -42,11 +74,28 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mXRecyclerView.setPullRefreshEnabled(true);
         mXRecyclerView.setLoadingListener(this);
+        addHeaderView();
     }
+
+    private void addHeaderView() {
+        View inflate = View.inflate(this, R.layout.add_short_video_layout,null);
+        inflate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MyLiveActivity.this, PostShortVideoActivity.class));
+            }
+        });
+        mXRecyclerView.addHeaderView(inflate);
+    }
+
+
 
     @Override
     public void onRefresh() {
         isRefresh = true;
+        if(adapter!=null){
+            adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
+        }
         mContentloader.getUserLive(UserHelper.getUserId(this), 1);
     }
 
@@ -63,10 +112,10 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
 
 
     }
-
+    MyLiveAdapter adapter;
     class LiveCallBack extends ICallBack {
         List<LiveRowsBean> rowsList = new ArrayList<>();
-        MyLiveAdapter adapter;
+
 
         @Override
         public void onDeleteLiveHistory() {
@@ -92,19 +141,19 @@ public class MyLiveActivity extends BaseActivity implements XRecyclerView.Loadin
                     }
                     rowsList.addAll(item.getRows());
                     if (adapter == null) {
-                        adapter = new MyLiveAdapter(mXRecyclerView, mContentloader, rowsList);
+                        adapter = new MyLiveAdapter(mXRecyclerView, mContentloader, rowsList, DataSupport.findAll(PostShortVideoParameterBean.class));
                         mXRecyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateItems(rowsList);
                     }
                 } else {
-                    mXRecyclerView.setVisibility(View.GONE);
-                    hintTv.setVisibility(View.VISIBLE);
+                //    mXRecyclerView.setVisibility(View.GONE);
+                //    hintTv.setVisibility(View.VISIBLE);
                 }
 
             }else{
-                mXRecyclerView.setVisibility(View.GONE);
-                hintTv.setVisibility(View.VISIBLE);
+              //  mXRecyclerView.setVisibility(View.GONE);
+             //   hintTv.setVisibility(View.VISIBLE);
             }
         }
 

@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by android on 2016/8/7.
+ * Created by wcj on 2016/8/7.
  */
 public class LiveAttentionOrFansActivity extends BaseActivity implements CustomTitleView.onBackBtnClickListener,View.OnTouchListener {
 

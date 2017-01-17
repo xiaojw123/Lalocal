@@ -35,7 +35,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -207,8 +207,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         isFirstload = true;
         loadDataFromLocal();
     }
-
-
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -216,7 +214,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             case R.id.chat_ctv:
                 break;
             case R.id.chat_cancel_btn:
-                if (getActivity() instanceof LivePlayerBaseActivity || getActivity() instanceof PlayBackNewActivity) {
+                if (getActivity() instanceof LivePlayerBaseActivity || getActivity() instanceof PlayBackActivity) {
                     if (isSoftKeyShow) {
                         KeyboardUtil.hidenSoftKey(mMsgEdit);
                     }
@@ -307,8 +305,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         }
     }
-
-
     private void searchPhotoBum() {
         if (moreOpLayout.getVisibility() == View.VISIBLE) {
             moreOpLayout.setVisibility(View.GONE);
@@ -322,8 +318,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 PHOTO_REQUEST_GALLERY);
 
     }
-
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -383,15 +377,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).start();
     }
 
-
     private String getSavePicPath() throws IOException {
         String dir = FileSaveUtil.SD_CARD_PATH + "image_data/";
         FileSaveUtil.createSDDirectory(dir);
         String fileName = String.valueOf(System.currentTimeMillis() + ".png");
         return dir + fileName;
     }
-
-
     @Override
     public void onGlobalLayout() {
         Rect r = new Rect();
@@ -427,8 +418,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }
         lastHeight = height;
     }
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -436,7 +425,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             reigisterNimService(true);
         }
     }
-
     public void reigisterNimService(boolean flag) {
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, flag);
@@ -590,13 +578,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 file, file.getName());
 //        updateChatMessage(message);
         NIMClient.getService(MsgService.class).sendMessage(message, false);
-
-
-        
-
-
-
-
     }
 
     private void sendText(String sessionId, String text) {

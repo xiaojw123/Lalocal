@@ -50,13 +50,10 @@ import java.util.List;
 /**
  * Created by lenovo on 2016/6/22.
  */
-
 public class ProductDetailsActivity extends BaseActivity implements MyScrollView.ScrollViewListener, MyScrollView.ScrollByListener,
         View.OnClickListener, CustomTitleView.onBackBtnClickListener {
-
     private MyScrollView mScrollView;
     private RelativeLayout reLayout;
-
     private ImageView detailsPhoto1;
     private ShineButton btnLike;
     private ImageView btnShare;

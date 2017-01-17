@@ -10,7 +10,7 @@ import com.lalocal.lalocal.help.TargetPage;
 import com.lalocal.lalocal.help.TargetType;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.me.LLoginActivity;
 
 import org.json.JSONException;
@@ -51,7 +51,7 @@ public class WebViewClientUrlSkipUtils {
                     }
                     //直播回放跳转
                     if (TargetType.LIVE_PALY_BACK.equals(targetType)) {
-                        Intent intent = new Intent(mContext, PlayBackActivity.class);
+                        Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
                         intent.putExtra("id", targetId);
                         mContext.startActivity(intent);
                         return true;

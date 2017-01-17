@@ -16,7 +16,7 @@ import com.lalocal.lalocal.activity.fragment.MeFragment;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.permission.MPermission;
 import com.lalocal.lalocal.me.LLoginActivity;
@@ -64,7 +64,6 @@ public class BaseActivity extends AppCompatActivity {
     //监听IM账号登录状态
     private void registerObservers(boolean register) {
         NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
-
     }
 
     Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
@@ -107,21 +106,21 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onSuccess(Object o) {
                 AppLog.i("TAG", "BaseActivity,登录云信成功");
-                DemoCache.setAccount(imccId);
-                DemoCache.getRegUserInfo();
-                DemoCache.setLoginStatus(true);
+                LiveCache.setAccount(imccId);
+                LiveCache.getRegUserInfo();
+                LiveCache.setLoginStatus(true);
             }
 
             @Override
             public void onFailed(int i) {
                 AppLog.i("TAG", "BaseActivity,登录云信失败" + i);
-                DemoCache.setLoginStatus(false);
+                LiveCache.setLoginStatus(false);
             }
 
             @Override
             public void onException(Throwable throwable) {
                 AppLog.i("TAG", "BaseActivity,登录云信异常");
-                DemoCache.setLoginStatus(false);
+                LiveCache.setLoginStatus(false);
             }
         });
     }
@@ -154,6 +153,7 @@ public class BaseActivity extends AppCompatActivity {
             mContentloader = new ContentLoader(this);
         }
         mContentloader.setCallBack(callBack);
+
     }
 
 

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.android.volley.VolleyError;
-import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -24,8 +23,6 @@ import butterknife.ButterKnife;
  * 专题列表Activity
  */
 public class ThemeActivity extends BaseActivity {
-
-
     @BindView(R.id.rv_theme)
     XRecyclerView xRecyclerView;
 

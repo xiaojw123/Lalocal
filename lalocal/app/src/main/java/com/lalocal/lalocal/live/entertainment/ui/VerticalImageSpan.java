@@ -8,7 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.text.style.ImageSpan;
 
 /**
- * Created by android on 2016/12/11.
+ * Created by wcj on 2016/12/11.
  * ImageSpan居中显示
  */
 public class VerticalImageSpan extends ImageSpan {
@@ -28,10 +28,8 @@ public class VerticalImageSpan extends ImageSpan {
             Paint.FontMetricsInt fmPaint = paint.getFontMetricsInt();
             int fontHeight = fmPaint.bottom - fmPaint.top;
             int drHeight = rect.bottom - rect.top;
-
             int top = drHeight / 2 - fontHeight / 4;
             int bottom = drHeight / 2 + fontHeight / 4;
-
             fontMetricsInt.ascent = -bottom;
             fontMetricsInt.top = -bottom;
             fontMetricsInt.bottom = top;

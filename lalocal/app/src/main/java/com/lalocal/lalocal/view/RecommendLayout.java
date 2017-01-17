@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.fragment.LiveFragment;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +174,7 @@ public class RecommendLayout extends LinearLayout {
                             intent1.putExtra("id", String.valueOf(mTargetId));
                             mContext.startActivity(intent1);
                         } else if (mPlayType == LiveFragment.PLAYBACK) {
-                            Intent intent = new Intent(mContext, PlayBackActivity.class);
+                            Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
                             intent.putExtra("id", String.valueOf(mTargetId));
                             mContext.startActivity(intent);
                         }

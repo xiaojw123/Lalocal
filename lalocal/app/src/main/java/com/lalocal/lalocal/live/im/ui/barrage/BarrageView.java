@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.im.session.BarrageViewBean;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 
@@ -51,7 +50,6 @@ public class BarrageView extends RelativeLayout{
     private Queue<SoftReference<LinearLayout>> textViewCache = new LinkedList<>();
     private int lineCount;
     private int lineHeight;
-
     // 字幕管理
     private Queue<BarrageViewBean> textCache = new LinkedList<>();
     private BarrageViewBean poll;
@@ -70,7 +68,6 @@ public class BarrageView extends RelativeLayout{
         this.lineHeight = ScreenUtil.sp2px(config.getMaxTextSizeSp());
         this.lineCount = totalLineHeight / lineHeight;
         this.padding= DensityUtil.dip2px(getContext(), 3);
-        // random colors
         if (config.getColors() == null || config.getColors().isEmpty()) {
             List<Integer> colors = new ArrayList<>(DEFAULT_RANDOM_COLOR_NUM);
             for (int i = 0; i < DEFAULT_RANDOM_COLOR_NUM; i++) {
@@ -80,21 +77,16 @@ public class BarrageView extends RelativeLayout{
         }
         this.config = config;
 
-        log("barrage init, lineHeight=" + lineHeight + ", lineCount=" + lineCount);
     }
 
     public void addTextBarrage(BarrageViewBean text) {
         textCache.add(text);
         checkAndRunTextBarrage();
     }
-
-
-
     private void checkAndRunTextBarrage() {
         if (textCache.isEmpty()) {
             return;
         }
-
         // line
         int availableLine = getAvailableLine();
         if (availableLine < 0) {
@@ -116,7 +108,6 @@ public class BarrageView extends RelativeLayout{
         }
         if (linearLayout == null) {
             linearLayout = buildTextView(poll, availableLine);
-
         } else {
             linearLayout = reuseTextView(linearLayout, poll, availableLine);
         }
@@ -138,7 +129,6 @@ public class BarrageView extends RelativeLayout{
         linearLayout.setBackgroundResource(R.drawable.barrage_view_bg);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setGravity(Gravity.CENTER);
-
 
         linearLayoutParent.addView(linearLayout);
         linearLayoutParent.addView(textNull);
@@ -244,7 +234,6 @@ public class BarrageView extends RelativeLayout{
         if (line >= 0 && line < lineCount) {
             linesUnavailable.add(line); // 占用
         }
-
         return line;
     }
 
@@ -259,7 +248,6 @@ public class BarrageView extends RelativeLayout{
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
-                AppLog.i("TAG","text barrage run, line=" + line + ", duration=" + duration + ", freeLineDuration=" + freeLineDuration);
                 postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -295,27 +283,21 @@ public class BarrageView extends RelativeLayout{
     }
 
     private void onLineAvailable(final int line) {
-        log("free line, line=" + line);
-
         linesUnavailable.remove(line);
         checkAndRunTextBarrage();
     }
 
     private void onTextBarrageDone(final LinearLayout view, final int line) {
-        AppLog.i("TAG","弹幕动画结束，移除view");
         removeView(view);
         textViewCache.add(new SoftReference<>(view));
-
         checkAndRunTextBarrage();
     }
-
 
     private void log(String message) {
         if (OUTPUT_LOG) {
             Log.i(TAG, message);
         }
     }
-
     private OnBarrageClickListener onBarrageClickListener;
 
     public interface OnBarrageClickListener {

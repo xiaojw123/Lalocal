@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.pili.pldroid.player.widget.PLVideoTextureView
+        android:id="@+id/video_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        >
+    </com.pili.pldroid.player.widget.PLVideoTextureView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/video_compress_progress_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/live_padding_15dp"
+            android:visibility="gone">
+            <ProgressBar
+                android:id="@+id/upload_progress"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/live_padding_3dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_marginLeft="@dimen/live_padding_15dp"
+                android:layout_marginRight="@dimen/live_padding_15dp"
+                android:progressDrawable="@drawable/post_short_video_progress_bg"
+                android:max="100"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/live_padding_10dp"
+                android:textSize="10sp"
+                android:textColor="@color/white"
+                android:text="正在压缩中..."/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/video_bottom_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/live_height_60dp"
+            android:gravity="center"
+            android:background="@color/color_70190f00"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/video_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_18_sp"
+                android:padding="@dimen/live_padding_10dp"
+                android:textColor="@color/white"
+                android:text="取消"
+                />
+            <ImageView
+                android:id="@+id/video_pause"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:src="@drawable/livingreplay_unplay"/>
+            <!--livingreplay_unplay-->
+            <TextView
+                android:id="@+id/video_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_18_sp"
+                android:padding="@dimen/live_padding_10dp"
+                android:textColor="@color/white"
+                android:text="选取"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

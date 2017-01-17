@@ -15,7 +15,7 @@
         android:id="@+id/audient_gift_plane_bg"
         android:layout_width="match_parent"
         android:layout_height="@dimen/audient_gift_plane_bg_height"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="@dimen/live_height_120dp"
         android:background="@drawable/giftmassagebg"
         android:visibility="gone" >
 

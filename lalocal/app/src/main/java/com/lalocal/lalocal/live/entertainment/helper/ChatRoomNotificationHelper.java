@@ -2,7 +2,7 @@ package com.lalocal.lalocal.live.entertainment.helper;
 
 import android.text.TextUtils;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 
 import java.util.List;
@@ -81,8 +81,8 @@ public class ChatRoomNotificationHelper {
         List<String> targets = attachment.getTargetNicks();
         if (attachment.getTargetNicks() != null) {
             for (int i = 0; i < targets.size(); i++) {
-                if(DemoCache.getAccount()!=null){
-                    sb.append(DemoCache.getAccount().equals(accounts.get(i)) ? "你" : targets.get(i));
+                if(LiveCache.getAccount()!=null){
+                    sb.append(LiveCache.getAccount().equals(accounts.get(i)) ? "你" : targets.get(i));
                     sb.append(",");
                 }else{
                     sb.append(targets.get(i));

@@ -18,7 +18,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.model.CategoryBean;
@@ -26,6 +26,7 @@ import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.model.LiveUserBean;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
+import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.lalocal.lalocal.util.SPCUtils;
@@ -466,13 +467,15 @@ public class HomeLiveAdapter extends RecyclerView.Adapter {
                         intent1.putExtra("id", String.valueOf(id));
                         ((Activity)mContext).startActivityForResult(intent1, 123);
                     } else if (targetType == Constants.PLAY_BACK_TYPE_URL) {
-                        Intent intent = new Intent(mContext, PlayBackActivity.class);
+                        AppLog.i("sfr", "2");
+                        Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
+
                         intent.putExtra("id", String.valueOf(id));
                         ((Activity)mContext).startActivityForResult(intent, 123);
                     } else if (targetType == 0) {
-
                         if (bean.getEndAt() != null && bean.getStartAt() != null) {
-                            Intent intent = new Intent(mContext, PlayBackActivity.class);
+                            AppLog.i("sfr", "4");
+                            Intent intent = new Intent(mContext, PlayBackDetailActivity.class);
                             intent.putExtra("id", String.valueOf(bean.getId()));
                             ((Activity)mContext).startActivityForResult(intent, 123);
                         } else {

@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
-
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.base.ui.TAdapterDelegate;
 import com.lalocal.lalocal.live.base.ui.TViewHolder;
@@ -21,7 +20,6 @@ import com.lalocal.lalocal.live.im.ui.dialog.EasyAlertDialog;
 import com.lalocal.lalocal.live.im.ui.dialog.EasyAlertDialogHelper;
 import com.lalocal.lalocal.live.im.ui.listview.AutoRefreshListView;
 import com.lalocal.lalocal.live.im.ui.listview.ListViewUtil;
-import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -37,23 +35,20 @@ import com.netease.nimlib.sdk.msg.constant.MsgStatusEnum;
 import com.netease.nimlib.sdk.msg.constant.MsgTypeEnum;
 import com.netease.nimlib.sdk.msg.model.AttachmentProgress;
 import com.netease.nimlib.sdk.msg.model.IMMessage;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 /**
  * 聊天室消息收发模块
- * Created by huangjun on 2016/1/27.
+ * Created by 王长健.
  */
 public class ChatRoomMsgListPanel implements TAdapterDelegate {
-    private static final int MESSAGE_CAPACITY = 150;
-    public static final String NIM_CHAT_MESSAGE_INFO="nimlivesenfmessage";
+    private static final int MESSAGE_CAPACITY = 150;//最大数量
     // container
     private Container container;
     private View rootView;
     private Handler uiHandler;
-
     // message list view
     private MessageListViewEx messageListView;
     private LinkedList<IMMessage> items;
@@ -74,13 +69,10 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         this.title=title;
         init();
     }
-
     public void onResume() {
         setEarPhoneMode(UserPreferences.isEarPhoneModeEnable());
     }
-
     public void onPause() {
-
     }
 
     public void onDestroy() {
@@ -89,7 +81,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
     public boolean onBackPressed() {
         uiHandler.removeCallbacks(null);
-
         return false;
     }
 
@@ -98,13 +89,10 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         this.uiHandler = new Handler();
         registerObservers(true);
     }
-
-
     private void initListView() {
         items = new LinkedList<>();
         adapter = new MsgAdapter(container.activity, items, this);
         adapter.setEventListener(new MsgItemEventListener());
-
         messageListView = (MessageListViewEx) rootView.findViewById(R.id.messageListView);
         View view= View.inflate(container.activity, R.layout.chat_head_items,null);
         View view2= View.inflate(container.activity, R.layout.live_item_remind_layout,null);
@@ -116,7 +104,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
                 scrollToBottom();
             }
         });
-
         headInfos.setText(context.getString(R.string.system_announ)+content);
         headInfos.setVisibility(View.GONE);
         infoRemind.setText(title);
@@ -132,17 +119,14 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         }
         // adapter
         messageListView.setAdapter(adapter);
-
         messageListView.setListViewEventListener(new MessageListViewEx.OnListViewEventListener() {
             @Override
             public void onListViewStartScroll() {
                 container.proxy.shouldCollapseInputPanel();
-                boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
                 if(newView.getVisibility()==View.VISIBLE){
                     LiveConstant.newMessageCount=0;
                     newView.setVisibility(View.GONE);
                 }
-                AppLog.i("TAG","公屏滚动监听"+(needScrollToBottom==true?"到底了":"没到底"));
             }
         });
     }
@@ -150,26 +134,9 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         headInfos.setVisibility(View.VISIBLE);
         infoRemind.setVisibility(View.VISIBLE);
     }
-    public void setHead(TextView textView){
-        messageListView.addHeaderView(textView);
-    }
-
-
-
-    private OnChatRoomMessageItemClickListener onChatRoomMessageItemClickListener;
-
-    public interface OnChatRoomMessageItemClickListener {
-        void onMessageListItem(String userId);
-    }
-
-    public void setOnChatRoomMessageItemClickListener(OnChatRoomMessageItemClickListener onChatRoomMessageItemClickListener) {
-        this.onChatRoomMessageItemClickListener = onChatRoomMessageItemClickListener;
-    }
-
     // 刷新消息列表
     public void refreshMessageList() {
         container.activity.runOnUiThread(new Runnable() {
-
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
@@ -187,19 +154,21 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         }, 200);
     }
 
+    /**
+     * 显示接收消息
+     * @param messages
+     */
     public void onIncomingMessage(List<ChatRoomMessage> messages) {
         boolean needScrollToBottom = ListViewUtil.isLastMessageVisible(messageListView);
         if(!needScrollToBottom){
             ++LiveConstant.newMessageCount;
             newView.setVisibility(View.VISIBLE);
             newView.setText(LiveConstant.newMessageCount+context.getString(R.string.new_massage));
-
         }else{
             LiveConstant.newMessageCount=0;
             if(newView.getVisibility()==View.VISIBLE){
                 newView.setVisibility(View.GONE);
             }
-
         }
         boolean needRefresh = false;
         List<IMMessage> addedListItems = new ArrayList<>(messages.size());
@@ -232,15 +201,10 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         ListViewUtil.scrollToBottom(messageListView);
     }
 
-    //显示本地消息
-    public  void onSendLocalMsg(IMMessage message){
-
-    }
     private void saveMessage(final List<IMMessage> messageList, boolean addFirst) {
         if (messageList == null || messageList.isEmpty()) {
             return;
         }
-
         for (IMMessage msg : messageList) {
             saveMessage(msg, addFirst);
         }
@@ -250,11 +214,9 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
         if (message == null) {
             return;
         }
-
         if (items.size() >= MESSAGE_CAPACITY) {
             items.poll();
         }
-
         if (addFirst) {
             items.add(0, message);
         } else {
@@ -326,7 +288,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
          */
         private void onMessageLoaded(List<ChatRoomMessage> messages) {
             int count = messages.size();
-
             if (items.size() > 0) {
                 // 在第一次加载的过程中又收到了新消息，做一下去重
                 for (IMMessage message : messages) {
@@ -338,7 +299,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
                     }
                 }
             }
-
             List<IMMessage> result = new ArrayList<>();
             for (IMMessage message : messages) {
                 result.add(message);
@@ -393,13 +353,7 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
     };
 
 
-    public  interface  OnNewMessageRemindListener{
-        void newMessageCount(int count);
-    }
-    OnNewMessageRemindListener onNewMessageRemindListener;
-    public  void setOnNewMessageRemindListener(OnNewMessageRemindListener onNewMessageRemindListener){
-        this.onNewMessageRemindListener=onNewMessageRemindListener;
-    }
+
 
     /**
      * 消息附件上传/下载进度观察者
@@ -453,7 +407,6 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
                 if (index < 0) {
                     return;
                 }
-
                 Object tag = ListViewUtil.getViewHolderByIndex(messageListView, index);
                 if (tag instanceof MsgViewHolderBase) {
                     MsgViewHolderBase viewHolder = (MsgViewHolderBase) tag;
@@ -501,18 +454,10 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
         @Override
         public void itemClickListener(IMMessage itemMessage) {
-            //    Toast.makeText(context,"itemMessage"+itemMessage.getFromAccount(),Toast.LENGTH_SHORT).show();
-
-         /*   Intent intent = new Intent();
-            intent.setAction(NIM_CHAT_MESSAGE_INFO);
-            intent.putExtra("msg", itemMessage.getFromAccount());
-            context.sendBroadcast(intent);*/
-
         }
 
         @Override
         public boolean onViewHolderLongClick(View clickView, View viewHolderView, IMMessage item) {
-
             return true;
         }
 
@@ -554,6 +499,5 @@ public class ChatRoomMsgListPanel implements TAdapterDelegate {
 
     private void setEarPhoneMode(boolean earPhoneMode) {
         UserPreferences.setEarPhoneModeEnable(earPhoneMode);
-//        MessageAudioControl.getInstance(container.activity).setEarPhoneModeEnable(earPhoneMode);
     }
 }

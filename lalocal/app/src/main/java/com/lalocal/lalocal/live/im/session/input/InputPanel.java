@@ -26,7 +26,7 @@ import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
@@ -246,7 +246,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
      * 发送“正在输入”通知
      */
     private void sendTypingCommand() {
-        if (container.account.equals(DemoCache.getAccount())) {
+        if (container.account.equals(LiveCache.getAccount())) {
             return;
         }
 
@@ -282,8 +282,8 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         @Override
         public void onClick(View v) {
             if (v == sendMessageButtonInInputBar) {
-                boolean loginStatus = DemoCache.getLoginStatus();
-                boolean loginChatRoomStatus = DemoCache.getLoginChatRoomStatus();
+                boolean loginStatus = LiveCache.getLoginStatus();
+                boolean loginChatRoomStatus = LiveCache.getLoginChatRoomStatus();
                 if(loginChatRoomStatus&&loginStatus){
                     onTextMessageSendButtonPressed(messageEditText.getText().toString());
                 }else {
@@ -341,7 +341,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         }
         if (container.sessionType == SessionTypeEnum.ChatRoom&&creatorAccount!=null) {
                 textMessage = ChatRoomMessageBuilder.createChatRoomTextMessage(container.account, text);
-            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
+            ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, LiveCache.getAccount());
             Map<String, Object> ext = new HashMap<>();
                 Boolean selectorStatus = SPCUtils.getBoolean(mContext, IS_SELSCTOR);
                 if(selectorStatus){
@@ -396,7 +396,7 @@ public class InputPanel implements IEmoticonSelectedListener, IAudioRecordCallba
         if(onBarrageViewCheckStatusListener!=null){
             onBarrageViewCheckStatusListener.getBarrageViewCheckStatus(isSelector,fromNick+":"+content);
         }
-        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, DemoCache.getAccount());
+        ChatRoomMember chatRoomMember = ChatRoomMemberCache.getInstance().getChatRoomMember(container.account, LiveCache.getAccount());
         if (chatRoomMember != null && chatRoomMember.getMemberType() != null) {
             ext.put("type", chatRoomMember.getMemberType().getValue());
             ext.put("barrag",fromNick+":"+content);

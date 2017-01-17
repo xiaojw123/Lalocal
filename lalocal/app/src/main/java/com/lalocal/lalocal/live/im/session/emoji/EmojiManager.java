@@ -12,7 +12,7 @@ import android.support.v4.util.LruCache;
 import android.util.DisplayMetrics;
 import android.util.Xml;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -43,7 +43,7 @@ public class EmojiManager {
     private static LruCache<String, Bitmap> drawableCache;
 
     static {
-        Context context = DemoCache.getContext();
+        Context context = LiveCache.getContext();
 
         load(context, EMOT_DIR + "emoji.xml");
 

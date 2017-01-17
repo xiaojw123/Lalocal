@@ -357,6 +357,14 @@ public class AppConfig {
         //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
         return baseUrl + "channels/historys?area=" + areaId + "&pageNumber=" + pageNumber + "&attentionFlag=" + attentionFlag;
     }
+    //获取上传短视频的token  http://dev.lalocal.cn/api/system/videos/token?postfix=mp4
+    public static final String getShortVideoTkoen(){
+        return  baseUrl+"system/videos/token?postfix=mp4";
+    }
+    //上传短视频 http://dev.lalocal.cn/api/channels/historys
+    public static final String getShortVideoPost(){
+        return baseUrl+"channels/historys";
+    }
 
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1
     public static final String getPlayBackLiveDetails(int id) {

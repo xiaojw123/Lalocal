@@ -52,6 +52,7 @@ public interface KeyParams {
     int RESULT_ChARGE_SUCCESS = 200;
     int RESULT_EXCHARGE_SUCCESS = 201;
     int RESULT_UPDATE_WALLET = 203;
+    int RESULT_VIDEO=204;
     //页面类型
     String PAGE_TYPE = "page_type";
     int PAGE_TYPE_WALLET = 0x11;
@@ -77,6 +78,22 @@ public interface KeyParams {
     int LOCATION_REQUESTCODE = 305;
     int PLAYER_OVER_FIRST_REQUESTCODE = 306;
     int PLAYER_OVER_FIRST_RESULTCODE = 307;
+    int VIDEO_PREVIEW_REQUESTCODE=308;
+    int UPLOAD_SHORT_VIEW_RESULTCODE=309;
+    int UPLOAD_SHORT_VIEW_SUCCESS_RESULTCODE_=310;
+    String VIDEO_PREVIEW_PATH="video_preview_path";
+    String FILE_PATH="file_path";
+
+
+    //直播模块
+    String CNAME="cname";
+    String PULLURL="pullUrl";
+    String LONGTIME="longTime";
+    String PUSHURL="pushUrl";
+
+    String SHORT_VIDEO_PARAMETER="shortvideoparameter";
+
+
 
 
 }

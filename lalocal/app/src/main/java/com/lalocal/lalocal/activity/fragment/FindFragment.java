@@ -182,7 +182,6 @@ public class FindFragment extends BaseFragment {
             if (mXrvRecommend != null) {
                 isRefreshing = true;
                 mXrvRecommend.setLoadingMoreEnabled(true);
-
                 // 获取三个不同接口的数据
                 mContentLoader.recommendAd();
                 mContentLoader.indexRecommentList();

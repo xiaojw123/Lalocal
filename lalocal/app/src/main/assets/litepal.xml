@@ -36,6 +36,7 @@
         <mapping class="com.lalocal.lalocal.model.Country" />
         <mapping class="com.lalocal.lalocal.model.HistoryItem"/>
         <mapping class="com.lalocal.lalocal.model.LiveHistoryItem"/>
+        <mapping class="com.lalocal.lalocal.live.entertainment.model.PostShortVideoParameterBean"/>
     </list>
 
     <!--

@@ -24,7 +24,7 @@ import com.lalocal.lalocal.activity.PayActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.model.ChallengeDetailsResp;
 import com.lalocal.lalocal.live.entertainment.model.GiftDataResp;
@@ -37,6 +37,8 @@ import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
+import com.lalocal.lalocal.live.entertainment.model.PostShortVideoParameterBean;
+import com.lalocal.lalocal.live.entertainment.model.ShortVideoTokenBean;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.me.LRegister1Activity;
 import com.lalocal.lalocal.model.AreaItem;
@@ -1283,6 +1285,27 @@ public class ContentLoader {
         request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
         requestQueue.add(request);
     }
+    //获取短视频上传的token
+    public void getShortVideoToken(){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.SHORT_VIDEO_TOKEN);
+        }
+        ContentRequest request = new ContentRequest(AppConfig.getShortVideoTkoen(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        requestQueue.add(request);
+    }
+    //上传短视频
+    public void getShortVideo(PostShortVideoParameterBean parameter){
+        if (callBack != null) {
+            response = new ContentResponse(RequestCode.POST_SHORT_VIDEO);
+        }
+        ContentRequest request = new ContentRequest(Request.Method.POST,AppConfig.getShortVideoPost(), response, response);
+        request.setHeaderParams(getHeaderParams(UserHelper.getUserId(context), UserHelper.getToken(context)));
+        request.setBodyParams(getPostShortVideoParams(parameter));
+        requestQueue.add(request);
+    }
+
+
 
     //获取直播用户信息
     public void getLiveUserInfo(String userId) {
@@ -2283,6 +2306,12 @@ public class ContentLoader {
                     case RequestCode.IMG_TOKEN:
                         responseImgToken(json);
                         break;
+                    case RequestCode.SHORT_VIDEO_TOKEN:
+                        responseShortVideoToken(jsonObj);
+                        break;
+                    case RequestCode.POST_SHORT_VIDEO:
+                        responseShortVideo(json);
+                        break;
                     case RequestCode.ALTER_LIVE_COVER:
                         responseAlterLiveCover(json);
                         break;
@@ -3060,14 +3089,14 @@ public class ContentLoader {
                 bundle.putString(KeyParams.NICKNAME, user.getNickName());
                 bundle.putInt(KeyParams.SORTVALUE, user.getSortValue());
                 UserHelper.saveLoginInfo(context, bundle);
-                DemoCache.clear();
+                LiveCache.clear();
                 AuthPreferences.clearUserInfo();
-                try {
-                    NIMClient.getService(AuthService.class).logout();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                DemoCache.setLoginStatus(false);
+               try {
+                   NIMClient.getService(AuthService.class).logout();
+               }catch (Exception e){
+                   e.printStackTrace();
+               }
+                LiveCache.setLoginStatus(false);
                 AuthPreferences.saveUserAccount(user.getImUserInfo().getAccId());
                 AuthPreferences.saveUserToken(user.getImUserInfo().getToken());
             }
@@ -3147,7 +3176,6 @@ public class ContentLoader {
             LiveDetailsDataResp liveDetailsDataResp = new Gson().fromJson(json, LiveDetailsDataResp.class);
             callBack.onLiveDetails(liveDetailsDataResp);
         }
-
         //创建直播间
         private void responseCreateLiveRoom(String json) {
             AppLog.i("TAG", "打印创建直播间返回日志：" + json);
@@ -3170,6 +3198,7 @@ public class ContentLoader {
             AppLog.i("TAG", "上传在线人数" + json);
             callBack.onOnLinesCount(json);
         }
+
 
         //修改直播封面
         private void responseAlterLiveCover(String json) {
@@ -3262,6 +3291,17 @@ public class ContentLoader {
             JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
             ChallengeDetailsResp.ResultBean resultBean = new Gson().fromJson(resultJson.toString(), ChallengeDetailsResp.ResultBean.class);
             callBack.onChallengeInitiate(resultBean);
+        }
+        //短视频token
+        private void responseShortVideoToken(JSONObject jsonObj) {
+            JSONObject resultJson = jsonObj.optJSONObject(ResultParams.REULST);
+            ShortVideoTokenBean shortVideoTokenBean = new Gson().fromJson(resultJson.toString(), ShortVideoTokenBean.class);
+            callBack.onShortVideo(shortVideoTokenBean);
+        }
+        //上传短视频
+        private void responseShortVideo(String json) {
+            AppLog.d("TAG","上传短视频完成回调："+json);
+            callBack.onShortVideoComplete(json);
         }
 
         //挑战详情
@@ -3559,7 +3599,6 @@ public class ContentLoader {
             ((Activity) context).startActivityForResult(intent, KeyParams.REQUEST_CODE);
         }
     }
-
 
     public String getModifyUserProfileParams(String nickname, int sex, String areaCode, String
             phone, String description) {
@@ -3914,7 +3953,37 @@ public class ContentLoader {
         AppLog.i("dailyRec", "device id " + map.get("DEVICE_ID"));
         AppLog.print("__USER_ID=" + String.valueOf(userid) + "\n__TOKEN=" + token);
         return map;
+    }
 
+    private String getPostShortVideoParams(PostShortVideoParameterBean parameter) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", parameter.getTitle());
+            jsonObject.put("photo", parameter.getPhoto());
+            jsonObject.put("description", parameter.getDescription());
+            jsonObject.put("direction", parameter.getDirection());
+            jsonObject.put("address",parameter.getAddress());
+            jsonObject.put("latitude", parameter.getLatitude());
+            jsonObject.put("longitude", parameter.getLongitude());
+            jsonObject.put("videoRecordForm", recordForm(parameter));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AppLog.d("TAG","短视频上传参数："+jsonObject.toString());
+        return jsonObject.toString();
+    }
+
+    public JSONObject  recordForm(PostShortVideoParameterBean parameter){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("originUrl", parameter.getOriginUrl());
+            jsonObject.put("size", parameter.getSize());
+            jsonObject.put("duration",parameter.getDuration());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
     }
 
     public Map<String, String> getLoginHeaderParams() {
@@ -4063,10 +4132,14 @@ public class ContentLoader {
         int LIVE_AVATAR = 243;
         int USER_LEAVE_ROOM = 244;
         int VALIDATE_MSGS = 245;
-        int PLAY_BACK_DETAILES = 246;
-        int PLAY_BACK_MSG = 247;
-        int ALTER_PLAY_BACK = 248;
-        int CLOSE_LIVE_ROOM = 249;
+
+        int PLAY_BACK_DETAILES=246;
+        int PLAY_BACK_MSG=247;
+        int ALTER_PLAY_BACK=248;
+        int CLOSE_LIVE_ROOM=249;
+        int SHORT_VIDEO_TOKEN=250;
+        int POST_SHORT_VIDEO=251;
+
 
         int GET_INDEX_RECOMMEND_LIST = 300;
         int GET_ARTICLE_LIST = 301;

@@ -175,6 +175,7 @@ public class WorkerThread extends Thread {
             return;
         }
 
+
         ensureRtcEngineReadyLock();
         mRtcEngine.joinChannel(null, channel, "OpenLive", uid);
         mEngineConfig.mChannel = channel;
@@ -211,7 +212,9 @@ public class WorkerThread extends Thread {
     private final MyEngineEventHandler mEngineEventHandler;
 
     public final void configEngine(int cRole, int vProfile) {
+
         if (Thread.currentThread() != this) {
+
             Message envelop = new Message();
             envelop.what = ACTION_WORKER_CONFIG_ENGINE;
             envelop.obj = new Object[]{cRole, vProfile};

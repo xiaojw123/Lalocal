@@ -24,7 +24,7 @@ import com.lalocal.lalocal.help.MobEvent;
 import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.model.Constants;
 import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
@@ -220,7 +220,7 @@ public class ADCategoryViewHolder extends RecyclerView.ViewHolder {
             Intent intent = null;
             switch (targetType) {
                 case Constants.PLAY_BACK_TYPE_URL: // 回放
-                    intent = new Intent(mContext, PlayBackActivity.class);
+                    intent = new Intent(mContext, PlayBackDetailActivity.class);
                     intent.putExtra("id", String.valueOf(targetId));
                     mContext.startActivity(intent);
                     break;

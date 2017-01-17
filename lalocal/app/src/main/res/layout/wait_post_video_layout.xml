@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/live_padding_30dp">
+
+        <RelativeLayout
+            android:id="@+id/upload_cover_layout"
+            android:layout_width="130dp"
+            android:layout_height="130dp">
+
+            <ImageView
+                android:id="@+id/video_continue_cover"
+                android:layout_width="@dimen/live_height_120dp"
+                android:layout_height="@dimen/live_height_120dp"
+                android:src="@drawable/add_pics_btn"
+                />
+
+
+            <ProgressBar
+                android:id="@+id/upload_progress"
+                android:layout_width="120dp"
+                android:layout_height="@dimen/live_padding_5dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="9.2dp"
+                android:progressDrawable="@drawable/post_short_video_progress_bg"
+                android:max="1000"/>
+            <ImageView
+                android:id="@+id/post_status_iv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/suspending_ic"
+                android:visibility="gone"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/upload_hint_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/color_190f00"
+            android:textSize="@dimen/text_size_16_sp"
+            android:layout_toRightOf="@+id/upload_cover_layout"
+            android:paddingLeft="@dimen/live_padding_15dp"
+            android:text="@string/choose_local_video"
+            android:layout_marginTop="@dimen/live_padding_15dp"
+            android:layout_marginBottom="@dimen/live_padding_6dp"/>
+
+        <TextView
+            android:id="@+id/upload_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_local_video_hint"
+            android:textSize="@dimen/text_size_12_sp"
+            android:layout_toRightOf="@+id/upload_cover_layout"
+            android:paddingLeft="@dimen/live_padding_15dp"
+            android:layout_below="@+id/upload_hint_title"
+            android:textColor="@color/color_70190f00"
+            android:drawableLeft="@drawable/peopleliving_location_darkic_02"
+            android:drawablePadding="@dimen/live_padding_3dp"
+            android:layout_marginBottom="@dimen/live_padding_6dp"
+            android:alpha="0.6"/>
+
+
+        <TextView
+            android:id="@+id/upload_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_local_video_hint"
+            android:textSize="@dimen/text_size_12_sp"
+            android:layout_toRightOf="@+id/upload_cover_layout"
+            android:paddingLeft="@dimen/live_padding_15dp"
+            android:layout_below="@+id/upload_location"
+            android:textColor="@color/color_70190f00"
+            android:drawableLeft="@drawable/manytime_light"
+            android:drawablePadding="@dimen/live_padding_3dp"
+            android:layout_marginBottom="@dimen/live_height_14dp"
+            android:alpha="0.6"/>
+
+        <TextView
+            android:id="@+id/upload_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/upload_cover_layout"
+            android:paddingLeft="@dimen/live_padding_15dp"
+            android:layout_below="@+id/upload_time"
+            android:textColor="@color/color_70190f00"
+            android:textSize="@dimen/text_size_14_sp"
+            android:alpha="0.6"
+            android:text="楼房吉安里看风景按道理讲法律的辣椒粉蓝发生的时间发的时刻发货速度快解放后看的回访卡顿发货快点"/>
+    </RelativeLayout>
+</merge>

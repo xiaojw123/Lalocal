@@ -271,7 +271,7 @@ public class SplashActivity extends BaseActivity implements View.OnClickListener
             result = versionInfo.getResult();
             if (result != null) {
                 String apiUrl = result.getApiUrl();
-                AppConfig.setBaseUrl(apiUrl);
+               // AppConfig.setBaseUrl(apiUrl);
                 if (UserHelper.isLogined(SplashActivity.this)) {
                     mContentloader.getPushTags();
                 } else {

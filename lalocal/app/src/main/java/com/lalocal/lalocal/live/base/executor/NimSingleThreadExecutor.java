@@ -2,7 +2,7 @@ package com.lalocal.lalocal.live.base.executor;
 
 import android.os.Handler;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -18,7 +18,7 @@ public class NimSingleThreadExecutor {
     private Executor executor;
 
     private NimSingleThreadExecutor() {
-        uiHander = new Handler(DemoCache.getContext().getMainLooper());
+        uiHander = new Handler(LiveCache.getContext().getMainLooper());
         executor = Executors.newSingleThreadExecutor();
     }
 

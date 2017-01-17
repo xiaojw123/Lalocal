@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.im.session.image.ImageLoaderKit;
 import com.netease.nimlib.sdk.nos.model.NosThumbParam;
 import com.netease.nimlib.sdk.nos.util.NosThumbImageUtil;
@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 
 public class AvatarImageView extends CircleImageView {
 
-    public static final int DEFAULT_THUMB_SIZE = (int) DemoCache.getContext().getResources().getDimension(R.dimen.avatar_max_size);
+    public static final int DEFAULT_THUMB_SIZE = (int) LiveCache.getContext().getResources().getDimension(R.dimen.avatar_max_size);
 
     private DisplayImageOptions options;
 

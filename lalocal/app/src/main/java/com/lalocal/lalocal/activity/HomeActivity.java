@@ -110,9 +110,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
             // 初始化
             initLocation();
         }
-
     }
-
     private static final int INIT = 0x01;
     private static final String[] RW_SD_PERMISSIONS = new String[]{
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -134,6 +132,7 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
     }
 
     private void doNext(int requestCode, int[] grantResults) {
+
         if(LIVE_PERMISSION_RW_EXTERNAL_STORAGE_CODE==requestCode){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 初始化
@@ -267,8 +266,6 @@ public class HomeActivity extends BaseActivity implements MeFragment.OnMeFragmen
         Intent intent = new Intent(this, GlobalSearchActivity.class);
         startActivity(intent);
     }
-
-
     /**
      * 显示某一个fragment
      *

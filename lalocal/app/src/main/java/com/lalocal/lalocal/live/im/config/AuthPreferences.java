@@ -3,7 +3,7 @@ package com.lalocal.lalocal.live.im.config;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 
 
 /**
@@ -50,6 +50,6 @@ public class AuthPreferences {
     }
 
     static SharedPreferences getSharedPreferences() {
-        return DemoCache.getContext().getSharedPreferences("Demo", Context.MODE_PRIVATE);
+        return LiveCache.getContext().getSharedPreferences("Demo", Context.MODE_PRIVATE);
     }
 }

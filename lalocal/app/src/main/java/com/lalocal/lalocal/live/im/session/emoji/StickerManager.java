@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.util.Log;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.im.util.file.FileUtil;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
@@ -81,7 +81,7 @@ public class StickerManager {
     }
 
     private void loadStickerCategory() {
-        AssetManager assetManager = DemoCache.getContext().getResources().getAssets();
+        AssetManager assetManager = LiveCache.getContext().getResources().getAssets();
         try {
             String[] files = assetManager.list("sticker");
             StickerCategory category;

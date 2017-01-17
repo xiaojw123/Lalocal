@@ -31,7 +31,6 @@ import openlive.agora.io.pldroidplayer.R;
  * A MediaController widget must implement all the interface defined by com.pili.pldroid.player.IMediaController
  */
 public class MediaController extends FrameLayout implements IMediaController,View.OnClickListener{
-
     private static final String TAG = "PLMediaController";
     private IMediaController.MediaPlayerControl mPlayer;
     private Context mContext;

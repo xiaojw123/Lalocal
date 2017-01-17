@@ -8,7 +8,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 
 import java.io.File;
 
@@ -100,7 +100,7 @@ public class InstallUtil {
 	 * 安装apk文件
 	 */
 	public static void installApk(String filepath) {
-        DemoCache.getContext().startActivity(getInstallApkIntent(filepath));
+        LiveCache.getContext().startActivity(getInstallApkIntent(filepath));
 	}
 
 	/**

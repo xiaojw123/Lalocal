@@ -15,6 +15,7 @@ import com.lalocal.lalocal.live.entertainment.model.LiveRoomAvatarSortResp;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackMsgResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackReviewResultBean;
+import com.lalocal.lalocal.live.entertainment.model.ShortVideoTokenBean;
 import com.lalocal.lalocal.model.AreaItem;
 import com.lalocal.lalocal.model.ArticleDetailsResp;
 import com.lalocal.lalocal.model.ArticleItem;
@@ -507,6 +508,14 @@ public abstract class ICallBack {
     }
 
     public void onSuperManagerCloseLive(int code) {
+
+    }
+
+    public void onShortVideo(ShortVideoTokenBean shortVideoTokenBean) {
+
+    }
+
+    public void onShortVideoComplete(String json) {
 
     }
 }
