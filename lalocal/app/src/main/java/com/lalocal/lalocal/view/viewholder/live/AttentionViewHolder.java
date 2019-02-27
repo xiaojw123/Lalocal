@@ -21,10 +21,10 @@ import com.makeramen.roundedimageview.RoundedImageView;
 
 /**
  * Created by wangjie on 2016/12/14.
+ *
+ * 直播首页 我的关注 视图容器
  */
-
 public class AttentionViewHolder extends RecyclerView.ViewHolder {
-
 
     // 我的关注
     private CardView cvAttention;
@@ -61,11 +61,7 @@ public class AttentionViewHolder extends RecyclerView.ViewHolder {
             String avatar = bean.getAvatar();
             // 如果接口有头像链接
             if (!TextUtils.isEmpty(avatar)) {
-                // Glide与RoundedImageView一起使用会使圆角消失
-//                Glide.with(mContext)
-//                        .load(avatar)
-//                        .placeholder(R.drawable.androidloading)
-//                        .into(imgAvatar);
+                // Glide与RoundedImageView一起使用会使圆角消失，所以使用ImageLoader
                 DrawableUtils.displayImg(mContext, imgAvatar, avatar, R.drawable.androidloading);
             }
         } else {

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.model.PlayBackResultBean;
 import com.lalocal.lalocal.model.LiveRowsBean;
 import com.lalocal.lalocal.net.ContentLoader;
@@ -361,7 +361,7 @@ public class HomepageLiveAdapter extends RecyclerView.Adapter {
         public void onPlayBackDetails(PlayBackResultBean liveRowsBean) {
             super.onPlayBackDetails(liveRowsBean);
             if (liveRowsBean != null) {
-                Intent intent=new Intent(mContext,PlayBackActivity.class);
+                Intent intent=new Intent(mContext,PlayBackDetailActivity.class);
                 intent.putExtra("id",String.valueOf(liveRowsBean.getId()));
                 mContext.startActivity(intent);
             }

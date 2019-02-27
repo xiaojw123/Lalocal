@@ -6,7 +6,6 @@ import org.litepal.crud.DataSupport;
  * Created by android on 2016/11/19.
  */
 public class LiveHistoryItem extends DataSupport {
-
     private String name;
 
     public String getName() {

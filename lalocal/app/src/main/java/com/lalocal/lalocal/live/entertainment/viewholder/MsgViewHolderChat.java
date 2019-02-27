@@ -15,18 +15,19 @@ import android.widget.TextView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.base.ui.TViewHolder;
 import com.lalocal.lalocal.live.base.util.MessageToBean;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
+import com.lalocal.lalocal.live.entertainment.constant.LiveParams;
+import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.model.GiftBean;
 import com.lalocal.lalocal.live.entertainment.ui.CustomChatDialog;
 import com.lalocal.lalocal.live.entertainment.ui.CustomNewUserInforDialog;
 import com.lalocal.lalocal.live.entertainment.ui.VerticalImageSpan;
 import com.lalocal.lalocal.live.im.session.Container;
 import com.lalocal.lalocal.me.LLoginActivity;
-import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.DensityUtil;
 import com.lalocal.lalocal.util.DrawableUtils;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
@@ -41,12 +42,11 @@ import static com.lalocal.lalocal.R.drawable.live_im_master_bg;
 import static com.lalocal.lalocal.R.drawable.live_master_im_item_bg;
 
 /**
- * Created by hzxuwen on 2016/3/24.
+ * Created by wcj
  */
 public class MsgViewHolderChat extends TViewHolder{
     private ChatRoomMessage message;
     private TextView nameText;
-
     private String code;
     private LinearLayout messageItem;
     private String fromAccount;
@@ -59,6 +59,7 @@ public class MsgViewHolderChat extends TViewHolder{
     private String adminSendMsgUserId;
     private VerticalImageSpan span;
     private Drawable drawable;
+    private CustomChatDialog customDialog;
 
 
     @Override
@@ -75,7 +76,7 @@ public class MsgViewHolderChat extends TViewHolder{
     @Override
     protected void refresh(Object item) {
         String itemContent=null;
-        String styles=null;
+        int styles=-1;
         String disableSendMsgNickName=null;
         String adminSendMsgNickName=null;
         String giftCount=null;
@@ -95,48 +96,47 @@ public class MsgViewHolderChat extends TViewHolder{
                 Map.Entry<String, Object> next = iterator.next();
                 String key = next.getKey();
                 Object value = next.getValue();
-                if("creatorAccount".equals(key)){
+                if(LiveParams.CREATORACCOUNT.equals(key)){
                     creatorAccount = value.toString();
                 }
-                if("style".equals(key)){
-                    styles = value.toString();
+                if(LiveParams.STYLE.equals(key)){
+                    styles = Integer.parseInt(value.toString());
                 }
-                if("userId".equals(key)){
+                if(LiveParams.USERID.equals(key)){
                     userId = value.toString();
                 }
-                if("channelId".equals(key)){
+                if(LiveParams.CHANNELID.equals(key)){
                     channelId = value.toString();
                 }
-
-                if ("disableSendMsgUserId".equals(key)) {
+                if (LiveParams.DISABLESENDMSGUSERID.equals(key)) {
                     disableSendMsgUserId = value.toString();
                 }
-                if("adminSendMsgUserId".equals(key)){
+                if(LiveParams.ADMIN_SEND_MSG_USERID.equals(key)){
                     adminSendMsgUserId = value.toString();
                 }
-                if("disableSendMsgNickName".equals(key)){
+                if(LiveParams.DISABLE_SEND_MSG_NICKNAME.equals(key)){
                     disableSendMsgNickName=value.toString();
                 }
-                if("adminSendMsgNickName".equals(key)){
+                if(LiveParams.ADMIN_SEND_MSG_NICKNAME.equals(key)){
                     adminSendMsgNickName=value.toString();
                 }
 
-                if ("giftModel".equals(key)) {
+                if (LiveParams.GIFTMODEL.equals(key)) {
                     String text = value.toString();
-                    if (text != null && !"null".equals(text)) {
+                    if (text != null && !LiveParams.NULL.equals(text)) {
                         Map<String, Object> map = (Map<String, Object>) value;
                         Iterator<Map.Entry<String, Object>> mapItem = map.entrySet().iterator();
                         while (mapItem.hasNext()) {
                             Map.Entry<String, Object> next1 = mapItem.next();
                             String key1 = next1.getKey();
                             Object value1 = next1.getValue();
-                            if ("code".equals(key1)) {
+                            if (LiveParams.CODE.equals(key1)) {
                                 code = value1.toString();
                             }
-                            if("giftCount".equals(key1)){
+                            if(LiveParams.GIFT_COUNT.equals(key1)){
                                 giftCount= value1.toString();
                             }
-                            if("giftName".equals(key1)){
+                            if(LiveParams.GIFT_NAME.equals(key1)){
                                 giftName = value1.toString();
                             }
                         }
@@ -148,19 +148,17 @@ public class MsgViewHolderChat extends TViewHolder{
         itemLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userId1=null;
+                String userId1;
                 if(container==null){
                     container = new Container(((LivePlayerBaseActivity)context), LiveConstant.ROOM_ID, SessionTypeEnum.ChatRoom, ((LivePlayerBaseActivity)context));
                 }
-                if(disableSendMsgUserId!=null&&!disableSendMsgUserId.equals("null")){
-                    AppLog.i("TAG","disableSendMsgUserId："+disableSendMsgUserId);
+                if(disableSendMsgUserId!=null&&!disableSendMsgUserId.equals(LiveParams.NULL)){
                     userId1=disableSendMsgUserId;
-                }else if(adminSendMsgUserId!=null&&!adminSendMsgUserId.equals("null")){
+                }else if(adminSendMsgUserId!=null&&!adminSendMsgUserId.equals(LiveParams.NULL)){
                     userId1=adminSendMsgUserId;
                 }else{
                     userId1=userId;
                 }
-                AppLog.i("TAG","获取用户id:"+userId1+"    :"+UserHelper.getUserId(context)+"channelId:"+channelId+"     :"+LivePlayerBaseActivity.CHANNELID_ID);
                 if(UserHelper.isLogined(context)&&userId1!=null){
                     if(LiveConstant.isUnDestory){
                         CustomNewUserInforDialog dialog = new CustomNewUserInforDialog(context, container,userId1, LivePlayerBaseActivity.CHANNELID_ID, LiveConstant.ROLE, false,creatorAccount, LiveConstant.ROOM_ID);
@@ -168,79 +166,81 @@ public class MsgViewHolderChat extends TViewHolder{
                     }
                 }else {
                     if(!UserHelper.isLogined(context)){
-                        final CustomChatDialog customDialog = new CustomChatDialog(context);
+                        if(customDialog==null){
+                            customDialog = new CustomChatDialog(context);
+                        }
                         customDialog.setContent(context.getString(R.string.live_login_hint));
                         customDialog.setCancelable(false);
                         customDialog.setCancelBtn(context.getString(R.string.live_canncel), null);
                         customDialog.setSurceBtn(context.getString(R.string.live_login_imm), new CustomChatDialog.CustomDialogListener() {
                             @Override
                             public void onDialogClickListener() {
-                                DemoCache.setLoginStatus(false);
+                                LiveCache.setLoginStatus(false);
                                 LLoginActivity.startForResult(context, 701);
                             }
                         });
                         customDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                             @Override
                             public void onDismiss(DialogInterface dialog) {
-                                LiveConstant.USER_INFO_FIRST_CLICK = true;
+                                customDialog=null;
                             }
                         });
                         customDialog.show();
                     }
-
                 }
-
             }
         });
 
-
-
-
         switch (styles){
-            case "0":
+            case MessageType.text:
                 itemContent = message.getContent();
                 break;
-            case "1":
+            case MessageType.barrage:
                 itemContent=message.getContent();
                 break;
-            case "2"://点赞
-                itemContent="给主播点了赞";
+            case MessageType.like://点赞
+                itemContent=context.getString(R.string.like_to_master);
                 break;
-            case "6"://禁言
+            case MessageType.ban://禁言
                 itemContent=context.getString(R.string.ban)+disableSendMsgNickName;
                 messageItem.setBackgroundResource(live_im_master_bg);
                 break;
-            case "7":
+            case MessageType.relieveBan:
                 itemContent=context.getString(R.string.relieve)+disableSendMsgNickName+context.getString(R.string.de_ban);
                 messageItem.setBackgroundResource(live_im_master_bg);
                 break;
-            case "8":
+            case MessageType.managerLive:
                 itemContent= context.getString(R.string.jiang)+adminSendMsgNickName+context.getString(R.string.setting_manage);
                 messageItem.setBackgroundResource(live_im_master_bg);
                 break;
-            case "9":
+            case MessageType.cancel:
                 itemContent=context.getString(R.string.cancel_le)+adminSendMsgNickName+context.getString(R.string.de_manager);
                 messageItem.setBackgroundResource(live_im_master_bg);
                 break;
-            case "10":
+            case MessageType.gift:
                 final   GiftBean messageToGiftBean = MessageToBean.getMessageToGiftBean(message);
                 itemContent=context.getString(R.string.send_gift_)+giftCount+context.getString(R.string.ge)+giftName;
                 textColor="#ffffff";
                 messageItem.setBackgroundResource(live_im_gift_item_bg);
                 messageItem.setPadding(0,DensityUtil.dip2px(context,8),0,DensityUtil.dip2px(context,8));
-                setNameTextView(creatorAccount,itemContent,textColor,styles,messageToGiftBean);
+                setNameTextView(creatorAccount,itemContent,textColor,String.valueOf(styles),messageToGiftBean);
                 return;
-            case "12":
+            case MessageType.kickOut:
                 itemContent= message.getContent();
                 break;
         }
-        AppLog.i("TAG","creatorAccount:"+creatorAccount+"    itemContent:"+itemContent);
-        setNameTextView(creatorAccount,itemContent,textColor,styles,null);
+        setNameTextView(creatorAccount,itemContent,textColor,String.valueOf(styles),null);
     }
 
+    /**
+     * 礼物消息
+     * @param text
+     * @param textColor
+     * @param messageToGiftBean
+     * @param tv
+     */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private void textviewImageContent(final String text, final String textColor, final GiftBean messageToGiftBean, final TextView tv){
-            AppLog.i("TAG","礼物消息内容:"+text);
             String[] textContent = text.split(",.,");
             String nameText = textContent[0]+" ";
             String contentText = " "+textContent[1];
@@ -250,32 +250,34 @@ public class MsgViewHolderChat extends TViewHolder{
             Bitmap bitmap = DrawableUtils.loadingBitMap(context,messageToGiftBean.getGiftImage());
         if(bitmap==null){
             switch (messageToGiftBean.getCode()){
-                case LiveConstant.ROSE:
+                case LiveParams.ROSE:
                     drawable=context.getResources().getDrawable(R.drawable.gift_rose_48);
                     break;
-                case LiveConstant.GLASSES:
+                case LiveParams.GLASSES:
                     drawable=context.getResources().getDrawable(R.drawable.gift_glasses_48);
                     break;
-                case LiveConstant.PLAN:
+                case LiveParams.PLAN:
                     drawable=context.getResources().getDrawable(R.drawable.gift_plane_48);
                     break;
-                case LiveConstant.TRAVELLINGCASE:
+                case LiveParams.TRAVELLINGCASE:
                     drawable=context.getResources().getDrawable(R.drawable.gift_travellingcase_48);
                     break;
-                case LiveConstant.STAR:
+                case LiveParams.STAR:
                     drawable=context.getResources().getDrawable(R.drawable.gift_start_48);
                     break;
-                case LiveConstant.FRUIT:
+                case LiveParams.FRUIT:
                     drawable=context.getResources().getDrawable(R.drawable.gift_fruit_48);
                     break;
-                case LiveConstant.WATER:
+                case LiveParams.WATER:
                     drawable=context.getResources().getDrawable(R.drawable.gift_water_48);
                     break;
-                case LiveConstant.UMBRELLA:
+                case LiveParams.UMBRELLA:
                     drawable=context.getResources().getDrawable(R.drawable.gift_umbrella_48);
                     break;
+                case LiveParams.FACE:
+                    drawable=context.getResources().getDrawable(R.drawable.gift_face_48);
+                    break;
             }
-
             int i = DensityUtil.dip2px(context, 25);
             drawable.setBounds(0,0,i, i);
             span=new VerticalImageSpan(drawable);
@@ -295,6 +297,12 @@ public class MsgViewHolderChat extends TViewHolder{
             }
     }
 
+    /**
+     * 普通消息
+     * @param text
+     * @param textColor
+     * @return
+     */
     private SpannableStringBuilder textviewSetContent(String text, String textColor) {
         String[] textContent = text.split(",.,");
         String nameText = textContent[0] + " ";
@@ -308,7 +316,16 @@ public class MsgViewHolderChat extends TViewHolder{
         return style;
     }
 
+    /**
+     * 区分发消息者的身份，我，主播，其他人
+     * @param creatorAccount
+     * @param itemContent
+     * @param textColor
+     * @param styles
+     * @param messageToGiftBean
+     */
     public void setNameTextView(String creatorAccount,String itemContent,String textColor,String styles,GiftBean messageToGiftBean) {
+
         String contentItem=null;
         if (message.getMsgType() != MsgTypeEnum.notification) {
             if(message.getRemoteExtension() != null) {
@@ -317,7 +334,7 @@ public class MsgViewHolderChat extends TViewHolder{
                     messageItem.setBackgroundResource(live_im_gift_item_bg);
                 }else {
                     String fromAccount = message.getFromAccount();
-                    String account = DemoCache.getAccount();
+                    String account = LiveCache.getAccount();
                     if(fromAccount!=null&&fromAccount.equals(account)){
                         contentItem=context.getString(R.string.me_split)+itemContent;
                     }else if(fromAccount!=null&&fromAccount.equals(creatorAccount)){

@@ -1,11 +1,9 @@
 package com.lalocal.lalocal.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +13,7 @@ import com.lalocal.lalocal.model.RecommendAdResultBean;
 import com.lalocal.lalocal.model.SpecialShareVOBean;
 import com.lalocal.lalocal.util.AppConfig;
 import com.lalocal.lalocal.util.AppLog;
-import com.lalocal.lalocal.view.CommonWebClient;
+import com.lalocal.lalocal.util.CommonUtil;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.lalocal.lalocal.view.SharePopupWindow;
 
@@ -47,20 +45,8 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
         url = recommendAdResultBean.url;
         shareVO = recommendAdResultBean.shareVO;
         targetId = recommendAdResultBean.targetId;
-        WebSettings ws = carousFigure.getSettings();
-        ws.setJavaScriptEnabled(true);
-        ws.setJavaScriptCanOpenWindowsAutomatically(true);
-        ws.setUseWideViewPort(true);
-        ws.setDomStorageEnabled(true);
-        ws.setAllowFileAccess(true); // 允许访问文件
-        ws.setLoadWithOverviewMode(true);
-        ws.setDisplayZoomControls(false);
-        ws.setBlockNetworkImage(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-        carousFigure.setWebViewClient(new CommonWebClient(this));
         figureTv.setText(recommendAdResultBean.title);
+        CommonUtil.setWebView(carousFigure,true);
     }
 
     private void init() {
@@ -76,7 +62,13 @@ public class CarouselFigureActivity extends BaseActivity implements View.OnClick
     @Override
     protected void onStart() {
         super.onStart();
+<<<<<<< HEAD
         carousFigure.loadUrl(AppConfig.getH5Url(this,url));
+=======
+        AppLog.print("xxx loadUrl____"+AppConfig.getH5Url(this,url));
+        carousFigure.loadUrl(AppConfig.getH5Url(this,url));
+//        carousFigure.loadUrl(url);
+>>>>>>> dev
     }
 
 

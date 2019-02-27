@@ -3,7 +3,7 @@ package com.lalocal.lalocal.live.base.util;
 import android.app.Activity;
 
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 
 import java.util.Stack;
 
@@ -23,27 +23,21 @@ public class ActivityManager {
         return appManager;
     }
 
-    private static Stack<PlayBackNewActivity> playBackActivityStack = new Stack<PlayBackNewActivity>();
+    private static Stack<PlayBackActivity> playBackActivityStack = new Stack<PlayBackActivity>();
     private static Stack<AudienceActivity> audienceActivityStack =new Stack<AudienceActivity>();
-
-
-    public static void addPlayBackActivity(PlayBackNewActivity activity) {
+    public static void addPlayBackActivity(PlayBackActivity activity) {
         playBackActivityStack.add(activity);
     }
-
     public static void audienceActivityStack(AudienceActivity activity) {
         audienceActivityStack.add(activity);
     }
-
     public static void removePlayBackCurrent() {
         if(playBackActivityStack.size()>0){
             Activity lastElement = playBackActivityStack.lastElement();
             lastElement.finish();
             playBackActivityStack.remove(lastElement);
         }
-
     }
-
     public static void removeAudienceCurrent() {
         if(audienceActivityStack.size()>0){
             Activity lastElement = audienceActivityStack.lastElement();
@@ -75,8 +69,6 @@ public class ActivityManager {
         }
         playBackActivityStack.clear();
     }
-
-
     public static int getplayBackSize() {
         return playBackActivityStack.size();
     }

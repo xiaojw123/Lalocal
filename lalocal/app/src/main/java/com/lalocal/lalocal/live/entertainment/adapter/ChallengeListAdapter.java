@@ -32,9 +32,10 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
     private int newChallengeNumber;
     private int completeChallengeNumber;
     private int newFirstPosition = -1;
-    private boolean newFirstItem=true;
+    private boolean newFirstItem = true;
     private boolean completeFirstItem = true;
-    private int completeFirstPosition=-1;
+    private int completeFirstPosition = -1;
+
     public ChallengeListAdapter(Context context, List<ChallengeDetailsResp.ResultBean> result, int newChallengeNumber, int completeChallengeNumber) {
         this.mContext = context;
         this.result = result;
@@ -63,24 +64,24 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
 
         final int id = resultBean.getId();
         final int status = resultBean.getStatus();
-        DrawableUtils.displayImg(mContext,hodler.challengeListItemInitiateHead,resultBean.getCreater().getAvatar());
+        DrawableUtils.displayImg(mContext, hodler.challengeListItemInitiateHead, resultBean.getCreater().getAvatar());
         hodler.challengeListItemInitiateName.setText(resultBean.getCreater().getNickName());
         hodler.challengeListItemContent.setText(resultBean.getContent());
         hodler.challengeListItemMoney.setText(String.valueOf(resultBean.getTargetGold()));
 
         if (status == 0) {
-            if(newFirstItem){
-                newFirstItem=false;
-                newFirstPosition=position;
+            if (newFirstItem) {
+                newFirstItem = false;
+                newFirstPosition = position;
             }
-            if(newFirstPosition==position){
+            if (newFirstPosition == position) {
                 hodler.challengeListItemStatus.setVisibility(View.VISIBLE);
                 hodler.challengeListItemNew.setVisibility(View.VISIBLE);
                 hodler.challengeListItemStatus.setText("任务列表(" + newChallengeNumber + ")");
-                layoutParams.height= DensityUtil.dip2px(mContext,160);
-            }else{
+                layoutParams.height = DensityUtil.dip2px(mContext, 160);
+            } else {
                 hodler.challengeListItemStatus.setVisibility(View.GONE);
-                layoutParams.height= DensityUtil.dip2px(mContext,137);
+                layoutParams.height = DensityUtil.dip2px(mContext, 137);
             }
             hodler.chalengeListItemComplete.setVisibility(View.VISIBLE);
             hodler.challengeListItemWaive.setVisibility(View.VISIBLE);
@@ -88,7 +89,7 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
             hodler.challengeListItemWaive.setText("拒绝");
             hodler.challengeListItemNew.setVisibility(View.VISIBLE);
         } else if (status == 1) {
-            layoutParams.height= DensityUtil.dip2px(mContext,160);
+            layoutParams.height = DensityUtil.dip2px(mContext, 160);
 
             hodler.challengeListItemStatus.setText("正在进行(任务完成才能接受新任务)");
             hodler.chalengeListItemComplete.setText("完成");
@@ -97,17 +98,17 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
             hodler.challengeListItemWaive.setVisibility(View.VISIBLE);
             hodler.challengeListItemNew.setVisibility(View.GONE);
         } else if (status == 2) {
-           if(completeFirstItem){
-               completeFirstItem=false;
-               completeFirstPosition=position;
-           }
-            if(completeFirstPosition==position){
+            if (completeFirstItem) {
+                completeFirstItem = false;
+                completeFirstPosition = position;
+            }
+            if (completeFirstPosition == position) {
                 hodler.challengeListItemStatus.setVisibility(View.VISIBLE);
                 hodler.challengeListItemStatus.setText("已完成任务(" + completeChallengeNumber + ")");
-                layoutParams.height= DensityUtil.dip2px(mContext,160);
-            }else {
+                layoutParams.height = DensityUtil.dip2px(mContext, 160);
+            } else {
                 hodler.challengeListItemStatus.setVisibility(View.GONE);
-                layoutParams.height= DensityUtil.dip2px(mContext,147);
+                layoutParams.height = DensityUtil.dip2px(mContext, 147);
             }
 
             hodler.challengeListItemStatus.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
@@ -120,9 +121,9 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 if (onEmmceeClickListener != null) {
                     if (status == 0) {
-                        onEmmceeClickListener.emmceeClickStatus(1,id);
+                        onEmmceeClickListener.emmceeClickStatus(1, id);
                     } else if (status == 1) {
-                        onEmmceeClickListener.emmceeClickStatus(2,id);
+                        onEmmceeClickListener.emmceeClickStatus(2, id);
                     }
                 }
             }
@@ -133,9 +134,9 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
             public void onClick(View v) {
                 if (onEmmceeClickListener != null) {
                     if (status == 0) {
-                        onEmmceeClickListener.emmceeClickStatus(3,id);
+                        onEmmceeClickListener.emmceeClickStatus(3, id);
                     } else if (status == 1) {
-                        onEmmceeClickListener.emmceeClickStatus(4,id);
+                        onEmmceeClickListener.emmceeClickStatus(4, id);
                     }
                 }
             }
@@ -147,13 +148,17 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
     public int getItemCount() {
         return result == null ? 0 : result.size();
     }
+
     public class ChallengeListHodler extends RecyclerView.ViewHolder {
+
         @BindView(R.id.challenge_list_item_status)
         TextView challengeListItemStatus;
         @BindView(R.id.challenge_list_item_initiate_head)
         CircleImageView challengeListItemInitiateHead;
         @BindView(R.id.challenge_list_item_initiate_name)
         TextView challengeListItemInitiateName;
+        @BindView(R.id.challenge_list_item_new)
+        TextView challengeListItemNew;
         @BindView(R.id.challenge_list_item_content)
         TextView challengeListItemContent;
         @BindView(R.id.challenge_list_item_money)
@@ -162,10 +167,9 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
         TextView chalengeListItemComplete;
         @BindView(R.id.challenge_list_item_waive)
         TextView challengeListItemWaive;
-        @BindView(R.id.challenge_list_item_new)
-        TextView challengeListItemNew;
         @BindView(R.id.challenge_list_item)
         RelativeLayout challengeListItem;
+
         public ChallengeListHodler(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
@@ -176,7 +180,7 @@ public class ChallengeListAdapter extends RecyclerView.Adapter {
     private OnEmmceeClickListener onEmmceeClickListener;
 
     public interface OnEmmceeClickListener {
-        void emmceeClickStatus(int status,int challengeId);
+        void emmceeClickStatus(int status, int challengeId);
     }
 
     public void setOnLiveItemClickListener(OnEmmceeClickListener onEmmceeClickListener) {

@@ -147,7 +147,6 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 Toast.makeText(this, "没有地理位置权限", Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private void initLocation() {
@@ -331,7 +330,6 @@ public class LiveLocationActivity extends BaseActivity implements View.OnLayoutC
                 finish();
             }
         });
-
     }
 
     @OnClick({R.id.live_location_no, R.id.live_input_location_tv, R.id.live_location_complete, R.id.live_again_location,R.id.live_location_title_back})

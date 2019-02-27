@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.telephony.TelephonyManager;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -16,10 +17,14 @@ import android.view.KeyEvent;
 import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.im.LalocalHelperActivity;
+import com.lalocal.lalocal.view.CommonChromeClient;
+import com.lalocal.lalocal.view.CommonWebClient;
 import com.lalocal.lalocal.view.ProgressButton;
 import com.lalocal.lalocal.view.dialog.CustomDialog;
 
@@ -44,8 +49,28 @@ public class CommonUtil {
 
     public static String LONGITUDE = "";
     public static String LATITUDE = "";
-    public static Boolean LOCATION_Y=false;
-    public static String LOCATION_RESULT="";
+    public static Boolean LOCATION_Y = false;
+    public static String LOCATION_RESULT = "";
+
+    //webview基本设置 @param useCommWebViewClient使用公用的WebViewClient
+    public static void setWebView(WebView wv, boolean useCommWebClient) {
+        WebSettings ws = wv.getSettings();
+        ws.setJavaScriptEnabled(true);
+        ws.setJavaScriptCanOpenWindowsAutomatically(true);
+        ws.setUseWideViewPort(true);
+        ws.setDomStorageEnabled(true);
+        ws.setAllowFileAccess(true); // 允许访问文件
+        ws.setLoadWithOverviewMode(true);
+        ws.setDisplayZoomControls(false);
+        ws.setBlockNetworkImage(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+        if (useCommWebClient) {
+            wv.setWebViewClient(new CommonWebClient(wv.getContext()));
+            wv.setWebChromeClient(new CommonChromeClient(wv.getContext()));
+        }
+    }
 
     //根据userid获取accid
     public static String getAccId(int userId) {

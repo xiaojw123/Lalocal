@@ -76,6 +76,7 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
         personalMessageRlv.setNestedScrollingEnabled(false);
         contactAdapter = new RecentContactAdapter(mItems);
         contactAdapter.setOnItemClickListener(this);
+        titleLayout.setOnClickListener(this);
         personalMessageRlv.setAdapter(contactAdapter);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -250,6 +251,8 @@ public class PersonalMessageFragment extends BaseFragment implements OnItemClick
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.fragment_personal_msg_title:
+                break;
             case R.id.chat_cancel_btn:
                 FragmentManager fm = getFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();

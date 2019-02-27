@@ -18,7 +18,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.UserHelper;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.constant.LiveConstant;
 import com.lalocal.lalocal.live.entertainment.constant.MessageType;
 import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
@@ -90,7 +90,6 @@ public class CustomNewUserInforDialog extends BaseDialog {
  LinearLayout userInfoRootLayout;
     private String userId;
     private Context mContext;
-    boolean isMuted;//是否禁言
     private final ContentLoader contentLoader;
     private int userStatus;
     private int role;//身份，主播，用户
@@ -208,8 +207,11 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
                 userinfoBottomLeft.setAlpha(0.5f);
                 userinfoBottomLeft.setEnabled(false);
-                --fansNum;
-                liveFans.setText(String.valueOf(fansNum));
+                if(fansNum>0){
+                    --fansNum;
+                    liveFans.setText(String.valueOf(fansNum));
+                }
+
             }
         }
 
@@ -219,6 +221,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
             if (liveAttentionStatusBean.getReturnCode() == 0) {
                 LiveAttentionStatusBean.ResultBean resultStatus = liveAttentionStatusBean.getResult();
                 userStatus = resultStatus.getStatus();
+                AppLog.d("TAG","关注装填："+userStatus);
                 if (userStatus == 0) {
                     userinfoBottomRight.setText(mContext.getString(R.string.live_master_attention));
                     userinfoBottomLeft.setText(mContext.getString(R.string.private_letter_no));
@@ -299,11 +302,12 @@ public class CustomNewUserInforDialog extends BaseDialog {
                 dismiss();
                 if (mContext instanceof LivePlayerBaseActivity) {
                     ((LivePlayerBaseActivity) mContext).gotoPersonalMessage(true, accId, nickName);
-                }else if (mContext instanceof PlayBackNewActivity){
-                    ((PlayBackNewActivity)mContext).attatchChatFragment();
+                }else if (mContext instanceof PlayBackActivity){
+                    ((PlayBackActivity)mContext).attatchChatFragment();
                 }
                 break;
             case R.id.userinfo_bottom_right://关注
+                AppLog.d("TAG","发圣诞节回复即可恢复健康："+userStatus+"     userId:"+userId);
                 if (userStatus == 0) {//加关注
                     contentLoader.getAddAttention(String.valueOf(userId));
                 } else {//取消关注
@@ -355,9 +359,7 @@ public class CustomNewUserInforDialog extends BaseDialog {
             liveMessage.setStyle(type);
             liveMessage.setAdminSendMsgImUserId(accId);
             liveMessage.setAdminSendMsgNickName(nickName);
-          //  liveMessage.setAdminSendMsgUserId(userId);
             liveMessage.setDisableSendMsgNickName(nickName);
-         //   liveMessage.setDisableSendMsgUserId(userId);
             liveMessage.setUserId(String.valueOf(UserHelper.getUserId(mContext)));
             liveMessage.setCreatorAccount(creatorAccount);
             liveMessage.setChannelId(channelId);

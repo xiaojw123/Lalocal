@@ -4,14 +4,13 @@ import android.content.Context;
 
 import java.lang.Thread.UncaughtExceptionHandler;
 
+/**
+ * 全局异常捕获
+ */
 public class AppCrashHandler {
-
 	private Context context;
-	
 	private UncaughtExceptionHandler uncaughtExceptionHandler;
-
 	private static AppCrashHandler instance;
-
 	private AppCrashHandler(Context context) {
 		this.context = context;
 
@@ -24,7 +23,6 @@ public class AppCrashHandler {
 			public void uncaughtException(Thread thread, final Throwable ex) {
 				// save log
 				saveException(ex, true);
-
 				// uncaught
 				uncaughtExceptionHandler.uncaughtException(thread, ex);
 			}
@@ -35,7 +33,6 @@ public class AppCrashHandler {
 		if (instance == null) {
 			instance = new AppCrashHandler(mContext);
 		}
-		
 		return instance;
 	}
 

@@ -31,7 +31,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.AttentionOrFansRecyAdapter;
 import com.lalocal.lalocal.model.HistoryItem;
 import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
@@ -615,7 +615,7 @@ public class TestGlobalSearchActivity extends BaseActivity implements XRecyclerV
                 RecommendRowsBean> beanList) {
             updateItems(gsearchTabSpecial, specialList, beanList, pageNum, toalPages, key);
             if (specialList.size() > 0) {
-                themeAdapter.setResh(specialList);
+                themeAdapter.setRefresh(specialList);
                 showDataResult(gsearchTabSpecial);
             } else {
                 showEmptResult(gsearchTabSpecial);
@@ -758,7 +758,7 @@ public class TestGlobalSearchActivity extends BaseActivity implements XRecyclerV
             if (tagObj instanceof LiveRowsBean) {
                 LiveRowsBean liveRowsBean = (LiveRowsBean) tagObj;
                 if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
-                    Intent intent = new Intent(TestGlobalSearchActivity.this, PlayBackActivity.class);
+                    Intent intent = new Intent(TestGlobalSearchActivity.this, PlayBackDetailActivity.class);
                     intent.putExtra("id", String.valueOf(liveRowsBean.getId()));
                     startActivity(intent);
                 } else {

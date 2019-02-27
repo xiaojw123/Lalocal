@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 public class LalocalHelperActivity extends BaseActivity implements View.OnClickListener {
     LinearLayout helperContainer;
-    int chlidSize;
 
     public static void start(Context context) {
         Intent intent = new Intent(context, LalocalHelperActivity.class);
@@ -53,9 +52,9 @@ public class LalocalHelperActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        Object tag = v.getTag();
-        if (tag != null) {
-            NimChatActivity.start(this, (Bundle) tag);
+        Object obj = v.getTag(R.id.type);
+        if (obj != null) {
+            mContentloader.getUsersService((int) obj);
         }
     }
 
@@ -75,38 +74,15 @@ public class LalocalHelperActivity extends BaseActivity implements View.OnClickL
                 textView.setText(title);
                 helperContainer.addView(textView);
             }
-            chlidSize=helperContainer.getChildCount();
-            requestUser(1);
         }
 
         @Override
-        public void onGetUser(JSONObject resultJobj, int index) {
-            View view = helperContainer.getChildAt(index);
-            if (view != null) {
-                Bundle bundle = new Bundle();
-                bundle.putString(KeyParams.ACCID, resultJobj.optString("accId"));
-                bundle.putString(KeyParams.NICKNAME, resultJobj.optString("nickName"));
-                view.setTag(bundle);
-            }
-            index += 1;
-            if (chlidSize> index) {
-                requestUser(index);
-            }
+        public void onGetUser(JSONObject resultJobj) {
+            Bundle bundle = new Bundle();
+            bundle.putString(KeyParams.ACCID, resultJobj.optString("accId"));
+            bundle.putString(KeyParams.NICKNAME, resultJobj.optString("nickName"));
+            NimChatActivity.start(LalocalHelperActivity.this, bundle);
         }
-
-
     }
 
-    public void requestUser(int index) {
-        if (chlidSize>index) {
-            View view = helperContainer.getChildAt(index);
-            if (view != null) {
-                Object tag = view.getTag(R.id.type);
-                if (tag != null) {
-                    mContentloader.getUsersService((int) tag, index);
-                }
-            }
-        }
-
-    }
 }

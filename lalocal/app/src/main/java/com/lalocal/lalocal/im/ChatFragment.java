@@ -21,8 +21,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +35,7 @@ import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LivePlayerBaseActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackNewActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
 import com.lalocal.lalocal.live.entertainment.helper.MessageUpdateListener;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CommonUtil;
@@ -43,6 +43,7 @@ import com.lalocal.lalocal.util.FileSaveUtil;
 import com.lalocal.lalocal.util.ImageCheckoutUtil;
 import com.lalocal.lalocal.util.KeyboardUtil;
 import com.lalocal.lalocal.util.PictureUtil;
+import com.lalocal.lalocal.view.CustomFrameLayout;
 import com.lalocal.lalocal.view.CustomTitleView;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
@@ -67,7 +68,12 @@ import java.util.List;
  */
 
 public class ChatFragment extends BaseFragment implements View.OnClickListener, View.OnTouchListener, ViewTreeObserver.OnGlobalLayoutListener, CustomTitleView.onBackBtnClickListener, XRecyclerView.LoadingListener {
+<<<<<<< HEAD
     private static final int IMAGE_SIZE = 100 * 1024;
+=======
+    private static final int LOAD_DELAY_TIME = 1000;
+    private static final int IMAGE_SIZE = 100 * 1024;// 300kb
+>>>>>>> dev
     private static final int LOAD_MESSAGE_COUNT = 10;
     private static final int PEMISSION_CODE_SDCARD = 0x11;
     private static final int PHOTO_REQUEST_GALLERY = 2;
@@ -77,19 +83,22 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     TextView mMsgAddTv, mMsgSendTv;
     ImageView sendImg;
     MessageListAdapter msgAdapter;
-    FrameLayout moreOpLayout;
+    CustomFrameLayout moreOpLayout;
     Button cancelBtn, myselfBtn;
     List<IMMessage> mMessageList = new ArrayList<>();
     RelativeLayout rootView;
-    int navigationBarHeight, lastHeight;
+    int navigationBarHeight, lastHeight, opHieght;
     boolean isMoreAdd, isSoftKeyShow, isFirstload;
     String accId, nickName;
     int pageType;
     boolean hasCancel;
+    boolean chatVisible = true;
     FragmentManager fm;
     PersonalMessageFragment lastFragment;
     LinearLayoutManager layoutManager;
     MessageUpdateListener unReadUpdateListener;
+    LinearLayout opLLt;
+    RelativeLayout opEditCotainer;
 
 
     @Override
@@ -110,12 +119,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         this.unReadUpdateListener = unReadUpdateListener;
     }
 
+    public void setChatVisible(boolean chatVisible) {
+        this.chatVisible = chatVisible;
+    }
+
     @Override
     public void onDestroyView() {
         registerStatusObserve(false);
         super.onDestroyView();
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+>>>>>>> dev
 
     private void registerStatusObserve(boolean flag) {
         NIMClient.getService(MsgServiceObserve.class).observeMsgStatus(
@@ -125,13 +145,13 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     public void initParams() {
         navigationBarHeight = CommonUtil.getNavigationBarHeight(getActivity());
+        opHieght = (int) getResources().getDimension(R.dimen.pop_more_message_layout_height) * 3;
         Bundle bundle = getArguments();
         if (bundle != null) {
             pageType = bundle.getInt(KeyParams.PAGE_TYPE, PageType.PAGE_DEFAULT);
             nickName = bundle.getString(KeyParams.NICKNAME);
             accId = bundle.getString(KeyParams.ACCID);
             hasCancel = bundle.getBoolean(KeyParams.HAST_CANCLE);
-            AppLog.print("initParams____nickName__" + nickName + ", accid__" + accId);
         }
     }
 
@@ -139,23 +159,23 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         if (bundle != null) {
             nickName = bundle.getString(KeyParams.NICKNAME);
             accId = bundle.getString(KeyParams.ACCID);
-            AppLog.print("initParams____nickName__" + nickName + ", accid__" + accId);
         }
         chatTv.setTitle(nickName);
         limit = 10;
-        isRoot = true;
         mMessageList.clear();
         msgAdapter = new MessageListAdapter(mMessageList);
         mXRecyclerView.setAdapter(msgAdapter);
-        loadDataFromRemote(limit);
+        loadDataFromLocal();
     }
 
     private void initView(View contentView) {
+        opEditCotainer = (RelativeLayout) contentView.findViewById(R.id.chat_edit_cotainer);
+        opLLt = (LinearLayout) contentView.findViewById(R.id.chat_op_layout);
         cancelBtn = (Button) contentView.findViewById(R.id.chat_cancel_btn);
         myselfBtn = (Button) contentView.findViewById(R.id.chat_myself_btn);
         chatTv = (CustomTitleView) contentView.findViewById(R.id.chat_ctv);
         rootView = (RelativeLayout) contentView.findViewById(R.id.activity_chat_root);
-        moreOpLayout = (FrameLayout) contentView.findViewById(R.id.chat_more_layout);
+        moreOpLayout = (CustomFrameLayout) contentView.findViewById(R.id.chat_more_layout);
         sendImg = (ImageView) contentView.findViewById(R.id.chat_more_send_img);
         mMsgAddTv = (TextView) contentView.findViewById(R.id.chat_add_stv);
         mMsgEdit = (EditText) contentView.findViewById(R.id.chat_edit);
@@ -163,7 +183,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mXRecyclerView = (XRecyclerView) contentView.findViewById(R.id.chat_xrlv);
         mXRecyclerView.setLoadingMoreEnabled(false);
         mXRecyclerView.setLoadingListener(this);
+        moreOpLayout.setOnViewHeplerListner(viewHelperListener);
         layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setStackFromEnd(true);
         mXRecyclerView.setLayoutManager(layoutManager);
         mXRecyclerView.setOnTouchListener(this);
         msgAdapter = new MessageListAdapter(mMessageList);
@@ -174,6 +196,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         mMsgAddTv.setOnClickListener(this);
         sendImg.setOnClickListener(this);
         chatTv.setOnCustomClickLister(this);
+        chatTv.setOnClickListener(this);
         rootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
         chatTv.setTitle(nickName);
         if (pageType == PageType.PAGE_PLAY_BACK) {
@@ -189,16 +212,17 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 myselfBtn.setVisibility(View.VISIBLE);
             }
         }
-        loadDataFromRemote(limit);
+        isFirstload = true;
+        loadDataFromLocal();
     }
-
-
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id) {
+            case R.id.chat_ctv:
+                break;
             case R.id.chat_cancel_btn:
-                if (getActivity() instanceof LivePlayerBaseActivity || getActivity() instanceof PlayBackNewActivity) {
+                if (getActivity() instanceof LivePlayerBaseActivity || getActivity() instanceof PlayBackActivity) {
                     if (isSoftKeyShow) {
                         KeyboardUtil.hidenSoftKey(mMsgEdit);
                     }
@@ -230,7 +254,9 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     isMoreAdd = true;
                     KeyboardUtil.hidenSoftKey(mMsgEdit);
                 } else {
-                    moreOpLayout.setVisibility(View.VISIBLE);
+                    if (moreOpLayout.getVisibility() != View.VISIBLE) {
+                        moreOpLayout.setVisibility(View.VISIBLE);
+                    }
                 }
                 break;
             case R.id.chat_send_tv:
@@ -287,8 +313,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
         }
     }
-
-
     private void searchPhotoBum() {
         if (moreOpLayout.getVisibility() == View.VISIBLE) {
             moreOpLayout.setVisibility(View.GONE);
@@ -302,12 +326,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 PHOTO_REQUEST_GALLERY);
 
     }
-
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            moreOpLayout.setVisibility(View.GONE);
+            if (moreOpLayout.getVisibility() == View.VISIBLE) {
+                moreOpLayout.setVisibility(View.GONE);
+            }
             if (isSoftKeyShow) {
                 KeyboardUtil.hidenSoftKey(mMsgEdit);
             }
@@ -361,15 +385,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         }).start();
     }
 
-
     private String getSavePicPath() throws IOException {
         String dir = FileSaveUtil.SD_CARD_PATH + "image_data/";
         FileSaveUtil.createSDDirectory(dir);
         String fileName = String.valueOf(System.currentTimeMillis() + ".png");
         return dir + fileName;
     }
-
-
     @Override
     public void onGlobalLayout() {
         Rect r = new Rect();
@@ -385,6 +406,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             if (moreOpLayout.getVisibility() == View.VISIBLE) {
                 moreOpLayout.setVisibility(View.GONE);
             }
+            mXRecyclerView.smoothScrollBy(0, height);
         } else {
             isSoftKeyShow = false;
             if (isMoreAdd) {
@@ -393,27 +415,35 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                     moreOpLayout.setVisibility(View.VISIBLE);
                 }
             }
+//            mXRecyclerView.smoothScrollBy(0, -height);l
+            mXRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+//                    mXRecyclerView.scrollToPosition(getLastPosition());
+                    layoutManager.scrollToPositionWithOffset(getLastPosition(),0);
+                }
+            },LOAD_DELAY_TIME);
         }
         lastHeight = height;
     }
-
-
     @Override
     public void onResume() {
         super.onResume();
-        AppLog.print("chatFragment_onResume__");
-        reigisterNimService(true);
+        if (chatVisible) {
+            reigisterNimService(true);
+        }
     }
-
     public void reigisterNimService(boolean flag) {
         NIMClient.getService(MsgServiceObserve.class)
                 .observeReceiveMessage(incomingMessageObserver, flag);
         if (flag) {
             // 进入聊天界面，建议放在onResume中
             NIMClient.getService(MsgService.class).setChattingAccount(accId, SessionTypeEnum.P2P);
-            if (unReadUpdateListener != null) {
-                unReadUpdateListener.onUnReadUpate();
-            }
+
+//            if (unReadUpdateListener != null) {
+//                AppLog.print("reigisterNimService chat fragment unReadUpdate");
+//                unReadUpdateListener.onUnReadUpate();
+//            }
         } else {
             // 退出聊天界面或离开最近联系人列表界面，建议放在onPause中
             NIMClient.getService(MsgService.class).setChattingAccount(MsgService.MSG_CHATTING_ACCOUNT_NONE, SessionTypeEnum.P2P);
@@ -425,36 +455,44 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onPause() {
         super.onPause();
         resetOpView();
-        reigisterNimService(false);
+        if (chatVisible) {
+            reigisterNimService(false);
+        }
     }
 
 
-    private void loadDataFromRemote(int limit) {
-        NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), limit, true)
-                .setCallback(callback);
+    private void loadDataFromLocal() {
+        //本地查询
+        NIMClient.getService(MsgService.class).queryMessageList(accId, SessionTypeEnum.P2P, 0, limit).setCallback(initCallback);
+        //服务端查询
+//        NIMClient.getService(MsgService.class).pullMessageHistory(anchor(), 10, true)
+//                .setCallback(callback);
     }
 
 
     private void updateMessages(List<IMMessage> param) {
-        AppLog.print("updateMessages___");
         if (!mMessageList.containsAll(param)) {
             mMessageList.addAll(param);
             msgAdapter.updateItems(mMessageList);
-            AppLog.print("scrollToPosition__");
-            if (isRoot) {
-                isRoot = false;
-                layoutManager.scrollToPositionWithOffset(msgAdapter.getItemCount() - 1, 0);
-            }
         }
     }
 
     private IMMessage anchor() {
-        return ChatRoomMessageBuilder.createEmptyChatRoomMessage(accId, 0);
+        if (mMessageList.size() <= 0) {
+            return ChatRoomMessageBuilder.createEmptyChatRoomMessage(accId, 0);
+        } else {
+            return mMessageList.get(0);
+        }
     }
 
     private Observer<IMMessage> messageObserver = new Observer<IMMessage>() {
         @Override
         public void onEvent(IMMessage imMessage) {
+<<<<<<< HEAD
+=======
+            MsgStatusEnum status = imMessage.getStatus();
+            AppLog.print("消息发送结果status:" + status);
+>>>>>>> dev
             updateChatMessage(imMessage);
         }
     };
@@ -463,10 +501,8 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
                 @Override
                 public void onEvent(List<IMMessage> messages) {
                     // 处理新收到的消息，为了上传处理方便，SDK 保证参数 messages 全部来自同一个聊天对象。
-                    AppLog.print("incomingMessageObserver___len:" + messages.size());
                     for (IMMessage imMessage : messages) {
                         if (TextUtils.equals(accId, imMessage.getSessionId())) {
-                            isRoot = true;
                             updateChatMessage(imMessage);
                         } else {
                             imMessage.setStatus(MsgStatusEnum.unread);
@@ -476,43 +512,10 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
             };
 
-    private RequestCallback<List<IMMessage>> callback = new RequestCallback<List<IMMessage>>() {
-        @Override
-        public void onSuccess(List<IMMessage> param) {
-            AppLog.print("IMMessage len___" + param.size());
-            if (isRefresh) {
-                isRefresh = false;
-                if (lastParams != null && lastParams.size() > 0) {
-                    if (mMessageList.containsAll(lastParams)) {
-                        mMessageList.removeAll(lastParams);
-                    }
-                }
-                mXRecyclerView.refreshComplete();
-            }
-            lastParams = param;
-            Collections.reverse(param);
-            if (isFirstload && mMessageList.size() > 0) {
-                for (IMMessage message : param) {
-                    for (IMMessage item : mMessageList) {
-                        if (item.isTheSame(message)) {
-                            mMessageList.remove(item);
-                        }
-                    }
-                }
-            }
-            updateMessages(param);
-        }
+    public int getLastPosition() {
+        return msgAdapter.getItemCount() - 1;
+    }
 
-        @Override
-        public void onFailed(int code) {
-            resetRefresh();
-        }
-
-        @Override
-        public void onException(Throwable exception) {
-            resetRefresh();
-        }
-    };
 
     private void resetRefresh() {
         if (isRefresh) {
@@ -555,7 +558,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        AppLog.print("onHiddenChanged————————hiden___" + hidden);
         if (!hidden) {
             reigisterNimService(true);
         } else {
@@ -568,7 +570,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     public void onRefresh() {
         isRefresh = true;
         limit += 10;
-        loadDataFromRemote(limit);
+        loadDataFromLocal();
     }
 
     @Override
@@ -577,7 +579,6 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
     }
 
     public void sendImg(String sessionId, File file) {
-        AppLog.print("sendImg____ssid:" + sessionId + ", file:" + file);
         // 创建图片消息
         if (isSoftKeyShow) {
             KeyboardUtil.hidenSoftKey(mMsgEdit);
@@ -585,16 +586,12 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
         IMMessage message = MessageBuilder.createImageMessage(
                 sessionId, // 聊天对象的 ID，如果是单聊，为用户帐号，如果是群聊，为群组 ID
                 SessionTypeEnum.P2P, // 聊天类型，单聊或群组
-                file, // 图片文件对象
-                null // 文件显示名字，如果第三方 APP 不关注，可以为 null
-        );
+                file, file.getName());
 //        updateChatMessage(message);
         NIMClient.getService(MsgService.class).sendMessage(message, false);
-
     }
 
     private void sendText(String sessionId, String text) {
-        AppLog.print("sendText ssid:" + sessionId + ", text:" + text);
         if (isSoftKeyShow) {
             KeyboardUtil.hidenSoftKey(mMsgEdit);
         }
@@ -610,6 +607,7 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
 
     private void updateChatMessage(IMMessage message) {
         if (!mMessageList.contains(message)) {
+<<<<<<< HEAD
             mMessageList.add(message);
             msgAdapter.setItems(mMessageList);
             int lastPos = msgAdapter.getItemCount() - 1;
@@ -621,11 +619,80 @@ public class ChatFragment extends BaseFragment implements View.OnClickListener, 
             layoutManager.scrollToPositionWithOffset(lastPos, 0);
         } else {
             msgAdapter.updateItems(mMessageList);
+=======
+            AppLog.print("lastPosition:" + getLastPosition());
+            mMessageList.add(message);
+            if (mMessageList.size() == 1) {
+                msgAdapter.updateItems(mMessageList);
+            } else {
+                msgAdapter.updateSingleItem(mMessageList);
+            }
+            mXRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    layoutManager.scrollToPositionWithOffset(getLastPosition(), 0);
+                }
+            }, 20);
+>>>>>>> dev
         }
     }
 
 
-    List<IMMessage> lastParams;
     int limit = 10;
-    boolean isRefresh, isRoot = true;
+    boolean isRefresh;
+    private CustomFrameLayout.ViewHelperListener viewHelperListener = new CustomFrameLayout.ViewHelperListener() {
+        @Override
+        public void onVisibilityChanged(final int visibility) {
+            if (isSoftKeyShow) {
+                return;
+            }
+            mXRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (visibility == View.VISIBLE) {
+                        mXRecyclerView.smoothScrollBy(0, opHieght);
+                    } else {
+                        mXRecyclerView.scrollToPosition(msgAdapter.getItemCount() - 1);
+                    }
+                }
+            }, LOAD_DELAY_TIME);
+        }
+
+    };
+    private RequestCallback<List<IMMessage>> initCallback = new RequestCallback<List<IMMessage>>() {
+        @Override
+        public void onSuccess(List<IMMessage> param) {
+            if (isRefresh) {
+                isRefresh = false;
+                mXRecyclerView.refreshComplete();
+            }
+            if (param != null && param.size() > 0) {
+                Collections.reverse(param);
+                mMessageList = param;
+                msgAdapter.updateItems(mMessageList);
+                if (isFirstload) {
+                    isFirstload = false;
+                    mXRecyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            layoutManager.scrollToPositionWithOffset(getLastPosition(), 0);
+                        }
+                    }, LOAD_DELAY_TIME);
+                } else {
+                    layoutManager.scrollToPosition(0);
+                }
+            }
+        }
+
+        @Override
+        public void onFailed(int code) {
+            resetRefresh();
+        }
+
+        @Override
+        public void onException(Throwable exception) {
+            resetRefresh();
+        }
+    };
+
 }

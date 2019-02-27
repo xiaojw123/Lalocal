@@ -10,6 +10,8 @@ import org.json.JSONObject;
 
 /**
  * Created by wangjie on 2016/11/1.
+ *
+ * 常用的七牛云有关封装
  */
 public class QiniuUtils {
 
@@ -57,7 +59,7 @@ public class QiniuUtils {
 
     /**
      * 上传简单文件
-     * @param filePath 文件路径
+     * @param filePath 文件路径，手机中的图片路径
      * @param fileName 指定上传到七牛云上后图片的文件名，后台获取token的时候有fileName
      * @param token 从服务端获取的token
      * @return 图片是否上传成功
@@ -78,6 +80,13 @@ public class QiniuUtils {
                 }, null);
     }
 
+    /**
+     * 无监听事件的单一文件上传封装
+     * @param bytesImg
+     * @param fileName
+     * @param token
+     * @return
+     */
     public static boolean uploadSimpleFile(byte[] bytesImg, final String fileName, final String token) {
         final boolean[] isSuccess = {false};
         UploadManager uploadManager = new UploadManager();
@@ -95,6 +104,9 @@ public class QiniuUtils {
         return isSuccess[0];
     }
 
+    /**
+     * 上传接口
+     */
     public interface OnUploadListener {
         void onUploadSuccess(ResponseInfo info);
         void onUploadFail(ResponseInfo info);

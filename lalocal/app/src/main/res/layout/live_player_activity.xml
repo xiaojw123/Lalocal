@@ -16,14 +16,14 @@
             android:layout_height="match_parent"
             android:gravity="bottom"
             >
-            <RelativeLayout
+            <FrameLayout
                 android:id="@+id/player_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:fillViewport="true">
 
-            </RelativeLayout>
+            </FrameLayout>
 
             <ImageView
                 android:id="@+id/live_quit"
@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
                     android:textSize="@dimen/live_text_16sp"
-                    android:text="直播即将开始..."/>
+                    android:text="@string/live_start_count_tv"/>
             </LinearLayout>
 
 
@@ -72,9 +72,6 @@
 
 
         </RelativeLayout>
-        <!--
-            android:layout_gravity="right"
-            android:layout_marginLeft="-65dp"-->
 
         <RelativeLayout
             android:id="@+id/live_layout"
@@ -85,11 +82,11 @@
             >
             <View
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="@dimen/live_height_120dp"
                 android:background="@drawable/live_bg_gradient_top"></View>
             <View
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="@dimen/live_height_200dp"
                 android:background="@drawable/live_bg_gradient_bottom"
                 android:layout_alignParentBottom="true"></View>
 
@@ -144,7 +141,7 @@
                                 android:drawableLeft="@drawable/livecrown_16"
                                 android:drawableRight="@drawable/livecrown_arrow"
                                 android:drawablePadding="@dimen/live_padding_5dp"
-                                android:text="榜单"
+                                android:text="@string/live_ranking_list"
                                 android:textStyle="italic"
                                 android:textColor="@android:color/black"
                                 android:textSize="@dimen/live_text_12sp" />
@@ -153,10 +150,10 @@
 
                     <RelativeLayout
                         android:id="@+id/audience_score_layout"
-                        android:layout_width="60dp"
-                        android:layout_height="22dp"
+                        android:layout_width="@dimen/live_height_60dp"
+                        android:layout_height="@dimen/live_padding_22dp"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="17dp"
+                        android:layout_marginLeft="@dimen/live_padding_17dp"
                         android:layout_toRightOf="@+id/live_master_info_layout"
                         android:visibility="gone"
                         >
@@ -241,15 +238,7 @@
                 </android.support.v7.widget.RecyclerView>
             </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/challenge_new_task"
-                android:layout_width="@dimen/live_height_36dp"
-                android:layout_height="@dimen/live_height_51dp"
-                android:layout_alignParentRight="true"
-                android:paddingTop="@dimen/live_padding_15dp"
-                android:paddingRight="@dimen/live_padding_12dp"
-                android:visibility="gone"
-                android:src="@drawable/newtask"/>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -283,7 +272,7 @@
                 <TextView
                     android:id="@+id/new_message_remind"
                     android:layout_width="wrap_content"
-                    android:layout_height="30dp"
+                    android:layout_height="@dimen/live_padding_30dp"
                     android:gravity="center"
                     android:textSize="@dimen/text_size_12_sp"
                     android:layout_above="@+id/live_nofitifation_layout"
@@ -318,7 +307,7 @@
                     style="@style/list_view"
                     android:layout_width="match_parent"
                     android:layout_marginRight="@dimen/live_height_100dp"
-                    android:layout_height="150dp"
+                    android:layout_height="@dimen/live_height_150dp"
                     android:layout_above="@id/live_nofitifation_layout"
                     android:cacheColorHint="@android:color/transparent"
                     android:divider="@null"
@@ -329,7 +318,7 @@
                 <com.lalocal.lalocal.live.im.ui.barrage.BarrageView
                     android:id="@+id/barrageView_test"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="@dimen/live_height_75dp"
                     android:paddingBottom="@dimen/live_padding_5dp"
                     android:layout_above="@+id/messageListView"
                    ></com.lalocal.lalocal.live.im.ui.barrage.BarrageView>
@@ -338,7 +327,7 @@
                     android:id="@+id/gift_animation_view"
                     layout="@layout/gift_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="@dimen/live_height_60dp"
                     android:layout_above="@id/barrageView_test"
                    />
 
@@ -346,19 +335,19 @@
                     android:id="@+id/gift_animation_view_up"
                     layout="@layout/gift_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_height="@dimen/live_height_60dp"
                     android:layout_above="@id/gift_animation_view"
                   />
 
                 <RelativeLayout
                     android:id="@+id/BackBtn"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="@dimen/live_height_50dp"
+                    android:layout_height="@dimen/live_height_50dp"
                     android:layout_alignParentRight="true">
 
                     <TextView
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
+                        android:layout_width="@dimen/live_padding_15dp"
+                        android:layout_height="@dimen/live_padding_15dp"
                         android:layout_centerInParent="true"
                         android:background="@drawable/icon_close_selector" />
                 </RelativeLayout>
@@ -369,7 +358,7 @@
             <FrameLayout
                 android:id="@+id/audience_fragment_container"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="@dimen/live_height_300dp"
                 android:layout_alignParentBottom="true"
                 />
 
@@ -377,7 +366,12 @@
 
 
     </com.lalocal.lalocal.live.entertainment.ui.CustomDrawerLayout>
+    <FrameLayout
+        android:id="@+id/create_live_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom"
+        />
 
-    <include layout="@layout/create_live_popu_layout"></include>
 
 </RelativeLayout>

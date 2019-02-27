@@ -5,7 +5,7 @@ import android.util.Log;
 import android.webkit.MimeTypeMap;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 
 import java.util.Locale;
@@ -90,7 +90,7 @@ public class FileUtil {
 
     public static String formatFileSize(long size, SizeUnit unit) {
         if (size < 0) {
-            return DemoCache.getContext().getString(R.string.unknow_size);
+            return LiveCache.getContext().getString(R.string.unknow_size);
         }
 
         final double KB = 1024;

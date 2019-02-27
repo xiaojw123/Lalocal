@@ -11,7 +11,7 @@ import android.media.ExifInterface;
 import android.text.TextUtils;
 
 import com.lalocal.lalocal.R;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.base.util.StringUtil;
 import com.lalocal.lalocal.live.base.util.log.LogUtil;
 import com.lalocal.lalocal.live.im.util.file.AttachmentStore;
@@ -38,7 +38,7 @@ public class ImageUtil {
 	public final static float MAX_IMAGE_RATIO = 5f;
 	public static Bitmap getDefaultBitmapWhenGetFail() {
         try {
-            return getBitmapImmutableCopy(DemoCache.getContext().getResources(), R.drawable.nim_image_download_failed);
+            return getBitmapImmutableCopy(LiveCache.getContext().getResources(), R.drawable.nim_image_download_failed);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -300,7 +300,7 @@ public class ImageUtil {
     
     private static String getTempFilePath(String extension) {
     	return StorageUtil.getWritePath(
-                DemoCache.getContext(),
+                LiveCache.getContext(),
     			"temp_image_" + StringUtil.get36UUID() + "." + extension,
     			StorageType.TYPE_TEMP);
     }
@@ -386,7 +386,7 @@ public class ImageUtil {
         	width = bound[0];
         	height = bound[1];
         } else if (Integer.class.isInstance(imageObject)) {
-        	bound = BitmapDecoder.decodeBound(DemoCache.getContext().getResources(), (Integer) imageObject);
+        	bound = BitmapDecoder.decodeBound(LiveCache.getContext().getResources(), (Integer) imageObject);
         	width = bound[0];
         	height = bound[1];
         } else if (InputStream.class.isInstance(imageObject)) {
@@ -420,7 +420,7 @@ public class ImageUtil {
      */
     public static Bitmap getBitmapFromDrawableRes(int res) {
         try {
-            return getBitmapImmutableCopy(DemoCache.getContext().getResources(), res);
+            return getBitmapImmutableCopy(LiveCache.getContext().getResources(), res);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

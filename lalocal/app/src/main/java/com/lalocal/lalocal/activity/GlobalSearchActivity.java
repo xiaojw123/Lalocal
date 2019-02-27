@@ -25,7 +25,7 @@ import com.lalocal.lalocal.help.MobHelper;
 import com.lalocal.lalocal.help.PageType;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.live.entertainment.adapter.AttentionOrFansRecyAdapter;
 import com.lalocal.lalocal.model.HistoryItem;
 import com.lalocal.lalocal.model.LiveFansOrAttentionRowsBean;
@@ -689,7 +689,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 if (themeAdapter == null) {
                     themeAdapter = new ThemeAdapter(GlobalSearchActivity.this, specialList);
                 } else {
-                    themeAdapter.setResh(specialList);
+                    themeAdapter.setRefresh(specialList);
                 }
                 if (gsearchTabSpecial.isSelected()) {
                     showDataResult();
@@ -702,7 +702,6 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
                 }
             }
         }
-
     }
 
     private OnItemClickListener itemClickListener = new OnItemClickListener() {
@@ -715,7 +714,7 @@ public class GlobalSearchActivity extends BaseActivity implements XRecyclerView.
             if (tagObj instanceof LiveRowsBean) {
                 LiveRowsBean liveRowsBean = (LiveRowsBean) tagObj;
                 if (liveRowsBean.getEndAt() != null && liveRowsBean.getStartAt() != null) {
-                    Intent intent = new Intent(GlobalSearchActivity.this, PlayBackActivity.class);
+                    Intent intent = new Intent(GlobalSearchActivity.this, PlayBackDetailActivity.class);
                     intent.putExtra("id", String.valueOf(liveRowsBean.getId()));
                     startActivity(intent);
                 } else {

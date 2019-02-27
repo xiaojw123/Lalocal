@@ -1,20 +1,20 @@
 package com.lalocal.lalocal.me;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.activity.BaseActivity;
 import com.lalocal.lalocal.help.KeyParams;
 import com.lalocal.lalocal.util.AppConfig;
+<<<<<<< HEAD
 import com.lalocal.lalocal.view.CommonWebClient;
+=======
+import com.lalocal.lalocal.util.CommonUtil;
+>>>>>>> dev
 import com.lalocal.lalocal.view.CustomTitleView;
 
 /**
@@ -31,26 +31,13 @@ public class TargetWebActivity extends BaseActivity {
         setContentView(R.layout.activity_target_web);
         CustomTitleView titleView = (CustomTitleView) findViewById(R.id.target_web_title);
         webView = (WebView) findViewById(R.id.target_web_wv);
+        CommonUtil.setWebView(webView, true);
         String title = getTargetTitle();
         if (!TextUtils.isEmpty(title)) {
             titleView.setTitle(title);
-        }else{
+        } else {
             titleView.setVisibility(View.GONE);
         }
-        WebSettings ws = webView.getSettings();
-        ws.setJavaScriptEnabled(true);
-        ws.setJavaScriptCanOpenWindowsAutomatically(true);
-        ws.setUseWideViewPort(true);
-        ws.setDomStorageEnabled(true);
-        ws.setAllowFileAccess(true); // 允许访问文件
-        ws.setLoadWithOverviewMode(true);
-        ws.setDisplayZoomControls(false);
-        ws.setBlockNetworkImage(false);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ws.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-        webView.loadUrl(getTargeUrl());
-        webView.setWebViewClient(new TargetWebviewClient(this));
     }
 
     private void cloaseVideo() {
@@ -59,35 +46,17 @@ public class TargetWebActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        webView.loadUrl(getTargeUrl());
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         cloaseVideo();
     }
 
-    class TargetWebviewClient extends CommonWebClient {
-        public TargetWebviewClient(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void onPageStarted(WebView view, String url, Bitmap favicon) {
-            super.onPageStarted(view, url, favicon);
-            showLoadingAnimation();
-        }
-
-        @Override
-        public void onPageFinished(WebView view, String url) {
-            super.onPageFinished(view, url);
-            hidenLoadingAnimation();
-        }
-
-//        @Override
-//        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//            AppLog.print("url____" + url);
-//            view.loadUrl(url);
-//            return true;
-//        }
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -100,8 +69,13 @@ public class TargetWebActivity extends BaseActivity {
 
 
     public String getTargeUrl() {
+<<<<<<< HEAD
         String url=getIntent().getStringExtra(KeyParams.TARGE_URL);
         return AppConfig.getH5Url(this,url);
+=======
+        String url = getIntent().getStringExtra(KeyParams.TARGE_URL);
+        return AppConfig.getH5Url(this, url);
+>>>>>>> dev
     }
 
     public String getTargetTitle() {

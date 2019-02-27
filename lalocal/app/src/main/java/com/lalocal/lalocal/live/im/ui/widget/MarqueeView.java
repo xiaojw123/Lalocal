@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Queue;
 
 /**
- * Created by android on 2016/11/15.
+ * Created by wcj on 2016/11/15.
  * 聊天室消息通知滚动效果
  */
 public class MarqueeView extends ViewFlipper {
@@ -79,7 +79,6 @@ public class MarqueeView extends ViewFlipper {
                 isRoll=false;
                 removeAllViews();
                 addView(createTextView(poll));
-
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {

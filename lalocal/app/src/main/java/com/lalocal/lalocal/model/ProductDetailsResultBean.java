@@ -42,4 +42,6 @@ public class ProductDetailsResultBean {
     public String videoUrl;
     public List<ProductDetailsBean> details;
     public List<PhotosVosBean> photoVOs;
+    public String h5Url;
+
 }

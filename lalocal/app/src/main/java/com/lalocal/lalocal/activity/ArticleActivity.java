@@ -86,9 +86,7 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         initView();
         initData(targetID);
 
-
     }
-
 
     private void initView() {
         backBtn = (ImageView) findViewById(R.id.article_common_back_btn);
@@ -101,7 +99,6 @@ public class ArticleActivity extends BaseActivity implements View.OnClickListene
         collectTv = (TextView) findViewById(R.id.article_collect_tv);
         back = (LinearLayout) findViewById(R.id.article_back_btn);
         btnLike.setImageResource(R.drawable.index_article_btn_like);
-
 
         //点击事件
         backBtn.setOnClickListener(this);

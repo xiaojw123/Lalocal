@@ -41,22 +41,47 @@ public class AppConfig {
     //       private static String baseUrl = "http://api.lalocal.cn/api/";
     private static String baseUrl = "http://dev.lalocal.cn:8080/api/";
     private static String sUserRuleUrl = "http://h5.lalocal.cn/static/userRole.html";
+<<<<<<< HEAD
     public static final String BOOK_URL_FORMART = "%1$s?USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
 
     //获取h5 url地址
     public static String getH5Url(Context context, String baseH5Url) {
         if (!TextUtils.isEmpty(baseH5Url) && !baseH5Url.contains("?")) {
+=======
+    public static final String BOOK_URL_FORMART_1 = "%1$s?USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+    public static final String BOOK_URL_FORMART_2 = "%1$s&USER_ID=%2$s&TOKEN=%3$s&APP_VERSION=%4$s&DEVICE=%5$s&DEVICE_ID=%6$s";
+
+    //获取h5 url地址
+    public static String getH5Url(Context context, String baseH5Url) {
+        if (!TextUtils.isEmpty(baseH5Url)) {
+>>>>>>> dev
             if (UserHelper.isLogined(context)) {
                 int userId = UserHelper.getUserId(context);
                 String token = UserHelper.getToken(context);
                 String device = CommonUtil.getDevice();
                 String devcieId = CommonUtil.getUUID(context);
                 String version = AppConfig.getVersionName(context);
+<<<<<<< HEAD
                 return String.format(AppConfig.BOOK_URL_FORMART, baseH5Url, userId, token, version, device, devcieId);
             }
         }
         return baseH5Url;
 
+=======
+                if (baseH5Url.contains("?")) {
+                    int len = baseH5Url.length();
+                    int firstIndex = baseH5Url.indexOf("?");
+                    String keyParams = baseH5Url.substring(firstIndex, len);
+                    if (!keyParams.contains("USER_ID")) {
+                        return String.format(AppConfig.BOOK_URL_FORMART_2, baseH5Url, userId, token, version, device, devcieId);
+                    }
+                } else {
+                    return String.format(AppConfig.BOOK_URL_FORMART_1, baseH5Url, userId, token, version, device, devcieId);
+                }
+            }
+        }
+        return baseH5Url;
+>>>>>>> dev
     }
 
     public static String getWelcommeImgs() {
@@ -346,6 +371,14 @@ public class AppConfig {
     public static final String getPlayBackLive(String areaId, int pageNumber, String attentionFlag) {
         //  return baseUrl+(areaId==null?("channels/historys?area=&pageNumber="+pageNumber):("channels/historys?area="+areaId+"&pageNumber="+pageNumber));
         return baseUrl + "channels/historys?area=" + areaId + "&pageNumber=" + pageNumber + "&attentionFlag=" + attentionFlag;
+    }
+    //获取上传短视频的token  http://dev.lalocal.cn/api/system/videos/token?postfix=mp4
+    public static final String getShortVideoTkoen(){
+        return  baseUrl+"system/videos/token?postfix=mp4";
+    }
+    //上传短视频 http://dev.lalocal.cn/api/channels/historys
+    public static final String getShortVideoPost(){
+        return baseUrl+"channels/historys";
     }
 
     //历史直播详情 http://dev.lalocal.cn:8080/api/channels/historys/1

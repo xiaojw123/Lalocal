@@ -13,7 +13,7 @@ import com.lalocal.lalocal.activity.RouteDetailActivity;
 import com.lalocal.lalocal.activity.SpecialDetailsActivity;
 import com.lalocal.lalocal.live.entertainment.activity.AudienceActivity;
 import com.lalocal.lalocal.live.entertainment.activity.LiveHomePageActivity;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.me.LLoginActivity;
 import com.lalocal.lalocal.me.TargetWebActivity;
 import com.lalocal.lalocal.model.Constants;
@@ -62,7 +62,7 @@ public class TargetPage {
 
     //回放
     public static void gotoPlayBack(Context context, String id, boolean isMessage) {
-        Intent intent = new Intent(context, PlayBackActivity.class);
+        Intent intent = new Intent(context, PlayBackDetailActivity.class);
         intent.putExtra("id", id);
         if (isMessage) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -138,12 +138,19 @@ public class TargetPage {
 
     }
 
+<<<<<<< HEAD
     public static int gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName, boolean isMessage) {
         int resultCode = SUCESS;
         if (TextUtils.isEmpty(targetType)) {
             resultCode = FAILED;
             return resultCode;
+=======
+    public static boolean gotoTargetPage(Context context, String targetType, String targetId, String targetUrl, String targetName,boolean isMessage) {
+        if (TextUtils.isEmpty(targetType)) {
+            return false;
+>>>>>>> dev
         }
+        boolean isHandled=true;
         switch (targetType) {
             case TargetType.URL://链接
                 gotoWebDetail(context, targetUrl, targetName, isMessage);
@@ -180,9 +187,15 @@ public class TargetPage {
             default:
                 resultCode = FAILED;
                 break;
-
+            default:
+                isHandled=false;
+                break;
         }
+<<<<<<< HEAD
         return resultCode;
+=======
+        return isHandled;
+>>>>>>> dev
     }
 
     public static final int FAILED = 0x12;

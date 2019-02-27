@@ -3,7 +3,6 @@
     android:id="@+id/create_live_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone"
     >
     <ImageView
         android:layout_width="match_parent"
@@ -33,7 +32,7 @@
         android:layout_gravity="center"
         android:background="@color/live_input_live_bg"
         android:gravity="center"
-        android:text="发起直播"
+        android:text="@string/start_live_btn"
         android:textColor="@color/live_start_nomal_tv"
         android:textSize="@dimen/text_size_16_sp" />
 
@@ -90,7 +89,7 @@
             android:paddingRight="@dimen/live_padding_6dp"
             android:paddingTop="@dimen/live_padding_3dp"
             android:singleLine="true"
-            android:text="正在获取位置信息..." />
+            android:text="@string/lolacal_no_location" />
 
 
 
@@ -99,7 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/live_definition_bg"
-            android:text="网络: 高清"
+            android:text="@string/video_profile_720p"
             android:drawableRight="@drawable/triangle_unsel"
             android:drawablePadding="@dimen/live_padding_3dp"
             android:paddingLeft="@dimen/live_padding_5dp"
@@ -127,7 +126,7 @@
                 android:id="@+id/live_definition_choose_up"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="网络: 高清"
+                android:text="@string/video_profile_720p"
                 android:drawableRight="@drawable/triangle_sel"
                 android:drawablePadding="@dimen/live_padding_3dp"
                 android:background="@android:color/white"
@@ -137,7 +136,7 @@
                 android:id="@+id/live_definition_choose_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="网络: 流畅"
+                android:text="@string/video_profile_480p"
                 android:paddingTop="@dimen/live_padding_5dp"
                 android:drawablePadding="@dimen/live_padding_3dp"
                 android:background="@android:color/white"
@@ -156,7 +155,7 @@
             android:layout_below="@+id/live_definition_choose"
             android:background="@null"
             android:gravity="center_vertical"
-            android:hint="为直播间取个名字"
+            android:hint="@string/live_room_name_hint"
             android:layerType="software"
             android:maxLength="20"
             android:textColor="@android:color/white"
@@ -178,7 +177,6 @@
             android:textColor="@android:color/white"
             android:paddingRight="@dimen/live_padding_5dp"
             android:textSize="@dimen/live_text_10sp" />
-
     </RelativeLayout>
 
 

@@ -9,10 +9,12 @@ import com.lalocal.lalocal.net.ContentLoader;
 import com.lalocal.lalocal.util.AppLog;
 import com.lalocal.lalocal.util.CheckWeixinAndWeibo;
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.analytics.dplus.UMADplus;
 import com.umeng.socialize.UMAuthListener;
 import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -20,21 +22,47 @@ import java.util.Map;
  */
 
 public class MobHelper {
+    //定义用户画像属性
+    public interface UMADParamas {
+        String NAME="name";
+        String SEX="sex";
+        String USER_ID="userid";
+    }
+
+
     private static MobHelper helper = new MobHelper();
+    private static Map<String, Object> sUserAttr = new HashMap<>();
 
 
     private MobHelper() {
-
     }
 
     public static MobHelper getInstance() {
         return helper;
     }
 
+    public static void registerSuperProperty(Context context, Map<String, Object> userAttr) {
+        sUserAttr = userAttr;
+        for (Map.Entry<String, Object> entry : userAttr.entrySet()) {
+            UMADplus.registerSuperProperty(context, entry.getKey(), entry.getValue());
+        }
+    }
+
+    public static void unRegsiterUserProperty(Context context) {
+        if (sUserAttr.size() > 0) {
+            for (Map.Entry<String, Object> entry : sUserAttr.entrySet()) {
+                UMADplus.unregisterSuperProperty(context, entry.getKey());
+            }
+        }
+    }
+
 
     public static void sendEevent(Context context, String event) {
         if (!MyApplication.isDebug) {
             MobclickAgent.onEvent(context, event);
+            if (sUserAttr.size() > 0) {
+                UMADplus.track(context, event, sUserAttr);
+            }
         }
     }
 

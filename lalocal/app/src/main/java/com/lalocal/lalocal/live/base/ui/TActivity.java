@@ -39,26 +39,22 @@ public abstract class TActivity extends BaseActivity {
             @Override
             public void onGlobalLayout() {
                 layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                initUIandEvent();
             }
         });
 
     }
 
-    protected abstract void initUIandEvent();
-    protected abstract void deInitUIandEvent();
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    //    deInitUIandEvent();
+     //   deInitUIandEvent();
         destroyed = true;
     }
 
     protected RtcEngine rtcEngine() {
         return ((MyApplication) getApplication()).getWorkerThread().getRtcEngine();
     }
-
     protected final WorkerThread worker() {
         return ((MyApplication) getApplication()).getWorkerThread();
     }

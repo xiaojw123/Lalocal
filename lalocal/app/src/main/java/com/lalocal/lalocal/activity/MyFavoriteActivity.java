@@ -11,7 +11,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.help.UserHelper;
-import com.lalocal.lalocal.live.entertainment.activity.PlayBackActivity;
+import com.lalocal.lalocal.live.entertainment.activity.PlayBackDetailActivity;
 import com.lalocal.lalocal.model.FavoriteItem;
 import com.lalocal.lalocal.model.SpecialToH5Bean;
 import com.lalocal.lalocal.net.callback.ICallBack;
@@ -194,7 +194,7 @@ public class MyFavoriteActivity extends BaseActivity implements XRecyclerView.Lo
     }
 
     private void gotoLivePlay(FavoriteItem item) {
-        Intent intent = new Intent(this, PlayBackActivity.class);
+        Intent intent = new Intent(this, PlayBackDetailActivity.class);
         intent.putExtra("id",String.valueOf(item.getTargetId()));
         startActivityForResult(intent, 100);
     }

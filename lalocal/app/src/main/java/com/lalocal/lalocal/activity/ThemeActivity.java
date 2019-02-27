@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.android.volley.VolleyError;
-import com.chanven.lib.cptr.recyclerview.RecyclerAdapterWithHF;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.lalocal.lalocal.R;
 import com.lalocal.lalocal.live.entertainment.ui.CustomLinearLayoutManager;
@@ -20,9 +19,10 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * 专题列表Activity
+ */
 public class ThemeActivity extends BaseActivity {
-
-
     @BindView(R.id.rv_theme)
     XRecyclerView xRecyclerView;
 
@@ -41,10 +41,18 @@ public class ThemeActivity extends BaseActivity {
         initLoader();
         initRecyclerView();
     }
+
+    /**
+     * 网络数据获取准备
+     */
     private void initLoader() {
         mContentLoader = new ContentLoader(this);
         mContentLoader.setCallBack(new MyCallBack());
     }
+
+    /**
+     * 初始化XRecyclerView
+     */
     private void initRecyclerView() {
         final CustomLinearLayoutManager layoutManager = new CustomLinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -56,6 +64,10 @@ public class ThemeActivity extends BaseActivity {
         xRecyclerView.setRefreshing(true);
 
     }
+
+    /**
+     * 加载监听事件
+     */
     private int mPageSize = 10;
     int pageNum=1;
     boolean isRefresh = false;
@@ -77,6 +89,10 @@ public class ThemeActivity extends BaseActivity {
     }
 
     List<RecommendRowsBean> rowsBeanList=new ArrayList<>();
+
+    /**
+     * 网络接口获取结果
+     */
     private class MyCallBack extends ICallBack {
 
         /**
@@ -101,7 +117,7 @@ public class ThemeActivity extends BaseActivity {
                     mThemeAdapter=new ThemeAdapter(ThemeActivity.this,rowsBeanList);
                     xRecyclerView.setAdapter(mThemeAdapter);
                 }else {
-                    mThemeAdapter.setResh(rowsBeanList);
+                    mThemeAdapter.setRefresh(rowsBeanList);
                 }
                 if (isRefresh) {
                     xRecyclerView.refreshComplete();

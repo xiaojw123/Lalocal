@@ -7,15 +7,13 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.bugtags.library.Bugtags;
-import com.crashlytics.android.Crashlytics;
 import com.lalocal.lalocal.help.TargetPage;
 import com.lalocal.lalocal.help.TargetType;
-import com.lalocal.lalocal.live.DemoCache;
+import com.lalocal.lalocal.live.LiveCache;
 import com.lalocal.lalocal.live.base.util.ScreenUtil;
 import com.lalocal.lalocal.live.base.util.crash.AppCrashHandler;
 import com.lalocal.lalocal.live.base.util.sys.SystemUtil;
 import com.lalocal.lalocal.live.entertainment.agora.openlive.WorkerThread;
-import com.lalocal.lalocal.live.entertainment.ui.ApngImageLoader;
 import com.lalocal.lalocal.live.im.config.AuthPreferences;
 import com.lalocal.lalocal.live.im.config.UserPreferences;
 import com.lalocal.lalocal.live.im.util.storage.StorageType;
@@ -27,6 +25,7 @@ import com.lalocal.lalocal.util.AppLog;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
+import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.pingplusplus.android.PingppLog;
@@ -45,12 +44,6 @@ import org.litepal.tablemanager.Connector;
 
 import java.util.List;
 import java.util.Map;
-
-import io.fabric.sdk.android.Fabric;
-
-;
-
-
 /**
  * Created by xiaojw on 2016/6/30.
  * 【APP上线注意事项】
@@ -88,8 +81,8 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        AppLog.print("Application create start");
         initLogManager();
+        AppLog.print("Application create start");
         Config.IsToastTip = true;
         AppCrashHandler.getInstance(this);
         if (isDebug) {
@@ -99,17 +92,27 @@ public class MyApplication extends Application {
             startUmeng();
         }
         initUPsuh();
+
         AppLog.print("initUPush");
 
         //数据库
         intCountryDB();
         AppLog.print("initDB");
         //初始化Apng
-        //    initApngImageLoader();
-        DemoCache.setContext(this);
+
+        LiveCache.setContext(this);
+
+        LiveCache.setContext(this);
+
         AppLog.print("init Live Cache");
         NIMClient.init(this, getLoginInfo(), getOptions());
         AppLog.print("init NIMClient");
+        //关闭通知栏提醒
+        try {
+            NIMClient.toggleNotification(false);
+        } catch (Exception e) {
+            AppLog.print("关闭通知异常");
+        }
         if (inMainProcess()) {
             // TODO: 2016/12/15 im
             // 注册自定义消息附件解析器
@@ -117,47 +120,18 @@ public class MyApplication extends Application {
             // init tools
             StorageUtil.init(this, null);
             ScreenUtil.init(this);
-            DemoCache.initImageLoaderKit();
+            LiveCache.initImageLoaderKit();
             initLog();
             FlavorDependent.getInstance().onApplicationCreate();
-            //关闭通知栏提醒
-            try {
-                NIMClient.toggleNotification(false);
-            } catch (Exception e) {
-                AppLog.print("关闭通知异常");
-            }
+            boolean isOpen=NIMClient.getService(AuthService.class).openLocalCache(AuthPreferences.getUserAccount());
+            AppLog.print("db open result:"+isOpen);
         }
         AppLog.print("Application create end");
     }
 
-    private void initApngImageLoader() {
-        ApngImageLoader apngImageLoader = ApngImageLoader.getInstance();
-        apngImageLoader.setEnableDebugLog(false);
-        apngImageLoader.setEnableVerboseLog(false);
-        apngImageLoader.init(this);
-
-    }
-
-
     private void initUPsuh() {
         try {
             PushAgent mPushAgent = PushAgent.getInstance(this);
-//        UmengMessageHandler messageHandler = new UmengMessageHandler() {
-//            /**
-//             * 自定义消息的回调方法
-//             * */
-//            @Override
-//            public void dealWithCustomMessage(final Context context, final UMessage msg) {
-//                AppLog.print("dealWithCustomMessage____");
-//                super.dealWithCustomMessage(context, msg);
-//            }
-//
-//            @Override
-//            public void dealWithNotificationMessage(Context context, UMessage uMessage) {
-//                super.dealWithNotificationMessage(context, uMessage);
-//            }
-//        };
-//        mPushAgent.setMessageHandler(messageHandler);
             UmengNotificationClickHandler notificationClickHandler = new UmengNotificationClickHandler() {
                 //打开链接
                 @Override
@@ -175,47 +149,42 @@ public class MyApplication extends Application {
                         if (data == null || data.size() < 1) {
                             return;
                         }
-                        for (Map.Entry entry : data.entrySet()) {
-                            AppLog.print("key:" + entry.getKey() + ", value:" + entry.getValue() + "\n");
-                        }
-                        if (data != null && data.size() > 0) {
-                            String targetType = data.get("targetType");
-                            String targetId = data.get("targetId");
-                            String targetUrl = data.get("targetUrl");
-                            String targetName = data.get("targetName");
-                            AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
-                            if (targetType != null) {
-                                switch (targetType) {
-                                    case TargetType.URL://链接
-                                        TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
-                                        break;
-                                    case TargetType.USER://用户
-                                        TargetPage.gotoUser(context, targetId, true);
-                                        break;
-                                    case TargetType.ARTICLE://文章
-                                    case TargetType.INFORMATION://资讯
-                                        TargetPage.gotoArticleDetail(context, targetId, true);
-                                        break;
-                                    case TargetType.PRODUCT://产品
-                                        TargetPage.gotoProductDetail(context, targetId, targetType, true);
-                                        break;
-                                    case TargetType.ROUTE://线路
-                                        TargetPage.gotoRouteDetail(context, targetId, true);
-                                        break;
-                                    case TargetType.SPECIAL://专题
-                                        TargetPage.gotoSpecialDetail(context, targetId, true);
-                                        break;
-                                    case TargetType.LIVE_VIDEO://直播视频
-                                        TargetPage.gotoLive(context, targetId, true);
-                                        break;
-                                    case TargetType.LIVE_PALY_BACK://回放
-                                        TargetPage.gotoPlayBack(context, targetId, true);
-                                        break;
+                        String targetType = data.get("targetType");
+                        String targetId = data.get("targetId");
+                        String targetUrl = data.get("targetUrl");
+                        String targetName = data.get("targetName");
+                        AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
+                        if (targetType != null) {
+                            switc (targetType) {
+                                case TargetType.URL://链接
+                                    TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
+                                    break;
+                                case TargetType.USER://用户
+                                    TargetPage.gotoUser(context, targetId, true);
+                                    break;
+                                case TargetType.ARTICLE://文章
+                                case TargetType.INFORMATION://资讯
+                                    TargetPage.gotoArticleDetail(context, targetId, true);
+                                    break;
+                                case TargetType.PRODUCT://产品
+                                    TargetPage.gotoProductDetail(context, targetId, targetType, true);
+                                    break;
+                                case TargetType.ROUTE://线路
+                                    TargetPage.gotoRouteDetail(context, targetId, true);
+                                    break;
+                                case TargetType.SPECIAL://专题
+                                    TargetPage.gotoSpecialDetail(context, targetId, true);
+                                    break;
+                                case TargetType.LIVE_VIDEO://直播视频
+                                    TargetPage.gotoLive(context, targetId, true);
+                                    break;
+                                case TargetType.LIVE_PALY_BACK://回放
+                                    TargetPage.gotoPlayBack(context, targetId, true);
+                                    break;
 
-                                }
                             }
-
                         }
+
                     }
                 }
 
@@ -324,7 +293,7 @@ public class MyApplication extends Application {
         String imToken = AuthPreferences.getUserToken();
         AppLog.i("TAG", "MyApplication：account:" + imccId + "token:" + imToken);
         if (!TextUtils.isEmpty(imccId) && !TextUtils.isEmpty(imToken)) {
-            DemoCache.setAccount(imccId.toLowerCase());
+            LiveCache.setAccount(imccId.toLowerCase());
             return new LoginInfo(imccId, imToken);
         } else {
             return null;
@@ -358,11 +327,11 @@ public class MyApplication extends Application {
 
     //fabric分析
     private void startFabric() {
-        Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)
-                .build();
-        Fabric.with(fabric);
+//        Fabric fabric = new Fabric.Builder(this)
+//                .kits(new Crashlytics())
+//                .debuggable(true)
+//                .build();
+//        Fabric.with(fabric);
     }
 
     //umeng分析

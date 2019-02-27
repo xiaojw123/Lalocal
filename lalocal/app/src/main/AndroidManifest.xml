@@ -40,7 +40,6 @@
     <!-- 网易视频云推流 -->
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-feature
@@ -112,16 +111,21 @@
             android:screenOrientation="portrait" />
         <activity android:name=".activity.OrderActivity" />
         <activity android:name=".activity.ArticleTestAct" />
+        <activity android:name=".live.entertainment.activity.ShortVideoPreviewActivity"></activity>
+        <activity android:name=".live.entertainment.activity.PostShortVideoActivity"
+            android:windowSoftInputMode="stateHidden"></activity>
         <activity
             android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".live.entertainment.activity.TestActivity" />
+        <activity android:name=".live.entertainment.activity.TestActivity"
+            android:hardwareAccelerated="false">
+
+        </activity>
         <activity
             android:name=".activity.RePlyActivity"
             android:windowSoftInputMode="stateVisible|adjustPan" />
@@ -139,12 +143,12 @@
             android:name="UMENG_MESSAGE_SECRET"
             android:value="f76ad94a4f278d4c9fb57c7be7ed3788" />
         <!-- //lalocal-debug -->
-        <!-- <meta-data -->
-        <!-- android:name="UMENG_APPKEY" -->
-        <!-- android:value="5806d2df67e58ef11a000e36" /> -->
-        <!-- <meta-data -->
-        <!-- android:name="UMENG_MESSAGE_SECRET" -->
-        <!-- android:value="9b462862fd10e9e8872745ec67df7718"/> -->
+         <!--<meta-data-->
+         <!--android:name="UMENG_APPKEY"-->
+         <!--android:value="5806d2df67e58ef11a000e36" />-->
+         <!--<meta-data-->
+         <!--android:name="UMENG_MESSAGE_SECRET"-->
+         <!--android:value="9b462862fd10e9e8872745ec67df7718"/>-->
         <activity
             android:name=".wxapi.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -200,6 +204,7 @@
         <activity android:name=".activity.RouteDetailActivity" />
         <activity android:name=".activity.BookActivity" />
         <activity android:name=".activity.PayActivity" />
+        <activity android:name=".activity.VideoContinueUploadActivity"></activity>
 
         <!-- ping++ -->
         <!-- Ping++ SDK -->
@@ -266,9 +271,9 @@
             </intent-filter>
         </receiver>
         <!-- lalocal-release -->
-         <!--<meta-data-->
-         <!--android:name="com.netease.nim.appKey"-->
-         <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
+        <!--<meta-data-->
+        <!--android:name="com.netease.nim.appKey"-->
+        <!--android:value="4cbe3856032ad3755da23525e596405f" />-->
         <!-- lalocal-debug -->
         <meta-data
             android:name="com.netease.nim.appKey"
@@ -325,11 +330,10 @@
         <activity android:name=".activity.MyLiveActivity" />
         <activity android:name=".activity.LiveDetailActivity" />
         <activity android:name=".activity.AttentionActivity" />
-        <activity android:name=".live.entertainment.activity.LiveAttentionDemo" />
         <activity
-            android:name=".live.entertainment.activity.PlayBackActivity"
+            android:name=".live.entertainment.activity.PlayBackDetailActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".live.entertainment.activity.PlayBackNewActivity" />
+        <activity android:name=".live.entertainment.activity.PlayBackActivity" />
         <!-- GlideModule -->
         <meta-data
             android:name="com.lalocal.lalocal.util.CustomCachingGlideModule"
@@ -372,9 +376,16 @@
         <activity android:name=".me.PraiseCommentActivity" />
         <activity android:name=".im.NimChatActivity" />
         <activity android:name=".activity.ArticleCommentActivity" />
+<<<<<<< HEAD
         <activity android:name=".activity.PersonalMessageActivity" />
         <activity android:name=".activity.PostVideoActivity"
             android:windowSoftInputMode="stateHidden" >
+=======
+        <activity android:name=".activity.NimPersonalMessageActivity" />
+        <activity
+            android:name=".activity.PostVideoActivity"
+            android:windowSoftInputMode="stateHidden">
+>>>>>>> dev
 
         </activity>
 

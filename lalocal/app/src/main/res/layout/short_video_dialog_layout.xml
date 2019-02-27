@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dimen_size_15_dp"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/select"
+            android:textColor="@color/color_1a"
+            android:textSize="@dimen/text_size_22_sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/photoalbum_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_btn_height"
+            android:layout_marginTop="@dimen/dimen_size_10_dp"
+            android:background="@drawable/register_button_bg"
+            android:text="@string/photo_add_short_video"
+            android:textColor="@color/white"
+            />'
+
+        <Button
+            android:id="@+id/cancel_selectephoto_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/register_btn_height"
+            android:layout_marginTop="@dimen/dimen_size_10_dp"
+            android:background="@drawable/register_button_bg"
+            android:text="@string/cancel"
+            android:textColor="@color/white"
+            />
+
+    </LinearLayout>
+</FrameLayout>

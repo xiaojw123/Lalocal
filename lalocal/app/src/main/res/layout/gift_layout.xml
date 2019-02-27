@@ -45,7 +45,6 @@
                     android:textSize="@dimen/live_text_12sp"
                     android:textColor="#97d3e9"
                     android:singleLine="true"
-                    android:text="啊哈就好就好"
                     />
                 <TextView
                     android:id="@+id/send_gift_name"
@@ -54,7 +53,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/live_text_12sp"
                     android:textColor="@android:color/white"
-                    android:text="一朵花"
                     />
             </LinearLayout>
         </LinearLayout>

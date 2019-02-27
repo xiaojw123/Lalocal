@@ -40,130 +40,10 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/androidloading"/>
             </RelativeLayout>
-
-            <TextView
-                android:id="@+id/product_title_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="@dimen/product_details_title_tv"
-                android:textStyle="bold"
-                android:paddingLeft="@dimen/product_details_padding_left"
-                android:paddingBottom="@dimen/product_details_padding_bottom"
-                android:paddingTop="@dimen/register_user_protocal_top"/>
-            <LinearLayout
+            <WebView
+                android:id="@+id/product_details_wv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingLeft="@dimen/product_details_padding_left"
-                android:paddingBottom="@dimen/product_details_padding_bottom"
-                android:background="@android:color/white">
-                <TextView
-                    android:id="@+id/product_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size_20_sp"
-                    android:textColor="@color/color_ffaa2a"/>
-                <TextView
-                    android:paddingRight="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="  起"/>
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:layout_marginLeft="@dimen/product_details_padding_left"
-                android:layout_marginRight="@dimen/product_details_padding_left"
-                android:layerType="software"
-                android:background="@drawable/imag_line"></View>
-            <LinearLayout
-                android:id="@+id/product_content_value"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/product_details_interval"
-                android:paddingBottom="@dimen/product_details_interval"
-                android:orientation="vertical"
-                android:background="@android:color/white"
-                >
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_marginLeft="@dimen/product_details_padding_left"
-                android:layout_marginRight="@dimen/product_details_padding_left"
-                android:layerType="software"
-                android:background="@drawable/imag_line"></View>
-
-            <LinearLayout
-                android:id="@+id/product_check_detail"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:background="@android:color/white">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="查看详情"
-                    android:textColor="@android:color/black"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="5dp"
-                    android:src="@drawable/btnarrow"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="#dedede"></View>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="58dp"
-                android:background="@android:color/white"
-                >
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/product_details_padding_left"
-                    android:layout_marginRight="@dimen/product_details_padding_left"
-                    android:layout_centerInParent="true"
-                    android:background="@android:color/darker_gray"></View>
-                <TextView
-                    android:id="@+id/product_service"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/white"
-                    android:layout_centerInParent="true"
-                    android:padding="10dp"
-                    />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:id="@+id/product_service_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@android:color/white"
-                >
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/product_purchase_notes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="20dp"
-                android:background="@android:color/white"
-                >
-
-            </LinearLayout>
-         <!--   <View
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:background="#dedede"></View>-->
+                android:layout_height="match_parent"/>
         </LinearLayout>
     </com.lalocal.lalocal.view.MyScrollView>
     <RelativeLayout
@@ -208,8 +88,5 @@
 
 
 </LinearLayout>
-    <include
-        layout="@layout/page_base_loading"
-        />
 
 </FrameLayout>

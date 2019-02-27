@@ -6,8 +6,8 @@ ext {
             compileVersion   : 24,
             minSdk           : 14,
             targetSdk        : 23,
-            version_code     : 221,
-            version_name     : "2.2.1"
+            version_code     : 222,
+            version_name     : "2.2.2"
     ]
     libraries = [
             support: "25.1.0",
@@ -17,12 +17,12 @@ buildscript {
     repositories {
         jcenter()
         mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
+//        maven { url 'https://maven.fabric.io/public' }
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.2'
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'com.android.tools.build:gradle:2.3.1'
+//        classpath 'io.fabric.tools:gradle:1.+'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

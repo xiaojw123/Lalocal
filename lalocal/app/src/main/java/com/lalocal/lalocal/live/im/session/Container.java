@@ -5,7 +5,7 @@ import android.app.Activity;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 
 /**
- * Created by zhoujianghua on 2015/7/6.
+ * Created by wcj on 2015/7/6.
  */
 public class Container {
     public final Activity activity;
