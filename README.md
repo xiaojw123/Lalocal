@@ -50,5 +50,13 @@
 5. 商品价格日历点击事件
 
 	lalocal://productpricecalendarclick?{"url": "http://7xpid3.com1.z0.glb.clouddn.com/2016052111453710470326042255"}
+	
+	
+<img src="lalocal/img/pl1.png" width="375"/>    <img src="lalocal/img/pl2.png" width="375"/>
+
+<img src="lalocal/img/pl3.png" width="375"/>    <img src="lalocal/img/pl4.png" width="375"/>
+
+
+
 
 
