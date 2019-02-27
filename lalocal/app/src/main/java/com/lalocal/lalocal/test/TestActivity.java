@@ -1,6 +1,7 @@
 package com.lalocal.lalocal.test;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,7 +34,7 @@ public class TestActivity extends BaseActivity implements View.OnClickListener {
 //        timerTask.cancel();
 //        Timer timer=new Timer();
 //        timer.cancel();
-
+        new AsyncTask<>().execute()
 }
     public void payment(View view){
         Intent intent=new Intent(this,PayActivity.class);

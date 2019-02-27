@@ -7,7 +7,6 @@ import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
 import com.bugtags.library.Bugtags;
-import com.crashlytics.android.Crashlytics;
 import com.lalocal.lalocal.help.TargetPage;
 import com.lalocal.lalocal.help.TargetType;
 import com.lalocal.lalocal.live.LiveCache;
@@ -45,7 +44,6 @@ import org.litepal.tablemanager.Connector;
 
 import java.util.List;
 import java.util.Map;
-import io.fabric.sdk.android.Fabric;
 /**
  * Created by xiaojw on 2016/6/30.
  * 【APP上线注意事项】
@@ -157,7 +155,7 @@ public class MyApplication extends Application {
                         String targetName = data.get("targetName");
                         AppLog.print("推送custom params@如下  \ntargetType：" + targetType + "\ntargetId: " + targetId + "\ntargetName: " + targetName);
                         if (targetType != null) {
-                            switch (targetType) {
+                            switc (targetType) {
                                 case TargetType.URL://链接
                                     TargetPage.gotoWebDetail(context, targetUrl, targetName, true);
                                     break;
@@ -329,11 +327,11 @@ public class MyApplication extends Application {
 
     //fabric分析
     private void startFabric() {
-        Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)
-                .build();
-        Fabric.with(fabric);
+//        Fabric fabric = new Fabric.Builder(this)
+//                .kits(new Crashlytics())
+//                .debuggable(true)
+//                .build();
+//        Fabric.with(fabric);
     }
 
     //umeng分析

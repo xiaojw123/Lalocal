@@ -38,7 +38,8 @@ import butterknife.ButterKnife;
 import static com.lalocal.lalocal.R.dimen.order_travel_time_height;
 import static com.lalocal.lalocal.R.id.orderdetail_contact_email_tv;
 
-public class OrderActivity extends BaseActivity implements View.OnClickListener, CustomTitleView.onBackBtnClickListener {
+public class
+OrderActivity extends BaseActivity implements View.OnClickListener, CustomTitleView.onBackBtnClickListener {
     private LinearLayout travel_people_container;
     private LinearLayout pay_money_container;
     private FrameLayout pay_time_container;

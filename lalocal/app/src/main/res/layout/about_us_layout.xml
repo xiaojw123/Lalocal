@@ -30,8 +30,8 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/about_us_logo_top"
                 android:src="@drawable/about_us_logo"
-                snser:borderColor="@color/color_d9"
                 snser:borderWidths="@dimen/dimen_size_1_dp"
+                snser:borderColor="@color/color_d9"
                 snser:rectRoundRadius="@dimen/dimen_size_10_dp"
                 snser:type="rounded_rect" />
 

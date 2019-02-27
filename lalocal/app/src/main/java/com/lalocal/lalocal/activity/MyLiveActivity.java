@@ -25,32 +25,32 @@ import org.litepal.crud.DataSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyLiveActivity extends BaseActivity implements XRecyclerView.LoadingListener{
+public class MyLiveActivity extends BaseActivity implements XRecyclerView.LoadingListener {
     XRecyclerView mXRecyclerView;
     TextView hintTv;
     int pageNum, pageSize;
     boolean isRefresh, isLoadMore;
     CustomTitleView titleView;
-public static final int VIDEO_PREVIEW_REQUESTCODE=501;
+    public static final int VIDEO_PREVIEW_REQUESTCODE = 501;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== VIDEO_PREVIEW_REQUESTCODE){
-            if(resultCode== KeyParams.UPLOAD_SHORT_VIEW_RESULTCODE){
-                if(adapter!=null){
+        if (requestCode == VIDEO_PREVIEW_REQUESTCODE) {
+            if (resultCode == KeyParams.UPLOAD_SHORT_VIEW_RESULTCODE) {
+                if (adapter != null) {
                     adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
                 }
-            }else if(resultCode==KeyParams.UPLOAD_SHORT_VIEW_SUCCESS_RESULTCODE_){
+            } else if (resultCode == KeyParams.UPLOAD_SHORT_VIEW_SUCCESS_RESULTCODE_) {
                 isRefresh = true;
                 mContentloader.getUserLive(UserHelper.getUserId(this), 1);
-                if(adapter!=null){
+                if (adapter != null) {
                     adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
                 }
             }
         }
-        if(resultCode== KeyParams.UPLOAD_SHORT_VIEW_RESULTCODE){
-            if(adapter!=null){
+        if (resultCode == KeyParams.UPLOAD_SHORT_VIEW_RESULTCODE) {
+            if (adapter != null) {
                 adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
             }
         }
@@ -66,10 +66,9 @@ public static final int VIDEO_PREVIEW_REQUESTCODE=501;
     }
 
 
-
     private void initView() {
-        titleView=(CustomTitleView) findViewById(R.id.my_live_ctv);
-        hintTv= (TextView) findViewById(R.id.my_live_items_hint);
+        titleView = (CustomTitleView) findViewById(R.id.my_live_ctv);
+        hintTv = (TextView) findViewById(R.id.my_live_items_hint);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.my_live_items_xrlv);
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mXRecyclerView.setPullRefreshEnabled(true);
@@ -78,7 +77,7 @@ public static final int VIDEO_PREVIEW_REQUESTCODE=501;
     }
 
     private void addHeaderView() {
-        View inflate = View.inflate(this, R.layout.add_short_video_layout,null);
+        View inflate = View.inflate(this, R.layout.add_short_video_layout, null);
         inflate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -89,11 +88,10 @@ public static final int VIDEO_PREVIEW_REQUESTCODE=501;
     }
 
 
-
     @Override
     public void onRefresh() {
         isRefresh = true;
-        if(adapter!=null){
+        if (adapter != null) {
             adapter.updateDataBaseItmes(DataSupport.findAll(PostShortVideoParameterBean.class));
         }
         mContentloader.getUserLive(UserHelper.getUserId(this), 1);
@@ -112,7 +110,9 @@ public static final int VIDEO_PREVIEW_REQUESTCODE=501;
 
 
     }
+
     MyLiveAdapter adapter;
+
     class LiveCallBack extends ICallBack {
         List<LiveRowsBean> rowsList = new ArrayList<>();
 
@@ -147,13 +147,13 @@ public static final int VIDEO_PREVIEW_REQUESTCODE=501;
                         adapter.updateItems(rowsList);
                     }
                 } else {
-                //    mXRecyclerView.setVisibility(View.GONE);
-                //    hintTv.setVisibility(View.VISIBLE);
+                    //    mXRecyclerView.setVisibility(View.GONE);
+                    //    hintTv.setVisibility(View.VISIBLE);
                 }
 
-            }else{
-              //  mXRecyclerView.setVisibility(View.GONE);
-             //   hintTv.setVisibility(View.VISIBLE);
+            } else {
+                //  mXRecyclerView.setVisibility(View.GONE);
+                //   hintTv.setVisibility(View.VISIBLE);
             }
         }
 
@@ -175,7 +175,7 @@ public static final int VIDEO_PREVIEW_REQUESTCODE=501;
         }
 
         @Override
-        public void onResponseFailed(int code,String message) {
+        public void onResponseFailed(int code, String message) {
             resetLoad();
         }
 
